@@ -21,6 +21,8 @@ The official API base URL is fixed to `https://api.billysbilling.com/v2`. API re
 
 Reads run directly. Writes use an autonomous two-call protocol: preview, then execute with a short-lived, single-use confirmation ticket bound to the exact operation. Human approval is not required for normal writes.
 
+Every browser used by development, tests, and runtime is headless. The interface lane keeps its dedicated persistent profile but never opens, raises, focuses, or manipulates a desktop window.
+
 No completeness claim is allowed until every applicable API and interface coverage row is implemented and tested.
 
 ## 2. Goals
@@ -29,14 +31,15 @@ No completeness claim is allowed until every applicable API and interface covera
 2. Implement every supported official API operation as a typed `api_*` tool.
 3. Implement a matching `ui_*` workflow for every API capability Billy exposes through its interface.
 4. Add every verified UI-only workflow after the interface lane reaches API parity.
-5. Handle API and browser authentication completely, including expiry, reauthentication, MFA, organisation selection, and recovery.
+5. Handle API and headless browser authentication completely, including persisted sessions, credentials and TOTP from environment or credential store, expiry, reauthentication, MFA detection, organisation selection, and recovery.
 6. Give every tool typed Pydantic input and output models.
 7. Use stable, predictable tool names grouped by business area.
 8. Track method or route, request fields, response fields, filters, pagination, errors, side effects, cleanup, implementation, and tests in machine-readable coverage manifests.
 9. Test request construction, response mapping, errors, pagination, reads, writes, authentication, egress, browser recovery, interface drift, plan restrictions, and cleanup.
-10. Keep credentials outside the repository.
-11. Expose no telemetry, shell execution, dynamic code execution, generic HTTP proxy, or raw browser-control tools.
-12. Verify against a Billy test account or dedicated non-production organisation before enabling live use.
+10. Verify every interface feature end to end through the headless UI using DOM assertions, independent API or UI read-back, and agent vision.
+11. Keep credentials outside the repository.
+12. Expose no telemetry, shell execution, dynamic code execution, generic HTTP proxy, or raw browser-control tools.
+13. Verify against a Billy test account or dedicated non-production organisation before enabling live use.
 
 ## 3. Non-goals
 
@@ -48,6 +51,9 @@ No completeness claim is allowed until every applicable API and interface covera
 6. No automated test writes against production organisations.
 7. No transport other than stdio.
 8. No claim that a documentation gap counts as implemented coverage.
+9. No headed browser in development, tests, or runtime.
+10. No opening, raising, focusing, or manipulating desktop windows.
+11. No use of agent vision as the sole verification oracle.
 
 ## 4. Terminology
 
@@ -70,6 +76,23 @@ A verified operation exposed by Billy's interface without an equivalent supporte
 ### 4.5 Coverage row
 
 One official API operation or one verified interface workflow, with its contract, implementation status, and test evidence.
+
+### 4.6 Headless browser policy
+
+Every Billy browser process launched or controlled by the project is headless. The MCP never controls a desktop window.
+
+### 4.7 Vision verification
+
+A vision-capable agent inspects rendered headless browser frames to verify the intended visible values, submission result, resulting record, and clean restoration. Vision supplements DOM assertions and independent read-back; it never replaces them.
+
+### 4.8 UI write capture set
+
+For a UI write test, the required rendered frames are:
+
+1. Initial state before editing
+2. Completed fields immediately before submission
+3. Success state and resulting record after submission
+4. Restored state after cleanup
 
 ## 5. Architecture
 
@@ -183,7 +206,7 @@ Interface bootstrap creates an access token through Billy's settings and stores 
 
 ### 7.2 Browser authentication
 
-The interface lane owns a dedicated Chrome profile outside the repository. It does not attach to the user's everyday browser profile.
+The interface lane owns a dedicated Chrome profile outside the repository. It does not attach to the user's everyday browser profile. Chrome always runs headless and never creates or manipulates a desktop window.
 
 The authentication service handles:
 
@@ -192,15 +215,16 @@ The authentication service handles:
 - Login-state detection
 - Session expiry
 - Reauthentication
-- MFA and unavoidable human challenges
+- Credential and TOTP resolution from environment variables or the operating system credential store
+- MFA, CAPTCHA, passkey, and other challenge detection
 - Organisation discovery and selection
 - Organisation mismatch detection
 - Safe logout
 - Browser crash recovery
 
-Routine automation uses the persistent headed Chrome instance without bringing it to the foreground. The window is raised only when login, MFA, reauthentication, or recovery requires human interaction.
+Authentication first reuses the persisted session. When login is required, the headless browser uses credentials and optional TOTP stored outside the repository. An unautomatable MFA, CAPTCHA, passkey, push approval, or similar challenge returns `AUTH_INTERACTION_REQUIRED` with recovery instructions and never launches a visible browser.
 
-After initial authentication, normal reads and writes are autonomous.
+Normal reads and writes are autonomous whenever the session or securely stored authentication material is sufficient.
 
 ### 7.3 Authentication states
 
@@ -270,6 +294,8 @@ An execute tool:
 9. Returns the typed result and verified post-state.
 
 Any changed input or state requires a new preview.
+
+For interface writes under test, the workflow captures the four required rendered states: initial state before editing, completed fields immediately before submission, success state and resulting record after submission, and restored state after cleanup. The result is accepted only when DOM assertions, independent read-back, and vision verification agree at every applicable state.
 
 ### 8.3 Ticket binding
 
@@ -360,7 +386,7 @@ No documentation ambiguity may be waived into a green completeness status.
 
 ### 10.1 Automation contract
 
-The interface lane uses Playwright with the dedicated persistent Chrome profile.
+The interface lane uses Playwright with the dedicated persistent Chrome profile in headless mode only. Development, CI, live verification, and runtime use the same no-window rule.
 
 Each business area has typed page objects and workflow state machines. Selectors prefer accessible roles, labels, and stable route or data markers. Fragile styling selectors are avoided.
 
@@ -373,8 +399,8 @@ For every official API business operation:
 1. Determine whether Billy exposes an equivalent interface workflow.
 2. Record the mapping and evidence.
 3. Implement the typed `ui_*` workflow when applicable.
-4. Test it independently of the API tool.
-5. Use the API read path as a verification oracle where safe.
+4. Test it independently of the API tool through the headless UI.
+5. Verify it with DOM assertions, independent API or UI read-back, and agent vision.
 
 If Billy has no equivalent interface workflow, the UI row is marked not applicable with evidence. No stub tool is registered.
 
@@ -384,7 +410,7 @@ After the parity baseline, implement all additional verified interface capabilit
 
 The initial read-only discovery probed 107 routes and found 31 real route families plus settings.
 
-The following route families were discovered at read or navigation depth. None is green until its field contract, implementation, contract tests, and live non-production tests are complete:
+The following route families were discovered at read or navigation depth. None is green until `discovered`, `implemented`, `contract_tested`, `live_tested`, and `vision_verified` are all true:
 
 - Invoices
 - Quotes
@@ -414,17 +440,45 @@ Still red:
 - Plan-gated workflows
 - Some settings workflows
 
-### 10.4 Interface drift
+### 10.4 Headless vision verification
+
+Every interface coverage row requires end-to-end execution through headless Chrome.
+
+Read workflows require:
+
+- DOM assertions for the expected values and controls
+- A rendered headless frame inspected by a vision-capable agent
+- Independent API or second UI read-back
+
+If no independent read-back path exists, the row remains red until one is established.
+
+Write workflows require:
+
+1. Initial-state frame
+2. Completed-form frame before submission
+3. DOM assertions that the exact intended values are present
+4. Submission through the real Billy UI
+5. Success-state and resulting-record frame
+6. Independent API or UI read-back of the submitted result
+7. Cleanup through the supported API or UI path
+8. Restored-state frame and final read-back
+
+The vision-capable agent must confirm the intended visible values, the correct submission result, the resulting record, and clean restoration. Vision is additive evidence and never the sole oracle.
+
+After review, raw frames are purged. The durable `vision_evidence` record contains only the coverage row, test-run identifier, assertion and read-back references, reviewer verdict, timestamp, and `purge_verified: true`. It contains no screenshot, rendered frame, credential, or Billy business value.
+
+### 10.5 Interface drift
 
 Every workflow defines an expected page signature using route, stable controls, and critical labels.
 
 If the signature changes, the tool returns `UI_CHANGED`. It does not guess, use coordinates, or click a visually similar control.
 
-### 10.5 Browser recovery
+### 10.6 Browser recovery
 
 The browser manager:
 
-- Launches or attaches only to the MCP-owned profile
+- Launches only a headless browser using the MCP-owned profile
+- Never opens, raises, focuses, or manipulates a desktop window
 - Serialises stateful UI writes
 - Closes extra tabs after workflows
 - Restores a known safe route
@@ -496,16 +550,24 @@ Each row tracks:
 | `implemented` | Real implementation exists |
 | `contract_tested` | Unit or contract tests pass |
 | `live_tested` | Dedicated non-production verification passes |
+| `vision_verified` | Vision-capable agent verified rendered headless UI evidence; required for UI rows only |
+| `vision_evidence` | Durable non-sensitive review record that references the run, assertions, read-back, reviewer, and verified purge; never a raw frame |
 | `evidence` | Documentation or test reference |
 
 ### 12.2 Completeness rule
 
-A row is green only when all four required statuses are true:
+An API row is green only when all four required statuses are true:
 
 - `discovered`
 - `implemented`
 - `contract_tested`
 - `live_tested`
+
+An interface row requires those four statuses plus:
+
+- `vision_verified`
+
+`vision_verified` is not applicable to API rows. It is mandatory for every interface parity and UI-only row.
 
 An operation that cannot yet be safely tested remains red. `not_applicable` is allowed only for a UI parity row when evidence shows Billy exposes no equivalent UI workflow. It is not allowed for an official API operation.
 
@@ -526,6 +588,9 @@ CI fails if:
 
 - A registered tool lacks a coverage row.
 - An implemented row lacks required tests.
+- An interface row is green without `vision_verified` and a durable `vision_evidence` review record.
+- A vision review record lacks DOM assertions, independent read-back, reviewer result, or `purge_verified: true`.
+- Raw rendered frames are present in the repository or remain after the review retention window.
 - The report is stale.
 - `coverage/status.json` says `complete: true` while any applicable row remains red.
 - README or release metadata claims completeness without generated `complete: true`.
@@ -538,7 +603,7 @@ Public errors are stable and machine-readable.
 | --- | --- |
 | `AUTH_REQUIRED` | Authentication is missing |
 | `AUTH_EXPIRED` | Credential or browser session expired |
-| `AUTH_INTERACTION_REQUIRED` | Login, MFA, or recovery needs a person |
+| `AUTH_INTERACTION_REQUIRED` | An unautomatable MFA, CAPTCHA, passkey, push approval, or similar challenge requires out-of-band resolution; no browser window is launched |
 | `ORGANIZATION_REQUIRED` | No organisation selected |
 | `ORGANIZATION_MISMATCH` | Current organisation differs from the request or ticket |
 | `VALIDATION_ERROR` | Typed or business validation failed |
@@ -568,8 +633,8 @@ There is no production `NOT_IMPLEMENTED` error because stub tools are not regist
 | Unit | Canonicalisation, request construction, response mapping, errors, tickets, file identity, URL normalisation, redaction |
 | Contract | Pydantic schemas against documentation and sanitised fixtures |
 | API integration | Filters, pagination, errors, reads, and writes against the dedicated organisation |
-| Interface workflow | Selectors, state machines, reads, writes, plan gates, and typed mapping |
-| Authentication | Login states, expiry, reauthentication, MFA handoff, organisation selection, credential bootstrap |
+| Interface workflow | Headless selectors, state machines, reads, writes, plan gates, typed mapping, rendered-frame capture, and vision verification |
+| Authentication | Headless login states, persisted sessions, credential and TOTP resolution, expiry, reauthentication, challenge errors without a window, organisation selection, credential bootstrap |
 | Egress | Allowed and denied destinations for both lanes |
 | Recovery | Browser crash, stale session, restart, and discarded tickets |
 | Cleanup | Reverse-order deletion and leftover reporting |
@@ -589,12 +654,17 @@ Neither setting is committed with an enabled value. Runtime production enablemen
 
 1. Generate a unique test-run identifier.
 2. Create clearly tagged temporary resources.
-3. Exercise preview and execute.
-4. Read back and verify the result.
-5. Track every created or changed object.
-6. Restore or delete in reverse dependency order.
-7. Run a final search for the test tag where supported.
-8. Fail with `CLEANUP_FAILED` and report exact leftovers if cleanup is incomplete.
+3. Capture the initial rendered state for an interface write.
+4. Exercise preview, fill the form, and capture the completed fields before submission.
+5. Execute through the real headless UI and capture the success state and resulting record.
+6. Verify DOM state and independently read back the result through the API or a second UI path.
+7. Have a vision-capable agent verify the intended values, submission, and resulting record.
+8. Track every created or changed object.
+9. Restore or delete in reverse dependency order.
+10. Capture the restored state, assert it through the DOM, independently read it back, and have the vision-capable agent verify clean restoration.
+11. Write a non-sensitive vision-review record, purge the raw frames, and record `purge_verified: true`.
+12. Run a final search for the test tag where supported.
+13. Fail with `CLEANUP_FAILED` and report exact leftovers if cleanup is incomplete.
 
 The test suite never hides orphaned data.
 
@@ -608,16 +678,18 @@ They require a Billy-supported sandbox, a resettable dedicated organisation, or 
 
 1. No secrets in source control, fixtures, test recordings, or examples.
 2. Credentials come only from environment variables or the operating system credential store.
-3. The browser profile and downloads stay outside the repository with owner-only permissions.
+3. The browser profile, downloads, and test-org rendered-frame evidence stay outside the repository with owner-only permissions.
 4. Confirmation tickets are high-entropy, short-lived, single-use, and never logged.
 5. File uploads are restricted to configured roots.
 6. API and browser egress policies are enforced in code.
 7. No telemetry from Billy MCP.
 8. The MCP server exposes no shell or dynamic-code operation.
 9. Dependencies are minimal, locked, audited, and updated through reviewed changes.
-10. Authenticated live runs never write HAR files or browser traces to disk. Failure screenshots are disabled by default and may be retained only after automated redaction. Synthetic and sanitised fixtures may be committed.
-11. Public releases are scanned for credentials and dependency advisories.
-12. The MCP host is trusted to call tools. Tickets protect against accidental or stale writes, not a fully malicious local host.
+10. Every browser is headless and the project never opens, raises, focuses, or manipulates a desktop window.
+11. Production runtime never persists screenshots, rendered frames, HAR files, or browser traces.
+12. Non-production test rendered frames are ephemeral, stored outside the repository with owner-only permissions, and purged after vision review. Synthetic and sanitised fixtures may be committed.
+13. Public releases are scanned for credentials and dependency advisories.
+14. The MCP host is trusted to call tools. Tickets protect against accidental or stale writes, not a fully malicious local host.
 
 ## 16. Repository structure
 
@@ -641,6 +713,7 @@ billy-mcp/
     ui_workflows_manifest.yaml
     browser_egress.yaml
     status.json
+    vision_reviews/
   tests/
     unit/
     contract/
@@ -660,7 +733,7 @@ The repository excludes:
 - `.env` and credentials
 - Browser profiles and cookies
 - Downloads containing company data
-- Unredacted HAR, trace, and screenshot evidence
+- HAR files, traces, screenshots, and rendered-frame evidence
 - Test-account exports
 
 ## 17. Delivery plan
@@ -672,7 +745,7 @@ The repository excludes:
 3. Create the interface workflow inventory and API-parity cross-map.
 4. Create coverage manifest schemas and generated reports.
 5. Implement FastMCP stdio shell, typed errors, config, and redacted logging.
-6. Implement authentication, organisation context, credential storage, and browser lifecycle.
+6. Implement headless-only authentication, organisation context, credential and TOTP storage, and persistent browser lifecycle without desktop-window control.
 7. Implement autonomous confirmation tickets.
 8. Implement API and browser egress policies.
 
@@ -691,29 +764,32 @@ The repository excludes:
 2. Implement every applicable read workflow.
 3. Map every write form field and validation rule.
 4. Implement every applicable write through preview and execute.
-5. Test authentication transitions, organisation switching, plan gates, drift, recovery, and cleanup.
-6. Require all applicable parity rows to be green before moving the lane beyond parity.
+5. Implement the rendered-frame capture and agent-vision verification pipeline.
+6. Test authentication transitions, organisation switching, plan gates, drift, recovery, vision evidence, and cleanup through headless Chrome.
+7. Require all applicable parity rows to be green before moving the lane beyond parity.
 
 ### Lane B: UI-only coverage
 
 1. Complete the remaining verified interface inventory.
 2. Implement inventory, Copilot, financing, annual reports, bulk exports, partner integrations, settings, and other verified UI-only workflows.
 3. Verify external partner destinations and scope their temporary allowlists.
-4. Test every claimed UI-only workflow against the dedicated organisation or supported sandbox.
+4. Test every claimed UI-only workflow headlessly against the dedicated organisation or supported sandbox, including required vision evidence.
 
 ### Final reconciliation
 
 1. Cross-link API and interface coverage.
 2. Run the complete test suite.
 3. Run credential, telemetry, network, dependency, and public-artifact audits.
-4. Verify the test organisation is clean.
-5. Publish a completeness claim only when every applicable row is green.
+4. Verify every UI row has vision evidence and that ephemeral frames were purged.
+5. Verify the test organisation is clean.
+6. Publish a completeness claim only when every applicable row is green.
 
 ## 18. Implementation roles
 
 - Grok CLI performs implementation grunt work.
 - Codex orchestrates, reviews, verifies evidence, and decides what is accepted.
-- Human interaction is limited to unavoidable login, MFA, plan enablement, and production authorisation.
+- A vision-capable agent verifies every headless UI workflow using rendered-frame evidence in addition to DOM assertions and independent read-back.
+- Humans may place credentials or TOTP material in the environment or operating system credential store and resolve unavoidable authentication challenges out of band. The MCP never launches a visible browser.
 
 Codex subagents are not used for this project unless the user changes that instruction.
 
@@ -723,19 +799,21 @@ The project is complete only when all of these are true:
 
 1. One FastMCP stdio server lists only real, typed tools.
 2. Every supported official API operation is implemented and tested.
-3. Every API capability exposed by Billy's interface has a tested UI equivalent.
-4. Every verified UI-only operation is implemented and tested.
-5. Authentication covers API tokens, persistent login, expiry, reauthentication, MFA, organisation selection, bootstrap, and recovery.
+3. Every API capability exposed by Billy's interface has a headless end-to-end tested and vision-verified UI equivalent.
+4. Every verified UI-only operation is implemented, headless end-to-end tested, and vision verified.
+5. Authentication covers API tokens, headless persistent login, credential and TOTP resolution, expiry, reauthentication, MFA detection, organisation selection, bootstrap, recovery, and no-window challenge errors.
 6. Every write uses preview and execute with an exact, one-use confirmation ticket.
 7. File and destination bindings are revalidated at execution.
 8. No generic browser, HTTP, shell, or dynamic-code tool exists.
 9. Egress controls and telemetry blocking are enforced.
-10. Coverage reports are generated from manifests, every applicable row satisfies the four-status green definition, and generated `coverage/status.json` says `complete: true`.
-11. Request construction, response mapping, filters, pagination, errors, writes, authentication, recovery, plan gates, and cleanup are tested.
-12. Automated live verification uses only a dedicated non-production organisation or Billy-supported sandbox.
-13. Test data is removed or restored, and cleanup failures are visible.
-14. The public repository contains no credential or private company artifact.
-15. No unresolved documentation gap is counted as complete.
+10. Every browser is headless and no project process opens, raises, focuses, or manipulates a desktop window.
+11. Coverage reports are generated from manifests, every API row satisfies the four-status rule, every UI row additionally has `vision_verified`, and generated `coverage/status.json` says `complete: true`.
+12. Request construction, response mapping, filters, pagination, errors, writes, authentication, recovery, plan gates, rendered-frame vision, and cleanup are tested.
+13. Automated live verification uses only a dedicated non-production organisation or Billy-supported sandbox.
+14. Test data is removed or restored, cleanup failures are visible, and ephemeral rendered frames are purged after review.
+15. Production runtime persists no screenshot, rendered frame, HAR, or browser trace.
+16. The public repository contains no credential or private company artifact.
+17. No unresolved documentation gap is counted as complete.
 
 ## 20. Known gaps at design approval
 
@@ -744,12 +822,13 @@ The project is complete only when all of these are true:
 | 92 ambiguous bulk save/delete operation mentions | Obtain the complete official contract or verify with Billy in the dedicated organisation |
 | No documented webhook found | Continue official and interface discovery; do not invent a tool |
 | Field-level write forms | Map and test every field and validation |
-| Authentication transitions | Test login, expiry, reauthentication, MFA, switching, and logout |
+| Authentication transitions | Test headless login, persisted session, credential and TOTP resolution, expiry, reauthentication, challenge errors, switching, and logout |
 | Account menu | Complete live discovery |
 | Daybook editor | Complete live discovery and write tests |
 | Plan-gated workflows | Obtain suitable test access or Billy-supported sandbox |
 | Some settings | Complete field-level discovery and tests |
 | Irreversible actions | Obtain a safe supported test path |
+| Vision evidence pipeline | Implement rendered-frame capture, vision review, evidence indexing, and purge verification |
 
 Every unresolved gap remains visible and blocks the relevant completeness claim.
 
@@ -759,11 +838,11 @@ Every unresolved gap remains visible and blocks the relevant completeness claim.
 2. Explicit `api_*` and `ui_*` lanes with shared `auth_*`.
 3. The interface lane must reach full API parity before adding UI-only features.
 4. Dedicated persistent Chrome profile owned by the MCP.
-5. Background automation with visible browser only for unavoidable authentication or recovery.
+5. Every browser is headless; the project never opens, raises, focuses, or manipulates a desktop window.
 6. Autonomous preview and execute for writes, with no mandatory human approval.
 7. Exact file and destination binding.
 8. Official documentation is the API contract.
-9. Playwright page objects and workflow state machines, with accessibility automation only for native surfaces.
+9. Playwright headless page objects and workflow state machines with no native desktop automation.
 10. Fail closed on interface drift.
 11. Billy-only API egress and restricted browser egress.
 12. Exact partner hosts temporarily allowed only for explicitly requested Billy workflows.
@@ -771,6 +850,9 @@ Every unresolved gap remains visible and blocks the relevant completeness claim.
 14. Dedicated non-production verification before live use.
 15. Manifest-driven completeness with no early completeness claim.
 16. Grok CLI performs implementation grunt work under Codex orchestration and review.
+17. Every UI workflow requires DOM assertions, independent read-back, and agent vision; no UI row is green without `vision_verified`.
+18. UI write tests capture initial, completed-form, submitted-result, and cleaned-up frames.
+19. Non-production frames are ephemeral and purged; production runtime persists no visual or browser trace artifact.
 
 ## 22. Document control
 

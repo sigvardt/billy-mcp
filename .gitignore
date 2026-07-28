@@ -25,5 +25,8 @@ chrome-profile/
 downloads/
 playwright-report/
 test-results/
+vision-evidence/
+rendered-frames/
+screenshots/
 *.har
 *.trace.zip
