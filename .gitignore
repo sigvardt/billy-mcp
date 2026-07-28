@@ -1,0 +1,29 @@
+.DS_Store
+
+# Credentials and local configuration
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+dist/
+build/
+*.egg-info/
+
+# Browser state and test evidence
+chrome-profile/
+downloads/
+playwright-report/
+test-results/
+*.har
+*.trace.zip
