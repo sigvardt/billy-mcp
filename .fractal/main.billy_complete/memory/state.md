@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T19:48:00Z
+updated: 2026-07-29T19:58:00Z
 ---
 
 # state
@@ -22,11 +22,11 @@ updated: 2026-07-29T19:48:00Z
 - Wave-5c freeze: **ACCEPT**. Wave-5c product at tip `f235ac2`: **ACCEPT** offline by independent Grok.
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
 - Wave-5d product at tip **`1108e2f`**: **ACCEPT** offline by independent Grok (`wiki/wave_fived_product_independent_review.md`; full note `tmp/grok-review.md`).
-- Reproduced the product review verification locally: focused ticket/registry/coverage suite **110 passed** and the non-live repository suite **753 passed**.
-- Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review (`wiki/wave_fivee_freeze_independent_review.md`). The active Codex fallback remains supplemental and non-gating.
+- Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review (`wiki/wave_fivee_freeze_independent_review.md`). Codex fallback is supplemental only.
+- Wave-5e product: **not implemented**. Research handoff is ready at `tmp/grok-research.md` (product implementation brief). Plan/Implement may spawn bill + bill-line leaves now.
 - Clear red remaining: **77** of 207 clear ops (includes 6 Wave-5e bill/line CUD). After Wave-5e product: target **178** `api_*`, **136** offline rows.
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
-- Historical unmerged review branches contain child-seed state and superseded fallback reports only, so they remain intentionally closed rather than merged. The completed Wave-5d Codex fallback audit is non-invasive and cannot replace the already-recorded Grok acceptance.
+- Historical unmerged review branches contain child-seed state and superseded fallback reports only, so they remain intentionally closed rather than merged.
 
 ## Review decisions (authoritative)
 
@@ -39,13 +39,21 @@ updated: 2026-07-29T19:48:00Z
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
 - Wave-5d product at tip `1108e2f`: **ACCEPT** offline by independent Grok.
 - Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review.
-- Wave-5e product: **not accepted** until freeze ACCEPT + product review.
+- Wave-5e product: **not accepted** until product lands + independent Grok product review.
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
 ## Open coverage work
 
 1. Implement bills + billLines under the accepted Wave-5e freeze (target 178 `api_*`, 136 offline rows), then obtain a separate Grok product review.
 2. Remaining clear writes (~71 after Wave-5e), specials, bulk (live only), UI/auth/vision, and live qualification.
+
+## Research pass (product handoff)
+
+- Docs re-fetch: ETag `hsisik4g9p3603`, MD5 match, 147934 bytes — no source drift.
+- Unauth probes: bills/billLines POST/PUT 401; missing-id DELETE 200 (not cleanup proof); postings CUD still 405.
+- Contract unchanged vs freeze: opaque bill payload; bill lines account/taxRate/description/amount; line `additional_plural_roots=("bills",)`; no invoice-style embedded-line rules for bills.
+- Clone pattern: `invoice_writes.py` + `invoice_line_writes.py`.
+- UI discovery still blocked at login; no UI work in Wave-5e product.
 
 ## Evidence boundaries
 
