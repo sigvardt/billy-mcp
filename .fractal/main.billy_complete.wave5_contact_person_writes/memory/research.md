@@ -18,9 +18,11 @@ updated: 2026-07-29T14:09:46Z
 The official documentation fingerprint is ETag `hsisik4g9p3603` and MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. The cited parent Grok brief and the frozen
 shared contract are authoritative; this leaf performs no new web, interface,
-or live research. The brief is at
+or live research. The cited brief is read-only parent evidence at
 `/Volumes/ssd_1/Repositories/billy-mcp/.worktrees/main.billy_complete/.fractal/main.billy_complete/tmp/grok-research.md`,
-and the manifest repeats this fingerprint for all three contact-person CUD rows.
+and the manifest repeats this fingerprint for all three contact-person CUD rows:
+`api.contactPersons.create`, `api.contactPersons.update`, and
+`api.contactPersons.delete`.
 
 Register exactly these paired tools through
 `register_contact_person_write_tools(server, client, write_protocol)`:
@@ -35,8 +37,8 @@ is `PUT /contactPersons/{escaped-id}` with the same singular body; delete is
 ticket through `WriteOperationSpec` and `WriteProtocolService`; execute accepts
 only `WriteExecuteInput` and delegates to the protocol. The protocol retains
 the canonical request and escaped relative path server-side, does not make a
-preview HTTP request, sends no DELETE body, and maps changed `contactPersons`
-with optional `meta.deletedRecords.contactPersons`.
+preview HTTP request, sends no DELETE body, has no write retry, and maps changed
+`contactPersons` with optional `meta.deletedRecords.contactPersons`.
 
 The contact-person property table makes `contactId` dependency-sensitive and
 describes name-or-email semantics inconsistently. Do not add offline name/email
