@@ -102,6 +102,30 @@ def test_redaction_removes_wave_three_read_sensitive_values() -> None:
     }
 
 
+def test_redaction_removes_wave_four_reminder_and_user_contact_values() -> None:
+    result = redact(
+        {
+            "invoiceReminder": {
+                "emailSubject": "Overdue invoice for Acme",
+                "emailBody": "Payment is overdue for customer@example.test.",
+                "downloadUrl": "https://download.billy.dk/reminder?token=download-secret",
+                "createdTime": "2026-07-29T12:00:00Z",
+            },
+            "user": {"email": "operator@example.test", "phone": "+4512345678"},
+        }
+    )
+
+    assert result == {
+        "invoiceReminder": {
+            "emailSubject": REDACTED,
+            "emailBody": REDACTED,
+            "downloadUrl": REDACTED,
+            "createdTime": "2026-07-29T12:00:00Z",
+        },
+        "user": {"email": REDACTED, "phone": REDACTED},
+    }
+
+
 @pytest.mark.parametrize("upstream_code", ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"])
 def test_known_401_codes_become_auth_required_with_sanitised_metadata(upstream_code: str) -> None:
     error = translate_upstream_error(

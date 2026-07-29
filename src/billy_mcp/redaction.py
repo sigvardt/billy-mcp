@@ -28,6 +28,9 @@ _SENSITIVE_ORGANIZATION_PAYMENT_KEYS = frozenset(
 _SENSITIVE_READ_KEYS = frozenset(
     {
         "email",
+        "emailbody",
+        "emailsubject",
+        "phone",
         "bankname",
         "bankroutingno",
         "bankaccountno",

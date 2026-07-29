@@ -94,6 +94,19 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert by_id["api.invoices.list"]["filters"] == generator.INVOICE_FILTERS
     assert by_id["api.bills.list"]["filters"] == generator.BILL_FILTERS
     assert by_id["api.daybookTransactions.list"]["filters"] == generator.DAYBOOK_TRANSACTION_FILTERS
+    for resource in ("cities", "states", "zipcodes"):
+        row = by_id[f"api.{resource}.list"]
+        assert row["filters"] == {"countryId": {"type": "string", "required": True}}
+        assert row["request_fields"] == [
+            "page",
+            "pageSize",
+            "include",
+            "sortProperty",
+            "sortDirection",
+            "countryId",
+        ]
+        assert row["contract_status"] == "documented_plus_live_observation"
+        assert "without a non-empty countryId" in row["evidence"]
     assert by_id["api.files.create"]["alias_of"] == generator.FILES_UPLOAD_ALIAS
     assert by_id["api.files.create"]["tool_name"] == ""
     assert by_id["api.files.create"]["request_fields"] == generator.FILES_UPLOAD_REQUEST_FIELDS

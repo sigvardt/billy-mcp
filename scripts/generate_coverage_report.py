@@ -217,10 +217,21 @@ DAYBOOK_TRANSACTION_FILTERS: dict[str, Any] = {
     "q": ["description", "extendedDescription", "voucherNo"],
 }
 
+GEO_COUNTRY_ID_FILTER: dict[str, Any] = {
+    "countryId": {"type": "string", "required": True},
+}
+LIVE_GEO_COUNTRY_ID_EVIDENCE = (
+    "Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty "
+    "countryId return Billy 400 OTHER before authentication."
+)
+
 LIST_FILTERS: dict[str, dict[str, Any]] = {
     "invoices": INVOICE_FILTERS,
     "bills": BILL_FILTERS,
     "daybookTransactions": DAYBOOK_TRANSACTION_FILTERS,
+    "cities": GEO_COUNTRY_ID_FILTER,
+    "states": GEO_COUNTRY_ID_FILTER,
+    "zipcodes": GEO_COUNTRY_ID_FILTER,
 }
 
 UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
@@ -497,6 +508,9 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
             source_kind="clear",
         ),
     ]
+    if resource in {"cities", "states", "zipcodes"}:
+        rows[1]["contract_status"] = "documented_plus_live_observation"
+        rows[1]["evidence"] = f"{rows[1]['evidence']}; {LIVE_GEO_COUNTRY_ID_EVIDENCE}"
     for operation, supported, method, side_effects, cleanup in (
         ("create", create, "POST", f"creates {singular_name}", "delete dedicated test resource"),
         ("update", update, "PUT", f"updates {singular_name}", "restore prior test state"),

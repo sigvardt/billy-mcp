@@ -4104,7 +4104,12 @@
         "UI_CHANGED"
       ],
       "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.list",
-      "filters": {},
+      "filters": {
+        "countryId": {
+          "required": true,
+          "type": "string"
+        }
+      },
       "id": "ui.parity.cities.list",
       "implemented": false,
       "lane": "ui",
@@ -4135,7 +4140,8 @@
         "pageSize",
         "include",
         "sortProperty",
-        "sortDirection"
+        "sortDirection",
+        "countryId"
       ],
       "response_fields": [
         "cities[]",
@@ -11460,7 +11466,12 @@
         "UI_CHANGED"
       ],
       "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.list",
-      "filters": {},
+      "filters": {
+        "countryId": {
+          "required": true,
+          "type": "string"
+        }
+      },
       "id": "ui.parity.states.list",
       "implemented": false,
       "lane": "ui",
@@ -11491,7 +11502,8 @@
         "pageSize",
         "include",
         "sortProperty",
-        "sortDirection"
+        "sortDirection",
+        "countryId"
       ],
       "response_fields": [
         "states[]",
@@ -12704,7 +12716,12 @@
         "UI_CHANGED"
       ],
       "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.list",
-      "filters": {},
+      "filters": {
+        "countryId": {
+          "required": true,
+          "type": "string"
+        }
+      },
       "id": "ui.parity.zipcodes.list",
       "implemented": false,
       "lane": "ui",
@@ -12735,7 +12752,8 @@
         "pageSize",
         "include",
         "sortProperty",
-        "sortDirection"
+        "sortDirection",
+        "countryId"
       ],
       "response_fields": [
         "zipcodes[]",
