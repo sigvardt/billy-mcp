@@ -508,6 +508,21 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_tax_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.taxRates.create": ("tests/api/test_tax_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.taxRates.update": ("tests/api/test_tax_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.taxRates.delete": ("tests/api/test_tax_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.taxRateDeductionComponents.create": (
+        "tests/api/test_tax_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.taxRateDeductionComponents.update": (
+        "tests/api/test_tax_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.taxRateDeductionComponents.delete": (
+        "tests/api/test_tax_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxRulesets.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxRulesets.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxRules.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
