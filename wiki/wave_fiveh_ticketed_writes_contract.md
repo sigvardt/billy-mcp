@@ -1,34 +1,36 @@
 ---
 name: wave_fiveh_ticketed_writes_contract
-title: Wave-5h attachment JSON ticketed-write contract (Codex Power fallback candidate)
-desc: Cited fallback candidate for three offline-only Billy attachment JSON CUD operations; not an independent Grok acceptance.
-tags: [billy, api, attachments, writes, confirmation, fallback]
+title: Wave-5h attachment JSON ticketed-write contract
+desc: Cited offline contract for three singular Billy attachment JSON CUD operations, accepted by independent Grok review.
+tags: [billy, api, attachments, writes, confirmation]
 sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - coverage/api_v2_manifest.yaml
   - coverage/status.json
   - wiki/offline_write_probe_rules.md
+  - wiki/wave_fiveh_freeze_independent_review.md
 created: 2026-07-29T23:00:00Z
-updated: 2026-07-29T23:00:00Z
+updated: 2026-07-29T23:16:00Z
 ---
 
-# Wave-5h attachment JSON ticketed-write contract (Codex Power fallback candidate)
+# Wave-5h attachment JSON ticketed-write contract
 
 ## Authority and evidence
 
-This is a **Codex Power fallback contract candidate**, written because the
-Grok CLI was unauthenticated before it could edit. It is not an independent
-Grok review, acceptance verdict, or implementation gate. A later independent
-Grok review alone may accept or reject this candidate; this page neither opens
-nor closes a product, live-qualification, UI, vision, coverage, or completeness
-gate.
+This is the frozen, offline-only implementation contract for the three documented
+singular Billy API v2 CUD rows for `attachments`. It was first drafted as a
+Codex Power fallback page and is elevated by the independent Grok freeze review
+recorded in `wiki/wave_fiveh_freeze_independent_review.md`. That acceptance
+opens only the offline product-implementation gate. It is not acceptance of
+implementation, live qualification, browser/UI parity, vision verification,
+bulk operations, special routes, or overall completeness.
 
 The primary authority is the current [official Billy API documentation](https://www.billy.dk/api/),
 fetched read-only on 2026-07-29 (HTTP 200; ETag `"hsisik4g9p3603"`; 147934
 bytes; MD5 `c2efda0ee4cf9cf200e14910c5fc6996`). The fingerprint matches the
-checked-in API manifest and the preceding cited research lead: no source drift
-or manifest conflict was found. The resource table at
+checked-in API manifest and the cited research lead: no source drift or
+manifest conflict was found. The resource table at
 [`/v2/attachments`](https://www.billy.dk/api/#v2attachments) lists singular
 create, update, and delete support. The generic official
 [create/update/delete rules](https://www.billy.dk/api/#creating-a-record)
@@ -50,7 +52,7 @@ second inventory row.
 The locked runtime base is `https://api.billysbilling.com/v2`; runtime paths in
 the table are client-relative and must never repeat `/v2`. The cited page shows
 that base in its API-client example. No route, method, tool, or response root
-outside this table is frozen by this candidate.
+outside this table is frozen by this contract.
 
 ## Input, field, and response boundaries
 
@@ -117,7 +119,7 @@ operation and independent read-back.
 The official documentation separately describes high-sensitivity binary
 `POST /files`: raw file bytes plus file-specific headers can optionally create
 an attachment and may return both `files` and `attachments`. That is a distinct
-special route, not evidence for attachment JSON CUD. This candidate therefore
+special route, not evidence for attachment JSON CUD. This contract therefore
 keeps `api.files.create` and `api.special.files_upload` red and out of scope;
 it neither infers file-upload behaviour nor serializes a file-upload request.
 
@@ -128,7 +130,7 @@ unobserved response root, generic HTTP tool, or UI tool is authorised here.
 
 There were no credentials, browser sessions, Billy records, authenticated
 requests, UI observations, live tests, screenshots, HARs, traces, or vision
-work in this fallback. It makes no coverage-green, `implemented`,
+work under this contract. It makes no coverage-green, `implemented`,
 `contract_tested`, `live_tested`, `vision_verified`, registry-count, or
 `complete` claim.
 
@@ -149,7 +151,7 @@ Before any later product or coverage change, the offline suite must prove:
 - changed `attachments` mapping without fabricated roots, and optional delete
   metadata only when supplied.
 
-Later authenticated non-production work, outside this candidate, must resolve
+Later authenticated non-production work, outside this contract, must resolve
 owner serialization, valid create prerequisites and `fileId` lifecycle, actual
 response envelopes, priority editability, and cleanup by delete plus
 independent read-back. It must not be backfilled from the binary `/files`
