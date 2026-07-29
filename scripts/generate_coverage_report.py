@@ -320,6 +320,9 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.contacts.delete": ("tests/api/test_contact_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.invoices.get": ("tests/api/test_invoice_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.invoices.list": ("tests/api/test_invoice_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoices.create": ("tests/api/test_invoice_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoices.update": ("tests/api/test_invoice_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoices.delete": ("tests/api/test_invoice_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bills.get": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bills.list": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.daybookTransactions.get": (
@@ -344,6 +347,18 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.invoiceLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.invoiceLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoiceLines.create": (
+        "tests/api/test_invoice_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.invoiceLines.update": (
+        "tests/api/test_invoice_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.invoiceLines.delete": (
+        "tests/api/test_invoice_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.billLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.billLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.daybookTransactionLines.get": (
