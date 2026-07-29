@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-29T22:18:30Z
+updated: 2026-07-29T22:42:41Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -59,10 +59,11 @@ coverage green.
 | `organizations` | POST/PUT 401; DELETE **405** |
 | `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
+| `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; freeze only after dedicated field research (embedded replace on match has-many) |
 
-Probe refresh: 2026-07-29T22:17:57Z, docs ETag `hsisik4g9p3603`, MD5
+Probe refresh: 2026-07-29T22:42:41Z, docs ETag `hsisik4g9p3603`, MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
-`.fractal/main.billy_complete/tmp/write-probes-research33-compact.json`.
+`.fractal/main.billy_complete/tmp/write-probes-research34-compact.json`.
 
 ## Next freezes (planning only)
 
@@ -72,6 +73,7 @@ Probe refresh: 2026-07-29T22:17:57Z, docs ETag `hsisik4g9p3603`, MD5
   overall completeness remain fail-closed.
 - Recommended next offline freeze: singular
   `attachments` CUD (3 clear ops). Secondary freeze-ready cohort:
-  `salesTaxAccounts` + `salesTaxMetaFields` (6 clear CUD). Full cited brief
-  lives outside the public repo under the node scratch path
+  `salesTaxAccounts` + `salesTaxMetaFields` (6 clear CUD). Tertiary
+  probe-open later: bank line match/line/subject-association CUD. Full cited
+  brief lives outside the public repo under the node scratch path
   `.fractal/main.billy_complete/tmp/grok-research.md`.
