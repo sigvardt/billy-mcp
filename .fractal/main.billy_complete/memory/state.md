@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T13:10:00Z
+updated: 2026-07-29T13:26:37Z
 ---
 
 # state
@@ -17,39 +17,37 @@ updated: 2026-07-29T13:10:00Z
 - Clear resource get/list offline: **92/92** implemented and contract_tested.
 - Specials offline-green: `api.special.user_get`, `api.special.user_organizations` only (4 specials remain red).
 - Coverage: implemented 94, contract_tested 94, live_tested 0, vision 0, `complete: false`.
-- Offline suite: **487** passed (`not live and not vision`). Full mode fails only at completeness gate (expected).
 - Official docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).
 - UI discovery still unauthenticated login only; all 339 UI rows red.
 - `BILLY_API_TOKEN` unavailable; no live qualification claimed.
-- Wave-4 root independent review: offline **PASS**, product incomplete (wiki record committed).
+- Wave-5 **contract freeze** committed (`wiki/wave_five_ticketed_writes_contract.md` @ `9624d26`). No write tools registered yet.
+- Active child: `wave5_write_foundation` (init; not yet product-delivered).
+- Post-freeze verification: repository lint passed and the non-live suite passed **487** tests; the durable Grok review record is `wiki/wave_five_contract_freeze_independent_review.md`.
 
 ## Evidence boundaries
 
 - Official API: https://www.billy.dk/api/ fingerprint above.
 - 46 resources, 207 clear ops, 92 bulk ambiguous, 6 specials; 0 webhooks.
-- Documented list filter tables only for invoices, bills, daybookTransactions.
-- Live unauth: cities/states/zipcodes require `countryId`; countryGroups public; unauth `GET /user/organizations` returns 404 (docs path kept offline until authenticated live proof); org-scoped get-by-id often 404 without token while lists return 401.
-- **Write probes (unauth):** POST/PUT → 401 AUTHENTICATION_REQUIRED; invalid token → OAUTH_INVALID_ACCESS_TOKEN; **DELETE → 200 empty success without deletedRecords** (idempotent; not cleanup proof). Bulk still unproven.
-- Remaining red API work: 115 clear writes, 92 bulk, four specials (upload, invoice email/delivery/logs).
+- Write probes (unauth): POST/PUT → 401; DELETE → empty 200 (not cleanup proof). Bulk unproven.
+- Remaining red API work: 115 clear writes, 92 bulk, four specials.
 
 ## Review decisions
 
-- Independent review of Wave-4 offline integration: **ACCEPT** slice quality and anti-false-green; **FAIL** product completeness.
-- No REQUIRED rewrites of geo/tax/bank/balance/ledger read modules.
-- Rejected as complete: live, UI/vision, auth product tools, bulk resolution, write tools, full-mode completeness.
+- Wave-4 offline integration: **ACCEPT** slice; **FAIL** product completeness.
+- Wave-5 contract freeze @ `9624d26`: **ACCEPT** freeze honesty and alignment; **no** write greening; product completeness still **FAIL**.
+- No REQUIRED rewrite of Wave-4 read modules or freeze wiki for false-green.
+- Before greening any Wave-5a row: both preview+execute, preview no mutation, ticket matrix, exact body capture, evidence map; live stays false.
 
 ## Next implementation slice (for Codex Power)
 
-Wave-5a ticketed clear writes (see research brief):
-
-1. Shared write framework + wire `ConfirmationStore` into tools.
-2. First cohort (15 inventory ops / 30 tools): products, productPrices, contacts, contactPersons, daybooks — preview + execute each.
-3. Contract tests for ticket matrix, request construction, no preview mutation, 401/404 fixtures.
-4. Offline-green only those 15 rows; live/UI/bulk/complete stay false.
-5. Then expand writes; with token: live reads + writes + bulk probes; then specials, auth, UI/vision.
+1. Deliver and merge `wave5_write_foundation` (`write_protocol.py` + unit tests).
+2. Spawn/merge catalog/contact/contact_person/daybook write leaves (30 tools).
+3. Root register → 124 `api_*` + 2 coverage; offline-green only 15 write inventory rows.
+4. Independent Grok product review of integrated Wave-5a.
+5. Later: live token, bulk probes, specials, auth, UI/vision.
 
 ## References
 
 - Research: `.fractal/main.billy_complete/tmp/grok-research.md`
-- Review: wiki `wave_four_root_integration_independent_review.md`
-- Wiki: `wiki/wave_four_remaining_clear_reads_contract.md`, `wiki/billy_ui_discovery_brief.md`, `wiki/billy_api_v2_research_seed.md`
+- Review: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Wiki: `wiki/wave_five_ticketed_writes_contract.md`, `wiki/wave_four_root_integration_independent_review.md`
