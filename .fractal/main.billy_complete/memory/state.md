@@ -6,22 +6,22 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T17:45:00Z
+updated: 2026-07-29T17:57:28Z
 ---
 
 # state
 
 ## Current state
 
-- Root HEAD under freeze review: `ab199e2` (Wave-5c contract freeze). Wave-5b product code remains `a2a0996`.
-- Runtime: **142** `api_*` + 2 coverage; shared ConfirmationStore + WriteProtocolService; 24 preview + 24 execute writes.
-- Coverage: implemented 118, contract_tested 118, live 0, vision 0, `complete: false`.
+- Wave-5c parent and line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
+- Runtime: **154** `api_*` + 2 coverage; 30 preview + 30 execute ticketed write tools.
+- Coverage: implemented 124, contract_tested 124, live 0, vision 0, `complete: false`.
 - Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (re-fetched; unchanged).
 - Wave-5a registration product: **ACCEPT** offline.
 - Wave-5b freeze: **ACCEPT**. Wave-5b product at `920ceab`: **REJECTED**. Repair product at `a2a0996`: **ACCEPT**.
 - Wave-5c freeze: **ACCEPT** (`wiki/wave_fivec_ticketed_writes_contract.md`; durable review `wiki/wave_fivec_freeze_independent_review.md`).
-- Wave-5c product: **not on root**. Active leaves: `wave5c_daybook_transaction_writes`, `wave5c_daybook_transaction_line_writes`.
-- UI all red; bulk 92 empty-tool red; four specials red; **91** clear singular writes still red (including 6 Wave-5c); no live token.
+- Wave-5c product: **pending independent product review**. Its six clear singular CUD rows have focused offline contract suites, server evidence mappings, and a two-way cross-module executor-mismatch regression.
+- UI all red; bulk 92 empty-tool red; four specials red; **85** clear singular writes remain red; no live token.
 
 ## Review decisions (authoritative)
 
@@ -30,13 +30,13 @@ updated: 2026-07-29T17:45:00Z
 - Wave-5b product at `920ceab`: **REJECTED**.
 - Wave-5b repair at `a2a0996`: **ACCEPT** offline.
 - Wave-5c freeze at `ab199e2`: **ACCEPT** offline contract only.
-- Wave-5c product: pending leaf merge + separate independent product review.
+- Wave-5c product: root integration is pending separate independent product review.
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
-## Next work
+## Open coverage work
 
-1. Merge Wave-5c leaves when committed and green; root registration to 154 `api_*` and 124 offline rows; independent product review.
-2. Remaining clear writes (invoices/bills first), specials, bulk (live only), UI/auth/vision, live qualification.
+1. Independent Grok product review of the merged Wave-5c implementation and generated coverage.
+2. Remaining clear writes (invoices/bills first), specials, bulk (live only), UI/auth/vision, and live qualification.
 
 ## Evidence boundaries
 

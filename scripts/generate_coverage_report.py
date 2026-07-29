@@ -330,6 +330,18 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_daybook_transaction_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.daybookTransactions.create": (
+        "tests/api/test_daybook_transaction_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactions.update": (
+        "tests/api/test_daybook_transaction_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactions.delete": (
+        "tests/api/test_daybook_transaction_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.invoiceLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.invoiceLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.billLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
@@ -340,6 +352,18 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.daybookTransactionLines.list": (
         "tests/api/test_line_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactionLines.create": (
+        "tests/api/test_daybook_transaction_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactionLines.update": (
+        "tests/api/test_daybook_transaction_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactionLines.delete": (
+        "tests/api/test_daybook_transaction_line_writes.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
     "api.contactPersons.get": (

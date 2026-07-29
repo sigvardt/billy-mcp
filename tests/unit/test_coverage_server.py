@@ -122,6 +122,23 @@ WAVE_FIVEB_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEC_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_daybook_transactions_create_preview",
+        "api_daybook_transactions_create_execute",
+        "api_daybook_transactions_update_preview",
+        "api_daybook_transactions_update_execute",
+        "api_daybook_transactions_delete_preview",
+        "api_daybook_transactions_delete_execute",
+        "api_daybook_transaction_lines_create_preview",
+        "api_daybook_transaction_lines_create_execute",
+        "api_daybook_transaction_lines_update_preview",
+        "api_daybook_transaction_lines_update_execute",
+        "api_daybook_transaction_lines_delete_preview",
+        "api_daybook_transaction_lines_delete_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -257,11 +274,13 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
     assert len(WAVE_FIVEA_WRITE_API_TOOL_NAMES) == 30
     assert len(WAVE_FIVEB_WRITE_API_TOOL_NAMES) == 18
-    assert len(api_tool_names) == 142
+    assert len(WAVE_FIVEC_WRITE_API_TOOL_NAMES) == 12
+    assert len(api_tool_names) == 154
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
         | WAVE_FOUR_API_TOOL_NAMES
         | WAVE_FIVEA_WRITE_API_TOOL_NAMES
         | WAVE_FIVEB_WRITE_API_TOOL_NAMES
+        | WAVE_FIVEC_WRITE_API_TOOL_NAMES
     )

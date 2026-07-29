@@ -1,58 +1,65 @@
 ---
 name: wave_fivec_freeze_independent_review
-desc: Independent Grok ACCEPT of the Wave-5c offline ticketed-write contract freeze; product not yet on root.
-tags: [billy, review, writes, coverage]
+title: Wave-5c contract freeze independent review ACCEPT
+desc: Independent Grok acceptance of the cited offline contract for daybook transaction and line writes.
+tags: [billy, api, writes, review, coverage]
 sources:
   - https://www.billy.dk/api/
   - wiki/wave_fivec_ticketed_writes_contract.md
+  - wiki/wave_fiveb_repair_independent_review.md
+  - coverage/api_v2_manifest.yaml
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T17:45:00Z
 updated: 2026-07-29T17:45:00Z
 ---
 
-# wave_fivec_freeze_independent_review
+# Wave-5c contract freeze independent review ACCEPT
 
 ## Verdict
 
 | Claim | Result |
 | --- | --- |
 | Wave-5c cited contract freeze | **ACCEPT** |
-| Wave-5c product implementation | **not on root** (separate review after merge) |
-| Wave-5b offline product (recheck) | **ACCEPT** |
-| Overall product completeness | **FAIL** (expected) |
-| Coverage honesty / fail-closed bulk-UI-live | **PASS** |
+| Official documentation versus maintained inventory | **PASS** |
+| Freeze versus exact six-row tool/path/root map | **PASS** |
+| Coverage honesty before product integration | **PASS** |
+| Wave-5c product implementation | **not accepted** — separate review required after root integration |
+| Live, UI, vision, bulk, and completeness | **not claimed / fail-closed** |
 
-Root HEAD at review: `ab199e2`. Official docs fingerprint unchanged: ETag
-`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes.
+The independent Grok review checked root `ab199e2`. Official documentation was
+re-fetched at ETag `hsisik4g9p3603`, MD5
+`c2efda0ee4cf9cf200e14910c5fc6996`, and 147934 bytes; it was unchanged from
+the API inventory and the Wave-5c contract.
 
-## What was accepted
+## Accepted frozen scope
 
-`wiki/wave_fivec_ticketed_writes_contract.md` freezes exactly six clear singular
-CUD inventory rows (`daybookTransactions` and `daybookTransactionLines`
-create/update/delete) for offline ticketed preview/execute tools. Paths,
-singular roots, inventory preview tool names, shared protocol reuse with
-required `execute_tool_name`, P1 mismatch behaviour, opaque singular payloads,
-and exclusions (bulk, postings/natures 405, ledger transactions, invoices,
-specials, UI, live green) match current official documentation and the
-maintained inventory.
+The review accepts only the offline contract for singular create, update, and
+delete of `daybookTransactions` and `daybookTransactionLines`:
 
-## What remains red
+- the six preview/execute name pairs and their exact POST/PUT/DELETE paths;
+- singular request roots, partial PUT, and bodyless DELETE;
+- the locked API base and no duplicate `/v2` in client paths;
+- typed outer inputs with opaque `JsonValue` payloads;
+- the accepted P1/P2 protocol: one shared ticket store/service, exact
+  server-owned `execute_tool_name`, mismatch before ticket consumption or HTTP,
+  terminal ticket pruning, and no mutation retry;
+- all documented field and live-only ambiguity boundaries, including embedded
+  transaction lines and undeclared additional response roots.
 
-- All six Wave-5c rows: discovered only; not implemented or contract-tested.
-- Runtime still **142** `api_*` tools (no Wave-5c write tools registered).
-- Coverage still implemented/contract_tested **118**, live **0**, vision **0**,
-  `complete: false`.
-- Bulk 92 empty-tool; four specials red; remaining clear CUD red.
-- Unauthenticated DELETE 200 is not cleanup proof. Unauthenticated natures and
-  postings CUD return 405 despite some documentation Supports flags.
+The contract correctly excludes bulk bodies, webhooks, special routes,
+postings/account-natures 405 candidates, ledger transactions, browser/UI work,
+and live qualification. The 92 bulk rows retain empty tool names and all six
+Wave-5c rows remain red at this freeze point.
 
-## Next product gate
+## Required product gate
 
-After Codex Power leaves land and the root registers the twelve tools and
-regenerates coverage to **124** offline rows with **154** `api_*` tools, run a
-separate independent product review before expanding scope (Wave-5d invoices
-and bills).
+This is not a product acceptance. After root registration of the two write
+modules, an independent Grok product review must verify 154 `api_*` tools, 124
+offline implemented/contract-tested rows, all six evidence mappings, and both
+same- and cross-module executor-mismatch regressions. It must reject any live,
+UI, vision, bulk, or completeness claim without its own qualifying evidence.
 
-Full scratch report: node `tmp/grok-review.md` (not durable; this wiki page is
-the shared summary).
+No browser was launched, no credential or customer data was used, and no raw
+evidence was retained. The full temporary reviewer note remains outside the
+repository; this page is the durable, non-sensitive summary.

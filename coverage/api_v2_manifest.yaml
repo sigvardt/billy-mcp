@@ -5548,7 +5548,7 @@
       "area": "daybook_transaction_lines",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5557,7 +5557,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactionLines.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/daybookTransactionLines",
@@ -5574,7 +5574,9 @@
       "side_effects": "creates daybookTransactionLine",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_line_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transaction_lines_create_preview",
       "vision_evidence": null,
@@ -5584,7 +5586,7 @@
       "area": "daybook_transaction_lines",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5593,7 +5595,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactionLines.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/daybookTransactionLines/:id",
@@ -5611,7 +5613,9 @@
       "side_effects": "updates daybookTransactionLine",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_line_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transaction_lines_update_preview",
       "vision_evidence": null,
@@ -5621,7 +5625,7 @@
       "area": "daybook_transaction_lines",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5630,7 +5634,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactionLines.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/daybookTransactionLines/:id",
@@ -5647,7 +5651,9 @@
       "side_effects": "deletes daybookTransactionLine",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_line_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transaction_lines_delete_preview",
       "vision_evidence": null,
@@ -5848,7 +5854,7 @@
       "area": "daybook_transactions",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5857,7 +5863,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactions.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/daybookTransactions",
@@ -5874,7 +5880,9 @@
       "side_effects": "creates daybookTransaction",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transactions_create_preview",
       "vision_evidence": null,
@@ -5884,7 +5892,7 @@
       "area": "daybook_transactions",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5893,7 +5901,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactions.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/daybookTransactions/:id",
@@ -5911,7 +5919,9 @@
       "side_effects": "updates daybookTransaction",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transactions_update_preview",
       "vision_evidence": null,
@@ -5921,7 +5931,7 @@
       "area": "daybook_transactions",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5930,7 +5940,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybookTransactions.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/daybookTransactions/:id",
@@ -5947,7 +5957,9 @@
       "side_effects": "deletes daybookTransaction",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_transaction_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybook_transactions_delete_preview",
       "vision_evidence": null,
