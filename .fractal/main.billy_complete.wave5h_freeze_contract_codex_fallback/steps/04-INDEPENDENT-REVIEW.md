@@ -1,6 +1,6 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
 ## Independent review
