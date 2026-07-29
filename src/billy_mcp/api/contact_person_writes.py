@@ -72,8 +72,8 @@ def register_contact_person_write_tools(
         return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
 
     def api_contact_persons_update_preview(
-        id: str,
         contactPerson: dict[str, JsonValue],
+        id: str = Field(min_length=1),
     ) -> WritePreviewResult:
         """Preview an update of one Billy contact person without sending a write."""
 

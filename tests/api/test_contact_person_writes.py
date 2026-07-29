@@ -18,7 +18,7 @@ from billy_mcp.api.contact_person_writes import (
     ContactPersonUpdatePreviewInput,
     register_contact_person_write_tools,
 )
-from billy_mcp.api.write_protocol import WriteProtocolService
+from billy_mcp.api.write_protocol import WriteExecuteInput, WriteProtocolService
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.confirmations import ConfirmationStore
 
@@ -92,6 +92,9 @@ def test_registers_exactly_six_tools_with_strict_preview_and_ticket_only_execute
         "id",
         "contactPerson",
     }
+    assert (
+        tools["api_contact_persons_update_preview"].parameters["properties"]["id"]["minLength"] == 1
+    )
     assert set(tools["api_contact_persons_delete_preview"].parameters["properties"]) == {"id"}
     for name in (
         "api_contact_persons_create_execute",
@@ -111,6 +114,10 @@ def test_registers_exactly_six_tools_with_strict_preview_and_ticket_only_execute
         )
     with pytest.raises(ValidationError):
         ContactPersonDeletePreviewInput.model_validate({"id": "person-1", "unexpected": True})
+    with pytest.raises(ValidationError):
+        WriteExecuteInput.model_validate(
+            {"confirmation_ticket": "ticket", "contactPerson": {"label": "Ada"}}
+        )
 
 
 @pytest.mark.parametrize(

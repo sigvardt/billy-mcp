@@ -16,9 +16,9 @@ updated: 2026-07-29T14:09:46Z
 # research
 
 The official documentation fingerprint is ETag `hsisik4g9p3603` and MD5
-`c2efda0ee4cf9cf200e14910c5fc6996`. The cited Grok brief and the frozen shared
-contract are authoritative; this leaf performs no new web, interface, or live
-research.
+`c2efda0ee4cf9cf200e14910c5fc6996`. The cited parent Grok brief and the frozen
+shared contract are authoritative; this leaf performs no new web, interface,
+or live research.
 
 Register exactly these paired tools through
 `register_contact_person_write_tools(server, client, write_protocol)`:
