@@ -375,14 +375,41 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_daybook_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.daybookBalanceAccounts.create": (
+        "tests/api/test_daybook_balance_account_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookBalanceAccounts.update": (
+        "tests/api/test_daybook_balance_account_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookBalanceAccounts.delete": (
+        "tests/api/test_daybook_balance_account_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.accounts.get": ("tests/api/test_account_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.accounts.list": ("tests/api/test_account_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.accounts.create": ("tests/api/test_account_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.accounts.update": ("tests/api/test_account_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.accounts.delete": ("tests/api/test_account_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.accountGroups.get": (
         "tests/api/test_account_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
     "api.accountGroups.list": (
         "tests/api/test_account_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountGroups.create": (
+        "tests/api/test_account_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountGroups.update": (
+        "tests/api/test_account_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountGroups.delete": (
+        "tests/api/test_account_writes.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
     "api.accountNatures.get": (

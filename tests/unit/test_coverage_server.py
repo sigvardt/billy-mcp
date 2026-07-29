@@ -99,6 +99,29 @@ WAVE_FIVEA_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEB_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_account_groups_create_preview",
+        "api_account_groups_create_execute",
+        "api_account_groups_update_preview",
+        "api_account_groups_update_execute",
+        "api_account_groups_delete_preview",
+        "api_account_groups_delete_execute",
+        "api_accounts_create_preview",
+        "api_accounts_create_execute",
+        "api_accounts_update_preview",
+        "api_accounts_update_execute",
+        "api_accounts_delete_preview",
+        "api_accounts_delete_execute",
+        "api_daybook_balance_accounts_create_preview",
+        "api_daybook_balance_accounts_create_execute",
+        "api_daybook_balance_accounts_update_preview",
+        "api_daybook_balance_accounts_update_execute",
+        "api_daybook_balance_accounts_delete_preview",
+        "api_daybook_balance_accounts_delete_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -233,8 +256,12 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
 
     assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
     assert len(WAVE_FIVEA_WRITE_API_TOOL_NAMES) == 30
-    assert len(api_tool_names) == 124
+    assert len(WAVE_FIVEB_WRITE_API_TOOL_NAMES) == 18
+    assert len(api_tool_names) == 142
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
-        expected_pre_wave_four_tools | WAVE_FOUR_API_TOOL_NAMES | WAVE_FIVEA_WRITE_API_TOOL_NAMES
+        expected_pre_wave_four_tools
+        | WAVE_FOUR_API_TOOL_NAMES
+        | WAVE_FIVEA_WRITE_API_TOOL_NAMES
+        | WAVE_FIVEB_WRITE_API_TOOL_NAMES
     )
