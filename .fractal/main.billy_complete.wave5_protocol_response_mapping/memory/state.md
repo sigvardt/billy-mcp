@@ -9,8 +9,6 @@ sources:
   - coverage/api_v2_manifest.yaml
   - src/billy_mcp/api/write_protocol.py
   - tests/unit/test_write_protocol.py
-created: 2026-07-29T14:10:20Z
-updated: 2026-07-29T14:10:20Z
 ---
 
 # state
@@ -32,8 +30,11 @@ documented changed plural root. A mapped success retains each declared root
 that is present in `WriteExecutionResult.changed_records`, excludes undeclared
 response roots, and does not fabricate an absent declaration. The primary root
 remains required for non-delete success; declared additional roots remain
-optional. A product response with `products` and `productPrices` is the focused
-fixture, with single-root and delete responses as regression cases.
+optional. The same declared-root set filters `meta.deletedRecords`: each
+present declared root must be a list of strings, while absent and undeclared
+metadata roots are omitted. A product response with `products` and
+`productPrices` is the focused fixture, with single-root and delete responses
+as regression cases.
 
 ## Inherited boundaries
 
@@ -42,5 +43,5 @@ Only `src/billy_mcp/api/write_protocol.py` and
 MockTransport doubles only: no Billy mutation, registration, coverage/client,
 confirmation, auth, UI/browser, inventory, bulk-route, or shared-wiki change.
 Ticket single use, canonical request binding, escaped IDs, locked relative
-paths, typed invalid-success errors, optional primary-root
+paths, typed invalid-success errors, optional declared-root
 `meta.deletedRecords`, and the no-retry policy remain preserved behaviour.
