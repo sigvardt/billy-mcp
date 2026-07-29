@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T19:37:29Z
+updated: 2026-07-29T19:48:33Z
 ---
 
 # billy_mcp
@@ -50,6 +50,8 @@ updated: 2026-07-29T19:37:29Z
 [[wave_fived_product_independent_review|wave_fived_product_independent_review]]: Independent Grok acceptance of the offline invoice and invoice-line ticketed-write product at tip 1108e2f.
 
 [[wave_fived_ticketed_writes_contract|wave_fived_ticketed_writes_contract]]: Cited offline contract for Billy invoice and invoice-line singular ticketed writes.
+
+[[wave_fivee_freeze_codex_fallback_review|wave_fivee_freeze_codex_fallback_review]]: Static fallback audit of the frozen bill and bill-line write contract at fc8118e; not a Grok acceptance and cannot open the product gate.
 
 [[wave_fivee_ticketed_writes_contract|wave_fivee_ticketed_writes_contract]]: Cited offline contract for Billy bill and bill-line singular ticketed writes.
 
