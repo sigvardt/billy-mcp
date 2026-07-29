@@ -15,32 +15,31 @@ updated: 2026-07-29T14:10:20Z
 
 # state
 
-## Frozen basis
+## Frozen research basis
 
-The cited official-documentation fingerprint is ETag `hsisik4g9p3603` and MD5
-`c2efda0ee4cf9cf200e14910c5fc6996`. The frozen contract and cited parent Grok
-brief are authoritative; this leaf performs no further web, interface, or live
+The cited parent Grok brief, frozen write contract, approved design §§5–6 and
+§8, and API inventory agree on the official-documentation fingerprint: ETag
+`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`. The brief was read
+from the parent worktree because its scratch path is git-ignored. These sources
+are authoritative; this leaf performs no further web, interface, or live
 research.
 
-## Required hardening
+## Exact response-mapping task
 
-`WriteOperationSpec` must let a resource declare each documented changed plural
-root. A successful response must retain every declared root that is present in
-`WriteExecutionResult.changed_records`, while preserving the required primary
-root rule for non-delete writes and never fabricating an absent declared root.
-Undeclared response roots stay excluded. Existing typed invalid-success errors,
-delete handling, and primary-root `meta.deletedRecords` behaviour remain
-unchanged.
+`WriteOperationSpec` declares the primary changed plural root plus every other
+documented changed plural root. A mapped success retains each declared root
+that is present in `WriteExecutionResult.changed_records`, excludes undeclared
+response roots, and does not fabricate an absent declaration. The primary root
+remains required for non-delete success; declared additional roots remain
+optional. A product response with `products` and `productPrices` is the focused
+fixture, with single-root and delete responses as regression cases.
 
-The focused fixture is a product response containing both `products` and
-`productPrices`; both must survive mapping. Existing single-root and delete
-fixtures remain the regression guard.
-
-## Boundaries
+## Inherited boundaries
 
 Only `src/billy_mcp/api/write_protocol.py` and
-`tests/unit/test_write_protocol.py` may receive product changes. The work uses
-local MockTransport doubles only and does not alter registration, coverage,
-client, confirmations, authentication, UI/browser, inventory, bulk routes, or
-the shared wiki. Tickets, paths, canonical bindings, and the no-retry policy
-are out of scope for behavioural change and must remain covered.
+`tests/unit/test_write_protocol.py` may receive product changes. Local
+MockTransport doubles only: no Billy mutation, registration, coverage/client,
+confirmation, auth, UI/browser, inventory, bulk-route, or shared-wiki change.
+Ticket single use, canonical request binding, escaped IDs, locked relative
+paths, typed invalid-success errors, optional primary-root
+`meta.deletedRecords`, and the no-retry policy remain preserved behaviour.
