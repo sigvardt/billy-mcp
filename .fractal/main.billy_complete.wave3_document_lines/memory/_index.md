@@ -13,7 +13,7 @@ updated: 2026-07-29T11:29:00Z
 
 ## Status
 
-The document-line read cluster has six typed, offline-verified tools and focused contract tests. The owned source and test files are ready for their scoped delivery commit.
+The document-line read cluster is committed at `9a797bc` with six typed, offline-verified tools and focused contract tests.
 
 ## Contract pointers
 
