@@ -61,9 +61,10 @@ coverage green.
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; freeze only after dedicated field research (embedded replace on match has-many) |
 
-Probe refresh: 2026-07-29T22:42:41Z, docs ETag `hsisik4g9p3603`, MD5
+Probe refresh: 2026-07-29T23:45:16Z, docs ETag `hsisik4g9p3603`, MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
-`.fractal/main.billy_complete/tmp/write-probes-research34-compact.json`.
+`.fractal/main.billy_complete/tmp/write-probes-research37.json` (prior compact
+snapshot: `write-probes-research34-compact.json`).
 
 ## Next freezes (planning only)
 
@@ -71,9 +72,11 @@ Probe refresh: 2026-07-29T22:42:41Z, docs ETag `hsisik4g9p3603`, MD5
   offline product slice at root `55faa02` by
   `wiki/wave_fiveg_product_independent_review.md`; live/UI/vision/bulk and
   overall completeness remain fail-closed.
-- Recommended next offline freeze: singular
-  `attachments` CUD (3 clear ops). Secondary freeze-ready cohort:
-  `salesTaxAccounts` + `salesTaxMetaFields` (6 clear CUD). Tertiary
-  probe-open later: bank line match/line/subject-association CUD. Full cited
-  brief lives outside the public repo under the node scratch path
-  `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Wave-5h attachment singular JSON CUD freeze is accepted
+  (`wiki/wave_fiveh_ticketed_writes_contract.md`). Product is in flight on the
+  attachment product child; not root-accepted yet.
+- Recommended next offline freeze: singular `salesTaxAccounts` +
+  `salesTaxMetaFields` CUD (6 clear ops). Freeze-ready research is in the node
+  scratch brief `.fractal/main.billy_complete/tmp/grok-research.md` (docs
+  fingerprint unchanged; unauth POST/PUT 401; DELETE missing-id 200). Tertiary
+  probe-open later: bank line match/line/subject-association CUD.
