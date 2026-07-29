@@ -16,10 +16,6 @@ from billy_mcp.api.write_protocol import (
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.models import ToolError
 
-_CREATE_EXECUTE_TOOL = "api_contacts_create_execute"
-_UPDATE_EXECUTE_TOOL = "api_contacts_update_execute"
-_DELETE_EXECUTE_TOOL = "api_contacts_delete_execute"
-
 
 class _ContactWritePreviewInput(BaseModel):
     """Base model that rejects undeclared fields around an opaque contact payload."""
@@ -55,12 +51,13 @@ def register_contact_write_tools(
 
     del client
 
-    def api_contacts_create_preview(input: ContactCreatePreviewInput) -> WritePreviewResult:
+    def api_contacts_create_preview(contact: dict[str, JsonValue]) -> WritePreviewResult:
         """Preview creation of one Billy contact without sending a mutation."""
 
+        input = ContactCreatePreviewInput(contact=contact)
         return write_protocol.preview(
             _contact_spec(
-                execute_tool_name=_CREATE_EXECUTE_TOOL,
+                execute_tool_name="api_contacts_create_execute",
                 method=WriteMethod.POST,
                 payload=input.contact,
                 resource_id=None,
@@ -70,18 +67,22 @@ def register_contact_write_tools(
         )
 
     def api_contacts_create_execute(
-        input: WriteExecuteInput,
+        confirmation_ticket: str = Field(min_length=1),
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(input)
+        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
 
-    def api_contacts_update_preview(input: ContactUpdatePreviewInput) -> WritePreviewResult:
+    def api_contacts_update_preview(
+        contact: dict[str, JsonValue],
+        id: str = Field(min_length=1),
+    ) -> WritePreviewResult:
         """Preview an update to one Billy contact without sending a mutation."""
 
+        input = ContactUpdatePreviewInput(id=id, contact=contact)
         return write_protocol.preview(
             _contact_spec(
-                execute_tool_name=_UPDATE_EXECUTE_TOOL,
+                execute_tool_name="api_contacts_update_execute",
                 method=WriteMethod.PUT,
                 payload=input.contact,
                 resource_id=input.id,
@@ -95,18 +96,19 @@ def register_contact_write_tools(
         )
 
     def api_contacts_update_execute(
-        input: WriteExecuteInput,
+        confirmation_ticket: str = Field(min_length=1),
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact update represented by a confirmation ticket."""
 
-        return write_protocol.execute(input)
+        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
 
-    def api_contacts_delete_preview(input: ContactDeletePreviewInput) -> WritePreviewResult:
+    def api_contacts_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy contact without sending a mutation."""
 
+        input = ContactDeletePreviewInput(id=id)
         return write_protocol.preview(
             _contact_spec(
-                execute_tool_name=_DELETE_EXECUTE_TOOL,
+                execute_tool_name="api_contacts_delete_execute",
                 method=WriteMethod.DELETE,
                 payload=None,
                 resource_id=input.id,
@@ -120,18 +122,18 @@ def register_contact_write_tools(
         )
 
     def api_contacts_delete_execute(
-        input: WriteExecuteInput,
+        confirmation_ticket: str = Field(min_length=1),
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(input)
+        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
 
     server.tool(
         name="api_contacts_create_preview",
         description="Preview creation of one Billy contact without making a mutation.",
     )(api_contacts_create_preview)
     server.tool(
-        name=_CREATE_EXECUTE_TOOL,
+        name="api_contacts_create_execute",
         description="Execute a previewed Billy contact creation with its confirmation ticket.",
     )(api_contacts_create_execute)
     server.tool(
@@ -139,7 +141,7 @@ def register_contact_write_tools(
         description="Preview an update to one Billy contact without making a mutation.",
     )(api_contacts_update_preview)
     server.tool(
-        name=_UPDATE_EXECUTE_TOOL,
+        name="api_contacts_update_execute",
         description="Execute a previewed Billy contact update with its confirmation ticket.",
     )(api_contacts_update_execute)
     server.tool(
@@ -147,7 +149,7 @@ def register_contact_write_tools(
         description="Preview deletion of one Billy contact without making a mutation.",
     )(api_contacts_delete_preview)
     server.tool(
-        name=_DELETE_EXECUTE_TOOL,
+        name="api_contacts_delete_execute",
         description="Execute a previewed Billy contact deletion with its confirmation ticket.",
     )(api_contacts_delete_execute)
 

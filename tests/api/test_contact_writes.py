@@ -63,10 +63,10 @@ def make_server(
     return server, requests
 
 
-def call_tool(server: FastMCP, tool_name: str, input: dict[str, object]) -> dict[str, object]:
-    """Call one typed tool and narrow its structured result to an object."""
+def call_tool(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> dict[str, object]:
+    """Call one typed tool with its direct MCP argument object."""
 
-    result = asyncio.run(server.call_tool(tool_name, {"input": input}))
+    result = asyncio.run(server.call_tool(tool_name, arguments))
     structured_content = result.structured_content
     assert isinstance(structured_content, dict)
     structured_result = structured_content.get("result", structured_content)
@@ -74,7 +74,7 @@ def call_tool(server: FastMCP, tool_name: str, input: dict[str, object]) -> dict
     return cast(dict[str, object], structured_result)
 
 
-def test_registers_exactly_six_typed_contact_write_tools() -> None:
+def test_registers_exactly_six_typed_direct_contact_write_tools() -> None:
     server, _ = make_server(lambda request: httpx.Response(200, json={"contacts": []}))
 
     tools = asyncio.run(server.list_tools())
@@ -88,24 +88,31 @@ def test_registers_exactly_six_typed_contact_write_tools() -> None:
         "api_contacts_delete_preview",
         "api_contacts_delete_execute",
     }
-    for tool in by_name.values():
-        assert set(tool.parameters["properties"]) == {"input"}
+    expected_properties = {
+        "api_contacts_create_preview": {"contact"},
+        "api_contacts_create_execute": {"confirmation_ticket"},
+        "api_contacts_update_preview": {"id", "contact"},
+        "api_contacts_update_execute": {"confirmation_ticket"},
+        "api_contacts_delete_preview": {"id"},
+        "api_contacts_delete_execute": {"confirmation_ticket"},
+    }
+    for name, fields in expected_properties.items():
+        schema = by_name[name].parameters
+        properties = cast(dict[str, object], schema["properties"])
+        assert schema["additionalProperties"] is False
+        assert set(properties) == fields
+        assert "input" not in properties
 
-    execute_tool = asyncio.run(server.get_tool("api_contacts_create_execute"))
-    assert execute_tool is not None
-    execute_schema = execute_tool.parameters
-    properties = cast(dict[str, object], execute_schema["properties"])
-    input_reference = properties["input"]
-    assert isinstance(input_reference, dict)
-    input_reference = cast(dict[str, object], input_reference)
-    reference = input_reference["$ref"]
-    assert isinstance(reference, str)
-    definitions = cast(dict[str, object], execute_schema["$defs"])
-    execute_definition = definitions[reference.removeprefix("#/$defs/")]
-    assert isinstance(execute_definition, dict)
-    execute_definition = cast(dict[str, object], execute_definition)
-    assert execute_definition["additionalProperties"] is False
-    assert set(cast(dict[str, object], execute_definition["properties"])) == {"confirmation_ticket"}
+    for name in (
+        "api_contacts_create_execute",
+        "api_contacts_update_execute",
+        "api_contacts_delete_execute",
+    ):
+        schema = by_name[name].parameters
+        properties = cast(dict[str, object], schema["properties"])
+        ticket = properties["confirmation_ticket"]
+        assert isinstance(ticket, dict)
+        assert ticket["minLength"] == 1
 
 
 @pytest.mark.parametrize(

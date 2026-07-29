@@ -4,23 +4,24 @@ desc: Frozen Wave-5a contact write contract and offline implementation boundarie
 tags: [billy, contacts, writes, confirmation]
 sources:
   - wiki/wave_five_ticketed_writes_contract.md
-  - .fractal/main.billy_complete/tmp/grok-research.md
+  - .fractal/main.billy_complete/tmp/grok-research.md (cited parent brief; unavailable in this worktree)
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - coverage/api_v2_manifest.yaml
   - src/billy_mcp/api/write_protocol.py
   - .fractal/main.billy_complete.wave5_contact_writes/NODE.md
-created: 2026-07-29T14:21:35Z
-updated: 2026-07-29T14:21:35Z
+created: 2026-07-29T14:32:56Z
+updated: 2026-07-29T14:32:56Z
 ---
 
 # contact_write_research
 
 The frozen official-document fingerprint is ETag `hsisik4g9p3603` and MD5
-`c2efda0ee4cf9cf200e14910c5fc6996`. The cited parent Grok brief, frozen
-contract, approved design, inventory, shared protocol, and leaf contract agree
-on an offline-only ticketed contact CUD slice. The brief and its unauthenticated
-DELETE observation are contract evidence only: neither qualifies a live
-mutation nor changes coverage or live status.
+`c2efda0ee4cf9cf200e14910c5fc6996`. The frozen contract, approved design,
+inventory, shared protocol, and leaf contract agree on an offline-only ticketed
+contact CUD slice. The cited parent brief path was absent from both this leaf
+and its parent worktree; no replacement research was performed. The contract
+preserves its cited, frozen conclusions, including that an unauthenticated
+DELETE observation is not live-mutation or cleanup qualification.
 
 ## Tool and wire contract
 
@@ -42,6 +43,12 @@ issuance/consumption, canonical request binding, escaped paths, locked-client
 execution without write retry, and typed response/error mapping. Success maps
 the `contacts` changed-record root and optional `meta.deletedRecords` without
 inventing absent metadata.
+
+FastMCP registration must expose the preview fields and execute
+`confirmation_ticket` as direct handler parameters so generated tool schemas
+do not add an `input` wrapper. Handlers construct these existing outer Pydantic
+models internally before using `WriteProtocolService`; registrations remain the
+six literal names above.
 
 ## Offline boundary
 
