@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-29T23:30:00Z
+updated: 2026-07-29T23:38:00Z
 ---
 
 # state
@@ -18,15 +18,16 @@ updated: 2026-07-29T23:30:00Z
 - Wave-5g freeze remains **`5612aa8`** (`wiki/wave_fiveg_ticketed_writes_contract.md`).
 - Wave-5h freeze page merged at **`c14266e`**. Root Grok independent freeze review **ACCEPT** at `wiki/wave_fiveh_freeze_independent_review.md`. Contract at `wiki/wave_fiveh_ticketed_writes_contract.md`.
 - Wave-5h product-ready research **ACCEPT** at `wiki/wave_fiveh_product_ready_research_independent_review.md`.
-- Research36 (product-implementation handoff) re-fetched official docs: fingerprint **unchanged** (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes). Unauth probes reconfirm attachments POST/PUT **401**, DELETE missing-id **200** (not cleanup). Brief: `tmp/grok-research.md`.
-- Product gate **open** for six ticketed attachment JSON CUD tools (registry **208**, coverage **151** after suites). **No product module yet** (`attachment_writes.py` absent).
-- Current non-live verification passes: formatting, Ruff, Pyright, coverage and repository-policy checks, and **892** non-live tests (last recorded before this research pass).
+- Research36 product-implementation handoff: root Grok independent review **ACCEPT** at `wiki/wave_fiveh_product_implementation_research_independent_review.md`. Full findings: `tmp/grok-review.md`. Docs fingerprint re-verified unchanged (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).
+- Product gate **open** for six ticketed attachment JSON CUD tools (registry **208**, coverage **151** after suites). **No product module yet** (`attachment_writes.py` absent). Registry still **202**.
+- The focused Codex Power child `wave5h_attachment_product` owns the offline
+  attachment JSON CUD implementation, tests, registration, and coverage
+  evidence. Root integration still requires a clean child result followed by a
+  separate Grok product review.
 - Coverage: implemented 148, contract_tested 148, live 0, vision 0, `complete: false`. Clear red CUD: 61.
 - UI all red; bulk 92 empty-tool red; specials red; no live token.
 - Child `wave5h_freeze_codex_fallback_review` completed a supplemental static
-  PASS at `0f3a69a`; it confirms the freeze's internal consistency but is
-  non-authoritative and does not open product, live, UI, vision, or coverage
-  gates.
+  PASS; non-authoritative for product, live, UI, vision, or coverage gates.
 
 ## Review decisions (authoritative)
 
@@ -34,7 +35,7 @@ updated: 2026-07-29T23:30:00Z
 - Wave-5h freeze-ready research: **ACCEPT** offline handoff only.
 - Wave-5h freeze at merge `c14266e`: **ACCEPT** offline contract.
 - Wave-5h product-ready research (research35): **ACCEPT** offline handoff only.
-- Research36 product-implementation brief: supersedes research35 operator state; **does not** green coverage or accept product.
+- Wave-5h product-implementation research (research36): **ACCEPT** offline handoff only; compatible refresh of open product gate; does not green coverage or accept product.
 - Wave-5h product: **not implemented / not accepted**.
 - Overall completeness: **FAIL**.
 
