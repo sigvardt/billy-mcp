@@ -14,9 +14,9 @@ updated: 2026-07-29T12:46:46Z
 
 ***
 
-## Product state
+## Delivered product state
 
-- Owned files present (working tree, not yet committed):
+- Owned files committed in `d10bb40`:
   - `src/billy_mcp/api/ledger_user_reads.py`
   - `tests/api/test_ledger_user_reads.py`
 - Six tools: transactions/postings/users get+list on `/transactions`,
@@ -26,12 +26,13 @@ updated: 2026-07-29T12:46:46Z
   pyright` 0 errors on owned files; node lint passes; non-live node suite 300
   passed. Full mode fails closed only at the global incomplete-coverage gate.
 
-## Coverage / claims
+## Explicit non-claims
 
 - Inventory six get/list rows still false/false/false.
 - `status.complete` false.
 - Live, UI, vision red. No greening from this leaf.
-- `server.py` does not register the module yet (root integration).
+- `server.py` registration and logging redaction remain root-owned integration
+  work and are not delivered by this leaf.
 
 ## Contract anchors
 
