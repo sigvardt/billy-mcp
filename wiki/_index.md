@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T19:20:35Z
+updated: 2026-07-29T19:37:29Z
 ---
 
 # billy_mcp
@@ -50,6 +50,8 @@ updated: 2026-07-29T19:20:35Z
 [[wave_fived_product_independent_review|wave_fived_product_independent_review]]: Independent Grok acceptance of the offline invoice and invoice-line ticketed-write product at tip 1108e2f.
 
 [[wave_fived_ticketed_writes_contract|wave_fived_ticketed_writes_contract]]: Cited offline contract for Billy invoice and invoice-line singular ticketed writes.
+
+[[wave_fivee_ticketed_writes_contract|wave_fivee_ticketed_writes_contract]]: Cited offline contract for Billy bill and bill-line singular ticketed writes.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
