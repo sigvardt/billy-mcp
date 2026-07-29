@@ -173,6 +173,23 @@ WAVE_FIVEE_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEF_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_tax_rates_create_preview",
+        "api_tax_rates_create_execute",
+        "api_tax_rates_update_preview",
+        "api_tax_rates_update_execute",
+        "api_tax_rates_delete_preview",
+        "api_tax_rates_delete_execute",
+        "api_tax_rate_deduction_components_create_preview",
+        "api_tax_rate_deduction_components_create_execute",
+        "api_tax_rate_deduction_components_update_preview",
+        "api_tax_rate_deduction_components_update_execute",
+        "api_tax_rate_deduction_components_delete_preview",
+        "api_tax_rate_deduction_components_delete_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -311,7 +328,8 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     assert len(WAVE_FIVEC_WRITE_API_TOOL_NAMES) == 12
     assert len(WAVE_FIVED_WRITE_API_TOOL_NAMES) == 12
     assert len(WAVE_FIVEE_WRITE_API_TOOL_NAMES) == 12
-    assert len(api_tool_names) == 178
+    assert len(WAVE_FIVEF_WRITE_API_TOOL_NAMES) == 12
+    assert len(api_tool_names) == 190
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -321,4 +339,5 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
         | WAVE_FIVEC_WRITE_API_TOOL_NAMES
         | WAVE_FIVED_WRITE_API_TOOL_NAMES
         | WAVE_FIVEE_WRITE_API_TOOL_NAMES
+        | WAVE_FIVEF_WRITE_API_TOOL_NAMES
     )
