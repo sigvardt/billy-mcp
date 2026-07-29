@@ -301,6 +301,70 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_daybook_transaction_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.invoiceLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoiceLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.billLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.billLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.daybookTransactionLines.get": (
+        "tests/api/test_line_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactionLines.list": (
+        "tests/api/test_line_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.contactPersons.get": (
+        "tests/api/test_contact_person_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.contactPersons.list": (
+        "tests/api/test_contact_person_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybooks.get": ("tests/api/test_daybook_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.daybooks.list": ("tests/api/test_daybook_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.daybookBalanceAccounts.get": (
+        "tests/api/test_daybook_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookBalanceAccounts.list": (
+        "tests/api/test_daybook_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accounts.get": ("tests/api/test_account_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.accounts.list": ("tests/api/test_account_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.accountGroups.get": (
+        "tests/api/test_account_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountGroups.list": (
+        "tests/api/test_account_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountNatures.get": (
+        "tests/api/test_account_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountNatures.list": (
+        "tests/api/test_account_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.files.get": (
+        "tests/api/test_file_attachment_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.files.list": (
+        "tests/api/test_file_attachment_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.attachments.get": (
+        "tests/api/test_file_attachment_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.attachments.list": (
+        "tests/api/test_file_attachment_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
 }
 
 
