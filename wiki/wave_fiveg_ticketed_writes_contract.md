@@ -1,7 +1,7 @@
 ---
 name: wave_fiveg_ticketed_writes_contract
 title: Wave-5g sales-tax rules ticketed-write contract
-desc: Cited offline contract for singular sales-tax ruleset and rule ticketed writes, pending independent Grok freeze review.
+desc: Cited offline contract for singular sales-tax ruleset and rule ticketed writes, accepted by independent Grok review.
 tags: [billy, api, sales-tax, writes, coverage]
 sources:
   - https://www.billy.dk/api/
@@ -11,7 +11,7 @@ sources:
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:45:00Z
-updated: 2026-07-29T21:45:00Z
+updated: 2026-07-29T21:54:00Z
 ---
 
 # Wave-5g sales-tax rules ticketed-write contract
@@ -26,11 +26,11 @@ derives from the cited official API page, re-fetched by Grok with ETag
 is retained outside the repository at
 `.fractal/main.billy_complete/tmp/grok-research.md`.
 
-This contract requires an independent Grok freeze review before any product
-implementation. An ACCEPT would open only the offline product-implementation
-gate. It is not acceptance of implementation, live qualification, browser/UI
-parity, vision verification, bulk operations, special routes, or overall
-completeness.
+The independent Grok freeze review recorded in
+`wiki/wave_fiveg_freeze_independent_review.md` accepted this exact contract.
+That acceptance opens only the offline product-implementation gate. It is not
+acceptance of implementation, live qualification, browser/UI parity, vision
+verification, bulk operations, special routes, or overall completeness.
 
 ## Exact inventory and tool surface
 
