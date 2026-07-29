@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T14:40:03Z
+updated: 2026-07-29T15:03:33Z
 ---
 
 # billy_mcp
@@ -14,6 +14,8 @@ updated: 2026-07-29T14:40:03Z
 [[billy_ui_discovery_brief|billy_ui_discovery_brief]]: First read-only headless Billy UI discovery result for mit.billy.dk (auth blocked).
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
+
+[[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
 [[wave_five_contract_freeze_independent_review|wave_five_contract_freeze_independent_review]]: Independent Grok review of Wave-5 ticketed-write contract freeze at 9624d26 — freeze ACCEPT; product incomplete; no write tools yet.
 
