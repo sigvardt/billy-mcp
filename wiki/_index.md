@@ -21,7 +21,7 @@ updated: 2026-07-29T14:40:03Z
 
 [[wave_five_write_protocol_independent_review|wave_five_write_protocol_independent_review]]: Independent Grok audit accepting the scoped Wave-5 shared ticketed-write protocol for root merge.
 
-[[wave_fivea_candidate_independent_review|wave_fivea_candidate_independent_review]]: Independent Grok review of root fail-closed baseline and Wave-5a candidate tips (protocol ACCEPT; contacts and contact persons REJECT).
+[[wave_fivea_candidate_independent_review|wave_fivea_candidate_independent_review]]: Independent Grok review of root fail-closed baseline and Wave-5a candidate tips (protocol, contacts, and contact persons ACCEPT for selective product merge; product completeness FAIL).
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
