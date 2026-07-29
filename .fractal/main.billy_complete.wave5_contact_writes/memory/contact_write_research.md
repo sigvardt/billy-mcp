@@ -9,8 +9,8 @@ sources:
   - coverage/api_v2_manifest.yaml
   - src/billy_mcp/api/write_protocol.py
   - .fractal/main.billy_complete.wave5_contact_writes/NODE.md
-created: 2026-07-29T14:09:59Z
-updated: 2026-07-29T14:09:59Z
+created: 2026-07-29T14:21:35Z
+updated: 2026-07-29T14:21:35Z
 ---
 
 # contact_write_research
@@ -22,13 +22,16 @@ on an offline-only ticketed contact CUD slice.
 
 ## Tool and wire contract
 
-- `api_contacts_create_preview` and `api_contacts_create_execute`: `POST
-  /contacts` with exact JSON `{ "contact": payload }`.
-- `api_contacts_update_preview` and `api_contacts_update_execute`: `PUT
-  /contacts/{percent-encoded id}` with exact JSON `{ "contact": payload }`.
-- `api_contacts_delete_preview` and `api_contacts_delete_execute`: `DELETE
-  /contacts/{percent-encoded id}` with no HTTP body; the ticket binds canonical
-  `{ "id": id }`.
+The six required registrations are `api_contacts_create_preview`,
+`api_contacts_create_execute`, `api_contacts_update_preview`,
+`api_contacts_update_execute`, `api_contacts_delete_preview`, and
+`api_contacts_delete_execute`.
+
+- Create: `POST /contacts` with exact JSON `{ "contact": payload }`.
+- Update: `PUT /contacts/{percent-encoded id}` with exact JSON
+  `{ "contact": payload }`.
+- Delete: `DELETE /contacts/{percent-encoded id}` with no HTTP body; its ticket
+  binds canonical `{ "id": id }`.
 
 Every preview outer input is typed and forbids extras. Every execute accepts
 only `WriteExecuteInput` (the confirmation ticket). The nested `contact`
