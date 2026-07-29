@@ -71,6 +71,37 @@ def test_redaction_recurses_over_nested_authentication_values() -> None:
     }
 
 
+def test_redaction_removes_wave_three_read_sensitive_values() -> None:
+    result = redact(
+        {
+            "contactPerson": {"email": "customer@example.test", "name": "Visible name"},
+            "account": {
+                "bankName": "Test Bank",
+                "bankRoutingNo": "12345678",
+                "bankAccountNo": "1234567890",
+                "bankSwift": "TESTDKKK",
+                "bankIban": "DK5000400440116243",
+            },
+            "file": {
+                "downloadUrl": "https://download.billy.dk/file?token=download-secret",
+                "fileName": "visible.pdf",
+            },
+        }
+    )
+
+    assert result == {
+        "contactPerson": {"email": REDACTED, "name": "Visible name"},
+        "account": {
+            "bankName": REDACTED,
+            "bankRoutingNo": REDACTED,
+            "bankAccountNo": REDACTED,
+            "bankSwift": REDACTED,
+            "bankIban": REDACTED,
+        },
+        "file": {"downloadUrl": REDACTED, "fileName": "visible.pdf"},
+    }
+
+
 @pytest.mark.parametrize("upstream_code", ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"])
 def test_known_401_codes_become_auth_required_with_sanitised_metadata(upstream_code: str) -> None:
     error = translate_upstream_error(

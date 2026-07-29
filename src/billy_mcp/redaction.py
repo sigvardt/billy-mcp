@@ -25,6 +25,17 @@ _SENSITIVE_ORGANIZATION_PAYMENT_KEYS = frozenset(
         "paymenttermsdays",
     }
 )
+_SENSITIVE_READ_KEYS = frozenset(
+    {
+        "email",
+        "bankname",
+        "bankroutingno",
+        "bankaccountno",
+        "bankswift",
+        "bankiban",
+        "downloadurl",
+    }
+)
 
 type RedactedValue = (
     str | int | float | bool | None | list["RedactedValue"] | dict[str, "RedactedValue"]
@@ -32,11 +43,13 @@ type RedactedValue = (
 
 
 def is_sensitive_key(key: str) -> bool:
-    """Return whether a structured field name could contain an authentication secret."""
+    """Return whether a structured field name could contain protected data."""
 
     normalized = key.lower().replace("-", "").replace("_", "")
-    return normalized in _SENSITIVE_ORGANIZATION_PAYMENT_KEYS or any(
-        part in normalized for part in _SENSITIVE_PARTS
+    return (
+        normalized in _SENSITIVE_ORGANIZATION_PAYMENT_KEYS
+        or normalized in _SENSITIVE_READ_KEYS
+        or any(part in normalized for part in _SENSITIVE_PARTS)
     )
 
 
