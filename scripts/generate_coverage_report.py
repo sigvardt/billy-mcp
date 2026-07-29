@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the immutable Phase 0 coverage inventories and their red-only report.
+"""Generate the frozen Phase 0 coverage inventories and their derived report.
 
 The ``.yaml`` artifacts are JSON documents, which is a valid YAML subset. This
 keeps the inventory dependency-free while preserving a machine-readable YAML
@@ -258,6 +258,12 @@ UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
     "settings_beta",
 )
 
+SINGULAR_ROOT_KEY_OVERRIDES = {
+    "bankLineMatches": "bankLineMatch",
+}
+API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested", "live_tested")
+UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
+
 
 def snake_case(value: str) -> str:
     """Return a stable planned-tool segment from an official resource name."""
@@ -268,6 +274,8 @@ def snake_case(value: str) -> str:
 def singular(value: str) -> str:
     """Return the documented JSON root-key shape without claiming field schemas."""
 
+    if value in SINGULAR_ROOT_KEY_OVERRIDES:
+        return SINGULAR_ROOT_KEY_OVERRIDES[value]
     if value.endswith("ies"):
         return f"{value[:-3]}y"
     return value[:-1] if value.endswith("s") else value
@@ -736,15 +744,47 @@ def count_by(items: list[dict[str, Any]], key: str) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def row_is_qualified(row: dict[str, Any], fields: tuple[str, ...]) -> bool:
+    """Return whether a row satisfies every qualification state for its lane."""
+
+    return all(row.get(field) is True for field in fields)
+
+
+def coverage_is_complete(api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]]) -> bool:
+    """Derive a completeness claim from row evidence and unresolved bulk contracts."""
+
+    return (
+        bool(api_rows)
+        and bool(ui_rows)
+        and not any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows)
+        and all(row_is_qualified(row, API_QUALIFICATION_FIELDS) for row in api_rows)
+        and all(row_is_qualified(row, UI_QUALIFICATION_FIELDS) for row in ui_rows)
+    )
+
+
+def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]]) -> str:
+    """Describe the first current evidence gap without changing qualification state."""
+
+    if coverage_is_complete(api_rows, ui_rows):
+        return "No manifest qualification blockers remain."
+    if any(row.get("live_tested") is not True for row in [*api_rows, *ui_rows]):
+        return "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed"
+    if any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows):
+        return "Unresolved ambiguous bulk contracts prevent a completeness claim"
+    if any(row.get("vision_verified") is not True for row in ui_rows):
+        return "UI vision verification is incomplete"
+    return "Manifest qualification evidence is incomplete"
+
+
 def build_status(api_manifest: dict[str, Any], ui_manifest: dict[str, Any]) -> dict[str, Any]:
-    """Return the only generated completeness source, which is false in Phase 0."""
+    """Return the generated completeness source derived from manifest row evidence."""
 
     api_rows = api_manifest["operations"]
     ui_rows = ui_manifest["workflows"]
     rows = api_rows + ui_rows
     return {
         "schema_version": 1,
-        "complete": False,
+        "complete": coverage_is_complete(api_rows, ui_rows),
         "phase": "phase_0_inventory",
         "official_docs": {"etag": DOCS_ETAG, "md5": DOCS_MD5},
         "source_counts": {
@@ -762,7 +802,7 @@ def build_status(api_manifest: dict[str, Any], ui_manifest: dict[str, Any]) -> d
             "contract_tested_rows": sum(bool(row["contract_tested"]) for row in rows),
             "live_tested_rows": sum(bool(row["live_tested"]) for row in rows),
             "vision_verified_rows": sum(bool(row["vision_verified"]) for row in ui_rows),
-            "blocker": "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed",
+            "blocker": qualification_blocker(api_rows, ui_rows),
         },
     }
 
@@ -772,13 +812,20 @@ def render_report(status: dict[str, Any]) -> str:
 
     counts = status["source_counts"]
     qualification = status["qualification"]
+    state_summary = (
+        "This generated inventory currently satisfies the manifest qualification rules."
+        if status["complete"]
+        else (
+            "This generated inventory is currently incomplete. It freezes the official-doc "
+            "snapshot without asserting implementation, contract testing, live testing, or vision "
+            "verification."
+        )
+    )
     return "\n".join(
         [
             "# Phase 0 coverage status",
             "",
-            "This generated inventory is deliberately incomplete. It freezes the official-doc",
-            "snapshot without asserting implementation, contract testing, live testing, or vision",
-            "verification.",
+            state_summary,
             "",
             "| Source | Count |",
             "| --- | ---: |",

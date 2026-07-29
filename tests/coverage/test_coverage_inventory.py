@@ -5,6 +5,7 @@ from __future__ import annotations
 import copy
 import importlib.util
 import json
+import subprocess
 import sys
 from collections import Counter
 from pathlib import Path
@@ -54,11 +55,20 @@ def validation_errors(
     report: str,
     *,
     root: Path = ROOT,
+    reject_false_completeness: bool = False,
+    require_complete: bool = False,
 ) -> list[str]:
     """Validate in-memory copies without changing generated repository files."""
 
     return checker.validate_documents(
-        api_manifest, ui_manifest, browser_egress, status, report, root
+        api_manifest,
+        ui_manifest,
+        browser_egress,
+        status,
+        report,
+        root,
+        reject_false_completeness=reject_false_completeness,
+        require_complete=require_complete,
     )
 
 
@@ -92,6 +102,7 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         by_id[generator.FILES_UPLOAD_ALIAS]["request_fields"]
         == generator.FILES_UPLOAD_REQUEST_FIELDS
     )
+    assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
 
     for row in operations:
         assert set(generator.COMMON_ERRORS).issubset(row["errors"])
@@ -103,6 +114,92 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
             assert "offset" not in row["request_fields"]
     assert status["complete"] is False
     assert status["source_counts"]["api_total"] == 305
+    assert '"bankLineMatche"' not in json.dumps(api_manifest)
+
+
+def test_status_completeness_is_derived_from_row_evidence() -> None:
+    """A future green claim depends on every lane state and resolved bulk rows."""
+
+    green_api = [
+        {
+            "source_kind": "clear",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+        }
+    ]
+    green_ui = [
+        {
+            "workflow_kind": "api_parity",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+            "vision_verified": True,
+        }
+    ]
+
+    assert (
+        generator.build_status({"operations": green_api}, {"workflows": green_ui})["complete"]
+        is True
+    )
+    assert (
+        generator.build_status(
+            {"operations": [{**green_api[0], "source_kind": "ambiguous_bulk"}]},
+            {"workflows": green_ui},
+        )["complete"]
+        is False
+    )
+
+
+def test_require_complete_checks_each_row_state_and_bulk_resolution() -> None:
+    """The full gate has no shortcut around API, UI, or bulk qualification."""
+
+    qualified_api = [
+        {
+            "id": "api.products.list",
+            "source_kind": "clear",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+        }
+    ]
+    qualified_ui = [
+        {
+            "id": "ui.parity.products.list",
+            "workflow_kind": "api_parity",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+            "vision_verified": True,
+        }
+    ]
+    complete_status = {"complete": True}
+
+    assert checker.require_complete_errors(qualified_api, qualified_ui, complete_status) == []
+
+    incomplete_api = copy.deepcopy(qualified_api)
+    incomplete_api[0]["contract_tested"] = False
+    assert any(
+        "for every API row" in error
+        for error in checker.require_complete_errors(incomplete_api, qualified_ui, complete_status)
+    )
+
+    incomplete_ui = copy.deepcopy(qualified_ui)
+    incomplete_ui[0]["vision_verified"] = False
+    assert any(
+        "for every UI row" in error
+        for error in checker.require_complete_errors(qualified_api, incomplete_ui, complete_status)
+    )
+
+    unresolved_bulk = [{**qualified_api[0], "source_kind": "ambiguous_bulk"}]
+    assert any(
+        "no ambiguous_bulk rows" in error
+        for error in checker.require_complete_errors(unresolved_bulk, qualified_ui, complete_status)
+    )
 
 
 def test_files_create_remains_a_multipart_alias_without_a_second_tool() -> None:
@@ -162,10 +259,14 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     }
     assert {row["area"] for row in discovery_rows} == set(generator.UI_DISCOVERY_FAMILIES)
     assert all(row["vision_verified"] is False for row in workflows)
+    assert all(row["implemented"] is False for row in workflows)
+    assert all(row["contract_tested"] is False for row in workflows)
+    assert all(row["live_tested"] is False for row in workflows)
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in workflows)
     assert checker.raw_evidence_errors(ui_manifest) == []
     assert status["source_counts"]["ui_api_parity"] == 305
+    assert '"bankLineMatche"' not in json.dumps(ui_manifest)
 
     by_host = {rule["host"]: rule for rule in browser_egress["hosts"]}
     assert browser_egress["default_action"] == "deny"
@@ -175,8 +276,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert by_host["api.billy.dk"]["browser_action"] == "deny"
 
 
-def test_checker_rejects_missing_fields_false_completion_green_bulk_and_frames() -> None:
-    """The contract checker fails closed for the Phase 0 state rules."""
+def test_checker_rejects_missing_fields_false_completeness_green_bulk_and_frames() -> None:
+    """The contract checker permits red rows but rejects unsupported green claims."""
 
     api_manifest, ui_manifest, browser_egress, status, report = documents()
 
@@ -190,9 +291,14 @@ def test_checker_rejects_missing_fields_false_completion_green_bulk_and_frames()
     false_complete = copy.deepcopy(status)
     false_complete["complete"] = True
     assert any(
-        "complete must be false" in error
+        "falsely claims complete" in error
         for error in validation_errors(
-            api_manifest, ui_manifest, browser_egress, false_complete, report
+            api_manifest,
+            ui_manifest,
+            browser_egress,
+            false_complete,
+            report,
+            reject_false_completeness=True,
         )
     )
 
@@ -209,6 +315,48 @@ def test_checker_rejects_missing_fields_false_completion_green_bulk_and_frames()
     assert any(
         "raw browser evidence" in error
         for error in validation_errors(api_manifest, raw_frame, browser_egress, status, report)
+    )
+
+    false_report = report.replace("Complete: `false`", "Complete: `true`")
+    assert any(
+        "coverage/report.md is stale" in error
+        for error in validation_errors(
+            api_manifest,
+            ui_manifest,
+            browser_egress,
+            status,
+            false_report,
+            reject_false_completeness=True,
+        )
+    )
+
+
+def test_checker_cli_allows_offline_red_inventory_but_rejects_full_qualification() -> None:
+    """Root lint can validate red inventory, while the full gate fails closed."""
+
+    checker_path = SCRIPTS / "check_coverage.py"
+    lint_result = subprocess.run(
+        [sys.executable, str(checker_path), "--reject-false-completeness"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert lint_result.returncode == 0, lint_result.stdout + lint_result.stderr
+
+    complete_result = subprocess.run(
+        [sys.executable, str(checker_path), "--require-complete"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert complete_result.returncode == 1
+    assert (
+        "--require-complete requires coverage/status.json complete=true" in complete_result.stdout
+    )
+    assert (
+        "--require-complete requires no ambiguous_bulk rows (92 remain)" in complete_result.stdout
     )
 
 

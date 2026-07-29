@@ -1,8 +1,6 @@
 # Phase 0 coverage status
 
-This generated inventory is deliberately incomplete. It freezes the official-doc
-snapshot without asserting implementation, contract testing, live testing, or vision
-verification.
+This generated inventory is currently incomplete. It freezes the official-doc snapshot without asserting implementation, contract testing, live testing, or vision verification.
 
 | Source | Count |
 | --- | ---: |

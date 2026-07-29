@@ -26,7 +26,15 @@ headers, but only the special row plans `api_files_upload_preview`; no JSON
 `api_files_create` tool may be introduced.
 
 `scripts/check_coverage.py` rejects schema omissions, stale generated output,
-false completeness, green bulk rows, unsupported domain-tool registrations, and
-raw browser-evidence paths. All implementation, contract-test, live-test, and
-UI vision states remain false because no API token or UI qualification evidence
-is available.
+false green completeness, green bulk rows, unsupported domain-tool
+registrations, and raw browser-evidence paths. Normal validation accepts a
+coherent red inventory. `--reject-false-completeness` is the root lint mode;
+`--require-complete` additionally requires every API state, every UI vision
+state, and no unresolved bulk row. All implementation, contract-test,
+live-test, and UI vision states remain false because no API token or UI
+qualification evidence is available.
+
+The generated completeness flag is derived from the row evidence, not from a
+permanent Phase 0 constant. The `bankLineMatches` response and write root key
+is `bankLineMatch`; the generator and API/UI manifests must never emit the
+incorrect `bankLineMatche` singularization.

@@ -1278,7 +1278,7 @@
         "include"
       ],
       "response_fields": [
-        "bankLineMatche"
+        "bankLineMatch"
       ],
       "sensitivity": "low",
       "side_effects": "none",
@@ -1367,14 +1367,14 @@
       "operation": "create",
       "pagination": null,
       "request_fields": [
-        "bankLineMatche"
+        "bankLineMatch"
       ],
       "response_fields": [
         "changed_records[]",
         "meta.deletedRecords"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates bankLineMatche",
+      "side_effects": "creates bankLineMatch",
       "source_kind": "clear",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1404,14 +1404,14 @@
       "pagination": null,
       "request_fields": [
         "id",
-        "bankLineMatche"
+        "bankLineMatch"
       ],
       "response_fields": [
         "changed_records[]",
         "meta.deletedRecords"
       ],
       "sensitivity": "medium",
-      "side_effects": "updates bankLineMatche",
+      "side_effects": "updates bankLineMatch",
       "source_kind": "clear",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1447,7 +1447,7 @@
         "meta.deletedRecords"
       ],
       "sensitivity": "medium",
-      "side_effects": "deletes bankLineMatche",
+      "side_effects": "deletes bankLineMatch",
       "source_kind": "clear",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"

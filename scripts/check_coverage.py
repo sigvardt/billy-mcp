@@ -3,6 +3,7 @@
 
 from __future__ import annotations
 
+import argparse
 import ast
 import json
 import sys
@@ -10,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 from generate_coverage_report import (
+    API_QUALIFICATION_FIELDS,
     BILL_FILTERS,
     COMMON_ERRORS,
     DAYBOOK_TRANSACTION_FILTERS,
@@ -18,8 +20,10 @@ from generate_coverage_report import (
     FILES_UPLOAD_TOOL_NAME,
     INVOICE_FILTERS,
     PAGING,
+    UI_QUALIFICATION_FIELDS,
     build_api_manifest,
     build_status,
+    coverage_is_complete,
     render_report,
 )
 
@@ -48,7 +52,6 @@ REQUIRED_ROW_FIELDS = {
     "vision_evidence",
     "evidence",
 }
-PHASE_ZERO_FALSE_FIELDS = ("implemented", "contract_tested", "live_tested")
 RAW_EVIDENCE_PARTS = ("frame", "screenshot", "rendered", "vision-evidence")
 RAW_EVIDENCE_SUFFIXES = (".png", ".jpg", ".jpeg", ".webp", ".gif", ".har", ".trace.zip")
 
@@ -75,7 +78,7 @@ def document_rows(document: dict[str, Any], field: str, label: str) -> list[dict
 
 
 def row_errors(rows: list[dict[str, Any]], lane: str) -> list[str]:
-    """Return missing fields and forbidden green states for a manifest lane."""
+    """Return missing fields and invalid status types for a manifest lane."""
 
     errors: list[str] = []
     seen_ids: set[str] = set()
@@ -90,12 +93,12 @@ def row_errors(rows: list[dict[str, Any]], lane: str) -> list[str]:
         seen_ids.add(row_id)
         if row["lane"] != lane:
             errors.append(f"{row_id}: lane must be {lane}")
-        for field in PHASE_ZERO_FALSE_FIELDS:
-            if row[field] is not False:
-                errors.append(f"{row_id}: Phase 0 {field} must be false")
+        for field in API_QUALIFICATION_FIELDS:
+            if not isinstance(row[field], bool):
+                errors.append(f"{row_id}: {field} must be a boolean")
         if lane == "ui":
-            if row["vision_verified"] is not False:
-                errors.append(f"{row_id}: UI vision_verified must be false")
+            if not isinstance(row["vision_verified"], bool):
+                errors.append(f"{row_id}: UI vision_verified must be a boolean")
         elif row["vision_verified"] is not None:
             errors.append(f"{row_id}: API vision_verified must be null")
         if row["vision_evidence"] is not None:
@@ -202,7 +205,10 @@ def api_errors(api_rows: list[dict[str, Any]]) -> list[str]:
                 errors.append(f"{row_id}: ambiguous bulk row must not plan a tool")
             if not method_or_route.startswith("AMBIGUOUS Supports:"):
                 errors.append(f"{row_id}: ambiguous bulk route must remain explicitly ambiguous")
-            if any(row.get(field) is not False for field in PHASE_ZERO_FALSE_FIELDS):
+            if any(
+                row.get(field) is True
+                for field in ("implemented", "contract_tested", "live_tested")
+            ):
                 errors.append(f"{row_id}: ambiguous bulk row must stay red")
         if kind == "clear" and row.get("discovered") is not True:
             errors.append(f"{row_id}: documented clear operation must be discovered")
@@ -302,6 +308,52 @@ def egress_errors(egress: dict[str, Any]) -> list[str]:
     return errors
 
 
+def false_completeness_errors(
+    api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]], status: dict[str, Any]
+) -> list[str]:
+    """Reject a green status claim that its manifest evidence cannot support."""
+
+    if status.get("complete") is True and not coverage_is_complete(api_rows, ui_rows):
+        return ["coverage/status.json falsely claims complete without qualifying manifest rows"]
+    return []
+
+
+def require_complete_errors(
+    api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]], status: dict[str, Any]
+) -> list[str]:
+    """Return the full-qualification failures required by the release gate."""
+
+    errors: list[str] = []
+    if status.get("complete") is not True:
+        errors.append("--require-complete requires coverage/status.json complete=true")
+    ambiguous_rows = [row for row in api_rows if row.get("source_kind") == "ambiguous_bulk"]
+    if ambiguous_rows:
+        errors.append(
+            f"--require-complete requires no ambiguous_bulk rows ({len(ambiguous_rows)} remain)"
+        )
+    incomplete_api = [
+        str(row.get("id", "<missing-id>"))
+        for row in api_rows
+        if not all(row.get(field) is True for field in API_QUALIFICATION_FIELDS)
+    ]
+    if incomplete_api:
+        errors.append(
+            "--require-complete requires discovered, implemented, contract_tested, and "
+            f"live_tested for every API row ({len(incomplete_api)} incomplete)"
+        )
+    incomplete_ui = [
+        str(row.get("id", "<missing-id>"))
+        for row in ui_rows
+        if not all(row.get(field) is True for field in UI_QUALIFICATION_FIELDS)
+    ]
+    if incomplete_ui:
+        errors.append(
+            "--require-complete requires all API qualification states and vision_verified "
+            f"for every UI row ({len(incomplete_ui)} incomplete)"
+        )
+    return errors
+
+
 def validate_documents(
     api_manifest: dict[str, Any],
     ui_manifest: dict[str, Any],
@@ -309,6 +361,9 @@ def validate_documents(
     status: dict[str, Any],
     report: str,
     root: Path,
+    *,
+    reject_false_completeness: bool = False,
+    require_complete: bool = False,
 ) -> list[str]:
     """Return all structural and status failures without changing checked-in data."""
 
@@ -325,8 +380,10 @@ def validate_documents(
     expected_status = build_status(api_manifest, ui_manifest)
     if status != expected_status:
         errors.append("coverage/status.json is stale or does not match generated source arithmetic")
-    if status.get("complete") is not False:
-        errors.append("coverage/status.json complete must be false while rows remain red")
+    if reject_false_completeness:
+        errors.extend(false_completeness_errors(api_rows, ui_rows, status))
+    if require_complete:
+        errors.extend(require_complete_errors(api_rows, ui_rows, status))
     if report != render_report(expected_status):
         errors.append("coverage/report.md is stale or non-deterministic")
 
@@ -340,7 +397,12 @@ def validate_documents(
     return errors
 
 
-def validate_root(root: Path) -> list[str]:
+def validate_root(
+    root: Path,
+    *,
+    reject_false_completeness: bool = False,
+    require_complete: bool = False,
+) -> list[str]:
     """Load and validate every checked-in artifact under a repository root."""
 
     coverage = root / "coverage"
@@ -352,13 +414,38 @@ def validate_root(root: Path) -> list[str]:
         report = (coverage / "report.md").read_text(encoding="utf-8")
     except (OSError, ValueError) as error:
         return [str(error)]
-    return validate_documents(api_manifest, ui_manifest, browser_egress, status, report, root)
+    return validate_documents(
+        api_manifest,
+        ui_manifest,
+        browser_egress,
+        status,
+        report,
+        root,
+        reject_false_completeness=reject_false_completeness,
+        require_complete=require_complete,
+    )
 
 
 def main() -> int:
     """Print validation failures suitable for local and CI use."""
 
-    errors = validate_root(ROOT)
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--reject-false-completeness",
+        action="store_true",
+        help="reject a true completeness claim that red manifest evidence cannot support",
+    )
+    parser.add_argument(
+        "--require-complete",
+        action="store_true",
+        help="require a fully qualified manifest for a full test or release gate",
+    )
+    args = parser.parse_args()
+    errors = validate_root(
+        ROOT,
+        reject_false_completeness=args.reject_false_completeness,
+        require_complete=args.require_complete,
+    )
     if errors:
         print("Coverage inventory checks failed:")
         print("\n".join(f"- {error}" for error in errors))
