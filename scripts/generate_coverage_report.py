@@ -525,8 +525,38 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.salesTaxRulesets.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxRulesets.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxRulesets.create": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxRulesets.update": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxRulesets.delete": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxRules.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxRules.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxRules.create": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxRules.update": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxRules.delete": (
+        "tests/api/test_sales_tax_writes.py",
+        "tests/api/test_sales_tax_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxAccounts.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxAccounts.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxMetaFields.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
