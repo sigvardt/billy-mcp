@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T17:48:20Z
+updated: 2026-07-29T18:10:11Z
 ---
 
 # billy_mcp
@@ -38,6 +38,8 @@ updated: 2026-07-29T17:48:20Z
 [[wave_fiveb_ticketed_writes_contract|wave_fiveb_ticketed_writes_contract]]: Cited offline ticketed-write contract for Billy account groups, accounts, and daybook balance accounts.
 
 [[wave_fivec_freeze_independent_review|wave_fivec_freeze_independent_review]]: Independent Grok acceptance of the cited offline contract for daybook transaction and line writes.
+
+[[wave_fivec_product_fallback_review|wave_fivec_product_fallback_review]]: Codex Power fallback acceptance of the Wave-5c offline daybook transaction write slice; mandatory Grok audit remains outstanding.
 
 [[wave_fivec_ticketed_writes_contract|wave_fivec_ticketed_writes_contract]]: Cited offline ticketed-write contract for Billy daybook transactions and transaction lines.
 
