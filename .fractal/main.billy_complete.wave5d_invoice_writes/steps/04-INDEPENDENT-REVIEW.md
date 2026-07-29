@@ -1,32 +1,20 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
-## Independent review
+## Codex Power fallback review
 
-Review the current iteration independently. Do not implement production code.
-Write findings to `$NODE_DIR/tmp/grok-review.md`, replacing the prior
-iteration's file.
+The designated Grok route is unavailable before product edits because its
+device/API authentication is absent. Perform a separate-context Codex Power
+fallback review of this leaf only; it cannot be labelled a Grok review or close
+the parent's mandatory Grok product-review gate. Write the explicit fallback
+verdict and the authentication limitation to `$NODE_DIR/tmp/grok-review.md`.
 
-Check:
-
-1. Current official Billy documentation against the maintained API inventory.
-2. The tested Billy interface against the interface inventory and API parity
-   map.
-3. Typed input and output schemas, request construction, response mapping,
-   filters, pagination, errors, and writes in the current diff.
-4. Approval-token binding, authentication, redaction, host and path
-   restrictions, cleanup, and repository secret safety.
-5. Headless interface evidence. Review field values before submission, the
-   success state, independent read-back, cleanup, and raw-frame purge.
-6. Coverage status. Reject any green row based on a stub, mock, skip, untested
-   operation, inaccessible screen, ambiguous contract, or vision-only result.
-
-Use current primary sources and include direct citations for every contract
-discrepancy. Use the project's headless vision-review harness for any pending
-visual evidence. Never open a headed browser or touch desktop windows.
-
-The report must give a pass or fail verdict, exact file and coverage-row
-references, reproducible commands or evidence references, and required fixes.
-Post high-priority blockers to the parent by radio and continue the step.
+Review the owned diff against `wiki/wave_fived_ticketed_writes_contract.md` and
+the accepted Wave-5c pattern. Check typed schemas, exact routes and roots,
+preview non-mutation, ticket/executor binding before consume or HTTP, single-use
+failure paths, no write retries, error mapping, focused evidence, secrets, and
+unchanged non-Wave-5d coverage. Give PASS or FAIL with exact locations and
+reproducible commands; post blockers to the parent. Do not browse, use a
+browser, or claim live/UI/vision evidence.
