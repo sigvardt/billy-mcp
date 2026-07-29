@@ -84,6 +84,7 @@ class WriteOperationSpec(BaseModel):
     collection_path: str = Field(min_length=1)
     singular_root: str = Field(min_length=1)
     plural_root: str = Field(min_length=1)
+    additional_plural_roots: tuple[str, ...] = ()
     payload: dict[str, JsonValue] | None = None
     resource_id: str | None = None
     organization_id: str | None = None
@@ -121,6 +122,11 @@ class WriteOperationSpec(BaseModel):
                 raise ValueError("PUT requires a non-empty resource_id and payload")
         elif self.payload is not None or not self.resource_id:
             raise ValueError("DELETE requires a non-empty resource_id and no payload")
+        declared_plural_roots = (self.plural_root, *self.additional_plural_roots)
+        if any(not root for root in declared_plural_roots):
+            raise ValueError("changed plural roots must be non-empty")
+        if len(set(declared_plural_roots)) != len(declared_plural_roots):
+            raise ValueError("changed plural roots must be unique")
         return self
 
 
@@ -133,6 +139,7 @@ class _PreparedWrite:
     json_body: dict[str, JsonValue] | None
     binding: ConfirmationBinding
     plural_root: str
+    additional_plural_roots: tuple[str, ...]
 
 
 class WriteProtocolService:
@@ -161,6 +168,7 @@ class WriteProtocolService:
             json_body=None if specification.method is WriteMethod.DELETE else canonical_request,
             binding=binding,
             plural_root=specification.plural_root,
+            additional_plural_roots=specification.additional_plural_roots,
         )
         with self._prepared_lock:
             self._prepared_by_ticket[issued.value] = prepared
@@ -258,16 +266,25 @@ def _map_execution_response(
         return _invalid_success_response(prepared.plural_root)
 
     changed_records: dict[str, list[dict[str, JsonValue]]] = {}
-    root_value = data.get(prepared.plural_root)
-    if root_value is not None:
+    declared_plural_roots = (prepared.plural_root, *prepared.additional_plural_roots)
+    for plural_root in declared_plural_roots:
+        if plural_root not in data:
+            if plural_root == prepared.plural_root and prepared.method is not WriteMethod.DELETE:
+                return _invalid_success_response(prepared.plural_root)
+            continue
+        root_value = data[plural_root]
+        if (
+            root_value is None
+            and plural_root == prepared.plural_root
+            and prepared.method is WriteMethod.DELETE
+        ):
+            continue
         records = _records(root_value)
         if records is None:
-            return _invalid_success_response(prepared.plural_root)
-        changed_records[prepared.plural_root] = records
-    elif prepared.method is not WriteMethod.DELETE:
-        return _invalid_success_response(prepared.plural_root)
+            return _invalid_success_response(plural_root)
+        changed_records[plural_root] = records
 
-    deleted_records = _deleted_records(data, prepared.plural_root)
+    deleted_records = _deleted_records(data, declared_plural_roots)
     if isinstance(deleted_records, ToolError):
         return deleted_records
     return WriteExecutionResult(
@@ -299,7 +316,7 @@ def _records(value: object) -> list[dict[str, JsonValue]] | None:
 
 
 def _deleted_records(
-    data: dict[str, object], plural_root: str
+    data: dict[str, object], declared_plural_roots: tuple[str, ...]
 ) -> dict[str, list[str]] | ToolError | None:
     meta = data.get("meta")
     if meta is None:
@@ -313,15 +330,18 @@ def _deleted_records(
     deleted_mapping = _mapping(deleted)
     if deleted_mapping is None:
         return _invalid_success_response("meta.deletedRecords")
-    resource_ids = deleted_mapping.get(plural_root)
-    if resource_ids is None:
-        return None
-    if not isinstance(resource_ids, list):
-        return _invalid_success_response(f"meta.deletedRecords.{plural_root}")
-    identifiers = cast(list[object], resource_ids)
-    if not all(isinstance(item, str) for item in identifiers):
-        return _invalid_success_response(f"meta.deletedRecords.{plural_root}")
-    return {plural_root: cast(list[str], identifiers)}
+    deleted_records: dict[str, list[str]] = {}
+    for plural_root in declared_plural_roots:
+        if plural_root not in deleted_mapping:
+            continue
+        resource_ids = deleted_mapping[plural_root]
+        if not isinstance(resource_ids, list):
+            return _invalid_success_response(f"meta.deletedRecords.{plural_root}")
+        identifiers = cast(list[object], resource_ids)
+        if not all(isinstance(item, str) for item in identifiers):
+            return _invalid_success_response(f"meta.deletedRecords.{plural_root}")
+        deleted_records[plural_root] = cast(list[str], identifiers)
+    return deleted_records or None
 
 
 def _invalid_success_response(root: str) -> ToolError:

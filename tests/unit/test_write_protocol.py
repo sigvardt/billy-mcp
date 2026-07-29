@@ -246,6 +246,41 @@ def test_execution_maps_only_declared_changed_and_deleted_record_roots() -> None
     }
 
 
+@pytest.mark.parametrize(
+    ("body", "expected_changed_records"),
+    [
+        (
+            {
+                "products": [{"id": "product-1"}],
+                "productPrices": [{"id": "price-1", "productId": "product-1"}],
+                "contacts": [{"id": "contact-1"}],
+            },
+            {
+                "products": [{"id": "product-1"}],
+                "productPrices": [{"id": "price-1", "productId": "product-1"}],
+            },
+        ),
+        (
+            {"products": [{"id": "product-1"}]},
+            {"products": [{"id": "product-1"}]},
+        ),
+    ],
+)
+def test_execution_maps_every_present_declared_changed_record_root(
+    body: dict[str, object],
+    expected_changed_records: dict[str, list[dict[str, str]]],
+) -> None:
+    service = make_service(httpx.MockTransport(lambda request: httpx.Response(200, json=body)))
+    preview = service.preview(
+        operation(WriteMethod.PUT, additional_plural_roots=("productPrices",))
+    )
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, WriteExecutionResult)
+    assert result.changed_records == expected_changed_records
+    assert result.deleted_records is None
+
+
 def test_delete_preserves_absent_optional_deleted_records_without_inventing_them() -> None:
     service = make_service(
         httpx.MockTransport(lambda request: httpx.Response(200, json={"meta": {}}))
@@ -256,6 +291,64 @@ def test_delete_preserves_absent_optional_deleted_records_without_inventing_them
     assert isinstance(result, WriteExecutionResult)
     assert result.changed_records == {}
     assert result.deleted_records is None
+
+
+def test_delete_maps_every_present_declared_deleted_record_root() -> None:
+    service = make_service(
+        httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={
+                    "meta": {
+                        "deletedRecords": {
+                            "products": ["old-product"],
+                            "productPrices": ["old-price"],
+                            "contacts": ["undeclared-contact"],
+                        }
+                    }
+                },
+            )
+        )
+    )
+    preview = service.preview(
+        operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
+    )
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, WriteExecutionResult)
+    assert result.changed_records == {}
+    assert result.deleted_records == {
+        "products": ["old-product"],
+        "productPrices": ["old-price"],
+    }
+
+
+@pytest.mark.parametrize("deleted_product_prices", ["not-a-list", [1]])
+def test_malformed_declared_additional_deleted_root_returns_validation_error(
+    deleted_product_prices: object,
+) -> None:
+    service = make_service(
+        httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={
+                    "meta": {
+                        "deletedRecords": {
+                            "products": ["old-product"],
+                            "productPrices": deleted_product_prices,
+                        }
+                    }
+                },
+            )
+        )
+    )
+    preview = service.preview(
+        operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
+    )
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.VALIDATION_ERROR
 
 
 @pytest.mark.parametrize(
@@ -270,6 +363,24 @@ def test_delete_preserves_absent_optional_deleted_records_without_inventing_them
 def test_malformed_success_payload_returns_validation_error(body: dict[str, object]) -> None:
     service = make_service(httpx.MockTransport(lambda request: httpx.Response(200, json=body)))
     preview = service.preview(operation(WriteMethod.PUT))
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.VALIDATION_ERROR
+
+
+def test_malformed_declared_additional_changed_root_returns_validation_error() -> None:
+    service = make_service(
+        httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={"products": [{"id": "product-1"}], "productPrices": {}},
+            )
+        )
+    )
+    preview = service.preview(
+        operation(WriteMethod.PUT, additional_plural_roots=("productPrices",))
+    )
     result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
 
     assert isinstance(result, ToolError)
