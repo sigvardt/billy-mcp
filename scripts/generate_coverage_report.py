@@ -289,6 +289,18 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.productPrices.list": ("tests/api/test_catalog_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.contacts.get": ("tests/api/test_contact_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.contacts.list": ("tests/api/test_contact_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoices.get": ("tests/api/test_invoice_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.invoices.list": ("tests/api/test_invoice_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bills.get": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bills.list": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.daybookTransactions.get": (
+        "tests/api/test_daybook_transaction_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.daybookTransactions.list": (
+        "tests/api/test_daybook_transaction_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
 }
 
 

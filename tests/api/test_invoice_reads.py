@@ -198,6 +198,7 @@ def test_list_maps_absent_optional_paging_without_fabricating_it() -> None:
         ({"sortProperty": "updatedTime"}, "sortProperty"),
         ({"sortDirection": "DOWN"}, "sortDirection"),
         ({"state": "paid"}, "state"),
+        ({"q": ""}, "q"),
         ({"offset": 1}, "offset"),
         ({"email": "invoice@example.test"}, "email"),
     ],

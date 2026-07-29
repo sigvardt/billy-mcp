@@ -135,7 +135,7 @@ class InvoicesListRequest(_RequestModel):
     )
     amount: float | None = None
     quote_id: str | None = Field(default=None, alias="quoteId", serialization_alias="quoteId")
-    q: str | None = None
+    q: str | None = Field(default=None, min_length=1)
 
     def query_params(self) -> dict[str, str | int | float | bool]:
         """Serialise only the documented invoice query surface."""
@@ -286,7 +286,7 @@ def register_invoice_read_tools(server: FastMCP, client: BillyHttpClient) -> Non
         recurringInvoiceId: str | None = None,
         amount: float | None = None,
         quoteId: str | None = None,
-        q: str | None = None,
+        q: str | None = Field(default=None, min_length=1),
     ) -> InvoicesListSuccess | ToolError:
         """Read Billy invoices with frozen paging, filters, and sorting only."""
 

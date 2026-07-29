@@ -6,9 +6,12 @@ from pathlib import Path
 
 from fastmcp import FastMCP
 
+from billy_mcp.api.bill_reads import register_bill_read_tools
 from billy_mcp.api.bootstrap_reads import register_bootstrap_read_tools
 from billy_mcp.api.catalog_reads import register_catalog_read_tools
 from billy_mcp.api.contact_reads import register_contact_read_tools
+from billy_mcp.api.daybook_transaction_reads import register_daybook_transaction_read_tools
+from billy_mcp.api.invoice_reads import register_invoice_read_tools
 from billy_mcp.api.reference_reads import register_reference_reads
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -54,6 +57,9 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
     register_contact_read_tools(server, client)
+    register_invoice_read_tools(server, client)
+    register_bill_read_tools(server, client)
+    register_daybook_transaction_read_tools(server, client)
     return server
 
 

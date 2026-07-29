@@ -5,29 +5,23 @@ tags: [billy, coverage, review]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
-created: 2026-07-29T10:38:45Z
-updated: 2026-07-29T10:38:45Z
+created: 2026-07-29T10:58:11Z
+updated: 2026-07-29T10:58:11Z
 ---
 
 # state
 
 ## Current state
 
-- The coverage and safety foundation is on root: coverage manifests (305 API +
-  339 UI), locked client, tickets, redaction, browser egress, and coverage
-  tools.
-- Exactly 16 Wave-1 API rows are offline-qualified (`implemented` +
-  `contract_tested`): user, user organizations, organizations, currencies,
-  countries, locales, products, product prices, contacts. All are registered
-  in root `server.py`. Every `live_tested` and UI qualification state remains
-  false.
-- Generated status and report accurately identify this bounded slice as
-  `phase_1_offline_api_reads`; `complete` remains false.
-- Three active Codex Power leaves own Wave-2 invoice, bill, and daybook
-  transaction read modules. Root retains server wiring and generated coverage
-  evidence until clean merge.
+- Wave-1 offline reads are committed and product-exposed (16 tools).
+- Wave-2 invoice, bill, and daybook-transaction modules are merged and
+  registered on root with focused contract tests. Their six rows have offline
+  implementation and contract-test evidence, for 22 such API rows total.
+- Independent review verdict: **FAIL** for product completeness; **ACCEPT**
+  Wave-2 offline quality and anti-false-green discipline on the working tree.
+- Every `live_tested` and UI qualification state remains false. `complete`
+  remains false. Full mode fails closed.
 - UI discovery evidence stops at unauthenticated `/login`.
-- Full test mode fails closed until every applicable row qualifies.
 - Official docs fingerprint unchanged.
 
 ## Evidence boundaries
@@ -35,21 +29,39 @@ updated: 2026-07-29T10:38:45Z
 - Official API fingerprint: ETag `hsisik4g9p3603`, 147934 bytes, MD5
   `c2efda0ee4cf9cf200e14910c5fc6996` (https://www.billy.dk/api/).
 - 46 resources, 207 clear ops, 92 bulk ambiguous, 6 specials; no webhooks.
-- Documented list filter tables exist only for invoices, bills, and
-  daybookTransactions (inventory freeze matches official parameters).
+- Documented list filter tables only for invoices, bills, daybookTransactions;
+  code allowlists match official tables on the working tree.
 - `BILLY_API_TOKEN` unavailable; no live or vision claim is valid.
-- Offline suite: 77 passed; full mode exit 1 on require-complete.
+- Offline suite and final integration gate: 128 tests passed.
 
 ## Review decisions
 
 - Accepted: inventory arithmetic and specials match official Supports; files
-  create aliases to multipart special; dual-tool and bankLineMatch defects fixed.
+  create aliases to multipart special; bankLineMatches singularization correct.
 - Accepted: checker `--require-complete` and full mode fail closed on red inventory.
-- Accepted: Wave-1 offline greens are real typed tools + contract tests, not stubs.
+- Accepted: Wave-1 and Wave-2 offline greens (working tree) are real typed tools
+  + contract tests, not stubs; `live_tested` stays false.
+- Accepted: bill `q` as free search string (not field-name enum) matches official
+  search parameter semantics.
+- Fixed: invoice `q` now rejects an empty string, matching bill and daybook
+  query validation.
+- Deferred with evidence: invoice date/time filters remain opaque strings. The
+  public documentation provides examples but no canonical accepted wire format,
+  and no non-production token exists to validate a parser; enforcing one would
+  invent contract behavior.
 - Rejected as complete: product completeness, live qualification, UI/vision
   completeness, auth product tools, bulk resolution.
-- Residual medium: create request_fields remain singular body keys until write
-  tools; user/organizations root keys are assumed by fixtures until live proof.
+- Residual low/medium: invoice date filters as opaque strings vs bill `date`
+  types; create request_fields singular until writes; user/organizations root
+  keys fixture-assumed until live proof.
+
+## Next implementation slice (for Codex Power)
+
+1. Commit/push Wave-2 root integration WIP (server + evidence map + tests).
+2. Wave-3 unfiltered clear get/list clusters (lines, contactPersons, daybooks,
+   accounts, files read, attachments).
+3. When token exists: live-test offline-green reads; start bulk probes; do not
+   invent bulk bodies.
 
 ## References
 

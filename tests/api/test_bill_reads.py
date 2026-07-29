@@ -10,7 +10,6 @@ from fastmcp import FastMCP
 from pydantic import ValidationError
 
 from billy_mcp.api.bill_reads import (
-    BillQuery,
     BillsGetRequest,
     BillsGetSuccess,
     BillsListRequest,
@@ -96,7 +95,7 @@ def test_list_builds_only_documented_query_parameters_and_maps_paging() -> None:
             suppliersInvoiceNo="SUP-1",
             isBare=True,
             amount=42.5,
-            q=BillQuery.SUPPLIERS_INVOICE_NO,
+            q="supplier search",
         ),
     )
 
@@ -127,7 +126,7 @@ def test_list_builds_only_documented_query_parameters_and_maps_paging() -> None:
             "suppliersInvoiceNo": "SUP-1",
             "isBare": "true",
             "amount": "42.5",
-            "q": "suppliersInvoiceNo",
+            "q": "supplier search",
         }
     )
     assert set(requests[0].url.params) == {
@@ -179,7 +178,7 @@ def test_list_maps_absent_optional_paging_without_fabricating_it() -> None:
         ({"sortProperty": "invoiceNo"}, "sortProperty"),
         ({"sortDirection": "DOWN"}, "sortDirection"),
         ({"state": "paid"}, "state"),
-        ({"q": "query"}, "q"),
+        ({"q": ""}, "q"),
         ({"offset": 1}, "offset"),
         ({"entryDatePeriod": "thisMonth"}, "entryDatePeriod"),
         ({"minApprovedTime": "2026-01-01"}, "minApprovedTime"),

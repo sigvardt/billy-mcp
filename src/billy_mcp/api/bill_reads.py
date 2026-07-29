@@ -61,17 +61,6 @@ class BillState(StrEnum):
     VOIDED = "voided"
 
 
-class BillQuery(StrEnum):
-    """The documented bill-list query fields."""
-
-    CONTACT_NAME = "contact.name"
-    LINE_DESCRIPTION = "lineDescription"
-    VOUCHER_NO = "voucherNo"
-    AMOUNT = "amount"
-    SUPPLIERS_INVOICE_NO = "suppliersInvoiceNo"
-    BALANCE = "balance"
-
-
 class BillsGetRequest(_RequestModel):
     """Input for retrieving one bill by its Billy identifier."""
 
@@ -134,7 +123,7 @@ class BillsListRequest(_RequestModel):
     )
     is_bare: bool | None = Field(default=None, alias="isBare", serialization_alias="isBare")
     amount: float | None = None
-    q: BillQuery | None = None
+    q: str | None = Field(default=None, min_length=1)
 
     def query_params(self) -> dict[str, str | int | float | bool]:
         """Serialise only the documented bill-list query fields."""
@@ -276,7 +265,7 @@ def register_bill_read_tools(server: FastMCP, client: BillyHttpClient) -> None:
         suppliersInvoiceNo: str | None = None,
         isBare: bool | None = None,
         amount: float | None = None,
-        q: BillQuery | None = None,
+        q: str | None = Field(default=None, min_length=1),
     ) -> BillsListSuccess | ToolError:
         """Read Billy bills with documented paging, filters, and sorting only."""
 

@@ -6,7 +6,7 @@ sources:
   - https://www.billy.dk/api/
   - .fractal/main.billy_complete/tmp/grok-research.md
 created: 2026-07-29T10:19:00Z
-updated: 2026-07-29T10:27:15Z
+updated: 2026-07-29T10:53:00Z
 ---
 
 # wave_two_filtered_reads_contract
@@ -43,6 +43,20 @@ Period values remain opaque documented strings. Invoices alone permit the
 invoice period filters; bills must not inherit them. `quoteId` and
 `recurringInvoiceId` are invoice-list filters only and do not prove separate API
 resources or UI parity.
+
+## Offline integration evidence
+
+The root server registers the six tools in this contract. Each has a focused
+contract suite and a root registry assertion, and the coverage generator records
+only `implemented: true` and `contract_tested: true` for the matching API rows.
+The evidence remains intentionally incomplete: every `live_tested` field is
+false, all interface/vision rows are red, and generated `complete` remains
+false.
+
+The bill and invoice `q` parameters are non-empty free-text search strings; the
+documented field lists describe what Billy searches, not an enum of permitted
+query text. Date/time and period filters retain their documented wire strings
+until a dedicated non-production observation verifies stricter parsing.
 
 ## Exclusions
 

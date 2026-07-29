@@ -80,7 +80,7 @@ def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
     ]
 
 
-def test_server_registers_only_coverage_and_implemented_wave_one_tools(tmp_path: Path) -> None:
+def test_server_registers_only_coverage_and_implemented_read_tools(tmp_path: Path) -> None:
     write_coverage_fixture(tmp_path)
     report = load_coverage_report(tmp_path)
     server = create_server(tmp_path)
@@ -108,4 +108,10 @@ def test_server_registers_only_coverage_and_implemented_wave_one_tools(tmp_path:
         "api_product_prices_list",
         "api_contacts_get",
         "api_contacts_list",
+        "api_invoices_get",
+        "api_invoices_list",
+        "api_bills_get",
+        "api_bills_list",
+        "api_daybook_transactions_get",
+        "api_daybook_transactions_list",
     }
