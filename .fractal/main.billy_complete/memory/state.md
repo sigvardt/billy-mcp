@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T20:50:00Z
+updated: 2026-07-29T20:58:37Z
 ---
 
 # state
@@ -16,11 +16,17 @@ updated: 2026-07-29T20:50:00Z
 - Wave-5c through Wave-5e parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
 - Runtime: **178** `api_*` + 2 coverage; 42 preview + 42 execute ticketed write tools. No tax write tools yet.
 - Coverage: implemented 136, contract_tested 136, live 0, vision 0, `complete: false`.
-- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Independent freeze review re-fetch matches.
+- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Product-ready research re-fetch matches research28 and freeze review.
 - Wave-5e product at tip **`15d0bde`** / root record **`c92ed0e`**: **ACCEPT** offline.
-- Wave-5f freeze at tip **`d412e8c`**: **ACCEPT** offline by authoritative root Grok (`wiki/wave_fivef_freeze_independent_review.md`). Product gate open; product code still absent.
+- Wave-5f freeze at tip **`d412e8c`** / record **`e39704b`**: **ACCEPT** offline by authoritative root Grok (`wiki/wave_fivef_freeze_independent_review.md`). Product gate open; product code still absent.
+- Product-ready research brief is current at `.fractal/main.billy_complete/tmp/grok-research.md` (Wave-5f product slice: one `tax_writes.py`, 12 tools, registry 190, offline 142 after offline suite).
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
 - Historical unmerged review branches remain intentionally closed rather than merged.
+- Parent branch `main` is current at this branch's merge base, and there are no
+  active or paused child nodes.  Remaining divergent child branches contain
+  review-node seed files or non-authoritative fallback review evidence; their
+  conclusions are already represented by the authoritative root review records
+  above, so they remain intentionally unmerged.
 
 ## Review decisions (authoritative)
 
