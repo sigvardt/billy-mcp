@@ -19,10 +19,11 @@ updated: 2026-07-29T14:10:20Z
 
 The cited parent Grok brief, frozen write contract, approved design §§5–6 and
 §8, and API inventory agree on the official-documentation fingerprint: ETag
-`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`. The brief was read
-from the parent worktree because its scratch path is git-ignored. These sources
-are authoritative; this leaf performs no further web, interface, or live
-research.
+`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`. The cited brief is
+read from the parent worktree scratch path
+`/Volumes/ssd_1/Repositories/billy-mcp/.worktrees/main.billy_complete/.fractal/main.billy_complete/tmp/grok-research.md`;
+the child-facing relative path is intentionally git-ignored. These sources are
+authoritative; this leaf performs no further web, interface, or live research.
 
 ## Exact response-mapping task
 

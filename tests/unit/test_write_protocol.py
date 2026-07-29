@@ -293,6 +293,64 @@ def test_delete_preserves_absent_optional_deleted_records_without_inventing_them
     assert result.deleted_records is None
 
 
+def test_delete_maps_every_present_declared_deleted_record_root() -> None:
+    service = make_service(
+        httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={
+                    "meta": {
+                        "deletedRecords": {
+                            "products": ["old-product"],
+                            "productPrices": ["old-price"],
+                            "contacts": ["undeclared-contact"],
+                        }
+                    }
+                },
+            )
+        )
+    )
+    preview = service.preview(
+        operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
+    )
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, WriteExecutionResult)
+    assert result.changed_records == {}
+    assert result.deleted_records == {
+        "products": ["old-product"],
+        "productPrices": ["old-price"],
+    }
+
+
+@pytest.mark.parametrize("deleted_product_prices", ["not-a-list", [1]])
+def test_malformed_declared_additional_deleted_root_returns_validation_error(
+    deleted_product_prices: object,
+) -> None:
+    service = make_service(
+        httpx.MockTransport(
+            lambda request: httpx.Response(
+                200,
+                json={
+                    "meta": {
+                        "deletedRecords": {
+                            "products": ["old-product"],
+                            "productPrices": deleted_product_prices,
+                        }
+                    }
+                },
+            )
+        )
+    )
+    preview = service.preview(
+        operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
+    )
+    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.VALIDATION_ERROR
+
+
 @pytest.mark.parametrize(
     "body",
     [
