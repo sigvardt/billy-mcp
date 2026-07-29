@@ -24,11 +24,11 @@ the cited official API page, re-fetched by Grok with ETag `hsisik4g9p3603`, MD5
 cited research brief is retained outside the public repository at
 `.fractal/main.billy_complete/tmp/grok-research.md`.
 
-Wave-5d has independent Grok offline acceptance in
-[[wave_fived_product_independent_review]], so this contract authorises a
-Wave-5e independent freeze review. It does not authorise product implementation
-until that review accepts this exact contract. It never authorises live, UI,
-vision, bulk, special-route, or overall-completeness claims.
+The authoritative root Grok review has accepted this exact frozen commit in
+[[wave_fivee_freeze_independent_review]]. The acceptance opens only the
+offline product-implementation gate. It does not accept the implemented
+product, nor does it authorise live, UI, vision, bulk, special-route, or
+overall-completeness claims.
 
 ## Exact inventory and tool surface
 
