@@ -1,0 +1,26 @@
+{
+  "complete": false,
+  "official_docs": {
+    "etag": "hsisik4g9p3603",
+    "md5": "c2efda0ee4cf9cf200e14910c5fc6996"
+  },
+  "phase": "phase_0_inventory",
+  "qualification": {
+    "blocker": "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed",
+    "contract_tested_rows": 0,
+    "implemented_rows": 0,
+    "live_tested_rows": 0,
+    "vision_verified_rows": 0
+  },
+  "schema_version": 1,
+  "source_counts": {
+    "all_rows": 644,
+    "api_ambiguous_bulk": 92,
+    "api_clear": 207,
+    "api_special": 6,
+    "api_total": 305,
+    "ui_api_parity": 305,
+    "ui_discovery": 34,
+    "ui_total": 339
+  }
+}
