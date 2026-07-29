@@ -1072,7 +1072,7 @@ def render_report(status: dict[str, Any]) -> str:
     )
     return "\n".join(
         [
-            "# Phase 1 offline API-read coverage status",
+            "# Phase 1 offline API read-and-write coverage status",
             "",
             state_summary,
             "",

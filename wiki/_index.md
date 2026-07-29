@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T16:18:27Z
+updated: 2026-07-29T16:26:28Z
 ---
 
 # billy_mcp
@@ -28,6 +28,8 @@ updated: 2026-07-29T16:18:27Z
 [[wave_fivea_registration_independent_review|wave_fivea_registration_independent_review]]: Independent Grok ACCEPT of integrated Wave-5a ticketed write registration on the root branch.
 
 [[wave_fivea_root_registration_baseline_review|wave_fivea_root_registration_baseline_review]]: Independent Grok review of the Wave-5a root registration planning baseline (honesty PASS; product completeness FAIL; registration not integrated).
+
+[[wave_fiveb_freeze_independent_review|wave_fiveb_freeze_independent_review]]: Independent Grok ACCEPT of the Wave-5b offline ticketed-write contract freeze; product not yet shipped.
 
 [[wave_fiveb_ticketed_writes_contract|wave_fiveb_ticketed_writes_contract]]: Cited offline ticketed-write contract for Billy account groups, accounts, and daybook balance accounts.
 
