@@ -490,6 +490,21 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_file_attachment_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.attachments.create": (
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.attachments.update": (
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.attachments.delete": (
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.countryGroups.get": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.countryGroups.list": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.cities.get": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
