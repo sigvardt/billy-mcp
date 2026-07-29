@@ -6,27 +6,26 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T12:35:00Z
+updated: 2026-07-29T12:44:00Z
 ---
 
 # state
 
 ## Current state
 
-- Wave-1 through Wave-3 offline reads are on root: **44** real `api_*` tools +
-  2 `coverage_*`. Status: 44 implemented/contract_tested, 0 live_tested,
-  complete false.
-- Wave-4 first cohort is **merged as source** (geo 8, tax 16, bank 10) with
-  focused contract tests, but **not registered** and **not greened**. Root
-  product surface still 44 offline tools.
-- Second-cohort leaves active: balance/invoice-ext (10) and ledger/users (6).
-- Official docs fingerprint unchanged.
+- Wave-1 through Wave-3 offline reads are registered on root: **44** real
+  `api_*` tools + 2 `coverage_*`. Status: 44 implemented/contract_tested,
+  0 live_tested, complete false.
+- Wave-4 geo (8), tax (16), bank (10), and balance/invoice extension (10)
+  modules are **merged as source** with focused contract tests, but remain
+  **unregistered** and **not greened**. Root product surface still has 44
+  offline tools.
+- The ledger/users (6 tools) delivery is committed and pending root merge.
+- Official docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5
+  `c2efda0ee4cf9cf200e14910c5fc6996`).
 - UI discovery still unauthenticated login only; all UI rows red.
-- `BILLY_API_TOKEN` unavailable; full mode fails closed (438 offline pass, then
-  completeness gate fails).
-- Root lint, coverage-inventory, policy checks, and the 438-test non-live
-  suite pass after the first-cohort merge; the three first-cohort modules also
-  pass 213 focused tests when run together.
+- `BILLY_API_TOKEN` unavailable; full mode fails closed. Root non-live gates
+  pass with 462 tests after the balance/invoice-extension merge.
 
 ## Evidence boundaries
 
@@ -34,11 +33,14 @@ updated: 2026-07-29T12:35:00Z
   `c2efda0ee4cf9cf200e14910c5fc6996` (https://www.billy.dk/api/).
 - 46 resources, 207 clear ops, 92 bulk ambiguous, 6 specials; 0 webhooks.
 - Documented list filter tables only for invoices, bills, daybookTransactions.
-- Live unauth: cities/states/zipcodes require `countryId`; countryGroups public;
-  unauth `GET /user/organizations` returns 404 (docs path kept offline until
+- Live unauth: cities/states/zipcodes require `countryId`; countryGroups public
+  (list + get `/countryGroups/eu` → root `countryGroup`); unauth
+  `GET /user/organizations` returns 404 (docs path kept offline until
   authenticated live proof).
-- Remaining clear red: 165 (50 get/list + 115 writes). Specials red except user
-  get/organizations.
+- Live unauth: org-scoped **get-by-id** often returns **404 RECORD_NOT_FOUND**
+  without a token while **lists** return **401 AUTHENTICATION_REQUIRED**.
+- Remaining clear red: 50 get/list (Wave-4) + all writes. Specials red except
+  user get/organizations.
 
 ## Review decisions
 
@@ -46,9 +48,6 @@ updated: 2026-07-29T12:35:00Z
   **ACCEPT** anti-false-green and first-cohort module quality; **FAIL** root
   wiring of Wave-4 (expected integration gap, not false green).
 - No REQUIRED rewrites of geo/tax/bank modules from that review.
-- The review's 46-tool registry reproduction (44 `api_*`, two `coverage_*`)
-  confirms that the missing Wave-4 registration/evidence is a real pending
-  integration task, not an incorrect review finding.
 - Accepted: inventory arithmetic matches official Supports.
 - Accepted for Wave-4: require `countryId` on cities/states/zipcodes lists from
   live evidence; do not invent other resource filters offline.
@@ -59,12 +58,14 @@ updated: 2026-07-29T12:35:00Z
 
 ## Next implementation slice (for Codex Power)
 
-1. Finish and merge second-cohort leaves (16 tools).
-2. Root integration: register all 50 Wave-4 tools + offline evidence → **94**
+1. Merge the reviewed ledger/users delivery, preserving only its two product
+   files and pruning generated child seed files.
+2. Root integration: register all 50 Wave-4 tools + evidence → **94**
    `api_*` + 2 `coverage_*`; complete stays false; live_tested stays false.
-3. When token exists: live-test offline-green reads (include authenticated
+3. Map `RECORD_NOT_FOUND` on get tools (live unauth matrix); keep 401 on lists.
+4. When token exists: live-test offline-green reads (include authenticated
    `/user/organizations`); bulk probes; ticketed writes.
-4. Authenticated UI only with credentials + DOM + read-back + vision + purge.
+5. Authenticated UI only with credentials + DOM + read-back + vision + purge.
 
 ## References
 
