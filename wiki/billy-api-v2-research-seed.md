@@ -6,12 +6,12 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-29T08:34:00Z
+updated: 2026-07-29T08:45:00Z
 ---
 
 # billy-api-v2-research-seed
 
-Primary source: https://www.billy.dk/api/ (accessed 2026-07-29; etag `hsisik4g9p3603`, 147934 bytes).  
+Primary source: https://www.billy.dk/api/ (accessed 2026-07-29; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).  
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
 Detailed freeze recipe: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (not a completeness claim).
 
@@ -24,6 +24,10 @@ Detailed freeze recipe: node scratch `.fractal/main.billy_complete/tmp/grok-rese
 | Clear get/list/create/update/delete ops | 207 |
 | Bulk save + bulk delete flags | 92 (contract incomplete on current docs) |
 | Documented webhooks | 0 |
+
+## Non-resources
+
+- HTML noise includes Prismic CMS `…/api/v2/documents/search` and prose about "supporting documents". That is **not** a Billy API resource. Official Supports TOC has no `/v2/documents`.
 
 ## Global conventions
 
