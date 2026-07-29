@@ -5,8 +5,8 @@ tags: [billy, coverage, review]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
-created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T20:58:37Z
+created: 2026-07-29T21:14:11Z
+updated: 2026-07-29T21:14:11Z
 ---
 
 # state
@@ -14,19 +14,16 @@ updated: 2026-07-29T20:58:37Z
 ## Current state
 
 - Wave-5c through Wave-5e parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
-- Runtime: **178** `api_*` + 2 coverage; 42 preview + 42 execute ticketed write tools. No tax write tools yet.
+- Runtime: **178** `api_*` + 2 coverage; 42 preview + 42 execute ticketed write tools. No tax write tools on root yet.
 - Coverage: implemented 136, contract_tested 136, live 0, vision 0, `complete: false`.
-- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Product-ready research re-fetch matches research28 and freeze review.
+- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Independent review re-fetch matches.
 - Wave-5e product at tip **`15d0bde`** / root record **`c92ed0e`**: **ACCEPT** offline.
-- Wave-5f freeze at tip **`d412e8c`** / record **`e39704b`**: **ACCEPT** offline by authoritative root Grok (`wiki/wave_fivef_freeze_independent_review.md`). Product gate open; product code still absent.
-- Product-ready research brief is current at `.fractal/main.billy_complete/tmp/grok-research.md` (Wave-5f product slice: one `tax_writes.py`, 12 tools, registry 190, offline 142 after offline suite).
+- Wave-5f freeze at tip **`d412e8c`** / record **`e39704b`**: **ACCEPT** offline (`wiki/wave_fivef_freeze_independent_review.md`).
+- Product-ready research tip **`1c9e6cb`**: independent Grok **ACCEPT** as Codex handoff only (`.fractal/main.billy_complete/tmp/grok-review.md`). Product still **not accepted**.
+- Active child: `main.billy_complete.wave5f_tax_product` (codex-power product leaf). Its work remains unmerged and unaccepted until a clean root product commit receives a separate Grok review.
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
 - Historical unmerged review branches remain intentionally closed rather than merged.
-- Parent branch `main` is current at this branch's merge base, and there are no
-  active or paused child nodes.  Remaining divergent child branches contain
-  review-node seed files or non-authoritative fallback review evidence; their
-  conclusions are already represented by the authoritative root review records
-  above, so they remain intentionally unmerged.
+- Parent branch `main` is current at this branch's merge base. Remaining divergent historical child branches hold review seed or non-authoritative fallback evidence already covered by root review records.
 
 ## Review decisions (authoritative)
 
@@ -41,7 +38,8 @@ updated: 2026-07-29T20:58:37Z
 - Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review.
 - Wave-5e product at tip `15d0bde`: **ACCEPT** offline by independent Grok.
 - Wave-5f freeze at tip `d412e8c`: **ACCEPT** offline by the authoritative root Grok independent review.
-- Wave-5f product: **not started / not accepted**.
+- Wave-5f product-ready research at tip `1c9e6cb`: **ACCEPT** offline as implementation handoff only.
+- Wave-5f product: **in progress on child / not accepted** (no root product commit).
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
 ## Open coverage work
@@ -54,7 +52,7 @@ updated: 2026-07-29T20:58:37Z
 - Docs re-fetch at review: ETag `hsisik4g9p3603`, MD5 match, 147934 bytes — no source drift.
 - Six inventory CUD tool names and routes match freeze table; bulk empty-tool red.
 - Unauth POST/PUT **401**; missing-id DELETE **200** (not cleanup proof).
-- No `tax_writes.py`; no premature coverage green.
+- No `tax_writes.py` on root; no premature coverage green.
 - The review's `api.billy.dk` restatement is non-blocking: the freeze and
   approved design positively lock API traffic to `https://api.billysbilling.com/v2`.
   Product host-lock tests should still cover the denied sample host.
@@ -66,6 +64,7 @@ updated: 2026-07-29T20:58:37Z
 - Unauth DELETE empty 200 is not cleanup proof.
 - Unauth METHOD_NOT_ALLOWED 405 overrides Supports-flag optimism for offline green paths.
 - Freeze ACCEPT opens product only; product ACCEPT is offline only after separate review; no live/UI/bulk/completeness claim.
+- Product-ready research ACCEPT is handoff only, not product ACCEPT.
 
 ## References
 
