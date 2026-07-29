@@ -7,6 +7,8 @@ from pathlib import Path
 from fastmcp import FastMCP
 
 from billy_mcp.api.account_reads import register_account_read_tools
+from billy_mcp.api.balance_invoice_ext_reads import register_balance_invoice_extension_read_tools
+from billy_mcp.api.bank_reads import register_bank_read_tools
 from billy_mcp.api.bill_reads import register_bill_read_tools
 from billy_mcp.api.bootstrap_reads import register_bootstrap_read_tools
 from billy_mcp.api.catalog_reads import register_catalog_read_tools
@@ -15,9 +17,12 @@ from billy_mcp.api.contact_reads import register_contact_read_tools
 from billy_mcp.api.daybook_reads import register_daybook_read_tools
 from billy_mcp.api.daybook_transaction_reads import register_daybook_transaction_read_tools
 from billy_mcp.api.file_attachment_reads import register_file_attachment_read_tools
+from billy_mcp.api.geo_reads import register_geo_read_tools
 from billy_mcp.api.invoice_reads import register_invoice_read_tools
+from billy_mcp.api.ledger_user_reads import register_ledger_user_read_tools
 from billy_mcp.api.line_reads import register_line_read_tools
 from billy_mcp.api.reference_reads import register_reference_reads
+from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
 from billy_mcp.coverage import (
@@ -70,6 +75,11 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_daybook_read_tools(server, client)
     register_account_read_tools(server, client)
     register_file_attachment_read_tools(server, client)
+    register_geo_read_tools(server, client)
+    register_tax_read_tools(server, client)
+    register_bank_read_tools(server, client)
+    register_balance_invoice_extension_read_tools(server, client)
+    register_ledger_user_read_tools(server, client)
     return server
 
 

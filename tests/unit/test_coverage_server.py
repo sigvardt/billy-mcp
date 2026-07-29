@@ -9,6 +9,61 @@ from billy_mcp.coverage import CoverageLoadError, load_coverage_report
 from billy_mcp.models import StableErrorCode
 from billy_mcp.server import create_server
 
+WAVE_FOUR_API_TOOL_NAMES = frozenset(
+    {
+        "api_country_groups_get",
+        "api_country_groups_list",
+        "api_cities_get",
+        "api_cities_list",
+        "api_states_get",
+        "api_states_list",
+        "api_zipcodes_get",
+        "api_zipcodes_list",
+        "api_tax_rates_get",
+        "api_tax_rates_list",
+        "api_tax_rate_deduction_components_get",
+        "api_tax_rate_deduction_components_list",
+        "api_sales_tax_rulesets_get",
+        "api_sales_tax_rulesets_list",
+        "api_sales_tax_rules_get",
+        "api_sales_tax_rules_list",
+        "api_sales_tax_accounts_get",
+        "api_sales_tax_accounts_list",
+        "api_sales_tax_meta_fields_get",
+        "api_sales_tax_meta_fields_list",
+        "api_sales_tax_returns_get",
+        "api_sales_tax_returns_list",
+        "api_sales_tax_payments_get",
+        "api_sales_tax_payments_list",
+        "api_bank_payments_get",
+        "api_bank_payments_list",
+        "api_bank_line_matches_get",
+        "api_bank_line_matches_list",
+        "api_bank_lines_get",
+        "api_bank_lines_list",
+        "api_bank_line_subject_associations_get",
+        "api_bank_line_subject_associations_list",
+        "api_balance_modifiers_get",
+        "api_balance_modifiers_list",
+        "api_contact_balance_payments_get",
+        "api_contact_balance_payments_list",
+        "api_contact_balance_postings_get",
+        "api_contact_balance_postings_list",
+        "api_invoice_late_fees_get",
+        "api_invoice_late_fees_list",
+        "api_invoice_reminders_get",
+        "api_invoice_reminders_list",
+        "api_invoice_reminder_associations_get",
+        "api_invoice_reminder_associations_list",
+        "api_transactions_get",
+        "api_transactions_list",
+        "api_postings_get",
+        "api_postings_list",
+        "api_users_get",
+        "api_users_list",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -89,7 +144,7 @@ def test_server_registers_only_coverage_and_implemented_read_tools(tmp_path: Pat
     assert report.status.complete is False
     assert report.status.source_counts == {"red": 2}
     assert [row.id for row in report.api_rows] == ["api.products.list"]
-    assert {tool.name for tool in tools} == {
+    expected_pre_wave_four_tools = {
         "coverage_status",
         "coverage_report",
         "api_user_get",
@@ -137,3 +192,9 @@ def test_server_registers_only_coverage_and_implemented_read_tools(tmp_path: Pat
         "api_attachments_get",
         "api_attachments_list",
     }
+    tool_names = {tool.name for tool in tools}
+    api_tool_names = {name for name in tool_names if name.startswith("api_")}
+
+    assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
+    assert len(api_tool_names) == 94
+    assert tool_names == expected_pre_wave_four_tools | WAVE_FOUR_API_TOOL_NAMES

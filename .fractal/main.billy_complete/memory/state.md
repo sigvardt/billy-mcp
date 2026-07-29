@@ -16,16 +16,17 @@ updated: 2026-07-29T12:44:00Z
 - Wave-1 through Wave-3 offline reads are registered on root: **44** real
   `api_*` tools + 2 `coverage_*`. Status: 44 implemented/contract_tested,
   0 live_tested, complete false.
-- Wave-4 geo (8), tax (16), bank (10), and balance/invoice extension (10)
-  modules are **merged as source** with focused contract tests, but remain
-  **unregistered** and **not greened**. Root product surface still has 44
-  offline tools.
-- The ledger/users (6 tools) delivery is committed and pending root merge.
+- Wave-4's fifty clear get/list tools are merged and registered: geo (8), tax
+  (16), bank (10), balance/invoice extension (10), and ledger/users (6). Root
+  now exposes **94** real `api_*` tools plus 2 `coverage_*` tools.
+- Generated coverage has exactly 94 API rows marked `implemented` and
+  `contract_tested`; every API `live_tested` flag remains false and
+  `complete` remains false.
 - Official docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5
   `c2efda0ee4cf9cf200e14910c5fc6996`).
 - UI discovery still unauthenticated login only; all UI rows red.
-- `BILLY_API_TOKEN` unavailable; full mode fails closed. Root non-live gates
-  pass with 462 tests after the balance/invoice-extension merge.
+- `BILLY_API_TOKEN` unavailable; full mode fails closed. The post-integration
+  focused suite covers 275 tests; complete non-live verification remains due.
 
 ## Evidence boundaries
 
@@ -58,14 +59,12 @@ updated: 2026-07-29T12:44:00Z
 
 ## Next implementation slice (for Codex Power)
 
-1. Merge the reviewed ledger/users delivery, preserving only its two product
-   files and pruning generated child seed files.
-2. Root integration: register all 50 Wave-4 tools + evidence → **94**
-   `api_*` + 2 `coverage_*`; complete stays false; live_tested stays false.
-3. Map `RECORD_NOT_FOUND` on get tools (live unauth matrix); keep 401 on lists.
-4. When token exists: live-test offline-green reads (include authenticated
+1. Run complete non-live and expected-fail full gates, then request an
+   independent Grok review of the registered 94-tool offline surface.
+2. Map `RECORD_NOT_FOUND` on get tools (live unauth matrix); keep 401 on lists.
+3. When token exists: live-test offline-green reads (include authenticated
    `/user/organizations`); bulk probes; ticketed writes.
-5. Authenticated UI only with credentials + DOM + read-back + vision + purge.
+4. Authenticated UI only with credentials + DOM + read-back + vision + purge.
 
 ## References
 
