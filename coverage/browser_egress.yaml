@@ -1,0 +1,55 @@
+{
+  "default_action": "deny",
+  "hosts": [
+    {
+      "api_client_action": "deny",
+      "browser_action": "allow",
+      "condition": "typed UI/auth workflow",
+      "evidence": "Frozen brief \u00a710.3: official app host",
+      "host": "mit.billy.dk",
+      "owner": "ui_auth",
+      "purpose": "Billy web interface and headless authentication only",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    },
+    {
+      "api_client_action": "deny",
+      "browser_action": "allow",
+      "condition": "future verified typed download workflow; not general navigation",
+      "evidence": "Frozen brief \u00a710.3: files downloadUrl host",
+      "host": "download.billy.dk",
+      "owner": "future_typed_download",
+      "purpose": "Typed Billy file download handling only",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    },
+    {
+      "api_client_action": "exclusive_allow",
+      "browser_action": "deny",
+      "condition": "not available to browser lane",
+      "evidence": "Approved design \u00a711.1 and frozen brief \u00a73",
+      "host": "api.billysbilling.com",
+      "owner": "api_client",
+      "purpose": "Locked official API client destination",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    },
+    {
+      "api_client_action": "deny",
+      "browser_action": "deny",
+      "condition": "never permitted",
+      "evidence": "Frozen brief \u00a72.3 and \u00a710.3 alias-host denial",
+      "host": "api.billy.dk",
+      "owner": "none",
+      "purpose": "Denied API alias",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    }
+  ],
+  "manifest": "billy_browser_egress_phase_0",
+  "schema_version": 1
+}
