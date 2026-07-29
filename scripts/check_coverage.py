@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate the Phase 0 coverage inventory and generated status artifacts."""
+"""Validate the generated coverage inventory and status artifacts."""
 
 from __future__ import annotations
 

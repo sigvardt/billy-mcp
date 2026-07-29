@@ -46,6 +46,13 @@ frames. Ambiguous bulk documentation and inaccessible authenticated screens
 remain red. A full test invocation must reject this state rather than treating a
 red manifest as a successful product qualification.
 
+The generated phase labels describe the current evidence slice, never a
+qualification shortcut. `phase_1_offline_api_reads` records that a bounded API
+read slice has implementation and contract-test evidence; it does not assert
+live testing, UI parity, vision verification, or `complete: true`. Future phase
+changes must remain generator-owned and be backed by the corresponding
+row-level evidence.
+
 The first bounded UI observation is documented in
 `wiki/billy_ui_discovery_brief.md`: the allowlisted, forced-headless browser
 reached only the unauthenticated login surface. It is evidence about that

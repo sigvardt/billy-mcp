@@ -1,4 +1,4 @@
-"""Tests for the red-only Phase 0 coverage inventory freeze."""
+"""Tests for the fail-closed generated coverage inventory."""
 
 from __future__ import annotations
 
@@ -116,6 +116,7 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
             assert row["pagination"] == generator.PAGING
             assert "offset" not in row["request_fields"]
     assert status["complete"] is False
+    assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     assert status["qualification"]["implemented_rows"] == len(offline_evidence)
     assert status["qualification"]["contract_tested_rows"] == len(offline_evidence)

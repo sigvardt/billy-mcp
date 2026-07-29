@@ -5,26 +5,30 @@ tags: [billy, coverage, review]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
-created: 2026-07-29T09:43:28Z
-updated: 2026-07-29T10:19:00Z
+created: 2026-07-29T10:38:45Z
+updated: 2026-07-29T10:38:45Z
 ---
 
 # state
 
 ## Current state
 
-- Phase 0 inventory and safety baseline are on root: coverage manifests (305
-  API + 339 UI, all progress flags red except discovery on API rows), status
-  complete false, locked client, tickets, redaction, browser egress, and
-  coverage_* tools.
-- Wave-1 read modules are merged for bootstrap, reference, catalogue, and
-  contacts (16 tools + focused contract tests). Root `server.py` still
-  registers only coverage tools; inventory `implemented` /
-  `contract_tested` remain false until integration wires and proves them.
+- The coverage and safety foundation is on root: coverage manifests (305 API +
+  339 UI), locked client, tickets, redaction, browser egress, and coverage
+  tools.
+- Exactly 16 Wave-1 API rows are offline-qualified (`implemented` +
+  `contract_tested`): user, user organizations, organizations, currencies,
+  countries, locales, products, product prices, contacts. All are registered
+  in root `server.py`. Every `live_tested` and UI qualification state remains
+  false.
+- Generated status and report accurately identify this bounded slice as
+  `phase_1_offline_api_reads`; `complete` remains false.
+- Three active Codex Power leaves own Wave-2 invoice, bill, and daybook
+  transaction read modules. Root retains server wiring and generated coverage
+  evidence until clean merge.
 - UI discovery evidence stops at unauthenticated `/login`.
 - Full test mode fails closed until every applicable row qualifies.
-- Latest research brief targets Wave-1 root integration then Wave-2 filtered
-  invoice/bill/daybookTransaction reads. Official docs fingerprint unchanged.
+- Official docs fingerprint unchanged.
 
 ## Evidence boundaries
 
@@ -34,21 +38,23 @@ updated: 2026-07-29T10:19:00Z
 - Documented list filter tables exist only for invoices, bills, and
   daybookTransactions (inventory freeze matches official parameters).
 - `BILLY_API_TOKEN` unavailable; no live or vision claim is valid.
+- Offline suite: 77 passed; full mode exit 1 on require-complete.
 
 ## Review decisions
 
 - Accepted: inventory arithmetic and specials match official Supports; files
   create aliases to multipart special; dual-tool and bankLineMatch defects fixed.
 - Accepted: checker `--require-complete` and full mode fail closed on red inventory.
-- Rejected as complete: any product completeness or Phase 0 auth/UI closure claim.
+- Accepted: Wave-1 offline greens are real typed tools + contract tests, not stubs.
+- Rejected as complete: product completeness, live qualification, UI/vision
+  completeness, auth product tools, bulk resolution.
 - Residual medium: create request_fields remain singular body keys until write
-  tools have official property-table evidence; user/organizations root keys
-  assumed by fixtures until live proof; Fractal child seed trees remain
-  tracked orchestration metadata rather than product artifacts.
+  tools; user/organizations root keys are assumed by fixtures until live proof.
 
 ## References
 
 - Research: `.fractal/main.billy_complete/tmp/grok-research.md`
 - Review: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Wiki: `wiki/billy_api_v2_research_seed.md`, `wiki/billy_ui_discovery_brief.md`,
-  `wiki/phase_zero_contract.md`, `wiki/wave_one_reads_contract.md`
+  `wiki/phase_zero_contract.md`, `wiki/wave_one_reads_contract.md`,
+  `wiki/wave_two_filtered_reads_contract.md`

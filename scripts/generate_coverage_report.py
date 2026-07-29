@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate the frozen Phase 0 coverage inventories and their derived report.
+"""Generate the maintained coverage inventories and their derived report.
 
 The ``.yaml`` artifacts are JSON documents, which is a valid YAML subset. This
 keeps the inventory dependency-free while preserving a machine-readable YAML
@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DOCS_URL = "https://www.billy.dk/api/"
 DOCS_ETAG = "hsisik4g9p3603"
 DOCS_MD5 = "c2efda0ee4cf9cf200e14910c5fc6996"
+CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
@@ -815,7 +816,7 @@ def build_status(api_manifest: dict[str, Any], ui_manifest: dict[str, Any]) -> d
     return {
         "schema_version": 1,
         "complete": coverage_is_complete(api_rows, ui_rows),
-        "phase": "phase_0_inventory",
+        "phase": CURRENT_COVERAGE_PHASE,
         "official_docs": {"etag": DOCS_ETAG, "md5": DOCS_MD5},
         "source_counts": {
             "api_clear": count_by(api_rows, "source_kind").get("clear", 0),
@@ -847,13 +848,13 @@ def render_report(status: dict[str, Any]) -> str:
         if status["complete"]
         else (
             "This generated inventory is currently incomplete. It freezes the official-doc "
-            "snapshot without asserting implementation, contract testing, live testing, or vision "
-            "verification."
+            "snapshot with row-level implementation and contract-test evidence, without asserting "
+            "live testing or vision verification."
         )
     )
     return "\n".join(
         [
-            "# Phase 0 coverage status",
+            "# Phase 1 offline API-read coverage status",
             "",
             state_summary,
             "",
@@ -882,7 +883,7 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 def generate(root: Path) -> dict[str, Any]:
-    """Write every generated Phase 0 inventory artifact below ``root``."""
+    """Write every generated coverage artifact below ``root``."""
 
     api_manifest = build_api_manifest()
     ui_manifest = build_ui_manifest(api_manifest)
@@ -906,7 +907,7 @@ def main() -> int:
         parser.error("pass --write to generate coverage artifacts")
     status = generate(ROOT)
     print(
-        "Generated Phase 0 coverage: "
+        "Generated coverage: "
         f"{status['source_counts']['api_total']} API rows, "
         f"{status['source_counts']['ui_total']} UI rows, complete={status['complete']}."
     )
