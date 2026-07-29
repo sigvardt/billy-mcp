@@ -887,7 +887,7 @@
       "area": "attachments",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -896,7 +896,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.attachments.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/attachments",
@@ -913,7 +913,10 @@
       "side_effects": "creates attachment",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_attachments_create_preview",
       "vision_evidence": null,
@@ -923,7 +926,7 @@
       "area": "attachments",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -932,7 +935,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.attachments.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/attachments/:id",
@@ -950,7 +953,10 @@
       "side_effects": "updates attachment",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_attachments_update_preview",
       "vision_evidence": null,
@@ -960,7 +966,7 @@
       "area": "attachments",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -969,7 +975,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.attachments.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/attachments/:id",
@@ -986,7 +992,10 @@
       "side_effects": "deletes attachment",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_attachment_writes.py",
+        "tests/api/test_attachment_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_attachments_delete_preview",
       "vision_evidence": null,
