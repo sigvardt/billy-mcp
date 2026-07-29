@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T19:58:00Z
+updated: 2026-07-29T20:10:00Z
 ---
 
 # state
@@ -14,16 +14,20 @@ updated: 2026-07-29T19:58:00Z
 ## Current state
 
 - Wave-5c and Wave-5d parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
-- Runtime: **166** `api_*` + 2 coverage; 36 preview + 36 execute ticketed write tools.
-- Coverage: implemented 130, contract_tested 130, live 0, vision 0, `complete: false`.
-- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Re-fetched this research pass; byte-identical to prior freeze snapshot.
+- Runtime: **166** `api_*` + 2 coverage; 36 preview + 36 execute ticketed write tools. Bill write tools still absent on tip `a3972cd`.
+- Coverage: implemented 130, contract_tested 130, live 0, vision 0, `complete: false`. Six Wave-5e CUD rows still red (honest).
+- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Independent-review re-fetch matches.
 - Wave-5a registration product: **ACCEPT** offline.
 - Wave-5b freeze: **ACCEPT**. Wave-5b product at `920ceab`: **REJECTED**. Repair product at `a2a0996`: **ACCEPT**.
 - Wave-5c freeze: **ACCEPT**. Wave-5c product at tip `f235ac2`: **ACCEPT** offline by independent Grok.
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
-- Wave-5d product at tip **`1108e2f`**: **ACCEPT** offline by independent Grok (`wiki/wave_fived_product_independent_review.md`; full note `tmp/grok-review.md`).
-- Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review (`wiki/wave_fivee_freeze_independent_review.md`). Codex fallback is supplemental only.
-- Wave-5e product: **not implemented**. Research handoff is ready at `tmp/grok-research.md` (product implementation brief). Plan/Implement may spawn bill + bill-line leaves now.
+- Wave-5d product at tip **`1108e2f`**: **ACCEPT** offline by independent Grok (`wiki/wave_fived_product_independent_review.md`).
+- Wave-5e freeze at `fc8118e`: **ACCEPT** offline (`wiki/wave_fivee_freeze_independent_review.md`). Codex fallback is supplemental only.
+- Wave-5e plan at tip **`a3972cd`**: independent Grok review **PASS** on plan fidelity and fail-closed coverage (`tmp/grok-review.md`). Product **not accepted** (modules not on root).
+- Wave-5e product leaves (`wave5e_bill_writes`, `wave5e_bill_line_writes`) may be in flight; root must merge owned files only, then request product review.
+- Root baseline verification after the plan review: lint (format/Ruff/Pyright,
+  coverage inventory, repository policy) passed and non-live suite passed
+  **753 tests**. This does not qualify the in-flight product modules.
 - Clear red remaining: **77** of 207 clear ops (includes 6 Wave-5e bill/line CUD). After Wave-5e product: target **178** `api_*`, **136** offline rows.
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
 - Historical unmerged review branches contain child-seed state and superseded fallback reports only, so they remain intentionally closed rather than merged.
@@ -39,7 +43,8 @@ updated: 2026-07-29T19:58:00Z
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
 - Wave-5d product at tip `1108e2f`: **ACCEPT** offline by independent Grok.
 - Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review.
-- Wave-5e product: **not accepted** until product lands + independent Grok product review.
+- Wave-5e plan tip `a3972cd`: independent review **PASS** plan/coverage honesty; product **FAIL/not present**.
+- Wave-5e product: **not accepted** until product lands on root + independent Grok product review.
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
 ## Open coverage work
