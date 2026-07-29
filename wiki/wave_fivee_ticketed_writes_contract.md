@@ -41,15 +41,15 @@ vision, bulk, special-route, or overall-completeness claims.
 | `api.billLines.update` | `api_bill_lines_update_preview` | `api_bill_lines_update_execute` | `PUT /billLines/:id` | `billLine` | `billLines`, optional `bills` |
 | `api.billLines.delete` | `api_bill_lines_delete_preview` | `api_bill_lines_delete_execute` | `DELETE /billLines/:id` | id binding only | `billLines`, optional `bills` and deleted metadata |
 
-The `api.billLines.update` preview tool is
-`api_bill_lines_update_preview`. Each inventory row remains one API operation:
-its `tool_name` is the preview tool, while the execute twin is registered but
-is not a second coverage row.
+Each inventory row remains one API operation: its `tool_name` is the preview
+tool, while the execute twin is registered but is not a second coverage row.
 
 ## Shared write protocol
 
 - Requests use only the locked API base `https://api.billysbilling.com/v2` and
   the client-relative paths shown above; no `/v2` path prefix is repeated.
+- Never call the `https://api.billy.dk/v2` host shown only in the documentation
+  file-upload sample; it is not an approved Billy API endpoint.
 - Create and update requests contain exactly one singular root. Updates are
   `PUT`, support partial fields, and require any body `id` to equal the route
   id. Deletes have no body and bind canonical request `{"id": "…"}`.
