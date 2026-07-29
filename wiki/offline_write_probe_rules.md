@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-29T21:28:11Z
+updated: 2026-07-29T22:18:30Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -50,12 +50,28 @@ coverage green.
 | `postings` | POST/PUT/DELETE **405**; property table effectively all readonly |
 | `bankPayments` | POST/PUT 401; DELETE **405** despite Supports listing delete |
 | `transactions` | POST/PUT 401; DELETE 200; property table almost all readonly — do not freeze from Supports alone |
+| `balanceModifiers`, `contactBalancePostings` | POST/PUT/DELETE **405** (Supports create/update is not enough) |
+| `cities`, `countries`, `currencies`, `states`, `zipcodes`, `locales`, `countryGroups` | POST/PUT/DELETE **405** — reference data not offline-writable |
+| `contactBalancePayments` | POST/PUT 401; DELETE **405** |
+| `invoiceLateFees` | POST/PUT 401; DELETE **405** (Supports omits singular delete) |
+| `invoiceReminders` | POST 401; PUT/DELETE **405** (Supports: create only among singular writes) |
+| `invoiceReminderAssociations` | POST/PUT **405**; DELETE missing-id 200 — do not offline-green create/update |
+| `organizations` | POST/PUT 401; DELETE **405** |
+| `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
+| `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
+
+Probe refresh: 2026-07-29T22:17:57Z, docs ETag `hsisik4g9p3603`, MD5
+`c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
+`.fractal/main.billy_complete/tmp/write-probes-research33-compact.json`.
 
 ## Next freezes (planning only)
 
-- Wave-5f product (taxRates + taxRateDeductionComponents) remains the active
-  product track under its accepted freeze.
-- Recommended next freeze after that product accepts:
-  `salesTaxRulesets` + `salesTaxRules` (6 clear CUD). Full cited brief lives
-  outside the public repo under the node scratch path
+- Wave-5g product (`salesTaxRulesets` + `salesTaxRules`) is accepted as an
+  offline product slice at root `55faa02` by
+  `wiki/wave_fiveg_product_independent_review.md`; live/UI/vision/bulk and
+  overall completeness remain fail-closed.
+- Recommended next offline freeze: singular
+  `attachments` CUD (3 clear ops). Secondary freeze-ready cohort:
+  `salesTaxAccounts` + `salesTaxMetaFields` (6 clear CUD). Full cited brief
+  lives outside the public repo under the node scratch path
   `.fractal/main.billy_complete/tmp/grok-research.md`.

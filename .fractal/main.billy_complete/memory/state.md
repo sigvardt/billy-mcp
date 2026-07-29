@@ -6,26 +6,22 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-29T22:11:45Z
+updated: 2026-07-29T22:33:00Z
 ---
 
 # state
 
 ## Current state
 
-- Wave-5c through Wave-5f parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
-- Root merge `353449d` integrates Wave-5f product `8c1cdf6`: **190** `api_*` + 2 coverage tools and 48 preview + 48 execute ticketed write tools, including tax-rate and deduction-component CUD. Root tip records product ACCEPT at **`70e0506`**.
-- Wave-5g freeze committed at **`5612aa8`** (`wiki/wave_fiveg_ticketed_writes_contract.md`). Independent root Grok freeze **ACCEPT** at `wiki/wave_fiveg_freeze_independent_review.md`. **No product code yet.**
-- Product-ready research at scratch `tmp/grok-research.md`: docs fingerprint unchanged; unauth probes reconfirm 401/200 gates; handoff is Codex Power product only (12 tools, registry 202, coverage 148 offline).
-- Independent Grok product-ready research **ACCEPT** offline as handoff only: `wiki/wave_fiveg_product_ready_research_independent_review.md` (scratch `tmp/grok-review.md`). Not product ACCEPT.
-- The Codex Power leaf `main.billy_complete.wave5g_sales_tax_product` is implementing the accepted twelve-tool offline cohort; root has no unmerged product code.
-- Coverage: implemented 142, contract_tested 142, live 0, vision 0, `complete: false`.
-- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Review re-fetch matches.
-- Wave-5e product at tip **`15d0bde`** / root record **`c92ed0e`**: **ACCEPT** offline.
-- Wave-5f freeze at tip **`d412e8c`** / record **`e39704b`**: **ACCEPT** offline (`wiki/wave_fivef_freeze_independent_review.md`).
-- Wave-5f product at root merge **`353449d`** / product **`8c1cdf6`**: **ACCEPT** offline (`wiki/wave_fivef_product_independent_review.md`).
+- Wave-5c through Wave-5g write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
+- Root merge **`55faa02`** integrates Wave-5g product **`e6f96e7`**: **202** `api_*` + 2 coverage tools; twelve ticketed sales-tax ruleset/rule write tools. Offline product **ACCEPT** at `wiki/wave_fiveg_product_independent_review.md`.
+- Wave-5g freeze remains **`5612aa8`** (`wiki/wave_fiveg_ticketed_writes_contract.md`); freeze ACCEPT at `wiki/wave_fiveg_freeze_independent_review.md`.
+- Wave-5h freeze-ready research at scratch `tmp/grok-research.md` (attachments primary; salesTaxAccounts + salesTaxMetaFields secondary). Research PASS as handoff only; freeze page not written.
+- Coverage: implemented 148, contract_tested 148, live 0, vision 0, `complete: false`.
+- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Independent review re-fetch matches.
+- Wave-5f product at root merge **`353449d`**: **ACCEPT** offline (`wiki/wave_fivef_product_independent_review.md`).
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
-- Leaf `wave5g_freeze_review` exited without deliverable; root review is authoritative. Historical unmerged review branches remain intentionally closed rather than merged.
+- Historical unmerged review leaves remain intentionally closed rather than merged. Codex fallback review leaves do not replace Grok product ACCEPT.
 
 ## Review decisions (authoritative)
 
@@ -43,42 +39,32 @@ updated: 2026-07-29T22:11:45Z
 - Wave-5f product-ready research at tip `1c9e6cb`: **ACCEPT** offline as implementation handoff only.
 - Wave-5f product at root merge `353449d`: **ACCEPT** offline by independent Grok.
 - Wave-5g freeze at tip `5612aa8`: **ACCEPT** offline by the authoritative root Grok independent review.
-- Wave-5g product-ready research: **ACCEPT** offline as implementation handoff only (`wiki/wave_fiveg_product_ready_research_independent_review.md`).
-- Wave-5g product: **not accepted** (not implemented).
+- Wave-5g product-ready research: **ACCEPT** offline as implementation handoff only.
+- Wave-5g product at root merge `55faa02`: **ACCEPT** offline by independent Grok (`wiki/wave_fiveg_product_independent_review.md`).
+- Wave-5h freeze: **not written** (research ready only).
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
 ## Open coverage work
 
-1. Product the accepted Wave-5g freeze: `salesTaxRulesets` + `salesTaxRules` (6 CUD; +12 tools; target 202 `api_*`, 148 offline rows), then independent product review. Product-ready research is ready in `tmp/grok-research.md`.
-2. Later: sales-tax accounts/meta-fields, payments/returns partial CUD, attachments, specials, bulk (live only), UI/auth/vision.
-3. Blocked offline without more evidence: `accountNatures` and `postings` writes (unauth 405 overrides Supports), `bankPayments` delete (405), `transactions` CUD (all-readonly property table). OPTIONS ACM listing POST is not authority when real method returns 405.
-
-## Wave-5g freeze and product evidence
-
-- Docs re-fetch at product-ready research: same ETag/MD5/bytes as inventory fingerprint.
-- Unauth: salesTaxRulesets/Rules POST/PUT **401**, DELETE missing-id **200**, not cleanup proof.
-- Parent `additional_plural_roots=("salesTaxRules",)`; child `()`.
-- Almost all fields immutable on both resources; keep opaque payloads; still ship ticketed update (Supports + 401, not 405).
-- No `sales_tax_writes` module; registry still 190; six inventory CUD rows still red.
-- Attachments alternate ready later (3 CUD); not in this product.
-- `accountNatures`/`postings` POST unauth **405** — do not offline-green from Supports.
+1. Freeze Wave-5h attachments singular CUD from `tmp/grok-research.md` §4; independent freeze review; product (+6 tools → 208; coverage 151).
+2. Freeze Wave-5i salesTaxAccounts + salesTaxMetaFields CUD; product (+12 tools → 220; coverage 157).
+3. Later partial CUD: salesTaxPayments create/update, salesTaxReturns update, bankPayments create/update, contactBalancePayments create/update, invoiceLateFees create/update, invoiceReminders create, organizations create/update, users update.
+4. Specials: binary files upload, invoice email/delivery/logs.
+5. Bulk (live only), UI/auth/vision.
+6. Blocked offline without more evidence: `accountNatures`, `postings`, `balanceModifiers`, `contactBalancePostings`, geo reference CUD (all unauth 405), `bankPayments`/`salesTaxPayments` delete (405), `transactions` CUD (all-readonly property table), `invoiceReminderAssociations` create/update (405).
 
 ## Evidence boundaries
 
 - Official API fingerprint: etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`.
+- Product ACCEPT is offline only; no live/UI/bulk/completeness claim.
 - Unauth DELETE empty 200 is not cleanup proof.
 - Unauth METHOD_NOT_ALLOWED 405 overrides Supports-flag optimism for offline green paths.
-- Freeze ACCEPT opens product only; product ACCEPT is offline only after separate review; no live/UI/bulk/completeness claim.
-- Product-ready research does not implement tools and does not flip coverage.
 
 ## References
 
-- Research (scratch): `.fractal/main.billy_complete/tmp/grok-research.md`
 - Review (scratch): `.fractal/main.billy_complete/tmp/grok-review.md`
+- Research Wave-5h (scratch): `.fractal/main.billy_complete/tmp/grok-research.md`
+- Wiki product ACCEPT 5g: `wiki/wave_fiveg_product_independent_review.md`
 - Wiki freeze 5g: `wiki/wave_fiveg_ticketed_writes_contract.md`
 - Wiki freeze ACCEPT 5g: `wiki/wave_fiveg_freeze_independent_review.md`
-- Wiki product-ready research ACCEPT 5g: `wiki/wave_fiveg_product_ready_research_independent_review.md`
-- Wiki freeze 5f: `wiki/wave_fivef_ticketed_writes_contract.md`
-- Wiki freeze ACCEPT 5f: `wiki/wave_fivef_freeze_independent_review.md`
-- Wiki product ACCEPT 5f: `wiki/wave_fivef_product_independent_review.md`
 - Wiki offline probe policy: `wiki/offline_write_probe_rules.md`
