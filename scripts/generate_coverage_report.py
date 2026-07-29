@@ -325,6 +325,9 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.invoices.delete": ("tests/api/test_invoice_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bills.get": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bills.list": ("tests/api/test_bill_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bills.create": ("tests/api/test_bill_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bills.update": ("tests/api/test_bill_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bills.delete": ("tests/api/test_bill_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.daybookTransactions.get": (
         "tests/api/test_daybook_transaction_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
@@ -361,6 +364,18 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.billLines.get": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.billLines.list": ("tests/api/test_line_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.billLines.create": (
+        "tests/api/test_bill_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.billLines.update": (
+        "tests/api/test_bill_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.billLines.delete": (
+        "tests/api/test_bill_line_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.daybookTransactionLines.get": (
         "tests/api/test_line_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
