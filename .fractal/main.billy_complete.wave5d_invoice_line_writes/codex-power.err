@@ -1,0 +1,2 @@
+2026-07-29T19:11:40.981738Z ERROR codex_core::session: failed to record rollout items: thread 019faf3d-ea2f-75b1-a385-a8872316ea9f not found
+2026-07-29T19:11:40.981778Z ERROR codex_core::session: failed to record rollout items: thread 019faf3d-ea2f-75b1-a385-a8872316ea9f not found
