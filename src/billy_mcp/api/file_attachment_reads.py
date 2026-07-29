@@ -61,6 +61,14 @@ class Paging(BaseModel):
     model_config = ConfigDict(extra="allow")
 
 
+class FileAttachmentMeta(BaseModel):
+    """The documented optional metadata envelope for collection reads."""
+
+    model_config = ConfigDict(extra="allow")
+
+    paging: Paging | None = None
+
+
 class FileGetSuccess(BaseModel):
     """Mapped success envelope for ``api_files_get``."""
 
@@ -75,7 +83,7 @@ class FilesListSuccess(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     files: list[FileAttachmentRecord]
-    paging: Paging | None = None
+    meta: FileAttachmentMeta | None = None
 
 
 class AttachmentGetSuccess(BaseModel):
@@ -92,7 +100,7 @@ class AttachmentsListSuccess(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     attachments: list[FileAttachmentRecord]
-    paging: Paging | None = None
+    meta: FileAttachmentMeta | None = None
 
 
 class FileAttachmentReadService:
@@ -119,8 +127,8 @@ class FileAttachmentReadService:
         records = _list_from_response(response, "files")
         if isinstance(records, ToolError):
             return records
-        files, paging = records
-        return FilesListSuccess(files=files, paging=paging)
+        files, meta = records
+        return FilesListSuccess(files=files, meta=meta)
 
     def attachments_get(
         self, request: FileAttachmentGetRequest
@@ -144,21 +152,74 @@ class FileAttachmentReadService:
         records = _list_from_response(response, "attachments")
         if isinstance(records, ToolError):
             return records
-        attachments, paging = records
-        return AttachmentsListSuccess(attachments=attachments, paging=paging)
+        attachments, meta = records
+        return AttachmentsListSuccess(attachments=attachments, meta=meta)
 
 
 def register_file_attachment_read_tools(server: FastMCP, client: BillyHttpClient) -> None:
     """Register exactly the four verified file and attachment read tools."""
 
     service = FileAttachmentReadService(client)
-    server.tool(name="api_files_get", description="Read one Billy file.")(service.files_get)
-    server.tool(name="api_files_list", description="List Billy files.")(service.files_list)
+
+    def api_files_get(
+        id: str = Field(min_length=1), include: str | None = Field(default=None, min_length=1)
+    ) -> FileGetSuccess | ToolError:
+        """Read one Billy file by identifier."""
+
+        return service.files_get(FileAttachmentGetRequest(id=id, include=include))
+
+    def api_files_list(
+        page: int = Field(default=1, ge=1),
+        pageSize: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+        include: str | None = Field(default=None, min_length=1),
+        sortProperty: str | None = Field(default=None, min_length=1),
+        sortDirection: SortDirection | None = None,
+    ) -> FilesListSuccess | ToolError:
+        """List Billy files with documented paging, inclusion, and sorting."""
+
+        return service.files_list(
+            FileAttachmentListRequest(
+                page=page,
+                pageSize=pageSize,
+                include=include,
+                sortProperty=sortProperty,
+                sortDirection=sortDirection,
+            )
+        )
+
+    def api_attachments_get(
+        id: str = Field(min_length=1), include: str | None = Field(default=None, min_length=1)
+    ) -> AttachmentGetSuccess | ToolError:
+        """Read one Billy attachment by identifier."""
+
+        return service.attachments_get(FileAttachmentGetRequest(id=id, include=include))
+
+    def api_attachments_list(
+        page: int = Field(default=1, ge=1),
+        pageSize: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+        include: str | None = Field(default=None, min_length=1),
+        sortProperty: str | None = Field(default=None, min_length=1),
+        sortDirection: SortDirection | None = None,
+    ) -> AttachmentsListSuccess | ToolError:
+        """List Billy attachments with documented paging, inclusion, and sorting."""
+
+        return service.attachments_list(
+            FileAttachmentListRequest(
+                page=page,
+                pageSize=pageSize,
+                include=include,
+                sortProperty=sortProperty,
+                sortDirection=sortDirection,
+            )
+        )
+
+    server.tool(name="api_files_get", description="Read one Billy file.")(api_files_get)
+    server.tool(name="api_files_list", description="List Billy files.")(api_files_list)
     server.tool(name="api_attachments_get", description="Read one Billy attachment.")(
-        service.attachments_get
+        api_attachments_get
     )
     server.tool(name="api_attachments_list", description="List Billy attachments.")(
-        service.attachments_list
+        api_attachments_list
     )
 
 
@@ -198,7 +259,7 @@ def _record_from_response(
 
 def _list_from_response(
     response: BillyResponse | ToolError, root: str
-) -> tuple[list[FileAttachmentRecord], Paging | None] | ToolError:
+) -> tuple[list[FileAttachmentRecord], FileAttachmentMeta | None] | ToolError:
     payload = _response_mapping(response, root)
     if isinstance(payload, ToolError):
         return payload
@@ -213,10 +274,10 @@ def _list_from_response(
             records.append(FileAttachmentRecord.model_validate(value))
         except ValidationError:
             return _invalid_response(root)
-    paging = _paging_from_response(payload, root)
-    if isinstance(paging, ToolError):
-        return paging
-    return records, paging
+    meta = _meta_from_response(payload, root)
+    if isinstance(meta, ToolError):
+        return meta
+    return records, meta
 
 
 def _response_mapping(
@@ -230,20 +291,16 @@ def _response_mapping(
     return cast(Mapping[str, object], data)
 
 
-def _paging_from_response(payload: Mapping[str, object], root: str) -> Paging | ToolError | None:
+def _meta_from_response(
+    payload: Mapping[str, object], root: str
+) -> FileAttachmentMeta | ToolError | None:
     meta = payload.get("meta")
     if meta is None:
         return None
     if not isinstance(meta, Mapping):
         return _invalid_response(root)
-    meta_mapping = cast(Mapping[str, object], meta)
-    paging = meta_mapping.get("paging")
-    if paging is None:
-        return None
-    if not isinstance(paging, Mapping):
-        return _invalid_response(root)
     try:
-        return Paging.model_validate(paging)
+        return FileAttachmentMeta.model_validate(meta)
     except ValidationError:
         return _invalid_response(root)
 

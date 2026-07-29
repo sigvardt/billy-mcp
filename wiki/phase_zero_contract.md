@@ -5,7 +5,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:04:46Z
-updated: 2026-07-29T09:04:46Z
+updated: 2026-07-29T11:48:00Z
 ---
 
 # phase_zero_contract
@@ -64,3 +64,11 @@ integration wiring. The coverage-inventory child owns manifest data and its
 tests. The shared-foundation child owns concrete modules below `src/billy_mcp`
 except root-owned `models.py`, plus isolated unit tests. Cross-cutting contract
 changes are escalated to root before implementation.
+
+Public FastMCP tool schemas use flat documented input fields. A service may use
+one Pydantic request model internally, but registration wrappers must not make
+that implementation detail a nested `request` parameter. Collection results
+preserve the documented response envelope, including `meta.paging`; they do
+not flatten metadata into invented top-level fields. Contract suites must assert
+the registered tool schema and one structured tool result in addition to client
+path/query and service-model checks.

@@ -124,15 +124,66 @@ def register_catalog_read_tools(server: FastMCP, client: BillyHttpClient) -> Non
     """Register only the four verified catalogue read tools on a FastMCP server."""
 
     service = CatalogReadService(client)
-    server.tool(name="api_products_get", description="Read one Billy product.")(
-        service.products_get
-    )
-    server.tool(name="api_products_list", description="List Billy products.")(service.products_list)
+
+    def api_products_get(
+        id: str = Field(min_length=1), include: str | None = None
+    ) -> ProductGetSuccess | ToolError:
+        """Read one Billy product by identifier."""
+
+        return service.products_get(CatalogGetRequest(id=id, include=include))
+
+    def api_products_list(
+        page: int = Field(default=1, ge=1),
+        pageSize: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+        include: str | None = None,
+        sortProperty: str | None = None,
+        sortDirection: SortDirection | None = None,
+    ) -> ProductListSuccess | ToolError:
+        """List Billy products with documented paging, inclusion, and sorting."""
+
+        return service.products_list(
+            CatalogListRequest(
+                page=page,
+                pageSize=pageSize,
+                include=include,
+                sortProperty=sortProperty,
+                sortDirection=sortDirection,
+            )
+        )
+
+    def api_product_prices_get(
+        id: str = Field(min_length=1), include: str | None = None
+    ) -> ProductPriceGetSuccess | ToolError:
+        """Read one Billy product price by identifier."""
+
+        return service.product_prices_get(CatalogGetRequest(id=id, include=include))
+
+    def api_product_prices_list(
+        page: int = Field(default=1, ge=1),
+        pageSize: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
+        include: str | None = None,
+        sortProperty: str | None = None,
+        sortDirection: SortDirection | None = None,
+    ) -> ProductPriceListSuccess | ToolError:
+        """List Billy product prices with documented paging, inclusion, and sorting."""
+
+        return service.product_prices_list(
+            CatalogListRequest(
+                page=page,
+                pageSize=pageSize,
+                include=include,
+                sortProperty=sortProperty,
+                sortDirection=sortDirection,
+            )
+        )
+
+    server.tool(name="api_products_get", description="Read one Billy product.")(api_products_get)
+    server.tool(name="api_products_list", description="List Billy products.")(api_products_list)
     server.tool(name="api_product_prices_get", description="Read one Billy product price.")(
-        service.product_prices_get
+        api_product_prices_get
     )
     server.tool(name="api_product_prices_list", description="List Billy product prices.")(
-        service.product_prices_list
+        api_product_prices_list
     )
 
 

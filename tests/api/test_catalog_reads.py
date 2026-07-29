@@ -65,10 +65,24 @@ def test_registers_exactly_the_four_typed_catalogue_tools(client_factory: Client
         "api_products_get",
         "api_products_list",
     }
-    assert all(tool.model_dump()["parameters"]["properties"] for tool in tools)
-    result = asyncio.run(
-        server.call_tool("api_products_get", {"request": {"id": "registered-product"}})
-    )
+    parameters = {tool.name: tool.parameters["properties"] for tool in tools}
+    assert set(parameters["api_products_get"]) == {"id", "include"}
+    assert set(parameters["api_product_prices_get"]) == {"id", "include"}
+    assert set(parameters["api_products_list"]) == {
+        "page",
+        "pageSize",
+        "include",
+        "sortProperty",
+        "sortDirection",
+    }
+    assert set(parameters["api_product_prices_list"]) == {
+        "page",
+        "pageSize",
+        "include",
+        "sortProperty",
+        "sortDirection",
+    }
+    result = asyncio.run(server.call_tool("api_products_get", {"id": "registered-product"}))
     assert result.structured_content == {"result": {"product": {"id": "registered-product"}}}
     assert [request.url.path for request in requests] == ["/v2/products/registered-product"]
 

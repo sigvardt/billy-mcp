@@ -108,8 +108,9 @@ def test_list_reads_use_only_documented_query_parameters_and_map_optional_paging
 
     assert isinstance(files_result, FilesListSuccess)
     assert files_result.files[0].model_dump() == {"id": "file-1", "fileName": "invoice.pdf"}
-    assert files_result.paging is not None
-    assert files_result.paging.model_dump() == {
+    assert files_result.meta is not None
+    assert files_result.meta.paging is not None
+    assert files_result.meta.paging.model_dump() == {
         "page": 2,
         "pageCount": 3,
         "pageSize": 25,
@@ -134,7 +135,7 @@ def test_list_reads_use_only_documented_query_parameters_and_map_optional_paging
     }
     assert isinstance(attachments_result, AttachmentsListSuccess)
     assert attachments_result.attachments[0].model_dump() == {"id": "attachment-1"}
-    assert attachments_result.paging is None
+    assert attachments_result.meta is None
     assert attachment_requests[0].url.path == "/v2/attachments"
     assert attachment_requests[0].url.params == httpx.QueryParams({"page": "1", "pageSize": "1000"})
 
@@ -208,13 +209,47 @@ def test_registration_exposes_exactly_the_four_file_and_attachment_tools(
         "api_attachments_get",
         "api_attachments_list",
     }
-    assert set(tools["api_files_list"].parameters["properties"]["request"]["properties"]) == {
+    assert set(tools["api_files_get"].parameters["properties"]) == {"id", "include"}
+    assert set(tools["api_attachments_get"].parameters["properties"]) == {"id", "include"}
+    assert set(tools["api_files_list"].parameters["properties"]) == {
         "page",
         "pageSize",
         "include",
         "sortProperty",
         "sortDirection",
     }
-    result = asyncio.run(server.call_tool("api_files_get", {"request": {"id": "file-1"}}))
+    assert set(tools["api_attachments_list"].parameters["properties"]) == {
+        "page",
+        "pageSize",
+        "include",
+        "sortProperty",
+        "sortDirection",
+    }
+    result = asyncio.run(server.call_tool("api_files_get", {"id": "file-1"}))
     assert result.structured_content == {"result": {"file": {"id": "file-1"}}}
     assert [request.url.path for request in requests] == ["/v2/files/file-1"]
+
+
+def test_list_tool_preserves_the_documented_meta_paging_envelope(
+    client_factory: ClientFactory,
+) -> None:
+    client, _ = client_factory(
+        lambda request: httpx.Response(
+            200,
+            json={
+                "files": [{"id": "file-1"}],
+                "meta": {"paging": {"page": 2, "pageSize": 25}},
+            },
+        )
+    )
+    server = FastMCP("file-attachment-meta-contract-test")
+    register_file_attachment_read_tools(server, client)
+
+    result = asyncio.run(server.call_tool("api_files_list", {"page": 2, "pageSize": 25}))
+
+    assert result.structured_content == {
+        "result": {
+            "files": [{"id": "file-1"}],
+            "meta": {"paging": {"page": 2, "pageSize": 25}},
+        }
+    }
