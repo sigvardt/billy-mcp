@@ -38,6 +38,9 @@ describes name-or-email semantics inconsistently. Do not add offline name/email
 XOR or required-field validators; retain the nested payload as opaque JSON and
 leave that question for live qualification.
 
+`contactId` remains caller-supplied opaque payload data as well: its documented
+dependency does not establish a locally provable value shape or availability.
+
 Sources are the frozen contract at `wiki/wave_five_ticketed_writes_contract.md`,
 the cited parent Grok brief at
 `/Volumes/ssd_1/Repositories/billy-mcp/.worktrees/main.billy_complete/.fractal/main.billy_complete/tmp/grok-research.md`,

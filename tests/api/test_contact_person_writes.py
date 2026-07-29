@@ -99,6 +99,7 @@ def test_registers_exactly_six_tools_with_strict_preview_and_ticket_only_execute
         "api_contact_persons_delete_execute",
     ):
         assert set(tools[name].parameters["properties"]) == {"confirmation_ticket"}
+        assert tools[name].parameters["additionalProperties"] is False
 
     with pytest.raises(ValidationError):
         ContactPersonCreatePreviewInput.model_validate(
