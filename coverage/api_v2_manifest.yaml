@@ -3744,7 +3744,7 @@
       "area": "contact_persons",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3753,7 +3753,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contactPersons.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/contactPersons",
@@ -3770,7 +3770,9 @@
       "side_effects": "creates contactPerson",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_person_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contact_persons_create_preview",
       "vision_evidence": null,
@@ -3780,7 +3782,7 @@
       "area": "contact_persons",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3789,7 +3791,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contactPersons.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/contactPersons/:id",
@@ -3807,7 +3809,9 @@
       "side_effects": "updates contactPerson",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_person_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contact_persons_update_preview",
       "vision_evidence": null,
@@ -3817,7 +3821,7 @@
       "area": "contact_persons",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3826,7 +3830,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contactPersons.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/contactPersons/:id",
@@ -3843,7 +3847,9 @@
       "side_effects": "deletes contactPerson",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_person_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contact_persons_delete_preview",
       "vision_evidence": null,
@@ -4012,7 +4018,7 @@
       "area": "contacts",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4021,7 +4027,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contacts.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/contacts",
@@ -4038,7 +4044,9 @@
       "side_effects": "creates contact",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contacts_create_preview",
       "vision_evidence": null,
@@ -4048,7 +4056,7 @@
       "area": "contacts",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4057,7 +4065,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contacts.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/contacts/:id",
@@ -4075,7 +4083,9 @@
       "side_effects": "updates contact",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contacts_update_preview",
       "vision_evidence": null,
@@ -4085,7 +4095,7 @@
       "area": "contacts",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4094,7 +4104,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contacts.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/contacts/:id",
@@ -4111,7 +4121,9 @@
       "side_effects": "deletes contact",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contacts_delete_preview",
       "vision_evidence": null,
@@ -5244,7 +5256,7 @@
       "area": "daybooks",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5253,7 +5265,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybooks.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/daybooks",
@@ -5270,7 +5282,9 @@
       "side_effects": "creates daybook",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybooks_create_preview",
       "vision_evidence": null,
@@ -5280,7 +5294,7 @@
       "area": "daybooks",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5289,7 +5303,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybooks.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/daybooks/:id",
@@ -5307,7 +5321,9 @@
       "side_effects": "updates daybook",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybooks_update_preview",
       "vision_evidence": null,
@@ -5317,7 +5333,7 @@
       "area": "daybooks",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -5326,7 +5342,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.daybooks.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/daybooks/:id",
@@ -5343,7 +5359,9 @@
       "side_effects": "deletes daybook",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_daybook_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_daybooks_delete_preview",
       "vision_evidence": null,
@@ -8299,7 +8317,7 @@
       "area": "product_prices",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8308,7 +8326,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.productPrices.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/productPrices",
@@ -8325,7 +8343,9 @@
       "side_effects": "creates productPrice",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_product_prices_create_preview",
       "vision_evidence": null,
@@ -8335,7 +8355,7 @@
       "area": "product_prices",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8344,7 +8364,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.productPrices.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/productPrices/:id",
@@ -8362,7 +8382,9 @@
       "side_effects": "updates productPrice",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_product_prices_update_preview",
       "vision_evidence": null,
@@ -8372,7 +8394,7 @@
       "area": "product_prices",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8381,7 +8403,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.productPrices.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/productPrices/:id",
@@ -8398,7 +8420,9 @@
       "side_effects": "deletes productPrice",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_product_prices_delete_preview",
       "vision_evidence": null,
@@ -8567,7 +8591,7 @@
       "area": "products",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8576,7 +8600,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.products.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/products",
@@ -8593,7 +8617,9 @@
       "side_effects": "creates product",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_products_create_preview",
       "vision_evidence": null,
@@ -8603,7 +8629,7 @@
       "area": "products",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8612,7 +8638,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.products.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/products/:id",
@@ -8630,7 +8656,9 @@
       "side_effects": "updates product",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_products_update_preview",
       "vision_evidence": null,
@@ -8640,7 +8668,7 @@
       "area": "products",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8649,7 +8677,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.products.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/products/:id",
@@ -8666,7 +8694,9 @@
       "side_effects": "deletes product",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_products_delete_preview",
       "vision_evidence": null,
