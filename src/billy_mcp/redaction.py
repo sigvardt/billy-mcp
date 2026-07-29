@@ -7,6 +7,24 @@ from typing import cast
 
 REDACTED = "[REDACTED]"
 _SENSITIVE_PARTS = ("token", "password", "totp", "cookie", "ticket", "authorization")
+_SENSITIVE_ORGANIZATION_PAYMENT_KEYS = frozenset(
+    {
+        "subscriptioncardtype",
+        "subscriptioncardnumber",
+        "subscriptioncardexpires",
+        "subscriptiontransaction",
+        "issubscriptionbankpayer",
+        "subscriptionprice",
+        "subscriptionperiod",
+        "subscriptiondiscount",
+        "subscriptionexpires",
+        "defaultinvoicebankaccount",
+        "defaultbankfeeaccount",
+        "defaultbillbankaccount",
+        "paymenttermsmode",
+        "paymenttermsdays",
+    }
+)
 
 type RedactedValue = (
     str | int | float | bool | None | list["RedactedValue"] | dict[str, "RedactedValue"]
@@ -17,7 +35,9 @@ def is_sensitive_key(key: str) -> bool:
     """Return whether a structured field name could contain an authentication secret."""
 
     normalized = key.lower().replace("-", "").replace("_", "")
-    return any(part in normalized for part in _SENSITIVE_PARTS)
+    return normalized in _SENSITIVE_ORGANIZATION_PAYMENT_KEYS or any(
+        part in normalized for part in _SENSITIVE_PARTS
+    )
 
 
 def redact(value: object) -> RedactedValue:

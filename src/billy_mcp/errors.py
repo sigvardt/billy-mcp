@@ -19,10 +19,10 @@ def translate_upstream_error(status_code: int, payload: object) -> ToolError:
         mapping = cast(Mapping[object, object], payload)
         envelope = {str(key): value for key, value in mapping.items()}
     error_code = envelope.get("errorCode")
-    error_message = envelope.get("errorMessage")
+    sanitised_envelope = {key: value for key, value in envelope.items() if key != "errorMessage"}
     details: dict[str, Any] = {
         "upstream_status": status_code,
-        "upstream": redact(dict(envelope)),
+        "upstream": redact(sanitised_envelope),
     }
     if isinstance(error_code, str) and error_code in _AUTHENTICATION_CODES:
         return ToolError(
@@ -38,8 +38,7 @@ def translate_upstream_error(status_code: int, payload: object) -> ToolError:
         code = StableErrorCode.RATE_LIMITED
     else:
         code = StableErrorCode.BILLY_ERROR
-    message = error_message if isinstance(error_message, str) else "Billy API request failed."
-    return ToolError(code=code, message=message, details=details)
+    return ToolError(code=code, message="Billy API request failed.", details=details)
 
 
 def unavailable_coverage_error(missing: list[str]) -> ToolError:
