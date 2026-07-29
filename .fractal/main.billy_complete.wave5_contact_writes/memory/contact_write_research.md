@@ -18,10 +18,11 @@ updated: 2026-07-29T14:32:56Z
 The frozen official-document fingerprint is ETag `hsisik4g9p3603` and MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. The frozen contract, approved design,
 inventory, shared protocol, and leaf contract agree on an offline-only ticketed
-contact CUD slice. The cited parent brief path was absent from both this leaf
-and its parent worktree; no replacement research was performed. The contract
-preserves its cited, frozen conclusions, including that an unauthenticated
-DELETE observation is not live-mutation or cleanup qualification.
+contact CUD slice. The cited parent Grok brief is an explicit source of the
+contract, but its ignored path is unavailable in this worktree; no replacement
+research was performed. The contract preserves its cited, frozen conclusions,
+including that an unauthenticated DELETE observation is not live-mutation or
+cleanup qualification.
 
 ## Tool and wire contract
 
@@ -40,8 +41,9 @@ Every preview outer input is typed and forbids extras. Every execute accepts
 only `WriteExecuteInput` (the confirmation ticket). The nested `contact`
 payload remains `dict[str, JsonValue]`. `WriteProtocolService` owns ticket
 issuance/consumption, canonical request binding, escaped paths, locked-client
-execution without write retry, and typed response/error mapping. Success maps
-the `contacts` changed-record root and optional `meta.deletedRecords` without
+execution without write retry, and typed response/error mapping. The inventory
+lists the three request roots as `contact`, IDs as the update/delete input, and
+the `contacts` changed-record root plus optional `meta.deletedRecords` without
 inventing absent metadata.
 
 FastMCP registration must expose the preview fields and execute
