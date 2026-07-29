@@ -6,10 +6,10 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-29T08:12:00Z
+updated: 2026-07-29T08:23:38Z
 ---
 
-# Billy API v2 research seed
+# billy-api-v2-research-seed
 
 Primary source: https://www.billy.dk/api/ (accessed 2026-07-29).  
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.
@@ -30,7 +30,7 @@ Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`
 - GET list `/v2/{plural}` → plural array + optional `meta.paging`
 - POST create, PUT partial update, DELETE one (idempotent)
 - Write responses return all changed records; deletes in `meta.deletedRecords`
-- Paging: `page`/`pageSize` or `offset`/`pageSize`, max pageSize 1000
+- Paging (current official docs): `page`/`pageSize` only, max pageSize 1000 (default 1000). Historical docs also mention `offset`/`pageSize` — treat offset as unproven until live check
 - Include: `include=resource.property:sideload|embed`
 - Sort: `sortProperty`, `sortDirection` ASC|DESC
 - Locales via `Accept-Language`: en_US, da_DK, fr_FR, nl_NL, de_DE
