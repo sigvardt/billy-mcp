@@ -66,3 +66,9 @@ This page supersedes the earlier contact and contact-person **REJECT** rows for 
 4. Machine inventory: `coverage/api_v2_manifest.yaml`, `coverage/status.json`
 5. Review artifact: `.fractal/main.billy_complete/tmp/grok-review.md`
 6. Research brief: `.fractal/main.billy_complete/tmp/grok-research.md`
+
+## Related review
+
+Catalog and daybook tips are gated in
+`wiki/wave_fivea_catalog_daybook_independent_review.md` (both ACCEPT for
+selective product merge; registration still blocked).
