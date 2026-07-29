@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T11:43:41Z
+updated: 2026-07-29T11:57:03Z
 ---
 
 # billy_mcp
@@ -14,6 +14,8 @@ updated: 2026-07-29T11:43:41Z
 [[billy_ui_discovery_brief|billy_ui_discovery_brief]]: First read-only headless Billy UI discovery result for mit.billy.dk (auth blocked).
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
+
+[[wave_four_remaining_clear_reads_contract|wave_four_remaining_clear_reads_contract]]: Frozen official + live contract for Wave-4 remaining clear API get/list reads.
 
 [[wave_one_reads_contract|wave_one_reads_contract]]: Frozen official contract for the first Billy API read-only implementation wave.
 
@@ -26,4 +28,5 @@ updated: 2026-07-29T11:43:41Z
 ***
 
 - [[billy_api_v2_research_seed]] — Official API v2 inventory seed (2026-07-29)
+- [[wave_four_remaining_clear_reads_contract]] — Wave-4 remaining clear get/list freeze (50 tools)
 - [[wave_three_unfiltered_reads_contract]] — Wave-3 unfiltered clear get/list freeze

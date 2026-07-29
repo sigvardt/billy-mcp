@@ -6,14 +6,14 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-29T09:52:00Z
+updated: 2026-07-29T11:55:00Z
 ---
 
 # billy_api_v2_research_seed
 
-Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T11:02:40Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — still unchanged).
+Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T11:52:46Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — still unchanged).
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
-Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (not a completeness claim).
+Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (Wave-4 remaining clear get/list; not a completeness claim). Companion: `wiki/wave_four_remaining_clear_reads_contract.md`.
 
 ## Counts
 
@@ -40,6 +40,8 @@ Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_
 - Sort: `sortProperty`, `sortDirection` ASC|DESC
 - Locales via `Accept-Language`: en_US, da_DK, fr_FR, nl_NL, de_DE
 - Documented list filters only for invoices, bills, daybookTransactions
+- Live-proven list filter (not on official tables): cities, states, zipcodes require non-empty `countryId` (unauth 400 OTHER without it; 401 once present)
+- Public unauth reads observed for countries, currencies, locales, countryGroups
 - Deny runtime host `api.billy.dk` (sample noise); lock client to `api.billysbilling.com`
 
 ## Special routes outside resource Supports matrix
@@ -92,8 +94,9 @@ Interface inventory still depends on dedicated non-production org headless disco
 1. Freeze red `coverage/api_v2_manifest.yaml` and UI manifest
 2. Shared FastMCP foundation, locked HTTP client, tickets, headless browser shell
 3. Wave-1 reads (next): `api_user_*`, `api_organizations_*` get/list, currencies/countries/locales get/list, products and productPrices get/list, contacts get/list
-4. Later reads: invoices/bills/daybooks and remaining clear get/list
-5. Writes with preview/execute after reads are green
-6. Bulk and irreversible specials only after live contract proof
+4. Wave-2/3 reads: invoices/bills/daybooks (+ lines, accounts, files) — offline done
+5. Wave-4: remaining 50 clear get/list (geo/tax/bank/balance-invoice-ext/ledger-users) — frozen for Codex Power
+6. Writes with preview/execute after clear reads are offline-green
+7. Bulk and irreversible specials only after live contract proof
 
 No row is complete until discovered, implemented, contract_tested, and live_tested (UI also vision_verified).
