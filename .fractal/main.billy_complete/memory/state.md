@@ -6,64 +6,39 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T15:31:22Z
+updated: 2026-07-29T15:44:20Z
 ---
 
 # state
 
 ## Current state
 
-- Root product surface: **94** real `api_*` tools + 2 `coverage_*` at runtime. Write modules on root: protocol multi-root, contacts, contact persons, catalog, and daybooks. **No write tools registered** in `create_server`.
-- Static AST under `src/` already names **124** `api_*` tools (30 write preview/execute strings in leaf modules). Coverage checker allows them via inventory previews + execute-twin gate. **Offline greening still requires evidence map entries.**
-- Clear resource get/list offline: **92/92** implemented and contract_tested.
-- Specials offline-green: `api.special.user_get`, `api.special.user_organizations` only (4 specials remain red).
-- Coverage: implemented 94, contract_tested 94, live_tested 0, vision 0, `complete: false`.
-- Official docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).
-- UI discovery still unauthenticated login only; all 339 UI rows red.
-- `BILLY_API_TOKEN` unavailable; no live qualification claimed.
-- Wave-5 contract freeze binding. Execute-twin coverage gate present.
+- Root HEAD includes Wave-5a write modules and a registration plan baseline. Runtime still **94** `api_*` + 2 coverage tools. **No write tools in `create_server`.**
+- Coverage: implemented 94, contract_tested 94, live 0, vision 0, `complete: false`. Docs fingerprint unchanged.
+- Child `wave5a_root_registration` (codex-power) is **active** for the registration slice; not integrated yet.
+- UI all red; bulk 92 empty-tool red; four specials red; no live token.
 
-## Wave-5a status
+## Review decisions (authoritative)
 
-- Catalog tip `ba4101a` / daybook tip `0d4b0e5`: **ACCEPT** selective product/test merge (done).
-- Protocol + contacts + contact persons: **ACCEPT** and merged earlier.
-- Independent reviews: `wiki/wave_fivea_catalog_daybook_independent_review.md`, `wiki/wave_fivea_candidate_independent_review.md`.
-- Next slice: **root registration** of all 30 write tools; green only 15 offline inventory rows; keep live false.
+- Catalog/daybook tips: **ACCEPT** selective merge (prior).
+- Root registration **baseline** @ plan commit: **ACCEPT honesty / FAIL product completeness** (`wiki/wave_fivea_root_registration_baseline_review.md`, `tmp/grok-review.md`).
+- Registration **implementation**: **not reviewed as ACCEPT** until child product commit is integrated and re-reviewed.
+- No inventory rewrite required; docs fingerprint matches.
+
+## Next work
+
+1. Monitor `wave5a_root_registration`; merge only accepted product paths when child completes.
+2. Re-run offline suite from root; independent Grok review of integrated registration.
+3. After ACCEPT: remaining clear writes, specials, bulk (live only), UI/auth/vision, live qualification.
 
 ## Evidence boundaries
 
-- Official API: https://www.billy.dk/api/ fingerprint above.
-- 207 clear / 92 bulk / 6 specials → 305 API; 339 UI; 0 webhooks.
-- Unauth DELETE empty 200 is not cleanup proof. Bulk unproven.
-- Remaining red API work after this registration: ~101 clear singular writes, 92 bulk, four specials (plus live for everything).
-
-## Review decisions
-
-- Wave-4 offline integration: **ACCEPT** slice; **FAIL** product completeness.
-- Wave-5 contract freeze: **ACCEPT** honesty; no write greening.
-- Foundation protocol merge: **ACCEPT**.
-- Wave-5a protocol/contacts/contact persons: **ACCEPT**.
-- Wave-5a catalog + daybook tips: **ACCEPT** selective merge.
-- Root fail-closed **ACCEPT / PASS**; product completeness **FAIL** until registration + review.
-
-## Next implementation slice (for Codex Power)
-
-1. `create_server`: one `ConfirmationStore` + one `WriteProtocolService`; register contacts, contact persons, catalog, daybooks (30 tools).
-2. `OFFLINE_API_IMPLEMENTATION_EVIDENCE` for the 15 Wave-5a CUD inventory ids with focused write tests + `tests/unit/test_coverage_server.py`.
-3. Regenerate coverage; expect implemented/contract_tested **109**, live **0**, complete **false**.
-4. Update server registry test: **124** `api_*` tools.
-5. Independent Grok product review after integrated registration.
-
-## Research notes (durable)
-
-- Docs fingerprint still `hsisik4g9p3603` / `c2efda0ee4cf9cf200e14910c5fc6996` (research16 re-fetch identical to research15).
-- Unauth DELETE empty 200 on products, productPrices, contacts, contactPersons, daybooks.
-- Product create sample embeds `prices[]` with `unitPrice` + `currencyId`; product ops use `additional_plural_roots=("productPrices",)`.
-- Multi-word singular roots use Billy camelCase on MCP surface (`contactPerson`, `productPrice`).
-- Greening path is only `OFFLINE_API_IMPLEMENTATION_EVIDENCE` in `scripts/generate_coverage_report.py`, not AST presence alone.
-- 46 resources × bulk save/delete = 92 bulk rows; no body contract.
+- Official API fingerprint: etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`.
+- Focused offline write/coverage suite: **128** passed this review pass.
+- Unauth DELETE empty 200 is not cleanup proof.
 
 ## References
 
+- Review: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Research: `.fractal/main.billy_complete/tmp/grok-research.md`
-- Wiki: `wiki/wave_fivea_catalog_daybook_independent_review.md`, `wiki/wave_fivea_candidate_independent_review.md`, `wiki/wave_five_ticketed_writes_contract.md`
+- Wiki: `wiki/wave_fivea_root_registration_baseline_review.md`, `wiki/wave_five_ticketed_writes_contract.md`
