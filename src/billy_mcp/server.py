@@ -38,6 +38,7 @@ from billy_mcp.api.invoice_writes import register_invoice_write_tools
 from billy_mcp.api.ledger_user_reads import register_ledger_user_read_tools
 from billy_mcp.api.line_reads import register_line_read_tools
 from billy_mcp.api.reference_reads import register_reference_reads
+from billy_mcp.api.sales_tax_writes import register_sales_tax_write_tools
 from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
@@ -117,6 +118,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_bill_write_tools(server, client, write_protocol)
     register_bill_line_write_tools(server, client, write_protocol)
     register_tax_write_tools(server, client, write_protocol)
+    register_sales_tax_write_tools(server, client, write_protocol)
     return server
 
 
