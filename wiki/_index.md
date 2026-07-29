@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T20:49:38Z
+updated: 2026-07-29T21:36:26Z
 ---
 
 # billy_mcp
@@ -12,6 +12,8 @@ updated: 2026-07-29T20:49:38Z
 [[billy_api_v2_research_seed|billy_api_v2_research_seed]]: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 
 [[billy_ui_discovery_brief|billy_ui_discovery_brief]]: First read-only headless Billy UI discovery result for mit.billy.dk (auth blocked).
+
+[[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for when Supports flags may not open offline ticketed-write freezes.
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
@@ -60,6 +62,8 @@ updated: 2026-07-29T20:49:38Z
 [[wave_fivee_ticketed_writes_contract|wave_fivee_ticketed_writes_contract]]: Cited offline contract for Billy bill and bill-line singular ticketed writes.
 
 [[wave_fivef_freeze_independent_review|wave_fivef_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for tax-rate and deduction-component singular ticketed writes.
+
+[[wave_fivef_product_independent_review|wave_fivef_product_independent_review]]: Independent Grok acceptance of the offline tax-rate and deduction-component ticketed-write product at root merge 353449d.
 
 [[wave_fivef_ticketed_writes_contract|wave_fivef_ticketed_writes_contract]]: Cited offline contract for Billy tax-rate and deduction-component singular ticketed writes.
 
