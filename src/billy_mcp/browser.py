@@ -5,8 +5,74 @@ from __future__ import annotations
 import asyncio
 from collections.abc import Awaitable, Callable, Iterable
 from pathlib import Path
-from typing import Protocol, cast
+from typing import Literal, Protocol, cast
 from urllib.parse import urlsplit
+
+import yaml
+from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
+
+
+class BrowserEgressManifestHost(BaseModel):
+    """One reviewed browser/API egress entry from the frozen manifest."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    api_client_action: Literal["deny", "exclusive_allow"]
+    browser_action: Literal["allow", "deny"]
+    condition: str
+    evidence: str
+    host: str
+    owner: str
+    purpose: str
+    test_references: list[str] = Field(min_length=1)
+
+    @field_validator("host")
+    @classmethod
+    def require_exact_host(cls, value: str) -> str:
+        normalized = value.lower()
+        if value != value.strip() or not _is_exact_host(normalized):
+            raise ValueError("host must be an exact DNS host name")
+        return normalized
+
+
+class BrowserEgressManifest(BaseModel):
+    """The deny-by-default manifest contract approved for browser egress."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    default_action: Literal["deny"]
+    hosts: list[BrowserEgressManifestHost] = Field(min_length=1)
+    manifest: Literal["billy_browser_egress_phase_0"]
+    schema_version: Literal[1]
+
+    @model_validator(mode="after")
+    def require_unique_hosts(self) -> BrowserEgressManifest:
+        hosts = [entry.host for entry in self.hosts]
+        if len(hosts) != len(set(hosts)):
+            raise ValueError("browser egress hosts must be unique")
+        return self
+
+
+class BrowserEgressPolicyLoadError(ValueError):
+    """Raised when the reviewed browser-egress manifest cannot be trusted."""
+
+
+def _is_exact_host(value: str) -> bool:
+    """Accept only normal DNS names, never URLs, wildcards, ports, or paths."""
+
+    labels = value.split(".")
+    return (
+        value.isascii()
+        and len(value) <= 253
+        and len(labels) >= 2
+        and all(
+            1 <= len(label) <= 63
+            and label[0].isalnum()
+            and label[-1].isalnum()
+            and all(character.isalnum() or character == "-" for character in label)
+            for label in labels
+        )
+    )
 
 
 class BrowserRequest(Protocol):
@@ -58,6 +124,20 @@ class BrowserEgressPolicy:
         if not hosts or any("*" in host or "/" in host for host in hosts):
             raise ValueError("Browser egress hosts must be non-empty exact host names")
         self._allowed_hosts = hosts
+
+    @classmethod
+    def from_manifest(cls, manifest_path: Path) -> BrowserEgressPolicy:
+        """Construct a policy from the reviewed manifest, failing closed on every defect."""
+
+        try:
+            with manifest_path.open(encoding="utf-8") as manifest_file:
+                raw_manifest = yaml.safe_load(manifest_file)
+            manifest = BrowserEgressManifest.model_validate(raw_manifest)
+            return cls(entry.host for entry in manifest.hosts if entry.browser_action == "allow")
+        except (OSError, ValidationError, ValueError, yaml.YAMLError) as error:
+            raise BrowserEgressPolicyLoadError(
+                "Browser egress manifest is unavailable or invalid."
+            ) from error
 
     @property
     def allowed_hosts(self) -> frozenset[str]:

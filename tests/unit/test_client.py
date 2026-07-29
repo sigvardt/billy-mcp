@@ -33,6 +33,22 @@ def test_client_is_locked_to_official_host_and_documented_paging() -> None:
         client.list("/products", page_size=1001)
 
 
+@pytest.mark.parametrize("path", ["/v2", "/v2/products", "/v2/products/123"])
+def test_client_rejects_duplicate_fixed_api_prefix_before_request(path: str) -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={})
+
+    client = BillyHttpClient(lambda: "secret", transport=httpx.MockTransport(handler))
+
+    with pytest.raises(RequestConstructionError, match="omit the fixed /v2 prefix"):
+        client.request("GET", path)
+
+    assert requests == []
+
+
 def test_client_translates_documented_logger_prefixed_401() -> None:
     body = (
         "LOGGER ERROR: Authentication strategy does not have an access token.\n"

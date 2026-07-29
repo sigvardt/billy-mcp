@@ -134,6 +134,8 @@ class BillyHttpClient:
             raise RequestConstructionError("Only relative Billy API paths are permitted")
         if not path.startswith("/") or ".." in parsed.path.split("/"):
             raise RequestConstructionError("API path must be an absolute relative path below /v2")
+        if parsed.path == "/v2" or parsed.path.startswith("/v2/"):
+            raise RequestConstructionError("API paths must omit the fixed /v2 prefix")
         return f"{API_BASE_URL}{parsed.path}"
 
     @staticmethod

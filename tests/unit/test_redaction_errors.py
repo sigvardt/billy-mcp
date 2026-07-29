@@ -6,6 +6,50 @@ from billy_mcp.errors import translate_upstream_error
 from billy_mcp.models import StableErrorCode
 from billy_mcp.redaction import REDACTED, redact
 
+ORGANIZATION_SUBSCRIPTION_FIXTURE = {
+    "organization": {
+        "subscriptionCardType": "visa",
+        "subscriptionCardNumber": "test-card-number",
+        "subscriptionCardExpires": "2099-01",
+        "subscriptionTransaction": {"id": "subscription-transaction"},
+        "isSubscriptionBankPayer": True,
+        "subscriptionPrice": 123.45,
+        "subscriptionPeriod": "monthly",
+        "subscriptionDiscount": 10.0,
+        "subscriptionExpires": "2099-12-31",
+        "paymentTermsMode": "net",
+        "paymentTermsDays": 30,
+        "defaultInvoiceBankAccount": {"id": "invoice-bank-account"},
+        "defaultBankFeeAccount": {"id": "fee-bank-account"},
+        "defaultBillBankAccount": {"id": "bill-bank-account"},
+    },
+    "nested": [{"subscription_card_number": "nested-card-number"}],
+}
+
+
+def test_redaction_recursively_removes_organization_subscription_and_payment_values() -> None:
+    result = redact(ORGANIZATION_SUBSCRIPTION_FIXTURE)
+
+    assert result == {
+        "organization": {
+            "subscriptionCardType": REDACTED,
+            "subscriptionCardNumber": REDACTED,
+            "subscriptionCardExpires": REDACTED,
+            "subscriptionTransaction": REDACTED,
+            "isSubscriptionBankPayer": REDACTED,
+            "subscriptionPrice": REDACTED,
+            "subscriptionPeriod": REDACTED,
+            "subscriptionDiscount": REDACTED,
+            "subscriptionExpires": REDACTED,
+            "paymentTermsMode": REDACTED,
+            "paymentTermsDays": REDACTED,
+            "defaultInvoiceBankAccount": REDACTED,
+            "defaultBankFeeAccount": REDACTED,
+            "defaultBillBankAccount": REDACTED,
+        },
+        "nested": [{"subscription_card_number": REDACTED}],
+    }
+
 
 def test_redaction_recurses_over_nested_authentication_values() -> None:
     result = redact(
@@ -42,3 +86,27 @@ def test_known_401_codes_become_auth_required_with_sanitised_metadata(upstream_c
     assert error.code is StableErrorCode.AUTH_REQUIRED
     assert error.details["upstream"]["errorCode"] == upstream_code
     assert error.details["upstream"]["meta"]["authorization"] == REDACTED
+
+
+def test_upstream_errors_do_not_echo_subscription_or_payment_fixture_values() -> None:
+    payload = {
+        **ORGANIZATION_SUBSCRIPTION_FIXTURE,
+        "errorCode": "INVALID_SUBSCRIPTION",
+        "errorMessage": "test-card-number could not be charged",
+    }
+
+    error = translate_upstream_error(422, payload)
+    rendered_error = str(error.model_dump())
+
+    assert error.message == "Billy API request failed."
+    assert "errorMessage" not in error.details["upstream"]
+    for value in (
+        "test-card-number",
+        "2099-01",
+        "subscription-transaction",
+        "invoice-bank-account",
+        "fee-bank-account",
+        "bill-bank-account",
+        "nested-card-number",
+    ):
+        assert value not in rendered_error
