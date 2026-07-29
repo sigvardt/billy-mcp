@@ -6,14 +6,14 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-29T08:45:00Z
+updated: 2026-07-29T09:22:00Z
 ---
 
 # billy_api_v2_research_seed
 
-Primary source: https://www.billy.dk/api/ (accessed 2026-07-29; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).  
+Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T09:20Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — unchanged).
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
-Detailed freeze recipe: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (not a completeness claim).
+Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (not a completeness claim).
 
 ## Counts
 
@@ -44,7 +44,7 @@ Detailed freeze recipe: node scratch `.fractal/main.billy_complete/tmp/grok-rese
 
 ## Special routes outside resource Supports matrix
 
-- `POST /v2/files` multipart with X-Filename and optional x-create-attachment / x-create-variants / x-organizationid / x-should-scan
+- `POST /v2/files` multipart with X-Filename and optional x-create-attachment / x-create-variants / x-organizationid / x-should-scan (this is the only documented create path; do not also invent a JSON `{file:…}` create tool)
 - `POST /v2/invoices/:invoiceId/emails`
 - `POST /v2/invoiceDeliveries` (async e-invoice; poll invoiceLogs)
 - `GET /v2/invoiceLogs`
@@ -91,8 +91,9 @@ Interface inventory still depends on dedicated non-production org headless disco
 
 1. Freeze red `coverage/api_v2_manifest.yaml` and UI manifest
 2. Shared FastMCP foundation, locked HTTP client, tickets, headless browser shell
-3. Read-only API tools: user/org → reference data → contacts/products → invoices/bills/daybooks
-4. Writes with preview/execute after reads are green
-5. Bulk and irreversible specials only after live contract proof
+3. Wave-1 reads (next): `api_user_*`, `api_organizations_*` get/list, currencies/countries/locales get/list, products and productPrices get/list, contacts get/list
+4. Later reads: invoices/bills/daybooks and remaining clear get/list
+5. Writes with preview/execute after reads are green
+6. Bulk and irreversible specials only after live contract proof
 
 No row is complete until discovered, implemented, contract_tested, and live_tested (UI also vision_verified).

@@ -28,6 +28,21 @@ exist, and then require the checker to enforce row-level completeness. A regular
 offline test run can validate only the implemented slice; it is never evidence
 that the complete product is qualified.
 
+The coverage status is generated evidence, never an operator-maintained success
+switch. A complete report requires every applicable API row to have discovery,
+implementation, contract, and dedicated non-production live evidence; every
+applicable UI row also requires a headless DOM assertion, an independent
+read-back, and a non-sensitive vision-review record confirming purge of raw
+frames. Ambiguous bulk documentation and inaccessible authenticated screens
+remain red. A full test invocation must reject this state rather than treating a
+red manifest as a successful product qualification.
+
+The first bounded UI observation is documented in
+`wiki/billy_ui_discovery_brief.md`: the allowlisted, forced-headless browser
+reached only the unauthenticated login surface. It is evidence about that
+surface and its purge procedure, not API-to-UI parity, a `not_applicable`
+classification, or any green UI row.
+
 Root owns package metadata, cross-cutting models, CI, scripts, wiki, and
 integration wiring. The coverage-inventory child owns manifest data and its
 tests. The shared-foundation child owns concrete modules below `src/billy_mcp`
