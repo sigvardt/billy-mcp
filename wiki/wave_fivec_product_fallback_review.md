@@ -1,7 +1,7 @@
 ---
 name: wave_fivec_product_fallback_review
 title: Wave-5c offline product fallback review ACCEPT
-desc: Codex Power fallback acceptance of the Wave-5c offline daybook transaction write slice; mandatory Grok audit remains outstanding.
+desc: Historical Codex Power fallback acceptance of the Wave-5c offline daybook transaction write slice; superseded for gate purposes by wave_fivec_product_independent_review.
 tags: [billy, api, writes, review, fallback, coverage]
 sources:
   - wiki/wave_fivec_ticketed_writes_contract.md
@@ -20,8 +20,9 @@ updated: 2026-07-29T18:03:31Z
 **ACCEPT — the offline product slice only** for exact commit range
 `ab199e2..51bdc22` (tip `51bdc22`). This is a Codex Power fallback review:
 the designated Grok reviewer failed before review work with a verified
-authentication error. It is not, and does not replace, the required future
-Grok audit.
+authentication error. It is historical only. The required independent Grok
+product audit later ACCEPTed tip `f235ac2` in
+[[wave_fivec_product_independent_review]].
 
 The reviewed product scope adds the two Wave-5c write modules, their
 registration, their evidence mappings/generated inventory, and offline tests.
