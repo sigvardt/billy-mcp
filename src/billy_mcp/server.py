@@ -1,4 +1,4 @@
-"""The Phase 0 FastMCP stdio shell: only real typed coverage tools are exposed."""
+"""The Billy FastMCP stdio shell with real coverage and read-only API tools."""
 
 from __future__ import annotations
 
@@ -6,6 +6,12 @@ from pathlib import Path
 
 from fastmcp import FastMCP
 
+from billy_mcp.api.bootstrap_reads import register_bootstrap_read_tools
+from billy_mcp.api.catalog_reads import register_catalog_read_tools
+from billy_mcp.api.contact_reads import register_contact_read_tools
+from billy_mcp.api.reference_reads import register_reference_reads
+from billy_mcp.client import BillyHttpClient
+from billy_mcp.config import AppConfig
 from billy_mcp.coverage import (
     CoverageLoadError,
     CoverageReport,
@@ -16,10 +22,15 @@ from billy_mcp.models import ToolError
 
 
 def create_server(repository_root: Path | None = None) -> FastMCP:
-    """Create a server whose two registered tools are backed by real coverage data."""
+    """Create the server with only implemented, typed Billy capabilities."""
 
     root = repository_root or Path.cwd()
-    server = FastMCP("Billy MCP", instructions="Safety-first Billy coverage reporting.")
+    configuration = AppConfig.from_environment()
+    client = BillyHttpClient(configuration.resolve_api_token)
+    server = FastMCP(
+        "Billy MCP",
+        instructions="Safety-first Billy coverage reporting and documented read-only API access.",
+    )
 
     def coverage_status() -> GeneratedCoverageStatus | ToolError:
         try:
@@ -39,6 +50,10 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     server.tool(name="coverage_report", description="Read typed Billy MCP coverage report rows.")(
         coverage_report
     )
+    register_bootstrap_read_tools(server, client)
+    register_reference_reads(server, client)
+    register_catalog_read_tools(server, client)
+    register_contact_read_tools(server, client)
     return server
 
 

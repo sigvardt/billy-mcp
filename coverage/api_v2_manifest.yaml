@@ -3849,7 +3849,7 @@
       "area": "contacts",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3858,7 +3858,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contacts.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/contacts/:id",
@@ -3875,7 +3875,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contacts_get",
       "vision_evidence": null,
@@ -3885,7 +3887,7 @@
       "area": "contacts",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3894,7 +3896,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.contacts.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/contacts",
@@ -3932,7 +3934,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contacts_list",
       "vision_evidence": null,
@@ -4341,7 +4345,7 @@
       "area": "countries",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4350,7 +4354,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.countries.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/countries/:id",
@@ -4367,7 +4371,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_countries_get",
       "vision_evidence": null,
@@ -4377,7 +4383,7 @@
       "area": "countries",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4386,7 +4392,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.countries.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/countries",
@@ -4424,7 +4430,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_countries_list",
       "vision_evidence": null,
@@ -4569,7 +4577,7 @@
       "area": "currencies",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4578,7 +4586,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.currencies.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/currencies/:id",
@@ -4595,7 +4603,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_currencies_get",
       "vision_evidence": null,
@@ -4605,7 +4615,7 @@
       "area": "currencies",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -4614,7 +4624,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.currencies.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/currencies",
@@ -4652,7 +4662,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_currencies_list",
       "vision_evidence": null,
@@ -7384,7 +7396,7 @@
       "area": "locales",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -7393,7 +7405,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.locales.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/locales/:id",
@@ -7410,7 +7422,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_locales_get",
       "vision_evidence": null,
@@ -7420,7 +7434,7 @@
       "area": "locales",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -7429,7 +7443,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.locales.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/locales",
@@ -7467,7 +7481,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_reference_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_locales_list",
       "vision_evidence": null,
@@ -7612,7 +7628,7 @@
       "area": "organizations",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -7621,7 +7637,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.organizations.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/organizations/:id",
@@ -7638,7 +7654,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_bootstrap_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_organizations_get",
       "vision_evidence": null,
@@ -7648,7 +7666,7 @@
       "area": "organizations",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -7657,7 +7675,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.organizations.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/organizations",
@@ -7695,7 +7713,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_bootstrap_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_organizations_list",
       "vision_evidence": null,
@@ -8068,7 +8088,7 @@
       "area": "product_prices",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8077,7 +8097,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.productPrices.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/productPrices/:id",
@@ -8094,7 +8114,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_product_prices_get",
       "vision_evidence": null,
@@ -8104,7 +8126,7 @@
       "area": "product_prices",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8113,7 +8135,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.productPrices.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/productPrices",
@@ -8151,7 +8173,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_product_prices_list",
       "vision_evidence": null,
@@ -8332,7 +8356,7 @@
       "area": "products",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8341,7 +8365,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.products.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/products/:id",
@@ -8358,7 +8382,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_products_get",
       "vision_evidence": null,
@@ -8368,7 +8394,7 @@
       "area": "products",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8377,7 +8403,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": {},
       "id": "api.products.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/products",
@@ -8415,7 +8441,9 @@
       "side_effects": "none",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_catalog_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_products_list",
       "vision_evidence": null,
@@ -11679,7 +11707,7 @@
       "area": "user",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -11688,7 +11716,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.special.user_get",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/user",
@@ -11702,7 +11730,9 @@
       "side_effects": "none",
       "source_kind": "special",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_bootstrap_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_user_get",
       "vision_evidence": null,
@@ -11712,7 +11742,7 @@
       "area": "user_organizations",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -11721,7 +11751,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.special.user_organizations",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/user/organizations",
@@ -11735,7 +11765,9 @@
       "side_effects": "none",
       "source_kind": "special",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_bootstrap_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_user_list_organizations",
       "vision_evidence": null,

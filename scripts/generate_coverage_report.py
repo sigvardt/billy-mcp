@@ -19,6 +19,7 @@ DOCS_URL = "https://www.billy.dk/api/"
 DOCS_ETAG = "hsisik4g9p3603"
 DOCS_MD5 = "c2efda0ee4cf9cf200e14910c5fc6996"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
+SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -264,6 +265,31 @@ SINGULAR_ROOT_KEY_OVERRIDES = {
 API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested", "live_tested")
 UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
 
+# The inventory is generated from this narrow, source-controlled map rather
+# than hand-editing checked-in generated artifacts. Each entry is a real module
+# contract suite plus the root registry assertion that exposes the tool.
+OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
+    "api.special.user_get": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.special.user_organizations": (
+        "tests/api/test_bootstrap_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.organizations.get": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.organizations.list": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.currencies.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.currencies.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.countries.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.countries.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.locales.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.locales.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.products.get": ("tests/api/test_catalog_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.products.list": ("tests/api/test_catalog_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.productPrices.get": ("tests/api/test_catalog_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.productPrices.list": ("tests/api/test_catalog_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.contacts.get": ("tests/api/test_contact_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.contacts.list": ("tests/api/test_contact_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+}
+
 
 def snake_case(value: str) -> str:
     """Return a stable planned-tool segment from an official resource name."""
@@ -324,6 +350,7 @@ def base_api_row(
 ) -> dict[str, Any]:
     """Build one documented API row with all §12.1 and freeze fields."""
 
+    offline_test_references = OFFLINE_API_IMPLEMENTATION_EVIDENCE.get(row_id, ())
     row: dict[str, Any] = {
         "id": row_id,
         "lane": "api",
@@ -339,12 +366,15 @@ def base_api_row(
         "side_effects": side_effects,
         "cleanup": cleanup,
         "tool_name": tool_name,
-        "test_references": [TEST_REFERENCE],
+        "test_references": [TEST_REFERENCE, *offline_test_references],
         "evidence": f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}",
         "source_kind": source_kind,
         "contract_status": contract_status,
     }
     row.update(red_status(discovered=True))
+    if offline_test_references:
+        row["implemented"] = True
+        row["contract_tested"] = True
     return row
 
 

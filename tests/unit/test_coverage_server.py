@@ -80,7 +80,7 @@ def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
     ]
 
 
-def test_coverage_loader_and_fastmcp_registration_are_typed_and_limited(tmp_path: Path) -> None:
+def test_server_registers_only_coverage_and_implemented_wave_one_tools(tmp_path: Path) -> None:
     write_coverage_fixture(tmp_path)
     report = load_coverage_report(tmp_path)
     server = create_server(tmp_path)
@@ -89,5 +89,23 @@ def test_coverage_loader_and_fastmcp_registration_are_typed_and_limited(tmp_path
     assert report.status.complete is False
     assert report.status.source_counts == {"red": 2}
     assert [row.id for row in report.api_rows] == ["api.products.list"]
-    assert {tool.name for tool in tools} == {"coverage_status", "coverage_report"}
-    assert not any(tool.name.startswith(("api_", "ui_")) for tool in tools)
+    assert {tool.name for tool in tools} == {
+        "coverage_status",
+        "coverage_report",
+        "api_user_get",
+        "api_user_list_organizations",
+        "api_organizations_get",
+        "api_organizations_list",
+        "api_currencies_get",
+        "api_currencies_list",
+        "api_countries_get",
+        "api_countries_list",
+        "api_locales_get",
+        "api_locales_list",
+        "api_products_get",
+        "api_products_list",
+        "api_product_prices_get",
+        "api_product_prices_list",
+        "api_contacts_get",
+        "api_contacts_list",
+    }

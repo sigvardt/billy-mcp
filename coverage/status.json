@@ -7,8 +7,8 @@
   "phase": "phase_0_inventory",
   "qualification": {
     "blocker": "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed",
-    "contract_tested_rows": 0,
-    "implemented_rows": 0,
+    "contract_tested_rows": 16,
+    "implemented_rows": 16,
     "live_tested_rows": 0,
     "vision_verified_rows": 0
   },

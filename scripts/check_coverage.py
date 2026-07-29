@@ -146,22 +146,49 @@ def registered_domain_tools(root: Path) -> set[str]:
         except (OSError, SyntaxError):
             continue
         for node in ast.walk(module):
-            if not isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                continue
-            for decorator in node.decorator_list:
-                if not isinstance(decorator, ast.Call):
-                    continue
-                function = decorator.func
-                if not isinstance(function, ast.Attribute) or function.attr != "tool":
-                    continue
-                tool_name = node.name
-                for keyword in decorator.keywords:
-                    if keyword.arg == "name" and isinstance(keyword.value, ast.Constant):
-                        if isinstance(keyword.value.value, str):
-                            tool_name = keyword.value.value
-                if tool_name.startswith(("api_", "ui_")):
+            if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+                for decorator in node.decorator_list:
+                    tool_name = _tool_decorator_name(decorator, node.name)
+                    if tool_name is not None:
+                        tools.add(tool_name)
+            if isinstance(node, ast.Call):
+                tool_name = _imperative_tool_name(node)
+                if tool_name is not None:
                     tools.add(tool_name)
     return tools
+
+
+def _tool_decorator_name(decorator: ast.expr, default_name: str) -> str | None:
+    """Return an API/UI name from a direct ``@server.tool`` decorator."""
+
+    if not isinstance(decorator, ast.Call):
+        return None
+    function = decorator.func
+    if not isinstance(function, ast.Attribute) or function.attr != "tool":
+        return None
+    tool_name = default_name
+    for keyword in decorator.keywords:
+        if keyword.arg == "name" and isinstance(keyword.value, ast.Constant):
+            if isinstance(keyword.value.value, str):
+                tool_name = keyword.value.value
+    return tool_name if tool_name.startswith(("api_", "ui_")) else None
+
+
+def _imperative_tool_name(call: ast.Call) -> str | None:
+    """Return an API/UI name from ``server.tool(name=...)(handler)`` registration."""
+
+    factory = call.func
+    if not isinstance(factory, ast.Call):
+        return None
+    attribute = factory.func
+    if not isinstance(attribute, ast.Attribute) or attribute.attr != "tool":
+        return None
+    for keyword in factory.keywords:
+        if keyword.arg == "name" and isinstance(keyword.value, ast.Constant):
+            name = keyword.value.value
+            if isinstance(name, str) and name.startswith(("api_", "ui_")):
+                return name
+    return None
 
 
 def api_errors(api_rows: list[dict[str, Any]]) -> list[str]:
@@ -179,6 +206,7 @@ def api_errors(api_rows: list[dict[str, Any]]) -> list[str]:
         if unexpected:
             errors.append(f"invented or unsupported API rows: {', '.join(unexpected)}")
 
+    expected_by_id = {row["id"]: row for row in expected_rows}
     kind_counts: dict[str, int] = {}
     planned_tools: set[str] = set()
     for row in api_rows:
@@ -186,6 +214,13 @@ def api_errors(api_rows: list[dict[str, Any]]) -> list[str]:
         if isinstance(kind, str):
             kind_counts[kind] = kind_counts.get(kind, 0) + 1
         row_id = str(row.get("id", "<missing-id>"))
+        expected = expected_by_id.get(row_id)
+        if expected is not None:
+            for field in ("implemented", "contract_tested", "live_tested", "test_references"):
+                if row.get(field) != expected[field]:
+                    errors.append(
+                        f"{row_id}: generated offline qualification evidence does not match source"
+                    )
         method_or_route = str(row.get("method_or_route", ""))
         tool_name = row.get("tool_name")
         if "/v2/documents" in method_or_route or "webhook" in method_or_route.lower():

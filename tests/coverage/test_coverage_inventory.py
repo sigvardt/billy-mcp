@@ -104,16 +104,22 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     )
     assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
 
+    offline_evidence = generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE
     for row in operations:
         assert set(generator.COMMON_ERRORS).issubset(row["errors"])
-        assert row["implemented"] is False
-        assert row["contract_tested"] is False
+        expected_offline_evidence = offline_evidence.get(row["id"], ())
+        assert row["implemented"] is bool(expected_offline_evidence)
+        assert row["contract_tested"] is bool(expected_offline_evidence)
         assert row["live_tested"] is False
+        assert row["test_references"] == [generator.TEST_REFERENCE, *expected_offline_evidence]
         if row["operation"] == "list" and row["source_kind"] == "clear":
             assert row["pagination"] == generator.PAGING
             assert "offset" not in row["request_fields"]
     assert status["complete"] is False
     assert status["source_counts"]["api_total"] == 305
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence)
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence)
+    assert status["qualification"]["live_tested_rows"] == 0
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -360,13 +366,15 @@ def test_checker_cli_allows_offline_red_inventory_but_rejects_full_qualification
     )
 
 
-def test_checker_rejects_registered_domain_tool_without_coverage_row(tmp_path: Path) -> None:
-    """AST scanning catches a future domain registration that lacks inventory coverage."""
+def test_checker_rejects_imperatively_registered_domain_tool_without_coverage_row(
+    tmp_path: Path,
+) -> None:
+    """AST scanning catches the FastMCP registration form used by the real server."""
 
     source = tmp_path / "src" / "billy_mcp" / "server.py"
     source.parent.mkdir(parents=True)
     source.write_text(
-        "@mcp.tool()\ndef api_uninventoried_resource() -> None:\n    return None\n",
+        'mcp.tool(name="api_uninventoried_resource")(handler)\n',
         encoding="utf-8",
     )
     api_manifest, ui_manifest, browser_egress, status, report = documents()
