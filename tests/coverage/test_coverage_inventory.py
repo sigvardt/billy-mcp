@@ -401,6 +401,36 @@ def test_checker_rejects_imperatively_registered_domain_tool_without_coverage_ro
     )
 
 
+def test_checker_allows_exact_execute_twin_but_rejects_unpaired_execute_tool(
+    tmp_path: Path,
+) -> None:
+    """Execute companions are derived from preview inventory rows, never added as rows."""
+
+    source = tmp_path / "src" / "billy_mcp" / "server.py"
+    source.parent.mkdir(parents=True)
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+
+    source.write_text(
+        'mcp.tool(name="api_contacts_create_execute")(handler)\n',
+        encoding="utf-8",
+    )
+    assert (
+        validation_errors(api_manifest, ui_manifest, browser_egress, status, report, root=tmp_path)
+        == []
+    )
+
+    source.write_text(
+        'mcp.tool(name="api_contacts_create_execute_extra")(handler)\n',
+        encoding="utf-8",
+    )
+    assert any(
+        "registered domain tool lacks a coverage row: api_contacts_create_execute_extra" in error
+        for error in validation_errors(
+            api_manifest, ui_manifest, browser_egress, status, report, root=tmp_path
+        )
+    )
+
+
 def test_report_is_deterministic_and_json_yaml_has_no_offset_contract() -> None:
     """Generation is reproducible and the YAML-subset source never exposes offset paging."""
 

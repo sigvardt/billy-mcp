@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T13:44:41Z
+updated: 2026-07-29T14:40:03Z
 ---
 
 # billy_mcp
@@ -20,6 +20,8 @@ updated: 2026-07-29T13:44:41Z
 [[wave_five_ticketed_writes_contract|wave_five_ticketed_writes_contract]]: Frozen contract for the first offline ticketed Billy create, update, and delete tool cohort.
 
 [[wave_five_write_protocol_independent_review|wave_five_write_protocol_independent_review]]: Independent Grok audit accepting the scoped Wave-5 shared ticketed-write protocol for root merge.
+
+[[wave_fivea_candidate_independent_review|wave_fivea_candidate_independent_review]]: Independent Grok review of root fail-closed baseline and Wave-5a candidate tips (protocol ACCEPT; contacts and contact persons REJECT).
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
