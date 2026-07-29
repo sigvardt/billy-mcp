@@ -1,30 +1,21 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
 ## Research
 
-Research the exact contract questions needed for the next implementation slice.
-Use Billy's current official API documentation as the primary source. Use the
-dedicated non-production Billy interface for interface discovery. Use other
-sources only to locate primary evidence, never as the contract.
+The designated Grok research route failed before any owned product edit because
+the environment is not signed in. Retry this prerequisite step with Codex Power
+without performing new external research: the parent has already supplied the
+fresh cited Grok brief in `wiki/wave_fived_ticketed_writes_contract.md` and the
+official-doc fingerprint recorded there.
 
-Read the approved design, current inventories, coverage status, memory, recent
-plans, and unresolved review findings. Focus on red, unknown, ambiguous, or
-plan-gated rows. Check whether Billy documentation changed since the last
-recorded source review.
-
-Write a concise cited brief to `$NODE_DIR/tmp/grok-research.md`, replacing the
-prior iteration's file. Include:
-
-1. Exact official source links and access dates.
-2. Endpoint, method, request, response, filter, pagination, and error evidence.
-3. Interface routes, fields, state transitions, plan restrictions, and API
-   parity evidence.
-4. Ambiguities and what live non-production observation can resolve them.
-5. A bounded recommended implementation slice for Codex Power.
-
-Never change coverage to green during research. Never use a headed browser,
-touch a desktop window, expose credentials, or create persistent test data.
-Clean up any disposable interface records created during discovery.
+Read that freeze, the approved design, the six red inventory rows, the shared
+write protocol, and the accepted Wave-5c module/test pattern. Record a concise
+local readiness note in `$NODE_DIR/tmp/grok-research.md` that identifies the
+Grok authentication failure, cites the parent freeze, repeats the exact owned
+route/root map including optional `invoices` response mapping, and leaves all
+coverage rows red. Do not browse, use a browser, create test data, or claim a
+fresh Grok verdict. If the freeze is internally inconsistent, report the blocker
+to the parent rather than broadening scope.
