@@ -1,0 +1,29 @@
+---
+name: phase_zero_contract
+desc: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
+sources:
+  - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
+  - https://www.billy.dk/api/
+created: 2026-07-29T09:04:46Z
+updated: 2026-07-29T09:04:46Z
+---
+
+# phase_zero_contract
+
+The current official API source snapshot contains 207 clear resource operations,
+92 ambiguous bulk mentions, and six documented special routes. Every coverage
+row remains red until code, contract tests, and dedicated non-production live
+tests exist. The ambiguous bulk contract and singular `GET /v2/organization`
+sample are not implementable from the public documentation alone.
+
+Phase 0 owns the manifest schemas, generated coverage report, safety foundation,
+and typed `coverage_*` tools only. API and UI business tools are not registered
+until their concrete workflows are implemented. The API host is fixed to
+`https://api.billysbilling.com/v2`; the browser starts headless only and is
+deny-by-default outside its reviewed allowlist.
+
+Root owns package metadata, cross-cutting models, CI, scripts, wiki, and
+integration wiring. The coverage-inventory child owns manifest data and its
+tests. The shared-foundation child owns concrete modules below `src/billy_mcp`
+except root-owned `models.py`, plus isolated unit tests. Cross-cutting contract
+changes are escalated to root before implementation.

@@ -1,5 +1,5 @@
 ---
-name: billy-api-v2-research-seed
+name: billy_api_v2_research_seed
 desc: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 tags: [billy, api, research]
 sources:
@@ -9,7 +9,7 @@ created: 2026-07-29T08:12:00Z
 updated: 2026-07-29T08:45:00Z
 ---
 
-# billy-api-v2-research-seed
+# billy_api_v2_research_seed
 
 Primary source: https://www.billy.dk/api/ (accessed 2026-07-29; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).  
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
