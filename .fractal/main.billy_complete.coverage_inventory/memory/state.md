@@ -19,6 +19,12 @@ The browser policy denies by default, allows only the documented UI/auth and
 future typed-download hosts, reserves the official API host for the API client,
 and denies its alias.
 
+The duplicate evidence for `POST /v2/files` is intentionally represented by a
+clear Supports `api.files.create` row that aliases
+`api.special.files_upload`. Both rows preserve the documented multipart request
+headers, but only the special row plans `api_files_upload_preview`; no JSON
+`api_files_create` tool may be introduced.
+
 `scripts/check_coverage.py` rejects schema omissions, stale generated output,
 false completeness, green bulk rows, unsupported domain-tool registrations, and
 raw browser-evidence paths. All implementation, contract-test, live-test, and

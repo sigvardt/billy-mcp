@@ -13,6 +13,9 @@ from generate_coverage_report import (
     BILL_FILTERS,
     COMMON_ERRORS,
     DAYBOOK_TRANSACTION_FILTERS,
+    FILES_UPLOAD_ALIAS,
+    FILES_UPLOAD_REQUEST_FIELDS,
+    FILES_UPLOAD_TOOL_NAME,
     INVOICE_FILTERS,
     PAGING,
     build_api_manifest,
@@ -225,6 +228,20 @@ def api_errors(api_rows: list[dict[str, Any]]) -> list[str]:
     ):
         if by_id.get(row_id, {}).get("filters") != filters:
             errors.append(f"{row_id}: documented filter table changed or incomplete")
+    files_create = by_id.get("api.files.create", {})
+    files_upload = by_id.get(FILES_UPLOAD_ALIAS, {})
+    if files_create.get("alias_of") != FILES_UPLOAD_ALIAS:
+        errors.append("api.files.create: must alias the documented multipart upload row")
+    if files_create.get("tool_name") != "":
+        errors.append("api.files.create: must not plan a separate files-create tool")
+    if files_create.get("request_fields") != FILES_UPLOAD_REQUEST_FIELDS:
+        errors.append("api.files.create: must preserve documented multipart upload headers")
+    if files_upload.get("tool_name") != FILES_UPLOAD_TOOL_NAME:
+        errors.append("api.special.files_upload: must own the upload preview tool family")
+    if files_upload.get("request_fields") != FILES_UPLOAD_REQUEST_FIELDS:
+        errors.append("api.special.files_upload: must preserve documented multipart upload headers")
+    if any(tool_name.startswith("api_files_create") for tool_name in planned_tools):
+        errors.append("files upload coverage must not invent an api_files_create tool")
     return errors
 
 

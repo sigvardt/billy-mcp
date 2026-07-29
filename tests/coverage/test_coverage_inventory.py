@@ -84,6 +84,14 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert by_id["api.invoices.list"]["filters"] == generator.INVOICE_FILTERS
     assert by_id["api.bills.list"]["filters"] == generator.BILL_FILTERS
     assert by_id["api.daybookTransactions.list"]["filters"] == generator.DAYBOOK_TRANSACTION_FILTERS
+    assert by_id["api.files.create"]["alias_of"] == generator.FILES_UPLOAD_ALIAS
+    assert by_id["api.files.create"]["tool_name"] == ""
+    assert by_id["api.files.create"]["request_fields"] == generator.FILES_UPLOAD_REQUEST_FIELDS
+    assert by_id[generator.FILES_UPLOAD_ALIAS]["tool_name"] == generator.FILES_UPLOAD_TOOL_NAME
+    assert (
+        by_id[generator.FILES_UPLOAD_ALIAS]["request_fields"]
+        == generator.FILES_UPLOAD_REQUEST_FIELDS
+    )
 
     for row in operations:
         assert set(generator.COMMON_ERRORS).issubset(row["errors"])
@@ -95,6 +103,36 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
             assert "offset" not in row["request_fields"]
     assert status["complete"] is False
     assert status["source_counts"]["api_total"] == 305
+
+
+def test_files_create_remains_a_multipart_alias_without_a_second_tool() -> None:
+    """The Supports create flag must not invent a JSON files-create contract."""
+
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+    duplicate_tool = copy.deepcopy(api_manifest)
+    files_create = next(
+        row for row in duplicate_tool["operations"] if row["id"] == "api.files.create"
+    )
+    files_create["tool_name"] = "api_files_create_preview"
+
+    assert any(
+        "must not plan a separate files-create tool" in error
+        for error in validation_errors(duplicate_tool, ui_manifest, browser_egress, status, report)
+    )
+    assert any(
+        "must not invent an api_files_create tool" in error
+        for error in validation_errors(duplicate_tool, ui_manifest, browser_egress, status, report)
+    )
+
+    missing_header = copy.deepcopy(api_manifest)
+    files_upload = next(
+        row for row in missing_header["operations"] if row["id"] == generator.FILES_UPLOAD_ALIAS
+    )
+    files_upload["request_fields"] = ["file_bytes"]
+    assert any(
+        "api.special.files_upload: must preserve documented multipart upload headers" in error
+        for error in validation_errors(missing_header, ui_manifest, browser_egress, status, report)
+    )
 
 
 def test_bulk_rows_remain_ambiguous_and_toolless() -> None:

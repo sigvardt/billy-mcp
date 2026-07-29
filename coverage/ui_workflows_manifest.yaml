@@ -7216,7 +7216,7 @@
     {
       "api_row_id": "api.files.create",
       "area": "files",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "delete only dedicated test attachments after live upload contract qualification",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7234,14 +7234,21 @@
       "pagination": null,
       "parity_status": "discovery_required",
       "request_fields": [
-        "file"
+        "file_bytes",
+        "X-Access-Token",
+        "X-Filename",
+        "Content-Type",
+        "x-create-attachment?",
+        "x-create-variants?",
+        "x-organizationid?",
+        "x-should-scan?"
       ],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "files[]",
+        "attachments?"
       ],
-      "sensitivity": "medium",
-      "side_effects": "creates file",
+      "sensitivity": "high",
+      "side_effects": "high: uploads file content and may create attachment variants",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],

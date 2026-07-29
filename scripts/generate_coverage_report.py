@@ -20,6 +20,18 @@ DOCS_ETAG = "hsisik4g9p3603"
 DOCS_MD5 = "c2efda0ee4cf9cf200e14910c5fc6996"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
+FILES_UPLOAD_ALIAS = "api.special.files_upload"
+FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
+FILES_UPLOAD_REQUEST_FIELDS = [
+    "file_bytes",
+    "X-Access-Token",
+    "X-Filename",
+    "Content-Type",
+    "x-create-attachment?",
+    "x-create-variants?",
+    "x-organizationid?",
+    "x-should-scan?",
+]
 PAGING = {
     "parameters": ["page", "pageSize"],
     "page_size_default": 1000,
@@ -383,6 +395,27 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
     ):
         if not supported:
             continue
+        if resource == "files" and operation == "create":
+            row = base_api_row(
+                row_id="api.files.create",
+                area="files",
+                operation="create",
+                method_or_route="POST /v2/files",
+                request_fields=FILES_UPLOAD_REQUEST_FIELDS,
+                response_fields=["files[]", "attachments?"],
+                filters=[],
+                pagination=None,
+                side_effects="high: uploads file content and may create attachment variants",
+                cleanup=(
+                    "delete only dedicated test attachments after live upload "
+                    "contract qualification"
+                ),
+                tool_name="",
+                source_kind="clear",
+            )
+            row["alias_of"] = FILES_UPLOAD_ALIAS
+            rows.append(row)
+            continue
         request_fields = [singular_name] if operation == "create" else ["id", singular_name]
         if operation == "delete":
             request_fields = ["id"]
@@ -458,16 +491,7 @@ def special_rows() -> list[dict[str, Any]]:
             area="files",
             operation="upload",
             method_or_route="POST /v2/files",
-            request_fields=[
-                "file_bytes",
-                "X-Access-Token",
-                "X-Filename",
-                "Content-Type",
-                "x-create-attachment?",
-                "x-create-variants?",
-                "x-organizationid?",
-                "x-should-scan?",
-            ],
+            request_fields=FILES_UPLOAD_REQUEST_FIELDS,
             response_fields=["files[]", "attachments?"],
             filters=[],
             pagination=None,
@@ -475,7 +499,7 @@ def special_rows() -> list[dict[str, Any]]:
             cleanup=(
                 "delete only dedicated test attachments after live upload contract qualification"
             ),
-            tool_name="api_files_upload_preview",
+            tool_name=FILES_UPLOAD_TOOL_NAME,
             source_kind="special",
         ),
         base_api_row(
