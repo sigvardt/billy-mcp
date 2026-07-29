@@ -45,6 +45,14 @@ Common commands:
 
 ## Instructions
 
+**Parent override:** the authoritative root Grok independent-review step has
+accepted the Wave-5e offline product at `15d0bde` and has added the required
+`wiki/wave_fivee_product_independent_review.md` record on root. Do not create,
+edit, or commit that page or any other project artifact. Perform only enough
+independent inspection to surface a material contradictory finding to the
+parent over radio. If no such finding exists, finish cleanly with no project
+edits.
+
 Perform the mandatory independent Grok product review of the integrated
 Wave-5e bill and bill-line ticketed-write slice. This is an offline product
 audit, not an implementation task and not a completeness review.
@@ -87,19 +95,12 @@ path.
 
 ## Completion Requirements
 
-1. `wiki/wave_fivee_product_independent_review.md` exists, is project-wiki
-   lint-clean, and contains an independently reasoned ACCEPT or REJECT of the
-   exact integrated baseline.
-2. The review checks the current official-doc evidence against all six paths,
-   roots, optional bill-parent rule, ticket execution boundaries, registration,
-   test evidence, and generated coverage arithmetic.
-3. The review records only an offline product verdict. It does not claim live,
-   UI, vision, bulk, special-route, or overall completeness qualification.
-4. No project file outside that review page is changed. Any REJECT is sent to
-   the parent through radio with actionable file/line findings; any ACCEPT is
-   likewise announced with the reviewed commit and review-page path.
-5. The focused review checks and the node test/lint scripts pass before
-   `fractal node finish`; the child commits and pushes its review page.
+1. No project file is changed or committed after the parent override.
+2. Any material contradictory finding is sent to the parent through radio with
+   exact file/line evidence; otherwise send a concise no-finding confirmation.
+3. Do not make a live, UI, vision, bulk, special-route, or completeness claim.
+4. `fractal node finish` runs only after the radio handoff; no wiki artifact is
+   required from this now-redundant child.
 
 ## Rules
 
