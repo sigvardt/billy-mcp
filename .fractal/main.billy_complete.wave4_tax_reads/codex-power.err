@@ -1,0 +1,3 @@
+2026-07-29T12:26:53.845793Z ERROR codex_core::tools::router: error=apply_patch verification failed: Failed to find expected lines in /Volumes/ssd_1/Repositories/billy-mcp/.worktrees/main.billy_complete.wave4_tax_reads/.fractal/main.billy_complete.wave4_tax_reads/memory/research_status.md:
+created: 2026-07-29T12:08:00Z
+updated: 2026-07-29T12:08:00Z
