@@ -18,7 +18,9 @@ updated: 2026-07-29T14:21:35Z
 The frozen official-document fingerprint is ETag `hsisik4g9p3603` and MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. The cited parent Grok brief, frozen
 contract, approved design, inventory, shared protocol, and leaf contract agree
-on an offline-only ticketed contact CUD slice.
+on an offline-only ticketed contact CUD slice. The brief and its unauthenticated
+DELETE observation are contract evidence only: neither qualifies a live
+mutation nor changes coverage or live status.
 
 ## Tool and wire contract
 
