@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T12:35:27Z
+updated: 2026-07-29T13:03:20Z
 ---
 
 # billy_mcp
@@ -18,6 +18,8 @@ updated: 2026-07-29T12:35:27Z
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
 [[wave_four_freeze_independent_review|wave_four_freeze_independent_review]]: Independent Grok review of the Wave-4 read contract freeze and root offline baseline.
+
+[[wave_four_offline_integration_review|wave_four_offline_integration_review]]: Independent Grok review of Wave-4 offline get/list integration on root.
 
 [[wave_four_remaining_clear_reads_contract|wave_four_remaining_clear_reads_contract]]: Frozen official + live contract for Wave-4 remaining clear API get/list reads.
 
@@ -36,3 +38,4 @@ updated: 2026-07-29T12:35:27Z
 - [[billy_api_v2_research_seed]] — Official API v2 inventory seed (2026-07-29)
 - [[wave_four_remaining_clear_reads_contract]] — Wave-4 remaining clear get/list freeze (50 tools)
 - [[wave_three_unfiltered_reads_contract]] — Wave-3 unfiltered clear get/list freeze
+- [[wave_four_offline_integration_review]] — Wave-4 offline integration review (ACCEPT slice; FAIL complete)
