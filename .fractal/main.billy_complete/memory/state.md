@@ -5,8 +5,8 @@ tags: [billy, coverage, review]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
-created: 2026-07-29T10:58:11Z
-updated: 2026-07-29T11:55:30Z
+created: 2026-07-29T12:12:38Z
+updated: 2026-07-29T12:12:38Z
 ---
 
 # state
@@ -23,14 +23,14 @@ updated: 2026-07-29T11:55:30Z
 - UI discovery still unauthenticated login only; all UI rows red.
 - `BILLY_API_TOKEN` unavailable; full mode fails closed after the offline suite
   passes.
-- Child `wave3_envelope_rereview` may still be active for Wave-3 envelope
-  re-review; it does not block the Wave-4 freeze.
+- Wave-4 implementation leaves active on geo/tax/bank; not merged to root yet.
+- The independent review accepts the offline baseline and Wave-4 freeze while
+  rejecting any product-completeness claim.
 
 ## Evidence boundaries
 
 - Official API fingerprint: ETag `hsisik4g9p3603`, 147934 bytes, MD5
-  `c2efda0ee4cf9cf200e14910c5fc6996` (https://www.billy.dk/api/, research re-fetch
-  2026-07-29T11:52:46Z).
+  `c2efda0ee4cf9cf200e14910c5fc6996` (https://www.billy.dk/api/).
 - 46 resources, 207 clear ops, 92 bulk ambiguous, 6 specials; 0 webhooks.
 - Documented list filter tables only for invoices, bills, daybookTransactions.
 - **Live (unauth):** cities/states/zipcodes require `countryId` (400 OTHER
@@ -43,6 +43,10 @@ updated: 2026-07-29T11:55:30Z
   get/organizations.
 
 ## Review decisions
+
+- Independent review: **FAIL** product completeness; **ACCEPT** offline
+  Wave-1–3 quality, anti-false-green, and the Wave-4 freeze (geo countryId
+  inventory without greening).
 
 - Accepted: inventory arithmetic still matches official Supports.
 - Accepted: Wave-3 modules empty filter allowlists (except Wave-2 filtered
@@ -70,4 +74,5 @@ updated: 2026-07-29T11:55:30Z
   `wiki/phase_zero_contract.md`, `wiki/wave_one_reads_contract.md`,
   `wiki/wave_two_filtered_reads_contract.md`,
   `wiki/wave_three_unfiltered_reads_contract.md`,
-  `wiki/wave_four_remaining_clear_reads_contract.md`
+  `wiki/wave_four_remaining_clear_reads_contract.md`,
+  `wiki/wave_four_freeze_independent_review.md`
