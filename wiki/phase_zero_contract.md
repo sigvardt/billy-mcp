@@ -22,6 +22,15 @@ until their concrete workflows are implemented. The API host is fixed to
 `https://api.billysbilling.com/v2`; the browser starts headless only and is
 deny-by-default outside its reviewed allowlist.
 
+The browser runtime loads `coverage/browser_egress.yaml` at its launch boundary,
+before Playwright is called. It does not accept a prebuilt allowlist policy:
+normal runtime construction uses the reviewed manifest, while tests may provide
+a separate fixture manifest. Missing, malformed, or deny-only manifests abort
+the start before a context exists. The persistent profile is derived from the
+account running the server, not a hard-coded developer home directory. If route
+installation itself fails, the newly launched context and Playwright owner are
+closed before the failure is returned.
+
 `BILLY_TEST_MODE=full` is a qualification gate, not a best-effort test mode. It
 must fail closed until both the generated `coverage/status.json` and its checker
 exist, and then require the checker to enforce row-level completeness. A regular

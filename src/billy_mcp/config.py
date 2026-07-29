@@ -12,7 +12,18 @@ from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 API_BASE_URL = "https://api.billysbilling.com/v2"
 KEYRING_SERVICE = "billy-mcp"
-DEFAULT_BROWSER_PROFILE = Path("/Users/user/.local/share/billy-mcp/chrome-profile")
+
+
+def default_browser_profile(home: Path) -> Path:
+    """Return the MCP-owned profile location for one operating-system account."""
+
+    return home / ".local" / "share" / "billy-mcp" / "chrome-profile"
+
+
+# The persistent profile belongs to the account running the MCP server.  It is
+# deliberately not a project-relative directory: browser state must survive
+# deployments and must never be checked into the repository.
+DEFAULT_BROWSER_PROFILE = default_browser_profile(Path.home())
 
 
 class AppConfig(BaseModel):

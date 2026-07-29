@@ -47,6 +47,11 @@ class FakeContext:
         self.closed = True
 
 
+class FailingRouteContext(FakeContext):
+    async def route(self, url: str, handler: RouteHandler) -> None:
+        raise RuntimeError("route installation failed")
+
+
 async def invoke_handler(handler: RouteHandler, route: FakeRoute) -> None:
     await handler(route)
 
@@ -130,7 +135,6 @@ def test_browser_forces_headless_and_denies_unknown_egress() -> None:
 
     runtime = BrowserRuntime(
         profile_path=Path("/tmp/billy-profile"),
-        policy=BrowserEgressPolicy(["mit.billy.dk"]),
         launcher=launcher,
     )
     asyncio.run(runtime.start())
@@ -152,3 +156,41 @@ def test_browser_forces_headless_and_denies_unknown_egress() -> None:
     assert allowed.action == "continued"
     assert wrong_port.action == "aborted:blockedbyclient"
     assert denied.action == "aborted:blockedbyclient"
+
+
+def test_browser_runtime_fails_closed_before_launch_for_missing_manifest(tmp_path: Path) -> None:
+    launched = False
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        nonlocal launched
+        launched = True
+        return cast(PersistentContext, FakeContext())
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=tmp_path / "missing.yaml",
+        launcher=launcher,
+    )
+
+    with pytest.raises(BrowserEgressPolicyLoadError, match="unavailable or invalid"):
+        asyncio.run(runtime.start())
+
+    assert not launched
+
+
+def test_browser_closes_context_when_egress_route_cannot_be_installed(tmp_path: Path) -> None:
+    context = FailingRouteContext()
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    with pytest.raises(RuntimeError, match="route installation failed"):
+        asyncio.run(runtime.start())
+
+    assert context.closed

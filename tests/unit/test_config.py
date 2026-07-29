@@ -5,7 +5,13 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
-from billy_mcp.config import API_BASE_URL, KEYRING_SERVICE, AppConfig
+from billy_mcp.config import (
+    API_BASE_URL,
+    DEFAULT_BROWSER_PROFILE,
+    KEYRING_SERVICE,
+    AppConfig,
+    default_browser_profile,
+)
 
 
 def test_configuration_locks_api_base_and_does_not_serialize_token() -> None:
@@ -45,3 +51,12 @@ def test_keyring_token_resolution_follows_environment_precedence(
     assert seen == []
     assert config.resolve_api_token({}) == "keyring-secret"
     assert seen == [(KEYRING_SERVICE, "organization:org-42")]
+
+
+def test_default_browser_profile_is_owned_by_the_running_account() -> None:
+    expected_suffix = Path(".local/share/billy-mcp/chrome-profile")
+    assert (
+        default_browser_profile(Path("/tmp/mcp-account"))
+        == Path("/tmp/mcp-account") / expected_suffix
+    )
+    assert DEFAULT_BROWSER_PROFILE == default_browser_profile(Path.home())

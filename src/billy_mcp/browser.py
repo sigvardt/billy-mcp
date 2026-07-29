@@ -11,6 +11,10 @@ from urllib.parse import urlsplit
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
+DEFAULT_BROWSER_EGRESS_MANIFEST = (
+    Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
+)
+
 
 class BrowserEgressManifestHost(BaseModel):
     """One reviewed browser/API egress entry from the frozen manifest."""
@@ -162,12 +166,13 @@ class BrowserRuntime:
     def __init__(
         self,
         profile_path: Path,
-        policy: BrowserEgressPolicy,
         *,
+        egress_manifest_path: Path = DEFAULT_BROWSER_EGRESS_MANIFEST,
         launcher: PersistentContextLauncher | None = None,
     ) -> None:
         self._profile_path = profile_path.expanduser().resolve(strict=False)
-        self._policy = policy
+        self._egress_manifest_path = egress_manifest_path.expanduser().resolve(strict=False)
+        self._policy: BrowserEgressPolicy | None = None
         self._launcher = launcher
         self._context: PersistentContext | None = None
         self._playwright_stopper: Callable[[], Awaitable[None]] | None = None
@@ -178,20 +183,33 @@ class BrowserRuntime:
 
         async with self._lock:
             if self._context is None:
+                # Resolve the reviewed policy at the only browser start boundary.
+                # A missing, malformed, or deny-only manifest therefore prevents
+                # Playwright from launching rather than silently broadening egress.
+                self._policy = BrowserEgressPolicy.from_manifest(self._egress_manifest_path)
+                stopper: Callable[[], Awaitable[None]] | None = None
                 if self._launcher is None:
                     context, stopper = await _launch_persistent_context(
                         str(self._profile_path),
                         headless=True,
                         accept_downloads=False,
                     )
-                    self._playwright_stopper = stopper
                 else:
                     context = await self._launcher(
                         str(self._profile_path),
                         headless=True,
                         accept_downloads=False,
                     )
-                await context.route("**/*", self._enforce_egress)
+                try:
+                    await context.route("**/*", self._enforce_egress)
+                except BaseException:
+                    try:
+                        await context.close()
+                    finally:
+                        if stopper is not None:
+                            await stopper()
+                    raise
+                self._playwright_stopper = stopper
                 self._context = context
             return self._context
 
@@ -211,7 +229,10 @@ class BrowserRuntime:
                         await stopper()
 
     async def _enforce_egress(self, route: BrowserRoute) -> None:
-        if self._policy.allows(route.request.url):
+        policy = self._policy
+        if policy is None:
+            await route.abort("blockedbyclient")
+        elif policy.allows(route.request.url):
             await route.continue_()
         else:
             await route.abort("blockedbyclient")
