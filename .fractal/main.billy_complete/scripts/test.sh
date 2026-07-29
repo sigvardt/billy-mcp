@@ -15,6 +15,13 @@ if [[ "${BILLY_TEST_MODE:-commit}" == "full" && ! -f pyproject.toml ]]; then
     exit 1
 fi
 
+# Full qualification is meaningful only after generated coverage validation exists.
+if [[ "${BILLY_TEST_MODE:-commit}" == "full" ]] && \
+    { [[ ! -f scripts/check_coverage.py ]] || [[ ! -f coverage/status.json ]]; }; then
+    echo "coverage checker and generated status are required for full qualification" >&2
+    exit 1
+fi
+
 if [[ ! -f pyproject.toml ]]; then
     echo "pyproject.toml does not exist yet; no tests can run"
     exit 0

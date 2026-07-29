@@ -22,6 +22,12 @@ until their concrete workflows are implemented. The API host is fixed to
 `https://api.billysbilling.com/v2`; the browser starts headless only and is
 deny-by-default outside its reviewed allowlist.
 
+`BILLY_TEST_MODE=full` is a qualification gate, not a best-effort test mode. It
+must fail closed until both the generated `coverage/status.json` and its checker
+exist, and then require the checker to enforce row-level completeness. A regular
+offline test run can validate only the implemented slice; it is never evidence
+that the complete product is qualified.
+
 Root owns package metadata, cross-cutting models, CI, scripts, wiki, and
 integration wiring. The coverage-inventory child owns manifest data and its
 tests. The shared-foundation child owns concrete modules below `src/billy_mcp`

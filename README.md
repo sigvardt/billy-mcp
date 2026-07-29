@@ -9,7 +9,10 @@ The server will contain two explicit tool lanes:
 
 Authentication, organisation selection, autonomous write confirmation, coverage reporting, and testing are shared across both lanes.
 
-Implementation has not started. Completeness will not be claimed until every applicable coverage row is implemented and tested.
+Phase 0 has established the package and safety baseline. API and interface
+coverage inventories, the concrete FastMCP shell, and business tools remain
+incomplete. Completeness will not be claimed until every applicable coverage row
+is implemented and tested.
 
 Writes use a separate preview and execute call with a short-lived, exact-operation ticket. There is no caller-supplied confirmation boolean, no mandatory human approval, and no stub tool.
 
