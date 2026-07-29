@@ -11,7 +11,7 @@ updated: 2026-07-29T09:52:00Z
 
 # billy_api_v2_research_seed
 
-Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T09:50Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — still unchanged).
+Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T11:02:40Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — still unchanged).
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
 Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (not a completeness claim).
 

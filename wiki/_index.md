@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T10:27:15Z
+updated: 2026-07-29T11:08:58Z
 ---
 
 # billy_mcp
@@ -17,8 +17,11 @@ updated: 2026-07-29T10:27:15Z
 
 [[wave_one_reads_contract|wave_one_reads_contract]]: Frozen official contract for the first Billy API read-only implementation wave.
 
+[[wave_three_unfiltered_reads_contract|wave_three_unfiltered_reads_contract]]: Frozen official contract for Wave-3 unfiltered clear API get/list reads.
+
 [[wave_two_filtered_reads_contract|wave_two_filtered_reads_contract]]: Frozen official contract for the invoice, bill, and daybook-transaction API read wave.
 
 ***
 
 - [[billy_api_v2_research_seed]] — Official API v2 inventory seed (2026-07-29)
+- [[wave_three_unfiltered_reads_contract]] — Wave-3 unfiltered clear get/list freeze
