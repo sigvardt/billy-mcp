@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T15:47:06Z
+updated: 2026-07-29T16:07:30Z
 ---
 
 # billy_mcp
@@ -24,6 +24,8 @@ updated: 2026-07-29T15:47:06Z
 [[wave_fivea_candidate_independent_review|wave_fivea_candidate_independent_review]]: Independent Grok review of root fail-closed baseline and Wave-5a candidate tips (protocol, contacts, and contact persons ACCEPT for selective product merge; product completeness FAIL).
 
 [[wave_fivea_catalog_daybook_independent_review|wave_fivea_catalog_daybook_independent_review]]: Independent Grok review of Wave-5a catalog and daybook write tips (both ACCEPT for selective product merge; product completeness FAIL; root fail-closed PASS).
+
+[[wave_fivea_registration_independent_review|wave_fivea_registration_independent_review]]: Independent Grok ACCEPT of integrated Wave-5a ticketed write registration on the root branch.
 
 [[wave_fivea_root_registration_baseline_review|wave_fivea_root_registration_baseline_review]]: Independent Grok review of the Wave-5a root registration planning baseline (honesty PASS; product completeness FAIL; registration not integrated).
 
