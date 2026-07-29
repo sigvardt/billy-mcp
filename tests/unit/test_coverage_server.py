@@ -1,0 +1,93 @@
+from __future__ import annotations
+
+import asyncio
+from pathlib import Path
+
+import pytest
+
+from billy_mcp.coverage import CoverageLoadError, load_coverage_report
+from billy_mcp.models import StableErrorCode
+from billy_mcp.server import create_server
+
+
+def write_coverage_fixture(root: Path) -> None:
+    coverage = root / "coverage"
+    coverage.mkdir()
+    (coverage / "api_v2_manifest.yaml").write_text(
+        """operations:
+- id: api.products.list
+  lane: api
+  area: products
+  operation: list
+  method_or_route: GET /v2/products
+  request_fields: [page, pageSize]
+  response_fields: [products, meta.paging]
+  filters: []
+  pagination: {parameters: [page, pageSize]}
+  errors: [AUTHENTICATION_REQUIRED]
+  side_effects: none
+  cleanup: not_applicable
+  tool_name: api_products_list
+  evidence: frozen fixture
+  discovered: true
+  implemented: false
+  contract_tested: false
+  live_tested: false
+""",
+        encoding="utf-8",
+    )
+    (coverage / "ui_workflows_manifest.yaml").write_text(
+        """workflows:
+- id: ui.products.list
+  lane: ui
+  area: products
+  operation: list
+  method_or_route: /products
+  request_fields: []
+  response_fields: []
+  filters: []
+  pagination: null
+  errors: [UI_CHANGED]
+  side_effects: none
+  cleanup: not_applicable
+  tool_name: ''
+  evidence: frozen fixture
+  discovered: true
+  implemented: false
+  contract_tested: false
+  live_tested: false
+  vision_verified: false
+""",
+        encoding="utf-8",
+    )
+    (coverage / "browser_egress.yaml").write_text("hosts: []\n", encoding="utf-8")
+    (coverage / "status.json").write_text(
+        '{"complete": false, "phase": "phase_0_inventory", "source_counts": {"red": 2}}',
+        encoding="utf-8",
+    )
+
+
+def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
+    with pytest.raises(CoverageLoadError) as failure:
+        load_coverage_report(tmp_path)
+
+    assert failure.value.error.code is StableErrorCode.NOT_FOUND
+    assert failure.value.error.details["missing"] == [
+        "api_v2_manifest.yaml",
+        "ui_workflows_manifest.yaml",
+        "browser_egress.yaml",
+        "status.json",
+    ]
+
+
+def test_coverage_loader_and_fastmcp_registration_are_typed_and_limited(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    report = load_coverage_report(tmp_path)
+    server = create_server(tmp_path)
+    tools = asyncio.run(server.list_tools())
+
+    assert report.status.complete is False
+    assert report.status.source_counts == {"red": 2}
+    assert [row.id for row in report.api_rows] == ["api.products.list"]
+    assert {tool.name for tool in tools} == {"coverage_status", "coverage_report"}
+    assert not any(tool.name.startswith(("api_", "ui_")) for tool in tools)
