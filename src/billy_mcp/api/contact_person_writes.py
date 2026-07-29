@@ -69,7 +69,10 @@ def register_contact_person_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the contact-person create previously bound to a ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contact_persons_create_execute",
+        )
 
     def api_contact_persons_update_preview(
         contactPerson: dict[str, JsonValue],
@@ -91,7 +94,10 @@ def register_contact_person_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the contact-person update previously bound to a ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contact_persons_update_execute",
+        )
 
     def api_contact_persons_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview a bodyless deletion of one Billy contact person."""
@@ -110,7 +116,10 @@ def register_contact_person_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the contact-person deletion previously bound to a ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contact_persons_delete_execute",
+        )
 
     server.tool(
         name="api_contact_persons_create_preview",

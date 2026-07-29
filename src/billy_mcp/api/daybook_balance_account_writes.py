@@ -78,7 +78,10 @@ def register_daybook_balance_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook-balance-account creation in a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybook_balance_accounts_create_execute",
+        )
 
     def api_daybook_balance_accounts_update_preview(
         daybookBalanceAccount: dict[str, JsonValue],
@@ -110,7 +113,10 @@ def register_daybook_balance_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook-balance-account update in a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybook_balance_accounts_update_execute",
+        )
 
     def api_daybook_balance_accounts_delete_preview(
         id: str = Field(min_length=1),
@@ -138,7 +144,10 @@ def register_daybook_balance_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook-balance-account deletion in a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybook_balance_accounts_delete_execute",
+        )
 
     server.tool(
         name="api_daybook_balance_accounts_create_preview",

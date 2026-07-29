@@ -71,7 +71,10 @@ def register_contact_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contacts_create_execute",
+        )
 
     def api_contacts_update_preview(
         contact: dict[str, JsonValue],
@@ -100,7 +103,10 @@ def register_contact_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contacts_update_execute",
+        )
 
     def api_contacts_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy contact without sending a mutation."""
@@ -126,7 +132,10 @@ def register_contact_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact contact deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_contacts_delete_execute",
+        )
 
     server.tool(
         name="api_contacts_create_preview",

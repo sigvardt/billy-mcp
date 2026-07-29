@@ -193,7 +193,10 @@ def test_execute_sends_the_exact_stored_method_path_and_body_once(
 
     service = make_service(httpx.MockTransport(handler))
     preview = service.preview(specification)
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
 
     assert isinstance(result, WriteExecutionResult)
     assert len(requests) == 1
@@ -214,7 +217,10 @@ def test_execute_never_retries_a_write() -> None:
 
     service = make_service(httpx.MockTransport(handler))
     preview = service.preview(operation())
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_create_execute",
+    )
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.BILLY_ERROR
@@ -237,7 +243,10 @@ def test_execution_maps_only_declared_changed_and_deleted_record_roots() -> None
         )
     )
     preview = service.preview(operation(WriteMethod.PUT))
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_update_execute",
+    )
 
     assert isinstance(result, WriteExecutionResult)
     assert result.model_dump() == {
@@ -274,7 +283,10 @@ def test_execution_maps_every_present_declared_changed_record_root(
     preview = service.preview(
         operation(WriteMethod.PUT, additional_plural_roots=("productPrices",))
     )
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_update_execute",
+    )
 
     assert isinstance(result, WriteExecutionResult)
     assert result.changed_records == expected_changed_records
@@ -286,7 +298,10 @@ def test_delete_preserves_absent_optional_deleted_records_without_inventing_them
         httpx.MockTransport(lambda request: httpx.Response(200, json={"meta": {}}))
     )
     preview = service.preview(operation(WriteMethod.DELETE))
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_delete_execute",
+    )
 
     assert isinstance(result, WriteExecutionResult)
     assert result.changed_records == {}
@@ -313,7 +328,10 @@ def test_delete_maps_every_present_declared_deleted_record_root() -> None:
     preview = service.preview(
         operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
     )
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_delete_execute",
+    )
 
     assert isinstance(result, WriteExecutionResult)
     assert result.changed_records == {}
@@ -345,7 +363,10 @@ def test_malformed_declared_additional_deleted_root_returns_validation_error(
     preview = service.preview(
         operation(WriteMethod.DELETE, additional_plural_roots=("productPrices",))
     )
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_delete_execute",
+    )
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.VALIDATION_ERROR
@@ -363,7 +384,10 @@ def test_malformed_declared_additional_deleted_root_returns_validation_error(
 def test_malformed_success_payload_returns_validation_error(body: dict[str, object]) -> None:
     service = make_service(httpx.MockTransport(lambda request: httpx.Response(200, json=body)))
     preview = service.preview(operation(WriteMethod.PUT))
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_update_execute",
+    )
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.VALIDATION_ERROR
@@ -381,7 +405,10 @@ def test_malformed_declared_additional_changed_root_returns_validation_error() -
     preview = service.preview(
         operation(WriteMethod.PUT, additional_plural_roots=("productPrices",))
     )
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_update_execute",
+    )
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.VALIDATION_ERROR
@@ -405,7 +432,10 @@ def test_typed_upstream_errors_pass_through_unchanged(
 ) -> None:
     service = make_service(httpx.MockTransport(lambda request: httpx.Response(status, json=body)))
     preview = service.preview(operation())
-    result = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    result = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_create_execute",
+    )
 
     assert isinstance(result, ToolError)
     assert result.code is expected_code
@@ -425,16 +455,20 @@ def test_ticket_tampering_replay_expiry_and_concurrent_execution_are_safe() -> N
     preview = service.preview(operation())
 
     tampered = service.execute(
-        WriteExecuteInput(confirmation_ticket=f"{preview.confirmation_ticket}x")
+        WriteExecuteInput(confirmation_ticket=f"{preview.confirmation_ticket}x"),
+        execute_tool_name="api_products_create_execute",
     )
     assert isinstance(tampered, ToolError)
     assert tampered.code is StableErrorCode.CONFIRMATION_INVALID
     assert preview.confirmation_ticket not in tampered.message
 
+    def execute_create(input: WriteExecuteInput) -> WriteExecutionResult | ToolError:
+        return service.execute(input, execute_tool_name="api_products_create_execute")
+
     with ThreadPoolExecutor(max_workers=2) as executor:
         results = list(
             executor.map(
-                service.execute,
+                execute_create,
                 [
                     WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
                     WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
@@ -447,7 +481,10 @@ def test_ticket_tampering_replay_expiry_and_concurrent_execution_are_safe() -> N
     ]
     assert len(requests) == 1
 
-    replayed = service.execute(WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket))
+    replayed = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_create_execute",
+    )
     assert isinstance(replayed, ToolError)
     assert replayed.code is StableErrorCode.CONFIRMATION_CONSUMED
     assert len(requests) == 1
@@ -455,10 +492,98 @@ def test_ticket_tampering_replay_expiry_and_concurrent_execution_are_safe() -> N
     expiring_preview = service.preview(operation())
     clock.now += MAX_TICKET_TTL
     expired = service.execute(
-        WriteExecuteInput(confirmation_ticket=expiring_preview.confirmation_ticket)
+        WriteExecuteInput(confirmation_ticket=expiring_preview.confirmation_ticket),
+        execute_tool_name="api_products_create_execute",
     )
     assert isinstance(expired, ToolError)
     assert expired.code is StableErrorCode.CONFIRMATION_EXPIRED
+
+
+def test_execute_rejects_the_wrong_executor_without_consuming_the_ticket() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"products": [{"id": "product-1"}]})
+
+    service = make_service(httpx.MockTransport(handler))
+    specification = operation()
+    preview = service.preview(specification)
+
+    wrong_executor = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_delete_execute",
+    )
+    assert isinstance(wrong_executor, ToolError)
+    assert wrong_executor.code is StableErrorCode.CONFIRMATION_MISMATCH
+    assert requests == []
+
+    correct_executor = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
+    assert isinstance(correct_executor, WriteExecutionResult)
+    assert len(requests) == 1
+
+
+def test_terminal_execution_discards_the_request_and_preserves_the_replay_error() -> None:
+    confirmations = ConfirmationStore()
+    service = make_service(
+        httpx.MockTransport(lambda request: httpx.Response(200, json={"products": []})),
+        confirmations=confirmations,
+    )
+    specification = operation()
+    preview = service.preview(specification)
+
+    executed = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
+    assert isinstance(executed, WriteExecutionResult)
+
+    wrong_executor_after_execution = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name="api_products_delete_execute",
+    )
+    assert isinstance(wrong_executor_after_execution, ToolError)
+    assert wrong_executor_after_execution.code is StableErrorCode.CONFIRMATION_CONSUMED
+
+    replayed = service.execute(
+        WriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
+    assert isinstance(replayed, ToolError)
+    assert replayed.code is StableErrorCode.CONFIRMATION_CONSUMED
+
+
+def test_preview_and_expired_execute_prune_prepared_request_bodies() -> None:
+    clock = Clock()
+    confirmations = ConfirmationStore(clock)
+    service = make_service(
+        httpx.MockTransport(lambda request: httpx.Response(200, json={"products": []})),
+        confirmations=confirmations,
+    )
+    specification = operation()
+    stale_preview = service.preview(specification)
+
+    clock.now += MAX_TICKET_TTL
+    service.preview(specification)
+
+    expired = service.execute(
+        WriteExecuteInput(confirmation_ticket=stale_preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
+    assert isinstance(expired, ToolError)
+    assert expired.code is StableErrorCode.CONFIRMATION_INVALID
+
+    second_stale_preview = service.preview(specification)
+    clock.now += MAX_TICKET_TTL
+    direct_expired = service.execute(
+        WriteExecuteInput(confirmation_ticket=second_stale_preview.confirmation_ticket),
+        execute_tool_name=specification.execute_tool_name,
+    )
+    assert isinstance(direct_expired, ToolError)
+    assert direct_expired.code is StableErrorCode.CONFIRMATION_EXPIRED
 
 
 @pytest.mark.parametrize(

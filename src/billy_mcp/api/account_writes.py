@@ -94,7 +94,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account-group creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_account_groups_create_execute",
+        )
 
     def api_account_groups_update_preview(
         accountGroup: dict[str, JsonValue],
@@ -121,7 +124,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account-group update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_account_groups_update_execute",
+        )
 
     def api_account_groups_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy account group without sending a mutation."""
@@ -145,7 +151,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account-group deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_account_groups_delete_execute",
+        )
 
     def api_accounts_create_preview(account: dict[str, JsonValue]) -> WritePreviewResult:
         """Preview creation of one Billy account without sending a mutation."""
@@ -169,7 +178,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_accounts_create_execute",
+        )
 
     def api_accounts_update_preview(
         account: dict[str, JsonValue],
@@ -196,7 +208,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_accounts_update_execute",
+        )
 
     def api_accounts_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy account without sending a mutation."""
@@ -220,7 +235,10 @@ def register_account_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact account deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_accounts_delete_execute",
+        )
 
     server.tool(
         name="api_account_groups_create_preview",

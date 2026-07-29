@@ -137,6 +137,7 @@ class _PreparedWrite:
     method: WriteMethod
     path: str
     json_body: dict[str, JsonValue] | None
+    expires_at: datetime
     binding: ConfirmationBinding
     plural_root: str
     additional_plural_roots: tuple[str, ...]
@@ -154,6 +155,8 @@ class WriteProtocolService:
     def preview(self, specification: WriteOperationSpec) -> WritePreviewResult:
         """Issue a ticket for a canonical request without performing any HTTP request."""
 
+        with self._prepared_lock:
+            self._prune_prepared(self._confirmations.current_time())
         canonical_request = canonical_request_for(specification)
         expected_effect_state = _canonical_object(specification.expected_effect_state)
         binding = confirmation_binding_for(
@@ -166,6 +169,7 @@ class WriteProtocolService:
             method=specification.method,
             path=execution_path_for(specification),
             json_body=None if specification.method is WriteMethod.DELETE else canonical_request,
+            expires_at=issued.expires_at,
             binding=binding,
             plural_root=specification.plural_root,
             additional_plural_roots=specification.additional_plural_roots,
@@ -180,26 +184,57 @@ class WriteProtocolService:
             expires_at=issued.expires_at,
         )
 
-    def execute(self, input: WriteExecuteInput) -> WriteExecutionResult | ToolError:
-        """Consume a ticket and send its one retained request through the locked client."""
+    def execute(
+        self,
+        input: WriteExecuteInput,
+        *,
+        execute_tool_name: str,
+    ) -> WriteExecutionResult | ToolError:
+        """Execute only when the invoked tool is the exact ticket-bound executor."""
 
+        now = self._confirmations.current_time()
         with self._prepared_lock:
+            self._prune_prepared(now, preserve_ticket=input.confirmation_ticket)
             prepared = self._prepared_by_ticket.get(input.confirmation_ticket)
         if prepared is None:
+            terminal_error = self._confirmations.terminal_failure(input.confirmation_ticket)
+            if terminal_error is not None:
+                return terminal_error
             return ToolError(
                 code=StableErrorCode.CONFIRMATION_INVALID,
                 message="Confirmation ticket is invalid.",
             )
+        if prepared.binding.tool != execute_tool_name:
+            return ToolError(
+                code=StableErrorCode.CONFIRMATION_MISMATCH,
+                message="Confirmation ticket is not valid for this execute tool.",
+            )
         try:
             self._confirmations.consume(input.confirmation_ticket, prepared.binding)
         except ConfirmationFailure as failure:
+            if failure.error.code is not StableErrorCode.CONFIRMATION_MISMATCH:
+                self._discard_prepared(input.confirmation_ticket)
             return failure.error
+        self._discard_prepared(input.confirmation_ticket)
         response = self._client.request(
             prepared.method.value,
             prepared.path,
             json_body=prepared.json_body,
         )
         return _map_execution_response(response, prepared)
+
+    def _discard_prepared(self, ticket: str) -> None:
+        """Remove a terminal request while leaving replay state to ``ConfirmationStore``."""
+
+        with self._prepared_lock:
+            self._prepared_by_ticket.pop(ticket, None)
+
+    def _prune_prepared(self, now: datetime, *, preserve_ticket: str | None = None) -> None:
+        """Discard expired request bodies without hiding the active ticket's expiry error."""
+
+        for ticket, prepared in tuple(self._prepared_by_ticket.items()):
+            if ticket != preserve_ticket and now >= prepared.expires_at:
+                del self._prepared_by_ticket[ticket]
 
 
 def canonical_request_for(specification: WriteOperationSpec) -> dict[str, JsonValue]:

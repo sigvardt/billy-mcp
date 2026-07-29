@@ -118,7 +118,7 @@ class ConfirmationStore:
     def __init__(self, clock: Callable[[], datetime] | None = None) -> None:
         self._clock = clock or (lambda: datetime.now(UTC))
         self._records: dict[str, _TicketRecord] = {}
-        self._consumed: set[str] = set()
+        self._consumed: dict[str, datetime] = {}
         self._lock = threading.Lock()
 
     def issue(
@@ -135,6 +135,7 @@ class ConfirmationStore:
         ticket = secrets.token_urlsafe(TICKET_RANDOM_BYTES)
         expires_at = now + ttl
         with self._lock:
+            self._prune_expired(now)
             self._records[ticket] = _TicketRecord(binding=binding, expires_at=expires_at)
         return ConfirmationTicket(value=ticket, expires_at=expires_at)
 
@@ -143,22 +144,34 @@ class ConfirmationStore:
 
         now = self._now()
         with self._lock:
-            if ticket in self._consumed:
+            record = self._records.get(ticket)
+            if record is not None and now >= record.expires_at:
+                del self._records[ticket]
+                self._prune_expired(now)
+                raise ConfirmationFailure(
+                    StableErrorCode.CONFIRMATION_EXPIRED,
+                    "Confirmation ticket has expired.",
+                )
+            consumed_expires_at = self._consumed.get(ticket)
+            if consumed_expires_at is not None:
+                if now >= consumed_expires_at:
+                    del self._consumed[ticket]
+                    self._prune_expired(now)
+                    raise ConfirmationFailure(
+                        StableErrorCode.CONFIRMATION_EXPIRED,
+                        "Confirmation ticket has expired.",
+                    )
+                self._prune_expired(now)
                 raise ConfirmationFailure(
                     StableErrorCode.CONFIRMATION_CONSUMED,
                     "Confirmation ticket has already been consumed.",
                 )
+            self._prune_expired(now)
             record = self._records.get(ticket)
             if record is None:
                 raise ConfirmationFailure(
                     StableErrorCode.CONFIRMATION_INVALID,
                     "Confirmation ticket is invalid.",
-                )
-            if now >= record.expires_at:
-                del self._records[ticket]
-                raise ConfirmationFailure(
-                    StableErrorCode.CONFIRMATION_EXPIRED,
-                    "Confirmation ticket has expired.",
                 )
             if record.binding.canonical() != binding.canonical():
                 raise ConfirmationFailure(
@@ -166,8 +179,53 @@ class ConfirmationStore:
                     "Confirmation ticket does not match this operation.",
                 )
             del self._records[ticket]
-            self._consumed.add(ticket)
+            self._consumed[ticket] = record.expires_at
             return record.binding
+
+    def terminal_failure(self, ticket: str) -> ToolError | None:
+        """Return a non-sensitive terminal error after a prepared request was discarded."""
+
+        now = self._now()
+        with self._lock:
+            record = self._records.get(ticket)
+            if record is not None and now >= record.expires_at:
+                del self._records[ticket]
+                self._prune_expired(now)
+                return ToolError(
+                    code=StableErrorCode.CONFIRMATION_EXPIRED,
+                    message="Confirmation ticket has expired.",
+                )
+            consumed_expires_at = self._consumed.get(ticket)
+            if consumed_expires_at is not None:
+                if now >= consumed_expires_at:
+                    del self._consumed[ticket]
+                    self._prune_expired(now)
+                    return ToolError(
+                        code=StableErrorCode.CONFIRMATION_EXPIRED,
+                        message="Confirmation ticket has expired.",
+                    )
+                self._prune_expired(now)
+                return ToolError(
+                    code=StableErrorCode.CONFIRMATION_CONSUMED,
+                    message="Confirmation ticket has already been consumed.",
+                )
+            self._prune_expired(now)
+            return None
+
+    def current_time(self) -> datetime:
+        """Return the store clock so paired volatile state expires consistently."""
+
+        return self._now()
+
+    def _prune_expired(self, now: datetime) -> None:
+        """Drop all expired bindings and replay markers while holding ``_lock``."""
+
+        for ticket, record in tuple(self._records.items()):
+            if now >= record.expires_at:
+                del self._records[ticket]
+        for ticket, expires_at in tuple(self._consumed.items()):
+            if now >= expires_at:
+                del self._consumed[ticket]
 
     def _now(self) -> datetime:
         now = self._clock()

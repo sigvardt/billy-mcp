@@ -22,6 +22,9 @@ from billy_mcp.api.account_writes import (
     AccountUpdatePreviewInput,
     register_account_write_tools,
 )
+from billy_mcp.api.daybook_balance_account_writes import (
+    register_daybook_balance_account_write_tools,
+)
 from billy_mcp.api.write_protocol import (
     WriteExecuteInput,
     WriteMethod,
@@ -55,6 +58,7 @@ def make_server(
     *,
     token: str | None = "account-write-test-token",
     confirmations: ConfirmationStore | None = None,
+    include_daybook_balance_account_tools: bool = False,
 ) -> tuple[FastMCP, list[httpx.Request]]:
     """Create a fully local FastMCP server with a recording locked client."""
 
@@ -69,11 +73,14 @@ def make_server(
         transport=httpx.MockTransport(recording_handler),
     )
     server = FastMCP("account-write-contract-test")
+    write_protocol = WriteProtocolService(client, confirmations or ConfirmationStore())
     register_account_write_tools(
         server,
         client,
-        WriteProtocolService(client, confirmations or ConfirmationStore()),
+        write_protocol,
     )
+    if include_daybook_balance_account_tools:
+        register_daybook_balance_account_write_tools(server, client, write_protocol)
     return server, requests
 
 
@@ -380,6 +387,63 @@ def test_invalid_tampered_expired_and_replayed_tickets_fail_without_extra_writes
 
     assert first["changed_records"] == {"accounts": [{"id": "account-1"}]}
     assert replayed["code"] == StableErrorCode.CONFIRMATION_CONSUMED
+    assert len(requests) == 1
+
+
+def test_account_ticket_rejects_a_different_executor_in_the_same_module() -> None:
+    server, requests = make_server(
+        lambda request: httpx.Response(200, json={"accounts": [{"id": "account-1"}]}),
+    )
+
+    preview = call_tool(
+        server,
+        "api_accounts_create_preview",
+        {"account": {"name": "Sales"}},
+    )
+    wrong_executor = call_tool(
+        server,
+        "api_account_groups_delete_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+
+    assert wrong_executor["code"] == StableErrorCode.CONFIRMATION_MISMATCH
+    assert requests == []
+
+    correct_executor = call_tool(
+        server,
+        "api_accounts_create_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+    assert correct_executor["changed_records"] == {"accounts": [{"id": "account-1"}]}
+    assert len(requests) == 1
+
+
+def test_account_ticket_rejects_a_different_module_executor() -> None:
+    server, requests = make_server(
+        lambda request: httpx.Response(200, json={"accounts": [{"id": "account-1"}]}),
+        include_daybook_balance_account_tools=True,
+    )
+
+    preview = call_tool(
+        server,
+        "api_accounts_create_preview",
+        {"account": {"name": "Sales"}},
+    )
+    wrong_executor = call_tool(
+        server,
+        "api_daybook_balance_accounts_delete_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+
+    assert wrong_executor["code"] == StableErrorCode.CONFIRMATION_MISMATCH
+    assert requests == []
+
+    correct_executor = call_tool(
+        server,
+        "api_accounts_create_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+    assert correct_executor["changed_records"] == {"accounts": [{"id": "account-1"}]}
     assert len(requests) == 1
 
 

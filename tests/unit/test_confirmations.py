@@ -91,3 +91,31 @@ def test_ticket_rejects_tampering_replay_and_expiry() -> None:
     with pytest.raises(ConfirmationFailure) as expired:
         store.consume(expired_ticket.value, binding())
     assert expired.value.error.code is StableErrorCode.CONFIRMATION_EXPIRED
+
+
+def test_expired_bindings_and_replay_markers_are_pruned_without_losing_live_errors() -> None:
+    clock = Clock()
+    store = ConfirmationStore(clock)
+    consumed_ticket = store.issue(binding())
+    expired_ticket = store.issue(binding(tool="api_contacts_create_execute"))
+
+    store.consume(consumed_ticket.value, binding())
+    consumed = store.terminal_failure(consumed_ticket.value)
+    assert consumed is not None
+    assert consumed.code is StableErrorCode.CONFIRMATION_CONSUMED
+
+    clock.now += MAX_TICKET_TTL
+    expired = store.terminal_failure(expired_ticket.value)
+    assert expired is not None
+    assert expired.code is StableErrorCode.CONFIRMATION_EXPIRED
+
+    fresh_ticket = store.issue(binding(tool="api_accounts_create_execute"))
+    assert store.terminal_failure(consumed_ticket.value) is None
+    assert store.terminal_failure(expired_ticket.value) is None
+    assert (
+        store.consume(
+            fresh_ticket.value,
+            binding(tool="api_accounts_create_execute"),
+        ).tool
+        == "api_accounts_create_execute"
+    )

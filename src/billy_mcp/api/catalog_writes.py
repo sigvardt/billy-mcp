@@ -88,7 +88,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_products_create_execute",
+        )
 
     def api_products_update_preview(
         product: dict[str, JsonValue], id: str = Field(min_length=1)
@@ -110,7 +113,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_products_update_execute",
+        )
 
     def api_products_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy product without sending a mutation."""
@@ -130,7 +136,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_products_delete_execute",
+        )
 
     def api_product_prices_create_preview(
         productPrice: dict[str, JsonValue],
@@ -152,7 +161,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product-price creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_product_prices_create_execute",
+        )
 
     def api_product_prices_update_preview(
         productPrice: dict[str, JsonValue], id: str = Field(min_length=1)
@@ -174,7 +186,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product-price update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_product_prices_update_execute",
+        )
 
     def api_product_prices_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy product price without sending a mutation."""
@@ -194,7 +209,10 @@ def register_catalog_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute exactly the product-price deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_product_prices_delete_execute",
+        )
 
     server.tool(
         name="api_products_create_preview",

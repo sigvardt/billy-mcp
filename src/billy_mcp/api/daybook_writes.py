@@ -71,7 +71,10 @@ def register_daybook_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook creation represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybooks_create_execute",
+        )
 
     def api_daybooks_update_preview(
         daybook: dict[str, JsonValue],
@@ -100,7 +103,10 @@ def register_daybook_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook update represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybooks_update_execute",
+        )
 
     def api_daybooks_delete_preview(id: str = Field(min_length=1)) -> WritePreviewResult:
         """Preview deletion of one Billy daybook without sending a mutation."""
@@ -126,7 +132,10 @@ def register_daybook_write_tools(
     ) -> WriteExecutionResult | ToolError:
         """Execute the exact daybook deletion represented by a confirmation ticket."""
 
-        return write_protocol.execute(WriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_daybooks_delete_execute",
+        )
 
     server.tool(
         name="api_daybooks_create_preview",
