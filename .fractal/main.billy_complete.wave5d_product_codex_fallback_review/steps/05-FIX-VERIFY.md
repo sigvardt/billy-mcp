@@ -4,9 +4,9 @@ requires_approval: false
 
 ## Fix and verify
 
-Read `$NODE_DIR/tmp/grok-review.md`. Reproduce every reported problem. Fix each
-confirmed problem and record why any rejected finding is incorrect with direct
-evidence.
+Read the fallback review record. Reproduce every reported problem and report
+confirmed defects to the parent; this node must not repair source outside its
+wiki-only scope.
 
 Review the complete diff for missed edge cases and rule violations. Run:
 
