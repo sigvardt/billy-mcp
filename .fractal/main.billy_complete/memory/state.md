@@ -6,25 +6,24 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T20:16:31Z
+updated: 2026-07-29T20:30:00Z
 ---
 
 # state
 
 ## Current state
 
-- Wave-5c and Wave-5d parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
+- Wave-5c through Wave-5e parent/line write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
 - Runtime: **178** `api_*` + 2 coverage; 42 preview + 42 execute ticketed write tools. Bill and bill-line tools are registered through the shared root protocol.
 - Coverage: implemented 136, contract_tested 136, live 0, vision 0, `complete: false`. The six Wave-5e CUD rows have offline implementation and contract evidence; clear-red total is **73**.
-- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Latest research re-fetch matches (no source drift).
+- Official docs fingerprint still etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (body 147934 bytes). Independent product review re-fetch matches (no source drift).
 - Wave-5a registration product: **ACCEPT** offline.
 - Wave-5b freeze: **ACCEPT**. Wave-5b product at `920ceab`: **REJECTED**. Repair product at `a2a0996`: **ACCEPT**.
 - Wave-5c freeze: **ACCEPT**. Wave-5c product at tip `f235ac2`: **ACCEPT** offline by independent Grok.
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
 - Wave-5d product at tip **`1108e2f`**: **ACCEPT** offline by independent Grok (`wiki/wave_fived_product_independent_review.md`).
 - Wave-5e freeze at `fc8118e`: **ACCEPT** offline (`wiki/wave_fivee_freeze_independent_review.md`). Codex fallback is supplemental only.
-- Wave-5e plan at tip **`a3972cd`**: independent Grok review **PASS** on plan fidelity and fail-closed coverage (`tmp/grok-review.md`). Product remains **not accepted** pending its separate root product review.
-- Wave-5e bill and bill-line modules are merged selectively without child seed files. Root registration, bidirectional executor-mismatch coverage, generated evidence, and the non-live suite (**809 passed**) are complete; independent Grok product review is pending.
+- Wave-5e product at tip **`15d0bde`**: **ACCEPT** offline by independent Grok (`wiki/wave_fivee_product_independent_review.md`). Focused suites **58 passed**; registry **178** `api_*`.
 - UI all red; bulk 92 empty-tool red; four specials red; no live token in process env.
 - Historical unmerged review branches contain child-seed state and superseded fallback reports only, so they remain intentionally closed rather than merged.
 
@@ -39,16 +38,14 @@ updated: 2026-07-29T20:16:31Z
 - Wave-5d freeze at tip `5c376de`: **ACCEPT** offline contract only.
 - Wave-5d product at tip `1108e2f`: **ACCEPT** offline by independent Grok.
 - Wave-5e freeze at `fc8118e`: **ACCEPT** offline by the authoritative root Grok independent review.
-- Wave-5e plan tip `a3972cd`: independent review **PASS** plan/coverage honesty; product **FAIL/not present**.
-- Wave-5e product: **not accepted** until product lands on root + independent Grok product review.
+- Wave-5e product at tip `15d0bde`: **ACCEPT** offline by independent Grok.
 - Wave-5f freeze: **not started** (research only; see research handoff).
 - Overall completeness: **FAIL** until live, bulk, remaining writes, specials, UI/vision close red rows.
 
 ## Open coverage work
 
-1. Obtain the required independent Grok product review of the integrated Wave-5e root commit. Do not treat the offline checks as product acceptance.
-2. Wave-5f (researched): freeze then implement taxRates + taxRateDeductionComponents (6 clear CUD; target +12 tools / +6 offline rows after 5e).
-3. Remaining clear writes after 5e+5f (~67), specials, bulk (live only), UI/auth/vision, and live qualification.
+1. Wave-5f (researched): freeze then implement taxRates + taxRateDeductionComponents (6 clear CUD; target +12 tools / +6 offline rows after 5e).
+2. Remaining clear writes after 5e+5f (~67), specials, bulk (live only), UI/auth/vision, and live qualification.
 
 ## Research pass (Wave-5f handoff)
 
@@ -83,4 +80,5 @@ updated: 2026-07-29T20:16:31Z
 - Wiki freeze ACCEPT 5d: `wiki/wave_fived_freeze_independent_review.md`
 - Wiki freeze ACCEPT 5e: `wiki/wave_fivee_freeze_independent_review.md`
 - Wiki product ACCEPT 5d: `wiki/wave_fived_product_independent_review.md`
+- Wiki product ACCEPT 5e: `wiki/wave_fivee_product_independent_review.md`
 - Wave-5c Grok product ACCEPT: `wiki/wave_fivec_product_independent_review.md`
