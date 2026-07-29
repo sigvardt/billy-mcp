@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T18:55:00Z
+updated: 2026-07-29T19:20:35Z
 ---
 
 # billy_mcp
@@ -46,6 +46,8 @@ updated: 2026-07-29T18:55:00Z
 [[wave_fivec_ticketed_writes_contract|wave_fivec_ticketed_writes_contract]]: Cited offline ticketed-write contract for Billy daybook transactions and transaction lines.
 
 [[wave_fived_freeze_independent_review|wave_fived_freeze_independent_review]]: Independent Grok acceptance of the cited offline contract for invoice and invoice-line singular ticketed writes.
+
+[[wave_fived_product_independent_review|wave_fived_product_independent_review]]: Independent Grok acceptance of the offline invoice and invoice-line ticketed-write product at tip 1108e2f.
 
 [[wave_fived_ticketed_writes_contract|wave_fived_ticketed_writes_contract]]: Cited offline contract for Billy invoice and invoice-line singular ticketed writes.
 
