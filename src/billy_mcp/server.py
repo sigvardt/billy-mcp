@@ -1,4 +1,4 @@
-"""The Billy FastMCP stdio shell with real coverage and read-only API tools."""
+"""The Billy FastMCP stdio shell with coverage, reads, and ticketed writes."""
 
 from __future__ import annotations
 
@@ -12,10 +12,14 @@ from billy_mcp.api.bank_reads import register_bank_read_tools
 from billy_mcp.api.bill_reads import register_bill_read_tools
 from billy_mcp.api.bootstrap_reads import register_bootstrap_read_tools
 from billy_mcp.api.catalog_reads import register_catalog_read_tools
+from billy_mcp.api.catalog_writes import register_catalog_write_tools
 from billy_mcp.api.contact_person_reads import register_contact_person_read_tools
+from billy_mcp.api.contact_person_writes import register_contact_person_write_tools
 from billy_mcp.api.contact_reads import register_contact_read_tools
+from billy_mcp.api.contact_writes import register_contact_write_tools
 from billy_mcp.api.daybook_reads import register_daybook_read_tools
 from billy_mcp.api.daybook_transaction_reads import register_daybook_transaction_read_tools
+from billy_mcp.api.daybook_writes import register_daybook_write_tools
 from billy_mcp.api.file_attachment_reads import register_file_attachment_read_tools
 from billy_mcp.api.geo_reads import register_geo_read_tools
 from billy_mcp.api.invoice_reads import register_invoice_read_tools
@@ -23,8 +27,10 @@ from billy_mcp.api.ledger_user_reads import register_ledger_user_read_tools
 from billy_mcp.api.line_reads import register_line_read_tools
 from billy_mcp.api.reference_reads import register_reference_reads
 from billy_mcp.api.tax_reads import register_tax_read_tools
+from billy_mcp.api.write_protocol import WriteProtocolService
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
+from billy_mcp.confirmations import ConfirmationStore
 from billy_mcp.coverage import (
     CoverageLoadError,
     CoverageReport,
@@ -40,9 +46,14 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     root = repository_root or Path.cwd()
     configuration = AppConfig.from_environment()
     client = BillyHttpClient(configuration.resolve_api_token)
+    confirmations = ConfirmationStore()
+    write_protocol = WriteProtocolService(client, confirmations)
     server = FastMCP(
         "Billy MCP",
-        instructions="Safety-first Billy coverage reporting and documented read-only API access.",
+        instructions=(
+            "Safety-first Billy coverage reporting, documented API reads, and "
+            "confirmation-ticketed write previews and execution."
+        ),
     )
 
     def coverage_status() -> GeneratedCoverageStatus | ToolError:
@@ -80,6 +91,10 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_bank_read_tools(server, client)
     register_balance_invoice_extension_read_tools(server, client)
     register_ledger_user_read_tools(server, client)
+    register_contact_write_tools(server, client, write_protocol)
+    register_contact_person_write_tools(server, client, write_protocol)
+    register_catalog_write_tools(server, client, write_protocol)
+    register_daybook_write_tools(server, client, write_protocol)
     return server
 
 

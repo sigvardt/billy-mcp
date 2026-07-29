@@ -64,6 +64,41 @@ WAVE_FOUR_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEA_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_products_create_preview",
+        "api_products_create_execute",
+        "api_products_update_preview",
+        "api_products_update_execute",
+        "api_products_delete_preview",
+        "api_products_delete_execute",
+        "api_product_prices_create_preview",
+        "api_product_prices_create_execute",
+        "api_product_prices_update_preview",
+        "api_product_prices_update_execute",
+        "api_product_prices_delete_preview",
+        "api_product_prices_delete_execute",
+        "api_contacts_create_preview",
+        "api_contacts_create_execute",
+        "api_contacts_update_preview",
+        "api_contacts_update_execute",
+        "api_contacts_delete_preview",
+        "api_contacts_delete_execute",
+        "api_contact_persons_create_preview",
+        "api_contact_persons_create_execute",
+        "api_contact_persons_update_preview",
+        "api_contact_persons_update_execute",
+        "api_contact_persons_delete_preview",
+        "api_contact_persons_delete_execute",
+        "api_daybooks_create_preview",
+        "api_daybooks_create_execute",
+        "api_daybooks_update_preview",
+        "api_daybooks_update_execute",
+        "api_daybooks_delete_preview",
+        "api_daybooks_delete_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -135,7 +170,7 @@ def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
     ]
 
 
-def test_server_registers_only_coverage_and_implemented_read_tools(tmp_path: Path) -> None:
+def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> None:
     write_coverage_fixture(tmp_path)
     report = load_coverage_report(tmp_path)
     server = create_server(tmp_path)
@@ -194,7 +229,12 @@ def test_server_registers_only_coverage_and_implemented_read_tools(tmp_path: Pat
     }
     tool_names = {tool.name for tool in tools}
     api_tool_names = {name for name in tool_names if name.startswith("api_")}
+    coverage_tool_names = {name for name in tool_names if name.startswith("coverage_")}
 
     assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
-    assert len(api_tool_names) == 94
-    assert tool_names == expected_pre_wave_four_tools | WAVE_FOUR_API_TOOL_NAMES
+    assert len(WAVE_FIVEA_WRITE_API_TOOL_NAMES) == 30
+    assert len(api_tool_names) == 124
+    assert coverage_tool_names == {"coverage_status", "coverage_report"}
+    assert tool_names == (
+        expected_pre_wave_four_tools | WAVE_FOUR_API_TOOL_NAMES | WAVE_FIVEA_WRITE_API_TOOL_NAMES
+    )
