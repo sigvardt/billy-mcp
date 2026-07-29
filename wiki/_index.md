@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T11:08:58Z
+updated: 2026-07-29T11:54:02Z
 ---
 
 # billy_mcp
@@ -16,6 +16,8 @@ updated: 2026-07-29T11:08:58Z
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
 [[wave_one_reads_contract|wave_one_reads_contract]]: Frozen official contract for the first Billy API read-only implementation wave.
+
+[[wave_three_envelope_rereview|wave_three_envelope_rereview]]: PASS — both prior findings closed at 7965072 (8 flat inputs; files/attachments meta.paging preserved; coverage still red).
 
 [[wave_three_unfiltered_reads_contract|wave_three_unfiltered_reads_contract]]: Frozen official contract for Wave-3 unfiltered clear API get/list reads.
 
