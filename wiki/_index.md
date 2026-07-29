@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-29T12:12:38Z
+updated: 2026-07-29T12:24:46Z
 ---
 
 # billy_mcp
@@ -20,6 +20,8 @@ updated: 2026-07-29T12:12:38Z
 [[wave_four_remaining_clear_reads_contract|wave_four_remaining_clear_reads_contract]]: Frozen official + live contract for Wave-4 remaining clear API get/list reads.
 
 [[wave_one_reads_contract|wave_one_reads_contract]]: Frozen official contract for the first Billy API read-only implementation wave.
+
+[[wave_three_envelope_rereview|wave_three_envelope_rereview]]: PASS — both prior findings closed at 7965072 (8 flat inputs; files/attachments meta.paging preserved; coverage still red).
 
 [[wave_three_independent_review|wave_three_independent_review]]: Independent Grok review of Wave-3 unfiltered get/list API reads (22 rows) on branch integration a206eb0.
 

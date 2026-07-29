@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T12:12:38Z
-updated: 2026-07-29T12:12:38Z
+updated: 2026-07-29T12:20:00Z
 ---
 
 # state
@@ -16,16 +16,15 @@ updated: 2026-07-29T12:12:38Z
 - Wave-1 through Wave-3 offline reads are on root: **44** real `api_*` tools +
   2 `coverage_*`. Status: 44 implemented/contract_tested, 0 live_tested,
   complete false.
-- Wave-4 research freeze is ready: all **50** remaining clear get/list
-  operations cited in `tmp/grok-research.md` and
+- Wave-4 freeze remains valid after docs re-fetch: all **50** remaining clear
+  get/list operations cited in `tmp/grok-research.md` and
   `wiki/wave_four_remaining_clear_reads_contract.md`.
 - Official docs fingerprint unchanged.
+- First-cohort Wave-4 leaves active (geo/tax/bank) with module files present in
+  child worktrees; not merged to root. Second cohort not started.
 - UI discovery still unauthenticated login only; all UI rows red.
 - `BILLY_API_TOKEN` unavailable; full mode fails closed after the offline suite
   passes.
-- Wave-4 implementation leaves active on geo/tax/bank; not merged to root yet.
-- The independent review accepts the offline baseline and Wave-4 freeze while
-  rejecting any product-completeness claim.
 
 ## Evidence boundaries
 
@@ -34,37 +33,36 @@ updated: 2026-07-29T12:12:38Z
 - 46 resources, 207 clear ops, 92 bulk ambiguous, 6 specials; 0 webhooks.
 - Documented list filter tables only for invoices, bills, daybookTransactions.
 - **Live (unauth):** cities/states/zipcodes require `countryId` (400 OTHER
-  without it). countryGroups, countries, currencies, locales return 200 without
-  a token. Most other Wave-4 lists return 401 AUTHENTICATION_REQUIRED.
-- Wave-3 offline greens remain: invoiceLines, billLines, daybookTransactionLines,
-  contactPersons, daybooks, daybookBalanceAccounts, accounts, accountGroups,
-  accountNatures, files, attachments (plus prior waves).
-- Remaining clear red: 165 (50 get/list + 115 writes). Specials red except user
-  get/organizations.
+  without it). countryGroups public 200. Most other Wave-4 lists return 401
+  AUTHENTICATION_REQUIRED. **New:** unauth `GET /user/organizations` returns
+  404 UNKNOWN_RESOURCE while unauth `GET /user` returns 401; official path
+  kept for the offline special until authenticated live proof.
+- Wave-3 offline greens remain; remaining clear red: 165 (50 get/list + 115
+  writes). Specials red except user get/organizations.
 
 ## Review decisions
 
 - Independent review: **FAIL** product completeness; **ACCEPT** offline
   Wave-1–3 quality, anti-false-green, and the Wave-4 freeze (geo countryId
   inventory without greening).
-
 - Accepted: inventory arithmetic still matches official Supports.
-- Accepted: Wave-3 modules empty filter allowlists (except Wave-2 filtered
-  resources), flat schemas, meta.paging preserved.
 - Accepted for Wave-4: require `countryId` on cities/states/zipcodes lists from
   live evidence; do not invent other resource filters offline.
 - Rejected as complete: product completeness, live, UI/vision, auth product
   tools, bulk resolution.
+- Do not rewrite `api_user_list_organizations` from unauth 404 alone.
 
 ## Next implementation slice (for Codex Power)
 
-1. Wave-4 offline: 50 remaining clear get/list via five leaf modules
-   (geo, tax, bank, balance/invoice-ext, ledger/users) per research brief.
-2. Target registry after Wave-4: **94** `api_*` + 2 `coverage_*`; complete stays
-   false; live_tested stays false.
-3. When token exists: live-test offline-green reads; bulk probes; ticketed
-   writes; never invent bulk bodies.
-4. Authenticated UI only with credentials + DOM + read-back + vision + purge.
+1. Finish first-cohort Wave-4 leaves (geo/tax/bank); merge clean deliveries.
+2. Start second-cohort leaves: balance/invoice-ext (10 tools) and
+   ledger/users (6 tools) per research brief property tables.
+3. Root integration: register 50 tools → **94** `api_*` + 2 `coverage_*`;
+   complete stays false; live_tested stays false.
+4. When token exists: live-test offline-green reads (include authenticated
+   `/user/organizations`); bulk probes; ticketed writes; never invent bulk
+   bodies.
+5. Authenticated UI only with credentials + DOM + read-back + vision + purge.
 
 ## References
 
