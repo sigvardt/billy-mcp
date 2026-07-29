@@ -389,6 +389,16 @@ def require_complete_errors(
     return errors
 
 
+def execute_twin_names(planned_tools: set[str]) -> set[str]:
+    """Return non-inventory execute companions for documented API write previews."""
+
+    return {
+        f"{tool_name.removesuffix('_preview')}_execute"
+        for tool_name in planned_tools
+        if tool_name.startswith("api_") and tool_name.endswith("_preview")
+    }
+
+
 def validate_documents(
     api_manifest: dict[str, Any],
     ui_manifest: dict[str, Any],
@@ -427,7 +437,8 @@ def validate_documents(
         for row in api_rows + ui_rows
         if isinstance(row.get("tool_name"), str) and row["tool_name"]
     }
-    for tool_name in sorted(registered_domain_tools(root) - planned_tools):
+    allowed_registered_tools = planned_tools | execute_twin_names(planned_tools)
+    for tool_name in sorted(registered_domain_tools(root) - allowed_registered_tools):
         errors.append(f"registered domain tool lacks a coverage row: {tool_name}")
     return errors
 
