@@ -65,26 +65,30 @@ coverage green.
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 | invoice email special `POST /invoices/:id/emails` | POST with JSON object root **401**; non-object body **400**; GET/PUT/DELETE **405** (POST only) |
 | invoice delivery special `POST /invoiceDeliveries` | POST **401**; GET collection **401** (not official TOC tool); GET `:id` **404**; PUT `:id` **401** (not official); DELETE **405**; nested `POST /invoices/:id/invoiceDeliveries` **404** `UNKNOWN_RESOURCE` |
+| bulk candidate `PUT /{res}/bulk` with plural root | **401** on open resources (accounts, contacts, products, invoices, …); **405** on closed ref data | method-open candidate only — not a body/response contract |
+| bulk path `POST /{res}/bulk` or `/bulkSave` | **405** | closed |
+| bulk-looking `PATCH /{res}` with empty plural array | **200** meta-only unauth (`success: true`) | **not a contract**; never ship bulk tools from this |
+| bulk delete `DELETE /{res}?ids[]=` | **200** meta-only on many open deletes; **405** where singular delete closed | shape hint; associations error text documents `ids[]` form |
 
-Probe refresh: 2026-07-30T18:24:29Z (research83 residual clear full matrix +
-email/delivery specials; prior research82/81/64/63/61). HTTP docs ETag
+Probe refresh: 2026-07-30T20:18:53Z (research88 residual clear full matrix +
+bulk shape matrix + specials reconfirm; prior research83/82/81). HTTP docs ETag
 `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934 still
 byte-identical. POST/PUT probes must send a JSON object body (`{}` minimum); a
 missing body or `Content-Type: application/json` with empty/non-object body
 yields **400** `INVALID_REQUEST_BODY` before auth and is not a method-closed
 signal. Empty bytes without Content-Type may still reach **401** — product
 always sends a JSON object. Scratch:
-`.fractal/main.billy_complete/tmp/write-probes-research83.json`.
+`.fractal/main.billy_complete/tmp/write-probes-research88.json`.
 
 ## Planning note
 
-Wave-5g through Wave-5r offline products and Wave-5s-A invoiceLogs plus
-Wave-5s-B files upload are on root (182 offline contract-tested rows). Live,
-UI, vision, bulk, and overall completeness remain fail-closed. Wave-5s-C
-invoice email + invoiceDeliveries is the next offline product slice. Keep
-`contactBalancePostings` and `invoiceReminderAssociations` create/update
-offline-blocked (405). Keep `transactions` CUD offline-blocked without live
-property samples. Detail: [[wave_fives_residual_specials_research]].
+Wave-5g through Wave-5s-C offline products are on root (**184** offline
+contract-tested rows). All six specials are offline-producted; live remains
+false. Residual clear **29**, bulk **92**, UI, vision, and completeness stay
+fail-closed. There is no further offline write product slice. Next work is
+Wave-5t live residual/bulk gate harness (token required for product progress).
+Keep residual 405 false friends and `transactions` CUD offline-blocked without
+live samples. Detail: [[wave_fives_residual_specials_research]].
 
 ## Wave-5s residual clear (research83)
 

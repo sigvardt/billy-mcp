@@ -1,8 +1,8 @@
 ---
 name: wave_fives_residual_specials_research
 title: Wave-5s residual clear and specials research
-desc: Cited post-Wave-5r residual ranking for remaining clear not-impl and four special routes; invoiceLogs list is the recommended first offline residual product; no coverage greening from research.
-tags: [billy, api, specials, residual, writes, research, offline]
+desc: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
+tags: [billy, api, specials, residual, writes, research, offline, live-gate]
 sources:
   - https://www.billy.dk/api/
   - https://api.billysbilling.com/v2
@@ -13,9 +13,9 @@ sources:
   - coverage/api_v2_manifest.yaml
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
-  - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
+  - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T18:15:00Z
+updated: 2026-07-30T20:21:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -23,19 +23,19 @@ updated: 2026-07-30T18:15:00Z
 ## Authority boundary
 
 This page freezes **research evidence** for residual clear not-impl and the
-remaining special routes after Wave-5r product work (invoiceLogs product later
-merged offline). It is not product ACCEPT, live qualification, UI/vision work,
-bulk resolution, or completeness. It does not green coverage.
+special routes after Wave-5r. Wave-5s-A/B/C specials are now merged offline.
+It is not product ACCEPT for residual/bulk, live qualification, UI/vision work,
+or completeness. It does not green coverage.
 
 Full probe matrices and scratch snapshots live at
-`.fractal/main.billy_complete/tmp/grok-research.md` (research77 ranking;
-research78 deepens Wave-5s-A; research79 freezes Wave-5s-B; research80
-product-ready; research81 freezes Wave-5s-C email+delivery; research82 product-ready). InvoiceLogs list
+`.fractal/main.billy_complete/tmp/grok-research.md` (research88 is the current
+post-specials residual/bulk live-gate brief; research77–87 are historical). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
 offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 [[wave_fivesb_files_upload_product_ready_research]]. Email + delivery freeze:
 [[wave_fivesc_invoice_email_delivery_research]]. Email + delivery product-ready:
-[[wave_fivesc_invoice_email_delivery_product_ready_research]].
+[[wave_fivesc_invoice_email_delivery_product_ready_research]]. Product IR:
+[[wave_fivesc_research87_independent_review]].
 
 ## Gate status
 
@@ -43,20 +43,15 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | --- | --- |
 | Wave-5r freeze IR | **ACCEPT** ([[wave_fiver_freeze_independent_review]]) |
 | Wave-5r product on root | **Merged + product IR ACCEPT offline** ([[wave_fiver_product_independent_review]] @ `5ad69a6`) |
-| Root offline baseline | 180 implemented + contract_tested; live 0; vision 0; `complete: false`; registry 265 |
-| Clear not-impl on root | 30 (includes `api.files.create` alias) |
-| Specials not-impl | 3 (`files_upload`, `invoice_email`, `invoice_delivery`) |
+| Root offline baseline | **184** implemented + contract_tested; live 0; vision 0; `complete: false` |
+| Clear not-impl on root | **29** residual writes (all offline-blocked) |
+| Specials not-impl | **0** (all 6 specials offline producted; live still false) |
 | Ambiguous bulk | 92 red |
-| Wave-5s-A research | **Ready** ([[wave_fivesa_invoice_logs_list_research]]) |
-| Wave-5s-A product | **Merged** on root |
-| Wave-5s-B research | **Ready** ([[wave_fivesb_files_upload_research]]) |
-| Wave-5s-B product-ready | **Ready** ([[wave_fivesb_files_upload_product_ready_research]]) |
-| Wave-5s-B product-ready IR | **ACCEPT** offline ([[wave_fivesb_files_upload_product_ready_research_independent_review]]) |
-| Wave-5s-B product | Active / merge pending |
-| Wave-5s-C freeze research | **Ready** ([[wave_fivesc_invoice_email_delivery_research]]) |
-| Wave-5s-C freeze independent review | **ACCEPT as research** ([[wave_fivesc_invoice_email_delivery_research_independent_review]]) |
-| Wave-5s-C product-ready research | **Ready** ([[wave_fivesc_invoice_email_delivery_product_ready_research]]) |
-| Wave-5s-C product-ready independent review | **ACCEPT** offline as handoff only ([[wave_fivesc_invoice_email_delivery_product_ready_research_independent_review]]) |
+| Wave-5s-A product | **Merged** offline (`api_invoice_logs_list`) |
+| Wave-5s-B product | **Merged** offline (containment-repaired upload; live false) |
+| Wave-5s-C product | **Merged** offline (`0efceae`; review87 ACCEPT offline only) |
+| Next offline product tools | **None** — residual/bulk require live token |
+| Recommended next slice | **Wave-5t** live residual/bulk gate harness (fail-closed without token) |
 
 ## Official docs fingerprint
 
@@ -75,27 +70,43 @@ Inventory lock metadata in `coverage/status.json` still cites ETag
 API base remains locked to `https://api.billysbilling.com/v2`. Sample upload curl
 host `api.billy.dk` must never become the client base.
 
-## Residual ranking (offline)
+## Residual ranking (research88)
 
-### A. Next offline products (method open + documented shape)
+### A. Specials offline (done; live still false)
 
-| Priority | Inventory id | Wire | Offline note |
+| Priority | Inventory id | Wire | Note |
 | --- | --- | --- | --- |
 | done | `api.special.invoice_logs` | `GET /invoiceLogs` | Product merged offline |
-| 1 (product active) | `api.special.files_upload` (+ pair `api.files.create`) | `POST /files` binary | Ticket binds path + digest; not JSON create; product-ready research ready |
-| 2 (freeze ready) | `api.special.invoice_email` | `POST /invoices/:invoiceId/emails` | Ticketed; external email; bind `target=invoiceId`; research81 |
-| 3 (freeze ready) | `api.special.invoice_delivery` | `POST /invoiceDeliveries` | Ticketed; async e-invoice; poll logs; research81 |
+| done | `api.special.files_upload` (+ pair `api.files.create`) | `POST /files` binary | Containment-repaired; live false |
+| done | `api.special.invoice_email` | `POST /invoices/:invoiceId/emails` | Ticketed; live false |
+| done | `api.special.invoice_delivery` | `POST /invoiceDeliveries` | Ticketed; live false |
+| done | `api.special.user_get` / `user_organizations` | `GET /user`, `GET /user/organizations` | Earlier waves |
 
-### B. Blocked offline (keep red)
+### B. Blocked offline (keep red) — residual clear 29
 
-| Bucket | Rows | Why |
+| Bucket | Rows | Why (research88 unauth + docs) |
 | --- | --- | --- |
-| 405 false friends | accountNatures, balanceModifiers, cities, countries, countryGroups, currencies, locales, states, zipcodes, postings, contactBalancePostings, invoiceReminderAssociations create/update | Unauth POST/PUT **405** overrides Supports |
-| bankPayments delete | `api.bankPayments.delete` | Unauth DELETE **405** despite Supports delete |
-| transactions CUD | create/update/delete | Property table all readonly offline; DELETE 200 meta-only is not cleanup |
-| associations delete | `api.invoiceReminderAssociations.delete` | Unauth DELETE 200 meta-only; needs live cleanup proof |
-| bulk | all 92 | No body contract on official page |
-| webhooks | none | 0 official mentions |
+| 405 false friends | accountNatures, balanceModifiers, cities, countries, countryGroups, currencies, locales, states, zipcodes, postings, contactBalancePostings, invoiceReminderAssociations create/update | Unauth POST/PUT **405** `METHOD_NOT_ALLOWED` with explicit "does not support creating/updating records" |
+| bankPayments delete | `api.bankPayments.delete` | Unauth DELETE **405** "does not support deleting a single record" |
+| transactions CUD | create/update/delete | POST/PUT **401** method-open but property table almost all readonly; DELETE 200 meta-only is not cleanup |
+| associations delete | `api.invoiceReminderAssociations.delete` | Unauth DELETE 200 meta-only; error on missing ids documents `?ids[]=` form only |
+| bulk | all 92 | No body contract on official page; see bulk candidate note below |
+| webhooks | none | 0 official mentions; API `UNKNOWN_RESOURCE` 404 |
+
+### C. Bulk candidate (research only; not productable offline)
+
+| Pattern | Unauth result | Use |
+| --- | --- | --- |
+| `PUT /{resource}/bulk` + plural root | **401** on open resources | Strongest offline method-open candidate for bulk save |
+| `POST /{resource}/bulk` | **405** | Closed path form |
+| `PATCH /{resource}` empty plural | **200** meta-only unauth | **Not a contract** — do not ship tools |
+| `DELETE /{resource}?ids[]=` | **200** meta-only or **405** | Identifier shape hint only |
+
+Live non-production must prove request body, response roots, partial failure, and cleanup before any bulk tools.
+
+### D. Recommended next Codex slice
+
+**Wave-5t live residual/bulk gate harness**: detect `BILLY_API_TOKEN`, fail-closed without it, run residual 29 + bulk candidate matrix against the dedicated non-production organisation only, write non-sensitive evidence outside git, never green coverage from scaffolding. No residual/bulk FastMCP tools in that slice.
 
 ## Special contracts (official narrative)
 

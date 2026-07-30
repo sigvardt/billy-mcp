@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T20:10:00Z
+updated: 2026-07-30T20:26:34Z
 ---
 
 # billy_mcp
@@ -233,7 +233,7 @@ updated: 2026-07-30T20:10:00Z
 
 [[wave_fiver_ticketed_writes_contract|wave_fiver_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular salesTaxReturns update; create, delete, bulk, product, live, UI, and completeness remain excluded.
 
-[[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Cited post-Wave-5r residual ranking for remaining clear not-impl and four special routes; invoiceLogs list is the recommended first offline residual product; no coverage greening from research.
+[[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 
 [[wave_fivesa_invoice_logs_list_research|wave_fivesa_invoice_logs_list_research]]: Cited offline contract for the read-only special api_invoice_logs_list after Wave-5r product ACCEPT; list-only GET /invoiceLogs with sample query and response; no coverage greening from research.
 
