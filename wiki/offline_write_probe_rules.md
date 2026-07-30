@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T08:45:00Z
+updated: 2026-07-30T09:10:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -16,12 +16,13 @@ updated: 2026-07-30T08:45:00Z
 ## Authority
 
 Derived from Billy's public API docs at https://www.billy.dk/api/
-(current HTTP access ETag `juf598rs793603`, MD5
-`f3925615c452b34694abb7f2856e845a`, body 147934 bytes as of 2026-07-30; stripped
+(current HTTP access ETag `wcw4x9hqvu3603`, MD5
+`8b94b0135c91fd15fe54ea33e088a4be`, body 147934 bytes as of 2026-07-30; stripped
 plain contract is identical to the prior inventory lock ETag `hsisik4g9p3603` /
-MD5 `c2efda0ee4cf9cf200e14910c5fc6996`) and unauthenticated probes against the
-locked base `https://api.billysbilling.com/v2`. This is not live qualification
-and not coverage green.
+MD5 `c2efda0ee4cf9cf200e14910c5fc6996` after whitespace normalisation) and
+unauthenticated probes against the locked base
+`https://api.billysbilling.com/v2`. This is not live qualification and not
+coverage green.
 
 ## Rules
 
@@ -63,22 +64,25 @@ and not coverage green.
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 
-Probe refresh: 2026-07-30T08:41:45Z (research60). HTTP docs ETag
-`juf598rs793603`, MD5 `f3925615c452b34694abb7f2856e845a`, body 147934; stripped
+Probe refresh: 2026-07-30T09:06:27Z (research61). HTTP docs ETag
+`wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; stripped
 plain contract identical to prior lock `hsisik4g9p3603` /
-`c2efda0ee4cf9cf200e14910c5fc6996` (Prismic CDN `ref` token only). Scratch
-detail: `.fractal/main.billy_complete/tmp/write-probes-research60.json` (+
-bulk-hint; prior research59 / 58 / 57 / 56 / 55 / 54 / 47 / 46 / 44 / 43 / 40).
-No method-gate drift on bankPayments, salesTaxPayments, contactBalancePayments,
-or invoiceLateFees. invoiceLateFees and invoiceReminders bulk DELETE with
-`ids[]` return **405** (Supports bulk delete overridden offline).
-invoiceReminders POST 401 PUT/DELETE 405 reconfirmed.
-invoiceReminderAssociations create/update 405 reconfirmed. Wave-5m product
-ACCEPT offline; Wave-5n freeze page is next.
+`c2efda0ee4cf9cf200e14910c5fc6996` after whitespace normalisation. Scratch
+detail: `.fractal/main.billy_complete/tmp/write-probes-research61.json` (+
+bulk-hint; prior research60 / 59 / 58 / 57 / 56 / 55 / 54 / 47 / 46 / 44 / 43 /
+40). POST/PUT probes must send a JSON object body (`{}` minimum); a missing or
+empty body yields **400** `INVALID_REQUEST_BODY` before auth and is not a
+method-closed signal. No method-gate drift on bankPayments, salesTaxPayments,
+contactBalancePayments, or invoiceLateFees when using the `{}` body shape.
+invoiceLateFees and invoiceReminders bulk DELETE with `ids[]` return **405**
+(Supports bulk delete overridden offline). invoiceReminders POST 401
+PUT/DELETE 405 reconfirmed. invoiceReminderAssociations create/update 405
+reconfirmed. Wave-5m product ACCEPT offline; Wave-5n freeze page is on root;
+product for late fees still requires freeze independent review ACCEPT first.
 
 ## Next freezes (planning only)
 
-- Wave-5g through Wave-5l offline products remain on root for create+update
+- Wave-5g through Wave-5m offline products remain on root for create+update
   where accepted. Live/UI/vision/bulk and overall completeness remain fail-closed.
 - Wave-5l freeze is accepted offline
   (`wiki/wave_fivel_ticketed_writes_contract.md`,
@@ -91,11 +95,12 @@ ACCEPT offline; Wave-5n freeze page is next.
   `wiki/wave_fivem_freeze_independent_review.md`). Product is on root
   (`contact_balance_payment_writes.py`); offline product **ACCEPT** at
   `wiki/wave_fivem_product_independent_review.md` (root 250 tools / 172 offline).
-- Wave-5n freeze-ready research for `invoiceLateFees` create+update is in
-  `.fractal/main.billy_complete/tmp/grok-research.md` (research60). Wave-5m
-  product ACCEPT is recorded, so the next Codex slice is freeze page
-  `wiki/wave_fiven_ticketed_writes_contract.md` only; product for late fees
-  still requires a separate freeze ACCEPT first.
+- Wave-5n freeze page for singular `invoiceLateFees` create+update is on root
+  (`wiki/wave_fiven_ticketed_writes_contract.md` MD5
+  `93e6d266d1718fa517ff645b3ca213ce`). Product-ready research is in
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research61). Next gate is
+  independent freeze review ACCEPT, then a Codex product leaf for four tools
+  only; create cleanup must not claim singular DELETE.
 - After Wave-5n: `invoiceReminders` create only (PUT/DELETE 405). Keep
   `contactBalancePostings` and `invoiceReminderAssociations` create/update
   offline-blocked (405).
