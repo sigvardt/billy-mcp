@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T17:14:33Z
+updated: 2026-07-30T17:26:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -48,6 +48,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-A product | **Merged** on root |
 | Wave-5s-B research | **Ready** ([[wave_fivesb_files_upload_research]]) |
 | Wave-5s-B product-ready | **Ready** ([[wave_fivesb_files_upload_product_ready_research]]) |
+| Wave-5s-B product-ready IR | **ACCEPT** offline ([[wave_fivesb_files_upload_product_ready_research_independent_review]]) |
 
 ## Official docs fingerprint
 

@@ -17,3 +17,15 @@ green for `api.special.files_upload` + aliased `api.files.create`.
 ## Non-claims
 
 No coverage greening, no product ACCEPT, no live/UI/vision work, no disposable records.
+
+## Post-Mortem
+
+Completed the cited official-document handoff for the bounded binary upload
+slice. Independent Grok review found no blocking contract defect and accepted
+the handoff only; it explicitly withheld product and completeness acceptance.
+The committed baseline passed the non-live test suite (1180 passed), lint,
+type checks, coverage honesty checks, dependency audit, and credential-policy
+checks. No live traffic, browser evidence, credentials, or test data were
+created. The next unresolved slice is the ticketed binary upload implementation
+and its two offline evidence rows; live, UI, vision, bulk, and full-project
+gates remain red.

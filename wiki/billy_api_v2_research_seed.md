@@ -6,7 +6,7 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-29T11:55:00Z
+updated: 2026-07-30T17:37:00Z
 ---
 
 # billy_api_v2_research_seed
@@ -46,7 +46,7 @@ Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_
 
 ## Special routes outside resource Supports matrix
 
-- `POST /v2/files` multipart with X-Filename and optional x-create-attachment / x-create-variants / x-organizationid / x-should-scan (this is the only documented create path; do not also invent a JSON `{file:…}` create tool)
+- `POST /v2/files` raw binary (`--data-binary`) with X-Filename and optional x-create-attachment / x-create-variants / x-organizationid / x-should-scan (this is the only documented create path; do not also invent a JSON `{file:…}` create tool)
 - `POST /v2/invoices/:invoiceId/emails`
 - `POST /v2/invoiceDeliveries` (async e-invoice; poll invoiceLogs)
 - `GET /v2/invoiceLogs`

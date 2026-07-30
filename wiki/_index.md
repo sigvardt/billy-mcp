@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T17:22:05Z
+updated: 2026-07-30T17:32:30Z
 ---
 
 # billy_mcp
@@ -242,6 +242,8 @@ updated: 2026-07-30T17:22:05Z
 [[wave_fivesa_invoice_logs_research_independent_review|wave_fivesa_invoice_logs_research_independent_review]]: Authoritative Grok ACCEPT-as-research for the Wave-5s-A invoiceLogs list offline contract handoff at parent baseline 97f7e12; product not yet present; no coverage greening.
 
 [[wave_fivesb_files_upload_product_ready_research|wave_fivesb_files_upload_product_ready_research]]: Product-ready offline handoff for ticketed binary POST /files special and dual-row create alias; path/digest/size/mtime binding; no coverage greening.
+
+[[wave_fivesb_files_upload_product_ready_research_independent_review|wave_fivesb_files_upload_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for ticketed binary POST /files special and dual-row create alias; product and completeness remain open.
 
 [[wave_fivesb_files_upload_research|wave_fivesb_files_upload_research]]: Cited offline contract for ticketed binary POST /files special and aliased files.create row; path and digest bound preview or execute; no coverage greening.
 

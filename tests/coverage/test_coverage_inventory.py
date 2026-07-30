@@ -252,7 +252,7 @@ def test_require_complete_checks_each_row_state_and_bulk_resolution() -> None:
     )
 
 
-def test_files_create_remains_a_multipart_alias_without_a_second_tool() -> None:
+def test_files_create_remains_a_raw_binary_alias_without_a_second_tool() -> None:
     """The Supports create flag must not invent a JSON files-create contract."""
 
     api_manifest, ui_manifest, browser_egress, status, report = documents()
@@ -277,7 +277,7 @@ def test_files_create_remains_a_multipart_alias_without_a_second_tool() -> None:
     )
     files_upload["request_fields"] = ["file_bytes"]
     assert any(
-        "api.special.files_upload: must preserve documented multipart upload headers" in error
+        "api.special.files_upload: must preserve documented raw-binary upload headers" in error
         for error in validation_errors(missing_header, ui_manifest, browser_egress, status, report)
     )
 
