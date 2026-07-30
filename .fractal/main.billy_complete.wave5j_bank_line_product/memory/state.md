@@ -7,20 +7,19 @@ sources:
   - wiki/wave_fivej_freeze_independent_review.md
   - wiki/wave_fivej_product_ready_research_independent_review.md
 created: 2026-07-30T02:07:17Z
-updated: 2026-07-30T02:07:17Z
+updated: 2026-07-30T02:19:30Z
 ---
 
 # state
 
 The accepted offline authority is `wiki/wave_fivej_ticketed_writes_contract.md`
-plus `wiki/wave_fivej_freeze_independent_review.md`. The cited implementation
-handoff also has an independent product-ready ACCEPT confirmed by the parent.
-That gate accepts research43 only: it does not accept product code or green any
-product, live, UI, vision, or bulk coverage. The handoff itself is the parent
-worktree scratch file
-`.fractal/main.billy_complete/tmp/grok-research.md` (research43). It confirms the
-unchanged official documentation fingerprint and authorises exactly nine
-singular bank-line CUD rows as eighteen preview/execute tools.
+plus `wiki/wave_fivej_freeze_independent_review.md` and the durable product-ready
+ACCEPT at `wiki/wave_fivej_product_ready_research_independent_review.md`. That
+review records the accepted research43 handoff and authorises exactly nine
+singular bank-line CUD rows as eighteen preview/execute tools; it does not
+accept product code or green any product, live, UI, vision, or bulk coverage.
+The mutable parent scratch path now contains research44 for a later Wave-5k
+`bankPayments` freeze and is explicitly not Wave-5j authority.
 
 Ownership is limited to:
 
@@ -39,8 +38,10 @@ completion untouched. The delivery targets are 238 registered `api_*` tools,
 166 implemented and contract-tested offline rows, zero live/vision rows, and
 `complete: false`.
 
-The parent has directed a full retry under the corrected model. Before the final
+The parent has directed a full retry under the corrected model, and the operator
+authorised the `01-RESEARCH.md` route override from unauthenticated Grok to
+Codex Power without reopening research or contract scope. Before the final
 commit, remove only runner-generated untracked
 `.fractal/main.billy_complete.wave5j_bank_line_product/codex-power.err` and
-`skills/.system/` if present; never stage them. Both directives remain saved in
-the radio action queue until satisfied.
+`skills/.system/` if present; never stage them. The implementation, routing, and
+cleanup directives remain saved in the radio action queue until satisfied.
