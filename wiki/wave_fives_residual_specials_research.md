@@ -36,7 +36,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 [[wave_fivesb_files_upload_product_ready_research]]. Email + delivery freeze:
 [[wave_fivesc_invoice_email_delivery_research]]. Email + delivery product-ready:
 [[wave_fivesc_invoice_email_delivery_product_ready_research]]. Product IR:
-[[wave_fivesc_research87_independent_review]].
+[[wave_fivesc_research87_independent_review]]. Research90 IR: [[wave_fives_research90_independent_review]].
 
 ## Gate status
 

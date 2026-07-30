@@ -237,6 +237,8 @@ updated: 2026-07-30T21:02:43Z
 
 [[wave_fives_research89_independent_review|wave_fives_research89_independent_review]]: Independent Grok review of Research89 residual/bulk reconfirmation and the root-integrated Wave-5t live-gate harness. ACCEPT research and infrastructure only; completeness FAIL; no coverage greening.
 
+[[wave_fives_research90_independent_review|wave_fives_research90_independent_review]]: Independent Grok review of Research90 OPTIONS non-discrimination evidence and the Wave-5u method-level observation plan. ACCEPT research and planning only; completeness FAIL; no coverage greening.
+
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 
 [[wave_fivesa_invoice_logs_list_research|wave_fivesa_invoice_logs_list_research]]: Cited offline contract for the read-only special api_invoice_logs_list after Wave-5r product ACCEPT; list-only GET /invoiceLogs with sample query and response; no coverage greening from research.
