@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T16:28:00Z
+updated: 2026-07-30T16:45:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -29,8 +29,9 @@ green coverage.
 
 Full probe matrices and scratch snapshots live at
 `.fractal/main.billy_complete/tmp/grok-research.md` (research77 ranking;
-research78 deepens Wave-5s-A). InvoiceLogs list offline freeze detail:
-[[wave_fivesa_invoice_logs_list_research]].
+research78 deepens Wave-5s-A; research79 deepens Wave-5s-B). InvoiceLogs list
+offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
+offline freeze detail: [[wave_fivesb_files_upload_research]].
 
 ## Gate status
 
@@ -43,6 +44,7 @@ research78 deepens Wave-5s-A). InvoiceLogs list offline freeze detail:
 | Specials not-impl | 4 |
 | Ambiguous bulk | 92 red |
 | Wave-5s-A research | **Ready** ([[wave_fivesa_invoice_logs_list_research]]) |
+| Wave-5s-B research | **Ready** ([[wave_fivesb_files_upload_research]]) |
 
 ## Official docs fingerprint
 
