@@ -13,7 +13,7 @@ sources:
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-30T00:00:00Z
-updated: 2026-07-30T00:24:00Z
+updated: 2026-07-30T01:12:27Z
 ---
 
 # Wave-5i sales-tax account and meta-field ticketed-write contract
@@ -53,8 +53,18 @@ tool, while the execute twin is registered but is not a second coverage row.
 All six rows are medium sensitivity and record
 `AUTHENTICATION_REQUIRED` and `OAUTH_INVALID_ACCESS_TOKEN` as documented
 authentication errors. Until product code and real offline suites exist, every
-one remains `implemented: false`, `contract_tested: false`, and
+one was recorded `implemented: false`, `contract_tested: false`, and
 `live_tested: false`.
+
+That pre-implementation condition has now been satisfied at root merge
+`084ad77`: all six manifest rows are `implemented: true` and
+`contract_tested: true`, backed by
+`tests/api/test_sales_tax_account_meta_writes.py` and
+`tests/api/test_sales_tax_account_meta_cross_executor.py`. The independent
+Grok product record is `wiki/wave_fivei_product_independent_review.md`. This
+frozen tool/path/root map remains authoritative; all six rows stay
+`live_tested: false`, and the acceptance does not extend to UI, vision, bulk,
+or overall completeness.
 
 ## Shared write protocol
 

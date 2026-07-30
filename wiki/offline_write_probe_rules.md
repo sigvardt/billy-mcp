@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T00:53:00Z
+updated: 2026-07-30T01:08:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -72,22 +72,17 @@ Probe refresh: 2026-07-30T00:52:57Z, docs ETag `hsisik4g9p3603`, MD5
   offline product slice at root `55faa02` by
   `wiki/wave_fiveg_product_independent_review.md`; live/UI/vision/bulk and
   overall completeness remain fail-closed.
-- Wave-5h attachment singular JSON CUD freeze remains accepted
-  (`wiki/wave_fiveh_ticketed_writes_contract.md`). Its root product is now
-  accepted **offline only** at `29cecbe` by
-  `wiki/wave_fiveh_product_independent_review.md`; live/UI/vision/bulk and
-  overall completeness remain fail-closed.
-- Wave-5i freeze for singular `salesTaxAccounts` + `salesTaxMetaFields` CUD is
-  accepted (`wiki/wave_fivei_ticketed_writes_contract.md`,
-  `wiki/wave_fivei_freeze_independent_review.md`). Product-ready research is
-  accepted as a handoff only
-  (`wiki/wave_fivei_product_ready_research_independent_review.md`). Root merge
-  `084ad77` contains the twelve product tools at 220 registered `api_*` tools
-  and 157 offline rows; independent Grok product review remains required.
-- Recommended next offline freeze after Wave-5i product ACCEPT: Wave-5j singular
-  `bankLineMatches` + `bankLines` + `bankLineSubjectAssociations` CUD (9 clear
-  ops / 18 tools). Freeze-ready field research is in node scratch
-  `.fractal/main.billy_complete/tmp/grok-research.md` (research40); docs
-  fingerprint unchanged; unauth gates POST/PUT 401 and DELETE-missing-id 200.
-  Independent research review and freeze page are still required. Exclude
-  `bankPayments` singular delete (405) and all bulk rows.
+- Wave-5h attachment singular JSON CUD freeze and product remain accepted
+  offline (`wiki/wave_fiveh_ticketed_writes_contract.md`,
+  `wiki/wave_fiveh_product_independent_review.md` at `29cecbe`).
+- Wave-5i sales-tax account and meta-field product is accepted offline at root
+  merge `084ad77` by `wiki/wave_fivei_product_independent_review.md` (220 tools
+  / 157 offline rows). Live/UI/vision/bulk and overall completeness remain
+  fail-closed.
+- Recommended next offline freeze: Wave-5j singular `bankLineMatches` +
+  `bankLines` + `bankLineSubjectAssociations` CUD (9 clear ops / 18 tools).
+  Freeze-ready research is accepted as a drafting handoff only by
+  `wiki/wave_fivej_freeze_ready_research_independent_review.md`. Cited brief:
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research40). Freeze page
+  and product do not yet exist. Exclude `bankPayments` singular delete (405)
+  and all bulk rows.
