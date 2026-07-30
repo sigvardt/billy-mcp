@@ -110,6 +110,7 @@ host `api.billy.dk` must never become the client base.
 | Offline auth product | Root ACCEPT offline only (review94); no UI greening |
 | Recommended slice | Encode research95 bulk-delete form matrix into Wave-5u harness tests/comments only; residual/bulk tools still blocked; live needs `BILLY_API_TOKEN` |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research95) |
+| Independent review | **ACCEPT as research** — [[wave_fives_research95_independent_review]] |
 
 ## Residual ranking (research88; held by research89)
 

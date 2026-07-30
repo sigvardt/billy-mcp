@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T23:02:31Z
+updated: 2026-07-30T23:23:00Z
 ---
 
 # billy_mcp
@@ -252,6 +252,8 @@ updated: 2026-07-30T23:02:31Z
 [[wave_fives_research93_independent_review|wave_fives_research93_independent_review]]: Independent Grok review of research93 and pre-merge product scan. Accepts research only; rejects product merge on login submit-label regression; programme remains incomplete.
 
 [[wave_fives_research94_independent_review|wave_fives_research94_independent_review]]: Grok independent review of research94 and the merged offline auth credential pre-submit product on root tip a9c7a9b. Accepts research and offline product only. Completeness remains fail. No coverage greening.
+
+[[wave_fives_research95_independent_review|wave_fives_research95_independent_review]]: Independent Grok acceptance of research95 bulk-delete form-matrix findings and wiki promotions as research only; completeness remains failed; no residual/bulk product tools.
 
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 

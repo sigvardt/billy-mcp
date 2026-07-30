@@ -21,3 +21,26 @@ Wave-5u harness form-matrix encode only (tests/comments). No residual/bulk FastM
 
 - `wiki/wave_fives_residual_specials_research.md` research95 section
 - `wiki/wave5u_method_probe_contract.md` bulk-delete form evidence table
+
+## Post-Mortem
+
+- Completed: research95 evidence, durable wiki promotion, and independent
+  review95 record. Review95 accepts the promotion as research only and confirms
+  184 implemented/contract-tested API rows, zero live/vision rows, and
+  `complete: false`.
+- Findings: empty bulk-delete forms are validation errors; synthetic absent-id
+  metadata-only success remains unauthenticated non-evidence. No residual/bulk
+  tool, webhook, coverage green, credential submission, or browser evidence was
+  added.
+- Verification: root lint and the offline suite passed (1,297 passed, 1
+  deselected). The generated project-wiki index initially had one redundant
+  blank line and was regenerated; both project wiki and memory now lint clean
+  (memory retains its existing empty-index advisory).
+- Child management: the original Grok review leaf made no project edit because
+  its client was unauthenticated; review95 supplied the authoritative Grok
+  record, so the redundant Codex fallback and duplicate auth review were closed
+  without merging work. The two-file Wave-5u harness leaf remains active.
+- Next unresolved coverage slice: provision a dedicated non-production token
+  and organisation, then obtain reviewed non-persistence proof before any live
+  residual/bulk method observation. Full authenticated UI parity and vision
+  remain separately blocked.
