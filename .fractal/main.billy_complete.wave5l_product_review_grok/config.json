@@ -16,7 +16,7 @@
   "timeout": null,
   "iter_timeout": null,
   "step_timeout": "30m",
-  "step_retries": null,
+  "step_retries": 0,
   "step_retry_backoff": null,
   "interval": null,
   "sleep": null,
