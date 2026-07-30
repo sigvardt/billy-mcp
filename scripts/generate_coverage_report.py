@@ -290,6 +290,14 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_invoice_log_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.special.invoice_email": (
+        "tests/api/test_invoice_email_delivery_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.special.invoice_delivery": (
+        "tests/api/test_invoice_email_delivery_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.organizations.get": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.organizations.list": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.organizations.create": (
