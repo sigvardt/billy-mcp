@@ -61,29 +61,35 @@ coverage green.
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 
-Probe refresh: 2026-07-30T02:15:51Z, docs ETag `hsisik4g9p3603`, MD5
-`c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
-`.fractal/main.billy_complete/tmp/write-probes-research44.json` (compact:
-`write-probes-research44-compact.json`; prior: research43 / research40).
+Probe refresh: 2026-07-30T03:11:00Z, docs ETag `hsisik4g9p3603`, MD5
+`c2efda0ee4cf9cf200e14910c5fc6996` (byte-identical body 147934). Scratch
+detail: `.fractal/main.billy_complete/tmp/write-probes-research47.json`
+(compact: `write-probes-research47-compact.json`; prior: research46 / 44 / 43 /
+40). No drift on bankPayments POST/PUT 401 or singular DELETE 405 message.
 
 ## Next freezes (planning only)
 
-- Wave-5g through Wave-5i offline products remain accepted on root (latest:
-  Wave-5i at `084ad77`, 220 tools / 157 offline rows). Live/UI/vision/bulk and
-  overall completeness remain fail-closed.
+- Wave-5g through Wave-5i offline products remain accepted on root. Live/UI/
+  vision/bulk and overall completeness remain fail-closed.
 - Wave-5j bank-line freeze is accepted offline
   (`wiki/wave_fivej_ticketed_writes_contract.md`,
-  `wiki/wave_fivej_freeze_independent_review.md`). Product leaf is separate;
-  do not treat freeze ACCEPT as product ACCEPT.
+  `wiki/wave_fivej_freeze_independent_review.md`). Product is merged on root
+  (`d86844f`, 238 tools / 166 offline rows) but independent product review is
+  still the gate before Wave-5k freeze authoring.
 - Recommended next offline freeze after Wave-5j product ACCEPT: Wave-5k
   singular `bankPayments` **create + update only** (2 clear ops / 4 tools).
-  Freeze-ready research handoff:
-  `.fractal/main.billy_complete/tmp/grok-research.md` (research44). Singular
-  DELETE stays red on reconfirmed unauth **405**. Exclude all bulk rows.
-  Primary documented mutable update field is `isVoided` (irreversible once
-  true). `cashSide` docs publish `debit` / `credit`.
-- Later probe-open candidates (not frozen here): `salesTaxPayments`,
-  `contactBalancePayments`, `invoiceLateFees` create+update; `invoiceReminders`
-  create; `salesTaxReturns` update; `users` update; `organizations`
-  create+update (risk gate). `transactions` method-open but property table
-  largely immutable — do not freeze from Supports alone.
+  Freeze page authoring package:
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research47 §5–§6).
+  Prior ACCEPT pages:
+  `wiki/wave_fivek_freeze_ready_research_independent_review.md`,
+  `wiki/wave_fivek_freeze_implementation_research_independent_review.md`,
+  `wiki/wave_fivek_freeze_authoring_readiness_research_independent_review.md`.
+  Singular DELETE stays red on reconfirmed unauth **405**. Exclude all bulk
+  rows. Primary documented mutable update field is `isVoided` (irreversible
+  once true). `cashSide` docs publish `debit` / `credit`.
+- Later probe-open candidates (not frozen here): `salesTaxPayments` (research47
+  §10 seed: `amount`/`side` readonly, `isVoided` update candidate),
+  `contactBalancePayments`, `invoiceLateFees` create+update;
+  `invoiceReminders` create; `salesTaxReturns` update; `users` update;
+  `organizations` create+update (risk gate). `transactions` method-open but
+  property table largely immutable — do not freeze from Supports alone.
