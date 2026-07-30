@@ -34,3 +34,23 @@ create/update tools), gated on independent freeze ACCEPT.
 2. After freeze ACCEPT: Codex Power four tools
    `api_organizations_{create,update}_{preview,execute}` only; green two inventory
    rows after tests; leave bulk red; keep `complete: false`.
+
+## Post-Mortem
+
+- Completed: research68 reconfirmed the public API body, organizations POST/PUT
+  authentication gates, DELETE-405 exclusion, and the exact future four-tool
+  surface without changing product code or coverage.
+- Independent review68 accepted this package as research and produced the
+  durable project-wiki record
+  `wiki/wave_fivep_product_ready_research_independent_review.md`.
+- Verified: root formatting, Ruff, Pyright, coverage-policy, credential/safety,
+  both wiki lints, and the 1,110-test non-live suite pass. No raw evidence,
+  credentials, records, screenshots, HAR files, or traces were retained in the
+  repository.
+- No confirmed review defect required a fix. The organizations-create cleanup
+  wording is knowingly wrong only on the currently red inventory row and must
+  change through the generator when a later product has real contract evidence;
+  changing it during research would be false qualification.
+- Next unresolved slice: the separate organizations freeze review must record
+  an authoritative ACCEPT before a Codex Power leaf may implement create/update;
+  the independent Wave-5o product review remains a separate formal gate.

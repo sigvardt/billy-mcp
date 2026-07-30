@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T11:38:54Z
+updated: 2026-07-30T11:51:07Z
 ---
 
 # billy_mcp
@@ -180,6 +180,8 @@ updated: 2026-07-30T11:38:54Z
 [[wave_fivep_candidate_write_research|wave_fivep_candidate_write_research]]: Cited official-doc and unauth method-gate research for five inventoried write candidates; recommend or block only, not freeze or product acceptance.
 
 [[wave_fivep_freeze_ready_research_independent_review|wave_fivep_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5p organizations create and update freeze-ready package; freeze page, product, live, UI, and completeness remain separate.
+
+[[wave_fivep_product_ready_research_independent_review|wave_fivep_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5p organizations create and update product-ready package; freeze independent ACCEPT and product remain separate gates.
 
 [[wave_fivep_ticketed_writes_contract|wave_fivep_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular organizations create and update ticketed writes; delete and bulk remain excluded.
 
