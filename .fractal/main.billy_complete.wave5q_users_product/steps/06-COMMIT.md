@@ -4,18 +4,7 @@ requires_approval: false
 
 ## Commit
 
-1. If the Completion Requirements section is non-empty and every requirement is
-   met, verify all children are finished or killed (`fractal node list`) -- do
-   not self-complete with active children. Then signal completion (if empty,
-   never self-complete): `fractal node finish --reason="<reason>"`.
-
-   After finishing, if your parent is the user (root) node, post a brief
-   sign-off to them -- what you accomplished, the final state, and any decision
-   the user owns:
-   `fractal radio send "<summary>" --parent --subject="<subject>" --priority=<0-10>`.
-   Fire-and-forget; do not wait for a reply.
-
-2. Commit: `fractal commit "<short lowercase summary>"` -- this checks scope,
+1. Commit: `fractal commit "<short lowercase summary>"` -- this checks scope,
    lints, stages, commits, and pushes (unless `--local` was passed to
    initialization). Fix and retry on lint failure. Hook reformats of project
    files are auto-retried once -- review what they changed (`git diff HEAD~`).
@@ -46,3 +35,10 @@ requires_approval: false
 
    Reserve `--force` for a true last resort -- it bypasses the scope check *and*
    lint.
+
+2. Only after the commit succeeds and the worktree is clean, if every
+   Completion Requirement is met, signal completion:
+   `fractal node finish --reason="Wave-5q users update offline product delivered"`.
+   Do not claim the separate Grok product independent review, live/UI/vision,
+   bulk, or overall completeness. Post the resulting offline handoff to the
+   parent through the node outbox; do not wait for a reply.

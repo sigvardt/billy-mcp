@@ -95,6 +95,8 @@ live, vision, UI, bulk, and `complete` must remain red/false.
 Keep your own memory current, report material progress or blockers over radio,
 and commit with `fractal commit`; do not push manually. If unexpected unrelated
 worktree changes appear, preserve them and report the collision to the parent.
+This focused leaf omits dedicated research and review steps: fold durable state
+and a brief plan post-mortem into EXECUTE before committing.
 
 ## Completion Requirements
 
