@@ -2225,7 +2225,7 @@
     },
     {
       "area": "bank_payments",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "void dedicated test resource via documented irreversible isVoided; independently verify",
       "contract_status": "documented",
       "contract_tested": false,
       "discovered": true,
