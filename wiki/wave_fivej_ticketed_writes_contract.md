@@ -1,7 +1,7 @@
 ---
 name: wave_fivej_ticketed_writes_contract
 title: Wave-5j bank-line ticketed-write contract
-desc: Cited offline contract for singular bank-line match, line, and subject-association ticketed writes awaiting independent freeze review.
+desc: Cited offline contract for singular bank-line match, line, and subject-association ticketed writes, accepted by independent Grok freeze review.
 tags: [billy, api, bank, writes, coverage]
 sources:
   - https://www.billy.dk/api/
