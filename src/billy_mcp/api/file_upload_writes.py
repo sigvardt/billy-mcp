@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import errno
 import hashlib
+import os
 import stat
 import threading
 from collections.abc import Mapping
@@ -260,8 +262,14 @@ class FileUploadService:
                 code=StableErrorCode.FILE_CHANGED,
                 message="File changed after preview; create a new preview before upload.",
             )
+        descriptor_or_error = _open_file_descriptor_beneath_roots(
+            prepared.identity, self._configuration.allowed_upload_roots
+        )
+        if isinstance(descriptor_or_error, ToolError):
+            return descriptor_or_error
         try:
-            file_bytes = prepared.identity.path.read_bytes()
+            with os.fdopen(descriptor_or_error, "rb") as source:
+                file_bytes = source.read()
         except OSError:
             return ToolError(
                 code=StableErrorCode.FILE_CHANGED,
@@ -392,6 +400,94 @@ def _identity_beneath_roots(path: Path, roots: tuple[Path, ...]) -> _FileIdentit
     if not any(canonical_path.is_relative_to(root) for root in roots):
         return _file_not_allowed()
     return _identity_for_path(canonical_path)
+
+
+def _open_file_descriptor_beneath_roots(
+    identity: _FileIdentity, roots: tuple[Path, ...]
+) -> int | ToolError:
+    """Open the previewed file once through no-follow configured-root descriptors."""
+
+    for root in roots:
+        try:
+            relative_path = identity.path.relative_to(root)
+        except ValueError:
+            continue
+        if not relative_path.parts:
+            return _file_not_allowed()
+        return _open_relative_file_descriptor(root, relative_path, identity)
+    return _file_not_allowed()
+
+
+def _open_relative_file_descriptor(
+    root: Path, relative_path: Path, identity: _FileIdentity
+) -> int | ToolError:
+    """Return one verified descriptor without following a root, directory, or file symlink."""
+
+    directory_descriptor: int | None = None
+    file_descriptor: int | None = None
+    try:
+        directory_descriptor = _open_directory_descriptor(root)
+        for component in relative_path.parts[:-1]:
+            next_directory_descriptor = _open_directory_descriptor(
+                component, dir_fd=directory_descriptor
+            )
+            _close_descriptor(directory_descriptor)
+            directory_descriptor = next_directory_descriptor
+        file_descriptor = os.open(
+            relative_path.parts[-1],
+            os.O_RDONLY | os.O_NOFOLLOW,
+            dir_fd=directory_descriptor,
+        )
+        metadata = os.fstat(file_descriptor)
+    except OSError as error:
+        if file_descriptor is not None:
+            _close_descriptor(file_descriptor)
+        if error.errno in {errno.ELOOP, errno.ENOTDIR}:
+            return _file_not_allowed()
+        return ToolError(
+            code=StableErrorCode.FILE_CHANGED,
+            message="File changed before upload; create a new preview before upload.",
+        )
+    finally:
+        if directory_descriptor is not None:
+            _close_descriptor(directory_descriptor)
+
+    if not stat.S_ISREG(metadata.st_mode):
+        _close_descriptor(file_descriptor)
+        return _file_not_allowed()
+    if metadata.st_size != identity.size or metadata.st_mtime_ns != identity.mtime_ns:
+        _close_descriptor(file_descriptor)
+        return ToolError(
+            code=StableErrorCode.FILE_CHANGED,
+            message="File changed after preview; create a new preview before upload.",
+        )
+    return file_descriptor
+
+
+def _open_directory_descriptor(path: str | Path, *, dir_fd: int | None = None) -> int:
+    """Open and validate one directory without following a symlink."""
+
+    descriptor = os.open(
+        path,
+        os.O_RDONLY | os.O_DIRECTORY | os.O_NOFOLLOW,
+        dir_fd=dir_fd,
+    )
+    try:
+        if not stat.S_ISDIR(os.fstat(descriptor).st_mode):
+            raise OSError("descriptor is not a directory")
+    except OSError:
+        _close_descriptor(descriptor)
+        raise
+    return descriptor
+
+
+def _close_descriptor(descriptor: int) -> None:
+    """Best-effort close for descriptors rejected before ownership transfers to the reader."""
+
+    try:
+        os.close(descriptor)
+    except OSError:
+        pass
 
 
 def _canonical_request(
