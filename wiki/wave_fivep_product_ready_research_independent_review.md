@@ -61,10 +61,10 @@ ACCEPT, bulk resolution, or overall completeness.
 
 ## Explicit non-acceptances
 
-- `wiki/wave_fivep_freeze_independent_review.md` freeze ACCEPT (page absent;
-  freeze contract page is on root as
-  `wiki/wave_fivep_ticketed_writes_contract.md` MD5
-  `2742eda7bafecd619aba5fa8ad0694c5` but is not accepted by this review)
+- Freeze acceptance is outside this review: at this research review's baseline
+  the independent-review page had not landed. It subsequently landed
+  separately as [[wave_fivep_freeze_independent_review]]; this research ACCEPT
+  neither grants nor redecides that verdict.
 - Organizations product tools or coverage greening
 - Wave-5o product independent ACCEPT as a formal review page (create row may be
   offline green on root; formal product review remains separate)
