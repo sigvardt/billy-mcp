@@ -15,6 +15,7 @@ from fastmcp import FastMCP
 from fastmcp.exceptions import ValidationError as FastMCPValidationError
 from pydantic import ValidationError
 
+import billy_mcp.api.file_upload_writes as file_upload_writes
 from billy_mcp.api.file_upload_writes import (
     FileUploadExecuteInput,
     FileUploadExecuteSuccess,
@@ -352,7 +353,7 @@ def test_execute_rejects_every_bound_file_identity_change(tmp_path: Path, change
     assert requests == []
 
 
-def test_execute_rejects_replacement_between_identity_check_and_read(
+def test_execute_rejects_changed_bytes_between_identity_check_and_descriptor_open(
     tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 ) -> None:
     target = write_safe_file(tmp_path, b"original")
@@ -360,14 +361,23 @@ def test_execute_rejects_replacement_between_identity_check_and_read(
         tmp_path, lambda request: pytest.fail(f"replaced file attempted HTTP: {request.url}")
     )
     preview = call_tool(server, "api_files_upload_preview", preview_arguments())
-    original_read_bytes = Path.read_bytes
+    original_open = file_upload_writes.os.open
+    replaced = False
 
-    def replace_before_read(path: Path) -> bytes:
-        if path == target.resolve():
+    def replace_before_terminal_open(
+        path: str | Path,
+        flags: int,
+        mode: int = 0o777,
+        *,
+        dir_fd: int | None = None,
+    ) -> int:
+        nonlocal replaced
+        if path == target.name and dir_fd is not None:
             target.write_bytes(b"replacement")
-        return original_read_bytes(path)
+            replaced = True
+        return original_open(path, flags, mode, dir_fd=dir_fd)
 
-    monkeypatch.setattr(Path, "read_bytes", replace_before_read)
+    monkeypatch.setattr(file_upload_writes.os, "open", replace_before_terminal_open)
 
     result = call_tool(
         server,
@@ -375,7 +385,95 @@ def test_execute_rejects_replacement_between_identity_check_and_read(
         {"confirmation_ticket": preview["confirmation_ticket"]},
     )
 
+    assert replaced
     assert result["code"] == StableErrorCode.FILE_CHANGED
+    assert requests == []
+
+
+def test_execute_rejects_same_digest_outside_symlink_between_identity_and_descriptor_open(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    body = b"same digest bytes"
+    target = write_safe_file(tmp_path, body)
+    outside = tmp_path.parent / f"{tmp_path.name}-outside.txt"
+    outside.write_bytes(body)
+    server, requests = make_server(
+        tmp_path, lambda request: pytest.fail(f"symlink escape attempted HTTP: {request.url}")
+    )
+    preview = call_tool(server, "api_files_upload_preview", preview_arguments())
+    original_open = file_upload_writes.os.open
+    replaced = False
+
+    def replace_before_terminal_open(
+        path: str | Path,
+        flags: int,
+        mode: int = 0o777,
+        *,
+        dir_fd: int | None = None,
+    ) -> int:
+        nonlocal replaced
+        if path == target.name and dir_fd is not None:
+            target.unlink()
+            target.symlink_to(outside)
+            replaced = True
+        return original_open(path, flags, mode, dir_fd=dir_fd)
+
+    monkeypatch.setattr(file_upload_writes.os, "open", replace_before_terminal_open)
+
+    result = call_tool(
+        server,
+        "api_files_upload_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+
+    assert replaced
+    assert result["code"] == StableErrorCode.FILE_NOT_ALLOWED
+    assert requests == []
+
+
+def test_execute_rejects_intermediate_symlink_race_before_descriptor_open(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    body = b"same digest bytes"
+    nested = tmp_path / "nested"
+    nested.mkdir()
+    target = nested / "safe.txt"
+    target.write_bytes(body)
+    outside_directory = tmp_path.parent / f"{tmp_path.name}-outside"
+    outside_directory.mkdir()
+    (outside_directory / target.name).write_bytes(body)
+    server, requests = make_server(
+        tmp_path, lambda request: pytest.fail(f"intermediate symlink attempted HTTP: {request.url}")
+    )
+    preview = call_tool(server, "api_files_upload_preview", preview_arguments("nested/safe.txt"))
+    original_open = file_upload_writes.os.open
+    replaced = False
+
+    def replace_before_directory_open(
+        path: str | Path,
+        flags: int,
+        mode: int = 0o777,
+        *,
+        dir_fd: int | None = None,
+    ) -> int:
+        nonlocal replaced
+        if path == nested.name and dir_fd is not None:
+            target.unlink()
+            nested.rmdir()
+            nested.symlink_to(outside_directory, target_is_directory=True)
+            replaced = True
+        return original_open(path, flags, mode, dir_fd=dir_fd)
+
+    monkeypatch.setattr(file_upload_writes.os, "open", replace_before_directory_open)
+
+    result = call_tool(
+        server,
+        "api_files_upload_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+
+    assert replaced
+    assert result["code"] == StableErrorCode.FILE_NOT_ALLOWED
     assert requests == []
 
 
