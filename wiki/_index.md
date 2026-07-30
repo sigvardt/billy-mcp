@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T18:48:41Z
+updated: 2026-07-30T18:42:53Z
 ---
 
 # billy_mcp
@@ -241,8 +241,6 @@ updated: 2026-07-30T18:48:41Z
 
 [[wave_fivesa_invoice_logs_research_independent_review|wave_fivesa_invoice_logs_research_independent_review]]: Authoritative Grok ACCEPT-as-research for the Wave-5s-A invoiceLogs list offline contract handoff at parent baseline 97f7e12; product not yet present; no coverage greening.
 
-[[wave_fivesb_files_upload_product_codex_fallback_review|wave_fivesb_files_upload_product_codex_fallback_review]]: Non-authoritative static Codex Power review of the Wave-5s-B files-upload product at root baseline 98484f3; fails on an exact-byte and symlink TOCTOU before the mandatory Grok audit.
-
 [[wave_fivesb_files_upload_product_ready_research|wave_fivesb_files_upload_product_ready_research]]: Product-ready offline handoff for ticketed binary POST /files special and dual-row create alias; path/digest/size/mtime binding; no coverage greening.
 
 [[wave_fivesb_files_upload_product_ready_research_independent_review|wave_fivesb_files_upload_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for ticketed binary POST /files special and dual-row create alias; product and completeness remain open.
@@ -258,6 +256,8 @@ updated: 2026-07-30T18:48:41Z
 [[wave_fivesc_invoice_email_delivery_research|wave_fivesc_invoice_email_delivery_research]]: Cited offline freeze for ticketed POST invoice emails and invoiceDeliveries specials; high side effect; no coverage greening.
 
 [[wave_fivesc_invoice_email_delivery_research_independent_review|wave_fivesc_invoice_email_delivery_research_independent_review]]: Authoritative root Grok acceptance of the cited offline freeze for ticketed invoice email and invoiceDeliveries specials; product and completeness remain open.
+
+[[wave_fivesc_research83_independent_review|wave_fivesc_research83_independent_review]]: Authoritative root Grok acceptance of the research83 implementation-ready reconfirm for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
