@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-30T03:50:00Z
+updated: 2026-07-30T03:58:00Z
 ---
 
 # state
@@ -24,23 +24,24 @@ updated: 2026-07-30T03:50:00Z
 - **Wave-5k freeze page is still ABSENT.** Codex Power may author
   `wiki/wave_fivek_ticketed_writes_contract.md` (create+update only; delete
   excluded on 405). Product module still **absent**.
-- Research49 wrote **product-ready** handoff at
-  `.fractal/main.billy_complete/tmp/grok-research.md` (four-tool product recipe;
-  registry 242 / coverage 168 offline targets). Product-ready independent review
-  and freeze page are still required before product code.
+- Research49 product-ready handoff **ACCEPT** offline (root review in
+  `.fractal/main.billy_complete/tmp/grok-review.md`). Four-tool recipe validated;
+  product still blocked until freeze page + freeze ACCEPT. The original Grok
+  wiki-twin child could not authenticate before editing; the policy-required
+  Codex fallback review and the Codex freeze-contract child are active.
 - Coverage: implemented 166, contract_tested 166, live 0, vision 0, `complete: false`.
   Clear singular CUD rows still red: **43**.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official docs reconfirmed for research49: ETag `hsisik4g9p3603`, MD5
-  `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes (byte-identical to research48).
+- Official docs reconfirmed for research49 review: ETag `hsisik4g9p3603`, MD5
+  `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes (byte-identical to research49 HTML).
 - Unauth probes reconfirmed: bankPayments POST/PUT **401**; DELETE **405** with
   message “Resource at `bankPayments` does not support deleting a single record.”
 - salesTaxPayments and contactBalancePayments POST/PUT 401, DELETE 405 (Wave-5l seeds).
 - No false coverage greens; registry 238; bankPayments write tools absent; freeze page absent.
-- No coverage greens from research. No full-mode claim.
+- Product-ready handoff ACCEPT is not product or freeze ACCEPT. No full-mode claim.
 
 ## Review decisions (authoritative)
 
@@ -58,24 +59,24 @@ updated: 2026-07-30T03:50:00Z
   research: **ACCEPT** offline handoffs (package content only for package page).
 - Wave-5k freeze authoring authority (research48): **ACCEPT** — opens offline
   freeze-page authoring for bankPayments create+update only.
-- Wave-5k product-ready research (research49): **written; independent review pending**.
+- Wave-5k product-ready research (research49): **ACCEPT offline handoff only** (root independent review; product still blocked on freeze page + freeze ACCEPT).
 - Wave-5k freeze page / product: **not authored**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Codex Power authors `wiki/wave_fivek_ticketed_writes_contract.md` from
-   research48 §5–§6 (reconfirmed in research49); independent freeze review.
-2. Independent ACCEPT of research49 product-ready handoff.
-3. Four-tool product leaf (registry 242 / coverage 168 offline; delete stays red).
-4. Later freezes: salesTaxPayments / contactBalancePayments / invoiceLateFees
+1. Codex Power authors `wiki/wave_fivek_ticketed_writes_contract.md` (create+update
+   only; delete excluded on 405); then independent freeze review ACCEPT.
+2. Four-tool product leaf after freeze ACCEPT (research49 product-ready root ACCEPT
+   already met) → registry 242 / coverage 168 offline; delete stays red.
+3. Later freezes: salesTaxPayments / contactBalancePayments / invoiceLateFees
    create+update; invoiceReminders create; salesTaxReturns update; users update;
    orgs with risk gate; transactions only after readonly resolution.
-5. Blocked offline (405 / readonly): accountNatures, postings, balanceModifiers,
+4. Blocked offline (405 / readonly): accountNatures, postings, balanceModifiers,
    contactBalancePostings, geo CUD, bankPayments/salesTaxPayments/
    contactBalancePayments delete, invoiceReminderAssociations create/update,
    files JSON as binary special.
-6. Bulk 92, UI/auth/vision, live CUD still open.
+5. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
@@ -97,5 +98,5 @@ updated: 2026-07-30T03:50:00Z
 - Wave-5k freeze page package research ACCEPT: `wiki/wave_fivek_freeze_page_authoring_package_research_independent_review.md`
 - Wave-5k freeze authoring authority ACCEPT: `wiki/wave_fivek_freeze_authoring_authority_research_independent_review.md`
 - Research scratch: `.fractal/main.billy_complete/tmp/grok-research.md` (research49 product-ready)
-- Review scratch: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Review scratch: `.fractal/main.billy_complete/tmp/grok-review.md` (research49 product-ready ACCEPT)
 - Offline probe rules: `wiki/offline_write_probe_rules.md`
