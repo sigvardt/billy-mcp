@@ -1,13 +1,15 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
-## Independent review
+## Fallback review
 
-Review the current iteration independently. Do not implement production code.
-Write findings to `$NODE_DIR/tmp/grok-review.md`, replacing the prior
-iteration's file.
+Review the current iteration as the authorised Codex Power fallback after
+Grok's pre-edit authentication failure. Do not implement production code.
+Write findings to `$NODE_DIR/tmp/codex-power-review.md`, replacing the prior
+iteration's file. State plainly that this check is not an independent Grok
+review and cannot satisfy any later Grok-review gate.
 
 Check:
 

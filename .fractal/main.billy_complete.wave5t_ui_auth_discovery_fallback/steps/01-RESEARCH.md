@@ -1,6 +1,6 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
 ## Research
@@ -15,8 +15,10 @@ plans, and unresolved review findings. Focus on red, unknown, ambiguous, or
 plan-gated rows. Check whether Billy documentation changed since the last
 recorded source review.
 
-Write a concise cited brief to `$NODE_DIR/tmp/grok-research.md`, replacing the
-prior iteration's file. Include:
+Write a concise cited brief to `$NODE_DIR/tmp/codex-power-research.md`,
+replacing the prior iteration's file. This is the authorised fallback after
+Grok's pre-edit authentication failure; it must identify itself as such and
+must not be represented as the required future Grok audit. Include:
 
 1. Exact official source links and access dates.
 2. Endpoint, method, request, response, filter, pagination, and error evidence.
