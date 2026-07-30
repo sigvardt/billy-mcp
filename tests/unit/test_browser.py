@@ -601,9 +601,7 @@ def test_auth_login_start_returns_auth_required_for_unresolvable_reference(tmp_p
     assert page.closed
 
 
-@pytest.mark.parametrize(
-    "drift", ["route", "duplicate", "hidden", "missing", "legacy_page_title"]
-)
+@pytest.mark.parametrize("drift", ["route", "duplicate", "hidden", "missing", "legacy_page_title"])
 def test_auth_login_start_rejects_signature_drift_before_resolution(
     tmp_path: Path, drift: str
 ) -> None:
