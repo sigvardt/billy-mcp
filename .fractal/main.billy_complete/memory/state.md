@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-30T02:40:00Z
+updated: 2026-07-30T02:45:00Z
 ---
 
 # state
@@ -17,17 +17,18 @@ updated: 2026-07-30T02:40:00Z
 - Root has Wave-5i product: **220** `api_*` tools; offline coverage **157**. Product review **ACCEPT** at `wiki/wave_fivei_product_independent_review.md`.
 - Wave-5j freeze page is merged at root merge **`0db66d0`** (`wiki/wave_fivej_ticketed_writes_contract.md`). Independent freeze review **ACCEPT** at `wiki/wave_fivej_freeze_independent_review.md`.
 - Wave-5j product-ready research is independently **ACCEPT**ed at `wiki/wave_fivej_product_ready_research_independent_review.md`.
-- Wave-5j product is **not** on root (`bank_line_writes.py` absent). Recovery leaf `wave5j_bank_line_product_recovery` is active and has uncommitted `bank_line_writes.py` plus tests in its worktree.
+- Wave-5j product is **not** on root (`bank_line_writes.py` absent). Recovery leaf `wave5j_bank_line_product_recovery` has committed candidate `129890e`; root committed-byte review and merge are pending.
 - Wave-5k freeze-ready research (research44) is independently **ACCEPT**ed at `wiki/wave_fivek_freeze_ready_research_independent_review.md`.
 - Wave-5k freeze-implementation research (research45) is recorded at `.fractal/main.billy_complete/tmp/grok-research.md` (full property table, freeze table §5.1, reconfirmed probes). Freeze page not authored.
+- Wave-5k freeze-implementation research independent review: **ACCEPT** handoff only at `wiki/wave_fivek_freeze_implementation_research_independent_review.md`. Full findings: `.fractal/main.billy_complete/tmp/grok-review.md`.
 - Coverage: implemented 157, contract_tested 157, live 0, vision 0, `complete: false`. Clear red CUD: 52.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official docs reconfirmed research45: ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes (byte-identical to research44).
-- Unauth probes reconfirmed: bankPayments POST/PUT **401**; DELETE **405** `METHOD_NOT_ALLOWED` with message “Resource at `bankPayments` does not support deleting a single record.”
-- No coverage greens from research. No full-mode claim.
+- Official docs reconfirmed independently for review: ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, 147934 bytes (byte-identical to research45).
+- Unauth probes reconfirmed independently: bankPayments POST/PUT **401**; DELETE **405** `METHOD_NOT_ALLOWED` with message “Resource at `bankPayments` does not support deleting a single record.”
+- No coverage greens from research or this review. No full-mode claim.
 
 ## Review decisions (authoritative)
 
@@ -40,7 +41,7 @@ updated: 2026-07-30T02:40:00Z
 - Wave-5j product-ready research: **ACCEPT** offline handoff only.
 - Wave-5j product: **not present / not accepted**.
 - Wave-5k freeze-ready research (research44): **ACCEPT** offline freeze-drafting handoff only (`wiki/wave_fivek_freeze_ready_research_independent_review.md`).
-- Wave-5k freeze-implementation research (research45): **cited handoff written**; independent review of this pass not yet recorded.
+- Wave-5k freeze-implementation research (research45): **ACCEPT** offline freeze-page authoring handoff only (`wiki/wave_fivek_freeze_implementation_research_independent_review.md`).
 - Wave-5k freeze / product: **not authored**.
 - Overall completeness: **FAIL**.
 
@@ -66,5 +67,7 @@ updated: 2026-07-30T02:40:00Z
 - Wave-5j freeze contract: `wiki/wave_fivej_ticketed_writes_contract.md`
 - Wave-5j product-ready research ACCEPT: `wiki/wave_fivej_product_ready_research_independent_review.md`
 - Wave-5k freeze-ready research ACCEPT: `wiki/wave_fivek_freeze_ready_research_independent_review.md`
+- Wave-5k freeze-implementation research ACCEPT: `wiki/wave_fivek_freeze_implementation_research_independent_review.md`
+- Review scratch: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Research scratch: `.fractal/main.billy_complete/tmp/grok-research.md`
 - Offline probe rules: `wiki/offline_write_probe_rules.md`
