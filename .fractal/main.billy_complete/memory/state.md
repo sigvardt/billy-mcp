@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T06:20:59Z
-updated: 2026-07-30T07:43:00Z
+updated: 2026-07-30T07:56:00Z
 ---
 
 # state
@@ -17,35 +17,35 @@ updated: 2026-07-30T07:43:00Z
 - Root registry **246** `api_*` tools. Offline coverage **170** implemented + contract_tested. Live/vision still 0. `complete: false`.
 - Wave-5k freeze and product: ACCEPT offline.
 - Wave-5l freeze ACCEPT: `wiki/wave_fivel_freeze_independent_review.md` (contract MD5 `3c49c4f41f3d9485a177a6ee643db412`).
-- Wave-5l product is on root (`sales_tax_payment_writes.py`); offline create+update green. Product independent review ACCEPT is still open (review child active).
-- Wave-5m freeze page on root: `wiki/wave_fivem_ticketed_writes_contract.md` (content MD5 `b42947fb2c3fbfce6f22fbc4f595c63b`).
-- Wave-5m freeze independent review: **ACCEPT** at `wiki/wave_fivem_freeze_independent_review.md` (full findings `.fractal/main.billy_complete/tmp/grok-review.md`).
-- Wave-5m product-ready research: ACCEPT as handoff (research57 in `tmp/grok-research.md`). Product tools still absent; product leaf authorised under freeze ACCEPT.
+- Wave-5l product is on root (`sales_tax_payment_writes.py`); offline create+update green. Codex fallback product ACCEPT at `wiki/wave_fivel_product_codex_fallback_review.md`; required Grok product gate may still be pending separately and does not block Wave-5m product.
+- Wave-5m freeze page on root: `wiki/wave_fivem_ticketed_writes_contract.md` (file MD5 `fcb0e58742c8abc8ca9078859bb74eb8`).
+- Wave-5m freeze independent review: **ACCEPT** at `wiki/wave_fivem_freeze_independent_review.md`.
+- Wave-5m product-ready research: research58 in `tmp/grok-research.md` (docs fingerprint unchanged; unauth POST/PUT 401, DELETE 405 reconfirmed). Product tools still absent; product leaf is authorised under freeze ACCEPT.
 - bankPayments / salesTaxPayments create+update offline-qualified; deletes 405 red; bulk ambiguous empty.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 (review57 reconfirm).
-- Unauth: contactBalancePayments POST/PUT **401**, DELETE **405** reconfirmed.
+- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 (research58 reconfirm).
+- Unauth: contactBalancePayments POST/PUT **401**, DELETE **405** reconfirmed (top-level `errorCode` / `errorMessage`).
 - Coverage honesty: implemented/contract_tested **170**, live/vision **0**, `complete: false`. No false greens.
 
 ## Review decisions (authoritative)
 
 - Wave-5g through Wave-5k freeze/product: **ACCEPT** offline where recorded.
 - Wave-5l freeze page: **ACCEPT** offline.
-- Wave-5l product independent: **not accepted** yet (open).
-- Wave-5m freeze page: **ACCEPT** offline (MD5 `b42947fb2c3fbfce6f22fbc4f595c63b`).
+- Wave-5l product: Codex fallback ACCEPT recorded; Grok product gate still pending if not merged as authoritative.
+- Wave-5m freeze page: **ACCEPT** offline.
 - Wave-5m product: **not accepted** (not implemented).
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Spawn/run Wave-5m product leaf (four tools; +2 → 172 offline, tools 250) under freeze ACCEPT.
-2. Close Wave-5l product independent review ACCEPT.
-3. Later freezes: invoiceLateFees create+update; invoiceReminders create only; remaining blocked CUD.
-4. Bulk 92, UI/auth/vision, live CUD still open.
-5. Fix contactBalancePayments.create cleanup text when greening (no singular delete).
+1. Spawn/run Wave-5m product leaf (four tools; +2 → 172 offline, tools 250) under freeze ACCEPT; research handoff is research58.
+2. When greening create row, fix cleanup text away from “delete dedicated test resource” (singular DELETE unsupported).
+3. Close or leave redundant freeze-review children; freeze gate is already closed.
+4. Later freezes: invoiceLateFees create+update; invoiceReminders create only; remaining blocked CUD.
+5. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
@@ -56,8 +56,8 @@ updated: 2026-07-30T07:43:00Z
 
 ## References
 
-- Review: `.fractal/main.billy_complete/tmp/grok-review.md`
-- Research: `.fractal/main.billy_complete/tmp/grok-research.md`
+- Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research58)
+- Probes: `.fractal/main.billy_complete/tmp/write-probes-research58.json`
 - Wave-5m freeze ACCEPT: `wiki/wave_fivem_freeze_independent_review.md`
 - Wave-5m freeze contract: `wiki/wave_fivem_ticketed_writes_contract.md`
 - Offline probe rules: `wiki/offline_write_probe_rules.md`
