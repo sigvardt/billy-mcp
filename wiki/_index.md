@@ -249,6 +249,10 @@ updated: 2026-07-30T17:32:30Z
 
 [[wave_fivesb_files_upload_research_codex_fallback_review|wave_fivesb_files_upload_research_codex_fallback_review]]: Non-authoritative Codex Power review accepting the cited offline files-upload research handoff only; product and mandatory Grok audit remain open.
 
+[[wave_fivesc_invoice_email_delivery_research|wave_fivesc_invoice_email_delivery_research]]: Cited offline freeze for ticketed POST invoice emails and invoiceDeliveries specials; high side effect; no coverage greening.
+
+[[wave_fivesc_invoice_email_delivery_research_independent_review|wave_fivesc_invoice_email_delivery_research_independent_review]]: Authoritative root Grok acceptance of the cited offline freeze for ticketed invoice email and invoiceDeliveries specials; product and completeness remain open.
+
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
 [[wave_four_freeze_independent_review|wave_four_freeze_independent_review]]: Independent Grok review of the Wave-4 read contract freeze and root offline baseline.
