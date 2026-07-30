@@ -1,11 +1,11 @@
 {
-  "title": "Wave5L Product Review Grok",
+  "title": "Wave5L Product Review Codex Fallback",
   "project": ".",
   "root": "main",
   "scope": null,
   "base": "main.billy_complete",
   "meta": null,
-  "agent": "grok",
+  "agent": "codex-power",
   "provider": null,
   "model": null,
   "effort": null,

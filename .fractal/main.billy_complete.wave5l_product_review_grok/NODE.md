@@ -45,10 +45,13 @@ Common commands:
 
 ## Instructions
 
-Perform an independent Grok product review of the **merged** Wave-5l
+Perform a Codex Power fallback product review of the **merged** Wave-5l
 sales-tax-payment slice on `main.billy_complete` at root commit `6bf85ca`.
-Your review is the required product gate; do not review an unmerged child
-branch and do not implement or repair production code.
+The previous Grok attempt failed before task actions because its CLI was
+unauthenticated. This is the routing-policy retry with the other permitted
+agent. It is a static fallback audit only: it must not claim to satisfy the
+required independent Grok product gate. Do not review an unmerged child branch
+and do not implement or repair production code.
 
 Review only the product surface introduced from the prior root baseline:
 
@@ -85,13 +88,15 @@ Required review checks:
 3. Review the product from a clean `git archive` and run focused tests plus the
    non-live root suite. Do not supply tokens, perform live tests, create test
    data, use browser automation, or retain raw review evidence.
-4. Write only `wiki/wave_fivel_product_independent_review.md` (and its derived
-   wiki index entry) as the durable non-sensitive verdict. It must state an
-   explicit ACCEPT or FAIL. An ACCEPT is offline product acceptance only and
-   must list the remaining red gates; a FAIL must name actionable defects.
-   Do not alter source, tests, coverage inventory/state, the Wave-5m contract,
-   or any other wiki page. Report the verdict, cited evidence, test command
-   result, reviewed commit, and any artifact-purge confirmation through radio.
+4. Write only `wiki/wave_fivel_product_codex_fallback_review.md` (and its
+   derived wiki index entry) as the durable non-sensitive verdict. It must
+   state an explicit ACCEPT or FAIL and must explicitly say that required Grok
+   independent review remains pending. An ACCEPT is static fallback evidence
+   only and must list the remaining red gates; a FAIL must name actionable
+   defects. Do not alter source, tests, coverage inventory/state, the Wave-5m
+   contract, or any other wiki page. Report the verdict, cited evidence, test
+   command result, reviewed commit, and any artifact-purge confirmation through
+   radio.
 
 The Wave-5m contract-authoring sibling is independent. Do not gate your own
 completion on its progress and do not author or review that page.
@@ -100,8 +105,9 @@ completion on its progress and do not author or review that page.
 
 Finish only when all of the following are true:
 
-1. `wiki/wave_fivel_product_independent_review.md` exists on this branch with
-   an explicit ACCEPT or FAIL and direct official-document citation.
+1. `wiki/wave_fivel_product_codex_fallback_review.md` exists on this branch
+   with an explicit ACCEPT or FAIL, a direct official-document citation, and an
+   explicit statement that the required Grok gate remains pending.
 2. The record proves the exact four-tool surface against the frozen contract,
    reports the clean-archive and root test results, and states that live, UI,
    vision, bulk, delete, and completeness remain fail-closed.
@@ -111,7 +117,7 @@ Finish only when all of the following are true:
 4. `wiki update` and `wiki lint` for the project wiki pass, the focused review
    tests and `BILLY_TEST_MODE=commit bash "$NODE_DIR/scripts/test.sh"` pass,
    and the review record is committed and reported through the outbox.
-5. The node has run `fractal node finish --reason="Wave-5l independent product review recorded"`
+5. The node has run `fractal node finish --reason="Wave-5l Codex fallback product review recorded"`
    after its own deliverable is verifiably complete; it must not wait for root
    merge or sign-off.
 
