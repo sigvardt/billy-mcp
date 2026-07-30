@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T08:33:21Z
+updated: 2026-07-30T08:54:46Z
 ---
 
 # billy_mcp
@@ -150,6 +150,8 @@ updated: 2026-07-30T08:33:21Z
 [[wave_fivem_product_independent_review|wave_fivem_product_independent_review]]: Authoritative offline Grok ACCEPT for singular contactBalancePayments create and update ticketed write tools on root; live and UI remain red.
 
 [[wave_fivem_ticketed_writes_contract|wave_fivem_ticketed_writes_contract]]: Cited offline-only contract for singular Billy contactBalancePayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded, with singular delete excluded on documented 405.
+
+[[wave_fiven_ticketed_writes_contract|wave_fiven_ticketed_writes_contract]]: Cited offline contract that freezes only singular invoiceLateFees create and update ticketed writes; delete and bulk operations are excluded.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
