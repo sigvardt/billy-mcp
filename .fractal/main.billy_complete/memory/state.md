@@ -18,7 +18,9 @@ updated: 2026-07-30T16:08:00Z
 - Wave-5q freeze, freeze IR, product, and product IR are all **ACCEPT offline** on root.
 - Wave-5r freeze page on root: `wiki/wave_fiver_ticketed_writes_contract.md` content MD5 **`078aca13828b5e0d71b454c1aa2dc00f`**.
 - Wave-5r freeze independent review: **ACCEPT** (`wiki/wave_fiver_freeze_independent_review.md`).
-- Wave-5r product leaf `main.billy_complete.wave5r_sales_tax_returns_product` **completed** at `cf33343` (two tools, leaf coverage 179/179, registry 264). Root has **no** product merge yet.
+- Wave-5r salesTaxReturns update is root-integrated from leaf `cf33343`: two typed
+  tools, 179 implemented + contract-tested rows, and a 264-tool registry.
+  Independent Grok product acceptance remains pending.
 - Research77 residual ranking delivered: official docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` byte-identical; unauth residual matrix reconfirmed; Wave-5s specials map on wiki.
 - UI all red (339); bulk 92 empty-tool red; clear not-impl 31 on root; no live token; no UI credentials.
 
@@ -26,7 +28,8 @@ updated: 2026-07-30T16:08:00Z
 
 - Freeze MD5 `078aca13828b5e0d71b454c1aa2dc00f` verified; freeze IR ACCEPT stands.
 - Official docs body is byte-identical to research76; no Supports or property drift.
-- Coverage honesty on root: 178/178/0/0; complete false; `api.salesTaxReturns.update` remains red until product merges.
+- Coverage honesty on root: 179/179/0/0; `complete: false`. The product is
+  offline-only and has no live or vision evidence.
 - Research does not green coverage.
 
 ## Review decisions (authoritative)
@@ -35,20 +38,22 @@ updated: 2026-07-30T16:08:00Z
 - Wave-5r research packages: **ACCEPT as research**.
 - Wave-5r freeze independent: **ACCEPT**.
 - Wave-5r product implementation research: **ACCEPT as research**.
-- Wave-5r product: **not accepted** (not merged on root).
+- Wave-5r product: **not accepted** (root-integrated implementation awaits its
+  independent Grok review).
 - Wave-5s residual/specials research: **research delivered** (not product).
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Root: merge Wave-5r product tip `cf33343` to 179 offline / 264 tools.
-2. Grok: Wave-5r product independent review after merge.
-3. Codex Power Wave-5s-A: `api_invoice_logs_list` (special read).
+1. Grok: Wave-5r salesTaxReturns update product independent review.
+2. Codex Power Wave-5s-A: `api_invoice_logs_list` (special read), only after
+   the product review gives an offline ACCEPT.
 4. Later: files upload special, invoice email/delivery specials, 405 false friends (live/docs), transactions (live), bulk 92, UI/auth/vision.
 
 ## Evidence boundaries
 
-- Leaf product claim is not root product ACCEPT.
+- Root product integration is not product ACCEPT, live qualification, or
+  coverage completeness.
 - Freeze IR ACCEPT is not product ACCEPT, live qualification, or greening.
 - 405 overrides Supports offline; DELETE 200 meta-only is not cleanup proof.
 - Do not green coverage from research alone.
