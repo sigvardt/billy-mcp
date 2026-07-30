@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T12:30:21Z
+updated: 2026-07-30T12:43:12Z
 ---
 
 # billy_mcp
@@ -190,6 +190,8 @@ updated: 2026-07-30T12:30:21Z
 [[wave_fivep_product_ready_research_independent_review|wave_fivep_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5p organizations create and update product-ready package; freeze independent ACCEPT and product remain separate gates.
 
 [[wave_fivep_ticketed_writes_contract|wave_fivep_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular organizations create and update ticketed writes; delete and bulk remain excluded.
+
+[[wave_fiveq_ticketed_writes_contract|wave_fiveq_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular users update; create, delete, bulk, product, live, UI, and completeness remain excluded.
 
 [[wave_fiveq_users_freeze_ready_research|wave_fiveq_users_freeze_ready_research]]: Cited offline freeze-ready package for singular users update ticketed writes; create, delete, bulk, product, live, UI, and completeness remain separate.
 
