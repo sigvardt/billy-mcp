@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from enum import StrEnum
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
@@ -41,6 +41,20 @@ class ToolError(BaseModel):
     code: StableErrorCode
     message: str
     details: dict[str, Any] = Field(default_factory=dict)
+
+
+class AuthStatusInput(BaseModel):
+    """Empty, strict input boundary for the read-only browser session check."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class AuthStatusSuccess(BaseModel):
+    """The one browser-authentication state verified by the login signature."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal[StableErrorCode.AUTH_REQUIRED] = StableErrorCode.AUTH_REQUIRED
 
 
 class CoverageStatus(BaseModel):

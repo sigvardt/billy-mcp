@@ -58,6 +58,7 @@ from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.user_writes import register_user_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
+from billy_mcp.browser import AuthStatusChecker, BrowserRuntime
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
 from billy_mcp.confirmations import ConfirmationStore
@@ -67,10 +68,14 @@ from billy_mcp.coverage import (
     GeneratedCoverageStatus,
     load_coverage_report,
 )
-from billy_mcp.models import ToolError
+from billy_mcp.models import AuthStatusInput, AuthStatusSuccess, ToolError
 
 
-def create_server(repository_root: Path | None = None) -> FastMCP:
+def create_server(
+    repository_root: Path | None = None,
+    *,
+    auth_status_checker: AuthStatusChecker | None = None,
+) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
     root = repository_root or Path.cwd()
@@ -78,6 +83,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     client = BillyHttpClient(configuration.resolve_api_token)
     confirmations = ConfirmationStore()
     write_protocol = WriteProtocolService(client, confirmations)
+    checker = auth_status_checker or BrowserRuntime(configuration.browser_profile)
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -98,12 +104,22 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
         except CoverageLoadError as failure:
             return failure.error
 
+    async def auth_status() -> AuthStatusSuccess | ToolError:
+        """Check only the known headless Billy login state without taking action."""
+
+        AuthStatusInput()
+        return await checker.auth_status()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
     server.tool(name="coverage_report", description="Read typed Billy MCP coverage report rows.")(
         coverage_report
     )
+    server.tool(
+        name="auth_status",
+        description="Read the narrowly verified headless Billy authentication status.",
+    )(auth_status)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
