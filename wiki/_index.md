@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T15:40:16Z
+updated: 2026-07-30T15:51:05Z
 ---
 
 # billy_mcp
@@ -214,6 +214,8 @@ updated: 2026-07-30T15:40:16Z
 [[wave_fiver_freeze_independent_review|wave_fiver_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular salesTaxReturns update ticketed writes (create, singular delete, bulk, live, UI, vision, and completeness excluded).
 
 [[wave_fiver_freeze_ir_ready_research|wave_fiver_freeze_ir_ready_research]]: Cited re-verification that the Wave-5r freeze page is on root and ready for independent freeze review; product remains blocked until freeze IR ACCEPT; no coverage greening.
+
+[[wave_fiver_product_implementation_research|wave_fiver_product_implementation_research]]: Cited post-freeze-IR product map for singular salesTaxReturns update ticketed writes; product source still absent; no coverage greening from research.
 
 [[wave_fiver_sales_tax_returns_freeze_ready_research|wave_fiver_sales_tax_returns_freeze_ready_research]]: Cited offline freeze-ready package for singular salesTaxReturns update ticketed writes; create, delete, bulk, product, live, UI, and completeness remain separate.
 
