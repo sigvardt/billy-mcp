@@ -11563,7 +11563,7 @@
     },
     {
       "area": "users",
-      "cleanup": "restore prior test state",
+      "cleanup": "must read and restore prior non-production user state via PUT before greening; singular DELETE is method-closed (405)",
       "contract_status": "documented",
       "contract_tested": false,
       "discovered": true,
@@ -11588,8 +11588,8 @@
         "changed_records[]",
         "meta.deletedRecords"
       ],
-      "sensitivity": "medium",
-      "side_effects": "updates user",
+      "sensitivity": "high",
+      "side_effects": "high: updates user PII and privilege flags",
       "source_kind": "clear",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"

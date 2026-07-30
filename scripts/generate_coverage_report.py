@@ -939,6 +939,12 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
             cleanup = (
                 "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
             )
+        if resource == "users" and operation == "update":
+            side_effects = "high: updates user PII and privilege flags"
+            cleanup = (
+                "must read and restore prior non-production user state via PUT before "
+                "greening; singular DELETE is method-closed (405)"
+            )
         if resource == "files" and operation == "create":
             row = base_api_row(
                 row_id="api.files.create",

@@ -138,6 +138,14 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         assert by_id[row_id]["cleanup"] == (
             "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
         )
+    assert by_id["api.users.update"]["sensitivity"] == "high"
+    assert by_id["api.users.update"]["side_effects"] == (
+        "high: updates user PII and privilege flags"
+    )
+    assert by_id["api.users.update"]["cleanup"] == (
+        "must read and restore prior non-production user state via PUT before "
+        "greening; singular DELETE is method-closed (405)"
+    )
 
     offline_evidence = generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE
     for row in operations:

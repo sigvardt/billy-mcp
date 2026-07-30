@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T11:33:24Z
-updated: 2026-07-30T12:52:30Z
+updated: 2026-07-30T13:07:00Z
 ---
 
 # state
@@ -14,57 +14,56 @@ updated: 2026-07-30T12:52:30Z
 ## Current state
 
 - Wave-5c through Wave-5p write modules are merged into root; one shared confirmation store and write protocol.
-- Root registry offline coverage **177** implemented + contract_tested. Live/vision **0**. `complete: false`.
-- Wave-5o freeze, product, and product independent review are **ACCEPT**.
-- Wave-5p freeze, product, and product independent review are **ACCEPT** (organizations create+update, four tools).
-- Wave-5q freeze page is **on root** (`wiki/wave_fiveq_ticketed_writes_contract.md` MD5 `c53717468aff0406799feca225a00728`). Freeze independent review is **not landed**.
-- Wave-5q freeze-ready research and research independent review are **ACCEPT as research**.
-- Wave-5q **product-ready research** package is written (research71): `tmp/grok-research.md` and `wiki/wave_fiveq_users_product_ready_research.md`. Not freeze ACCEPT, not product.
-- Research71 docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes) reconfirmed byte-identical to research70; users PUT 401 / POST+DELETE 405 unchanged.
+- Root offline coverage **177** implemented + contract_tested. Live/vision **0**. `complete: false`.
+- Wave-5o and Wave-5p freeze + product + product independent review are **ACCEPT**.
+- Wave-5q freeze page is **on root** (MD5 `c53717468aff0406799feca225a00728`). Its formal Grok freeze independent review is **ACCEPT** at child commit `fc493dc`, but the wiki page is not yet merged to root.
+- Wave-5q freeze-ready research: **ACCEPT as research**.
+- Wave-5q product-ready research: parent review71 and the completed Grok child review **ACCEPT as research** at `b9f3a40`; its formal wiki IR page is not yet merged to root.
+- Research71 / review71 docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes). Users PUT 401; POST/DELETE 405. No users write tools in source.
+- Review71’s inventory notes are applied: the red `api.users.update` API row and
+  derived UI-parity row are high sensitivity for user PII and privilege flags;
+  their cleanup requirement is explicit restore-via-PUT before any greening and
+  records singular DELETE as method-closed (405).
 - UI all red (339); bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Research71 independent docs re-fetch and unauth probes match research70 (users PUT 401; POST/DELETE 405).
-- Coverage honesty: 177/177/0/0; complete false; zero UI greens; zero bulk greens; users update still red.
-- Organizations product ACCEPT on root; create cleanup uses fail-closed non-delete wording.
+- Review71 independent docs re-fetch and unauth probes match research71.
+- Coverage honesty: 177/177/0/0; complete false; zero UI greens; zero bulk greens; users update still red; zero false-green rows.
+- Product source correctly absent until freeze IR ACCEPT.
+- The generated inventory remains 305 API / 339 UI rows with 177 offline
+  implemented and contract-tested rows; the metadata correction changed no
+  qualification state.
 
 ## Review decisions (authoritative)
 
-- Wave-5m freeze/product: **ACCEPT** offline.
-- Wave-5n freeze/product: **ACCEPT** offline for singular create/update only.
-- Wave-5o freeze/product: **ACCEPT** offline.
-- Wave-5p freeze: **ACCEPT**.
-- Wave-5p product: **ACCEPT** offline.
-- Wave-5q users freeze-ready research: **ACCEPT as research**.
-- Wave-5q freeze page: on root; **freeze independent ACCEPT not yet recorded**.
-- Wave-5q product-ready research71: packaged; **independent research ACCEPT not yet recorded**.
+- Wave-5m through Wave-5p freeze/product: **ACCEPT** offline (as previously recorded).
+- Wave-5q freeze-ready research: **ACCEPT as research**.
+- Wave-5q product-ready research (review71): **ACCEPT as research**.
+- Wave-5q freeze formal independent ACCEPT: **ACCEPT** at `fc493dc`, pending root integration.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Independent freeze ACCEPT for Wave-5q users freeze page.
-2. Optional independent ACCEPT as research for Wave-5q product-ready package.
-3. Wave-5q product for users update only after freeze ACCEPT (+1 → 178 offline).
-4. Wave-5r: salesTaxReturns update-only freeze/product.
-5. Later research: transactions create/update, specials, method-closed Supports honesty pass.
-6. invoiceReminderAssociations delete blocked offline until live cleanup proof.
-7. Bulk 92, UI/auth/vision, live CUD still open.
+1. Merge the completed product-ready research IR and freeze IR; repair generated wiki-index rows and verify the root.
+2. With the freeze ACCEPT integrated: Codex Power users update product (+1 → 178 offline).
+3. Wave-5r salesTaxReturns update-only freeze/product.
+4. Later: transactions, specials, method-closed Supports honesty; associations delete needs live cleanup proof.
+5. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
 - Research ACCEPT is not freeze ACCEPT, product ACCEPT, or live qualification.
 - Freeze page on root is not freeze independent ACCEPT.
-- Organizations singular DELETE is 405: never claim delete cleanup offline.
+- Parent review71 does not own child IR wiki pages.
+- A child verdict authorises follow-on work only after its no-ff merge to root.
 - Users singular create/delete are 405: product is update-only.
 - Do not green coverage from research or freeze alone.
-- Unauth 405 overrides Supports create/update text for geo/reference rows.
 
 ## References
 
+- Review71 body: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Research71 brief: `.fractal/main.billy_complete/tmp/grok-research.md`
-- Wave-5q product-ready wiki: `wiki/wave_fiveq_users_product_ready_research.md`
-- Wave-5q freeze page: `wiki/wave_fiveq_ticketed_writes_contract.md`
-- Wave-5q freeze-ready wiki: `wiki/wave_fiveq_users_freeze_ready_research.md`
-- Wave-5p product acceptance: `wiki/wave_fivep_product_independent_review.md`
-- Probe rules: `wiki/offline_write_probe_rules.md`
+- Product-ready wiki: `wiki/wave_fiveq_users_product_ready_research.md`
+- Freeze page: `wiki/wave_fiveq_ticketed_writes_contract.md`
+- Review gates plan: `.fractal/main.billy_complete/plans/2026-07-30T12:55:17.225Z-110.15-wave5q_review_gates.md`
