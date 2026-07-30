@@ -16,22 +16,30 @@ updated: 2026-07-30T08:50:00Z
 - Wave-5c through Wave-5m write modules are merged into root; one shared confirmation store and write protocol.
 - Root registry **250** `api_*` tools. Offline coverage **172** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5m freeze ACCEPT and product ACCEPT offline remain valid (19 focused tests pass).
-- Research60 + independent review60: Wave-5n freeze-ready package **ACCEPT as research**.
+- Cited official research and independent review: Wave-5n freeze-ready package
+  **ACCEPT as research**.
 - Wave-5n freeze page not on root; child `wave5n_invoice_late_fee_freeze` active for freeze page only.
 - Official plain API contract stable; HTTP docs ETag/MD5 continues to churn (access metadata). Inventory still pins prior MD5.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Review60 re-fetch: plain identical to research60; unauth invoiceLateFees POST/PUT 401, singular+bulk DELETE 405.
+- Independent revalidation: plain contract identical to the accepted research;
+  unauthenticated invoiceLateFees POST/PUT return 401 and singular/bulk DELETE
+  return 405.
 - contactBalancePayments POST/PUT 401, DELETE 405 reconfirmed.
 - Coverage honesty: no false greens; bulk empty; complete false.
 - No `invoice_late_fee_writes.py`; no late-fee write registration.
+- Root offline verification passes: 19 focused contact-balance-payment tests and
+  the complete 1,075-test suite; formatting, lint, typing, inventory, and
+  repository-policy checks also pass.
 
 ## Review decisions (authoritative)
 
 - Wave-5m freeze/product: **ACCEPT** offline.
-- Research60 Wave-5n freeze-ready: **ACCEPT as research** (`wiki/wave_fiven_freeze_ready_research_independent_review.md`, `tmp/grok-review.md`).
+- Wave-5n freeze-ready research: **ACCEPT as research**
+  (`wiki/wave_fiven_freeze_ready_research_independent_review.md`,
+  `tmp/grok-review.md`). The review found no current-root repair.
 - Wave-5n freeze page: not present; no freeze ACCEPT.
 - Wave-5n product: not started; blocked until freeze ACCEPT.
 - Overall completeness: **FAIL**.
@@ -45,7 +53,8 @@ updated: 2026-07-30T08:50:00Z
 
 ## Evidence boundaries
 
-- Plain contract stable across research60/review60; HTTP fingerprint not the durable contract key.
+- Plain contract is stable across the research and its revalidation; an HTTP
+  access fingerprint is not the durable contract key.
 - Offline 401 opens freeze; 405 overrides Supports for delete/bulk-delete offline greening.
 - Offline product ACCEPT is not live/UI/vision ACCEPT.
 

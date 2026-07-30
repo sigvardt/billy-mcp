@@ -55,6 +55,16 @@ When greening create offline, set inventory cleanup for
 
 `live non-production cleanup strategy unqualified; singular DELETE is unsupported`
 
+## Revalidation boundary
+
+Independent review found no current-root correction: create and update remain
+red, no late-fee write module or registration exists, and all bulk rows retain
+empty tool names. Root verification passes the focused 19-test
+contact-balance-payment suite and the complete 1,075-test repository suite;
+formatting, lint, type checks, coverage-inventory checks, and repository-policy
+checks also pass. These checks confirm the fail-closed boundary only; they do
+not qualify a late-fee product, live API, UI, vision, or bulk operation.
+
 ## Full evidence
 
 Authoritative detail lives in the node scratch review file produced with this
