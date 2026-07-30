@@ -1,37 +1,41 @@
 ---
 name: wave_fivei_ticketed_writes_contract
 title: Wave-5i sales-tax account and meta-field ticketed-write contract
-desc: Cited offline contract for singular sales-tax account and meta-field ticketed writes; pending independent freeze review.
+desc: Cited offline contract for singular sales-tax account and meta-field ticketed writes, accepted by independent Grok review.
 tags: [billy, api, sales-tax, writes, coverage]
 sources:
   - https://www.billy.dk/api/
   - wiki/wave_fivei_freeze_ready_research_independent_review.md
+  - wiki/wave_fivei_freeze_independent_review.md
   - wiki/wave_fiveg_ticketed_writes_contract.md
   - wiki/offline_write_probe_rules.md
   - coverage/api_v2_manifest.yaml
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-30T00:00:00Z
-updated: 2026-07-30T00:00:00Z
+updated: 2026-07-30T00:24:00Z
 ---
 
 # Wave-5i sales-tax account and meta-field ticketed-write contract
 
 ## Authority and gate
 
-This is the proposed offline-only implementation contract for the six
-documented singular Billy API v2 CUD rows for `salesTaxAccounts` and
-`salesTaxMetaFields`. It derives from the cited official API page, re-fetched
-by Grok with ETag `hsisik4g9p3603`, MD5
-`c2efda0ee4cf9cf200e14910c5fc6996`, and an unchanged 147934-byte body. The
-complete cited research and unauthenticated probe record is retained outside
-the repository at `.fractal/main.billy_complete/tmp/grok-research.md`.
+This is the frozen offline-only implementation contract for the six documented
+singular Billy API v2 CUD rows for `salesTaxAccounts` and `salesTaxMetaFields`.
+It derives from the cited official API page, re-fetched by Grok with ETag
+`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, and an unchanged
+147934-byte body. The complete cited research and unauthenticated probe record
+is retained outside the repository at
+`.fractal/main.billy_complete/tmp/grok-research.md`.
 
 The authoring gate is the ACCEPT recorded in
-`wiki/wave_fivei_freeze_ready_research_independent_review.md`. This page still
-requires a separate independent Grok freeze review before it can open the
-offline product-implementation gate. It is not implementation, product, live,
-browser/UI, vision, bulk, special-route, or completeness acceptance.
+`wiki/wave_fivei_freeze_ready_research_independent_review.md`. The independent
+Grok freeze review recorded in
+`wiki/wave_fivei_freeze_independent_review.md` accepted this exact contract at
+root commit `a176887`. That acceptance opens only the offline
+product-implementation gate. It is not acceptance of implementation, live
+qualification, browser/UI parity, vision verification, bulk operations, special
+routes, or overall completeness.
 
 ## Exact inventory and tool surface
 

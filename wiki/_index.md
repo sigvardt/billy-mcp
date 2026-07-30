@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T00:15:19Z
+updated: 2026-07-30T00:28:11Z
 ---
 
 # billy_mcp
@@ -87,9 +87,11 @@ updated: 2026-07-30T00:15:19Z
 
 [[wave_fiveh_ticketed_writes_contract|wave_fiveh_ticketed_writes_contract]]: Cited offline contract for three singular Billy attachment JSON CUD operations, accepted by independent Grok review.
 
+[[wave_fivei_freeze_independent_review|wave_fivei_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular sales-tax account and meta-field ticketed writes.
+
 [[wave_fivei_freeze_ready_research_independent_review|wave_fivei_freeze_ready_research_independent_review]]: Authoritative root Grok acceptance of the research37 offline freeze-ready handoff for singular salesTaxAccounts and salesTaxMetaFields ticketed writes.
 
-[[wave_fivei_ticketed_writes_contract|wave_fivei_ticketed_writes_contract]]: Cited offline contract for singular sales-tax account and meta-field ticketed writes; pending independent freeze review.
+[[wave_fivei_ticketed_writes_contract|wave_fivei_ticketed_writes_contract]]: Cited offline contract for singular sales-tax account and meta-field ticketed writes, accepted by independent Grok review.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
