@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-29T23:59:00Z
+updated: 2026-07-30T00:53:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -59,12 +59,12 @@ coverage green.
 | `organizations` | POST/PUT 401; DELETE **405** |
 | `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
-| `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; freeze only after dedicated field research (embedded replace on match has-many) |
+| `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 
-Probe refresh: 2026-07-29T23:45:16Z, docs ETag `hsisik4g9p3603`, MD5
+Probe refresh: 2026-07-30T00:52:57Z, docs ETag `hsisik4g9p3603`, MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
-`.fractal/main.billy_complete/tmp/write-probes-research37.json` (prior compact
-snapshot: `write-probes-research34-compact.json`).
+`.fractal/main.billy_complete/tmp/write-probes-research40.json` (compact:
+`write-probes-research40-compact.json`; prior: research37 / research34-compact).
 
 ## Next freezes (planning only)
 
@@ -77,11 +77,17 @@ snapshot: `write-probes-research34-compact.json`).
   accepted **offline only** at `29cecbe` by
   `wiki/wave_fiveh_product_independent_review.md`; live/UI/vision/bulk and
   overall completeness remain fail-closed.
-- Recommended next offline freeze: singular `salesTaxAccounts` +
-  `salesTaxMetaFields` CUD (6 clear ops). Its research is accepted only as a
-  freeze-drafting handoff by
-  `wiki/wave_fivei_freeze_ready_research_independent_review.md`; the Wave-5i
-  freeze page and product do not yet exist. The cited docs fingerprint is
-  unchanged and the unauthenticated gate results are POST/PUT 401 and
-  DELETE-missing-id 200. Tertiary probe-open later: bank line
-  match/line/subject-association CUD.
+- Wave-5i freeze for singular `salesTaxAccounts` + `salesTaxMetaFields` CUD is
+  accepted (`wiki/wave_fivei_ticketed_writes_contract.md`,
+  `wiki/wave_fivei_freeze_independent_review.md`). Product-ready research is
+  accepted as a handoff only
+  (`wiki/wave_fivei_product_ready_research_independent_review.md`). Root merge
+  `084ad77` contains the twelve product tools at 220 registered `api_*` tools
+  and 157 offline rows; independent Grok product review remains required.
+- Recommended next offline freeze after Wave-5i product ACCEPT: Wave-5j singular
+  `bankLineMatches` + `bankLines` + `bankLineSubjectAssociations` CUD (9 clear
+  ops / 18 tools). Freeze-ready field research is in node scratch
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research40); docs
+  fingerprint unchanged; unauth gates POST/PUT 401 and DELETE-missing-id 200.
+  Independent research review and freeze page are still required. Exclude
+  `bankPayments` singular delete (405) and all bulk rows.
