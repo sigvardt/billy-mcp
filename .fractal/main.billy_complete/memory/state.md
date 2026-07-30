@@ -5,8 +5,8 @@ tags: [billy, coverage, review]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
-created: 2026-07-30T05:20:45Z
-updated: 2026-07-30T05:45:00Z
+created: 2026-07-30T05:56:53Z
+updated: 2026-07-30T05:56:53Z
 ---
 
 # state
@@ -19,15 +19,15 @@ updated: 2026-07-30T05:45:00Z
 - Wave-5k product ACCEPT: `wiki/wave_fivek_product_independent_review.md`.
 - bankPayments create+update offline-qualified only; delete stays red (405); bulk stays ambiguous.
 - **Wave-5l freeze ACCEPT:** `wiki/wave_fivel_freeze_independent_review.md` for `wiki/wave_fivel_ticketed_writes_contract.md` (MD5 `3c49c4f41f3d9485a177a6ee643db412`).
-- Wave-5l product not started: no `sales_tax_payment_writes.py`; do not confuse with `sales_tax_writes.py` rulesets.
+- **Wave-5l product gate open** (research55 product-ready package in `.fractal/main.billy_complete/tmp/grok-research.md`). Product not started: no `sales_tax_payment_writes.py`; do not confuse with `sales_tax_writes.py` rulesets.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, and a 147934-byte body (reconfirmed at freeze review).
-- Unauth probes: salesTaxPayments POST/PUT **401**; DELETE **405** exact singular-delete refusal.
-- Freeze review reproduced docs fingerprint, probes, inventory red create/update, and absence of product module.
-- No false coverage greens from freeze; `complete: false`.
+- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, and a 147934-byte body (reconfirmed research55 HEAD).
+- Unauth probes research55: salesTaxPayments POST/PUT **401**; DELETE **405** exact singular-delete refusal.
+- Freeze review ACCEPT opens product leaf only; does not green live/UI/vision/bulk/complete.
+- No false coverage greens from research; `complete: false`.
 
 ## Review decisions (authoritative)
 
@@ -36,7 +36,7 @@ updated: 2026-07-30T05:45:00Z
 - Wave-5k freeze page: **ACCEPT**.
 - Wave-5k product: **ACCEPT** offline.
 - Wave-5l freeze page: **ACCEPT** offline (`wiki/wave_fivel_freeze_independent_review.md`).
-- Wave-5l product: **not accepted** (not implemented).
+- Wave-5l product: **not accepted** (not implemented; product-ready research package exists).
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
@@ -58,5 +58,5 @@ updated: 2026-07-30T05:45:00Z
 - Wave-5l freeze ACCEPT: `wiki/wave_fivel_freeze_independent_review.md`
 - Wave-5l freeze contract: `wiki/wave_fivel_ticketed_writes_contract.md`
 - Wave-5k product ACCEPT: `wiki/wave_fivek_product_independent_review.md`
-- Current research scratch: `.fractal/main.billy_complete/tmp/grok-research.md` (research54)
+- Current research scratch: `.fractal/main.billy_complete/tmp/grok-research.md` (research55 product-ready)
 - Current review scratch: `.fractal/main.billy_complete/tmp/grok-review.md`
