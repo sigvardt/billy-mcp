@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T22:14:31Z
+updated: 2026-07-30T22:19:48Z
 ---
 
 # billy_mcp
@@ -246,6 +246,8 @@ updated: 2026-07-30T22:14:31Z
 [[wave_fives_research90_independent_review|wave_fives_research90_independent_review]]: Independent Grok review of Research90 OPTIONS non-discrimination evidence and the Wave-5u method-level observation plan. ACCEPT research and planning only; completeness FAIL; no coverage greening.
 
 [[wave_fives_research91_independent_review|wave_fives_research91_independent_review]]: Independent Grok review of research91 and offline typed auth_status at tip cf38b5c; overall completeness FAIL.
+
+[[wave_fives_research92_independent_review|wave_fives_research92_independent_review]]: Independent Grok review of research92 and tip auth credential pre-submit research freeze. Accepts research only; programme remains incomplete.
 
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 

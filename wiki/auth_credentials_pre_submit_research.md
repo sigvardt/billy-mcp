@@ -11,7 +11,6 @@ sources:
   - src/billy_mcp/browser.py
   - coverage/browser_egress.yaml
   - coverage/status.json
-  - wiki/ui_auth_credentials_login_organization_research_codex_fallback.md
 created: 2026-07-31T00:15:00Z
 updated: 2026-07-31T00:15:00Z
 ---
@@ -28,9 +27,10 @@ API document was re-fetched on 2026-07-31 with ETag `wcw4x9hqvu3603`, body MD5
 `https://api.billysbilling.com/v2`. The document still has no webhook API and
 does not document a bulk wire contract.
 
-The completed `ui_auth_credentials_login_organization_research_codex_fallback`
-page is supplementary Codex Power planning context only. It neither replaces
-the Grok brief nor supplies an independent product or vision approval.
+The completed Codex Power fallback record was reviewed as supplementary planning
+context. Its safe constraints are reconciled here, but it is not an authority
+that replaces the Grok brief or supplies an independent product or vision
+approval.
 
 The only productable scope is safe credential references plus the typed,
 headless, fail-closed login transition through the observed pre-submit state.
