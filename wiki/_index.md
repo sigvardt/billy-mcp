@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T16:47:49Z
+updated: 2026-07-30T17:07:26Z
 ---
 
 # billy_mcp
@@ -16,6 +16,8 @@ updated: 2026-07-30T16:47:49Z
 [[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for when Supports flags may not open offline ticketed-write freezes.
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
+
+[[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 

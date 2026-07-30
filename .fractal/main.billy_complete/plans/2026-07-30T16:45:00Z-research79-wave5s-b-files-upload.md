@@ -27,3 +27,19 @@ Wave-5s-A product IR, without greening coverage from research alone.
 ## Non-goals
 
 Product implementation, product IR, live tests, UI, bulk resolution.
+
+## Post-Mortem
+
+Completed: the cited binary-upload research handoff was committed at `4c1ce59`,
+including the documentation fingerprint, unauthenticated method matrix, and
+dual-row ownership boundary. The non-live root checks pass after the later
+invoice-log integration.
+
+Deviation: the designated Grok research reviewer failed authentication before
+performing any review. Its uncommitted draft was discarded rather than treated
+as Grok evidence, and an explicitly labelled Codex Power fallback reviewer was
+launched. That fallback cannot satisfy the final mandatory Grok audit.
+
+Cleanup: no upload implementation, live request, browser evidence, credential,
+or coverage greening was introduced. The next unresolved coverage slice is the
+ticketed files-upload product, after the fallback review is read and integrated.
