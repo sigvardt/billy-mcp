@@ -6,7 +6,7 @@ sources:
   - https://www.billy.dk/api/
   - .fractal/main.billy_complete/tmp/grok-research.md
 created: 2026-07-29T11:05:00Z
-updated: 2026-07-29T11:05:00Z
+updated: 2026-07-30T17:37:00Z
 ---
 
 # wave_three_unfiltered_reads_contract
@@ -63,11 +63,11 @@ It is based on the cited official-document brief with fingerprint
 
 - Account natures: no singular delete in Supports (inventory already omits it).
 - Files: Supports list create but no update and no singular delete; the only
-  documented create path is binary multipart `POST /v2/files` with
+  documented create path is raw-binary `POST /v2/files` with
   `X-Filename` and optional `x-create-attachment`, `x-create-variants`,
   `x-organizationid`, `x-should-scan`. Never call the sample host
   `api.billy.dk`. Inventory currently has both `api.files.create` and
-  `api.special.files_upload`; resolve to one multipart tool in the write wave.
+  `api.special.files_upload`; resolve to one raw-binary tool in the write wave.
 - Attachment linking via parent `attachmentIds` arrays is write-wave only.
 
 ## Offline integration evidence

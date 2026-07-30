@@ -19,7 +19,7 @@ sources:
   - scripts/generate_coverage_report.py
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research80)"
 created: 2026-07-30T17:14:33Z
-updated: 2026-07-30T17:14:33Z
+updated: 2026-07-30T17:26:00Z
 ---
 
 # Wave-5s-B files upload product-ready research
@@ -44,6 +44,7 @@ ranking: [[wave_fives_residual_specials_research]].
 | Wave-5s-A invoiceLogs product | **Merged** on root |
 | Wave-5s-B files upload freeze research | **Ready** ([[wave_fivesb_files_upload_research]]) |
 | Wave-5s-B product-ready research | **Ready** (this page) |
+| Wave-5s-B product-ready independent review | **ACCEPT** offline ([[wave_fivesb_files_upload_product_ready_research_independent_review]]) |
 | Root offline baseline | 180 implemented + contract_tested; live 0; vision 0; `complete: false`; registry 265 |
 
 ## Official docs fingerprint
