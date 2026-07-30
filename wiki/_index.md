@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T07:27:14Z
+updated: 2026-07-30T07:54:26Z
 ---
 
 # billy_mcp
@@ -140,6 +140,8 @@ updated: 2026-07-30T07:27:14Z
 [[wave_fivel_freeze_independent_review|wave_fivel_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular salesTaxPayments create and update ticketed writes (singular delete excluded on 405).
 
 [[wave_fivel_ticketed_writes_contract|wave_fivel_ticketed_writes_contract]]: Cited offline-only contract for singular Billy salesTaxPayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded; singular delete is excluded on documented 405.
+
+[[wave_fivem_freeze_codex_fallback_review|wave_fivem_freeze_codex_fallback_review]]: Non-authoritative Codex Power fallback ACCEPT of the contact-balance-payment offline contract at fb6bb22; mandatory independent Grok review remains outside this record.
 
 [[wave_fivem_ticketed_writes_contract|wave_fivem_ticketed_writes_contract]]: Cited offline-only contract for singular Billy contactBalancePayments create and update ticketed writes; awaiting separate Grok freeze acceptance, with singular delete excluded on documented 405.
 
