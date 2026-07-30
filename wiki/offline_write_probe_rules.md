@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-29T22:42:41Z
+updated: 2026-07-29T23:59:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -72,11 +72,16 @@ snapshot: `write-probes-research34-compact.json`).
   offline product slice at root `55faa02` by
   `wiki/wave_fiveg_product_independent_review.md`; live/UI/vision/bulk and
   overall completeness remain fail-closed.
-- Wave-5h attachment singular JSON CUD freeze is accepted
-  (`wiki/wave_fiveh_ticketed_writes_contract.md`). Product is in flight on the
-  attachment product child; not root-accepted yet.
+- Wave-5h attachment singular JSON CUD freeze remains accepted
+  (`wiki/wave_fiveh_ticketed_writes_contract.md`). Its root product is now
+  accepted **offline only** at `29cecbe` by
+  `wiki/wave_fiveh_product_independent_review.md`; live/UI/vision/bulk and
+  overall completeness remain fail-closed.
 - Recommended next offline freeze: singular `salesTaxAccounts` +
-  `salesTaxMetaFields` CUD (6 clear ops). Freeze-ready research is in the node
-  scratch brief `.fractal/main.billy_complete/tmp/grok-research.md` (docs
-  fingerprint unchanged; unauth POST/PUT 401; DELETE missing-id 200). Tertiary
-  probe-open later: bank line match/line/subject-association CUD.
+  `salesTaxMetaFields` CUD (6 clear ops). Its research is accepted only as a
+  freeze-drafting handoff by
+  `wiki/wave_fivei_freeze_ready_research_independent_review.md`; the Wave-5i
+  freeze page and product do not yet exist. The cited docs fingerprint is
+  unchanged and the unauthenticated gate results are POST/PUT 401 and
+  DELETE-missing-id 200. Tertiary probe-open later: bank line
+  match/line/subject-association CUD.
