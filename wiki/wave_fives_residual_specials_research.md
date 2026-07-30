@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T16:05:00Z
+updated: 2026-07-30T16:28:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -28,18 +28,21 @@ qualification, UI/vision work, bulk resolution, or completeness. It does not
 green coverage.
 
 Full probe matrices and scratch snapshots live at
-`.fractal/main.billy_complete/tmp/grok-research.md` (research77).
+`.fractal/main.billy_complete/tmp/grok-research.md` (research77 ranking;
+research78 deepens Wave-5s-A). InvoiceLogs list offline freeze detail:
+[[wave_fivesa_invoice_logs_list_research]].
 
 ## Gate status
 
 | Gate | Status |
 | --- | --- |
 | Wave-5r freeze IR | **ACCEPT** ([[wave_fiver_freeze_independent_review]]) |
-| Wave-5r product on root | **Absent** (leaf completed at `cf33343` with 179 offline; not merged) |
-| Root offline baseline | 178 implemented + contract_tested; live 0; vision 0; `complete: false` |
-| Clear not-impl on root | 31 (30 after salesTaxReturns update merges) |
+| Wave-5r product on root | **Merged + product IR ACCEPT offline** ([[wave_fiver_product_independent_review]] @ `5ad69a6`) |
+| Root offline baseline | 179 implemented + contract_tested; live 0; vision 0; `complete: false` |
+| Clear not-impl on root | 30 |
 | Specials not-impl | 4 |
 | Ambiguous bulk | 92 red |
+| Wave-5s-A research | **Ready** ([[wave_fivesa_invoice_logs_list_research]]) |
 
 ## Official docs fingerprint
 
@@ -141,8 +144,9 @@ persistent records. Detail: `tmp/write-probes-research77.json`.
 
 ## Bounded Codex Power slices
 
-1. Finish and merge Wave-5r product; Grok product IR.
+1. Wave-5r product merge + product IR: **done** (offline ACCEPT).
 2. **Wave-5s-A:** `api_invoice_logs_list` only; offline special green +1.
+   Implementation map: [[wave_fivesa_invoice_logs_list_research]].
 3. **Wave-5s-B:** files upload ticketed pair; pair generator evidence for
    `api.files.create` + `api.special.files_upload`.
 4. **Wave-5s-C:** invoice email + delivery ticketed pairs (high side effect;
