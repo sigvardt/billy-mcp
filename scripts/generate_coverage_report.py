@@ -610,6 +610,14 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.salesTaxReturns.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxPayments.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxPayments.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxPayments.create": (
+        "tests/api/test_sales_tax_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxPayments.update": (
+        "tests/api/test_sales_tax_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.bankPayments.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankPayments.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankPayments.create": (
