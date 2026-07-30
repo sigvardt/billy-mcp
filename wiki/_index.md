@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T17:07:26Z
+updated: 2026-07-30T17:22:05Z
 ---
 
 # billy_mcp
@@ -237,9 +237,15 @@ updated: 2026-07-30T17:07:26Z
 
 [[wave_fivesa_invoice_logs_list_research|wave_fivesa_invoice_logs_list_research]]: Cited offline contract for the read-only special api_invoice_logs_list after Wave-5r product ACCEPT; list-only GET /invoiceLogs with sample query and response; no coverage greening from research.
 
+[[wave_fivesa_invoice_logs_product_codex_fallback_review|wave_fivesa_invoice_logs_product_codex_fallback_review]]: Offline-only Codex Power fallback review of the merged invoiceLogs list product at baseline 5b8719b; accepted only for bounded offline product quality and not a Grok audit or completeness claim.
+
 [[wave_fivesa_invoice_logs_research_independent_review|wave_fivesa_invoice_logs_research_independent_review]]: Authoritative Grok ACCEPT-as-research for the Wave-5s-A invoiceLogs list offline contract handoff at parent baseline 97f7e12; product not yet present; no coverage greening.
 
+[[wave_fivesb_files_upload_product_ready_research|wave_fivesb_files_upload_product_ready_research]]: Product-ready offline handoff for ticketed binary POST /files special and dual-row create alias; path/digest/size/mtime binding; no coverage greening.
+
 [[wave_fivesb_files_upload_research|wave_fivesb_files_upload_research]]: Cited offline contract for ticketed binary POST /files special and aliased files.create row; path and digest bound preview or execute; no coverage greening.
+
+[[wave_fivesb_files_upload_research_codex_fallback_review|wave_fivesb_files_upload_research_codex_fallback_review]]: Non-authoritative Codex Power review accepting the cited offline files-upload research handoff only; product and mandatory Grok audit remain open.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 

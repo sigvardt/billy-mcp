@@ -15,23 +15,24 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T16:45:00Z
+updated: 2026-07-30T17:14:33Z
 ---
 
 # Wave-5s residual clear and specials research
 
 ## Authority boundary
 
-This page freezes **research evidence** for residual clear not-impl and the four
-red special routes after Wave-5r product work. It is not product ACCEPT, live
-qualification, UI/vision work, bulk resolution, or completeness. It does not
-green coverage.
+This page freezes **research evidence** for residual clear not-impl and the
+remaining special routes after Wave-5r product work (invoiceLogs product later
+merged offline). It is not product ACCEPT, live qualification, UI/vision work,
+bulk resolution, or completeness. It does not green coverage.
 
 Full probe matrices and scratch snapshots live at
 `.fractal/main.billy_complete/tmp/grok-research.md` (research77 ranking;
-research78 deepens Wave-5s-A; research79 deepens Wave-5s-B). InvoiceLogs list
+research78 deepens Wave-5s-A; research79 freezes Wave-5s-B; research80 product-ready). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
-offline freeze detail: [[wave_fivesb_files_upload_research]].
+offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
+[[wave_fivesb_files_upload_product_ready_research]].
 
 ## Gate status
 
@@ -39,12 +40,14 @@ offline freeze detail: [[wave_fivesb_files_upload_research]].
 | --- | --- |
 | Wave-5r freeze IR | **ACCEPT** ([[wave_fiver_freeze_independent_review]]) |
 | Wave-5r product on root | **Merged + product IR ACCEPT offline** ([[wave_fiver_product_independent_review]] @ `5ad69a6`) |
-| Root offline baseline | 179 implemented + contract_tested; live 0; vision 0; `complete: false` |
-| Clear not-impl on root | 30 |
-| Specials not-impl | 4 |
+| Root offline baseline | 180 implemented + contract_tested; live 0; vision 0; `complete: false`; registry 265 |
+| Clear not-impl on root | 30 (includes `api.files.create` alias) |
+| Specials not-impl | 3 (`files_upload`, `invoice_email`, `invoice_delivery`) |
 | Ambiguous bulk | 92 red |
 | Wave-5s-A research | **Ready** ([[wave_fivesa_invoice_logs_list_research]]) |
+| Wave-5s-A product | **Merged** on root |
 | Wave-5s-B research | **Ready** ([[wave_fivesb_files_upload_research]]) |
+| Wave-5s-B product-ready | **Ready** ([[wave_fivesb_files_upload_product_ready_research]]) |
 
 ## Official docs fingerprint
 
@@ -69,10 +72,10 @@ host `api.billy.dk` must never become the client base.
 
 | Priority | Inventory id | Wire | Offline note |
 | --- | --- | --- | --- |
-| 1 | `api.special.invoice_logs` | `GET /invoiceLogs` | List special; side effects none; filters from narrative |
-| 2 | `api.special.files_upload` (+ pair `api.files.create`) | `POST /files` binary | Ticket binds path + digest; not JSON create |
-| 3 | `api.special.invoice_email` | `POST /invoices/:invoiceId/emails` | Ticketed; external email |
-| 4 | `api.special.invoice_delivery` | `POST /invoiceDeliveries` | Ticketed; async e-invoice; poll logs |
+| done | `api.special.invoice_logs` | `GET /invoiceLogs` | Product merged offline |
+| 1 | `api.special.files_upload` (+ pair `api.files.create`) | `POST /files` binary | Ticket binds path + digest; not JSON create; product-ready research ready |
+| 2 | `api.special.invoice_email` | `POST /invoices/:invoiceId/emails` | Ticketed; external email |
+| 3 | `api.special.invoice_delivery` | `POST /invoiceDeliveries` | Ticketed; async e-invoice; poll logs |
 
 ### B. Blocked offline (keep red)
 

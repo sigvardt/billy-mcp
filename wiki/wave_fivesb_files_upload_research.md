@@ -41,6 +41,7 @@ ranking: [[wave_fives_residual_specials_research]].
 | Wave-5s-A invoiceLogs research IR | **ACCEPT as research** |
 | Wave-5s-A product | **In flight** on child (not root-merged at research time) |
 | Wave-5s-B files upload research | **Ready** (this page) |
+| Wave-5s-B product-ready research | **Ready** ([[wave_fivesb_files_upload_product_ready_research]]) |
 | Root offline baseline | 179 implemented + contract_tested; live 0; vision 0; `complete: false` |
 
 ## Official docs fingerprint
@@ -133,7 +134,7 @@ alternate host.
 1. Finish Wave-5s-A product IR before or in parallel only if ownership stays
    disjoint; root merge of logs first is preferred.
 2. **Wave-5s-B product:** ticketed upload pair + client binary path + dual-row
-   offline green for special + alias create.
+   offline green for special + alias create (see [[wave_fivesb_files_upload_product_ready_research]]).
 3. Later **Wave-5s-C:** invoice email + delivery specials.
 4. Keep transactions, 405 false friends, bankPayments delete, and bulk red
    offline.
