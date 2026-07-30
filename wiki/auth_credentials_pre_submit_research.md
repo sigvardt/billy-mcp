@@ -12,7 +12,7 @@ sources:
   - coverage/browser_egress.yaml
   - coverage/status.json
 created: 2026-07-31T00:15:00Z
-updated: 2026-07-31T00:30:00Z
+updated: 2026-07-31T00:58:00Z
 ---
 
 # Auth credential references and pre-submit login research freeze
@@ -146,3 +146,13 @@ coverage greening, hard-required title language, CAPTCHA-config-as-challenge,
 invented post-login DOM, and live password submit in CI without non-production
 secrets plus a fresh Grok re-review. Offline unit/contract proof with fake
 resolver and page seams remains the only accepted product bar for this slice.
+
+## Product status after review94
+
+Root tip `a9c7a9b` carries the offline credential-reference and pre-submit login
+product with submit labels `Log in` and `Log ind`. Independent review94
+**ACCEPT offline only**. UI inventory rows remain red. Live password submit,
+residual/bulk networking, and completeness remain blocked pending dedicated
+non-production credentials and further review. Official docs fingerprint
+reconfirmed byte-identical (ETag `wcw4x9hqvu3603`, MD5
+`8b94b0135c91fd15fe54ea33e088a4be`).
