@@ -735,6 +735,10 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.invoiceReminders.create": (
+        "tests/api/test_invoice_reminder_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.invoiceReminderAssociations.get": (
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
@@ -752,6 +756,10 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.postings.list": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.users.get": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.users.list": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+}
+
+WRITE_RESPONSE_FIELD_OVERRIDES: dict[tuple[str, str], list[str]] = {
+    ("invoiceReminders", "create"): ["invoiceReminders[]"],
 }
 
 
@@ -909,7 +917,15 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
             cleanup = (
                 "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
             )
-        if resource in {"contactBalancePayments", "invoiceLateFees"} and operation == "create":
+        if (
+            resource
+            in {
+                "contactBalancePayments",
+                "invoiceLateFees",
+                "invoiceReminders",
+            }
+            and operation == "create"
+        ):
             cleanup = (
                 "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
             )
@@ -937,7 +953,9 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
         request_fields = [singular_name] if operation == "create" else ["id", singular_name]
         if operation == "delete":
             request_fields = ["id"]
-        response_fields = ["changed_records[]", "meta.deletedRecords"]
+        response_fields = WRITE_RESPONSE_FIELD_OVERRIDES.get(
+            (resource, operation), ["changed_records[]", "meta.deletedRecords"]
+        )
         rows.append(
             base_api_row(
                 row_id=f"api.{resource}.{operation}",
