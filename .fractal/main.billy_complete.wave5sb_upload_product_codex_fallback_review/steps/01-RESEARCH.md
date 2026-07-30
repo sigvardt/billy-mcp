@@ -1,30 +1,16 @@
 ---
 requires_approval: false
-agent: grok
+agent: codex-power
 ---
 
 ## Research
 
-Research the exact contract questions needed for the next implementation slice.
-Use Billy's current official API documentation as the primary source. Use the
-dedicated non-production Billy interface for interface discovery. Use other
-sources only to locate primary evidence, never as the contract.
+No external research is required for this static fallback review. Read the
+committed design and cited Wave-5s-B handoff, inspect the production code and
+focused tests, and document only review findings in the assigned wiki page. Do
+not call Grok, browse, use credentials, or create a research brief; the review
+is deliberately a non-authoritative fallback after the verified Grok-auth
+failure.
 
-Read the approved design, current inventories, coverage status, memory, recent
-plans, and unresolved review findings. Focus on red, unknown, ambiguous, or
-plan-gated rows. Check whether Billy documentation changed since the last
-recorded source review.
-
-Write a concise cited brief to `$NODE_DIR/tmp/grok-research.md`, replacing the
-prior iteration's file. Include:
-
-1. Exact official source links and access dates.
-2. Endpoint, method, request, response, filter, pagination, and error evidence.
-3. Interface routes, fields, state transitions, plan restrictions, and API
-   parity evidence.
-4. Ambiguities and what live non-production observation can resolve them.
-5. A bounded recommended implementation slice for Codex Power.
-
-Never change coverage to green during research. Never use a headed browser,
-touch a desktop window, expose credentials, or create persistent test data.
-Clean up any disposable interface records created during discovery.
+Keep coverage unchanged and do not use a browser, live API, or persistent test
+data.
