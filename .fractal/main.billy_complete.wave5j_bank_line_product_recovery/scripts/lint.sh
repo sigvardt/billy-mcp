@@ -44,3 +44,10 @@ if command -v wiki &>/dev/null; then
             || echo "Warning: project wiki ($WIKI_DIR) has lint issues" >&2
     fi
 fi
+
+cd "$WORKTREE_DIR"
+uv run ruff format --check .
+uv run ruff check .
+uv run pyright
+uv run python scripts/check_coverage.py --reject-false-completeness
+uv run python scripts/check_repository_policy.py

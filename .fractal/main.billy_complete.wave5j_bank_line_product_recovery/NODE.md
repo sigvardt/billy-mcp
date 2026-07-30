@@ -81,6 +81,7 @@ Own only these tracked project files:
 - `tests/api/test_bank_line_writes.py`
 - `tests/api/test_bank_line_cross_executor.py`
 - `tests/unit/test_coverage_server.py`
+- `scripts/generate_coverage_report.py`
 - `coverage/api_v2_manifest.yaml`
 - `coverage/status.json`
 
@@ -102,7 +103,11 @@ with exact evidence; do not guess unsupported wire shapes or enum values.
    cross-executor mismatch before consume/HTTP, and no write retry.
 3. Registry coverage is exactly 238 `api_*` tools and 166 implemented plus
    contract-tested offline API rows; live and vision remain zero and
-   `coverage/status.json` remains `complete: false`.
+   `coverage/status.json` remains `complete: false`. Add the nine source
+   controlled `OFFLINE_API_IMPLEMENTATION_EVIDENCE` entries in
+   `scripts/generate_coverage_report.py`, each referring only to this leaf's
+   real bank-line test suite(s) and the root registry assertion; regenerate,
+   never hand-edit, the manifest and status artifacts.
 4. The focused test suite, format, lint, type, coverage, and safety checks pass
    from committed project bytes, with no credential or sensitive artifact.
 5. The branch contains only the owned implementation, test, and coverage files

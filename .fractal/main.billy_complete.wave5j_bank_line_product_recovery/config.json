@@ -6,7 +6,8 @@
     "src/billy_mcp",
     "tests/api",
     "tests/unit",
-    "coverage"
+    "coverage",
+    "scripts"
   ],
   "base": "main.billy_complete",
   "meta": null,
