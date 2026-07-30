@@ -616,6 +616,10 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.salesTaxReturns.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxReturns.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxReturns.update": (
+        "tests/api/test_sales_tax_return_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxPayments.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxPayments.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxPayments.create": (
@@ -1412,13 +1416,11 @@ def generate(root: Path) -> dict[str, Any]:
 
 
 def main() -> int:
-    """Generate the checked-in artifacts when explicitly requested."""
+    """Generate the checked-in artifacts."""
 
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--write", action="store_true", help="write coverage artifacts")
-    args = parser.parse_args()
-    if not args.write:
-        parser.error("pass --write to generate coverage artifacts")
+    parser.add_argument("--write", action="store_true", help="deprecated compatibility flag")
+    parser.parse_args()
     status = generate(ROOT)
     print(
         "Generated coverage: "
