@@ -695,6 +695,14 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.contactBalancePayments.create": (
+        "tests/api/test_contact_balance_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.contactBalancePayments.update": (
+        "tests/api/test_contact_balance_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.contactBalancePostings.get": (
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
@@ -890,6 +898,10 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
                 "isVoided; independently verify"
             )
         if resource == "salesTaxPayments" and operation == "create":
+            cleanup = (
+                "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
+            )
+        if resource == "contactBalancePayments" and operation == "create":
             cleanup = (
                 "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
             )

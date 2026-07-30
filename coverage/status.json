@@ -7,8 +7,8 @@
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
     "blocker": "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed",
-    "contract_tested_rows": 170,
-    "implemented_rows": 170,
+    "contract_tested_rows": 172,
+    "implemented_rows": 172,
     "live_tested_rows": 0,
     "vision_verified_rows": 0
   },
