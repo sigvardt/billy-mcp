@@ -4,12 +4,12 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T22:19:48Z
+updated: 2026-07-30T22:35:54Z
 ---
 
 # billy_mcp
 
-[[auth_credentials_pre_submit_research|auth_credentials_pre_submit_research]]: Grok research92 contract for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
+[[auth_credentials_pre_submit_research|auth_credentials_pre_submit_research]]: Grok research92 freeze plus research93 reconfirm for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
 
 [[billy_api_v2_research_seed|billy_api_v2_research_seed]]: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 
@@ -248,6 +248,8 @@ updated: 2026-07-30T22:19:48Z
 [[wave_fives_research91_independent_review|wave_fives_research91_independent_review]]: Independent Grok review of research91 and offline typed auth_status at tip cf38b5c; overall completeness FAIL.
 
 [[wave_fives_research92_independent_review|wave_fives_research92_independent_review]]: Independent Grok review of research92 and tip auth credential pre-submit research freeze. Accepts research only; programme remains incomplete.
+
+[[wave_fives_research93_independent_review|wave_fives_research93_independent_review]]: Independent Grok review of research93 and pre-merge product scan. Accepts research only; rejects product merge on login submit-label regression; programme remains incomplete.
 
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 

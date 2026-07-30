@@ -1,7 +1,7 @@
 ---
 name: auth_credentials_pre_submit_research
 title: Auth credential references and pre-submit login research freeze
-desc: Grok research92 contract for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
+desc: Grok research92 freeze plus research93 reconfirm for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
 tags: [billy, auth, credentials, login, research, grok, offline]
 sources:
   - https://www.billy.dk/api/
@@ -12,7 +12,7 @@ sources:
   - coverage/browser_egress.yaml
   - coverage/status.json
 created: 2026-07-31T00:15:00Z
-updated: 2026-07-31T00:15:00Z
+updated: 2026-07-31T00:30:00Z
 ---
 
 # Auth credential references and pre-submit login research freeze
@@ -21,11 +21,13 @@ updated: 2026-07-31T00:15:00Z
 
 This page promotes the non-sensitive implementation boundary in Grok
 research92, held in owner-only node scratch as
-`.fractal/main.billy_complete/tmp/grok-research.md`. The primary official Billy
-API document was re-fetched on 2026-07-31 with ETag `wcw4x9hqvu3603`, body MD5
+`.fractal/main.billy_complete/tmp/grok-research.md` (current pass research93
+reconfirm). The primary official Billy API document was re-fetched on
+2026-07-31 with ETag `wcw4x9hqvu3603`, body MD5
 `8b94b0135c91fd15fe54ea33e088a4be`, and the locked API base
-`https://api.billysbilling.com/v2`. The document still has no webhook API and
-does not document a bulk wire contract.
+`https://api.billysbilling.com/v2`. Research93 found the docs body
+byte-identical to research92. The document still has no webhook API and does
+not document a bulk wire contract.
 
 The completed Codex Power fallback record was reviewed as supplementary planning
 context. Its safe constraints are reconciled here, but it is not an authority
@@ -36,7 +38,8 @@ The only productable scope is safe credential references plus the typed,
 headless, fail-closed login transition through the observed pre-submit state.
 This page does not authorise credentialed live testing, post-login inference,
 organisation switching, token bootstrap, residual/bulk observation, coverage
-changes, or a completeness claim.
+changes, or a completeness claim. An in-flight product leaf is not product
+ACCEPT until a separate Grok independent review of the merged diff.
 
 ## Observed authentication boundary
 
@@ -45,18 +48,25 @@ route. The fixed root navigation must finish exactly at
 `https://mit.billy.dk/login`, with no query, fragment, user info, or nondefault
 port. The accepted signature has exactly one visible control each for:
 
-- `input[type=email][name=email]`
-- `input[type=password][name=password]`
+- `input[type=email][name=email]` (optional observed `data-cy=email-input-field`)
+- `input[type=password][name=password]` (optional observed
+  `data-cy=password-input-field`)
 - `input[type=checkbox][name=remember]`
 - `button[data-cy=login-button]`, whose trimmed text is exactly `Log in` or
   `Log ind`
 
+Name attributes remain the durable contract; email/password `data-cy` values
+may strengthen tests but are not required. Page title language varies (`Login`
+vs `Log ind`) and must not be hard-required.
+
 The observed button has no `type` attribute and is outside a form. A selector
 such as `button[type=submit]` or `form button` is therefore prohibited. Any
 URL, count, visibility, label, or DOM-read drift is `UI_CHANGED`, not a retry
-or a generic browser action. No CAPTCHA, passkey, push approval, TOTP screen,
-authenticated shell, organisation picker, or session-expiry state has been
-observed. `AUTH_INTERACTION_REQUIRED` remains reserved for a future observed,
+or a generic browser action. No CAPTCHA iframe, passkey, push approval, TOTP
+screen, authenticated shell, organisation picker, or session-expiry state has
+been observed on the login controls surface. Frontend bootstrap may mention
+CAPTCHA product flags; those flags alone must never become
+`AUTH_INTERACTION_REQUIRED`. That code remains reserved for a future observed,
 reviewed unautomatable challenge.
 
 The reviewed egress policy keeps the browser lane on exact Billy interface
@@ -121,6 +131,18 @@ The following remain red and blocked pending dedicated non-production material
 and fresh Grok review: real password submission, post-login UI discovery,
 TOTP, organisation selection, token bootstrap, session expiry and
 reauthentication, UI parity/vision evidence, API live rows, all 29 residual
-operations, and all 92 ambiguous bulk operations. `coverage/status.json`
-therefore remains incomplete: 184 API rows are implemented and contract-tested
-offline, with zero live or vision verification; all 339 UI rows remain red.
+operations, and all 92 ambiguous bulk operations. Research93 reconfirmed the
+unauthenticated residual/bulk matrix (closed POST 405, method-open 401, empty
+`ids[]` 400, docs org path 404) and left Wave-5u real-method observation
+blocked before network. `coverage/status.json` therefore remains incomplete:
+184 API rows are implemented and contract-tested offline, with zero live or
+vision verification; all 339 UI rows remain red.
+
+## Product review criteria (research93)
+
+After the offline product leaf merges, independent review must still reject
+secret-bearing models or fixtures, generic browser tools, residual/bulk tools,
+coverage greening, hard-required title language, CAPTCHA-config-as-challenge,
+invented post-login DOM, and live password submit in CI without non-production
+secrets plus a fresh Grok re-review. Offline unit/contract proof with fake
+resolver and page seams remains the only accepted product bar for this slice.
