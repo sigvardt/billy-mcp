@@ -24,3 +24,25 @@ Power can implement one special read tool.
 ## Non-goals
 - No coverage greening from research.
 - No singular get, writes, paging invention, live/UI/vision/bulk work.
+
+## Post-Mortem
+
+### Completed
+
+- The cited list-only invoiceLogs contract was recorded in the project wiki
+  without changing product source or coverage evidence.
+- Independent Grok review accepted the handoff as research only; the result is
+  recorded at `wiki/wave_fivesa_invoice_logs_research_independent_review.md`.
+
+### Verification and cleanup
+
+- The review reconfirmed the official docs fingerprint, collection GET auth
+  gate, singular 404 boundary, and write 405 boundaries.
+- No token, live record, browser, frame, HAR, or screenshot was used or
+  retained. Coverage stayed 179/179/0/0 with `complete: false`.
+
+### Next unresolved coverage slice
+
+- The active Codex Power leaf must implement and test exactly
+  `api_invoice_logs_list`; product independent review is required after a
+  merged implementation.

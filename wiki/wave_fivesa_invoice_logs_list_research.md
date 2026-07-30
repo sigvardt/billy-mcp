@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research78)"
 created: 2026-07-30T16:28:00Z
-updated: 2026-07-30T16:28:00Z
+updated: 2026-07-30T16:38:00Z
 ---
 
 # Wave-5s-A invoiceLogs list research
@@ -29,6 +29,8 @@ completeness. It does not green coverage.
 
 Full probe matrices and Codex implementation map:
 `.fractal/main.billy_complete/tmp/grok-research.md` (research78).
+Independent research review: [[wave_fivesa_invoice_logs_research_independent_review]]
+(**ACCEPT as research** at parent `97f7e12`).
 
 ## Prerequisites
 
@@ -36,6 +38,7 @@ Full probe matrices and Codex implementation map:
 | --- | --- |
 | Wave-5r product IR | **ACCEPT offline** ([[wave_fiver_product_independent_review]]) |
 | Residual ranking | **ACCEPT as research** ([[wave_fives_residual_specials_research]]) |
+| Wave-5s-A research IR | **ACCEPT as research** ([[wave_fivesa_invoice_logs_research_independent_review]]) |
 | Root offline baseline | 179 implemented + contract_tested; live 0; vision 0; `complete: false` |
 | Registry | 264 API tools before this slice |
 
