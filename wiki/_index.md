@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T19:45:00Z
+updated: 2026-07-30T19:53:49Z
 ---
 
 # billy_mcp
@@ -268,6 +268,8 @@ updated: 2026-07-30T19:45:00Z
 [[wave_fivesc_research85_independent_review|wave_fivesc_research85_independent_review]]: Authoritative root Grok acceptance of research85 handoff and offline product ACCEPT of containment-repaired file upload; Wave-5s-C product and completeness remain open.
 
 [[wave_fivesc_research85_product_ready_reconfirm|wave_fivesc_research85_product_ready_reconfirm]]: Post-containment-gate reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; full residual clear 29 unauth matrix; no coverage greening.
+
+[[wave_fivesc_research86_independent_review|wave_fivesc_research86_independent_review]]: Authoritative root Grok acceptance of the research86 product implementation handoff for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
 
 [[wave_fivesc_research86_product_implementation_handoff|wave_fivesc_research86_product_implementation_handoff]]: Post-upload-ACCEPT reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; sequencing gate open for Codex Power product leaf; residual clear stays offline-blocked; no coverage greening.
 
