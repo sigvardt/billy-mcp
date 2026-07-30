@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T11:51:07Z
+updated: 2026-07-30T11:57:38Z
 ---
 
 # billy_mcp
@@ -173,11 +173,15 @@ updated: 2026-07-30T11:51:07Z
 
 [[wave_fiveo_product_implementation_handoff_independent_review|wave_fiveo_product_implementation_handoff_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only product-implementation handoff after freeze ACCEPT; product tools and greening remain separate.
 
+[[wave_fiveo_product_independent_review|wave_fiveo_product_independent_review]]: Authoritative offline Grok ACCEPT for singular invoiceReminders create ticketed write tools on root afbe5188; update, delete, bulk, associations, live, UI, vision, and completeness remain fail-closed.
+
 [[wave_fiveo_product_ready_research_independent_review|wave_fiveo_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only product-ready package; freeze ACCEPT and product remain separate gates.
 
 [[wave_fiveo_ticketed_writes_contract|wave_fiveo_ticketed_writes_contract]]: Cited wiki-only contract freezing singular invoiceReminders create; update, delete, bulk, and association writes remain excluded.
 
 [[wave_fivep_candidate_write_research|wave_fivep_candidate_write_research]]: Cited official-doc and unauth method-gate research for five inventoried write candidates; recommend or block only, not freeze or product acceptance.
+
+[[wave_fivep_freeze_independent_review|wave_fivep_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular organizations create and update ticketed writes (singular delete excluded on 405).
 
 [[wave_fivep_freeze_ready_research_independent_review|wave_fivep_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5p organizations create and update freeze-ready package; freeze page, product, live, UI, and completeness remain separate.
 
