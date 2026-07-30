@@ -15,7 +15,7 @@ sources:
   - src/billy_mcp/api/user_writes.py
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-30T15:10:00Z
-updated: 2026-07-30T15:10:00Z
+updated: 2026-07-30T15:25:00Z
 ---
 
 # Wave-5r salesTaxReturns product-ready research
@@ -81,13 +81,15 @@ Blank-notes columns stay opaque offline with no live success claim:
 | Field | Value |
 | --- | --- |
 | Path | `wiki/wave_fiver_ticketed_writes_contract.md` |
-| Child branch tip | `main.billy_complete.wave5r_sales_tax_returns_freeze` @ `a8590b4` |
+| Authoring tip (merged) | `main.billy_complete.wave5r_sales_tax_returns_freeze` @ `a8590b4` |
 | Content MD5 | `078aca13828b5e0d71b454c1aa2dc00f` |
-| Root presence | Missing until freeze merge |
+| Root presence | **Present** on root (merged; see also [[wave_fiver_freeze_ir_ready_research]]) |
 
 Research74 found the freeze page content consistent with official Supports,
 property boundary, method gates, ticketed-write design, and the freeze-ready
-research package. Independent freeze ACCEPT remains a separate Grok freeze IR.
+research package. Research75 reconfirmed the same freeze MD5 on root and
+packaged freeze IR readiness. Independent freeze ACCEPT remains a separate
+Grok freeze IR.
 
 ## Exact product surface (after freeze IR ACCEPT only)
 

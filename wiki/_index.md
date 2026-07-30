@@ -211,6 +211,8 @@ updated: 2026-07-30T15:18:45Z
 
 [[wave_fiveq_users_product_ready_research_independent_review|wave_fiveq_users_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5q users update product-ready package; freeze independent ACCEPT and product remain separate gates.
 
+[[wave_fiver_freeze_ir_ready_research|wave_fiver_freeze_ir_ready_research]]: Cited re-verification that the Wave-5r freeze page is on root and ready for independent freeze review; product remains blocked until freeze IR ACCEPT; no coverage greening.
+
 [[wave_fiver_sales_tax_returns_freeze_ready_research|wave_fiver_sales_tax_returns_freeze_ready_research]]: Cited offline freeze-ready package for singular salesTaxReturns update ticketed writes; create, delete, bulk, product, live, UI, and completeness remain separate.
 
 [[wave_fiver_sales_tax_returns_freeze_ready_research_independent_review|wave_fiver_sales_tax_returns_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r salesTaxReturns update freeze-ready package; freeze page, product, live, UI, and completeness remain separate.
