@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T15:13:47Z
+updated: 2026-07-30T15:18:45Z
 ---
 
 # billy_mcp
@@ -205,6 +205,8 @@ updated: 2026-07-30T15:13:47Z
 
 [[wave_fiveq_users_product_implementation_research_independent_review|wave_fiveq_users_product_implementation_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5q users update product implementation handoff; product source, live, UI, vision, and completeness remain separate.
 
+[[wave_fiveq_users_product_independent_review|wave_fiveq_users_product_independent_review]]: Authoritative offline Grok ACCEPT for singular users update ticketed write tools on parent baseline e47da25; create, singular delete, bulk, live, UI, vision, and completeness remain fail-closed.
+
 [[wave_fiveq_users_product_ready_research|wave_fiveq_users_product_ready_research]]: Cited offline product-ready package for singular users update ticketed writes after freeze independent ACCEPT; create, delete, bulk, live, UI, and completeness remain separate.
 
 [[wave_fiveq_users_product_ready_research_independent_review|wave_fiveq_users_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5q users update product-ready package; freeze independent ACCEPT and product remain separate gates.
@@ -216,6 +218,8 @@ updated: 2026-07-30T15:13:47Z
 [[wave_fiver_sales_tax_returns_product_ready_research|wave_fiver_sales_tax_returns_product_ready_research]]: Cited freeze-page verification and product implementation map for singular salesTaxReturns update ticketed writes; freeze IR ACCEPT still required before product source; no coverage greening from research.
 
 [[wave_fiver_sales_tax_returns_product_ready_research_independent_review|wave_fiver_sales_tax_returns_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r freeze verification and product-ready package; freeze IR ACCEPT, product, live, UI, and completeness remain separate.
+
+[[wave_fiver_ticketed_writes_contract|wave_fiver_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular salesTaxReturns update; create, delete, bulk, product, live, UI, and completeness remain excluded.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
