@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T06:20:59Z
-updated: 2026-07-30T07:56:00Z
+updated: 2026-07-30T08:07:00Z
 ---
 
 # state
@@ -18,34 +18,35 @@ updated: 2026-07-30T07:56:00Z
 - Wave-5k freeze and product: ACCEPT offline.
 - Wave-5l freeze ACCEPT: `wiki/wave_fivel_freeze_independent_review.md` (contract MD5 `3c49c4f41f3d9485a177a6ee643db412`).
 - Wave-5l product is on root (`sales_tax_payment_writes.py`); offline create+update green. Codex fallback product ACCEPT at `wiki/wave_fivel_product_codex_fallback_review.md`; required Grok product gate may still be pending separately and does not block Wave-5m product.
-- Wave-5m freeze page on root: `wiki/wave_fivem_ticketed_writes_contract.md` (file MD5 `fcb0e58742c8abc8ca9078859bb74eb8`).
-- Wave-5m freeze independent review: **ACCEPT** at `wiki/wave_fivem_freeze_independent_review.md`.
-- Wave-5m product-ready research: research58 in `tmp/grok-research.md` (docs fingerprint unchanged; unauth POST/PUT 401, DELETE 405 reconfirmed). Product tools still absent; product leaf is authorised under freeze ACCEPT.
+- Wave-5m freeze page on root: `wiki/wave_fivem_ticketed_writes_contract.md`.
+- Wave-5m freeze independent review: **ACCEPT** at `wiki/wave_fivem_freeze_independent_review.md` (authoritative). Codex freeze fallback record is non-authoritative corroboration only.
+- Wave-5m product research handoff: research58 **ACCEPT** as research (`tmp/grok-research.md`). Independent review58: product **not accepted** (module absent; 246 tools; create/update rows still red).
+- Product child `main.billy_complete.wave5m_contact_balance_payment_product` is active under freeze ACCEPT.
 - bankPayments / salesTaxPayments create+update offline-qualified; deletes 405 red; bulk ambiguous empty.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 (research58 reconfirm).
-- Unauth: contactBalancePayments POST/PUT **401**, DELETE **405** reconfirmed (top-level `errorCode` / `errorMessage`).
-- Coverage honesty: implemented/contract_tested **170**, live/vision **0**, `complete: false`. No false greens.
+- Official docs retain ETag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 (review58 reconfirm).
+- Unauth: contactBalancePayments POST/PUT **401**, DELETE **405** reconfirmed.
+- Coverage honesty: implemented/contract_tested **170**, live/vision **0**, `complete: false`. No false greens. No bulk greened.
 
 ## Review decisions (authoritative)
 
 - Wave-5g through Wave-5k freeze/product: **ACCEPT** offline where recorded.
 - Wave-5l freeze page: **ACCEPT** offline.
 - Wave-5l product: Codex fallback ACCEPT recorded; Grok product gate still pending if not merged as authoritative.
-- Wave-5m freeze page: **ACCEPT** offline.
-- Wave-5m product: **not accepted** (not implemented).
+- Wave-5m freeze page: **ACCEPT** offline (Grok independent review).
+- Wave-5m research58 handoff: **ACCEPT** as research only.
+- Wave-5m product: **not accepted** (not implemented on root).
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Spawn/run Wave-5m product leaf (four tools; +2 → 172 offline, tools 250) under freeze ACCEPT; research handoff is research58.
+1. Finish Wave-5m product leaf (four tools; +2 → 172 offline, tools 250); then independent product review.
 2. When greening create row, fix cleanup text away from “delete dedicated test resource” (singular DELETE unsupported).
-3. Close or leave redundant freeze-review children; freeze gate is already closed.
-4. Later freezes: invoiceLateFees create+update; invoiceReminders create only; remaining blocked CUD.
-5. Bulk 92, UI/auth/vision, live CUD still open.
+3. Later freezes: invoiceLateFees create+update; invoiceReminders create only; remaining blocked CUD.
+4. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
