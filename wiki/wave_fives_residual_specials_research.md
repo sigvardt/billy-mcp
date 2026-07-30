@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-31T00:12:00Z
+updated: 2026-07-31T23:35:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -52,7 +52,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-B product | **Merged** offline (containment-repaired upload; live false) |
 | Wave-5s-C product | **Merged** offline (`0efceae`; review87 ACCEPT offline only) |
 | Next offline product tools | **None** — residual/bulk require live token |
-| Recommended next slice | **Wave-5u** method-level live residual/bulk observation (Wave-5t OPTIONS harness is infrastructure only) |
+| Recommended next slice | **Wave-5u residual unauth gate + bulk-delete canonical-form fixtures** (infrastructure only; form-matrix already merged). Live residual/bulk observation still blocked without `BILLY_API_TOKEN` |
 
 ## Official docs fingerprint
 
@@ -111,6 +111,23 @@ host `api.billy.dk` must never become the client base.
 | Recommended slice | Encode research95 bulk-delete form matrix into Wave-5u harness tests/comments only; residual/bulk tools still blocked; live needs `BILLY_API_TOKEN` |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research95) |
 | Independent review | **ACCEPT as research** — [[wave_fives_research95_independent_review]] |
+
+## Research96 reconfirm (no coverage green)
+
+| Check | Result |
+| --- | --- |
+| Docs body | Unchanged vs research88–95 (ETag `"wcw4x9hqvu3603"`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`) |
+| Form-matrix harness | **Merged** on root tip `2d3b501` (research95 encode done; still infrastructure only) |
+| Residual 29 unauth gates | Unchanged; 405 messages explicitly “does not support creating/updating records” |
+| Bulk delete server form | Empty `ids[]` **400** message states `DELETE /{resource}?ids[]=123&ids[]=456` |
+| Bulk delete JSON/form body | **400** `INVALID_DELETE_ID_ARRAY` — query form only |
+| bankPayments bulk empty | **405** “does not support bulk deleting records” |
+| `GET /user/organizations` no token | **404** `UNKNOWN_RESOURCE` (“Unknown resource `v2/user/organizations`”) |
+| `GET /organizations` no token | **401** `AUTHENTICATION_REQUIRED` (known resource) |
+| Garbage `X-Access-Token` | **401** `OAUTH_INVALID_ACCESS_TOKEN` on any path — auth-first; **does not prove path existence** |
+| UI login EN/DA | Reconfirmed `Log in` / `Log ind`; captcha iframe 0 |
+| Recommended slice | Encode residual unauth gate fixtures + bulk-delete canonical `ids[]` query template into Wave-5u harness only; still no residual/bulk tools; live needs `BILLY_API_TOKEN` |
+| Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research96) |
 
 ## Residual ranking (research88; held by research89)
 
