@@ -12,7 +12,7 @@ sources:
   - tests/unit/test_live_probe.py
   - tests/live/test_live_probe.py
 created: 2026-07-30T21:25:30Z
-updated: 2026-07-30T21:25:30Z
+updated: 2026-07-31T00:12:00Z
 ---
 
 # Wave-5u safe method-observation contract
@@ -120,6 +120,24 @@ causes the universal gate to block before any URL is built.
 | residual singular delete | `DELETE /R/:id` with `:id →` owner-verified absent identifier | none | no body; no `Content-Type` | The public idempotent-delete rule describes a missing record response, not proof that this identifier is absent in the matched organisation or that cleanup is complete. **BLOCK BEFORE NETWORK.** |
 | bulk save | `PUT /R/bulk` | none | `{"P": []}`; `application/json` | research90's unauthenticated `401` probe supports neither the empty-array semantics nor a bulk response/partial-failure contract. The official page lists bulk support but no bulk wire body. **BLOCK BEFORE NETWORK.** |
 | bulk delete | `DELETE /R` | exactly `ids[]=` (one empty `ids[]` value) | no body; no `Content-Type` | The collection query form is only a shape hint. It does not prove that an empty list is a no-op rather than an error or a broad delete. **BLOCK BEFORE NETWORK.** |
+
+### Bulk-delete form evidence (research95 unauth reconfirm)
+
+Unauthenticated probes on open bulk-delete collections (for example contacts,
+products, accounts, invoices, bills) and on
+`invoiceReminderAssociations` establish these form facts. They are **not**
+authenticated non-persistence proofs and do **not** open networking:
+
+| Form | Unauth result | Rule |
+| --- | --- | --- |
+| `DELETE /R?ids[]=` (empty value), bare `ids[]`, `ids=`, JSON `{"ids":[]}`, or empty plural root body | **400** `INVALID_DELETE_ID_ARRAY` | Empty is a validation **error**, never a safe no-op product path |
+| `DELETE /R?ids[]=<synthetic-absent-id>` | **200** meta-only | Looks like a missing-id response without auth; **not** live cleanup proof under a real token |
+| `DELETE /bankPayments?ids[]=` | **405** | bankPayments does not open this bulk form unauth |
+
+The frozen bulk-delete candidate may keep the query name exactly `ids[]`. It
+must still **BLOCK BEFORE NETWORK** until a separately reviewed non-production
+study proves non-persistence with dual organisation match, owner-verified
+identifiers, cleanup/read-back, and sanitised owner-only evidence.
 
 The 29 residual rows contain create, update, and singular-delete shapes. The
 92 bulk rows are 46 resource pairs using the last two shapes. A future runner

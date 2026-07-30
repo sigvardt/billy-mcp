@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T21:12:00Z
+updated: 2026-07-31T00:12:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -94,6 +94,22 @@ host `api.billy.dk` must never become the client base.
 | UI login | Reconfirmed English `Log in`; stable `name=email|password|remember` |
 | Recommended slice | **Wave-5u** method-level live residual/bulk observation upgrade (still fail-closed and unqualified; no residual/bulk tools; no coverage green). Wave-5t OPTIONS harness remains infrastructure only |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research90) |
+
+## Research95 reconfirm (no coverage green)
+
+| Check | Result |
+| --- | --- |
+| Docs body | Unchanged vs research88–94 (ETag `"wcw4x9hqvu3603"`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`) |
+| Residual 29 unauth gates | Unchanged (405 false friends; bankPayments delete 405; transactions POST/PUT 401, DELETE meta-200) |
+| Bulk save `PUT /{res}/bulk` empty plural | **401** on open resources |
+| Bulk delete empty `ids[]` / empty array forms | **400** `INVALID_DELETE_ID_ARRAY` (error, not no-op) |
+| Bulk delete `ids[]=<synthetic-absent-id>` unauth | **200** meta-only — **not** authenticated non-persistence proof |
+| bankPayments bulk empty | **405** |
+| `GET /user/organizations` | Still unauth **404** `UNKNOWN_RESOURCE` |
+| UI login EN/DA | EN title `Login` / submit `Log in`; DA title `Log ind` / submit `Log ind` |
+| Offline auth product | Root ACCEPT offline only (review94); no UI greening |
+| Recommended slice | Encode research95 bulk-delete form matrix into Wave-5u harness tests/comments only; residual/bulk tools still blocked; live needs `BILLY_API_TOKEN` |
+| Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research95) |
 
 ## Residual ranking (research88; held by research89)
 
