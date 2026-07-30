@@ -32,3 +32,15 @@ implementation slice for Codex Power (two invoice-reminder create tools).
 Codex Power: implement `api_invoice_reminders_create_preview` +
 `api_invoice_reminders_create_execute` only; green one inventory row after
 tests; leave bulk red; keep `complete: false`.
+
+## Post-Mortem
+
+- Completed the cited research handoff: current documentation and unauthenticated
+  method gates still permit only singular invoice-reminder create offline.
+- Independent review66 accepted this package as research and found no blocking
+  discrepancy. Its evidence reconfirms that PUT, singular DELETE, and bulk
+  DELETE remain excluded.
+- No source, tests, coverage status, or product claim changed in this research
+  slice; raw probe material remains in ignored scratch storage.
+- The next unresolved coverage slice is the separate two-tool product
+  implementation, followed by a fresh independent review of its committed diff.
