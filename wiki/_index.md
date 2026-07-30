@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T14:47:28Z
+updated: 2026-07-30T14:56:36Z
 ---
 
 # billy_mcp
@@ -210,6 +210,8 @@ updated: 2026-07-30T14:47:28Z
 [[wave_fiveq_users_product_ready_research_independent_review|wave_fiveq_users_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5q users update product-ready package; freeze independent ACCEPT and product remain separate gates.
 
 [[wave_fiver_sales_tax_returns_freeze_ready_research|wave_fiver_sales_tax_returns_freeze_ready_research]]: Cited offline freeze-ready package for singular salesTaxReturns update ticketed writes; create, delete, bulk, product, live, UI, and completeness remain separate.
+
+[[wave_fiver_sales_tax_returns_freeze_ready_research_independent_review|wave_fiver_sales_tax_returns_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r salesTaxReturns update freeze-ready package; freeze page, product, live, UI, and completeness remain separate.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 

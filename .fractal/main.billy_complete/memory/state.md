@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T11:33:24Z
-updated: 2026-07-30T14:46:30Z
+updated: 2026-07-30T14:56:30Z
 ---
 
 # state
@@ -17,15 +17,17 @@ updated: 2026-07-30T14:46:30Z
 - Root offline coverage **178** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5q freeze page + freeze IR **ACCEPT** on root (freeze MD5 `c53717468aff0406799feca225a00728`).
 - Wave-5q users product merged (`user_writes.py`); registry 262; `api.users.update` offline-green only; live still red; product independent ACCEPT still open as a separate review gate.
-- Research73 Wave-5r salesTaxReturns update freeze-ready package on root wiki + scratch brief.
+- Research73 Wave-5r salesTaxReturns update freeze-ready package on root.
+- Review73: **ACCEPT as research** for Wave-5r freeze-ready package (not freeze ACCEPT).
+- No Wave-5r freeze page and no salesTaxReturns write module yet.
 - UI all red (339); bulk 92 empty-tool red; no live token; no UI credentials.
 - Docs body still MD5 `8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes).
 
 ## Verification
 
-- Research73 re-fetch byte-identical to research72; salesTaxReturns POST 405 / PUT 401 / DELETE 405 / empty PUT 400.
-- Coverage honesty: 178/178/0/0; complete false; zero false-green rows from research.
-- Freeze-ready only: no freeze page yet for Wave-5r; no product module for salesTaxReturns.
+- Review73 independent re-fetch and unauth salesTaxReturns probes match research73.
+- Coverage honesty: 178/178/0/0; complete false; `api.salesTaxReturns.update` remains red; zero false-green rows from research.
+- Freeze-ready research ACCEPT authorises freeze page authoring only.
 
 ## Review decisions (authoritative)
 
@@ -34,7 +36,7 @@ updated: 2026-07-30T14:46:30Z
 - Wave-5q product-ready research: **ACCEPT as research**.
 - Research72 product implementation handoff: **ACCEPT as research** (review72).
 - Wave-5q product on root: **merged / product independent ACCEPT still open**.
-- Research73 Wave-5r freeze-ready: **packaged** (not freeze ACCEPT).
+- Research73 Wave-5r freeze-ready: **ACCEPT as research** (review73).
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
@@ -54,7 +56,9 @@ updated: 2026-07-30T14:46:30Z
 
 ## References
 
+- Review73: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Research73 brief: `.fractal/main.billy_complete/tmp/grok-research.md`
 - Freeze-ready wiki: `wiki/wave_fiver_sales_tax_returns_freeze_ready_research.md`
+- Freeze-ready IR wiki: `wiki/wave_fiver_sales_tax_returns_freeze_ready_research_independent_review.md`
 - Wave-5q freeze page: `wiki/wave_fiveq_ticketed_writes_contract.md`
 - Wave-5q product: `src/billy_mcp/api/user_writes.py`

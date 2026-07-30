@@ -19,3 +19,18 @@ Freeze-ready research package complete for singular `api.salesTaxReturns.update`
 ## Next Codex Power slice
 
 Author wiki-only `wiki/wave_fiver_ticketed_writes_contract.md` (two tools only). No source/tests/coverage greening in freeze leaf.
+
+## Post-Mortem
+
+- Completed: recorded the cited salesTaxReturns update-only research package,
+  including the current official-doc fingerprint and unauthenticated method
+  gates. The root inventory remained at 178 offline rows with no false green.
+- Review: the independent Grok review accepts this package **as research**;
+  freeze, product, live, UI, vision, bulk, and completeness remain separate.
+- Verification: root lint, type, coverage-policy, repository-policy, and
+  non-live tests passed (1,146 tests).
+- Cleanup: no credentials, persistent records, browser evidence, or raw
+  sensitive materials were added to tracked paths.
+- Next unresolved slice: the running Codex Power freeze-authoring leaf must
+  deliver a wiki-only contract; a separate Grok freeze acceptance then gates
+  any salesTaxReturns product work.
