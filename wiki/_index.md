@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T01:17:39Z
+updated: 2026-07-30T01:27:19Z
 ---
 
 # billy_mcp
@@ -104,6 +104,8 @@ updated: 2026-07-30T01:17:39Z
 [[wave_fivei_product_ready_research_independent_review|wave_fivei_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for singular sales-tax account and meta-field ticketed writes under the accepted Wave-5i freeze.
 
 [[wave_fivei_ticketed_writes_contract|wave_fivei_ticketed_writes_contract]]: Cited offline contract for singular sales-tax account and meta-field ticketed writes, accepted by independent Grok review.
+
+[[wave_fivej_freeze_implementation_research_independent_review|wave_fivej_freeze_implementation_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-implementation research handoff for singular bank-line match, line, and subject-association ticketed writes.
 
 [[wave_fivej_freeze_ready_research_independent_review|wave_fivej_freeze_ready_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-ready research handoff for singular bank-line match, line, and subject-association ticketed writes.
 
