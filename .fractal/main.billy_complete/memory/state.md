@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T11:33:24Z
-updated: 2026-07-30T13:07:00Z
+updated: 2026-07-30T13:55:00Z
 ---
 
 # state
@@ -16,9 +16,9 @@ updated: 2026-07-30T13:07:00Z
 - Wave-5c through Wave-5p write modules are merged into root; one shared confirmation store and write protocol.
 - Root offline coverage **177** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5o and Wave-5p freeze + product + product independent review are **ACCEPT**.
-- Wave-5q freeze page is **on root** (MD5 `c53717468aff0406799feca225a00728`). Its formal Grok freeze independent review is **ACCEPT** at child commit `fc493dc`, but the wiki page is not yet merged to root.
+- Wave-5q freeze page and its formal Grok freeze independent review are **ACCEPT** on root (freeze MD5 `c53717468aff0406799feca225a00728`; reviewed child commit `fc493dc`).
 - Wave-5q freeze-ready research: **ACCEPT as research**.
-- Wave-5q product-ready research: parent review71 and the completed Grok child review **ACCEPT as research** at `b9f3a40`; its formal wiki IR page is not yet merged to root.
+- Wave-5q product-ready research and its Grok independent review are **ACCEPT as research** on root (reviewed child commit `b9f3a40`); this is not product acceptance.
 - Research71 / review71 docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes). Users PUT 401; POST/DELETE 405. No users write tools in source.
 - Review71’s inventory notes are applied: the red `api.users.update` API row and
   derived UI-parity row are high sensitivity for user PII and privilege flags;
@@ -40,16 +40,15 @@ updated: 2026-07-30T13:07:00Z
 - Wave-5m through Wave-5p freeze/product: **ACCEPT** offline (as previously recorded).
 - Wave-5q freeze-ready research: **ACCEPT as research**.
 - Wave-5q product-ready research (review71): **ACCEPT as research**.
-- Wave-5q freeze formal independent ACCEPT: **ACCEPT** at `fc493dc`, pending root integration.
+- Wave-5q freeze formal independent ACCEPT: **ACCEPT** and integrated on root.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Merge the completed product-ready research IR and freeze IR; repair generated wiki-index rows and verify the root.
-2. With the freeze ACCEPT integrated: Codex Power users update product (+1 → 178 offline).
-3. Wave-5r salesTaxReturns update-only freeze/product.
-4. Later: transactions, specials, method-closed Supports honesty; associations delete needs live cleanup proof.
-5. Bulk 92, UI/auth/vision, live CUD still open.
+1. Codex Power users-update product (+1 → 178 offline) is now authorised by the integrated freeze ACCEPT.
+2. Wave-5r salesTaxReturns update-only freeze/product.
+3. Later: transactions, specials, method-closed Supports honesty; associations delete needs live cleanup proof.
+4. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 

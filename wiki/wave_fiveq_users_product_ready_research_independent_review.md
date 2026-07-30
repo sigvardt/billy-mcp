@@ -50,9 +50,9 @@ implementation by itself.
   - Empty-body PUT control → 400 `INVALID_REQUEST_BODY` (not a method-closed
     signal), matching the package and [[offline_write_probe_rules]]
 - Freeze page [[wave_fiveq_ticketed_writes_contract]] is present on root; on-disk
-  MD5 `c53717468aff0406799feca225a00728` matches the package claim. Freeze
-  independent review page for that contract has **not** landed; product source
-  correctly remains barred until freeze independent ACCEPT.
+  MD5 `c53717468aff0406799feca225a00728` matches the package claim. At the
+  review baseline, the separate freeze independent-review page had not landed,
+  so product source correctly remained barred until freeze independent ACCEPT.
 - Product-ready package bounds the leaf to
   `api_users_update_preview` / `api_users_update_execute` only: `PUT /users/:id`,
   strict outer `{id, user}`, opaque `user` map, optional matching inner `id`,
@@ -89,9 +89,10 @@ freeze independent ACCEPT.
 ## Explicit non-acceptances
 
 - **Freeze independent ACCEPT** of [[wave_fiveq_ticketed_writes_contract]]
-  (still not landed as a freeze IR page; freeze-ready research IR
-  [[wave_fiveq_users_freeze_ready_research_independent_review]] is a different
-  gate and does not accept the freeze page)
+  (this research review is not that gate; at the review baseline the formal
+  freeze-IR page had not landed, and the freeze-ready research IR
+  [[wave_fiveq_users_freeze_ready_research_independent_review]] is also a
+  different gate)
 - Users product tools, server registration, contract tests, or coverage greening
 - Create or singular delete tools (405)
 - Bulk save/delete tools (92 bulk rows stay red)
@@ -115,10 +116,9 @@ freeze independent ACCEPT.
 | Product source | absent (`src/billy_mcp/api/user_writes.py` not present) |
 | Probe scratch (git-ignored) | node `tmp/write-probes-review.json` and `tmp/docs_fingerprint.json` |
 
-## Remaining gate
+## Current integration boundary
 
-1. Parent-owned independent freeze review of
-   [[wave_fiveq_ticketed_writes_contract]] → ACCEPT or REJECT.
-2. Only after freeze IR ACCEPT: Codex Power product leaf for the two tools above.
-3. Then product independent review. This research ACCEPT is not a substitute for
-   either step.
+The separate [[wave_fiveq_freeze_independent_review]] now records the formal
+freeze **ACCEPT**. This research review remains only research evidence; the
+next gated work is a Codex Power product leaf for the two tools above, followed
+by a separate product independent review.
