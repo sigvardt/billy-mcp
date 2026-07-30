@@ -12028,7 +12028,7 @@
       "area": "invoice_logs",
       "cleanup": "not_applicable",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -12044,7 +12044,7 @@
         ]
       },
       "id": "api.special.invoice_logs",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "GET /v2/invoiceLogs",
@@ -12063,7 +12063,9 @@
       "side_effects": "none",
       "source_kind": "special",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_invoice_log_reads.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_invoice_logs_list",
       "vision_evidence": null,
