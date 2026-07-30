@@ -18,12 +18,21 @@ from typing import Final, Literal
 from urllib.parse import urlsplit
 
 import httpx
-from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator
+from pydantic import (
+    BaseModel,
+    ConfigDict,
+    Field,
+    ValidationError,
+    field_validator,
+    model_validator,
+)
 
 API_BASE_URL: Final = "https://api.billysbilling.com/v2"
 OBSERVATION_METHOD: Final = "OPTIONS"
 OBSERVATION_IDENTIFIER: Final = "__wave5t_observation_target__"
 DEFAULT_EVIDENCE_DIRECTORY: Final = Path.home() / ".local" / "state" / "billy-mcp" / "live-probe"
+BULK_DELETE_QUERY_NAME: Final[Literal["ids[]"]] = "ids[]"
+BULK_DELETE_EMPTY_ERROR_CODE: Final[Literal["INVALID_DELETE_ID_ARRAY"]] = "INVALID_DELETE_ID_ARRAY"
 
 
 class ProbeStatus(StrEnum):
@@ -52,6 +61,80 @@ class CandidateObservationState(StrEnum):
     TRANSPORT_UNAVAILABLE = "transport_unavailable"
 
 
+class BulkDeleteFormKind(StrEnum):
+    """Research95's observed unauthenticated bulk-delete input forms."""
+
+    EMPTY_IDS_ARRAY_QUERY = "empty_ids_array_query"
+    BARE_IDS_ARRAY_QUERY = "bare_ids_array_query"
+    EMPTY_IDS_QUERY = "empty_ids_query"
+    EMPTY_JSON_IDS_ARRAY = "empty_json_ids_array"
+    EMPTY_JSON_PLURAL_ARRAY = "empty_json_plural_array"
+    SYNTHETIC_IDS_ARRAY_QUERY = "synthetic_ids_array_query"
+
+
+class BulkDeleteFormState(StrEnum):
+    """Observed form outcomes that must never qualify a real method."""
+
+    VALIDATION_ERROR = "validation_error"
+    METADATA_ONLY_UNQUALIFIED = "metadata_only_unqualified"
+
+
+class BulkDeleteFormAssessment(BaseModel):
+    """Immutable research95 form outcome; no form proves a safe no-op."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    form: BulkDeleteFormKind
+    unauthenticated_status_code: Literal[200, 400]
+    error_code: Literal["INVALID_DELETE_ID_ARRAY"] | None = None
+    state: BulkDeleteFormState
+    safe_no_op: Literal[False] = False
+    qualifies_live_wire_contract: Literal[False] = False
+    permits_real_method_network: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_research95_semantics(self) -> BulkDeleteFormAssessment:
+        """Keep validation errors and metadata-only success distinct and unqualified."""
+
+        if self.form is BulkDeleteFormKind.SYNTHETIC_IDS_ARRAY_QUERY:
+            if (
+                self.unauthenticated_status_code != 200
+                or self.error_code is not None
+                or self.state is not BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED
+            ):
+                raise ValueError(
+                    "synthetic bulk-delete id is metadata-only unauthenticated evidence"
+                )
+            return self
+        if (
+            self.unauthenticated_status_code != 400
+            or self.error_code != BULK_DELETE_EMPTY_ERROR_CODE
+            or self.state is not BulkDeleteFormState.VALIDATION_ERROR
+        ):
+            raise ValueError(
+                "empty bulk-delete forms are INVALID_DELETE_ID_ARRAY validation errors"
+            )
+        return self
+
+
+class RealMethodSafetyGate(BaseModel):
+    """Current candidate state: every real residual or bulk method is blocked locally."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    non_persistence_proven: Literal[False] = False
+    dual_organization_verified: Literal[False] = False
+    owner_only_evidence_verified: Literal[False] = False
+    cleanup_verified: Literal[False] = False
+    independently_read_back: Literal[False] = False
+
+    @property
+    def permits_real_method_network(self) -> Literal[False]:
+        """Require a separately reviewed model change before real-method traffic can exist."""
+
+        return False
+
+
 class LiveProbeCandidate(BaseModel):
     """One statically approved candidate; callers cannot supply routes."""
 
@@ -62,12 +145,19 @@ class LiveProbeCandidate(BaseModel):
     candidate_method: Literal["POST", "PUT", "DELETE"]
     route: str = Field(pattern=r"^/[A-Za-z][A-Za-z0-9]*(?:/(?:bulk|:id))?$")
     query_names: tuple[Literal["ids[]"], ...] = ()
+    real_method_gate: RealMethodSafetyGate = Field(default_factory=RealMethodSafetyGate)
 
     @property
     def observation_route(self) -> str:
         """Return the static non-mutating route used for an OPTIONS observation."""
 
         return self.route.replace(":id", OBSERVATION_IDENTIFIER)
+
+    @property
+    def permits_real_method_network(self) -> Literal[False]:
+        """Expose the default-deny invariant without adding a real-method path."""
+
+        return self.real_method_gate.permits_real_method_network
 
 
 class LiveProbeObservation(BaseModel):
@@ -291,6 +381,51 @@ _BULK_COLLECTIONS: Final[tuple[str, ...]] = (
 )
 
 
+_RESEARCH95_BULK_DELETE_FORM_MATRIX: Final[tuple[BulkDeleteFormAssessment, ...]] = (
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.EMPTY_IDS_ARRAY_QUERY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        state=BulkDeleteFormState.VALIDATION_ERROR,
+    ),
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.BARE_IDS_ARRAY_QUERY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        state=BulkDeleteFormState.VALIDATION_ERROR,
+    ),
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.EMPTY_IDS_QUERY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        state=BulkDeleteFormState.VALIDATION_ERROR,
+    ),
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.EMPTY_JSON_IDS_ARRAY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        state=BulkDeleteFormState.VALIDATION_ERROR,
+    ),
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.EMPTY_JSON_PLURAL_ARRAY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        state=BulkDeleteFormState.VALIDATION_ERROR,
+    ),
+    BulkDeleteFormAssessment(
+        form=BulkDeleteFormKind.SYNTHETIC_IDS_ARRAY_QUERY,
+        unauthenticated_status_code=200,
+        state=BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED,
+    ),
+)
+
+
+def research95_bulk_delete_form_matrix() -> tuple[BulkDeleteFormAssessment, ...]:
+    """Return the exact observed form matrix without creating a request path."""
+
+    return _RESEARCH95_BULK_DELETE_FORM_MATRIX
+
+
 def research88_candidates() -> tuple[LiveProbeCandidate, ...]:
     """Construct the exact immutable 29-residual plus 92-bulk candidate matrix."""
 
@@ -318,7 +453,7 @@ def research88_candidates() -> tuple[LiveProbeCandidate, ...]:
                     kind=CandidateKind.BULK_DELETE,
                     candidate_method="DELETE",
                     route=f"/{collection}",
-                    query_names=("ids[]",),
+                    query_names=(BULK_DELETE_QUERY_NAME,),
                 ),
             )
         )

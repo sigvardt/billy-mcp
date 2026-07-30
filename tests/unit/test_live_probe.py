@@ -11,6 +11,11 @@ from pydantic import ValidationError
 
 from billy_mcp.live_probe import (
     API_BASE_URL,
+    BULK_DELETE_EMPTY_ERROR_CODE,
+    BULK_DELETE_QUERY_NAME,
+    BulkDeleteFormAssessment,
+    BulkDeleteFormKind,
+    BulkDeleteFormState,
     CandidateKind,
     CandidateObservationState,
     CleanupLedger,
@@ -19,8 +24,10 @@ from billy_mcp.live_probe import (
     LiveProbeRunner,
     PersistentDataBlocked,
     ProbeStatus,
+    RealMethodSafetyGate,
     TrackedDisposableResource,
     research88_candidates,
+    research95_bulk_delete_form_matrix,
 )
 
 
@@ -181,7 +188,74 @@ def test_research88_candidate_construction_is_exact_and_deterministic() -> None:
     )
     assert all(candidate.candidate_method == "PUT" for candidate in bulk[::2])
     assert all(candidate.candidate_method == "DELETE" for candidate in bulk[1::2])
-    assert all(candidate.query_names == ("ids[]",) for candidate in bulk[1::2])
+    assert BULK_DELETE_QUERY_NAME == "ids[]"
+    assert all(candidate.query_names == (BULK_DELETE_QUERY_NAME,) for candidate in bulk[1::2])
+
+
+def test_research95_empty_bulk_delete_forms_are_validation_errors_not_safe_no_ops() -> None:
+    matrix = research95_bulk_delete_form_matrix()
+    empty_forms = matrix[:-1]
+
+    assert tuple(form.form for form in empty_forms) == (
+        BulkDeleteFormKind.EMPTY_IDS_ARRAY_QUERY,
+        BulkDeleteFormKind.BARE_IDS_ARRAY_QUERY,
+        BulkDeleteFormKind.EMPTY_IDS_QUERY,
+        BulkDeleteFormKind.EMPTY_JSON_IDS_ARRAY,
+        BulkDeleteFormKind.EMPTY_JSON_PLURAL_ARRAY,
+    )
+    assert all(form.unauthenticated_status_code == 400 for form in empty_forms)
+    assert all(form.error_code == BULK_DELETE_EMPTY_ERROR_CODE for form in empty_forms)
+    assert all(form.state is BulkDeleteFormState.VALIDATION_ERROR for form in empty_forms)
+    assert all(form.safe_no_op is False for form in empty_forms)
+    assert all(form.qualifies_live_wire_contract is False for form in empty_forms)
+    assert all(form.permits_real_method_network is False for form in empty_forms)
+
+    with pytest.raises(ValidationError):
+        BulkDeleteFormAssessment(
+            form=BulkDeleteFormKind.EMPTY_IDS_ARRAY_QUERY,
+            unauthenticated_status_code=200,
+            state=BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED,
+        )
+    with pytest.raises(ValidationError):
+        BulkDeleteFormAssessment.model_validate(
+            {
+                "form": BulkDeleteFormKind.SYNTHETIC_IDS_ARRAY_QUERY,
+                "unauthenticated_status_code": 200,
+                "state": BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED,
+                "permits_real_method_network": True,
+            }
+        )
+
+
+def test_research95_metadata_only_success_cannot_open_a_real_method_network_path() -> None:
+    matrix = research95_bulk_delete_form_matrix()
+    synthetic_form = matrix[-1]
+
+    assert synthetic_form.form is BulkDeleteFormKind.SYNTHETIC_IDS_ARRAY_QUERY
+    assert synthetic_form.unauthenticated_status_code == 200
+    assert synthetic_form.error_code is None
+    assert synthetic_form.state is BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED
+    assert synthetic_form.safe_no_op is False
+    assert synthetic_form.qualifies_live_wire_contract is False
+    assert synthetic_form.permits_real_method_network is False
+
+    candidates = research88_candidates()
+    assert all(candidate.permits_real_method_network is False for candidate in candidates)
+    assert all(
+        candidate.real_method_gate.non_persistence_proven is False for candidate in candidates
+    )
+    assert all(
+        candidate.real_method_gate.dual_organization_verified is False for candidate in candidates
+    )
+    assert all(
+        candidate.real_method_gate.owner_only_evidence_verified is False for candidate in candidates
+    )
+    assert all(candidate.real_method_gate.cleanup_verified is False for candidate in candidates)
+    assert all(
+        candidate.real_method_gate.independently_read_back is False for candidate in candidates
+    )
+    with pytest.raises(ValidationError):
+        RealMethodSafetyGate.model_validate({"non_persistence_proven": True})
 
 
 def test_invalid_evidence_path_blocks_before_network(tmp_path: Path) -> None:
