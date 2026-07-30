@@ -13,7 +13,7 @@ sources:
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-30T12:24:00Z
-updated: 2026-07-30T12:24:00Z
+updated: 2026-07-30T12:41:00Z
 ---
 
 # Wave-5q users update freeze-ready research
@@ -109,7 +109,7 @@ Shared ticketed-write rules (design + prior freezes):
 
 | Candidate | Offline posture |
 | --- | --- |
-| organizations create/update | Wave-5p freeze ACCEPT; product leaf in flight |
+| organizations create/update | Wave-5p freeze ACCEPT; product integrated offline on root (177); product independent ACCEPT separate |
 | salesTaxReturns update | Sequential Wave-5r; PUT 401; narrow non-readonly columns |
 | invoiceReminderAssociations delete | **Blocked** (DELETE missing id returns 200 meta-only; cleanup unproven) |
 | Many Supports create/update geo/reference rows | Unauth POST/PUT **405** overrides Supports; not freeze candidates |
@@ -118,9 +118,11 @@ Shared ticketed-write rules (design + prior freezes):
 
 ## Coverage honesty at research time
 
-Root baseline remains 175 implemented and contract-tested API rows, 0 live, 0
-vision, 92 ambiguous bulk red, UI all red, `complete: false`. This research
-changes none of those figures.
+At research packaging time the root baseline was 175 implemented and
+contract-tested API rows. After organizations product integration the root
+baseline is 177 offline green, still 0 live, 0 vision, 92 ambiguous bulk red,
+UI all red, `complete: false`. Research itself does not green users or any other
+row.
 
 ## Recommended next step
 
