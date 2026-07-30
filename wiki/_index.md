@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T09:19:40Z
+updated: 2026-07-30T09:23:10Z
 ---
 
 # billy_mcp
@@ -147,9 +147,13 @@ updated: 2026-07-30T09:19:40Z
 
 [[wave_fivem_freeze_independent_review|wave_fivem_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular contactBalancePayments create and update ticketed writes (singular delete excluded on 405).
 
+[[wave_fivem_product_codex_fallback_review|wave_fivem_product_codex_fallback_review]]: Static Codex Power PASS for the committed contactBalancePayments create/update tools; supplemental only and not a replacement for the mandatory Grok independent-review gate.
+
 [[wave_fivem_product_independent_review|wave_fivem_product_independent_review]]: Authoritative offline Grok ACCEPT for singular contactBalancePayments create and update ticketed write tools on root; live and UI remain red.
 
 [[wave_fivem_ticketed_writes_contract|wave_fivem_ticketed_writes_contract]]: Cited offline-only contract for singular Billy contactBalancePayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded, with singular delete excluded on documented 405.
+
+[[wave_fiven_freeze_independent_review|wave_fiven_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular invoiceLateFees create and update ticketed writes (singular delete excluded on 405).
 
 [[wave_fiven_freeze_ready_research_independent_review|wave_fiven_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5n invoiceLateFees create and update freeze package; freeze page and product remain ungated until separately reviewed.
 
