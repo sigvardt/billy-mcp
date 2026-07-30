@@ -45,6 +45,7 @@ from billy_mcp.api.invoice_reminder_writes import register_invoice_reminder_writ
 from billy_mcp.api.invoice_writes import register_invoice_write_tools
 from billy_mcp.api.ledger_user_reads import register_ledger_user_read_tools
 from billy_mcp.api.line_reads import register_line_read_tools
+from billy_mcp.api.organization_writes import register_organization_write_tools
 from billy_mcp.api.reference_reads import register_reference_reads
 from billy_mcp.api.sales_tax_account_meta_writes import register_sales_tax_account_meta_write_tools
 from billy_mcp.api.sales_tax_payment_writes import register_sales_tax_payment_write_tools
@@ -137,6 +138,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_contact_balance_payment_write_tools(server, client, write_protocol)
     register_invoice_late_fee_write_tools(server, client, write_protocol)
     register_invoice_reminder_write_tools(server, client, write_protocol)
+    register_organization_write_tools(server, client, write_protocol)
     return server
 
 

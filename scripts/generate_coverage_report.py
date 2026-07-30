@@ -288,6 +288,14 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.organizations.get": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.organizations.list": ("tests/api/test_bootstrap_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.organizations.create": (
+        "tests/api/test_organization_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.organizations.update": (
+        "tests/api/test_organization_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.currencies.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.currencies.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.countries.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
@@ -923,6 +931,7 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
                 "contactBalancePayments",
                 "invoiceLateFees",
                 "invoiceReminders",
+                "organizations",
             }
             and operation == "create"
         ):
