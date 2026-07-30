@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T06:20:59Z
-updated: 2026-07-30T10:22:00Z
+updated: 2026-07-30T10:38:04Z
 ---
 
 # state
@@ -20,17 +20,18 @@ updated: 2026-07-30T10:22:00Z
 - Wave-5n product independent review: **ACCEPT** offline (`wiki/wave_fiven_product_independent_review.md`).
 - Wave-5o freeze-ready research: **ACCEPT as research** (research63 + review63).
 - Wave-5o freeze authoring package research64: **ACCEPT as research** (review64). Durable: `wiki/wave_fiveo_freeze_authoring_research_independent_review.md`.
-- Wave-5o freeze page still **absent** on root; product not started. Freeze authoring child may be active.
-- Official API contract stable (review64 HTML byte-identical to research64; ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
+- Wave-5o product-ready research65: cited package only (docs byte-identical to research64; probes same). Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Wave-5o freeze page still **absent on root**. The completed `wave5o_invoice_reminder_freeze` child has committed the create-only page (MD5 `6fec5754cc76c4a07b344021cbc3c36b`). Root must merge it and regenerate the parent-owned `wiki/_index.md`; freeze independent review and product remain blocked until then.
+- Official API contract stable (research65 HTML byte-identical to research64; ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Docs review64: ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; HTML equals research64.
-- Unauth probes with `{}` body: invoiceReminders POST 401; PUT/DELETE 405; bulk DELETE 405. associations POST/PUT 405; DELETE 200 meta-only.
+- Docs research65: ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; HTML equals research64.
+- Unauth probes with `{}` body: invoiceReminders POST 401; PUT/DELETE 405; bulk DELETE 405. Empty body POST 400 INVALID_REQUEST_BODY. associations POST/PUT 405; DELETE 200 meta-only.
 - Root late-fee writes present; reminders create inventory still red with reserved preview tool name; cleanup still `delete dedicated test resource` (fix only when product greens).
 - Coverage honesty: 174/174/0/0; complete false; zero UI greens.
-- No false greens from research64.
+- No false greens from research65.
 
 ## Review decisions (authoritative)
 
@@ -39,12 +40,13 @@ updated: 2026-07-30T10:22:00Z
 - Wave-5n product: **ACCEPT** offline for singular create/update only.
 - Wave-5o freeze-ready research: **ACCEPT as research** (review63).
 - Wave-5o freeze authoring research64: **ACCEPT as research** (review64).
+- Wave-5o product-ready research65: cited package only; it is not freeze or product acceptance.
 - Wave-5o freeze page / product: **not accepted**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Land `wiki/wave_fiveo_ticketed_writes_contract.md` (create-only two tools); freeze independent review; then two-tool product.
+1. Merge `wiki/wave_fiveo_ticketed_writes_contract.md` from the completed freeze child, regenerate the root index, then obtain independent freeze review before any two-tool product work using research65.
 2. Later: organizations create+update; users update-only; salesTaxReturns update-only (opaque/cautious); associations delete-only candidate.
 3. Bulk 92, UI/auth/vision, live CUD still open.
 
@@ -55,11 +57,12 @@ updated: 2026-07-30T10:22:00Z
 - Offline 401 opens freeze after product ACCEPT; 405 excludes methods offline.
 - POST/PUT probes require a JSON object body (`{}` minimum) to reach the auth gate.
 - Freeze authoring must not green inventory or ship product code.
+- Product must not start until freeze independent review ACCEPT of the root freeze page.
 
 ## References
 
-- Review: `.fractal/main.billy_complete/tmp/grok-review.md` (review64)
-- Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research64)
+- Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research65)
+- Prior review: `.fractal/main.billy_complete/tmp/grok-review.md` (review64)
 - Research ACCEPT wiki: `wiki/wave_fiveo_freeze_authoring_research_independent_review.md`
 - Prior freeze-ready ACCEPT: `wiki/wave_fiveo_freeze_ready_research_independent_review.md`
 - Product ACCEPT: `wiki/wave_fiven_product_independent_review.md`
