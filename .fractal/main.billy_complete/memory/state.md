@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T15:57:03Z
-updated: 2026-07-31T00:15:00Z
+updated: 2026-07-31T00:22:00Z
 ---
 
 # state
@@ -30,6 +30,7 @@ updated: 2026-07-31T00:15:00Z
 - Unauth matrix reconfirm: empty bulk `ids[]` → **400** `INVALID_DELETE_ID_ARRAY`; `GET /user/organizations` **404**; `GET /organizations` **401**; residual closed POST **405**; transactions POST **401**.
 - Live headless `auth_status` → `AUTH_REQUIRED` (Danish `Log ind`); `button[type=submit]` count 0; no CAPTCHA/passkey.
 - Coverage honesty: 184/184/0/0, `complete: false`. No greening from research.
+- Review92 independent: docs byte-identical; unauth matrix matches; live auth_status AUTH_REQUIRED; tip freeze has no src/coverage greening.
 
 ## Review decisions (authoritative)
 
@@ -40,6 +41,7 @@ updated: 2026-07-31T00:15:00Z
 - Research91: **ACCEPT as research** (review91).
 - Typed `auth_status` offline product: **ACCEPT** credential-absent only (review91); UI rows remain red.
 - Research92: **research-only** credential/login/org freeze; not product ACCEPT.
+- Review92: **ACCEPT research92 + tip research freeze as research only**; pre-submit product not present; overall FAIL.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
@@ -62,8 +64,12 @@ updated: 2026-07-31T00:15:00Z
 ## References
 
 - Research92: `.fractal/main.billy_complete/tmp/grok-research.md` (current research brief)
-- Review91: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Review92: `.fractal/main.billy_complete/tmp/grok-review.md` (current)
+- Wiki IR: `wiki/wave_fives_research92_independent_review.md`
+- Review91: superseded scratch by review92; offline auth_status ACCEPT still holds
 - Wiki IR: `wiki/wave_fives_research91_independent_review.md`
-- Codex credentials planning fallback (not Grok gate): `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` when merged from child
+- Codex credentials planning fallback: completed node record reconciled in
+  `wiki/auth_credentials_pre_submit_research.md`; it remains non-authoritative
+  and is not a Grok gate
 - Wave-5u contract: `wiki/wave5u_method_probe_contract.md`
 - Residual ranking: `wiki/wave_fives_residual_specials_research.md`
