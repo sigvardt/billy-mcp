@@ -35,7 +35,7 @@ dev = [
 packages = ["src/billy_mcp"]
 
 [tool.pytest.ini_options]
-addopts = "-ra"
+addopts = "-ra --import-mode=importlib"
 asyncio_mode = "auto"
 markers = [
   "live: requires the dedicated non-production Billy organisation",

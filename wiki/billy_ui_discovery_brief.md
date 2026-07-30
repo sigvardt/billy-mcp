@@ -7,7 +7,7 @@ sources:
   - /Volumes/ssd_1/Repositories/billy-mcp/.worktrees/main.billy_complete/.fractal/main.billy_complete/tmp/grok-research.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:35:00Z
-updated: 2026-07-29T09:37:00Z
+updated: 2026-07-30T20:45:00Z
 ---
 
 # billy_ui_discovery_brief
@@ -24,6 +24,12 @@ to an app shell. UI email/password/TOTP credentials and API token material were
 absent from process environment and default keyring account. No login submit
 was attempted. No CAPTCHA, passkey, push approval, or MFA challenge was shown
 (login form only). No business writes.
+
+Research89 reconfirm (2026-07-30): still login-only without credentials. Chrome
+locale observed as **English** (`title=Login`, submit `Log in`, placeholders
+`Email`/`Password`, “Keep me logged in”, “Forgot your password?”, “Sign up”,
+“Help”). Prior pass saw Danish labels. Prefer `name=` selectors; match both
+`Log in` and `Log ind` for submit text.
 
 ## Method (observed)
 

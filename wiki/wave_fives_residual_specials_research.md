@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T20:21:00Z
+updated: 2026-07-30T20:45:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -28,8 +28,9 @@ It is not product ACCEPT for residual/bulk, live qualification, UI/vision work,
 or completeness. It does not green coverage.
 
 Full probe matrices and scratch snapshots live at
-`.fractal/main.billy_complete/tmp/grok-research.md` (research88 is the current
-post-specials residual/bulk live-gate brief; research77–87 are historical). InvoiceLogs list
+`.fractal/main.billy_complete/tmp/grok-research.md` (research89 is the current
+Wave-5t harness/UI contract reconfirm; research88 residual ranking still holds;
+research77–87 are historical). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
 offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 [[wave_fivesb_files_upload_product_ready_research]]. Email + delivery freeze:
@@ -62,7 +63,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | ETag | `"wcw4x9hqvu3603"` |
 | Body bytes | 147934 |
 | MD5 | `8b94b0135c91fd15fe54ea33e088a4be` |
-| Note | Byte-identical to research76 HTML body |
+| Note | Byte-identical to research76–88 HTML body (research89 re-fetch) |
 
 Inventory lock metadata in `coverage/status.json` still cites ETag
 `hsisik4g9p3603` / MD5 `c2efda0ee4cf9cf200e14910c5fc6996` (access/CDN drift only).
@@ -70,7 +71,21 @@ Inventory lock metadata in `coverage/status.json` still cites ETag
 API base remains locked to `https://api.billysbilling.com/v2`. Sample upload curl
 host `api.billy.dk` must never become the client base.
 
-## Residual ranking (research88)
+## Research89 reconfirm (no coverage green)
+
+| Check | Result |
+| --- | --- |
+| Docs body | Unchanged vs research88 |
+| Residual 29 unauth gates | Unchanged (405 false friends; bankPayments delete 405; transactions POST/PUT 401, DELETE meta-200) |
+| Bulk candidates | `PUT /{res}/bulk` **401** on open; PATCH collection meta-200 still **not** a contract |
+| Specials method-open | emails, deliveries, invoiceLogs, files, `/user` still **401** unauth |
+| `GET /user/organizations` | Unauth **404** `UNKNOWN_RESOURCE` (docs still cite the path; offline special risk — live must prove or correct) |
+| UI login (headless, no creds) | `mit.billy.dk/login`, English chrome (`Login` / `Log in`); stable `name=email|password|remember` |
+| Recommended slice | Still Wave-5t fail-closed live residual/bulk gate harness only |
+
+## Residual ranking (research88; held by research89)
+
+
 
 ### A. Specials offline (done; live still false)
 
@@ -80,7 +95,7 @@ host `api.billy.dk` must never become the client base.
 | done | `api.special.files_upload` (+ pair `api.files.create`) | `POST /files` binary | Containment-repaired; live false |
 | done | `api.special.invoice_email` | `POST /invoices/:invoiceId/emails` | Ticketed; live false |
 | done | `api.special.invoice_delivery` | `POST /invoiceDeliveries` | Ticketed; live false |
-| done | `api.special.user_get` / `user_organizations` | `GET /user`, `GET /user/organizations` | Earlier waves |
+| done | `api.special.user_get` / `user_organizations` | `GET /user`, `GET /user/organizations` | Offline tools exist; research89 unauth `GET /user/organizations` is **404** — live must prove path |
 
 ### B. Blocked offline (keep red) — residual clear 29
 
@@ -88,7 +103,7 @@ host `api.billy.dk` must never become the client base.
 | --- | --- | --- |
 | 405 false friends | accountNatures, balanceModifiers, cities, countries, countryGroups, currencies, locales, states, zipcodes, postings, contactBalancePostings, invoiceReminderAssociations create/update | Unauth POST/PUT **405** `METHOD_NOT_ALLOWED` with explicit "does not support creating/updating records" |
 | bankPayments delete | `api.bankPayments.delete` | Unauth DELETE **405** "does not support deleting a single record" |
-| transactions CUD | create/update/delete | POST/PUT **401** method-open but property table almost all readonly; DELETE 200 meta-only is not cleanup |
+| transactions CUD | create/update/delete | POST/PUT **401** method-open but property table lists **all fields readonly** (research89 docs extract); DELETE 200 meta-only is not cleanup |
 | associations delete | `api.invoiceReminderAssociations.delete` | Unauth DELETE 200 meta-only; error on missing ids documents `?ids[]=` form only |
 | bulk | all 92 | No body contract on official page; see bulk candidate note below |
 | webhooks | none | 0 official mentions; API `UNKNOWN_RESOURCE` 404 |
