@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T20:26:34Z
+updated: 2026-07-30T20:36:58Z
 ---
 
 # billy_mcp
@@ -233,6 +233,8 @@ updated: 2026-07-30T20:26:34Z
 
 [[wave_fiver_ticketed_writes_contract|wave_fiver_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular salesTaxReturns update; create, delete, bulk, product, live, UI, and completeness remain excluded.
 
+[[wave_fives_research88_independent_review|wave_fives_research88_independent_review]]: Independent Grok review of Research88 and Wave-5t plan baseline. ACCEPT as research only. Coverage remains 184/184/0/0 complete false. No product greening.
+
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 
 [[wave_fivesa_invoice_logs_list_research|wave_fivesa_invoice_logs_list_research]]: Cited offline contract for the read-only special api_invoice_logs_list after Wave-5r product ACCEPT; list-only GET /invoiceLogs with sample query and response; no coverage greening from research.
@@ -303,3 +305,5 @@ updated: 2026-07-30T20:26:34Z
 - [[wave_four_remaining_clear_reads_contract]] — Wave-4 remaining clear get/list freeze (50 tools)
 - [[wave_three_unfiltered_reads_contract]] — Wave-3 unfiltered clear get/list freeze
 - [[wave_four_offline_integration_review]] — Wave-4 offline integration review (ACCEPT slice; FAIL complete)
+
+[[wave_fives_research88_independent_review|wave_fives_research88_independent_review]]: Independent Grok ACCEPT of Research88 residual/bulk live-gate ranking as research only; Wave-5t plan baseline planning-only; completeness FAIL.
