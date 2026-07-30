@@ -2,11 +2,12 @@ from __future__ import annotations
 
 import asyncio
 from pathlib import Path
+from typing import Any, cast
 
 import pytest
 
 from billy_mcp.coverage import CoverageLoadError, load_coverage_report
-from billy_mcp.models import StableErrorCode
+from billy_mcp.models import AuthStatusSuccess, StableErrorCode
 from billy_mcp.server import create_server
 
 WAVE_FOUR_API_TOOL_NAMES = frozenset(
@@ -343,6 +344,15 @@ WAVE_FIVESC_API_TOOL_NAMES = frozenset(
 )
 
 
+class FakeAuthStatusChecker:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def auth_status(self) -> AuthStatusSuccess:
+        self.calls += 1
+        return AuthStatusSuccess()
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -413,7 +423,7 @@ def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
     ]
 
 
-def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> None:
+def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_path: Path) -> None:
     write_coverage_fixture(tmp_path)
     report = load_coverage_report(tmp_path)
     server = create_server(tmp_path)
@@ -472,6 +482,7 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     }
     tool_names = {tool.name for tool in tools}
     api_tool_names = {name for name in tool_names if name.startswith("api_")}
+    auth_tool_names = {name for name in tool_names if name.startswith("auth_")}
     coverage_tool_names = {name for name in tool_names if name.startswith("coverage_")}
 
     assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
@@ -497,6 +508,7 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     assert len(WAVE_FIVESB_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(api_tool_names) == 271
+    assert auth_tool_names == {"auth_status"}
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -522,4 +534,35 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
         | WAVE_FIVESA_API_TOOL_NAMES
         | WAVE_FIVESB_API_TOOL_NAMES
         | WAVE_FIVESC_API_TOOL_NAMES
+        | auth_tool_names
     )
+
+
+def test_auth_status_registration_has_no_generic_controls_and_uses_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    checker = FakeAuthStatusChecker()
+    server = create_server(tmp_path, auth_status_checker=checker)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["auth_status"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    output_properties = cast(dict[str, Any], output_schema["properties"])
+    result_schema = cast(dict[str, Any], output_properties["result"])
+    variants = cast(list[dict[str, Any]], result_schema["anyOf"])
+    assert any(
+        cast(dict[str, Any], variant["properties"]).get("status", {}).get("const")
+        == "AUTH_REQUIRED"
+        for variant in variants
+    )
+    assert any(
+        {"code", "message"}.issubset(cast(dict[str, Any], variant["properties"]))
+        for variant in variants
+    )
+
+    result = asyncio.run(server.call_tool("auth_status", {}))
+
+    assert result.structured_content == {"result": {"status": "AUTH_REQUIRED"}}
+    assert checker.calls == 1

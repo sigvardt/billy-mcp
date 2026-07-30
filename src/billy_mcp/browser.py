@@ -11,9 +11,20 @@ from urllib.parse import urlsplit
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
+from billy_mcp.models import AuthStatusSuccess, StableErrorCode, ToolError
+
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
     Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
 )
+_BILLY_APP_ROOT_URL = "https://mit.billy.dk/"
+_BILLY_LOGIN_URL_PATH = "/login"
+_LOGIN_CONTROL_SELECTORS = (
+    "input[type='email'][name='email']",
+    "input[type='password'][name='password']",
+    "input[type='checkbox'][name='remember']",
+)
+_LOGIN_SUBMIT_SELECTOR = "button[data-cy='login-button']"
+_LOGIN_SUBMIT_LABELS = frozenset({"Log in", "Log ind"})
 
 
 class BrowserEgressManifestHost(BaseModel):
@@ -105,7 +116,38 @@ class PersistentContext(Protocol):
 
     async def route(self, url: str, handler: RouteHandler) -> None: ...
 
+    async def new_page(self) -> LoginPage: ...
+
     async def close(self) -> None: ...
+
+
+class LoginControl(Protocol):
+    """The exact, internal DOM reads needed to verify the recorded login form."""
+
+    async def count(self) -> int: ...
+
+    async def is_visible(self) -> bool: ...
+
+    async def inner_text(self) -> str: ...
+
+
+class LoginPage(Protocol):
+    """A deliberately minimal page surface for the fixed auth-status workflow."""
+
+    @property
+    def url(self) -> str: ...
+
+    async def goto(self, url: str, *, wait_until: Literal["domcontentloaded"]) -> object: ...
+
+    def locator(self, selector: str) -> LoginControl: ...
+
+    async def close(self) -> None: ...
+
+
+class AuthStatusChecker(Protocol):
+    """Injectable, auth-status-only seam for deterministic server tests."""
+
+    async def auth_status(self) -> AuthStatusSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -228,6 +270,30 @@ class BrowserRuntime:
                     if stopper is not None:
                         await stopper()
 
+    async def auth_status(self) -> AuthStatusSuccess | ToolError:
+        """Classify only the recorded Billy login page without exposing browser controls."""
+
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            try:
+                await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+                if not _is_known_login_url(page.url) or not await _has_login_signature(page):
+                    return _ui_changed_error()
+                return AuthStatusSuccess()
+            finally:
+                await page.close()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the authentication status check.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser authentication status could not be determined.",
+            )
+
     async def _enforce_egress(self, route: BrowserRoute) -> None:
         policy = self._policy
         if policy is None:
@@ -236,6 +302,55 @@ class BrowserRuntime:
             await route.continue_()
         else:
             await route.abort("blockedbyclient")
+
+
+def _is_known_login_url(url: str) -> bool:
+    """Accept only the observed HTTPS Billy login route, without redirect parameters."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and parsed.path == _BILLY_LOGIN_URL_PATH
+        and not parsed.query
+        and not parsed.fragment
+    )
+
+
+async def _has_login_signature(page: LoginPage) -> bool:
+    """Verify every observed login control exactly once and visibly present."""
+
+    try:
+        for selector in _LOGIN_CONTROL_SELECTORS:
+            control = page.locator(selector)
+            if await control.count() != 1 or not await control.is_visible():
+                return False
+        submit = page.locator(_LOGIN_SUBMIT_SELECTOR)
+        return (
+            await submit.count() == 1
+            and await submit.is_visible()
+            and (await submit.inner_text()).strip() in _LOGIN_SUBMIT_LABELS
+        )
+    except Exception:
+        # Any DOM-read failure means the recorded page signature is no longer
+        # trustworthy; do not disclose its contents or infer session state.
+        return False
+
+
+def _ui_changed_error() -> ToolError:
+    """Return the stable fail-closed result without echoing page or session values."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy login interface no longer matches the recorded signature.",
+    )
 
 
 async def _launch_persistent_context(

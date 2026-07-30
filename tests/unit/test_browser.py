@@ -14,6 +14,7 @@ from billy_mcp.browser import (
     PersistentContext,
     RouteHandler,
 )
+from billy_mcp.models import AuthStatusSuccess, StableErrorCode, ToolError
 
 
 class FakeRequest:
@@ -50,6 +51,68 @@ class FakeContext:
 class FailingRouteContext(FakeContext):
     async def route(self, url: str, handler: RouteHandler) -> None:
         raise RuntimeError("route installation failed")
+
+
+class FakeLoginControl:
+    def __init__(self, *, count: int = 1, visible: bool = True, text: str = "") -> None:
+        self._count = count
+        self._visible = visible
+        self._text = text
+
+    async def count(self) -> int:
+        return self._count
+
+    async def is_visible(self) -> bool:
+        return self._visible
+
+    async def inner_text(self) -> str:
+        return self._text
+
+
+class FakeLoginPage:
+    def __init__(
+        self,
+        *,
+        final_url: str = "https://mit.billy.dk/login",
+        controls: dict[str, FakeLoginControl] | None = None,
+        goto_error: Exception | None = None,
+    ) -> None:
+        self.url = final_url
+        self.controls = controls or {
+            "input[type='email'][name='email']": FakeLoginControl(),
+            "input[type='password'][name='password']": FakeLoginControl(),
+            "input[type='checkbox'][name='remember']": FakeLoginControl(),
+            "button[data-cy='login-button']": FakeLoginControl(text="Log in"),
+        }
+        self.goto_error = goto_error
+        self.navigation: list[tuple[str, str]] = []
+        self.closed = False
+
+    async def goto(self, url: str, *, wait_until: str) -> object:
+        self.navigation.append((url, wait_until))
+        if self.goto_error is not None:
+            raise self.goto_error
+        return object()
+
+    def locator(self, selector: str) -> FakeLoginControl:
+        return self.controls.get(selector, FakeLoginControl(count=0, visible=False))
+
+    async def close(self) -> None:
+        self.closed = True
+
+
+class FakeLoginContext(FakeContext):
+    def __init__(self, page: FakeLoginPage) -> None:
+        super().__init__()
+        self.page = page
+
+    async def new_page(self) -> FakeLoginPage:
+        return self.page
+
+
+class FailingLoginPage(FakeLoginPage):
+    def locator(self, selector: str) -> FakeLoginControl:
+        raise RuntimeError("login DOM changed")
 
 
 async def invoke_handler(handler: RouteHandler, route: FakeRoute) -> None:
@@ -194,3 +257,137 @@ def test_browser_closes_context_when_egress_route_cannot_be_installed(tmp_path: 
         asyncio.run(runtime.start())
 
     assert context.closed
+
+
+@pytest.mark.parametrize("submit_label", ["Log in", "Log ind"])
+def test_auth_status_returns_only_the_observed_login_state_in_headless_context(
+    tmp_path: Path, submit_label: str
+) -> None:
+    page = FakeLoginPage(
+        controls={
+            "input[type='email'][name='email']": FakeLoginControl(),
+            "input[type='password'][name='password']": FakeLoginControl(),
+            "input[type='checkbox'][name='remember']": FakeLoginControl(),
+            "button[data-cy='login-button']": FakeLoginControl(text=submit_label),
+        }
+    )
+    context = FakeLoginContext(page)
+    launch_arguments: dict[str, object] = {}
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        launch_arguments["profile_path"] = profile_path
+        launch_arguments.update(kwargs)
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_status())
+
+    assert result == AuthStatusSuccess()
+    assert launch_arguments["headless"] is True
+    assert launch_arguments["accept_downloads"] is False
+    assert page.navigation == [("https://mit.billy.dk/", "domcontentloaded")]
+    assert page.closed
+
+
+@pytest.mark.parametrize(
+    "final_url",
+    [
+        "https://mit.billy.dk/organizations",
+        "https://mit.billy.dk/login?returnTo=%2F",
+        "https://[malformed",
+    ],
+)
+def test_auth_status_fails_closed_when_the_final_route_changes(
+    tmp_path: Path, final_url: str
+) -> None:
+    page = FakeLoginPage(final_url=final_url)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_status())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert result.details == {}
+    assert page.closed
+
+
+def test_auth_status_fails_closed_when_the_login_signature_changes(tmp_path: Path) -> None:
+    page = FakeLoginPage(
+        controls={
+            "input[type='email'][name='email']": FakeLoginControl(),
+            "input[type='password'][name='password']": FakeLoginControl(),
+            "input[type='checkbox'][name='remember']": FakeLoginControl(),
+            "button[data-cy='login-button']": FakeLoginControl(text="Continue"),
+        }
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_status())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+
+
+def test_auth_status_fails_closed_when_login_control_reads_fail(tmp_path: Path) -> None:
+    page = FailingLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_status())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+
+
+def test_auth_status_does_not_echo_browser_session_or_credential_failures(tmp_path: Path) -> None:
+    secret = "cookie=session-secret password=browser-secret"
+    page = FakeLoginPage(goto_error=RuntimeError(secret))
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_status())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.BILLY_ERROR
+    assert result.details == {}
+    assert secret not in str(result.model_dump())
+    assert page.closed
