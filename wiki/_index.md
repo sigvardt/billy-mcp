@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T03:23:31Z
+updated: 2026-07-30T03:40:44Z
 ---
 
 # billy_mcp
@@ -116,6 +116,8 @@ updated: 2026-07-30T03:23:31Z
 [[wave_fivej_product_ready_research_independent_review|wave_fivej_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for singular bank-line match, line, and subject-association ticketed writes under the accepted Wave-5j freeze.
 
 [[wave_fivej_ticketed_writes_contract|wave_fivej_ticketed_writes_contract]]: Cited offline contract for singular bank-line match, line, and subject-association ticketed writes, accepted by independent Grok freeze review.
+
+[[wave_fivek_freeze_authoring_authority_research_independent_review|wave_fivek_freeze_authoring_authority_research_independent_review]]: Independent Grok acceptance that opens offline Wave-5k freeze-page authoring for singular bankPayments create and update after product prerequisite and package content are already accepted.
 
 [[wave_fivek_freeze_authoring_readiness_research_independent_review|wave_fivek_freeze_authoring_readiness_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-authoring readiness research handoff for singular bankPayments create and update after Wave-5j product merge, still gated on Wave-5j product independent review ACCEPT.
 
