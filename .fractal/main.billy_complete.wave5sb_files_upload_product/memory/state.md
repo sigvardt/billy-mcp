@@ -7,27 +7,21 @@ updated: 2026-07-30T17:54:00Z
 
 # state
 
-The node owns the bounded offline binary files-upload slice: typed preview and
-execute tools, narrow client support, registration, coverage evidence, and
-non-live tests. The accepted contract is
-`wiki/wave_fivesb_files_upload_product_ready_research.md`; implementation must
-not conduct new external research or broaden into JSON creates, generic file
-access, UI, live, or bulk work.
+The bounded offline binary files-upload slice is committed at `063ce7a`.
+The parent has confirmed the root clean-archive validation of that committed
+tip. Preserve its typed preview/execute tools, narrow binary client path,
+registration, coverage evidence, and non-live tests without reimplementing or
+expanding the product.
 
-The parent branch is already merged into this branch and no child branches
-exist. Parent confirmation establishes that the cited scratch handoff is
-intentionally unavailable and carries no additional binding contract. The
-complete authority is the product-ready handoff, its independent review,
-the frozen research page, and design §§8.3–8.4; concrete implementation
-conflicts must be escalated rather than resolved by new research.
+The accepted contract is
+`wiki/wave_fivesb_files_upload_product_ready_research.md`; it bars JSON creates,
+generic file access, UI, live, and bulk scope. The parent branch is already
+merged into this branch and no child branches exist. The cited scratch handoff
+is intentionally unavailable; the product-ready handoff, its independent
+review, frozen research page, and design §§8.3–8.4 are the complete authority.
 
-The committed product slice has been locally reviewed as a non-authoritative
-fallback after the requested Grok review could not authenticate. The review's
-two boundary defects are resolved: registered FastMCP parameters use strict
-scalar types so coercible booleans and strings are rejected before preview, and
-the tool and client reject CR/LF in caller-derived header values before any
-transport request. Focused regression tests and the configured non-live suite
-pass. Final clean-archive validation, repository checks, coverage regeneration,
-commit, and the required product review remain before completion. This fallback
-does not replace the independent Grok audit or qualify live, UI, vision, bulk,
-or completeness gates.
+The two resolved boundary protections remain part of the committed product:
+strict registered scalar types reject coercible values before preview, and the
+tool/client reject CR/LF in caller-derived header values before a request. The
+mandatory independent Grok product audit is parent-owned after merge. Live,
+UI, vision, bulk, and completeness gates remain intentionally unclaimed.
