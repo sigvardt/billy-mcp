@@ -6,111 +6,63 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-30T04:44:00Z
+updated: 2026-07-30T04:59:00Z
 ---
 
 # state
 
 ## Current state
 
-- Wave-5c through Wave-5i write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
-- Wave-5j freeze page is merged (`wiki/wave_fivej_ticketed_writes_contract.md`). Independent freeze review **ACCEPT** at `wiki/wave_fivej_freeze_independent_review.md`.
-- Wave-5j product is **merged on root** (`src/billy_mcp/api/bank_line_writes.py`, 18 ticketed tools). Registry **238** `api_*` tools. Offline coverage **166** implemented + contract_tested. Live/vision still 0. `complete: false`.
-- Wave-5j product has an **offline-only independent Codex fallback ACCEPT** at
-  `wiki/wave_fivej_product_independent_review.md`.
-- Wave-5k research chain is complete through freeze authoring authority, product
-  readiness, freeze-delivery verification, and root-freeze verification.
-- Wave-5k freeze authoring authority independent Grok review: **ACCEPT** at
-  `wiki/wave_fivek_freeze_authoring_authority_research_independent_review.md`.
-- Wave-5k product-readiness research: **ACCEPT offline handoff only** (root +
-  Codex fallback child ACCEPT).
-- **Wave-5k freeze page is on root** at
-  `wiki/wave_fivek_ticketed_writes_contract.md`, and the project wiki index
-  includes it.
-- Freeze independent review page **absent** (`wiki/wave_fivek_freeze_independent_review.md`). Product blocked until freeze independent ACCEPT.
-- Current official verification: docs are **unchanged**; bankPayments POST/PUT
-  return **401**, DELETE returns **405**; root freeze content is
-  **contract-match** (cosmetic 405 quote backticks only). The four-tool product
-  recipe is reconfirmed.
-- Current independent handoff review: **ACCEPT offline handoff only** (report
-  `tmp/grok-review.md`). Not freeze ACCEPT; not product ACCEPT.
-- Product module still **absent**.
+- Wave-5c through Wave-5j write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
+- Wave-5j product is on root (`src/billy_mcp/api/bank_line_writes.py`). Registry **238** `api_*` tools. Offline coverage **166** implemented + contract_tested. Live/vision still 0. `complete: false`.
+- Wave-5k freeze page is on root at `wiki/wave_fivek_ticketed_writes_contract.md`.
+- **Wave-5k freeze independent Grok review: ACCEPT** at
+  `wiki/wave_fivek_freeze_independent_review.md` (root independent review).
+  Opens offline four-tool product leaf only.
+- Codex Power fallback freeze page remains on root at
+  `wiki/wave_fivek_freeze_codex_fallback_review.md` as non-authoritative record only.
+- Wave-5k product module still **absent** (`src/billy_mcp/api/bank_payment_writes.py`).
 - Coverage: implemented 166, contract_tested 166, live 0, vision 0, `complete: false`.
-  Clear singular CUD rows still red with tool_name: **46**. Next offline greens: bankPayments create+update only (**+2 → 168**).
+  Next offline greens after product: bankPayments create+update only (**+2 → 168**, tools **242**).
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
 - Official docs retain ETag `hsisik4g9p3603`, MD5
   `c2efda0ee4cf9cf200e14910c5fc6996`, and a 147934-byte body.
-- Unauth probes reconfirmed: bankPayments POST/PUT **401**; DELETE **405** with
-  message “Resource at `bankPayments` does not support deleting a single record.”
-- Extended probes: salesTaxPayments / contactBalancePayments / invoiceLateFees
-  POST/PUT 401, DELETE 405; invoiceReminders POST 401, PUT **405** (no update), DELETE 405.
-- No false coverage greens; registry 238; bankPayments write tools absent; freeze page **present on root**; freeze review **absent**.
-- Product-ready handoff ACCEPT is not product or freeze ACCEPT. No full-mode claim.
+- Unauth probes: bankPayments POST/PUT **401**; DELETE **405** singular-delete refusal.
+- No false coverage greens; registry 238; bankPayments write tools absent.
+- Freeze ACCEPT does not green coverage and is not product ACCEPT.
 
 ## Review decisions (authoritative)
 
-- Wave-5g product: **ACCEPT** offline.
-- Wave-5h freeze / product: **ACCEPT** offline.
-- Wave-5i freeze / product: **ACCEPT** offline.
-- Wave-5j freeze-ready research: **ACCEPT** offline handoff only.
-- Wave-5j freeze-implementation research: **ACCEPT** offline handoff only.
-- Wave-5j freeze contract: **ACCEPT** offline contract.
-- Wave-5j product-ready research: **ACCEPT** offline handoff only.
-- Wave-5j product: **offline-only independent Codex fallback ACCEPT**; product
-  non-overclaim does not open Wave-5k product and is not a permanent freeze
-  research block. Accepted slice is 18 bank-line tools and 166 offline rows.
-- Wave-5k freeze-ready / freeze-implementation / authoring-readiness / package
-  research: **ACCEPT** offline handoffs (package content only for package page).
-- Wave-5k freeze authoring authority: **ACCEPT** — opens offline freeze-page
-  authoring for bankPayments create+update only.
-- Wave-5k product-readiness research: **ACCEPT offline handoff only**.
-- Wave-5k freeze-delivery verification: **ACCEPT offline handoff only**.
-- Wave-5k root-freeze verification: **ACCEPT offline handoff only**
-  (independent review). Not freeze ACCEPT. Not product ACCEPT.
-- Wave-5k freeze page: **on root; independent Grok review remains required**.
-  The first Grok reviewer failed before any reviewer edit because its route was
-  unauthenticated; policy requires the active Codex Power fallback review, which
-  is non-authoritative and cannot replace the Grok gate.
-- Wave-5k product: **not authored**.
+- Wave-5g through Wave-5i freeze/product: **ACCEPT** offline where recorded.
+- Wave-5j freeze and product: **ACCEPT** offline (product via Codex fallback ACCEPT page).
+- Wave-5k freeze-ready / implementation / authoring-readiness / package / authority research: **ACCEPT** offline handoffs as recorded.
+- Wave-5k product-ready research: **ACCEPT offline handoff only**.
+- Wave-5k freeze page: **ACCEPT** at `wiki/wave_fivek_freeze_independent_review.md`.
+- Wave-5k product: **not authored / not accepted**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Independent freeze review ACCEPT for `wiki/wave_fivek_ticketed_writes_contract.md` (page already on root).
-2. Four-tool product leaf after freeze ACCEPT → registry 242 / coverage 168 offline; delete stays red.
+1. Wave-5k product leaf (four tools) now authorised by freeze ACCEPT → registry 242 / coverage 168 offline; delete stays red.
+2. Independent product review ACCEPT after product merge.
 3. Later freezes: salesTaxPayments / contactBalancePayments / invoiceLateFees
-   create+update; invoiceReminders create only (PUT 405); salesTaxReturns update;
-   users update; orgs with risk gate; transactions only after readonly resolution.
-4. Blocked offline (405 / readonly): accountNatures, postings, balanceModifiers,
-   contactBalancePostings, geo CUD, bankPayments/salesTaxPayments/
-   contactBalancePayments/invoiceLateFees delete, invoiceReminders update/delete,
-   invoiceReminderAssociations create/update, files JSON as binary special.
-5. Bulk 92, UI/auth/vision, live CUD still open.
+   create+update; invoiceReminders create only (PUT 405); remaining blocked CUD.
+4. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
 - Official API fingerprint: etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`.
-- bankPayments singular DELETE remains **405** and overrides Supports delete for offline tools.
-- Inventory still carries `tool_name` for delete; freeze/product must not register delete tools.
-- Inventory create cleanup directs a void through irreversible `isVoided`; live qualification must independently verify that cleanup.
-- Clear singular CUD red count with tool_name: **46**.
-- No coverage green from research.
+- bankPayments singular DELETE remains **405**; no delete tools.
+- Inventory create cleanup: void via irreversible `isVoided` (live verify later).
+- No coverage green from review alone.
 
 ## References
 
-- Wave-5j freeze ACCEPT: `wiki/wave_fivej_freeze_independent_review.md`
-- Wave-5j freeze contract: `wiki/wave_fivej_ticketed_writes_contract.md`
-- Wave-5j product fallback ACCEPT: `wiki/wave_fivej_product_independent_review.md`
-- Wave-5k freeze-ready research ACCEPT: `wiki/wave_fivek_freeze_ready_research_independent_review.md`
-- Wave-5k freeze-implementation research ACCEPT: `wiki/wave_fivek_freeze_implementation_research_independent_review.md`
-- Wave-5k freeze authoring readiness research ACCEPT: `wiki/wave_fivek_freeze_authoring_readiness_research_independent_review.md`
-- Wave-5k freeze page package research ACCEPT: `wiki/wave_fivek_freeze_page_authoring_package_research_independent_review.md`
-- Wave-5k freeze authoring authority ACCEPT: `wiki/wave_fivek_freeze_authoring_authority_research_independent_review.md`
-- Wave-5k freeze page (root): `wiki/wave_fivek_ticketed_writes_contract.md`
+- Freeze ACCEPT: `wiki/wave_fivek_freeze_independent_review.md`
+- Freeze contract: `wiki/wave_fivek_ticketed_writes_contract.md`
+- Fallback freeze record: `wiki/wave_fivek_freeze_codex_fallback_review.md`
+- Current review scratch: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Current research scratch: `.fractal/main.billy_complete/tmp/grok-research.md`
-  (freeze-on-root verification and product lock)
-- Current independent handoff review: `.fractal/main.billy_complete/tmp/grok-review.md`
-- Offline probe rules: `wiki/offline_write_probe_rules.md`

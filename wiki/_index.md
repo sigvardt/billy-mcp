@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T04:47:16Z
+updated: 2026-07-30T05:01:31Z
 ---
 
 # billy_mcp
@@ -125,13 +125,15 @@ updated: 2026-07-30T04:47:16Z
 
 [[wave_fivek_freeze_implementation_research_independent_review|wave_fivek_freeze_implementation_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-implementation research handoff for singular bankPayments create and update ticketed writes (delete excluded on 405).
 
+[[wave_fivek_freeze_independent_review|wave_fivek_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular bankPayments create and update ticketed writes (delete excluded on 405).
+
 [[wave_fivek_freeze_page_authoring_package_research_independent_review|wave_fivek_freeze_page_authoring_package_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-page authoring package for singular bankPayments create and update, with Wave-5k authoring still blocked by the Wave-5j product fallback non-authorization.
 
 [[wave_fivek_freeze_ready_research_independent_review|wave_fivek_freeze_ready_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-ready research handoff for singular bankPayments create and update ticketed writes (delete excluded on 405).
 
 [[wave_fivek_product_ready_research_codex_fallback_review|wave_fivek_product_ready_research_codex_fallback_review]]: Non-authoritative offline Codex Power fallback ACCEPT of implementation readiness for two bankPayments ticketed-write rows; not a Grok gate, freeze acceptance, or product approval.
 
-[[wave_fivek_ticketed_writes_contract|wave_fivek_ticketed_writes_contract]]: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes, pending independent Grok freeze review.
+[[wave_fivek_ticketed_writes_contract|wave_fivek_ticketed_writes_contract]]: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 

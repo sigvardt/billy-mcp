@@ -1,7 +1,7 @@
 ---
 name: wave_fivek_ticketed_writes_contract
 title: Wave-5k bank-payment ticketed-write contract
-desc: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes, pending independent Grok freeze review.
+desc: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded.
 tags: [billy, api, bank, payments, writes, coverage]
 sources:
   - https://www.billy.dk/api/
@@ -33,8 +33,8 @@ The cited official documentation evidence is exactly ETag `hsisik4g9p3603`,
 MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 bytes. The locked API base
 is `https://api.billysbilling.com/v2`. This contract is not product
 implementation, live qualification, browser/UI parity, vision verification,
-bulk qualification, or a completeness claim. It requires an independent Grok
-freeze review before any Wave-5k product leaf.
+bulk qualification, or a completeness claim. Independent Grok freeze review ACCEPT is recorded in
+`wiki/wave_fivek_freeze_independent_review.md`. Product leaf may proceed under that gate.
 
 ## Exact inventory and tool surface
 
