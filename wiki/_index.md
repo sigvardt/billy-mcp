@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T11:08:32Z
+updated: 2026-07-30T11:17:04Z
 ---
 
 # billy_mcp
@@ -176,6 +176,8 @@ updated: 2026-07-30T11:08:32Z
 [[wave_fiveo_product_ready_research_independent_review|wave_fiveo_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only product-ready package; freeze ACCEPT and product remain separate gates.
 
 [[wave_fiveo_ticketed_writes_contract|wave_fiveo_ticketed_writes_contract]]: Cited wiki-only contract freezing singular invoiceReminders create; update, delete, bulk, and association writes remain excluded.
+
+[[wave_fivep_candidate_write_research|wave_fivep_candidate_write_research]]: Cited official-doc and unauth method-gate research for five inventoried write candidates; recommend or block only, not freeze or product acceptance.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
