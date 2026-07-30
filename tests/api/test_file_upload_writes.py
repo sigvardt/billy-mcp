@@ -352,6 +352,33 @@ def test_execute_rejects_every_bound_file_identity_change(tmp_path: Path, change
     assert requests == []
 
 
+def test_execute_rejects_replacement_between_identity_check_and_read(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    target = write_safe_file(tmp_path, b"original")
+    server, requests = make_server(
+        tmp_path, lambda request: pytest.fail(f"replaced file attempted HTTP: {request.url}")
+    )
+    preview = call_tool(server, "api_files_upload_preview", preview_arguments())
+    original_read_bytes = Path.read_bytes
+
+    def replace_before_read(path: Path) -> bytes:
+        if path == target.resolve():
+            target.write_bytes(b"replacement")
+        return original_read_bytes(path)
+
+    monkeypatch.setattr(Path, "read_bytes", replace_before_read)
+
+    result = call_tool(
+        server,
+        "api_files_upload_execute",
+        {"confirmation_ticket": preview["confirmation_ticket"]},
+    )
+
+    assert result["code"] == StableErrorCode.FILE_CHANGED
+    assert requests == []
+
+
 def test_execute_reports_nonregular_replacement_as_not_allowed(tmp_path: Path) -> None:
     target = write_safe_file(tmp_path)
     server, requests = make_server(

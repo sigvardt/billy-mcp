@@ -267,6 +267,11 @@ class FileUploadService:
                 code=StableErrorCode.FILE_CHANGED,
                 message="File changed before upload; create a new preview before upload.",
             )
+        if hashlib.sha256(file_bytes).hexdigest() != prepared.identity.digest:
+            return ToolError(
+                code=StableErrorCode.FILE_CHANGED,
+                message="File changed after preview; create a new preview before upload.",
+            )
         response = self._client.post_file(
             file_bytes=file_bytes,
             filename=prepared.filename,
