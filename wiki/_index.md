@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T10:39:41Z
+updated: 2026-07-30T10:50:46Z
 ---
 
 # billy_mcp
@@ -166,6 +166,8 @@ updated: 2026-07-30T10:39:41Z
 [[wave_fiven_ticketed_writes_contract|wave_fiven_ticketed_writes_contract]]: Cited offline contract that freezes only singular invoiceLateFees create and update ticketed writes; delete and bulk operations are excluded.
 
 [[wave_fiveo_freeze_authoring_research_independent_review|wave_fiveo_freeze_authoring_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only freeze authoring package after Wave-5n product ACCEPT; freeze page and product remain ungated until separate freeze review.
+
+[[wave_fiveo_freeze_independent_review|wave_fiveo_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular invoiceReminders create ticketed writes (update, delete, bulk, and association writes excluded).
 
 [[wave_fiveo_freeze_ready_research_independent_review|wave_fiveo_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only freeze package; freeze page and product remain ungated until Wave-5n product ACCEPT and separate freeze review.
 
