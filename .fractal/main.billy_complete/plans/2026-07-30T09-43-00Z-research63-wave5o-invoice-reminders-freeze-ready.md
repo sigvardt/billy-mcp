@@ -27,3 +27,18 @@ Author freeze wiki only for two tools:
 `.fractal/main.billy_complete/tmp/grok-research.md` (research63),
 `tmp/write-probes-research63.json`, section extracts, freeze MD5
 `93e6d266d1718fa517ff645b3ca213ce` still valid for Wave-5n.
+
+## Post-Mortem
+
+- Completed: captured the create-only `invoiceReminders` research package and
+  received an independent **ACCEPT as research** verdict.
+- Deviation: the finding's initial root count of 172 became stale after the
+  Wave-5n merge; the root is now at 174 offline contract-tested API rows.
+- Review and verification: review63 rechecked the byte-identical official
+  documentation and the recorded 401/405 probes. No implementation or
+  coverage state was changed by this research slice.
+- Cleanup: only non-sensitive scratch evidence and a durable scrubbed wiki
+  review record were retained; no credentials, browser evidence, or live
+  mutations were created.
+- Next unresolved slice: await the independent Wave-5n product verdict before
+  a Codex Power freeze leaf may write the Wave-5o contract.

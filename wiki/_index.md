@@ -163,6 +163,8 @@ updated: 2026-07-30T09:37:31Z
 
 [[wave_fiven_ticketed_writes_contract|wave_fiven_ticketed_writes_contract]]: Cited offline contract that freezes only singular invoiceLateFees create and update ticketed writes; delete and bulk operations are excluded.
 
+[[wave_fiveo_freeze_ready_research_independent_review|wave_fiveo_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5o invoiceReminders create-only freeze package; freeze page and product remain ungated until Wave-5n product ACCEPT and separate freeze review.
+
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
 [[wave_four_freeze_independent_review|wave_four_freeze_independent_review]]: Independent Grok review of the Wave-4 read contract freeze and root offline baseline.
