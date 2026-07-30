@@ -116,7 +116,11 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         == generator.FILES_UPLOAD_REQUEST_FIELDS
     )
     assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
-    for row_id in ("api.salesTaxPayments.create", "api.contactBalancePayments.create"):
+    for row_id in (
+        "api.salesTaxPayments.create",
+        "api.contactBalancePayments.create",
+        "api.invoiceLateFees.create",
+    ):
         assert by_id[row_id]["cleanup"] == (
             "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
         )
