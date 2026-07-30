@@ -52,6 +52,7 @@ from billy_mcp.api.sales_tax_payment_writes import register_sales_tax_payment_wr
 from billy_mcp.api.sales_tax_writes import register_sales_tax_write_tools
 from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
+from billy_mcp.api.user_writes import register_user_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -139,6 +140,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_invoice_late_fee_write_tools(server, client, write_protocol)
     register_invoice_reminder_write_tools(server, client, write_protocol)
     register_organization_write_tools(server, client, write_protocol)
+    register_user_write_tools(server, client, write_protocol)
     return server
 
 

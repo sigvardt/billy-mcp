@@ -11565,7 +11565,7 @@
       "area": "users",
       "cleanup": "must read and restore prior non-production user state via PUT before greening; singular DELETE is method-closed (405)",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -11574,7 +11574,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.users.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/users/:id",
@@ -11592,7 +11592,9 @@
       "side_effects": "high: updates user PII and privilege flags",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_user_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_users_update_preview",
       "vision_evidence": null,

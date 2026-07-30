@@ -764,6 +764,7 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.postings.list": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.users.get": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.users.list": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.users.update": ("tests/api/test_user_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
 }
 
 WRITE_RESPONSE_FIELD_OVERRIDES: dict[tuple[str, str], list[str]] = {
