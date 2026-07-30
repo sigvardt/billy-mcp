@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research77)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T17:41:00Z
+updated: 2026-07-30T18:15:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -30,11 +30,12 @@ bulk resolution, or completeness. It does not green coverage.
 Full probe matrices and scratch snapshots live at
 `.fractal/main.billy_complete/tmp/grok-research.md` (research77 ranking;
 research78 deepens Wave-5s-A; research79 freezes Wave-5s-B; research80
-product-ready; research81 freezes Wave-5s-C email+delivery). InvoiceLogs list
+product-ready; research81 freezes Wave-5s-C email+delivery; research82 product-ready). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
 offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 [[wave_fivesb_files_upload_product_ready_research]]. Email + delivery freeze:
-[[wave_fivesc_invoice_email_delivery_research]].
+[[wave_fivesc_invoice_email_delivery_research]]. Email + delivery product-ready:
+[[wave_fivesc_invoice_email_delivery_product_ready_research]].
 
 ## Gate status
 
@@ -54,6 +55,8 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-B product | Active / merge pending |
 | Wave-5s-C freeze research | **Ready** ([[wave_fivesc_invoice_email_delivery_research]]) |
 | Wave-5s-C freeze independent review | **ACCEPT as research** ([[wave_fivesc_invoice_email_delivery_research_independent_review]]) |
+| Wave-5s-C product-ready research | **Ready** ([[wave_fivesc_invoice_email_delivery_product_ready_research]]) |
+| Wave-5s-C product-ready independent review | **ACCEPT** offline as handoff only ([[wave_fivesc_invoice_email_delivery_product_ready_research_independent_review]]) |
 
 ## Official docs fingerprint
 
