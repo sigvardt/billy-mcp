@@ -127,6 +127,66 @@ class BillyHttpClient:
             return BillyResponse(status_code=response.status_code, data=body)
         raise AssertionError("retry loop must return")
 
+    def post_file(
+        self,
+        *,
+        file_bytes: bytes,
+        filename: str,
+        content_type: str,
+        create_attachment: bool = False,
+        create_variants: bool = False,
+        organization_id: str | None = None,
+        should_scan: bool = False,
+    ) -> BillyResponse | ToolError:
+        """Upload raw bytes to the one documented Billy files endpoint once."""
+
+        _validate_file_header_value(filename, "X-Filename")
+        _validate_file_header_value(content_type, "Content-Type")
+        if organization_id is not None:
+            _validate_file_header_value(organization_id, "x-organizationid")
+
+        token = self._token_provider()
+        if not token:
+            return ToolError(
+                code=StableErrorCode.AUTH_REQUIRED,
+                message="Billy API token is unavailable.",
+            )
+        headers = {
+            "X-Access-Token": token,
+            "Accept": "application/json",
+            "X-Filename": filename,
+            "Content-Type": content_type,
+        }
+        if create_attachment:
+            headers["x-create-attachment"] = "true"
+        if create_variants:
+            headers["x-create-variants"] = "true"
+        if organization_id is not None:
+            headers["x-organizationid"] = organization_id
+        if should_scan:
+            headers["x-should-scan"] = "true"
+
+        try:
+            response = self._client.request(
+                "POST",
+                self._url_for("/files"),
+                headers=headers,
+                content=file_bytes,
+            )
+        except httpx.TransportError:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Billy API request could not be completed.",
+            )
+        body: object
+        try:
+            body = parse_billy_json(response.text)
+        except (TypeError, ValueError, json.JSONDecodeError):
+            body = {}
+        if response.is_error:
+            return translate_upstream_error(response.status_code, body)
+        return BillyResponse(status_code=response.status_code, data=body)
+
     @staticmethod
     def _url_for(path: str) -> str:
         parsed = urlsplit(path)
@@ -156,3 +216,12 @@ class BillyHttpClient:
             or not 1 <= page_size <= MAX_PAGE_SIZE
         ):
             raise RequestConstructionError("pageSize must be an integer between 1 and 1000")
+
+
+def _validate_file_header_value(value: str, header_name: str) -> None:
+    """Reject blank or line-breaking values before they can add wire headers."""
+
+    if not value.strip():
+        raise RequestConstructionError(f"{header_name} must be non-empty")
+    if "\r" in value or "\n" in value:
+        raise RequestConstructionError(f"{header_name} must not contain CR or LF")

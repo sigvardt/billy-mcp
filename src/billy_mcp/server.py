@@ -37,6 +37,7 @@ from billy_mcp.api.daybook_transaction_reads import register_daybook_transaction
 from billy_mcp.api.daybook_transaction_writes import register_daybook_transaction_write_tools
 from billy_mcp.api.daybook_writes import register_daybook_write_tools
 from billy_mcp.api.file_attachment_reads import register_file_attachment_read_tools
+from billy_mcp.api.file_upload_writes import register_file_upload_tools
 from billy_mcp.api.geo_reads import register_geo_read_tools
 from billy_mcp.api.invoice_late_fee_writes import register_invoice_late_fee_write_tools
 from billy_mcp.api.invoice_line_writes import register_invoice_line_write_tools
@@ -115,6 +116,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_daybook_read_tools(server, client)
     register_account_read_tools(server, client)
     register_file_attachment_read_tools(server, client)
+    register_file_upload_tools(server, client, configuration, confirmations)
     register_geo_read_tools(server, client)
     register_tax_read_tools(server, client)
     register_bank_read_tools(server, client)

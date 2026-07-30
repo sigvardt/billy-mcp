@@ -494,6 +494,11 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_file_attachment_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.files.create": ("tests/api/test_file_upload_writes.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.special.files_upload": (
+        "tests/api/test_file_upload_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.attachments.get": (
         "tests/api/test_file_attachment_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
