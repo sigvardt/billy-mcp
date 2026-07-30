@@ -6,62 +6,62 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T06:20:59Z
-updated: 2026-07-30T08:45:00Z
+updated: 2026-07-30T08:50:00Z
 ---
 
 # state
 
 ## Current state
 
-- Wave-5c through Wave-5m write modules are merged into root; root registration uses the one shared `ConfirmationStore` and `WriteProtocolService`.
-- Root registry **250** `api_*` tools. Offline coverage **172** implemented + contract_tested. Live/vision still 0. `complete: false`.
-- Wave-5k freeze and product: ACCEPT offline.
-- Wave-5l freeze ACCEPT: `wiki/wave_fivel_freeze_independent_review.md`.
-- Wave-5l product on root; Codex fallback product ACCEPT recorded.
-- Wave-5m freeze ACCEPT: `wiki/wave_fivem_freeze_independent_review.md` (contract MD5 `fcb0e58742c8abc8ca9078859bb74eb8`).
-- Wave-5m product on root: `contact_balance_payment_writes.py` + tests; merge `8297713`; acceptance record `8133858`.
-- Wave-5m product independent review: **ACCEPT** offline at `wiki/wave_fivem_product_independent_review.md`.
-- Research60: Wave-5n `invoiceLateFees` freeze page is the **next Codex slice** (gate open). Freeze page not yet authored.
-- Official docs: plain contract identical to prior lock; HTTP ETag/MD5 advanced to `juf598rs793603` / `f3925615c452b34694abb7f2856e845a` (Prismic `ref` only). Inventory still pins prior ETag/MD5.
-- bankPayments / salesTaxPayments / contactBalancePayments create+update offline-qualified; deletes 405 red where applicable; bulk ambiguous empty.
+- Wave-5c through Wave-5m write modules are merged into root; one shared confirmation store and write protocol.
+- Root registry **250** `api_*` tools. Offline coverage **172** implemented + contract_tested. Live/vision **0**. `complete: false`.
+- Wave-5m freeze ACCEPT and product ACCEPT offline remain valid (19 focused tests pass).
+- Cited official research and independent review: Wave-5n freeze-ready package
+  **ACCEPT as research**.
+- Wave-5n freeze page not on root; child `wave5n_invoice_late_fee_freeze` active for freeze page only.
+- Official plain API contract stable; HTTP docs ETag/MD5 continues to churn (access metadata). Inventory still pins prior MD5.
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Official plain docs identical to research59; HTTP fingerprint `juf598rs793603` / `f3925615c452b34694abb7f2856e845a` / body 147934 (research60).
-- Unauth contactBalancePayments POST/PUT **401**, DELETE **405** reconfirmed.
-- Unauth invoiceLateFees POST/PUT **401**, singular DELETE **405**, bulk DELETE **405** reconfirmed.
-- Coverage honesty: implemented/contract_tested **172**, live/vision **0**, `complete: false`. No false greens. No bulk greened.
+- Independent revalidation: plain contract identical to the accepted research;
+  unauthenticated invoiceLateFees POST/PUT return 401 and singular/bulk DELETE
+  return 405.
+- contactBalancePayments POST/PUT 401, DELETE 405 reconfirmed.
+- Coverage honesty: no false greens; bulk empty; complete false.
+- No `invoice_late_fee_writes.py`; no late-fee write registration.
+- Root offline verification passes: 19 focused contact-balance-payment tests and
+  the complete 1,075-test suite; formatting, lint, typing, inventory, and
+  repository-policy checks also pass.
 
 ## Review decisions (authoritative)
 
-- Wave-5g through Wave-5k freeze/product: **ACCEPT** offline where recorded.
-- Wave-5l freeze page: **ACCEPT** offline.
-- Wave-5l product: Codex fallback ACCEPT recorded.
-- Wave-5m freeze page: **ACCEPT** offline.
-- Wave-5m product: **ACCEPT** offline.
-- Research60 Wave-5n freeze-ready: **ACCEPT as research** only; freeze page not present.
-- Wave-5n freeze page: not present; no ACCEPT.
+- Wave-5m freeze/product: **ACCEPT** offline.
+- Wave-5n freeze-ready research: **ACCEPT as research**
+  (`wiki/wave_fiven_freeze_ready_research_independent_review.md`,
+  `tmp/grok-review.md`). The review found no current-root repair.
+- Wave-5n freeze page: not present; no freeze ACCEPT.
+- Wave-5n product: not started; blocked until freeze ACCEPT.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Author Wave-5n freeze for invoiceLateFees create+update (research60 package); then freeze review and product.
-2. Later: invoiceReminders create only; associations create/update stay blocked offline (405).
-3. Optional: refresh inventory evidence strings from prior ETag/MD5 to current HTTP fingerprint after plain identity is recorded (not a contract change).
+1. Finish/merge Wave-5n freeze page; independent freeze review; then product.
+2. Product-time: fix `api.invoiceLateFees.create` cleanup wording (singular DELETE unsupported).
+3. Later: invoiceReminders create-only; associations create/update blocked offline (405).
 4. Bulk 92, UI/auth/vision, live CUD still open.
 
 ## Evidence boundaries
 
-- Official API plain contract lock: prior MD5 `c2efda0ee4cf9cf200e14910c5fc6996` still matches stripped body.
-- Current HTTP access: etag `juf598rs793603`, MD5 `f3925615c452b34694abb7f2856e845a`.
-- contactBalancePayments / invoiceLateFees Supports omit singular delete; unauth DELETE **405**.
-- invoiceLateFees bulk DELETE unauth **405** overrides Supports bulk delete for offline greening.
-- Product offline ACCEPT is not live/UI/vision ACCEPT.
+- Plain contract is stable across the research and its revalidation; an HTTP
+  access fingerprint is not the durable contract key.
+- Offline 401 opens freeze; 405 overrides Supports for delete/bulk-delete offline greening.
+- Offline product ACCEPT is not live/UI/vision ACCEPT.
 
 ## References
 
+- Review: `.fractal/main.billy_complete/tmp/grok-review.md` (review60)
 - Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research60)
+- Research ACCEPT wiki: `wiki/wave_fiven_freeze_ready_research_independent_review.md`
 - Wave-5m product ACCEPT: `wiki/wave_fivem_product_independent_review.md`
-- Wave-5m freeze: `wiki/wave_fivem_ticketed_writes_contract.md`
-- Offline probe rules: `wiki/offline_write_probe_rules.md`
+- Probe rules: `wiki/offline_write_probe_rules.md`
