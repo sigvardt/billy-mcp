@@ -141,3 +141,33 @@ def test_file_upload_omits_optional_headers_and_never_retries() -> None:
     assert "x-create-variants" not in headers
     assert "x-organizationid" not in headers
     assert "x-should-scan" not in headers
+
+
+@pytest.mark.parametrize(
+    ("filename", "content_type", "organization_id"),
+    [
+        ("note.txt\r\nX-Injected: value", "text/plain", None),
+        ("note.txt", "text/plain\r\nX-Injected: value", None),
+        ("note.txt", "text/plain", "org-1\r\nX-Injected: value"),
+    ],
+)
+def test_file_upload_rejects_header_injection_before_request(
+    filename: str, content_type: str, organization_id: str | None
+) -> None:
+    requests: list[httpx.Request] = []
+    client = BillyHttpClient(
+        lambda: "secret",
+        transport=httpx.MockTransport(
+            lambda request: requests.append(request) or httpx.Response(200, json={"files": []})
+        ),
+    )
+
+    with pytest.raises(RequestConstructionError, match="must not contain CR or LF"):
+        client.post_file(
+            file_bytes=b"x",
+            filename=filename,
+            content_type=content_type,
+            organization_id=organization_id,
+        )
+
+    assert requests == []

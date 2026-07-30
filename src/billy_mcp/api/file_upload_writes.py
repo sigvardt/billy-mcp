@@ -9,10 +9,10 @@ from collections.abc import Mapping
 from dataclasses import dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import cast
+from typing import Annotated, cast
 
 from fastmcp import FastMCP
-from pydantic import BaseModel, ConfigDict, Field, JsonValue, field_validator
+from pydantic import BaseModel, ConfigDict, Field, JsonValue, StrictBool, StrictStr, field_validator
 
 from billy_mcp.client import BillyHttpClient, BillyResponse
 from billy_mcp.config import AppConfig
@@ -26,6 +26,9 @@ from billy_mcp.redaction import redact
 
 _EXECUTE_TOOL_NAME = "api_files_upload_execute"
 _HASH_CHUNK_SIZE = 64 * 1024
+_ToolText = Annotated[StrictStr, Field(min_length=1)]
+_ToolHeaderText = Annotated[StrictStr, Field(min_length=1, pattern=r"^[^\r\n]+$")]
+_ToolOptionalHeaderText = Annotated[StrictStr | None, Field(min_length=1, pattern=r"^[^\r\n]+$")]
 
 
 class _FileUploadInput(BaseModel):
@@ -52,6 +55,17 @@ class FileUploadPreviewInput(_FileUploadInput):
 
         if not value.strip():
             raise ValueError("value must not be blank")
+        return value
+
+    @field_validator("filename", "content_type", "organization_id")
+    @classmethod
+    def safe_header_value(cls, value: str | None) -> str | None:
+        """Reject values that could create a caller-controlled extra HTTP header."""
+
+        if value is not None and ("\r" in value or "\n" in value):
+            raise ValueError("header values must not contain CR or LF")
+        if value is not None and not value.strip():
+            raise ValueError("header values must not be blank")
         return value
 
     @field_validator("path")
@@ -289,13 +303,13 @@ def register_file_upload_tools(
     service = FileUploadService(client, configuration, confirmations)
 
     def api_files_upload_preview(
-        path: str = Field(min_length=1),
-        filename: str = Field(min_length=1),
-        content_type: str = Field(min_length=1),
-        create_attachment: bool = False,
-        create_variants: bool = False,
-        organization_id: str | None = Field(default=None, min_length=1),
-        should_scan: bool = False,
+        path: _ToolText,
+        filename: _ToolHeaderText,
+        content_type: _ToolHeaderText,
+        create_attachment: StrictBool = False,
+        create_variants: StrictBool = False,
+        organization_id: _ToolOptionalHeaderText = None,
+        should_scan: StrictBool = False,
     ) -> FileUploadPreviewSuccess | ToolError:
         """Preview one configured-root local file without uploading it."""
 
@@ -312,7 +326,7 @@ def register_file_upload_tools(
         )
 
     def api_files_upload_execute(
-        confirmation_ticket: str = Field(min_length=1),
+        confirmation_ticket: _ToolText,
     ) -> FileUploadExecuteSuccess | ToolError:
         """Upload exactly the configured file identity in a preview ticket."""
 

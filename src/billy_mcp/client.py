@@ -140,12 +140,10 @@ class BillyHttpClient:
     ) -> BillyResponse | ToolError:
         """Upload raw bytes to the one documented Billy files endpoint once."""
 
-        if not filename.strip():
-            raise RequestConstructionError("X-Filename must be non-empty")
-        if not content_type.strip():
-            raise RequestConstructionError("Content-Type must be non-empty")
-        if organization_id is not None and not organization_id.strip():
-            raise RequestConstructionError("x-organizationid must be non-empty when provided")
+        _validate_file_header_value(filename, "X-Filename")
+        _validate_file_header_value(content_type, "Content-Type")
+        if organization_id is not None:
+            _validate_file_header_value(organization_id, "x-organizationid")
 
         token = self._token_provider()
         if not token:
@@ -218,3 +216,12 @@ class BillyHttpClient:
             or not 1 <= page_size <= MAX_PAGE_SIZE
         ):
             raise RequestConstructionError("pageSize must be an integer between 1 and 1000")
+
+
+def _validate_file_header_value(value: str, header_name: str) -> None:
+    """Reject blank or line-breaking values before they can add wire headers."""
+
+    if not value.strip():
+        raise RequestConstructionError(f"{header_name} must be non-empty")
+    if "\r" in value or "\n" in value:
+        raise RequestConstructionError(f"{header_name} must not contain CR or LF")

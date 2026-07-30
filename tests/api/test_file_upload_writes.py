@@ -12,6 +12,7 @@ from typing import cast
 import httpx
 import pytest
 from fastmcp import FastMCP
+from fastmcp.exceptions import ValidationError as FastMCPValidationError
 from pydantic import ValidationError
 
 from billy_mcp.api.file_upload_writes import (
@@ -124,6 +125,42 @@ def test_registers_exactly_two_flat_typed_upload_tools(tmp_path: Path) -> None:
 
 
 @pytest.mark.parametrize(
+    "arguments",
+    [
+        {**preview_arguments(), "create_attachment": "true"},
+        {**preview_arguments(), "path": 7},
+        {**preview_arguments(), "filename": "safe.txt\r\nX-Injected: value"},
+        {**preview_arguments(), "content_type": "text/plain\r\nX-Injected: value"},
+        {**preview_arguments(), "organization_id": "org\r\nX-Injected: value"},
+        {**preview_arguments(), "unknown": "forbidden"},
+    ],
+)
+def test_registered_preview_rejects_non_strict_or_header_injecting_inputs_before_http(
+    tmp_path: Path, arguments: dict[str, object]
+) -> None:
+    write_safe_file(tmp_path)
+    server, requests = make_server(
+        tmp_path, lambda request: pytest.fail(f"invalid preview attempted HTTP: {request.url}")
+    )
+
+    with pytest.raises(FastMCPValidationError):
+        call_tool(server, "api_files_upload_preview", arguments)
+
+    assert requests == []
+
+
+def test_registered_execute_rejects_non_string_ticket_before_http(tmp_path: Path) -> None:
+    server, requests = make_server(
+        tmp_path, lambda request: pytest.fail(f"invalid execute attempted HTTP: {request.url}")
+    )
+
+    with pytest.raises(FastMCPValidationError):
+        call_tool(server, "api_files_upload_execute", {"confirmation_ticket": 7})
+
+    assert requests == []
+
+
+@pytest.mark.parametrize(
     ("input_model", "payload"),
     [
         (
@@ -141,6 +178,14 @@ def test_registers_exactly_two_flat_typed_upload_tools(tmp_path: Path) -> None:
         (
             FileUploadPreviewInput,
             {**preview_arguments(), "create_attachment": "true"},
+        ),
+        (
+            FileUploadPreviewInput,
+            {**preview_arguments(), "filename": "safe.txt\r\nX-Injected: value"},
+        ),
+        (
+            FileUploadPreviewInput,
+            {**preview_arguments(), "organization_id": "org\r\nX-Injected: value"},
         ),
         (
             FileUploadExecuteInput,
