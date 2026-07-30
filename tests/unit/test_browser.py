@@ -118,7 +118,7 @@ class FakeLoginPage:
             "input[type='email'][name='email']": FakeLoginControl(),
             "input[type='password'][name='password']": FakeLoginControl(),
             "input[type='checkbox'][name='remember']": FakeLoginControl(),
-            "button[data-cy='login-button']": FakeLoginControl(text="Login"),
+            "button[data-cy='login-button']": FakeLoginControl(text="Log in"),
         }
         self.goto_error = goto_error
         self.navigation: list[tuple[str, str]] = []
@@ -334,7 +334,7 @@ def test_browser_closes_context_when_egress_route_cannot_be_installed(tmp_path: 
     assert context.closed
 
 
-@pytest.mark.parametrize("submit_label", ["Login", "Log ind"])
+@pytest.mark.parametrize("submit_label", ["Log in", "Log ind"])
 def test_auth_status_returns_only_the_observed_login_state_in_headless_context(
     tmp_path: Path, submit_label: str
 ) -> None:
@@ -468,7 +468,7 @@ def test_auth_status_does_not_echo_browser_session_or_credential_failures(tmp_pa
     assert page.closed
 
 
-@pytest.mark.parametrize("submit_label", ["Login", "Log ind"])
+@pytest.mark.parametrize("submit_label", ["Log in", "Log ind"])
 def test_auth_login_start_resolves_only_after_validation_and_rechecks_before_actions(
     tmp_path: Path, submit_label: str
 ) -> None:
@@ -601,7 +601,9 @@ def test_auth_login_start_returns_auth_required_for_unresolvable_reference(tmp_p
     assert page.closed
 
 
-@pytest.mark.parametrize("drift", ["route", "duplicate", "hidden", "missing", "label"])
+@pytest.mark.parametrize(
+    "drift", ["route", "duplicate", "hidden", "missing", "legacy_page_title"]
+)
 def test_auth_login_start_rejects_signature_drift_before_resolution(
     tmp_path: Path, drift: str
 ) -> None:
@@ -609,7 +611,7 @@ def test_auth_login_start_rejects_signature_drift_before_resolution(
         "input[type='email'][name='email']": FakeLoginControl(),
         "input[type='password'][name='password']": FakeLoginControl(),
         "input[type='checkbox'][name='remember']": FakeLoginControl(),
-        "button[data-cy='login-button']": FakeLoginControl(text="Login"),
+        "button[data-cy='login-button']": FakeLoginControl(text="Log in"),
     }
     final_url = "https://mit.billy.dk/login"
     if drift == "route":
@@ -621,7 +623,7 @@ def test_auth_login_start_rejects_signature_drift_before_resolution(
     elif drift == "missing":
         controls["input[type='checkbox'][name='remember']"] = FakeLoginControl(count=0)
     else:
-        controls["button[data-cy='login-button']"] = FakeLoginControl(text="Continue")
+        controls["button[data-cy='login-button']"] = FakeLoginControl(text="Login")
     page = FakeLoginPage(final_url=final_url, controls=controls)
     context = FakeLoginContext(page)
     resolver = FakeCredentialResolver(events=page.events)
@@ -716,7 +718,7 @@ def test_auth_login_start_redacts_unexpected_runtime_failure_and_closes_page(
             "input[type='password'][name='password']": FakeLoginControl(),
             "input[type='checkbox'][name='remember']": FakeLoginControl(),
             "button[data-cy='login-button']": FakeLoginControl(
-                text="Login", click_error=RuntimeError(unreported_value)
+                text="Log in", click_error=RuntimeError(unreported_value)
             ),
         }
     )

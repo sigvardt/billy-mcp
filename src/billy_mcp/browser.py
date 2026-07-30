@@ -29,7 +29,7 @@ _LOGIN_CONTROL_SELECTORS = (
     "input[type='checkbox'][name='remember']",
 )
 _LOGIN_SUBMIT_SELECTOR = "button[data-cy='login-button']"
-_LOGIN_SUBMIT_LABELS = frozenset({"Login", "Log ind"})
+_LOGIN_SUBMIT_LABELS = frozenset({"Log in", "Log ind"})
 
 
 class BrowserEgressManifestHost(BaseModel):
