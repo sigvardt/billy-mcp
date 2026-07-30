@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T01:08:46Z
+updated: 2026-07-30T01:17:39Z
 ---
 
 # billy_mcp
@@ -16,6 +16,8 @@ updated: 2026-07-30T01:08:46Z
 [[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for when Supports flags may not open offline ticketed-write freezes.
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
+
+[[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
 [[wave_five_contract_freeze_independent_review|wave_five_contract_freeze_independent_review]]: Independent Grok review of Wave-5 ticketed-write contract freeze at 9624d26 — freeze ACCEPT; product incomplete; no write tools yet.
 
@@ -33,6 +35,8 @@ updated: 2026-07-30T01:08:46Z
 
 [[wave_fiveb_freeze_independent_review|wave_fiveb_freeze_independent_review]]: Independent Grok ACCEPT of the Wave-5b offline ticketed-write contract freeze; product not yet shipped.
 
+[[wave_fiveb_product_fallback_review|wave_fiveb_product_fallback_review]]: Codex Power fallback review of Wave-5b root product at 920ceab; REJECT pending ticket-to-executor binding.
+
 [[wave_fiveb_product_independent_review|wave_fiveb_product_independent_review]]: Historical REJECT of Wave-5b at 920ceab; repaired product ACCEPT lives on wave_fiveb_repair_independent_review.
 
 [[wave_fiveb_repair_independent_review|wave_fiveb_repair_independent_review]]: Independent Grok acceptance of the ticketed-write executor-binding and ticket-prune repair on root a2a0996.
@@ -48,6 +52,8 @@ updated: 2026-07-30T01:08:46Z
 [[wave_fivec_ticketed_writes_contract|wave_fivec_ticketed_writes_contract]]: Cited offline ticketed-write contract for Billy daybook transactions and transaction lines.
 
 [[wave_fived_freeze_independent_review|wave_fived_freeze_independent_review]]: Independent Grok acceptance of the cited offline contract for invoice and invoice-line singular ticketed writes.
+
+[[wave_fived_product_codex_fallback_review|wave_fived_product_codex_fallback_review]]: Secondary offline Codex Power review of the invoice and invoice-line ticketed-write slice at 1108e2f.
 
 [[wave_fived_product_independent_review|wave_fived_product_independent_review]]: Independent Grok acceptance of the offline invoice and invoice-line ticketed-write product at tip 1108e2f.
 
@@ -74,6 +80,8 @@ updated: 2026-07-30T01:08:46Z
 [[wave_fiveg_product_ready_research_independent_review|wave_fiveg_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for sales-tax ruleset and rule ticketed writes under the accepted Wave-5g freeze.
 
 [[wave_fiveg_ticketed_writes_contract|wave_fiveg_ticketed_writes_contract]]: Cited offline contract for singular sales-tax ruleset and rule ticketed writes, accepted by independent Grok review.
+
+[[wave_fiveh_freeze_codex_fallback_review|wave_fiveh_freeze_codex_fallback_review]]: Supplemental static PASS for the Wave-5h attachment JSON freeze boundary; not independent-review authority.
 
 [[wave_fiveh_freeze_independent_review|wave_fiveh_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular attachment JSON ticketed writes.
 
