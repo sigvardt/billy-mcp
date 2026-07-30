@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T17:32:30Z
+updated: 2026-07-30T18:14:39Z
 ---
 
 # billy_mcp
@@ -248,6 +248,10 @@ updated: 2026-07-30T17:32:30Z
 [[wave_fivesb_files_upload_research|wave_fivesb_files_upload_research]]: Cited offline contract for ticketed binary POST /files special and aliased files.create row; path and digest bound preview or execute; no coverage greening.
 
 [[wave_fivesb_files_upload_research_codex_fallback_review|wave_fivesb_files_upload_research_codex_fallback_review]]: Non-authoritative Codex Power review accepting the cited offline files-upload research handoff only; product and mandatory Grok audit remain open.
+
+[[wave_fivesc_invoice_email_delivery_product_ready_research|wave_fivesc_invoice_email_delivery_product_ready_research]]: Cited product-ready handoff for ticketed invoice email and invoiceDeliveries specials; custom ConfirmationStore services required; no coverage greening.
+
+[[wave_fivesc_invoice_email_delivery_product_ready_research_independent_review|wave_fivesc_invoice_email_delivery_product_ready_research_independent_review]]: Authoritative root Grok acceptance of the cited offline product-ready handoff for ticketed invoice email and invoiceDeliveries specials; product and completeness remain open.
 
 [[wave_fivesc_invoice_email_delivery_research|wave_fivesc_invoice_email_delivery_research]]: Cited offline freeze for ticketed POST invoice emails and invoiceDeliveries specials; high side effect; no coverage greening.
 
