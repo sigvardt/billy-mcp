@@ -85,3 +85,59 @@ def test_client_retries_only_safe_reads() -> None:
     failed_write = client.request("POST", "/products", json_body={"product": {}})
     assert isinstance(failed_write, ToolError)
     assert attempts == ["POST"]
+
+
+def test_file_upload_posts_exact_raw_bytes_and_documented_headers_once() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(200, json={"files": []})
+
+    client = BillyHttpClient(lambda: "secret", transport=httpx.MockTransport(handler))
+    result = client.post_file(
+        file_bytes=b"innocuous upload bytes",
+        filename="note.txt",
+        content_type="text/plain",
+        create_attachment=True,
+        create_variants=True,
+        organization_id="org-1",
+        should_scan=True,
+    )
+
+    assert isinstance(result, BillyResponse)
+    assert len(requests) == 1
+    request = requests[0]
+    assert str(request.url) == "https://api.billysbilling.com/v2/files"
+    assert request.content == b"innocuous upload bytes"
+    assert request.headers["x-access-token"] == "secret"
+    assert request.headers["accept"] == "application/json"
+    assert request.headers["x-filename"] == "note.txt"
+    assert request.headers["content-type"] == "text/plain"
+    assert request.headers["x-create-attachment"] == "true"
+    assert request.headers["x-create-variants"] == "true"
+    assert request.headers["x-organizationid"] == "org-1"
+    assert request.headers["x-should-scan"] == "true"
+
+
+def test_file_upload_omits_optional_headers_and_never_retries() -> None:
+    requests: list[httpx.Request] = []
+
+    def handler(request: httpx.Request) -> httpx.Response:
+        requests.append(request)
+        return httpx.Response(503, json={"errorCode": "TEMPORARY"})
+
+    client = BillyHttpClient(lambda: "secret", transport=httpx.MockTransport(handler))
+    result = client.post_file(
+        file_bytes=b"x",
+        filename="note.txt",
+        content_type="text/plain",
+    )
+
+    assert isinstance(result, ToolError)
+    assert len(requests) == 1
+    headers = requests[0].headers
+    assert "x-create-attachment" not in headers
+    assert "x-create-variants" not in headers
+    assert "x-organizationid" not in headers
+    assert "x-should-scan" not in headers

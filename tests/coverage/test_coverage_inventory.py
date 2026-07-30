@@ -129,6 +129,18 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         by_id[generator.FILES_UPLOAD_ALIAS]["request_fields"]
         == generator.FILES_UPLOAD_REQUEST_FIELDS
     )
+    upload_evidence = (
+        "tests/api/test_file_upload_writes.py",
+        generator.SERVER_REGISTRY_TEST_REFERENCE,
+    )
+    assert generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE["api.files.create"] == upload_evidence
+    assert generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE[generator.FILES_UPLOAD_ALIAS] == (
+        upload_evidence
+    )
+    for row_id in ("api.files.create", generator.FILES_UPLOAD_ALIAS):
+        assert by_id[row_id]["test_references"] == [generator.TEST_REFERENCE, *upload_evidence]
+        assert by_id[row_id]["implemented"] is True
+        assert by_id[row_id]["contract_tested"] is True
     assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
     for row_id in (
         "api.salesTaxPayments.create",
