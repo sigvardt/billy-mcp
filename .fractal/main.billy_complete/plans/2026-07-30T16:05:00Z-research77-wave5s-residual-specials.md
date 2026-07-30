@@ -24,3 +24,28 @@ gates, then deliver a cited ranking and specials map for the next Codex slices.
 - No coverage greening from research.
 - No live/UI/vision/bulk work.
 - No offline freeze for transactions or 405 false friends.
+
+## Post-Mortem
+
+### Completed
+
+- Delivered the cited residual-specials ranking without altering any coverage
+  evidence. The official-doc fingerprint and unauthenticated method gates were
+  reconfirmed and the shared research page is indexed.
+- The planned downstream gates completed: Wave-5r salesTaxReturns update was
+  integrated at `5ad69a6`, and its authoritative offline product review issued
+  ACCEPT. Research77 remains research only.
+
+### Verification and cleanup
+
+- Project and memory wikis lint clean; static checks, coverage integrity,
+  repository policy, and 1,163 non-live/non-vision tests pass after the product
+  integration.
+- No credentials, browser evidence, live records, or coverage greening from
+  this research package were created.
+
+### Next unresolved coverage slice
+
+- Wave-5s-A may implement only the read-only `api_invoice_logs_list` special;
+  uploads, email/delivery writes, blocked writes, bulk, live, UI, and vision
+  remain separate work.
