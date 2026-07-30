@@ -11,6 +11,7 @@ from billy_mcp.api.account_writes import register_account_write_tools
 from billy_mcp.api.attachment_writes import register_attachment_write_tools
 from billy_mcp.api.balance_invoice_ext_reads import register_balance_invoice_extension_read_tools
 from billy_mcp.api.bank_line_writes import register_bank_line_write_tools
+from billy_mcp.api.bank_payment_writes import register_bank_payment_write_tools
 from billy_mcp.api.bank_reads import register_bank_read_tools
 from billy_mcp.api.bill_line_writes import register_bill_line_write_tools
 from billy_mcp.api.bill_reads import register_bill_read_tools
@@ -125,6 +126,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_sales_tax_account_meta_write_tools(server, client, write_protocol)
     register_attachment_write_tools(server, client, write_protocol)
     register_bank_line_write_tools(server, client, write_protocol)
+    register_bank_payment_write_tools(server, client, write_protocol)
     return server
 
 

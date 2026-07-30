@@ -3282,7 +3282,7 @@
     {
       "api_row_id": "api.bankPayments.create",
       "area": "bank_payments",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "void dedicated test resource via documented irreversible isVoided; independently verify",
       "contract_tested": false,
       "discovered": false,
       "errors": [
