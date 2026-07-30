@@ -11,7 +11,12 @@ from urllib.parse import urlsplit
 import yaml
 from pydantic import BaseModel, ConfigDict, Field, ValidationError, field_validator, model_validator
 
-from billy_mcp.models import AuthStatusSuccess, StableErrorCode, ToolError
+from billy_mcp.credentials import (
+    BrowserCredentialReferences,
+    CredentialResolver,
+    KeyringCredentialResolver,
+)
+from billy_mcp.models import AuthLoginStartSuccess, AuthStatusSuccess, StableErrorCode, ToolError
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
     Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
@@ -130,6 +135,10 @@ class LoginControl(Protocol):
 
     async def inner_text(self) -> str: ...
 
+    async def fill(self, value: str) -> None: ...
+
+    async def click(self) -> None: ...
+
 
 class LoginPage(Protocol):
     """A deliberately minimal page surface for the fixed auth-status workflow."""
@@ -148,6 +157,14 @@ class AuthStatusChecker(Protocol):
     """Injectable, auth-status-only seam for deterministic server tests."""
 
     async def auth_status(self) -> AuthStatusSuccess | ToolError: ...
+
+
+class AuthLoginService(Protocol):
+    """Injectable seam for the two purpose-built login operations."""
+
+    async def auth_login_start(self) -> AuthLoginStartSuccess | ToolError: ...
+
+    async def auth_login_wait(self) -> AuthStatusSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -211,11 +228,15 @@ class BrowserRuntime:
         *,
         egress_manifest_path: Path = DEFAULT_BROWSER_EGRESS_MANIFEST,
         launcher: PersistentContextLauncher | None = None,
+        credential_references: BrowserCredentialReferences | None = None,
+        credential_resolver: CredentialResolver | None = None,
     ) -> None:
         self._profile_path = profile_path.expanduser().resolve(strict=False)
         self._egress_manifest_path = egress_manifest_path.expanduser().resolve(strict=False)
         self._policy: BrowserEgressPolicy | None = None
         self._launcher = launcher
+        self._credential_references = credential_references or BrowserCredentialReferences()
+        self._credential_resolver = credential_resolver or KeyringCredentialResolver()
         self._context: PersistentContext | None = None
         self._playwright_stopper: Callable[[], Awaitable[None]] | None = None
         self._lock = asyncio.Lock()
@@ -278,7 +299,7 @@ class BrowserRuntime:
             page = await context.new_page()
             try:
                 await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
-                if not _is_known_login_url(page.url) or not await _has_login_signature(page):
+                if not await _has_known_login_page(page):
                     return _ui_changed_error()
                 return AuthStatusSuccess()
             finally:
@@ -293,6 +314,82 @@ class BrowserRuntime:
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser authentication status could not be determined.",
             )
+
+    async def auth_login_start(self) -> AuthLoginStartSuccess | ToolError:
+        """Perform only the fixed pre-submit transition and retain no resolved values."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            if not await _has_known_login_page(page):
+                return _ui_changed_error()
+
+            resolved_values = self._resolve_required_values()
+            if resolved_values is None:
+                return _auth_required_error()
+            primary_value, secondary_value = resolved_values
+
+            if not await _has_known_login_page(page):
+                return _ui_changed_error()
+            await page.locator(_LOGIN_CONTROL_SELECTORS[0]).fill(primary_value)
+
+            if not await _has_known_login_page(page):
+                return _ui_changed_error()
+            await page.locator(_LOGIN_CONTROL_SELECTORS[1]).fill(secondary_value)
+
+            if not await _has_known_login_page(page):
+                return _ui_changed_error()
+            await page.locator(_LOGIN_SUBMIT_SELECTOR).click()
+            return AuthLoginStartSuccess()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the login transition.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser login transition could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    # The original outcome remains redacted even when a browser
+                    # implementation cannot confirm page closure.
+                    pass
+
+    async def auth_login_wait(self) -> AuthStatusSuccess | ToolError:
+        """Observe only the already-reviewed login state after a transition starts."""
+
+        return await self.auth_status()
+
+    def _resolve_required_values(self) -> tuple[str, str] | None:
+        """Resolve exactly two required values after signature validation only."""
+
+        references = self._credential_references
+        if not references.has_required_references():
+            return None
+        primary_reference = references.primary
+        secondary_reference = references.secondary
+        if primary_reference is None or secondary_reference is None:
+            return None
+        try:
+            primary_value = self._credential_resolver.resolve(primary_reference)
+        except Exception:
+            return None
+        if not primary_value or not primary_value.strip():
+            return None
+        try:
+            secondary_value = self._credential_resolver.resolve(secondary_reference)
+        except Exception:
+            return None
+        if not secondary_value or not secondary_value.strip():
+            return None
+        return primary_value, secondary_value
 
     async def _enforce_egress(self, route: BrowserRoute) -> None:
         policy = self._policy
@@ -344,12 +441,27 @@ async def _has_login_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_known_login_page(page: LoginPage) -> bool:
+    """Validate the fixed URL and exact signature without exposing page content."""
+
+    return _is_known_login_url(page.url) and await _has_login_signature(page)
+
+
 def _ui_changed_error() -> ToolError:
     """Return the stable fail-closed result without echoing page or session values."""
 
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy login interface no longer matches the recorded signature.",
+    )
+
+
+def _auth_required_error() -> ToolError:
+    """Return the stable missing-reference result without naming a locator."""
+
+    return ToolError(
+        code=StableErrorCode.AUTH_REQUIRED,
+        message="Browser authentication material is unavailable.",
     )
 
 

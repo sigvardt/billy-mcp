@@ -57,6 +57,26 @@ class AuthStatusSuccess(BaseModel):
     status: Literal[StableErrorCode.AUTH_REQUIRED] = StableErrorCode.AUTH_REQUIRED
 
 
+class AuthLoginStartInput(BaseModel):
+    """Empty, strict input boundary for the fixed pre-submit transition."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class AuthLoginStartSuccess(BaseModel):
+    """The only positive result proved immediately after the internal submit action."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal["AUTHENTICATING"] = "AUTHENTICATING"
+
+
+class AuthLoginWaitInput(BaseModel):
+    """Empty, strict input boundary for observing only the known login state."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

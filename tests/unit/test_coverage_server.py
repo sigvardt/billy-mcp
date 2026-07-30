@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from pathlib import Path
 from typing import Any, cast
 
 import pytest
 
 from billy_mcp.coverage import CoverageLoadError, load_coverage_report
-from billy_mcp.models import AuthStatusSuccess, StableErrorCode
+from billy_mcp.models import AuthLoginStartSuccess, AuthStatusSuccess, StableErrorCode
 from billy_mcp.server import create_server
 
 WAVE_FOUR_API_TOOL_NAMES = frozenset(
@@ -353,6 +354,20 @@ class FakeAuthStatusChecker:
         return AuthStatusSuccess()
 
 
+class FakeAuthLoginService:
+    def __init__(self) -> None:
+        self.start_calls = 0
+        self.wait_calls = 0
+
+    async def auth_login_start(self) -> AuthLoginStartSuccess:
+        self.start_calls += 1
+        return AuthLoginStartSuccess()
+
+    async def auth_login_wait(self) -> AuthStatusSuccess:
+        self.wait_calls += 1
+        return AuthStatusSuccess()
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -508,7 +523,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESB_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(api_tool_names) == 271
-    assert auth_tool_names == {"auth_status"}
+    assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -566,3 +581,26 @@ def test_auth_status_registration_has_no_generic_controls_and_uses_typed_output(
 
     assert result.structured_content == {"result": {"status": "AUTH_REQUIRED"}}
     assert checker.calls == 1
+
+
+def test_login_registration_has_empty_inputs_and_typed_stable_outputs(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    login_service = FakeAuthLoginService()
+    server = create_server(tmp_path, auth_login_service=login_service)
+    tools = {item.name: item for item in asyncio.run(server.list_tools())}
+
+    start_tool = tools["auth_login_start"]
+    wait_tool = tools["auth_login_wait"]
+    assert start_tool.parameters["properties"] == {}
+    assert wait_tool.parameters["properties"] == {}
+    for tool in (start_tool, wait_tool):
+        schema = json.dumps(tool.output_schema).lower()
+        assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+
+    start_result = asyncio.run(server.call_tool("auth_login_start", {}))
+    wait_result = asyncio.run(server.call_tool("auth_login_wait", {}))
+
+    assert start_result.structured_content == {"result": {"status": "AUTHENTICATING"}}
+    assert wait_result.structured_content == {"result": {"status": "AUTH_REQUIRED"}}
+    assert login_service.start_calls == 1
+    assert login_service.wait_calls == 1

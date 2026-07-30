@@ -10,8 +10,14 @@ from typing import Literal
 import keyring
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
+from billy_mcp.credentials import (
+    CREDENTIAL_STORE_SERVICE,
+    BrowserCredentialReferences,
+    CredentialReference,
+)
+
 API_BASE_URL = "https://api.billysbilling.com/v2"
-KEYRING_SERVICE = "billy-mcp"
+KEYRING_SERVICE = CREDENTIAL_STORE_SERVICE
 
 
 def default_browser_profile(home: Path) -> Path:
@@ -34,6 +40,7 @@ class AppConfig(BaseModel):
     api_base_url: Literal["https://api.billysbilling.com/v2"] = API_BASE_URL
     selected_organization: str | None = Field(default=None, min_length=1)
     browser_profile: Path = DEFAULT_BROWSER_PROFILE
+    browser_credentials: BrowserCredentialReferences = BrowserCredentialReferences()
     allowed_upload_roots: tuple[Path, ...] = ()
 
     @field_validator("browser_profile", mode="after")
@@ -57,6 +64,10 @@ class AppConfig(BaseModel):
         return cls(
             selected_organization=source.get("BILLY_ORGANIZATION_ID") or None,
             browser_profile=profile,
+            browser_credentials=BrowserCredentialReferences(
+                primary=_opaque_reference(source.get("BILLY_BROWSER_PRIMARY_REFERENCE")),
+                secondary=_opaque_reference(source.get("BILLY_BROWSER_SECONDARY_REFERENCE")),
+            ),
             allowed_upload_roots=roots,
         )
 
@@ -73,3 +84,11 @@ class AppConfig(BaseModel):
             else "default"
         )
         return keyring.get_password(KEYRING_SERVICE, account)
+
+
+def _opaque_reference(value: str | None) -> CredentialReference | None:
+    """Convert an optional environment-provided opaque locator without resolving it."""
+
+    if value is None or not value.strip():
+        return None
+    return CredentialReference(opaque_id=value)
