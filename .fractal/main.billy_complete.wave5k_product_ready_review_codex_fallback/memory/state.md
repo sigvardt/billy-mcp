@@ -15,5 +15,5 @@ bulk, live, UI, vision, and completeness claims.
 
 The review page is the sole project-file change. The node test script passed.
 Project wiki lint identified only the generated root-index entry for the new
-page; the parent was notified because this node's one-file ownership forbids
-editing the existing index.
+page; that generated index entry is parent-owned because this node's one-file
+ownership forbids editing the existing index.
