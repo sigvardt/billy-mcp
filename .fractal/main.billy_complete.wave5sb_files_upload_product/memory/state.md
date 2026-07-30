@@ -22,12 +22,12 @@ the frozen research page, and design §§8.3–8.4; concrete implementation
 conflicts must be escalated rather than resolved by new research.
 
 The committed product slice has been locally reviewed as a non-authoritative
-fallback after the requested Grok review could not authenticate. The focused
-offline tests pass, but the review found two implementation blockers: FastMCP
-coerces string booleans in the registered preview signature before the strict
-Pydantic input model validates them, and the client accepts CR/LF in
-`X-Filename` or `Content-Type`, allowing a caller to inject arbitrary wire
-headers through those required values. These must be corrected with actual
-tool-boundary and client tests before product completion. This fallback does
-not replace the independent Grok audit or qualify live, UI, vision, bulk, or
-completeness gates.
+fallback after the requested Grok review could not authenticate. The review's
+two boundary defects are resolved: registered FastMCP parameters use strict
+scalar types so coercible booleans and strings are rejected before preview, and
+the tool and client reject CR/LF in caller-derived header values before any
+transport request. Focused regression tests and the configured non-live suite
+pass. Final clean-archive validation, repository checks, coverage regeneration,
+commit, and the required product review remain before completion. This fallback
+does not replace the independent Grok audit or qualify live, UI, vision, bulk,
+or completeness gates.
