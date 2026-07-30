@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T21:37:34Z
+updated: 2026-07-30T22:05:05Z
 ---
 
 # billy_mcp
@@ -18,6 +18,8 @@ updated: 2026-07-30T21:37:34Z
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
+
+[[ui_auth_credentials_login_organization_research_codex_fallback|ui_auth_credentials_login_organization_research_codex_fallback]]: Bounded implementation plan for secure headless Billy login and organisation context; not a Grok finding or UI qualification.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
