@@ -276,6 +276,15 @@ WAVE_FIVEL_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEM_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_contact_balance_payments_create_preview",
+        "api_contact_balance_payments_create_execute",
+        "api_contact_balance_payments_update_preview",
+        "api_contact_balance_payments_update_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -421,7 +430,8 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     assert len(WAVE_FIVEJ_WRITE_API_TOOL_NAMES) == 18
     assert len(WAVE_FIVEK_WRITE_API_TOOL_NAMES) == 4
     assert len(WAVE_FIVEL_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 246
+    assert len(WAVE_FIVEM_WRITE_API_TOOL_NAMES) == 4
+    assert len(api_tool_names) == 250
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -438,4 +448,5 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
         | WAVE_FIVEJ_WRITE_API_TOOL_NAMES
         | WAVE_FIVEK_WRITE_API_TOOL_NAMES
         | WAVE_FIVEL_WRITE_API_TOOL_NAMES
+        | WAVE_FIVEM_WRITE_API_TOOL_NAMES
     )

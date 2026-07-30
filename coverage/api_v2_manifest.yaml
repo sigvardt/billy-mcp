@@ -3342,9 +3342,9 @@
     },
     {
       "area": "contact_balance_payments",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3353,7 +3353,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contactBalancePayments.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/contactBalancePayments",
@@ -3370,7 +3370,9 @@
       "side_effects": "creates contactBalancePayment",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_balance_payment_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contact_balance_payments_create_preview",
       "vision_evidence": null,
@@ -3380,7 +3382,7 @@
       "area": "contact_balance_payments",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -3389,7 +3391,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.contactBalancePayments.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/contactBalancePayments/:id",
@@ -3407,7 +3409,9 @@
       "side_effects": "updates contactBalancePayment",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_contact_balance_payment_writes.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_contact_balance_payments_update_preview",
       "vision_evidence": null,

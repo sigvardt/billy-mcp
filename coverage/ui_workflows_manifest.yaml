@@ -4394,7 +4394,7 @@
     {
       "api_row_id": "api.contactBalancePayments.create",
       "area": "contact_balance_payments",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_tested": false,
       "discovered": false,
       "errors": [
