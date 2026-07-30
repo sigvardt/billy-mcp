@@ -71,6 +71,8 @@ You may change only these project files plus your own `.fractal/` seed:
 - `src/billy_mcp/server.py`
 - `tests/api/test_invoice_reminder_writes.py` (new)
 - `tests/unit/test_coverage_server.py`
+- `scripts/generate_coverage_report.py` (only the invoice-reminder create
+  evidence mapping and its singular-DELETE-unsupported cleanup override)
 - `coverage/api_v2_manifest.yaml`
 - `coverage/status.json`
 - `coverage/report.md`
