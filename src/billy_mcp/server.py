@@ -40,6 +40,7 @@ from billy_mcp.api.file_attachment_reads import register_file_attachment_read_to
 from billy_mcp.api.geo_reads import register_geo_read_tools
 from billy_mcp.api.invoice_late_fee_writes import register_invoice_late_fee_write_tools
 from billy_mcp.api.invoice_line_writes import register_invoice_line_write_tools
+from billy_mcp.api.invoice_log_reads import register_invoice_log_read_tools
 from billy_mcp.api.invoice_reads import register_invoice_read_tools
 from billy_mcp.api.invoice_reminder_writes import register_invoice_reminder_write_tools
 from billy_mcp.api.invoice_writes import register_invoice_write_tools
@@ -106,6 +107,7 @@ def create_server(repository_root: Path | None = None) -> FastMCP:
     register_catalog_read_tools(server, client)
     register_contact_read_tools(server, client)
     register_invoice_read_tools(server, client)
+    register_invoice_log_read_tools(server, client)
     register_bill_read_tools(server, client)
     register_daybook_transaction_read_tools(server, client)
     register_line_read_tools(server, client)
