@@ -612,6 +612,14 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.salesTaxPayments.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankPayments.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankPayments.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bankPayments.create": (
+        "tests/api/test_bank_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankPayments.update": (
+        "tests/api/test_bank_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.bankLineMatches.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.create": (
@@ -868,6 +876,11 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
     ):
         if not supported:
             continue
+        if resource == "bankPayments" and operation == "create":
+            cleanup = (
+                "void dedicated test resource via documented irreversible "
+                "isVoided; independently verify"
+            )
         if resource == "files" and operation == "create":
             row = base_api_row(
                 row_id="api.files.create",
