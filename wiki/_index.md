@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T20:36:58Z
+updated: 2026-07-30T21:02:43Z
 ---
 
 # billy_mcp
@@ -234,6 +234,8 @@ updated: 2026-07-30T20:36:58Z
 [[wave_fiver_ticketed_writes_contract|wave_fiver_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular salesTaxReturns update; create, delete, bulk, product, live, UI, and completeness remain excluded.
 
 [[wave_fives_research88_independent_review|wave_fives_research88_independent_review]]: Independent Grok review of Research88 and Wave-5t plan baseline. ACCEPT as research only. Coverage remains 184/184/0/0 complete false. No product greening.
+
+[[wave_fives_research89_independent_review|wave_fives_research89_independent_review]]: Independent Grok review of Research89 residual/bulk reconfirmation and the root-integrated Wave-5t live-gate harness. ACCEPT research and infrastructure only; completeness FAIL; no coverage greening.
 
 [[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
 
