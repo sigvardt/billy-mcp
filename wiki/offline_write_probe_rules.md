@@ -61,28 +61,29 @@ coverage green.
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 
-Probe refresh: 2026-07-30T00:52:57Z, docs ETag `hsisik4g9p3603`, MD5
+Probe refresh: 2026-07-30T02:15:51Z, docs ETag `hsisik4g9p3603`, MD5
 `c2efda0ee4cf9cf200e14910c5fc6996`. Scratch detail:
-`.fractal/main.billy_complete/tmp/write-probes-research40.json` (compact:
-`write-probes-research40-compact.json`; prior: research37 / research34-compact).
+`.fractal/main.billy_complete/tmp/write-probes-research44.json` (compact:
+`write-probes-research44-compact.json`; prior: research43 / research40).
 
 ## Next freezes (planning only)
 
-- Wave-5g product (`salesTaxRulesets` + `salesTaxRules`) is accepted as an
-  offline product slice at root `55faa02` by
-  `wiki/wave_fiveg_product_independent_review.md`; live/UI/vision/bulk and
+- Wave-5g through Wave-5i offline products remain accepted on root (latest:
+  Wave-5i at `084ad77`, 220 tools / 157 offline rows). Live/UI/vision/bulk and
   overall completeness remain fail-closed.
-- Wave-5h attachment singular JSON CUD freeze and product remain accepted
-  offline (`wiki/wave_fiveh_ticketed_writes_contract.md`,
-  `wiki/wave_fiveh_product_independent_review.md` at `29cecbe`).
-- Wave-5i sales-tax account and meta-field product is accepted offline at root
-  merge `084ad77` by `wiki/wave_fivei_product_independent_review.md` (220 tools
-  / 157 offline rows). Live/UI/vision/bulk and overall completeness remain
-  fail-closed.
-- Recommended next offline freeze: Wave-5j singular `bankLineMatches` +
-  `bankLines` + `bankLineSubjectAssociations` CUD (9 clear ops / 18 tools).
-  Freeze-ready research is accepted as a drafting handoff only by
-  `wiki/wave_fivej_freeze_ready_research_independent_review.md`. Cited brief:
-  `.fractal/main.billy_complete/tmp/grok-research.md` (research40). Freeze page
-  and product do not yet exist. Exclude `bankPayments` singular delete (405)
-  and all bulk rows.
+- Wave-5j bank-line freeze is accepted offline
+  (`wiki/wave_fivej_ticketed_writes_contract.md`,
+  `wiki/wave_fivej_freeze_independent_review.md`). Product leaf is separate;
+  do not treat freeze ACCEPT as product ACCEPT.
+- Recommended next offline freeze after Wave-5j product ACCEPT: Wave-5k
+  singular `bankPayments` **create + update only** (2 clear ops / 4 tools).
+  Freeze-ready research handoff:
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research44). Singular
+  DELETE stays red on reconfirmed unauth **405**. Exclude all bulk rows.
+  Primary documented mutable update field is `isVoided` (irreversible once
+  true). `cashSide` docs publish `debit` / `credit`.
+- Later probe-open candidates (not frozen here): `salesTaxPayments`,
+  `contactBalancePayments`, `invoiceLateFees` create+update; `invoiceReminders`
+  create; `salesTaxReturns` update; `users` update; `organizations`
+  create+update (risk gate). `transactions` method-open but property table
+  largely immutable — do not freeze from Supports alone.
