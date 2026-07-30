@@ -4,10 +4,12 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T21:55:00Z
+updated: 2026-07-30T22:14:31Z
 ---
 
 # billy_mcp
+
+[[auth_credentials_pre_submit_research|auth_credentials_pre_submit_research]]: Grok research92 contract for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
 
 [[billy_api_v2_research_seed|billy_api_v2_research_seed]]: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 

@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T15:57:03Z
-updated: 2026-07-30T21:55:00Z
+updated: 2026-07-31T00:15:00Z
 ---
 
 # state
@@ -18,19 +18,18 @@ updated: 2026-07-30T21:55:00Z
 - Root offline coverage: **184** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5t OPTIONS harness: infrastructure only.
 - Wave-5u method-probe contract: every residual/bulk real-method candidate **BLOCK BEFORE NETWORK**.
-- Typed `auth_status` integrated at tip `cf38b5c` with research91 submit signature (`button[data-cy=login-button]`, labels `Log in`|`Log ind`). Offline ACCEPT under review91. UI coverage stays red.
-- Dedicated Grok leaves cannot currently start because the runner lacks authentication. Review91 was delivered separately and accepts the offline slice; a bounded Codex fallback is researching credentials/login/organisation but cannot close a mandatory Grok gate.
-- No residual/bulk product without dedicated non-production credentials and non-persistence safety proof.
-- `BILLY_API_TOKEN` and UI secrets verified unset.
+- Typed `auth_status` at tip `cf38b5c` / IR `853d309` with research91/92 submit signature (`button[data-cy=login-button]`, labels `Log in`|`Log ind`). Offline ACCEPT under review91. UI coverage stays red.
+- Research92 freezes next product slice: offline credential-store references + login pre-submit state machine only. Live password submit, org picker, token bootstrap, residual/bulk networking remain blocked without dedicated non-production secrets and Grok re-review.
+- Official docs fingerprint unchanged (ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
+- `BILLY_API_TOKEN` and UI secrets verified unset on the research runner.
+- Codex fallback wiki for credentials/login/org is planning only and does not replace the Grok research92 brief or product gates.
 
 ## Verification
 
-- Review91 docs re-fetch: ETag `"wcw4x9hqvu3603"`, 147934 bytes, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (byte-identical to research91).
-- Independent unauth matrix matches research91; empty bulk `ids[]` → **400**; `GET /user/organizations` **404**; `GET /organizations` **401**.
-- Independent live headless `auth_status` → `AUTH_REQUIRED` (Danish `Log ind`); `button[type=submit]` count 0.
-- Unit: auth model/browser tests **19 passed**; auth server registration tests pass.
-- Coverage honesty: 184/184/0/0, `complete: false`. No greening.
-- Raw review scratch captures and generated probe scripts were purged; node scratch retains only non-sensitive Markdown briefs.
+- Research92 docs re-fetch: ETag `"wcw4x9hqvu3603"`, 147934 bytes, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (byte-identical to research91/review91).
+- Unauth matrix reconfirm: empty bulk `ids[]` → **400** `INVALID_DELETE_ID_ARRAY`; `GET /user/organizations` **404**; `GET /organizations` **401**; residual closed POST **405**; transactions POST **401**.
+- Live headless `auth_status` → `AUTH_REQUIRED` (Danish `Log ind`); `button[type=submit]` count 0; no CAPTCHA/passkey.
+- Coverage honesty: 184/184/0/0, `complete: false`. No greening from research.
 
 ## Review decisions (authoritative)
 
@@ -40,11 +39,12 @@ updated: 2026-07-30T21:55:00Z
 - Wave-5u plan/contract: **ACCEPT as planning/research only**; mandatory Grok gate remains open for product claims.
 - Research91: **ACCEPT as research** (review91).
 - Typed `auth_status` offline product: **ACCEPT** credential-absent only (review91); UI rows remain red.
+- Research92: **research-only** credential/login/org freeze; not product ACCEPT.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Credentialed login / org selection / token bootstrap slices after secure material is available outside git.
+1. Offline credential-reference + login pre-submit state machine (research92); live submit/org/bootstrap only after non-prod secrets + Grok re-review.
 2. Dedicated non-production token + org before live residual/bulk or API `live_tested`.
 3. Live prove or correct `GET /user/organizations` vs `/organizations`.
 4. Optional Wave-5u harness encoding BLOCK-BEFORE-NETWORK (still no product tools).
@@ -57,11 +57,13 @@ updated: 2026-07-30T21:55:00Z
 - Do not green coverage from research, harness scaffolding, or login-only `auth_status`.
 - No webhooks (official 0 mentions).
 - Codex fallback cannot alone close a mandatory Grok product gate.
+- Do not accept email/password/TOTP/token as MCP tool inputs; references only.
 
 ## References
 
-- Research91: `.fractal/main.billy_complete/tmp/grok-research.md`
+- Research92: `.fractal/main.billy_complete/tmp/grok-research.md` (current research brief)
 - Review91: `.fractal/main.billy_complete/tmp/grok-review.md`
 - Wiki IR: `wiki/wave_fives_research91_independent_review.md`
+- Codex credentials planning fallback (not Grok gate): `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` when merged from child
 - Wave-5u contract: `wiki/wave5u_method_probe_contract.md`
 - Residual ranking: `wiki/wave_fives_residual_specials_research.md`
