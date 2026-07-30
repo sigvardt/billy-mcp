@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T20:36:58Z
+updated: 2026-07-30T20:58:55Z
 ---
 
 # billy_mcp
@@ -20,6 +20,8 @@ updated: 2026-07-30T20:36:58Z
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
+
+[[wave5t_ui_auth_discovery|wave5t_ui_auth_discovery]]: Cited headless Billy UI/auth discovery fallback: session reuse reaches login only; no UI coverage is qualified.
 
 [[wave_five_contract_freeze_independent_review|wave_five_contract_freeze_independent_review]]: Independent Grok review of Wave-5 ticketed-write contract freeze at 9624d26 — freeze ACCEPT; product incomplete; no write tools yet.
 
