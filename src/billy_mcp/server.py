@@ -58,7 +58,7 @@ from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.user_writes import register_user_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
-from billy_mcp.browser import AuthStatusChecker, BrowserRuntime
+from billy_mcp.browser import AuthLoginService, AuthStatusChecker, BrowserRuntime
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
 from billy_mcp.confirmations import ConfirmationStore
@@ -68,13 +68,21 @@ from billy_mcp.coverage import (
     GeneratedCoverageStatus,
     load_coverage_report,
 )
-from billy_mcp.models import AuthStatusInput, AuthStatusSuccess, ToolError
+from billy_mcp.models import (
+    AuthLoginStartInput,
+    AuthLoginStartSuccess,
+    AuthLoginWaitInput,
+    AuthStatusInput,
+    AuthStatusSuccess,
+    ToolError,
+)
 
 
 def create_server(
     repository_root: Path | None = None,
     *,
     auth_status_checker: AuthStatusChecker | None = None,
+    auth_login_service: AuthLoginService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -83,7 +91,12 @@ def create_server(
     client = BillyHttpClient(configuration.resolve_api_token)
     confirmations = ConfirmationStore()
     write_protocol = WriteProtocolService(client, confirmations)
-    checker = auth_status_checker or BrowserRuntime(configuration.browser_profile)
+    browser = BrowserRuntime(
+        configuration.browser_profile,
+        credential_references=configuration.browser_credentials,
+    )
+    checker = auth_status_checker or browser
+    login_service = auth_login_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -110,6 +123,18 @@ def create_server(
         AuthStatusInput()
         return await checker.auth_status()
 
+    async def auth_login_start() -> AuthLoginStartSuccess | ToolError:
+        """Start the fixed headless login transition with configured opaque references."""
+
+        AuthLoginStartInput()
+        return await login_service.auth_login_start()
+
+    async def auth_login_wait() -> AuthStatusSuccess | ToolError:
+        """Observe only the reviewed login state after a login transition begins."""
+
+        AuthLoginWaitInput()
+        return await login_service.auth_login_wait()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -120,6 +145,14 @@ def create_server(
         name="auth_status",
         description="Read the narrowly verified headless Billy authentication status.",
     )(auth_status)
+    server.tool(
+        name="auth_login_start",
+        description="Start the fixed headless Billy login transition using configured references.",
+    )(auth_login_start)
+    server.tool(
+        name="auth_login_wait",
+        description="Observe only the reviewed Billy login state after a transition starts.",
+    )(auth_login_wait)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

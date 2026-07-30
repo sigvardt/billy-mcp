@@ -4,6 +4,9 @@ import pytest
 from pydantic import ValidationError
 
 from billy_mcp.models import (
+    AuthLoginStartInput,
+    AuthLoginStartSuccess,
+    AuthLoginWaitInput,
     AuthStatusInput,
     AuthStatusSuccess,
     CoverageStatus,
@@ -38,3 +41,18 @@ def test_auth_status_contract_has_no_caller_controls_and_only_the_verified_state
 
     with pytest.raises(ValidationError):
         AuthStatusInput.model_validate({"url": "https://untrusted.example"})
+
+
+def test_login_tool_models_have_empty_inputs_and_no_secret_bearing_schema() -> None:
+    assert AuthLoginStartInput().model_dump() == {}
+    assert AuthLoginWaitInput().model_dump() == {}
+    assert AuthLoginStartSuccess().model_dump() == {"status": "AUTHENTICATING"}
+
+    for model in (AuthLoginStartInput, AuthLoginWaitInput, AuthLoginStartSuccess):
+        properties = model.model_json_schema().get("properties", {})
+        assert not ({"email", "password", "totp", "cookie", "token"} & set(properties))
+
+    with pytest.raises(ValidationError):
+        AuthLoginStartInput.model_validate({"selector": "button"})
+    with pytest.raises(ValidationError):
+        AuthLoginWaitInput.model_validate({"url": "https://untrusted.example"})
