@@ -79,9 +79,11 @@ reconfirmed.
   `wiki/wave_fivel_freeze_independent_review.md`). Product is merged on root
   (`sales_tax_payment_writes.py`); independent product review ACCEPT is still open.
 - Wave-5m freeze for singular `contactBalancePayments` **create + update only**
-  (2 clear ops / 4 tools) is the active next freeze. Product-ready cited package:
+  is **ACCEPT** offline (`wiki/wave_fivem_ticketed_writes_contract.md` MD5
+  `b42947fb2c3fbfce6f22fbc4f595c63b`;
+  `wiki/wave_fivem_freeze_independent_review.md`). Product-ready package:
   `.fractal/main.billy_complete/tmp/grok-research.md` (research57). Product leaf
-  waits for freeze page ACCEPT.
+  is authorised under that freeze ACCEPT.
 - After Wave-5m product: `invoiceLateFees` create+update; then `invoiceReminders`
   create only (PUT/DELETE 405). Keep `contactBalancePostings` and
   `invoiceReminderAssociations` create/update offline-blocked (405).

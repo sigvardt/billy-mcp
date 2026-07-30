@@ -1,7 +1,7 @@
 ---
 name: wave_fivem_ticketed_writes_contract
 title: Wave-5m contact-balance-payment ticketed writes contract
-desc: Cited offline-only contract for singular Billy contactBalancePayments create and update ticketed writes; awaiting separate Grok freeze acceptance, with singular delete excluded on documented 405.
+desc: Cited offline-only contract for singular Billy contactBalancePayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded, with singular delete excluded on documented 405.
 tags: [billy, api, contact-balance-payments, writes, ticketed, coverage]
 sources:
   - https://www.billy.dk/api/
@@ -19,8 +19,9 @@ updated: 2026-07-30T07:25:12Z
 
 This offline contract freezes only the two clear singular write operations for
 `/v2/contactBalancePayments`: create and update. It authorises neither product
-implementation nor coverage changes. A future product leaf may not start until
-a separate independent Grok freeze review ACCEPTs this page.
+implementation nor coverage changes. The separate independent Grok freeze
+review has ACCEPTed this page; a future product leaf remains separately
+responsible for real implementation and row-level tests.
 
 The primary official source is https://www.billy.dk/api/, cited with ETag
 `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, and a
