@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T03:40:44Z
+updated: 2026-07-30T04:07:45Z
 ---
 
 # billy_mcp
@@ -126,6 +126,8 @@ updated: 2026-07-30T03:40:44Z
 [[wave_fivek_freeze_page_authoring_package_research_independent_review|wave_fivek_freeze_page_authoring_package_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-page authoring package for singular bankPayments create and update, with Wave-5k authoring still blocked by the Wave-5j product fallback non-authorization.
 
 [[wave_fivek_freeze_ready_research_independent_review|wave_fivek_freeze_ready_research_independent_review]]: Independent Grok acceptance of the cited offline freeze-ready research handoff for singular bankPayments create and update ticketed writes (delete excluded on 405).
+
+[[wave_fivek_ticketed_writes_contract|wave_fivek_ticketed_writes_contract]]: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes, pending independent Grok freeze review.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
