@@ -7425,7 +7425,7 @@
     {
       "api_row_id": "api.invoiceLateFees.create",
       "area": "invoice_late_fees",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8201,7 +8201,7 @@
     {
       "api_row_id": "api.invoiceReminders.create",
       "area": "invoice_reminders",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8222,8 +8222,7 @@
         "invoiceReminder"
       ],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "invoiceReminders[]"
       ],
       "sensitivity": "medium",
       "side_effects": "creates invoiceReminder",
@@ -8991,7 +8990,7 @@
     {
       "api_row_id": "api.organizations.create",
       "area": "organizations",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9012,8 +9011,7 @@
         "organization"
       ],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "organizations[]"
       ],
       "sensitivity": "medium",
       "side_effects": "creates organization",

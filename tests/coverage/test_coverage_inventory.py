@@ -78,13 +78,14 @@ def test_generated_inventory_passes_its_self_check() -> None:
     assert checker.validate_root(ROOT) == []
 
 
-def test_invoice_reminder_create_response_root_override_is_scoped() -> None:
+def test_write_response_root_overrides_are_scoped() -> None:
     """Preserve the frozen root without changing conventional write rows."""
 
     operations = generator.build_api_manifest()["operations"]
     by_id = {row["id"]: row for row in operations}
 
     assert by_id["api.invoiceReminders.create"]["response_fields"] == ["invoiceReminders[]"]
+    assert by_id["api.organizations.create"]["response_fields"] == ["organizations[]"]
     assert by_id["api.invoiceLateFees.create"]["response_fields"] == [
         "changed_records[]",
         "meta.deletedRecords",

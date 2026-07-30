@@ -14,12 +14,12 @@ updated: 2026-07-30T12:24:30Z
 ## Current state
 
 - Wave-5c through Wave-5o write modules are merged into root; one shared confirmation store and write protocol.
-- Root registry about **256** `api_*` tools. Offline coverage **175** implemented + contract_tested. Live/vision **0**. `complete: false`.
+- Root registry has **260** `api_*` tools. Offline coverage **177** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5o freeze, product, and product independent review are **ACCEPT**.
 - Wave-5p freeze page is **on root** (MD5 `2742eda7bafecd619aba5fa8ad0694c5`) and freeze independent review is **ACCEPT**.
 - Wave-5p product-ready research and product-implementation handoff research are **ACCEPT as research**.
 - Research70 reconfirmed docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes) byte-identical to research69. Core unauth gates unchanged. Extra matrix: many Supports-create/update red rows are unauth 405; transactions POST/PUT 401; specials open at 401.
-- Organizations product module still **absent** on root; child `wave5p_organizations_product` **completed** tip `fbc8996` with child coverage **177** (unmerged). Root stays **175** until merge.
+- Organizations create/update is integrated on root with four typed ticketed tools. Its documented `organizations[]` create response root is covered by generated API and UI-parity inventory metadata; all UI workflow flags remain red.
 - Wave-5q users update freeze-ready research package is written (`wiki/wave_fiveq_users_freeze_ready_research.md` + `tmp/grok-research.md` research70). Not freeze ACCEPT and not product.
 - UI all red (339); bulk 92 empty-tool red; no live token; no UI credentials.
 
@@ -27,7 +27,7 @@ updated: 2026-07-30T12:24:30Z
 
 - Docs body byte-identical to research69; core probe matrix matches.
 - Extra method-closed Supports rows documented for offline refusal (not greened).
-- Coverage honesty: 175/175/0/0; complete false; zero UI greens; zero bulk greens; no false greens from research.
+- Coverage honesty: 177/177/0/0; complete false; zero UI greens; zero bulk greens; no false greens from research or integration.
 
 ## Review decisions (authoritative)
 
@@ -37,13 +37,13 @@ updated: 2026-07-30T12:24:30Z
 - Wave-5p freeze: **ACCEPT**.
 - Wave-5p product-ready research: **ACCEPT as research**.
 - Wave-5p product-implementation handoff research69: **ACCEPT as research**.
-- Wave-5p product: implemented on child tip only (unmerged); independent product review still required after root merge.
+- Wave-5p product: integrated on root; independent Grok product review remains required before offline product acceptance.
 - Wave-5q users freeze-ready research70: **packaged**; independent research review not yet run.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Merge Wave-5p organizations product child (`fbc8996`, 177 on tip) to root → independent product review.
+1. Independent Grok review of the integrated Wave-5p organizations product; offline product acceptance remains pending.
 2. Wave-5q: freeze page for users update only (two tools), freeze ACCEPT, then product (+1 → 178 after orgs).
 3. Wave-5r: salesTaxReturns update-only freeze/product (narrow writable fields).
 4. Later research: transactions create/update (method-open), specials (files/emails/deliveries/logs), method-closed Supports honesty pass.

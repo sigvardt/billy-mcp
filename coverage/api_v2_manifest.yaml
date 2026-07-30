@@ -7975,8 +7975,7 @@
         "organization"
       ],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "organizations[]"
       ],
       "sensitivity": "medium",
       "side_effects": "creates organization",
