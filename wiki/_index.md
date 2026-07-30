@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T09:23:10Z
+updated: 2026-07-30T09:37:31Z
 ---
 
 # billy_mcp
@@ -156,6 +156,8 @@ updated: 2026-07-30T09:23:10Z
 [[wave_fiven_freeze_independent_review|wave_fiven_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular invoiceLateFees create and update ticketed writes (singular delete excluded on 405).
 
 [[wave_fiven_freeze_ready_research_independent_review|wave_fiven_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5n invoiceLateFees create and update freeze package; freeze page and product remain ungated until separately reviewed.
+
+[[wave_fiven_product_implementation_research_independent_review|wave_fiven_product_implementation_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5n product-implementation gate after freeze ACCEPT; product remains a separate Codex Power leaf.
 
 [[wave_fiven_product_ready_research_independent_review|wave_fiven_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5n invoiceLateFees product-ready package; freeze ACCEPT and product remain separate gates.
 

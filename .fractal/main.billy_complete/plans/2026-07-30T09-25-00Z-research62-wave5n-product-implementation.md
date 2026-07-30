@@ -12,3 +12,18 @@ Mirror contact_balance_payment_writes. Fix create cleanup wording on greening. T
 
 ## Evidence
 tmp/grok-research.md (research62), wiki/wave_fiven_freeze_independent_review.md, wiki/wave_fiven_ticketed_writes_contract.md
+
+## Post-Mortem
+
+- Completed: cited Research62 opened only the offline invoice-late-fee
+  create/update product gate after the separate freeze ACCEPT.
+- Review: independent review62 ACCEPTed the research package, reconfirming the
+  401 POST/PUT and 405 singular/bulk DELETE boundary; it did not accept product
+  code, live, UI, vision, bulk, or completeness claims.
+- Verification: root formatting, Ruff, Pyright, coverage/repository-policy
+  checks, and 1,075 non-live tests passed while the product remained absent.
+- Cleanup: no credentials, browser sessions, test records, or raw visual
+  evidence were introduced; coverage remains 172/172/0/0 with `complete: false`.
+- Next unresolved slice: the active Codex Power product leaf must deliver the
+  four frozen tools and correct the create cleanup wording before a separate
+  product review can begin.
