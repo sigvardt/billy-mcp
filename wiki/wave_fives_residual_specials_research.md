@@ -128,6 +128,7 @@ host `api.billy.dk` must never become the client base.
 | UI login EN/DA | Reconfirmed `Log in` / `Log ind`; captcha iframe 0 |
 | Recommended slice | Encode residual unauth gate fixtures + bulk-delete canonical `ids[]` query template into Wave-5u harness only; still no residual/bulk tools; live needs `BILLY_API_TOKEN` |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research96) |
+| Independent review | **ACCEPT as research** — [[wave_fives_research96_independent_review]] |
 
 ## Residual ranking (research88; held by research89)
 
