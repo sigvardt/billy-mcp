@@ -10543,7 +10543,7 @@
     {
       "api_row_id": "api.salesTaxPayments.create",
       "area": "sales_tax_payments",
-      "cleanup": "delete dedicated test resource",
+      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
       "contract_tested": false,
       "discovered": false,
       "errors": [

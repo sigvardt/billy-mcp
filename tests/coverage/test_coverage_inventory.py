@@ -116,6 +116,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         == generator.FILES_UPLOAD_REQUEST_FIELDS
     )
     assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
+    assert by_id["api.salesTaxPayments.create"]["cleanup"] == (
+        "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
+    )
 
     offline_evidence = generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE
     for row in operations:

@@ -889,6 +889,10 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
                 "void dedicated test resource via documented irreversible "
                 "isVoided; independently verify"
             )
+        if resource == "salesTaxPayments" and operation == "create":
+            cleanup = (
+                "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
+            )
         if resource == "files" and operation == "create":
             row = base_api_row(
                 row_id="api.files.create",
