@@ -8928,7 +8928,7 @@
       "area": "sales_tax_accounts",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8937,7 +8937,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxAccounts.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/salesTaxAccounts",
@@ -8954,7 +8954,10 @@
       "side_effects": "creates salesTaxAccount",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_accounts_create_preview",
       "vision_evidence": null,
@@ -8964,7 +8967,7 @@
       "area": "sales_tax_accounts",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -8973,7 +8976,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxAccounts.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/salesTaxAccounts/:id",
@@ -8991,7 +8994,10 @@
       "side_effects": "updates salesTaxAccount",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_accounts_update_preview",
       "vision_evidence": null,
@@ -9001,7 +9007,7 @@
       "area": "sales_tax_accounts",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -9010,7 +9016,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxAccounts.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/salesTaxAccounts/:id",
@@ -9027,7 +9033,10 @@
       "side_effects": "deletes salesTaxAccount",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_accounts_delete_preview",
       "vision_evidence": null,
@@ -9196,7 +9205,7 @@
       "area": "sales_tax_meta_fields",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -9205,7 +9214,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxMetaFields.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/salesTaxMetaFields",
@@ -9222,7 +9231,10 @@
       "side_effects": "creates salesTaxMetaField",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_meta_fields_create_preview",
       "vision_evidence": null,
@@ -9232,7 +9244,7 @@
       "area": "sales_tax_meta_fields",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -9241,7 +9253,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxMetaFields.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/salesTaxMetaFields/:id",
@@ -9259,7 +9271,10 @@
       "side_effects": "updates salesTaxMetaField",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_meta_fields_update_preview",
       "vision_evidence": null,
@@ -9269,7 +9284,7 @@
       "area": "sales_tax_meta_fields",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
@@ -9278,7 +9293,7 @@
       "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
       "filters": [],
       "id": "api.salesTaxMetaFields.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/salesTaxMetaFields/:id",
@@ -9295,7 +9310,10 @@
       "side_effects": "deletes salesTaxMetaField",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "api_sales_tax_meta_fields_delete_preview",
       "vision_evidence": null,

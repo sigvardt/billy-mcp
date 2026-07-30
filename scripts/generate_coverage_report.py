@@ -574,8 +574,38 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.salesTaxAccounts.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxAccounts.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxAccounts.create": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxAccounts.update": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxAccounts.delete": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxMetaFields.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxMetaFields.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.salesTaxMetaFields.create": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxMetaFields.update": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.salesTaxMetaFields.delete": (
+        "tests/api/test_sales_tax_account_meta_writes.py",
+        "tests/api/test_sales_tax_account_meta_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.salesTaxReturns.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxReturns.list": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.salesTaxPayments.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
