@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T19:01:40Z
+updated: 2026-07-30T19:10:28Z
 ---
 
 # billy_mcp
@@ -260,6 +260,8 @@ updated: 2026-07-30T19:01:40Z
 [[wave_fivesc_research83_independent_review|wave_fivesc_research83_independent_review]]: Authoritative root Grok acceptance of the research83 implementation-ready reconfirm for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
 
 [[wave_fivesc_research84_handoff_reconfirm|wave_fivesc_research84_handoff_reconfirm]]: Post race-fix reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; residual clear stays offline-blocked; no coverage greening.
+
+[[wave_fivesc_research84_independent_review|wave_fivesc_research84_independent_review]]: Authoritative root Grok acceptance of the research84 handoff reconfirm for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
