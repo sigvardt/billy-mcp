@@ -217,6 +217,8 @@ updated: 2026-07-30T15:51:05Z
 
 [[wave_fiver_product_implementation_research|wave_fiver_product_implementation_research]]: Cited post-freeze-IR product map for singular salesTaxReturns update ticketed writes; product source still absent; no coverage greening from research.
 
+[[wave_fiver_product_implementation_research_independent_review|wave_fiver_product_implementation_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r post-freeze-IR product implementation map; product source, live, UI, vision, and completeness remain separate.
+
 [[wave_fiver_sales_tax_returns_freeze_ready_research|wave_fiver_sales_tax_returns_freeze_ready_research]]: Cited offline freeze-ready package for singular salesTaxReturns update ticketed writes; create, delete, bulk, product, live, UI, and completeness remain separate.
 
 [[wave_fiver_sales_tax_returns_freeze_ready_research_independent_review|wave_fiver_sales_tax_returns_freeze_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r salesTaxReturns update freeze-ready package; freeze page, product, live, UI, and completeness remain separate.
