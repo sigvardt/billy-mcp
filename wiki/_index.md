@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T05:29:28Z
+updated: 2026-07-30T05:44:42Z
 ---
 
 # billy_mcp
@@ -136,6 +136,10 @@ updated: 2026-07-30T05:29:28Z
 [[wave_fivek_product_ready_research_codex_fallback_review|wave_fivek_product_ready_research_codex_fallback_review]]: Non-authoritative offline Codex Power fallback ACCEPT of implementation readiness for two bankPayments ticketed-write rows; not a Grok gate, freeze acceptance, or product approval.
 
 [[wave_fivek_ticketed_writes_contract|wave_fivek_ticketed_writes_contract]]: Cited offline-only contract for singular Billy bankPayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded.
+
+[[wave_fivel_freeze_independent_review|wave_fivel_freeze_independent_review]]: Authoritative root Grok acceptance of the cited offline contract for singular salesTaxPayments create and update ticketed writes (singular delete excluded on 405).
+
+[[wave_fivel_ticketed_writes_contract|wave_fivel_ticketed_writes_contract]]: Cited offline-only contract for singular Billy salesTaxPayments create and update ticketed writes; independent Grok freeze review ACCEPT recorded; singular delete is excluded on documented 405.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
