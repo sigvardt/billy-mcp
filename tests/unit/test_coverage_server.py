@@ -235,6 +235,29 @@ WAVE_FIVEI_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+WAVE_FIVEJ_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_bank_line_matches_create_preview",
+        "api_bank_line_matches_create_execute",
+        "api_bank_line_matches_update_preview",
+        "api_bank_line_matches_update_execute",
+        "api_bank_line_matches_delete_preview",
+        "api_bank_line_matches_delete_execute",
+        "api_bank_lines_create_preview",
+        "api_bank_lines_create_execute",
+        "api_bank_lines_update_preview",
+        "api_bank_lines_update_execute",
+        "api_bank_lines_delete_preview",
+        "api_bank_lines_delete_execute",
+        "api_bank_line_subject_associations_create_preview",
+        "api_bank_line_subject_associations_create_execute",
+        "api_bank_line_subject_associations_update_preview",
+        "api_bank_line_subject_associations_update_execute",
+        "api_bank_line_subject_associations_delete_preview",
+        "api_bank_line_subject_associations_delete_execute",
+    }
+)
+
 
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
@@ -377,7 +400,8 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
     assert len(WAVE_FIVEG_WRITE_API_TOOL_NAMES) == 12
     assert len(WAVE_FIVEH_WRITE_API_TOOL_NAMES) == 6
     assert len(WAVE_FIVEI_WRITE_API_TOOL_NAMES) == 12
-    assert len(api_tool_names) == 220
+    assert len(WAVE_FIVEJ_WRITE_API_TOOL_NAMES) == 18
+    assert len(api_tool_names) == 238
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -391,4 +415,5 @@ def test_server_registers_coverage_reads_and_ticketed_writes(tmp_path: Path) -> 
         | WAVE_FIVEG_WRITE_API_TOOL_NAMES
         | WAVE_FIVEH_WRITE_API_TOOL_NAMES
         | WAVE_FIVEI_WRITE_API_TOOL_NAMES
+        | WAVE_FIVEJ_WRITE_API_TOOL_NAMES
     )

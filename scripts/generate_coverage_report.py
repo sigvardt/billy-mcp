@@ -614,14 +614,59 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     "api.bankPayments.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bankLineMatches.create": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLineMatches.update": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLineMatches.delete": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.bankLines.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLines.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.bankLines.create": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLines.update": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLines.delete": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.bankLineSubjectAssociations.get": (
         "tests/api/test_bank_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
     "api.bankLineSubjectAssociations.list": (
         "tests/api/test_bank_reads.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLineSubjectAssociations.create": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLineSubjectAssociations.update": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.bankLineSubjectAssociations.delete": (
+        "tests/api/test_bank_line_writes.py",
+        "tests/api/test_bank_line_cross_executor.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
     "api.balanceModifiers.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
