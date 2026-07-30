@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T16:05:00Z
+updated: 2026-07-30T18:26:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -63,59 +63,46 @@ coverage green.
 | `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
+| invoice email special `POST /invoices/:id/emails` | POST with JSON object root **401**; non-object body **400**; GET/PUT/DELETE **405** (POST only) |
+| invoice delivery special `POST /invoiceDeliveries` | POST **401**; GET collection **401** (not official TOC tool); GET `:id` **404**; PUT `:id` **401** (not official); DELETE **405**; nested `POST /invoices/:id/invoiceDeliveries` **404** `UNKNOWN_RESOURCE` |
 
-Probe refresh: 2026-07-30T10:07:01Z (research64; prior research63/61). HTTP docs ETag
-`wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; stripped
-plain contract identical to prior lock `hsisik4g9p3603` /
-`c2efda0ee4cf9cf200e14910c5fc6996` after whitespace normalisation. Scratch
-detail: `.fractal/main.billy_complete/tmp/write-probes-research64.json` (+
-compact; prior research63 / 61 / 60 / 59 / 58 / 57 / 56 / 55 / 54 / 47 / 46 /
-44 / 43 / 40). POST/PUT probes must send a JSON object body (`{}` minimum); a
-missing or empty body yields **400** `INVALID_REQUEST_BODY` before auth and is
-not a method-closed signal. No method-gate drift on bankPayments,
-salesTaxPayments, contactBalancePayments, invoiceLateFees, or invoiceReminders
-when using the `{}` body shape. invoiceLateFees and invoiceReminders bulk
-DELETE with `ids[]` return **405** (Supports bulk delete overridden offline).
-invoiceReminders POST 401 PUT/DELETE 405 reconfirmed. invoiceReminderAssociations
-create/update 405 reconfirmed. Wave-5m and Wave-5n products are **ACCEPT**
-offline on root (174 offline contract-tested rows). Wave-5o freeze page for
-invoiceReminders create-only is the next wiki-only gate (research64 package).
+Probe refresh: 2026-07-30T18:24:29Z (research83 residual clear full matrix +
+email/delivery specials; prior research82/81/64/63/61). HTTP docs ETag
+`wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934 still
+byte-identical. POST/PUT probes must send a JSON object body (`{}` minimum); a
+missing body or `Content-Type: application/json` with empty/non-object body
+yields **400** `INVALID_REQUEST_BODY` before auth and is not a method-closed
+signal. Empty bytes without Content-Type may still reach **401** — product
+always sends a JSON object. Scratch:
+`.fractal/main.billy_complete/tmp/write-probes-research83.json`.
 
-## Next freezes (planning only)
+## Planning note
 
-- Wave-5g through Wave-5n offline products remain on root for create+update
-  where accepted. Live/UI/vision/bulk and overall completeness remain fail-closed.
-- Wave-5l freeze is accepted offline
-  (`wiki/wave_fivel_ticketed_writes_contract.md`,
-  `wiki/wave_fivel_freeze_independent_review.md`). Product is merged on root
-  (`sales_tax_payment_writes.py`) with its Codex fallback product review record
-  retained; no Wave-5l review decision changes in this evidence refresh.
-- Wave-5m freeze for singular `contactBalancePayments` **create + update only**
-  is **ACCEPT** offline (`wiki/wave_fivem_ticketed_writes_contract.md` MD5
-  `fcb0e58742c8abc8ca9078859bb74eb8`;
-  `wiki/wave_fivem_freeze_independent_review.md`). Product is on root
-  (`contact_balance_payment_writes.py`); offline product **ACCEPT** at
-  `wiki/wave_fivem_product_independent_review.md`.
-- Wave-5n freeze and product for singular `invoiceLateFees` create+update are
-  **ACCEPT** offline on root (`wiki/wave_fiven_ticketed_writes_contract.md` MD5
-  `93e6d266d1718fa517ff645b3ca213ce`;
-  `wiki/wave_fiven_product_independent_review.md`). Root baseline 254 tools /
-  174 offline.
-- Wave-5o next: singular `invoiceReminders` **create only** (POST 401;
-  PUT/DELETE/bulk DELETE 405). Freeze authoring package is research64 in
-  `.fractal/main.billy_complete/tmp/grok-research.md`. Freeze page
-  `wiki/wave_fiveo_ticketed_writes_contract.md` is not yet authored. Keep
-  `contactBalancePostings` and `invoiceReminderAssociations` create/update
-  offline-blocked (405).
+Wave-5g through Wave-5r offline products and Wave-5s-A invoiceLogs plus
+Wave-5s-B files upload are on root (182 offline contract-tested rows). Live,
+UI, vision, bulk, and overall completeness remain fail-closed. Wave-5s-C
+invoice email + invoiceDeliveries is the next offline product slice. Keep
+`contactBalancePostings` and `invoiceReminderAssociations` create/update
+offline-blocked (405). Keep `transactions` CUD offline-blocked without live
+property samples. Detail: [[wave_fives_residual_specials_research]].
 
-## Residual after Wave-5r (research77)
+## Wave-5s residual clear (research83)
 
-Probe refresh: 2026-07-30T16:03:17Z (research77). Official docs body still MD5
-`8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes). No
-method-gate drift vs research76 on salesTaxReturns, transactions, bankPayments
-delete, invoiceReminderAssociations, specials, or the geo/reference 405 set.
+After specials product (files upload + invoice email + invoiceDeliveries), the
+remaining clear not-impl set is **29** rows. Unauth probes against
+`https://api.billysbilling.com/v2` (no token, no persistent records) show:
 
-Next offline residual ranking (research only; not greening): specials first —
-invoiceLogs list, then files binary upload, then invoice email and invoice
-delivery. Keep transactions CUD, bankPayments delete, 405 false friends, and
-bulk 92 red offline. Detail: [[wave_fives_residual_specials_research]].
+1. **405 false friends (majority):** `accountNatures`, `balanceModifiers`,
+   geo/reference create/update (`cities`, `countries`, `currencies`, `states`,
+   `zipcodes`, `locales`, `countryGroups`), `contactBalancePostings`,
+   `postings`, `invoiceReminderAssociations` create/update, and
+   `bankPayments` singular delete. Supports create/update optimism is overridden
+   offline by rule 3.
+2. **Partial method open only:** `transactions` POST/PUT return **401** but stay
+   offline-blocked without live property-table and cleanup evidence.
+   `transactions` DELETE and `invoiceReminderAssociations` DELETE of a missing
+   id return **200** with `meta.success=true` (idempotent-delete narrative only).
+3. Ambiguous bulk **92** remain empty-tool red.
+
+Do not offline-green residual clear from Supports flags alone. Full probe body:
+`.fractal/main.billy_complete/tmp/write-probes-research83.json`.
