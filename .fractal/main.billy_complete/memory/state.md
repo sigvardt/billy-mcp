@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T15:57:03Z
-updated: 2026-07-30T21:28:00Z
+updated: 2026-07-30T21:37:35Z
 ---
 
 # state
@@ -17,8 +17,14 @@ updated: 2026-07-30T21:28:00Z
 - All **6** specials offline producted; live false. Residual clear **29** red. Bulk **92** red. UI **339** red.
 - Root offline coverage: **184** implemented + contract_tested. Live/vision **0**. `complete: false`.
 - Wave-5t live-gate harness root-integrated (OPTIONS-only; fail-closed; infrastructure only).
-- Research90 + Wave-5u plan on tip `ee46c3f`. Review90 **ACCEPTS research90 and Wave-5u plan as research/planning only**; overall completeness **FAIL**.
-- OPTIONS proven non-discriminative (independent review reproduction). Method-level Wave-5u implementation **not** on root yet.
+- Wave-5u's preserved research-only method-probe contract blocks every residual
+  and bulk real-method candidate before networking. It introduces no tool,
+  live probe, or coverage change.
+- The bounded login-route discovery is preserved as an actionable auth-status
+  source only. The focused `auth_status` implementation leaf is active; all UI
+  coverage remains red pending live DOM, read-back, and vision qualification.
+- No additional residual/bulk offline-observation or product wave may begin
+  without the required dedicated non-production credentials and safety proof.
 - `BILLY_API_TOKEN` and UI secrets verified unset.
 
 ## Verification
@@ -39,21 +45,31 @@ updated: 2026-07-30T21:28:00Z
 - Research89: **ACCEPT as research** (review89).
 - Wave-5t plan / harness: **ACCEPT as planning / infrastructure only** (review89).
 - Research90: **ACCEPT as research** (review90).
-- Wave-5u plan 142.21: **ACCEPT as planning only** (review90).
-- Wave-5t UI discovery fallback: **not accepted** / branch held (seed contamination).
+- Wave-5u plan: **ACCEPT as planning only** (review90); the later Codex
+  fallback contract remains research-only and awaits the mandatory Grok gate.
+- Wave-5t UI discovery fallback: preserved as bounded login discovery only;
+  it qualifies no UI coverage and awaits the mandatory Grok review.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Wave-5u contract leaf: freeze non-mutating method-observation shapes; reconcile associations delete singular vs `ids[]`.
-2. Wave-5u Codex implementation: replace OPTIONS with candidate methods under fail-closed gates; no tools; no coverage green.
-3. With dedicated non-production token + org: run method-level matrix; freeze only where methods and writable fields are proven.
-4. Live prove or correct `GET /user/organizations` (unauth **404** vs docs + offline tool path).
-5. UI/auth/vision qualification — credentials + dedicated org; EN+DA login labels.
+1. Complete the narrow typed `auth_status` implementation and obtain its
+   mandatory independent Grok review; it stays offline and does not green UI
+   coverage.
+2. Plan secure credential resolution, typed login, and organisation-selection
+   slices from observed non-production DOM states.
+3. Provision a dedicated non-production token and organisation before any live
+   API/UI qualification; then run safe matrix evidence and cleanup/read-back.
+4. Live prove or correct `GET /user/organizations` (unauth **404** vs docs +
+   offline tool path).
+5. UI/auth/vision qualification — credentials + dedicated org; EN+DA login
+   labels and independent read-backs.
 
 ## Evidence boundaries
 
 - Do not implement residual or bulk tools from Supports text, unauth 401 alone, PATCH meta-200, or OPTIONS 204.
+- The Wave-5u candidate shapes are currently **BLOCK BEFORE NETWORK**; do not
+  reopen another offline residual/bulk observation wave.
 - Do not green coverage from harness scaffolding or research.
 - No webhooks (official 0 mentions; API 404).
 - Do not claim vision or UI parity from login-only observation.
