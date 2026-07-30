@@ -35,3 +35,6 @@ MD5 `2ebc31c6223de5ce5e21d599f92b1a74`, Wave-5n freeze MD5
   disposable records.
 - Next unresolved slice: Codex Power freeze page, then independent freeze
   review, then two-tool product.
+- Root verification after the research handoff: the non-live lint and
+  1,094-test suite passed; both wikis lint clean. `complete` remains false, so
+  no live, browser, or full-suite claim is made.

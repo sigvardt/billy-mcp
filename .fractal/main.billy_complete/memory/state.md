@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T06:20:59Z
-updated: 2026-07-30T10:10:00Z
+updated: 2026-07-30T10:22:00Z
 ---
 
 # state
@@ -19,17 +19,18 @@ updated: 2026-07-30T10:10:00Z
 - Wave-5n freeze page: `wiki/wave_fiven_ticketed_writes_contract.md` (MD5 `93e6d266d1718fa517ff645b3ca213ce`).
 - Wave-5n product independent review: **ACCEPT** offline (`wiki/wave_fiven_product_independent_review.md`).
 - Wave-5o freeze-ready research: **ACCEPT as research** (research63 + review63).
-- Wave-5o freeze authoring package: **research64** reconfirmed docs byte-identical and probes identical; Wave-5n product ACCEPT opens freeze-page authoring. Freeze page **absent**.
-- Official API contract stable (research64 HTML byte-identical to research63; ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
+- Wave-5o freeze authoring package research64: **ACCEPT as research** (review64). Durable: `wiki/wave_fiveo_freeze_authoring_research_independent_review.md`.
+- Wave-5o freeze page still **absent** on root; product not started. Freeze authoring child may be active.
+- Official API contract stable (review64 HTML byte-identical to research64; ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
 - UI all red; bulk 92 empty-tool red; no live token; no UI credentials.
 
 ## Verification
 
-- Docs research64: ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; HTML equals research63.
-- Unauth probes with `{}` body: invoiceReminders POST 401; PUT/DELETE 405; bulk DELETE 405. invoiceLateFees POST/PUT 401; singular/bulk DELETE 405. associations POST/PUT 405; DELETE 200 meta-only; DELETE without ids 400 `INVALID_DELETE_ID_ARRAY`.
-- Root late-fee writes module present and registered; reminders create inventory still red with reserved preview tool name; cleanup still says `delete dedicated test resource` (fix only when product greens).
+- Docs review64: ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934; HTML equals research64.
+- Unauth probes with `{}` body: invoiceReminders POST 401; PUT/DELETE 405; bulk DELETE 405. associations POST/PUT 405; DELETE 200 meta-only.
+- Root late-fee writes present; reminders create inventory still red with reserved preview tool name; cleanup still `delete dedicated test resource` (fix only when product greens).
 - Coverage honesty: 174/174/0/0; complete false; zero UI greens.
-- Freeze MD5 match for Wave-5n; product ACCEPT still valid.
+- No false greens from research64.
 
 ## Review decisions (authoritative)
 
@@ -37,13 +38,13 @@ updated: 2026-07-30T10:10:00Z
 - Wave-5n freeze: **ACCEPT**.
 - Wave-5n product: **ACCEPT** offline for singular create/update only.
 - Wave-5o freeze-ready research: **ACCEPT as research** (review63).
-- Wave-5o freeze authoring package research64: ready for Codex Power wiki-only freeze page (not yet freeze ACCEPT).
+- Wave-5o freeze authoring research64: **ACCEPT as research** (review64).
 - Wave-5o freeze page / product: **not accepted**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Author `wiki/wave_fiveo_ticketed_writes_contract.md` from research64 freeze-authoring package (create-only two tools); then freeze independent review; then two-tool product.
+1. Land `wiki/wave_fiveo_ticketed_writes_contract.md` (create-only two tools); freeze independent review; then two-tool product.
 2. Later: organizations create+update; users update-only; salesTaxReturns update-only (opaque/cautious); associations delete-only candidate.
 3. Bulk 92, UI/auth/vision, live CUD still open.
 
@@ -57,9 +58,10 @@ updated: 2026-07-30T10:10:00Z
 
 ## References
 
+- Review: `.fractal/main.billy_complete/tmp/grok-review.md` (review64)
 - Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research64)
-- Probes: `.fractal/main.billy_complete/tmp/write-probes-research64.json`
-- Prior research ACCEPT wiki: `wiki/wave_fiveo_freeze_ready_research_independent_review.md`
+- Research ACCEPT wiki: `wiki/wave_fiveo_freeze_authoring_research_independent_review.md`
+- Prior freeze-ready ACCEPT: `wiki/wave_fiveo_freeze_ready_research_independent_review.md`
 - Product ACCEPT: `wiki/wave_fiven_product_independent_review.md`
 - Freeze ACCEPT (Wave-5n): `wiki/wave_fiven_freeze_independent_review.md`
 - Freeze page (Wave-5n): `wiki/wave_fiven_ticketed_writes_contract.md`
