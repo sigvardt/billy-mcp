@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T22:11:45Z
-updated: 2026-07-30T00:25:00Z
+updated: 2026-07-30T00:35:00Z
 ---
 
 # state
@@ -19,8 +19,9 @@ updated: 2026-07-30T00:25:00Z
 - Wave-5g product remains accepted at **`55faa02`** (`wiki/wave_fiveg_product_independent_review.md`).
 - Wave-5i freeze-ready ACCEPT stands at `wiki/wave_fivei_freeze_ready_research_independent_review.md`.
 - Wave-5i freeze page landed at commit **`a176887`** (`wiki/wave_fivei_ticketed_writes_contract.md`).
-- Root independent freeze review **ACCEPT** at `wiki/wave_fivei_freeze_independent_review.md`. Full findings: `tmp/grok-review.md`. Docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`). Unauth probes reconfirmed 401 POST/PUT and DELETE 200 trap.
-- Wave-5i product is **absent**. Next work: product-ready research (if required by cadence) then Codex product module (+12 → 220 tools; coverage 157).
+- Root independent freeze review **ACCEPT** at `wiki/wave_fivei_freeze_independent_review.md`. Docs fingerprint unchanged (etag `hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`). Unauth probes reconfirmed 401 POST/PUT and DELETE 200 trap.
+- Wave-5i product-ready research (research39) stands at `.fractal/main.billy_complete/tmp/grok-research.md`. Official docs re-fetched byte-identical; product module still **absent**.
+- Wave-5i product is **absent**. Next work: independent product-ready review if required, then Codex product module (+12 → 220 tools; coverage 157).
 - Coverage: implemented 151, contract_tested 151, live 0, vision 0, `complete: false`. Clear red CUD: 58.
 - UI all red; bulk 92 empty-tool red; specials red; no live token.
 - Child freeze/product review nodes that exit without durable ACCEPT do not replace root reviews.
@@ -32,12 +33,13 @@ updated: 2026-07-30T00:25:00Z
 - Wave-5h product at root merge `29cecbe`: **ACCEPT** offline.
 - Wave-5i freeze-ready research: **ACCEPT** offline handoff only.
 - Wave-5i freeze page at commit `a176887`: **ACCEPT** offline contract.
+- Wave-5i product-ready research (research39): written; awaiting independent review ACCEPT if cadence requires it before product leaf.
 - Wave-5i product: **not implemented / not accepted**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Product-ready research for Wave-5i, then Codex product (twelve tools) and offline suites; independent product review to 220/157.
+1. Independent review of Wave-5i product-ready research if required; then Codex product (twelve tools) and offline suites; independent product review to 220/157.
 2. Later: bank line family CUD (9 clear red), partial CUD cohorts, specials (binary files upload), bulk live, UI/auth/vision, live attachment CUD.
 3. Blocked offline (405 / readonly): accountNatures, postings, balanceModifiers, contactBalancePostings, geo CUD, bankPayments/salesTaxPayments delete, transactions CUD, invoiceReminderAssociations create/update.
 
@@ -52,8 +54,8 @@ updated: 2026-07-30T00:25:00Z
 
 ## References
 
+- Research product-ready 5i (scratch): `.fractal/main.billy_complete/tmp/grok-research.md`
 - Review (scratch): `.fractal/main.billy_complete/tmp/grok-review.md`
-- Research freeze-implementation 5i (scratch): `.fractal/main.billy_complete/tmp/grok-research.md`
 - Wiki freeze ACCEPT 5i: `wiki/wave_fivei_freeze_independent_review.md`
 - Wiki freeze contract 5i: `wiki/wave_fivei_ticketed_writes_contract.md`
 - Wiki freeze-ready ACCEPT 5i: `wiki/wave_fivei_freeze_ready_research_independent_review.md`
