@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T09:10:00Z
+updated: 2026-07-30T16:05:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -107,3 +107,15 @@ invoiceReminders create-only is the next wiki-only gate (research64 package).
   `wiki/wave_fiveo_ticketed_writes_contract.md` is not yet authored. Keep
   `contactBalancePostings` and `invoiceReminderAssociations` create/update
   offline-blocked (405).
+
+## Residual after Wave-5r (research77)
+
+Probe refresh: 2026-07-30T16:03:17Z (research77). Official docs body still MD5
+`8b94b0135c91fd15fe54ea33e088a4be` (ETag `wcw4x9hqvu3603`, 147934 bytes). No
+method-gate drift vs research76 on salesTaxReturns, transactions, bankPayments
+delete, invoiceReminderAssociations, specials, or the geo/reference 405 set.
+
+Next offline residual ranking (research only; not greening): specials first —
+invoiceLogs list, then files binary upload, then invoice email and invoice
+delivery. Keep transactions CUD, bankPayments delete, 405 false friends, and
+bulk 92 red offline. Detail: [[wave_fives_residual_specials_research]].

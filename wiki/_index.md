@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T15:51:05Z
+updated: 2026-07-30T16:07:21Z
 ---
 
 # billy_mcp
@@ -228,6 +228,8 @@ updated: 2026-07-30T15:51:05Z
 [[wave_fiver_sales_tax_returns_product_ready_research_independent_review|wave_fiver_sales_tax_returns_product_ready_research_independent_review]]: Independent Grok ACCEPT as research for the Wave-5r freeze verification and product-ready package; freeze IR ACCEPT, product, live, UI, and completeness remain separate.
 
 [[wave_fiver_ticketed_writes_contract|wave_fiver_ticketed_writes_contract]]: Cited wiki-only offline contract freezing singular salesTaxReturns update; create, delete, bulk, product, live, UI, and completeness remain excluded.
+
+[[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Cited post-Wave-5r residual ranking for remaining clear not-impl and four special routes; invoiceLogs list is the recommended first offline residual product; no coverage greening from research.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
