@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-30T20:45:00Z
+updated: 2026-07-30T21:12:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -28,8 +28,8 @@ It is not product ACCEPT for residual/bulk, live qualification, UI/vision work,
 or completeness. It does not green coverage.
 
 Full probe matrices and scratch snapshots live at
-`.fractal/main.billy_complete/tmp/grok-research.md` (research89 is the current
-Wave-5t harness/UI contract reconfirm; research88 residual ranking still holds;
+`.fractal/main.billy_complete/tmp/grok-research.md` (research90 is the current
+Wave-5u method-level upgrade brief; research89/88 residual ranking still holds;
 research77–87 are historical). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
 offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
@@ -52,7 +52,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-B product | **Merged** offline (containment-repaired upload; live false) |
 | Wave-5s-C product | **Merged** offline (`0efceae`; review87 ACCEPT offline only) |
 | Next offline product tools | **None** — residual/bulk require live token |
-| Recommended next slice | **Wave-5t** live residual/bulk gate harness (fail-closed without token) |
+| Recommended next slice | **Wave-5u** method-level live residual/bulk observation (Wave-5t OPTIONS harness is infrastructure only) |
 
 ## Official docs fingerprint
 
@@ -82,6 +82,18 @@ host `api.billy.dk` must never become the client base.
 | `GET /user/organizations` | Unauth **404** `UNKNOWN_RESOURCE` (docs still cite the path; offline special risk — live must prove or correct) |
 | UI login (headless, no creds) | `mit.billy.dk/login`, English chrome (`Login` / `Log in`); stable `name=email|password|remember` |
 | Recommended slice | Still Wave-5t fail-closed live residual/bulk gate harness only |
+
+## Research90 reconfirm (no coverage green)
+
+| Check | Result |
+| --- | --- |
+| Docs body | Unchanged vs research88/89 (ETag `"wcw4x9hqvu3603"`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`) |
+| OPTIONS discrimination | **None** — unauth OPTIONS on residual/bulk paths returns **204** empty body and the same full CORS method list for closed (`accountNatures` POST=405) and open (`transactions` POST=401, `contacts` PUT `/bulk`=401) routes |
+| Method-level residual/bulk | Unchanged vs research89 |
+| `GET /user/organizations` | Still unauth **404** `UNKNOWN_RESOURCE` |
+| UI login | Reconfirmed English `Log in`; stable `name=email|password|remember` |
+| Recommended slice | **Wave-5u** method-level live residual/bulk observation upgrade (still fail-closed and unqualified; no residual/bulk tools; no coverage green). Wave-5t OPTIONS harness remains infrastructure only |
+| Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research90) |
 
 ## Residual ranking (research88; held by research89)
 
