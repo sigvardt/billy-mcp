@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T19:20:26Z
+updated: 2026-07-30T19:33:19Z
 ---
 
 # billy_mcp
@@ -264,6 +264,8 @@ updated: 2026-07-30T19:20:26Z
 [[wave_fivesc_research84_handoff_reconfirm|wave_fivesc_research84_handoff_reconfirm]]: Post race-fix reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; residual clear stays offline-blocked; no coverage greening.
 
 [[wave_fivesc_research84_independent_review|wave_fivesc_research84_independent_review]]: Authoritative root Grok acceptance of the research84 handoff reconfirm for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
+
+[[wave_fivesc_research85_independent_review|wave_fivesc_research85_independent_review]]: Authoritative root Grok acceptance of research85 handoff and offline product ACCEPT of containment-repaired file upload; Wave-5s-C product and completeness remain open.
 
 [[wave_fivesc_research85_product_ready_reconfirm|wave_fivesc_research85_product_ready_reconfirm]]: Post-containment-gate reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; full residual clear 29 unauth matrix; no coverage greening.
 
