@@ -14,9 +14,10 @@ updated: 2026-07-30T02:07:17Z
 
 The accepted offline authority is `wiki/wave_fivej_ticketed_writes_contract.md`
 plus `wiki/wave_fivej_freeze_independent_review.md`. The cited implementation
-handoff also has an independent product-ready ACCEPT recorded at
-`wiki/wave_fivej_product_ready_research_independent_review.md` in the parent.
-The handoff itself is the parent worktree scratch file
+handoff also has an independent product-ready ACCEPT confirmed by the parent.
+That gate accepts research43 only: it does not accept product code or green any
+product, live, UI, vision, or bulk coverage. The handoff itself is the parent
+worktree scratch file
 `.fractal/main.billy_complete/tmp/grok-research.md` (research43). It confirms the
 unchanged official documentation fingerprint and authorises exactly nine
 singular bank-line CUD rows as eighteen preview/execute tools.
