@@ -25,3 +25,16 @@ Replaced `.fractal/main.billy_complete/tmp/grok-research.md` with research65.
 1. Freeze child lands root freeze page.
 2. Grok freeze independent review.
 3. Codex Power two-tool create product per research65 §4/§7.3.
+
+## Post-Mortem
+
+- Completed: research65 was independently reviewed and accepted **as research**;
+  the root now contains its non-product review record.
+- Deviation: the frozen page reached root during the follow-on integration, so
+  the earlier “absent on root” observation remains historical rather than current.
+- Review: no reported defect; the review explicitly did not accept product,
+  live, UI, bulk, or coverage changes.
+- Verification: root non-live lint and test suite passed (1094 tests); no raw
+  browser or credential evidence was added.
+- Next unresolved coverage slice: merge the separately accepted freeze-review
+  record, then begin only the cited two-tool create implementation.
