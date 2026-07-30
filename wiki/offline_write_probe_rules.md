@@ -8,18 +8,20 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T08:18:00Z
+updated: 2026-07-30T08:45:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
 
 ## Authority
 
-Derived from Billy's public API docs at https://www.billy.dk/api/ (ETag
-`hsisik4g9p3603`, MD5 `c2efda0ee4cf9cf200e14910c5fc6996`, body 147934 bytes as
-of 2026-07-29) and unauthenticated probes against the locked base
-`https://api.billysbilling.com/v2`. This is not live qualification and not
-coverage green.
+Derived from Billy's public API docs at https://www.billy.dk/api/
+(current HTTP access ETag `juf598rs793603`, MD5
+`f3925615c452b34694abb7f2856e845a`, body 147934 bytes as of 2026-07-30; stripped
+plain contract is identical to the prior inventory lock ETag `hsisik4g9p3603` /
+MD5 `c2efda0ee4cf9cf200e14910c5fc6996`) and unauthenticated probes against the
+locked base `https://api.billysbilling.com/v2`. This is not live qualification
+and not coverage green.
 
 ## Rules
 
@@ -61,16 +63,18 @@ coverage green.
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |
 | `bankLineMatches`, `bankLines`, `bankLineSubjectAssociations` | POST/PUT 401; DELETE missing-id 200 — full singular CUD probe-open; property tables extracted (research40); match has-many `lines`/`subjectAssociations` document replace-on-set while Notes say readonly — live must prove embed; offline freeze may use opaque inners |
 
-Probe refresh: 2026-07-30T08:15:26Z (research59), docs ETag `hsisik4g9p3603`, MD5
-`c2efda0ee4cf9cf200e14910c5fc6996` (byte-identical body 147934). Scratch
-detail: `.fractal/main.billy_complete/tmp/write-probes-research59.json` (+
-bulk-hint; prior research58 / 57 / 56 / 55 / 54 / 47 / 46 / 44 / 43 / 40). No
-drift on bankPayments or salesTaxPayments POST/PUT 401 or singular DELETE 405.
-contactBalancePayments / invoiceLateFees POST/PUT 401 and singular DELETE 405
-reconfirmed. invoiceLateFees and invoiceReminders bulk DELETE with `ids[]`
-return **405** (Supports bulk delete overridden offline). invoiceReminders POST
-401 PUT/DELETE 405 reconfirmed. invoiceReminderAssociations create/update 405
-reconfirmed.
+Probe refresh: 2026-07-30T08:41:45Z (research60). HTTP docs ETag
+`juf598rs793603`, MD5 `f3925615c452b34694abb7f2856e845a`, body 147934; stripped
+plain contract identical to prior lock `hsisik4g9p3603` /
+`c2efda0ee4cf9cf200e14910c5fc6996` (Prismic CDN `ref` token only). Scratch
+detail: `.fractal/main.billy_complete/tmp/write-probes-research60.json` (+
+bulk-hint; prior research59 / 58 / 57 / 56 / 55 / 54 / 47 / 46 / 44 / 43 / 40).
+No method-gate drift on bankPayments, salesTaxPayments, contactBalancePayments,
+or invoiceLateFees. invoiceLateFees and invoiceReminders bulk DELETE with
+`ids[]` return **405** (Supports bulk delete overridden offline).
+invoiceReminders POST 401 PUT/DELETE 405 reconfirmed.
+invoiceReminderAssociations create/update 405 reconfirmed. Wave-5m product
+ACCEPT offline; Wave-5n freeze page is next.
 
 ## Next freezes (planning only)
 
@@ -88,9 +92,10 @@ reconfirmed.
   (`contact_balance_payment_writes.py`); offline product **ACCEPT** at
   `wiki/wave_fivem_product_independent_review.md` (root 250 tools / 172 offline).
 - Wave-5n freeze-ready research for `invoiceLateFees` create+update is in
-  `.fractal/main.billy_complete/tmp/grok-research.md` (research59). Freeze page
-  authoring is open after Wave-5m product ACCEPT; product for late fees still
-  requires a separate freeze ACCEPT first.
+  `.fractal/main.billy_complete/tmp/grok-research.md` (research60). Wave-5m
+  product ACCEPT is recorded, so the next Codex slice is freeze page
+  `wiki/wave_fiven_ticketed_writes_contract.md` only; product for late fees
+  still requires a separate freeze ACCEPT first.
 - After Wave-5n: `invoiceReminders` create only (PUT/DELETE 405). Keep
   `contactBalancePostings` and `invoiceReminderAssociations` create/update
   offline-blocked (405).
