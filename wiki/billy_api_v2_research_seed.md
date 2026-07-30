@@ -6,14 +6,14 @@ sources:
   - https://www.billy.dk/api/
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T08:12:00Z
-updated: 2026-07-30T17:37:00Z
+updated: 2026-07-30T17:41:00Z
 ---
 
 # billy_api_v2_research_seed
 
-Primary source: https://www.billy.dk/api/ (re-verified 2026-07-29T11:52:46Z; etag `hsisik4g9p3603`, 147934 bytes, MD5 `c2efda0ee4cf9cf200e14910c5fc6996` — still unchanged).
+Primary source: https://www.billy.dk/api/ (re-verified 2026-07-30T17:39:48Z; live access etag `wcw4x9hqvu3603`, 147934 bytes, MD5 `8b94b0135c91fd15fe54ea33e088a4be` — body still unchanged vs inventory lock etag `hsisik4g9p3603` / MD5 `c2efda0ee4cf9cf200e14910c5fc6996`).
 Base URL lock: `https://api.billysbilling.com/v2`. Auth header: `X-Access-Token`.  
-Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (Wave-4 remaining clear get/list; not a completeness claim). Companion: `wiki/wave_four_remaining_clear_reads_contract.md`.
+Detailed freeze recipe / next-slice contract: node scratch `.fractal/main.billy_complete/tmp/grok-research.md` (Wave-5s-C email + delivery specials; not a completeness claim). Companion residual ranking: `wiki/wave_fives_residual_specials_research.md`.
 
 ## Counts
 
