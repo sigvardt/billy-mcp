@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-30T15:57:03Z
-updated: 2026-07-30T19:52:00Z
+updated: 2026-07-30T20:10:00Z
 ---
 
 # state
@@ -14,52 +14,54 @@ updated: 2026-07-30T19:52:00Z
 ## Current state
 
 - Wave-5c through Wave-5r write modules merged on root (including salesTaxReturns update).
-- Wave-5s-A `api_invoice_logs_list` and Wave-5s-B ticketed `api_files_upload_preview`/`api_files_upload_execute` are merged on root with descriptor-relative no-follow containment. Root offline coverage remains **182** implemented + contract_tested. Live/vision **0**. `complete: false`.
-- Wave-5s-B containment repair merged (`b54f8f9`). Independent Grok product review **ACCEPT** offline for the containment-repaired upload (live still false).
-- Wave-5s-C research86 product implementation handoff independently **ACCEPT** as research only (review86). Docs MD5 `8b94b0135c91fd15fe54ea33e088a4be` byte-identical. Wire unchanged. Sequencing gate open. Residual clear **29** offline-blocked. Specials not-impl **2** (email + delivery). Email/delivery product modules still absent on root.
-- Active product child: `main.billy_complete.wave5sc_email_delivery_product` (Codex Power). Its approved minimal scope includes custom email/delivery services and tests, server registration, two generator-evidence entries, root registry assertions, and regenerated coverage artifacts. Product ACCEPT remains open until merge + Grok product IR.
-- UI all red (339); bulk 92 red; no live token; no UI credentials.
+- Wave-5s-A `api_invoice_logs_list` and Wave-5s-B ticketed file upload (containment-repaired) are merged with offline product ACCEPT (live still false).
+- Wave-5s-C ticketed invoice email + invoiceDeliveries product is merged on root (`0efceae`). Tools: `api_invoices_send_email_preview`/`execute`, `api_invoice_deliveries_create_preview`/`execute`. Module: `src/billy_mcp/api/invoice_email_delivery_writes.py`.
+- Root offline coverage: **184** implemented + contract_tested. Live/vision **0**. `complete: false`. Specials not-impl **0**. Clear not-impl **29**. Bulk **92** red. UI **339** red.
+- Research87 docs fingerprint still MD5 `8b94b0135c91fd15fe54ea33e088a4be`. Residual clear still offline-blocked.
+- Product child `wave5sc_email_delivery_product` completed and merged. No active product child for specials.
 
 ## Verification
 
-- Review86 docs re-fetch: ETag `"wcw4x9hqvu3603"`, 147934 bytes, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, byte-identical to research86.
-- Review86 unauth probes match research86 email/delivery and residual samples.
-- Coverage honesty: 182/182/0/0, `complete: false`. No research greening. `WriteProtocolService` POST still `target=None` / collection-only path / plural success roots.
+- Review87 docs re-fetch: ETag `"wcw4x9hqvu3603"`, 147934 bytes, MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- Review87 unauth probes match email/delivery method gates; residual samples still block offline freezes.
+- Focused product suite: 32 passed (`tests/api/test_invoice_email_delivery_writes.py`).
+- Root commit-mode suite: 1,255 non-live tests passed with Ruff, Pyright,
+  coverage, and repository-policy checks passing.
+- Coverage honesty: 184/184/0/0, `complete: false`. live_tested false on email/delivery specials.
 
 ## Review decisions (authoritative)
 
 - Wave-5m through Wave-5q freeze/product: **ACCEPT** offline.
 - Wave-5r freeze/product independent: **ACCEPT** offline.
 - Wave-5s residual/specials research: **ACCEPT as research**.
-- Wave-5s-A invoiceLogs research IR: **ACCEPT as research**.
-- Wave-5s-B containment-repaired product (review85): **ACCEPT** offline only; `live_tested` false.
-- Wave-5s-C freeze / product-ready / research83–85 reconfirms: **ACCEPT as research handoff only**.
-- Wave-5s-C research86 product implementation handoff independent (review86): **ACCEPT as research handoff only**.
-- Wave-5s-C product ACCEPT: **open** (tools not on root).
+- Wave-5s-A invoiceLogs: product offline green.
+- Wave-5s-B containment-repaired upload product: **ACCEPT** offline only.
+- Wave-5s-C freeze / product-ready / research83–87: **ACCEPT as research** where applicable.
+- Wave-5s-C product (review87): **ACCEPT offline only**; `live_tested` false.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. Codex Power Wave-5s-C product leaf merge, then Grok product independent review.
-2. Later: residual clear 405 false friends / transactions property posture / bulk 92 / UI/auth/vision (live token required for residual offline-blocked rows).
+1. Residual clear 29 (405 false friends / transactions property posture / bankPayments delete / reminder-association delete meta) — live token or docs change required for offline-blocked rows.
+2. Ambiguous bulk 92 — live matrix or official bulk evidence.
+3. UI/auth/vision qualification — credentials + dedicated org.
+4. Live qualification for high side-effect specials (email, delivery, upload) on non-production org only.
 
 ## Evidence boundaries
 
-- Research ACCEPT / product-ready handoff is not product for email/delivery, live, UI, vision, bulk, or completeness.
-- Wave-5s-B product ACCEPT is offline only; do not set upload `live_tested` without non-production proof.
-- Do not green coverage from research alone.
+- Wave-5s-C product ACCEPT is offline only; do not set email/delivery `live_tested` without non-production proof.
+- Response roots provisional (`changed_records[]`, singular `invoiceDelivery`) until live envelope proof.
+- Do not green residual/bulk/UI from Supports text or research alone.
 - Email binds `target=invoiceId`; no `destination_url`; no multi-recipient.
 - Delivery: no invented `receiverCvr`/get/list/update; status via invoiceLogs.
-- Response roots provisional until live proof.
-- Generic WriteProtocolService POST target=None and plural-list success mapping are insufficient for email/delivery specials.
+- No automatic retry after external-send POST.
 
 ## References
 
 - Freeze: `wiki/wave_fivesc_invoice_email_delivery_research.md`
 - Product-ready: `wiki/wave_fivesc_invoice_email_delivery_product_ready_research.md`
-- Research86 handoff: `wiki/wave_fivesc_research86_product_implementation_handoff.md`
-- Research86 IR: `wiki/wave_fivesc_research86_independent_review.md`
-- Research85 IR + upload product ACCEPT: `wiki/wave_fivesc_research85_independent_review.md`
+- Research87 reconfirm: `wiki/wave_fivesc_research87_product_in_flight_reconfirm.md`
+- Review87 IR + product ACCEPT: `wiki/wave_fivesc_research87_independent_review.md`
 - Probe rules: `wiki/offline_write_probe_rules.md`
 - Research scratch: `.fractal/main.billy_complete/tmp/grok-research.md`
 - Review scratch: `.fractal/main.billy_complete/tmp/grok-review.md`

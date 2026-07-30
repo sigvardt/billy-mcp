@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-30T19:53:49Z
+updated: 2026-07-30T20:10:00Z
 ---
 
 # billy_mcp
@@ -272,6 +272,10 @@ updated: 2026-07-30T19:53:49Z
 [[wave_fivesc_research86_independent_review|wave_fivesc_research86_independent_review]]: Authoritative root Grok acceptance of the research86 product implementation handoff for ticketed invoice email and invoiceDeliveries; product and completeness remain open.
 
 [[wave_fivesc_research86_product_implementation_handoff|wave_fivesc_research86_product_implementation_handoff]]: Post-upload-ACCEPT reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged; sequencing gate open for Codex Power product leaf; residual clear stays offline-blocked; no coverage greening.
+
+[[wave_fivesc_research87_independent_review|wave_fivesc_research87_independent_review]]: Authoritative root Grok acceptance of research87 reconfirm and offline product ACCEPT of ticketed invoice email and invoiceDeliveries; live, UI, residual, bulk, and completeness remain open.
+
+[[wave_fivesc_research87_product_in_flight_reconfirm|wave_fivesc_research87_product_in_flight_reconfirm]]: Post-research86 reconfirm that official docs and Wave-5s-C email/delivery wire are unchanged while the Codex Power product leaf is active; residual clear stays offline-blocked; no coverage greening.
 
 [[wave_four_first_cohort_independent_review|wave_four_first_cohort_independent_review]]: Independent Grok review of merged Wave-4 geo/tax/bank modules — ACCEPT quality, FAIL product complete and root wiring.
 
