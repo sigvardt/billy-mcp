@@ -199,6 +199,8 @@ class LoginControl(Protocol):
 
     async def fill(self, value: str) -> None: ...
 
+    async def check(self) -> None: ...
+
     async def click(self) -> None: ...
 
 
@@ -444,6 +446,12 @@ class BrowserRuntime:
             if not await _has_known_login_page(page):
                 return _ui_changed_error()
             await page.locator(_LOGIN_CONTROL_SELECTORS[1]).fill(secondary_value)
+
+            # Persistent MCP profiles require Billy's "remember" control so the
+            # session can restore after process close (research101).
+            if not await _has_known_login_page(page):
+                return _ui_changed_error()
+            await page.locator(_LOGIN_CONTROL_SELECTORS[2]).check()
 
             if not await _has_known_login_page(page):
                 return _ui_changed_error()

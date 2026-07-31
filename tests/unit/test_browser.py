@@ -106,6 +106,9 @@ class FakeLoginControl:
         if self._fill_error is not None:
             raise self._fill_error
 
+    async def check(self) -> None:
+        self._record("check")
+
     async def click(self) -> None:
         self._record("click")
         if self._click_error is not None:
@@ -546,12 +549,18 @@ def test_auth_login_start_resolves_only_after_validation_and_rechecks_before_act
     assert page.events.index("fill:input[type='password'][name='password']") > page.events.index(
         "fill:input[type='email'][name='email']"
     )
+    assert page.events.index("check:input[type='checkbox'][name='remember']") > page.events.index(
+        "fill:input[type='password'][name='password']"
+    )
     assert "click:button[data-cy='login-button']" in page.events
+    assert page.events.index("click:button[data-cy='login-button']") > page.events.index(
+        "check:input[type='checkbox'][name='remember']"
+    )
     assert page.events.index("wait_for_load_state") > page.events.index(
         "click:button[data-cy='login-button']"
     )
     assert "fill:input[type='checkbox'][name='remember']" not in page.events
-    assert page.events.count("count:input[type='email'][name='email']") == 4
+    assert page.events.count("count:input[type='email'][name='email']") == 5
     assert page.closed
 
 
