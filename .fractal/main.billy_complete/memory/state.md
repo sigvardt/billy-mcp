@@ -6,28 +6,28 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T15:45:00Z
+updated: 2026-07-31T15:25:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 18 COMMIT complete; tip product daybooks 186.18 (`0b6176d`).
-- Coverage: implemented/contract 204; live/vision 20; API live 0; complete false.
+- Continue mode iter 19 FIX-VERIFY clean; product transactions 186.19 uncommitted.
+- Coverage: implemented/contract 205; live/vision 21; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Branch tip `0b6176d` (may dirty only memory after commit).
-
+- Ready for COMMIT product tip.
 
 ## Verification
 
-- Last product: `ui_financing_open` dual-session + vision purge_verified (COMMIT 186.17).
-- Offline baseline product: 1422 passed class.
-- Live baseline: 19 UI discovery/parity rows green.
+- Last product: `ui_transactions_list` dual-session + vision purge_verified (FIX-VERIFY 186.19).
+- Offline baseline product: 1439 passed class.
+- Live baseline: 21 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
+- Product `ui_transactions_list`: **ACCEPT** (IR 186.19; no required fixes; egress retains prior lives).
 - Product `ui_daybooks_open`: **ACCEPT** (IR 186.18; no required fixes; egress retains prior lives).
 - Product `ui_financing_open`: **ACCEPT** (IR 186.17; no required fixes; egress retains prior lives).
 - Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16; egress generator retains prior lives).
@@ -41,22 +41,27 @@ updated: 2026-07-31T15:45:00Z
 
 ## Open coverage work
 
-1. Next UI discovery freeze: `ui.discovery.transactions`.
-2. Then transactions, reports, vat, annual, exports, saft, addons, integrations,
-   inventory, settings_*.
+1. Next UI discovery freeze: `ui.discovery.reports`.
+2. Then vat_declarations, annual_reports, exports, saft_exports, addons,
+   integrations, inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (19 rows)
+## Live UI tools (21 rows)
 
-- discovery greened: invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (17): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
-  suppliers, bank_accounts, bank_reconciliation, financing.
+  suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
+- discovery still red (17): reports, vat_declarations, annual_reports,
+  exports, saft_exports, addons, integrations, inventory, settings_*.
 
 ## Evidence boundaries
 
 - No invent API tools for pure UI shells.
+- Transactions path is `/:org_slug/transactions` h1 `Posteringer`; nested create
+  shell `Postering:` rejected; never click Ny postering.
+- Daybooks path is `/:org_slug/daybooks/new` (editor shell); bare `/daybooks` rejected.
 - Bank recon is `/:org_slug/bank_accounts/:id/sync` (Afstemning), distinct from
   bank-accounts Bankkonti; empty content shell valid in test org.
 - Interface read-back: second browser session only.
@@ -65,12 +70,125 @@ updated: 2026-07-31T15:45:00Z
 
 ## References
 
-- Plan: `plans/2026-07-31T14:06:12.186Z-186.16-ui_bank_reconciliation_open.md`
-- Wiki: `wiki/ui_bank_reconciliation_open_shell.md`
-- Research: `tmp/grok-research.md` (research116 financing freeze)
-- Plan: `plans/2026-07-31T14:31:32.054Z-186.17-ui_financing_open.md`
-- Wiki: `wiki/ui_financing_open_shell.md`
-- Next: RESEARCH freeze `ui.discovery.daybooks`
+- Plan transactions: `plans/2026-07-31T15:28:53.633Z-186.19-ui_transactions_list.md`
+- Wiki: `wiki/ui_transactions_list_shell.md`
+- Plan daybooks: look up 186.18 in plans/; wiki `wiki/ui_daybooks_open_shell.md`
+- Next after COMMIT: RESEARCH freeze `ui.discovery.reports`
+
+## SYNC (iter 19)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 02AD1B86 read/reacted (next transactions freeze); refreshed private 16FA6AE4.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override already applied: no live API; grok-only).
+- Branch clean at product tip daybooks 186.18 (`0b6176d`) vs origin.
+- Coverage: implemented/contract 204; live/vision 20; complete false.
+- Outbox posted: iter19 progress (E16BA800).
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.transactions`.
+
+## PREPARE (iter 19)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: scaffold/init/review stubs only, or product already
+  superseded on root (`auth_status` present on root and evolved; wave5t/wave5u
+  research wiki already on root; wave5j bank-line fractal-only delta; optional
+  unmerged wiki-only
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip,
+  superseded auth research already on root product path).
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.transactions`.
+
+## SYNC pre-RESEARCH (iter 19)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 16FA6AE4 read/reacted (next: transactions freeze).
+- No running children. Parent merge already done (no-op).
+- Tip daybooks product `0b6176d`; dirty: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.transactions`.
+
+## Research (iter 19)
+
+- research118 freeze: `ui_transactions_list` for `ui.discovery.transactions`
+  → `/:org_slug/transactions` h1 `Posteringer` (CTA `Ny postering` observe-only).
+- Dual session path/h1/title/markers match; Billy may append `?period=…`;
+  nested `/transactions/:segment` is create shell h1 `Postering:` (not list);
+  soft aliases empty; daybooks contrast Upsedasse vs daybooks/new editor.
+- Frames purged; api_token_used false; writes/clicks false.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- Do not invent api write tools; do not green daybooks or parity rows.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 19)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: research118 freeze already announced (C686DB1B); ready PLAN product
+  `ui_transactions_list`.
+- Tip daybooks product; dirty memory/state.md only (+ tmp research artifacts).
+- Ready for PLAN: product `ui_transactions_list`.
+
+## Plan (iter 19)
+
+- Plan: `plans/2026-07-31T15:28:53.633Z-186.19-ui_transactions_list.md`
+  — product `ui_transactions_list` for `ui.discovery.transactions` only;
+  root-only; dual live+vision; path `/:org_slug/transactions` h1 `Posteringer`;
+  CTA Ny postering observe-only; nested create shell not list; no invent API
+  writes; no daybooks/parity re-green; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 19)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.19 ready; next EXECUTE product `ui_transactions_list`.
+- Dirty: memory + untracked plan/tmp research.
+
+## Execute (iter 19)
+
+- Producted `ui_transactions_list` (models/browser/server/tests/coverage/wiki).
+- Offline 1439; live dual + vision purge_verified.
+- Coverage live/vision 21; complete false.
+- Greens only `ui.discovery.transactions`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 19)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced (E6D4D26D). Ready for independent review of
+  `ui_transactions_list` (186.19).
+
+## Independent review (iter 19)
+
+- Product `ui_transactions_list`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (daybooks + prior lives + transactions).
+- Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 19)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 19)
+
+- IR product ACCEPT; optional N1 no-op API-token assert removed (comment only).
+- lint pass; offline 1439; live transactions reconfirm pass (one transient login
+  UI_CHANGED then pass); vision purge_verified.
+- Egress refs intact (uploads + receipt_inbox + bank_recon + bank_accounts +
+  financing + daybooks + transactions).
+- Coverage live/vision 21; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 19)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
 
 ## SYNC (iter 17)
 

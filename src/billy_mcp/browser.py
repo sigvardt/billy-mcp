@@ -39,6 +39,7 @@ from billy_mcp.models import (
     UiReceiptInboxListSuccess,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListSuccess,
+    UiTransactionsListSuccess,
     UiUploadsListSuccess,
 )
 
@@ -141,6 +142,11 @@ _DAYBOOKS_EDITOR_MARKERS = (
     "Tilføj kassekladdelinje",
     "Ingen postering valgt",
 )
+# Research118: transactions (Posteringer) list shell. Nested /transactions/:segment is create.
+# Never click Ny postering / Bogfør / void / delete.
+_TRANSACTIONS_LIST_PATH = re.compile(r"^/[^/]+/transactions$")
+_TRANSACTIONS_LIST_HEADING = "Posteringer"
+_TRANSACTIONS_CREATE_CTA = "Ny postering"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -433,6 +439,12 @@ class UiDaybooksOpenService(Protocol):
     """Injectable seam for the read-only daybook (Kassekladde) editor shell open."""
 
     async def ui_daybooks_open(self) -> UiDaybooksOpenSuccess | ToolError: ...
+
+
+class UiTransactionsListService(Protocol):
+    """Injectable seam for the read-only transactions (Posteringer) list shell open."""
+
+    async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1721,6 +1733,68 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError:
+        """Open the transactions (Posteringer) list shell for the authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_transactions_changed_error()
+
+            transactions_url = f"https://mit.billy.dk/{slug}/transactions"
+            await page.goto(transactions_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_transactions_changed_error()
+                if _is_transactions_list_url(page.url) and await _has_transactions_list_signature(
+                    page
+                ):
+                    return UiTransactionsListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_transactions_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the transactions list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser transactions list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2104,12 +2178,11 @@ def _is_daybooks_bare_url(url: str) -> bool:
 
 
 def _is_transactions_list_url(url: str) -> bool:
-    """Return True when the URL is the Posteringer list path (not daybooks editor)."""
+    """Return True when the URL is the Posteringer list path (not create shell)."""
 
     try:
         parsed = urlsplit(url)
         port = parsed.port
-        path = parsed.path or ""
     except ValueError:
         return False
     return (
@@ -2118,7 +2191,7 @@ def _is_transactions_list_url(url: str) -> bool:
         and port in {None, 443}
         and parsed.username is None
         and parsed.password is None
-        and bool(re.match(r"^/[^/]+/transactions/?$", path))
+        and bool(_TRANSACTIONS_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -2215,6 +2288,15 @@ def _ui_daybooks_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy daybooks shell could not be classified.",
+    )
+
+
+def _ui_transactions_changed_error() -> ToolError:
+    """Fail closed when the transactions list shell no longer matches research118."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy transactions list interface no longer matches the recorded signature.",
     )
 
 
@@ -2453,6 +2535,26 @@ async def _has_bills_list_signature(page: LoginPage) -> bool:
         if (await first.inner_text()).strip() != _BILLS_LIST_HEADING:
             return False
         create_action = page.locator(f"text={_BILLS_CREATE_CTA}")
+        if await create_action.count() < 1:
+            return False
+        return await create_action.first.is_visible()
+    except Exception:
+        return False
+
+
+async def _has_transactions_list_signature(page: LoginPage) -> bool:
+    """Verify the research118 Posteringer list heading and create CTA without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _TRANSACTIONS_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_TRANSACTIONS_CREATE_CTA}")
         if await create_action.count() < 1:
             return False
         return await create_action.first.is_visible()

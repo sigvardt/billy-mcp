@@ -77,6 +77,7 @@ from billy_mcp.browser import (
     UiReceiptInboxListService,
     UiRecurringInvoicesListService,
     UiSuppliersListService,
+    UiTransactionsListService,
     UiUploadsListService,
 )
 from billy_mcp.client import BillyHttpClient
@@ -126,6 +127,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiTransactionsListInput,
+    UiTransactionsListSuccess,
     UiUploadsListInput,
     UiUploadsListSuccess,
 )
@@ -152,6 +155,7 @@ def create_server(
     ui_bank_reconciliation_open_service: UiBankReconciliationOpenService | None = None,
     ui_financing_open_service: UiFinancingOpenService | None = None,
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
+    ui_transactions_list_service: UiTransactionsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -182,6 +186,7 @@ def create_server(
     bank_reconciliation_open_service = ui_bank_reconciliation_open_service or browser
     financing_open_service = ui_financing_open_service or browser
     daybooks_open_service = ui_daybooks_open_service or browser
+    transactions_list_service = ui_transactions_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -315,6 +320,12 @@ def create_server(
 
         UiDaybooksOpenInput()
         return await daybooks_open_service.ui_daybooks_open()
+
+    async def ui_transactions_list() -> UiTransactionsListSuccess | ToolError:
+        """Observe the authenticated Billy Posteringer list shell without create actions."""
+
+        UiTransactionsListInput()
+        return await transactions_list_service.ui_transactions_list()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -452,6 +463,14 @@ def create_server(
             "add lines, or post entries)."
         ),
     )(ui_daybooks_open)
+    server.tool(
+        name="ui_transactions_list",
+        description=(
+            "Open the Billy transactions (Posteringer) list shell for the authenticated "
+            "session (read-only path and heading classification; does not create, post, "
+            "void, or delete transactions)."
+        ),
+    )(ui_transactions_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

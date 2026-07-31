@@ -43,6 +43,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiTransactionsListInput,
+    UiTransactionsListSuccess,
     UiUploadsListInput,
     UiUploadsListSuccess,
 )
@@ -672,5 +674,53 @@ def test_ui_bills_list_models_are_empty_input_and_non_pii_success() -> None:
                 "create_action_visible": True,
                 "shell_markers_present": True,
                 "supplier_name": "secret",
+            }
+        )
+
+
+def test_ui_transactions_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiTransactionsListInput().model_dump() == {}
+    success = UiTransactionsListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/transactions",
+        "heading": "Posteringer",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiTransactionsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "transaction_no",
+        "voucher_no",
+        "selector",
+        "period",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiTransactionsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiTransactionsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/transactions",
+                "heading": "Posteringer",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "transaction_no": "secret",
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiTransactionsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/transactions/new",
+                "heading": "Posteringer",
+                "create_action_visible": True,
+                "shell_markers_present": True,
             }
         )

@@ -86,6 +86,10 @@ UI_DAYBOOKS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_daybooks_open.py"
 UI_DAYBOOKS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_DAYBOOKS_OPEN_TOOL_NAME = "ui_daybooks_open"
+UI_TRANSACTIONS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_transactions_list.py"
+UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_TRANSACTIONS_LIST_TOOL_NAME = "ui_transactions_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2157,6 +2161,64 @@ def apply_ui_daybooks_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_transactions_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark transactions (Posteringer) list **shell open** evidence only (research118).
+
+    Empty-input tool; path /:org_slug/transactions (query allowed); h1 Posteringer;
+    CTA Ny postering observe-only. Nested /transactions/:segment is create shell
+    (not list success). No invent API write tools. Does not green daybooks or
+    transactions parity rows.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/transactions (read-only Posteringer list shell open only; "
+        "nested /transactions/:segment is create shell)"
+    )
+    row["tool_name"] = UI_TRANSACTIONS_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE,
+        UI_TRANSACTIONS_LIST_UNIT_TEST_REFERENCE,
+        UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research118 dual-session headless observation + ui_transactions_list product; "
+        "list shell only (path class /:org_slug/transactions, h1 Posteringer, CTA "
+        "Ny postering present, no create); nested /transactions/:segment create shell "
+        "rejected; soft aliases empty; no invent api_transactions write tools; does not "
+        "green daybooks or ui.parity.transactions.*; vision record "
+        "tmp/vision-records/ui_transactions_list.json (list surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2219,6 +2281,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_financing_open_shell_evidence(row)
         if family == "daybooks":
             apply_ui_daybooks_open_shell_evidence(row)
+        if family == "transactions":
+            apply_ui_transactions_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2300,6 +2364,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                     UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2354,6 +2419,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                     UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {

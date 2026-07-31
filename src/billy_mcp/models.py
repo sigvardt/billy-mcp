@@ -358,6 +358,23 @@ class UiDaybooksOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiTransactionsListInput(BaseModel):
+    """Empty, strict input for the read-only transactions (Posteringer) list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiTransactionsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy Posteringer list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/transactions"] = "/:org_slug/transactions"
+    heading: Literal["Posteringer"] = "Posteringer"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
