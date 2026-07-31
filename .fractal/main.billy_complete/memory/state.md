@@ -13,15 +13,15 @@ updated: 2026-07-31T15:50:16Z
 
 ## Current state
 
-- Continue mode iter 20 pre-COMMIT SYNC done. Product reports 186.20 uncommitted.
+- Continue mode iter 20 COMMIT done. Product tip reports 186.20 (`6a6b94f`).
 - Coverage: implemented/contract 206; live/vision 22; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Ready for COMMIT product tip.
+- Next: RESEARCH freeze `ui.discovery.vat_declarations`.
 
 ## Verification
 
-- Last product: `ui_reports_open` dual-session + vision purge_verified (FIX-VERIFY 186.20).
+- Last product: `ui_reports_open` dual-session + vision purge_verified (COMMIT 186.20).
 - Offline baseline product: 1448 passed non-live.
 - Live baseline: 22 UI discovery/parity rows green.
 
@@ -194,6 +194,11 @@ updated: 2026-07-31T15:50:16Z
 - Private 0B2A374F read/reacted (next vat_declarations freeze).
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 20)
+
+- `fractal commit` product: ui reports open shell with dual live and vision (`6a6b94f`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 19)
 
