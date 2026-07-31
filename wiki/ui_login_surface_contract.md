@@ -14,7 +14,7 @@ sources:
   - coverage/browser_egress.yaml
   - coverage/ui_workflows_manifest.yaml
 created: 2026-07-31T00:21:07Z
-updated: 2026-07-31T00:21:07Z
+updated: 2026-07-31T00:35:00Z
 ---
 
 # UI login surface contract
@@ -37,7 +37,7 @@ post-login page.
 
 ## Cited observed-surface evidence
 
-The required evidence authority is the Grok-produced `research97` relay at
+The required evidence authority is the Grok-produced `research98` relay at
 `.fractal/main.billy_complete/tmp/grok-research.md`. The retrieval timestamp
 available in that relay is day precision; no time-of-day is invented here.
 
