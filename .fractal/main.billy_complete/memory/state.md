@@ -6,43 +6,32 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T20:20:20Z
+updated: 2026-07-31T20:22:46Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 27 COMMIT. Product tip settings_company 186.27 (`ui_settings_company_open`). Coverage live/vision 29; complete false. Next: remaining settings_* panels or annual red.
-- Continue mode iter 27 FIX-VERIFY 186.27 clean: lint pass; offline 1497; live settings company reconfirm pass; vision purge_verified; egress prior lives intact. Coverage live/vision 29; complete false. Ready COMMIT.
-- Continue mode iter 27 IR 186.27: product `ui_settings_company_open` **ACCEPT** (tmp/grok-review.md). No required fixes. Overall completeness FAIL. Next FIX-VERIFY then COMMIT.
-- Continue mode iter 27 EXECUTE 186.27 done: producted `ui_settings_company_open`. Offline 1497; live dual+vision purge_verified. Coverage live/vision 29; complete false. Ready REVIEW.
-- Continue mode iter 27 PLAN 186.27 ready: product `ui_settings_company_open`
-  (research126 company panel). Plan:
-  `plans/2026-07-31T19:56:23.851Z-186.27-ui_settings_company_open.md`.
-  Root-only; dual live+vision; greens only settings_company; annual stays red.
-
-- Continue mode iter 27 RESEARCH126 done. Settings hub freeze dual OK.
-  Canonical `/:org_slug/settings` h1 Indstillinger; default panel Virksomhed
-  (company). Next PLAN: product ui_settings_company_open only. Other settings_*
-  need panel freeze; annual stays red. Coverage unchanged (no greening).
-
-- Continue mode iter 27 PREPARE. Parent main already up to date. No child product merges
-  (auth_status/source already on tip; remaining children are init/failed review scaffolding
-  or wiki already present). Next RESEARCH settings_*.
-- Continue mode iter 27 SYNC. Tip d363343 (inventory product). Next RESEARCH settings_*.
-- Continue mode iter 26 COMMIT. Product tip inventory 186.26.
-- Coverage: implemented/contract 212; live/vision 28; API live 0; complete false.
-- Docs fingerprint ETag `wcw4x9hqvu3603` (unchanged).
-- Operator: grok-only; no live API; no running children.
-- Product `ui_inventory_open`: **ACCEPT** (committed). Next: RESEARCH freeze settings_*
-  (Indstillinger); annual stays red.
+- Continue mode iter 28 SYNC pre-COMMIT. Inbox/feed/private empty; saved empty; no running children. FIX-VERIFY clean; commit product next.
+- Continue mode iter 28 FIX-VERIFY 186.28 clean: lint pass; offline 1504; live accounting reconfirm pass; vision purge_verified; egress company+prior lives intact. Coverage live/vision 30; complete false. Ready COMMIT.
+- Continue mode iter 28 IR 186.28: product `ui_settings_accounting_open` **ACCEPT**. No required fixes. Overall completeness FAIL.
+- Continue mode iter 28 EXECUTE 186.28 done: producted `ui_settings_accounting_open`.
+- Continue mode iter 28 SYNC pre-REVIEW. EXECUTE product uncommitted. Ready IR.
+- Continue mode iter 28 EXECUTE 186.28 done: producted `ui_settings_accounting_open`. Offline 1504; live dual+vision purge_verified. Coverage live/vision 30.
+- Continue mode iter 28 SYNC pre-EXECUTE. Plan 186.28 ready.
+- Continue mode iter 28 PLAN 186.28 ready: product `ui_settings_accounting_open`.
+- Continue mode iter 28 SYNC pre-PLAN. Research127 freeze ready PLAN.
+- Continue mode iter 28 RESEARCH127 done. Settings accounting freeze dual OK.
+- Continue mode iter 28 SYNC pre-RESEARCH. Ready RESEARCH settings_* freeze.
+- Continue mode iter 28 PREPARE. Parent main up to date; no child product merges. Tip affbd3b.
+- Continue mode iter 28 SYNC. Tip affbd3b (settings company 186.27). Coverage live/vision 29; complete false.
 
 ## Verification
 
-- Last product: `ui_inventory_open` dual-session + vision purge_verified (committed 186.26).
-- Offline baseline product: 1490 passed non-live.
-- Live baseline: 28 UI discovery/parity rows green.
+- Last product: `ui_settings_company_open` dual-session + vision purge_verified (committed 186.27).
+- Offline baseline product: 1497 passed non-live.
+- Live baseline: 29 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
@@ -72,21 +61,24 @@ updated: 2026-07-31T20:20:20Z
 
 ## Open coverage work
 
-1. Next: remaining settings_* (accounting/invoicing SPA aliases or click-nav
-   panels). annual_reports stays red.
+1. Next: remaining settings_* (user/accounting/vat/invoicing/users/subscription/
+   access_token/beta via SPA click-nav from Indstillinger hub). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (28 rows)
+## Live UI tools (29 rows)
 
-- discovery greened (24): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (25): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
-  reports, vat_declarations, exports, saft_exports, addons, integrations, inventory.
+  reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
+  settings_company.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (10): annual_reports (inaccessible freeze), settings_*.
+- discovery still red (9): annual_reports (inaccessible freeze), settings_user,
+  settings_accounting, settings_vat, settings_invoicing, settings_users,
+  settings_subscription, settings_access_token, settings_beta.
 
 ## Evidence boundaries
 

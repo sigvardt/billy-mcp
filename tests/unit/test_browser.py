@@ -42,6 +42,7 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenSuccess,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
@@ -4359,6 +4360,30 @@ def _settings_company_shell_controls() -> dict[str, FakeLoginControl]:
     }
 
 
+def _settings_accounting_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Indstillinger"),
+        "text=Regnskab": FakeLoginControl(text="Regnskab"),
+        "text=Køb": FakeLoginControl(text="Køb"),
+        "text=Kontoplan": FakeLoginControl(text="Kontoplan"),
+        "text=Bankafstemning": FakeLoginControl(text="Bankafstemning"),
+        "text=Momsopgørelse": FakeLoginControl(text="Momsopgørelse"),
+        "text=Navn og adresse": FakeLoginControl(count=0, visible=False),
+        "text=Kontaktinformation": FakeLoginControl(count=0, visible=False),
+        "text=Gem ændringer": FakeLoginControl(text="Gem ændringer"),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
 def _integrations_soft_empty_controls() -> dict[str, FakeLoginControl]:
 
     return {
@@ -5979,6 +6004,187 @@ def test_ui_settings_company_open_returns_ui_changed_for_error_shell(tmp_path: P
     )
 
     result = asyncio.run(runtime.ui_settings_company_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _spa_rewrite_accounting_goto(page: FakeLoginPage) -> None:
+    """Simulate Billy SPA rewrite: settings/accounting → bare settings hub."""
+
+    original_goto = page.goto
+
+    async def goto_spa(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/settings/accounting"):
+            page.url = url[: -len("/accounting")]
+        return result
+
+    page.goto = goto_spa  # type: ignore[method-assign]
+
+
+def test_ui_settings_accounting_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_settings_accounting_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_settings_accounting_open_returns_success_for_accounting_shell(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_settings_accounting_shell_controls(),
+        follow_goto=True,
+    )
+    _spa_rewrite_accounting_goto(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_accounting_open())
+
+    assert result == UiSettingsAccountingOpenSuccess(accounting_panel_markers_present=True)
+    assert isinstance(result, UiSettingsAccountingOpenSuccess)
+    assert result.path_class == "/:org_slug/settings"
+    assert result.heading == "Indstillinger"
+    assert result.shell_kind == "settings_accounting"
+    assert result.accounting_panel_markers_present is True
+    assert any(url.rstrip("/").endswith("/settings/accounting") for url, _ in page.navigation)
+    assert page.url.rstrip("/").endswith("/settings")
+    assert page.closed
+
+
+def test_ui_settings_accounting_open_returns_ui_changed_for_company_panel(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    # Company markers present → must not classify as accounting even with rail Regnskab.
+    controls = _settings_company_shell_controls()
+    controls["text=Regnskab"] = FakeLoginControl(text="Regnskab")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    _spa_rewrite_accounting_goto(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_accounting_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_accounting_open_returns_ui_changed_without_markers(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_accounting_shell_controls()
+    controls["text=Kontoplan"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    _spa_rewrite_accounting_goto(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_accounting_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_accounting_open_returns_ui_changed_for_error_shell(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_accounting_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Upsedasse!")
+    controls["text=Upsedasse!"] = FakeLoginControl(text="Upsedasse!")
+    controls["text=Regnskab"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    _spa_rewrite_accounting_goto(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_accounting_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED

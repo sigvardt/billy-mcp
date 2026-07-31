@@ -36,7 +36,8 @@
         "tests/live/test_ui_addons_open.py",
         "tests/live/test_ui_integrations_open.py",
         "tests/live/test_ui_inventory_open.py",
-        "tests/live/test_ui_settings_company_open.py"
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/live/test_ui_settings_accounting_open.py"
       ]
     },
     {
@@ -158,7 +159,8 @@
         "tests/live/test_ui_addons_open.py",
         "tests/live/test_ui_integrations_open.py",
         "tests/live/test_ui_inventory_open.py",
-        "tests/live/test_ui_settings_company_open.py"
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/live/test_ui_settings_accounting_open.py"
       ]
     },
     {

@@ -53,6 +53,8 @@ from billy_mcp.models import (
     UiReportsOpenSuccess,
     UiSaftExportsOpenInput,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccountingOpenInput,
+    UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenInput,
     UiSettingsCompanyOpenSuccess,
     UiSuppliersListInput,
@@ -1128,5 +1130,48 @@ def test_ui_settings_company_open_models_company_shell() -> None:
                 "heading": "Indstillinger",
                 "shell_kind": "soft_empty",
                 "company_panel_markers_present": True,
+            }
+        )
+
+
+def test_ui_settings_accounting_open_models_accounting_shell() -> None:
+    assert UiSettingsAccountingOpenInput().model_dump() == {}
+    success = UiSettingsAccountingOpenSuccess(accounting_panel_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/settings",
+        "heading": "Indstillinger",
+        "shell_kind": "settings_accounting",
+        "accounting_panel_markers_present": True,
+    }
+    properties = UiSettingsAccountingOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "partner",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiSettingsAccountingOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSettingsAccountingOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings/accounting",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_accounting",
+                "accounting_panel_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSettingsAccountingOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_company",
+                "accounting_panel_markers_present": True,
             }
         )

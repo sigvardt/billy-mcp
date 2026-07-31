@@ -82,6 +82,7 @@ from billy_mcp.browser import (
     UiRecurringInvoicesListService,
     UiReportsOpenService,
     UiSaftExportsOpenService,
+    UiSettingsAccountingOpenService,
     UiSettingsCompanyOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
@@ -145,6 +146,8 @@ from billy_mcp.models import (
     UiReportsOpenSuccess,
     UiSaftExportsOpenInput,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccountingOpenInput,
+    UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenInput,
     UiSettingsCompanyOpenSuccess,
     UiSuppliersListInput,
@@ -188,6 +191,7 @@ def create_server(
     ui_integrations_open_service: UiIntegrationsOpenService | None = None,
     ui_inventory_open_service: UiInventoryOpenService | None = None,
     ui_settings_company_open_service: UiSettingsCompanyOpenService | None = None,
+    ui_settings_accounting_open_service: UiSettingsAccountingOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -227,6 +231,7 @@ def create_server(
     integrations_open_service = ui_integrations_open_service or browser
     inventory_open_service = ui_inventory_open_service or browser
     settings_company_open_service = ui_settings_company_open_service or browser
+    settings_accounting_open_service = ui_settings_accounting_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -414,6 +419,12 @@ def create_server(
 
         UiSettingsCompanyOpenInput()
         return await settings_company_open_service.ui_settings_company_open()
+
+    async def ui_settings_accounting_open() -> UiSettingsAccountingOpenSuccess | ToolError:
+        """Observe the Indstillinger Regnskab settings panel without write actions."""
+
+        UiSettingsAccountingOpenInput()
+        return await settings_accounting_open_service.ui_settings_accounting_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -623,6 +634,14 @@ def create_server(
             "does not click Gem, Tilføj ejer, upload, or other write actions)."
         ),
     )(ui_settings_company_open)
+    server.tool(
+        name="ui_settings_accounting_open",
+        description=(
+            "Open the Billy accounting settings (Indstillinger / Regnskab) panel for the "
+            "authenticated session (read-only path, heading, and accounting panel markers; "
+            "does not click Gem, Sæt låsedato, or other write actions)."
+        ),
+    )(ui_settings_accounting_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
