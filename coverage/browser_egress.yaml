@@ -5,7 +5,7 @@
       "api_client_action": "deny",
       "browser_action": "allow",
       "condition": "typed UI/auth workflow",
-      "evidence": "Frozen brief \u00a710.3: official app host",
+      "evidence": "Frozen brief §10.3: official app host",
       "host": "mit.billy.dk",
       "owner": "ui_auth",
       "purpose": "Billy web interface and headless authentication only",
@@ -22,14 +22,15 @@
         "tests/live/test_ui_suppliers_list.py",
         "tests/live/test_ui_bills_list.py",
         "tests/live/test_ui_debtor_balances_list.py",
-        "tests/live/test_ui_creditor_balances_list.py"
+        "tests/live/test_ui_creditor_balances_list.py",
+        "tests/live/test_ui_uploads_list.py"
       ]
     },
     {
       "api_client_action": "deny",
       "browser_action": "allow",
       "condition": "future verified typed download workflow; not general navigation",
-      "evidence": "Frozen brief \u00a710.3: files downloadUrl host",
+      "evidence": "Frozen brief §10.3: files downloadUrl host",
       "host": "download.billy.dk",
       "owner": "future_typed_download",
       "purpose": "Typed Billy file download handling only",
@@ -130,14 +131,15 @@
         "tests/live/test_ui_suppliers_list.py",
         "tests/live/test_ui_bills_list.py",
         "tests/live/test_ui_debtor_balances_list.py",
-        "tests/live/test_ui_creditor_balances_list.py"
+        "tests/live/test_ui_creditor_balances_list.py",
+        "tests/live/test_ui_uploads_list.py"
       ]
     },
     {
       "api_client_action": "deny",
       "browser_action": "deny",
       "condition": "never permitted",
-      "evidence": "Frozen brief \u00a72.3 and \u00a710.3 alias-host denial",
+      "evidence": "Frozen brief §2.3 and §10.3 alias-host denial",
       "host": "api.billy.dk",
       "owner": "none",
       "purpose": "Denied API alias",

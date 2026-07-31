@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T12:57:18Z
+updated: 2026-07-31T13:16:18Z
 ---
 
 # billy_mcp
@@ -52,6 +52,8 @@ updated: 2026-07-31T12:57:18Z
 [[ui_recurring_invoices_list_shell|ui_recurring_invoices_list_shell]]: Read-only headless ui_recurring_invoices_list contract for Billy Abonnementer list shell open only.
 
 [[ui_suppliers_list_shell|ui_suppliers_list_shell]]: Read-only headless ui_suppliers_list contract for Billy suppliers list shell open only.
+
+[[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list contract for Billy uploads (Bilag) list shell open only.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 

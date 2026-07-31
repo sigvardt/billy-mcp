@@ -73,6 +73,7 @@ from billy_mcp.browser import (
     UiQuotesListService,
     UiRecurringInvoicesListService,
     UiSuppliersListService,
+    UiUploadsListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -113,6 +114,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiUploadsListInput,
+    UiUploadsListSuccess,
 )
 
 
@@ -132,6 +135,7 @@ def create_server(
     ui_bills_list_service: UiBillsListService | None = None,
     ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
     ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
+    ui_uploads_list_service: UiUploadsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -157,6 +161,7 @@ def create_server(
     bills_list_service = ui_bills_list_service or browser
     debtor_balances_list_service = ui_debtor_balances_list_service or browser
     creditor_balances_list_service = ui_creditor_balances_list_service or browser
+    uploads_list_service = ui_uploads_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -261,6 +266,12 @@ def create_server(
         UiCreditorBalancesListInput()
         return await creditor_balances_list_service.ui_creditor_balances_list()
 
+    async def ui_uploads_list() -> UiUploadsListSuccess | ToolError:
+        """Observe the authenticated Billy uploads (Bilag) shell without writes or file pick."""
+
+        UiUploadsListInput()
+        return await uploads_list_service.ui_uploads_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -358,6 +369,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_creditor_balances_list)
+    server.tool(
+        name="ui_uploads_list",
+        description=(
+            "Open the Billy uploads (Bilag) list shell for the authenticated session "
+            "(read-only path and heading classification; does not choose or upload files)."
+        ),
+    )(ui_uploads_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

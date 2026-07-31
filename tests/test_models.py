@@ -35,6 +35,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiUploadsListInput,
+    UiUploadsListSuccess,
 )
 
 
@@ -424,6 +426,44 @@ def test_ui_creditor_balances_list_models_are_empty_input_and_non_pii_success() 
                 "path_class": "/:org_slug/other",
                 "heading": "X",
                 "create_action_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_uploads_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiUploadsListInput().model_dump() == {}
+    success = UiUploadsListSuccess(upload_action_visible=True, shell_markers_present=True)
+    assert success.path_class == "/:org_slug/uploads"
+    assert success.heading == "Bilag"
+    assert success.upload_action_visible is True
+    assert success.shell_markers_present is True
+    properties = UiUploadsListSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "upload_action_visible",
+        "shell_markers_present",
+    }
+    try:
+        UiUploadsListInput.model_validate({"file_path": "/tmp/x.pdf"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiUploadsListInput.model_validate({"digest": "abc"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiUploadsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/other",
+                "heading": "X",
+                "upload_action_visible": True,
                 "shell_markers_present": True,
             }
         )

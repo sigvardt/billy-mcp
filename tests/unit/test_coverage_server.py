@@ -24,6 +24,7 @@ from billy_mcp.models import (
     UiQuotesListSuccess,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListSuccess,
+    UiUploadsListSuccess,
 )
 from billy_mcp.server import create_server
 
@@ -492,6 +493,15 @@ class FakeUiCreditorBalancesListService:
         return UiCreditorBalancesListSuccess(create_action_visible=True, shell_markers_present=True)
 
 
+class FakeUiUploadsListService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_uploads_list(self) -> UiUploadsListSuccess:
+        self.calls += 1
+        return UiUploadsListSuccess(upload_action_visible=True, shell_markers_present=True)
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -661,6 +671,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_bills_list",
         "ui_debtor_balances_list",
         "ui_creditor_balances_list",
+        "ui_uploads_list",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1056,3 +1067,34 @@ def test_ui_creditor_balances_list_registration_has_empty_input_and_typed_output
         }
     }
     assert creditor.calls == 1
+
+
+def test_ui_uploads_list_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    uploads = FakeUiUploadsListService()
+    server = create_server(tmp_path, ui_uploads_list_service=uploads)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_uploads_list"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+    assert "file_path" not in properties
+    assert "digest" not in properties
+
+    result = asyncio.run(server.call_tool("ui_uploads_list", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/uploads",
+            "heading": "Bilag",
+            "upload_action_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert uploads.calls == 1

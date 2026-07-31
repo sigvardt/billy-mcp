@@ -35,6 +35,7 @@ from billy_mcp.models import (
     UiQuotesListSuccess,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListSuccess,
+    UiUploadsListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -103,6 +104,10 @@ _DEBTOR_BALANCES_CREATE_CTA = "Opret faktura"
 _CREDITOR_BALANCES_LIST_PATH = re.compile(r"^/[^/]+/creditorbalance$")
 _CREDITOR_BALANCES_LIST_HEADING = "Skyldige udgifter"
 _CREDITOR_BALANCES_CREATE_CTA = "Opret køb"
+# Research113: uploads (Bilag) shell; no /v2/uploads API resource. Never set file inputs.
+_UPLOADS_LIST_PATH = re.compile(r"^/[^/]+/uploads$")
+_UPLOADS_LIST_HEADING = "Bilag"
+_UPLOADS_UPLOAD_CTA = "Upload filer"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -363,6 +368,12 @@ class UiCreditorBalancesListService(Protocol):
     """Injectable seam for the read-only creditor balances list shell observation."""
 
     async def ui_creditor_balances_list(self) -> UiCreditorBalancesListSuccess | ToolError: ...
+
+
+class UiUploadsListService(Protocol):
+    """Injectable seam for the read-only uploads (Bilag) list shell observation."""
+
+    async def ui_uploads_list(self) -> UiUploadsListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1310,6 +1321,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_uploads_list(self) -> UiUploadsListSuccess | ToolError:
+        """Open the uploads (Bilag) list shell for the authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_uploads_changed_error()
+
+            uploads_url = f"https://mit.billy.dk/{slug}/uploads"
+            await page.goto(uploads_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_uploads_changed_error()
+                if _is_uploads_list_url(page.url) and await _has_uploads_list_signature(page):
+                    return UiUploadsListSuccess(
+                        upload_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_uploads_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the uploads list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser uploads list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1581,6 +1652,24 @@ def _is_creditor_balances_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_CREDITOR_BALANCES_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_uploads_list_url(url: str) -> bool:
+    """Return True when the URL is the uploads (Bilag) list shell path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_UPLOADS_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1872,6 +1961,29 @@ async def _has_creditor_balances_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_uploads_list_signature(page: LoginPage) -> bool:
+    """Verify the research113 uploads (Bilag) heading and Upload filer CTA without clicking.
+
+    Use the first visible h1 (multi-h1 shells possible). Never set file inputs.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _UPLOADS_LIST_HEADING:
+            return False
+        upload_action = page.locator(f"text={_UPLOADS_UPLOAD_CTA}")
+        if await upload_action.count() < 1:
+            return False
+        return await upload_action.first.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -2045,6 +2157,15 @@ def _ui_creditor_balances_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy creditor balances list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_uploads_changed_error() -> ToolError:
+    """Fail closed when the uploads list shell no longer matches research113."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy uploads list interface no longer matches the recorded signature.",
     )
 
 

@@ -272,6 +272,23 @@ class UiCreditorBalancesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiUploadsListInput(BaseModel):
+    """Empty, strict input boundary for the read-only uploads (Bilag) list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiUploadsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy uploads (Bilag) shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/uploads"] = "/:org_slug/uploads"
+    heading: Literal["Bilag"] = "Bilag"
+    upload_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
