@@ -6,17 +6,19 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T19:16:26Z
+updated: 2026-07-31T19:17:03Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 25 pre-COMMIT SYNC done. FIX-VERIFY clean for integrations.
-- Coverage: implemented/contract 211; live/vision 27; complete false.
+- Continue mode iter 25 COMMIT done. Product tip integrations 186.25 (`f34c9cf`).
+- Coverage: implemented/contract 211; live/vision 27; API live 0; complete false.
+- Docs fingerprint ETag `wcw4x9hqvu3603` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Ready COMMIT product `ui_integrations_open` (not node finish).
+- Product `ui_integrations_open`: **ACCEPT** (committed). Next: RESEARCH freeze
+  inventory (Lagermodul), then settings_*; annual stays red.
 
 ## Verification
 
@@ -1318,4 +1320,9 @@ updated: 2026-07-31T19:16:26Z
 - Unread inbox/feed/private: empty. Saved: empty.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 25)
+
+- `fractal commit` product: ui integrations open soft-empty shell with dual live and vision (`f34c9cf`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
