@@ -143,6 +143,7 @@ host `api.billy.dk` must never become the client base.
 | UI login EN/DA | Labels reconfirmed; Danish requires Playwright context locale + Accept-Language (query alone insufficient); localStorage `en_US` / `da_DK` |
 | Recommended slice | (A) merge + IR Research96 harness; (B) encode bulk open/closed class fixtures for all 92 bulk rows; residual/bulk tools still blocked; live needs `BILLY_API_TOKEN` |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research97) |
+| Independent review | **ACCEPT as research** + Research96 harness **ACCEPT as infrastructure only** — [[wave_fives_research97_independent_review]] |
 
 ## Residual ranking (research88; held by research89)
 
