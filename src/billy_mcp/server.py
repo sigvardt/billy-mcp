@@ -62,6 +62,7 @@ from billy_mcp.browser import (
     AuthLoginService,
     AuthStatusChecker,
     BrowserRuntime,
+    UiBankAccountsListService,
     UiClientsListService,
     UiInvoicesListService,
     UiProductsListService,
@@ -83,6 +84,8 @@ from billy_mcp.models import (
     AuthStatusInput,
     AuthStatusSuccess,
     ToolError,
+    UiBankAccountsListInput,
+    UiBankAccountsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
     UiInvoicesListInput,
@@ -100,6 +103,7 @@ def create_server(
     ui_invoices_list_service: UiInvoicesListService | None = None,
     ui_products_list_service: UiProductsListService | None = None,
     ui_clients_list_service: UiClientsListService | None = None,
+    ui_bank_accounts_list_service: UiBankAccountsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -117,6 +121,7 @@ def create_server(
     invoices_list_service = ui_invoices_list_service or browser
     products_list_service = ui_products_list_service or browser
     clients_list_service = ui_clients_list_service or browser
+    bank_accounts_list_service = ui_bank_accounts_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -173,6 +178,12 @@ def create_server(
         UiClientsListInput()
         return await clients_list_service.ui_clients_list()
 
+    async def ui_bank_accounts_list() -> UiBankAccountsListSuccess | ToolError:
+        """Observe the authenticated Billy bank accounts list shell without writes."""
+
+        UiBankAccountsListInput()
+        return await bank_accounts_list_service.ui_bank_accounts_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -214,6 +225,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_clients_list)
+    server.tool(
+        name="ui_bank_accounts_list",
+        description=(
+            "Open the Billy bank accounts list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_bank_accounts_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

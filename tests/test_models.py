@@ -13,6 +13,8 @@ from billy_mcp.models import (
     CoverageStatus,
     StableErrorCode,
     ToolError,
+    UiBankAccountsListInput,
+    UiBankAccountsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
     UiInvoicesListInput,
@@ -158,5 +160,43 @@ def test_ui_clients_list_models_are_empty_input_and_non_pii_success() -> None:
                 "create_action_visible": True,
                 "shell_markers_present": True,
                 "contact_name": "secret",
+            }
+        )
+
+
+def test_ui_bank_accounts_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiBankAccountsListInput().model_dump() == {}
+    success = UiBankAccountsListSuccess(
+        connect_bank_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/bank-accounts",
+        "heading": "Bankkonti",
+        "connect_bank_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiBankAccountsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "account_number",
+        "iban",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiBankAccountsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiBankAccountsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/bank-accounts",
+                "heading": "Bankkonti",
+                "connect_bank_action_visible": True,
+                "shell_markers_present": True,
+                "iban": "secret",
             }
         )

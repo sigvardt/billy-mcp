@@ -136,6 +136,23 @@ class UiClientsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBankAccountsListInput(BaseModel):
+    """Empty, strict input boundary for the read-only bank accounts list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBankAccountsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy bank accounts list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bank-accounts"] = "/:org_slug/bank-accounts"
+    heading: Literal["Bankkonti"] = "Bankkonti"
+    connect_bank_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
