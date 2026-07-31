@@ -59,6 +59,23 @@ explicit lanes:
 Shared `auth_*` tools handle API and browser authentication. Shared
 `coverage_*` tools expose the maintained coverage inventory and status.
 
+Qualification scope changed by the user on 2026-07-31:
+
+- Do not run live Billy API tests or make credentialed API qualification calls.
+- The API lane still covers every documented operation and must pass offline
+  request-construction, response-mapping, error, pagination, write, typing,
+  contract, and safety tests.
+- Keep each API row's `live_tested` value false and record that live API
+  qualification is outside the user-approved test scope. Never describe the API
+  lane as live-verified.
+- Only the interface lane receives live qualification through the dedicated
+  Billy test profile.
+- Interface read-back must use an independent second interface path or a fresh
+  browser session. It must not require an API token or a live API call.
+- This scope decision overrides live-API requirements in the approved design
+  and elsewhere in this node definition. It does not reduce API implementation
+  or offline contract coverage.
+
 Work in this order:
 
 1. Generate the official API inventory before API implementation. Record every
@@ -88,26 +105,28 @@ boolean is never approval. File uploads bind the exact resolved local path and
 file digest. Webhook or callback creation binds the exact destination URL. Do
 not invent a webhook API if Billy does not document one.
 
-Handle authentication fully. Read `BILLY_API_TOKEN` or an operating-system
-credential-store reference. Use an MCP-owned persistent browser profile.
-Support stored credentials and time-based one-time passwords when configured.
-Return `AUTH_INTERACTION_REQUIRED` only for a challenge that cannot be
-automated, such as CAPTCHA, passkey, push approval, or unsupported multi-factor
-authentication. Never open a visible browser window.
+Handle authentication fully. API-token behavior is tested offline only; a live
+`BILLY_API_TOKEN` is not required for qualification. Use an MCP-owned
+persistent browser profile. Support stored browser credentials and time-based
+one-time passwords when configured. Return `AUTH_INTERACTION_REQUIRED` only for
+a challenge that cannot be automated, such as CAPTCHA, passkey, push approval,
+or unsupported multi-factor authentication. Never open a visible browser
+window.
 
 Every browser used for discovery, implementation, tests, continuous
 integration, and runtime is headless. Never open, raise, focus, or manipulate a
 desktop window. Use Playwright only through bounded Billy workflows.
 
 For each interface test, verify the page state through DOM assertions and an
-independent API or second-interface read-back. A vision-capable Grok review is
-also mandatory, but vision is never the sole pass condition. For each interface
-write, capture the initial state, completed fields before submit, success or
-result after submit, and restored state after cleanup. Keep raw frames outside
-the repository in owner-only temporary storage. Purge them after review. Store
-only a non-sensitive review record with the coverage row, test run, assertion
-and read-back references, reviewer verdict, timestamp, and verified purge.
-Production persists no screenshots, frames, HAR files, or traces.
+independent second-interface read-back. Do not use a live API read-back. A
+vision-capable Grok review is also mandatory, but vision is never the sole pass
+condition. For each interface write, capture the initial state, completed fields
+before submit, success or result after submit, and restored state after cleanup.
+Keep raw frames outside the repository in owner-only temporary storage. Purge
+them after review. Store only a non-sensitive review record with the coverage
+row, test run, assertion and read-back references, reviewer verdict, timestamp,
+and verified purge. Production persists no screenshots, frames, HAR files, or
+traces.
 
 Use only `https://api.billysbilling.com/v2` for API traffic and the exact Billy
 browser host allowlist established by the design. Do not add telemetry,
@@ -115,18 +134,20 @@ non-Billy network calls, shell execution, dynamic code execution, token
 logging, arbitrary URL fetches, or arbitrary local file access. Keep all
 credentials and sensitive test material outside git.
 
-Run live automated tests only against the dedicated non-production Billy
-organisation. Create uniquely named disposable records, track every change,
-restore mutable state, and delete created records in reverse dependency order.
-Do not use live production data for qualification.
+Run live interface tests only against the dedicated non-production Billy
+organisation. Do not run live API tests. Create uniquely named disposable
+records through the interface, track every change, restore mutable state, and
+delete created records in reverse dependency order. Do not use live production
+data for qualification.
 
-Grok owns current official-document research, interface exploration, vision
-review, and independent completeness review. Grok must produce cited findings
-before Codex Power implements contract-dependent work. Codex Power owns
-repository implementation, debugging, tests, continuous integration, and
-commits. Only `grok` and `codex-power` may run child nodes. Spawn focused child
-nodes for independent API areas, interface areas, test harnesses, and final
-review when their file ownership can remain clear.
+Grok owns all remaining work: research, interface exploration, vision review,
+implementation, debugging, tests, continuous integration, commits, and
+independent completeness review. Only the `grok` CLI may run this node or any
+new child node. Every child spawn must pass `--agent=grok`. Do not use
+`codex-power`, bare `codex`, `claude`, `opencode`, or `omp`, including as
+fallbacks. Spawn focused child nodes for independent API areas, interface
+areas, test harnesses, and final review when their file ownership can remain
+clear.
 
 Never count a stub, placeholder, skipped test, mocked live result, inaccessible
 screen, ambiguous bulk operation, or untested irreversible action as complete.
@@ -140,9 +161,10 @@ The node may finish only when all conditions below are true:
    official API documentation. Each row records the endpoint, method, request
    fields, response fields, filters, pagination, errors, sensitivity, tool
    name, and test references.
-2. Every API inventory row has `discovered`, `implemented`,
-   `contract_tested`, and `live_tested` set to true. No API row is skipped or
-   marked `not_applicable`.
+2. Every API inventory row has `discovered`, `implemented`, and
+   `contract_tested` set to true. `live_tested` remains false and is accompanied
+   by an explicit machine-readable `out_of_scope_by_user` qualification. No API
+   row is skipped, stubbed, or falsely marked live-tested.
 3. Every API operation has a real typed FastMCP tool with typed success and
    error output. Request construction, response mapping, filters, pagination,
    documented errors, and write behaviour have passing tests.
@@ -152,15 +174,15 @@ The node may finish only when all conditions below are true:
 5. Every applicable interface row has `discovered`, `implemented`,
    `contract_tested`, `live_tested`, and `vision_verified` set to true.
 6. Every interface feature has a passing real headless end-to-end test with DOM
-   assertions, independent read-back, and a durable non-sensitive Grok vision
-   review record.
+   assertions, independent second-interface read-back, and a durable
+   non-sensitive Grok vision review record.
 7. Every interface write proves the intended field values before submission,
    the submitted result, independent read-back, and restoration or deletion of
    the test data.
-8. API token auth, persistent browser sessions, stored browser credentials,
-   time-based one-time passwords, expiry, reauthentication, organisation
-   selection, and `AUTH_INTERACTION_REQUIRED` paths have passing tests where
-   applicable.
+8. API token auth has passing offline tests. Persistent browser sessions, stored
+   browser credentials, time-based one-time passwords, expiry, reauthentication,
+   organisation selection, and `AUTH_INTERACTION_REQUIRED` paths have passing
+   live interface tests where applicable.
 9. Every write uses preview plus an exact, short-lived, single-use execution
    token. Tests cover tampering, replay, expiry, wrong organisation, wrong
    target, changed payload, changed local upload path or digest, and changed
@@ -168,25 +190,29 @@ The node may finish only when all conditions below are true:
 10. Tests cover the browser host allowlist, API base URL lock, plan-gated
     screens, navigation recovery, stale sessions, concurrency, retries that are
     safe to repeat, and redaction of tokens and sensitive values.
-11. The dedicated test organisation is clean after the full suite. Every
+11. The dedicated test organisation is clean after the interface suite. Every
     created record is deleted, every changed setting is restored, and cleanup
-    is verified independently.
+    is verified through a fresh interface read-back.
 12. All raw browser evidence is purged after review. The repository and test
     output contain no credentials, tokens, screenshots, frames, HAR files,
     traces, or sensitive customer data.
-13. Formatting, lint, type checks, unit tests, contract tests, live API tests,
-    headless interface tests, safety tests, dependency audit, credential scan,
-    and public-repository checks all pass.
+13. Formatting, lint, type checks, unit tests, offline API contract tests,
+    headless live interface tests, safety tests, dependency audit, credential
+    scan, and public-repository checks all pass. No live API test is required or
+    permitted.
 14. Continuous integration is green on the public repository and contains no
     secrets.
 15. An independent Grok audit confirms the inventories against current Billy
     documentation and the tested interface. Every discrepancy it finds is
     fixed and re-reviewed.
-16. `coverage/status.json` reports `complete: true`, and the generated coverage
-    report has no red, unknown, ambiguous, untested, skipped, or stubbed
-    applicable row.
-17. `BILLY_TEST_MODE=full bash "$NODE_DIR/scripts/test.sh"` passes immediately
-    before completion.
+16. `coverage/status.json` reports `complete: true` under the explicit scoped
+    qualification policy. The generated report has no red, unknown, ambiguous,
+    untested, skipped, or stubbed applicable implementation or contract row, and
+    no incomplete interface row. API live-test cells remain false with
+    `out_of_scope_by_user` rather than being falsely green.
+17. `BILLY_TEST_MODE=ui-full bash "$NODE_DIR/scripts/test.sh"` passes
+    immediately before completion. This mode runs the full offline API suite and
+    full live interface suite without live API traffic.
 18. All child nodes are merged or intentionally closed, the branch is clean,
     all commits are pushed, and the final implementation and coverage report
     are present on the node branch.
@@ -197,12 +223,14 @@ The node may finish only when all conditions below are true:
 - Keep the public repository free of credentials and sensitive evidence.
 - Treat inaccessible or plan-gated features as blockers until tested or
   supported by defensible interface evidence. They stay red meanwhile.
-- Clarify the 92 ambiguous bulk API entries from official evidence or live
-  non-production testing. Do not infer them into green coverage.
+- Clarify the 92 ambiguous bulk API entries from official documentation and
+  defensible offline contract evidence. Do not use live API testing or infer
+  them into green coverage.
 - Use Python 3.12, `uv`, locked dependencies, Ruff, Pyright, pytest, and
   Playwright Chromium.
 - Before each commit, run formatting, lint, type, unit, contract, and safety
-  checks. Before any completeness claim, run every live and vision test.
+  checks. Before any completeness claim, run every live interface and vision
+  test. Do not run live API tests.
 - Push node commits to `origin`. The run has no cost, iteration, depth, child,
   or time cap because the user explicitly chose an uncapped run.
 

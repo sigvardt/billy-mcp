@@ -14,7 +14,7 @@ sources:
   - coverage/browser_egress.yaml
   - coverage/ui_workflows_manifest.yaml
 created: 2026-07-31T00:21:07Z
-updated: 2026-07-31T00:35:00Z
+updated: 2026-07-31T00:48:00Z
 ---
 
 # UI login surface contract
@@ -37,7 +37,7 @@ post-login page.
 
 ## Cited observed-surface evidence
 
-The required evidence authority is the Grok-produced `research98` relay at
+The required evidence authority is the Grok-produced `research99` relay at
 `.fractal/main.billy_complete/tmp/grok-research.md`. The retrieval timestamp
 available in that relay is day precision; no time-of-day is invented here.
 
@@ -137,13 +137,12 @@ login page renders no business entity, and no authenticated API call is part of
 this workflow. Returning `AUTH_REQUIRED` is the complete read result.
 
 If later credentialed discovery establishes an organisation or restored-session
-state, its independent read-back must use the locked API client at
-`https://api.billysbilling.com/v2`, never Playwright. It must use a valid,
-dedicated non-production company token, compare the browser-selected
-organisation with an API organisation read, and preserve only reviewed,
-non-sensitive evidence. The unauthenticated `GET /user/organizations` result
-does not establish this: the cited relay records no-token `404` and
-garbage-token `401`, neither of which proves the browser route or selector.
+state, its independent read-back must use a second bounded interface route or a
+fresh, independently launched headless browser session. It must not reuse the
+first session's page objects or DOM assertions, require an API token, or make
+an API request. It may compare only stable non-sensitive interface state with
+the configured dedicated organisation; if the interface does not expose enough
+state for that comparison, the workflow remains blocked.
 
 ## Blockers and required live evidence
 
@@ -157,14 +156,20 @@ The following remain unasserted and blocked:
 - all product routes and their API-parity UI workflows.
 
 To open any one of those contracts, a separate approved run needs dedicated
-non-production browser credentials or a known MCP-owned non-production session,
-an explicitly identified non-production organisation, and a separately held
-company API credential when read-back is required. It must remain headless,
-stop at an actually observed unautomatable challenge, use exact newly observed
-DOM assertions, complete independent API read-back and cleanup where
-applicable, receive vision verification, and purge ephemeral visual evidence.
-It must not submit production credentials, persist browser artifacts, or infer
-the state from configuration flags alone.
+non-production browser credentials or a known MCP-owned non-production session
+and an explicitly identified non-production organisation. It must remain
+headless, stop at an actually observed unautomatable challenge, use exact newly
+observed DOM assertions, complete independent second-interface or fresh-session
+read-back and cleanup where applicable, receive vision verification, and purge
+ephemeral visual evidence. It must not submit production credentials, persist
+browser artifacts, use an API token or API call for read-back, or infer the
+state from configuration flags alone.
+
+That run must follow the frozen [[credentialed_session_discovery_protocol]]. It
+defines prerequisites, headless post-submit classification, independent
+second-interface read-back, session-restoration observation, Grok vision review,
+and evidence purge without inventing an authenticated selector or tool in
+advance.
 
 ## Coverage remains red
 

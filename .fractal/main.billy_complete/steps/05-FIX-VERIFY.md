@@ -1,5 +1,6 @@
 ---
 requires_approval: false
+agent: grok
 ---
 
 ## Fix and verify

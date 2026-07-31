@@ -5,7 +5,7 @@
   "scope": null,
   "base": null,
   "meta": null,
-  "agent": "codex-power",
+  "agent": "grok",
   "provider": null,
   "model": null,
   "effort": null,

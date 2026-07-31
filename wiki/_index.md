@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T00:35:29Z
+updated: 2026-07-31T00:53:53Z
 ---
 
 # billy_mcp
@@ -14,6 +14,10 @@ updated: 2026-07-31T00:35:29Z
 [[billy_api_v2_research_seed|billy_api_v2_research_seed]]: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 
 [[billy_ui_discovery_brief|billy_ui_discovery_brief]]: First read-only headless Billy UI discovery result for mit.billy.dk (auth blocked).
+
+[[credentialed_session_discovery_protocol|credentialed_session_discovery_protocol]]: Grok-frozen, headless-only protocol for observing Billy's first non-production post-login state before naming a new auth or UI workflow.
+
+[[credentialed_session_discovery_protocol_independent_review|credentialed_session_discovery_protocol_independent_review]]: Independent Grok review99 of research99 and the documentation-only credentialed session discovery protocol; accepts research and wiki freeze only; completeness remains failed.
 
 [[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for when Supports flags may not open offline ticketed-write freezes.
 
@@ -263,7 +267,7 @@ updated: 2026-07-31T00:35:29Z
 
 [[wave_fives_research97_independent_review|wave_fives_research97_independent_review]]: Independent Grok review of Research97 residual/bulk/login evidence and merged Research96 harness fixtures. ACCEPT research + infrastructure only; bulk open/closed class encode not present; completeness FAIL; no coverage greening.
 
-[[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
+[[wave_fives_residual_specials_research|wave_fives_residual_specials_research]]: Post-Wave-5s-C residual ranking. All six specials are offline-producted; residual clear 29 and bulk 92 stay live-gated while credentialed session discovery owns the active interface lane.
 
 [[wave_fivesa_invoice_logs_list_research|wave_fivesa_invoice_logs_list_research]]: Cited offline contract for the read-only special api_invoice_logs_list after Wave-5r product ACCEPT; list-only GET /invoiceLogs with sample query and response; no coverage greening from research.
 

@@ -1,7 +1,7 @@
 ---
 name: wave_fives_residual_specials_research
 title: Wave-5s residual clear and specials research
-desc: Post-Wave-5s-C residual ranking. All six specials are offline-producted. Residual clear 29 and bulk 92 stay live-gated. Next Codex slice is Wave-5t live residual/bulk gate harness. No coverage greening from research.
+desc: Post-Wave-5s-C residual ranking. All six specials are offline-producted; residual clear 29 and bulk 92 stay live-gated while credentialed session discovery owns the active interface lane.
 tags: [billy, api, specials, residual, writes, research, offline, live-gate]
 sources:
   - https://www.billy.dk/api/
@@ -13,9 +13,9 @@ sources:
   - coverage/api_v2_manifest.yaml
   - coverage/status.json
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
-  - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
+  - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research99)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-31T00:00:00Z
+updated: 2026-07-31T00:48:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -28,9 +28,9 @@ It is not product ACCEPT for residual/bulk, live qualification, UI/vision work,
 or completeness. It does not green coverage.
 
 Full probe matrices and scratch snapshots live at
-`.fractal/main.billy_complete/tmp/grok-research.md` (research90 is the current
-Wave-5u method-level upgrade brief; research89/88 residual ranking still holds;
-research77–87 are historical). InvoiceLogs list
+`.fractal/main.billy_complete/tmp/grok-research.md` (research99 is the current
+credentialed-session discovery freeze; the residual/bulk observations remain
+research-only). InvoiceLogs list
 offline freeze detail: [[wave_fivesa_invoice_logs_list_research]]. Files upload
 offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 [[wave_fivesb_files_upload_product_ready_research]]. Email + delivery freeze:
@@ -51,8 +51,17 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-A product | **Merged** offline (`api_invoice_logs_list`) |
 | Wave-5s-B product | **Merged** offline (containment-repaired upload; live false) |
 | Wave-5s-C product | **Merged** offline (`0efceae`; review87 ACCEPT offline only) |
-| Next offline product tools | **None** — residual/bulk require live token |
-| Recommended next slice | **(A)** merge + IR Research96 residual/canonical-form fixtures; **(B)** research97 bulk open/closed class fixtures (infrastructure only). Live residual/bulk observation still blocked without `BILLY_API_TOKEN` |
+| Next offline product tools | **None** — residual/bulk remain blocked pending official evidence; current policy prohibits live API qualification |
+| Active handoff | [[credentialed_session_discovery_protocol]]; no residual/bulk fixture cycle or product tool while dedicated non-production credentials are absent |
+
+### Current qualification policy
+
+Live API testing and credentialed API qualification are outside the
+user-approved scope. Every API `live_tested` value must remain false with the
+machine-readable `out_of_scope_by_user` qualification; no historical reference
+below to a token or live API proof is actionable. The interface lane alone may
+qualify live work, using a fresh second-interface read-back rather than an API
+call.
 
 ## Official docs fingerprint
 
@@ -179,11 +188,18 @@ host `api.billy.dk` must never become the client base.
 | `PATCH /{resource}` empty plural | **200** meta-only unauth | **Not a contract** — do not ship tools |
 | `DELETE /{resource}?ids[]=` | **200** meta-only or **405** | Identifier shape hint only |
 
-Live non-production must prove request body, response roots, partial failure, and cleanup before any bulk tools.
+Under the current qualification policy, no live API call may prove bulk
+behaviour. Bulk tools remain unimplemented until the missing contracts can be
+resolved from official documentation and defensible offline contract evidence.
 
-### D. Recommended next Codex slice
+### D. Current handoff
 
-**Wave-5t live residual/bulk gate harness**: detect `BILLY_API_TOKEN`, fail-closed without it, run residual 29 + bulk candidate matrix against the dedicated non-production organisation only, write non-sensitive evidence outside git, never green coverage from scaffolding. No residual/bulk FastMCP tools in that slice.
+The active interface lane is the
+[[credentialed_session_discovery_protocol]]. It requires a dedicated
+non-production browser session, organisation match, and fresh independent
+interface read-back before a new shared-auth or UI workflow can be named. Do
+not resume residual/bulk fixture work or real-method observation merely because
+an unauthenticated matrix exists; live API qualification is out of scope.
 
 ## Special contracts (official narrative)
 

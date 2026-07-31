@@ -23,7 +23,7 @@ prior iteration's file. Include:
 3. Interface routes, fields, state transitions, plan restrictions, and API
    parity evidence.
 4. Ambiguities and what live non-production observation can resolve them.
-5. A bounded recommended implementation slice for Codex Power.
+5. A bounded recommended implementation slice for Grok.
 
 Never change coverage to green during research. Never use a headed browser,
 touch a desktop window, expose credentials, or create persistent test data.
