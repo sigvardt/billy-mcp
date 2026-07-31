@@ -6,21 +6,21 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T22:20:00Z
+updated: 2026-07-31T21:25:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 29 COMMIT. Product tip settings_invoicing 186.29 (`ui_settings_invoicing_open`). Coverage live/vision 31; complete false. Next: remaining settings_* (user/vat/users/subscription/access_token/beta) or annual red. No invent api_settings_*.
-- Review: product `ui_settings_invoicing_open` **ACCEPT** (IR 186.29).
+- Continue mode iter 30 COMMIT. Product tip settings_user 186.30 (`ui_settings_user_open`). Coverage live/vision 32; complete false. Next: remaining settings_* (vat/users/subscription/access_token/beta) or annual red. No invent api_settings_*.
+- Review: product `ui_settings_user_open` **ACCEPT** (IR 186.30).
 
 ## Verification
 
-- Last product: `ui_settings_accounting_open` dual-session + vision purge_verified (committed 186.28).
-- Offline baseline product: 1504 passed non-live.
-- Live baseline: 30 UI discovery/parity rows green.
+- Last product: `ui_settings_user_open` dual-session + vision purge_verified (FIX-VERIFY reconfirm).
+- Offline baseline product: 1520 passed non-live.
+- Live baseline: 32 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
@@ -50,24 +50,23 @@ updated: 2026-07-31T22:20:00Z
 
 ## Open coverage work
 
-1. Next: remaining settings_* (user/vat/users/subscription/access_token/beta
+1. Next after COMMIT: remaining settings_* (vat/users/subscription/access_token/beta
    via SPA click-nav from Indstillinger hub). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (31 rows)
+## Live UI tools (32 rows)
 
-- discovery greened (26): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (27): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
   reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
-  settings_company, settings_accounting, settings_invoicing.
+  settings_company, settings_accounting, settings_invoicing, settings_user.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (7): annual_reports (inaccessible freeze), settings_user,
-  settings_vat, settings_users, settings_subscription, settings_access_token,
-  settings_beta.
+- discovery still red (6): annual_reports (inaccessible freeze), settings_vat,
+  settings_users, settings_subscription, settings_access_token, settings_beta.
 
 ## Evidence boundaries
 
@@ -99,12 +98,146 @@ updated: 2026-07-31T22:20:00Z
 
 ## References
 
-- Research122: `tmp/grok-research.md` (saft = CTA on exports hub; next product)
-- Discovery122: `.fractal/main.billy_complete/tmp/discovery122/summary_dual_saft.json`
-- Plan exports: `plans/2026-07-31T17:18:04.362Z-186.22-ui_exports_open.md`
-- Wiki: `wiki/ui_exports_open_shell.md`
-- Research121: annual inaccessible; product tip exports.
-- Next: RESEARCH freeze `ui.discovery.inventory` (Lagermodul)
+- Wiki settings: `wiki/ui_settings_company_open_shell.md`,
+  `wiki/ui_settings_accounting_open_shell.md`,
+  `wiki/ui_settings_invoicing_open_shell.md`
+- Tip product: `663586e` `ui_settings_invoicing_open`
+- Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_user`)
+
+## SYNC (iter 30)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 24121F79 + FBCFEBBC reacted (+): COMMIT invoicing done; next remaining settings.
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `663586e` vs origin/main.billy_complete.
+- Coverage: implemented/contract 215; live/vision 31; complete false.
+- Discovery still red (7): annual_reports, settings_user, settings_vat,
+  settings_users, settings_subscription, settings_access_token, settings_beta.
+- Outbox: D38D4FA8 sync iter30 ready research settings.
+- Private next: C659547F RESEARCH settings_user or vat.
+- Ready for PREPARE then RESEARCH (settings click-nav freeze). Not finish.
+
+## PREPARE (iter 30)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: many historical branches still list tip commits ahead of main, but
+  none carry unmerged product work. Inspected:
+  - `ui_auth_status`: product already on tip (auth_status tools live);
+    child tip is parallel fractal scaffolding + superseded browser delta.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`,
+    `ui_auth_credentials_research_codex_fallback`: wiki already on tip;
+    remaining diff is child `.fractal/` scaffolding only.
+  - Review/init-only branches: failed PREPARE/RESEARCH or init commits only.
+  - `wave5sb_files_upload_product`: memory-only delta; skip.
+- No child merges this iteration (would pollute with skill/scaffold or re-litigate
+  already-landed product).
+- No running children. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH settings freeze.
+
+## SYNC pre-RESEARCH (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C659547F reacted (+): RESEARCH settings_user or vat.
+- No running children.
+- PREPARE: parent up to date; no child merges.
+- Outbox pre-research note posted.
+- Ready RESEARCH freeze `ui.discovery.settings_user` (click-nav from Indstillinger).
+
+## Research (iter 30)
+
+- research129 freeze: remaining settings via dual click-nav (not soft URL seeds).
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- No API settings resource; do not invent `api_settings_*`. api_token_used false.
+- Soft seeds for user/vat/users/access-token/beta soft-empty or company default.
+- Click **Profil** dual success: path `/:org_slug/settings`, h1 `Indstillinger`,
+  h2 `Profil` + `Billede` + `Sprog og tema` + `Skift adgangskode`.
+- Also dual-frozen (later tips): Momssatser, Brugere, Adgangsnøgler, Betas.
+- Abonnement click: empty h2 / main chrome — keep red.
+- Frames purged; writes false. Brief: `tmp/grok-research.md`.
+- Recommended product: `ui_settings_user_open` only. Ready for PLAN.
+
+## SYNC pre-PLAN (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 112A31F7 reacted (+): PLAN ui_settings_user_open.
+- No running children.
+- Research129 brief present; frames purged; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN product `ui_settings_user_open`.
+
+## Plan (iter 30)
+
+- Plan: `plans/2026-07-31T21:31:09.177Z-186.30-ui_settings_user_open.md`
+  — product `ui_settings_user_open` for `ui.discovery.settings_user` only;
+  root-only; dual live+vision; open hub `/:org_slug/settings` then click
+  **Profil** (soft seeds reject); path class `/:org_slug/settings`, h1
+  `Indstillinger`, shell_kind=`settings_user`, required h2
+  Profil/Billede/Sprog og tema/Skift adgangskode; distinct from
+  company/accounting/invoicing; never Gem/Upload/password submit; no invent
+  api_settings_*; no greening other settings_*/annual; egress append without
+  drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C63F0279 reacted (+): EXECUTE ui_settings_user_open.
+- No running children.
+- Plan 186.30 present (untracked until commit). Ready EXECUTE product.
+
+## Execute (iter 30)
+
+- Producted `ui_settings_user_open` (models/browser/server/tests/coverage/wiki).
+- Open: hub `/:org_slug/settings` + observe-only click Profil; soft seeds reject.
+- Success: path/h1 Indstillinger, shell_kind settings_user, h2 markers
+  Profil/Billede/Sprog og tema/Skift adgangskode.
+- Offline non-live suite green (1520 passed).
+- Live dual + vision purge_verified for Profil panel.
+- Coverage live/vision 32; complete false.
+- Greens only `ui.discovery.settings_user`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F2DC2129 reacted (+): REVIEW ui_settings_user_open.
+- No running children.
+- Outbox pre-IR posted. Ready independent review of product 186.30.
+
+## Independent review (iter 30)
+
+- Product `ui_settings_user_open`: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Egress refs intact (company + accounting +
+  invoicing + user + prior lives).
+- Other settings_*/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4A716529 reacted (+): IR ACCEPT ready FIX-VERIFY.
+- No running children.
+- IR product ACCEPT; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 30)
+
+- IR product ACCEPT; optional N1/N2 no-op (left as-is).
+- lint pass; offline 1520; live settings_user reconfirm pass; vision purge_verified.
+- Egress refs intact (company + accounting + invoicing + user + prior lives).
+- Coverage live/vision 32; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 30)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F51AC8EE reacted (+): ready COMMIT.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 30)
+
+- `fractal commit` product: ui settings user open Profil panel with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## Research (iter 23)
 

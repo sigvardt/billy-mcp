@@ -85,6 +85,7 @@ from billy_mcp.browser import (
     UiSettingsAccountingOpenService,
     UiSettingsCompanyOpenService,
     UiSettingsInvoicingOpenService,
+    UiSettingsUserOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
@@ -153,6 +154,8 @@ from billy_mcp.models import (
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenInput,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsUserOpenInput,
+    UiSettingsUserOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -196,6 +199,7 @@ def create_server(
     ui_settings_company_open_service: UiSettingsCompanyOpenService | None = None,
     ui_settings_accounting_open_service: UiSettingsAccountingOpenService | None = None,
     ui_settings_invoicing_open_service: UiSettingsInvoicingOpenService | None = None,
+    ui_settings_user_open_service: UiSettingsUserOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -237,6 +241,7 @@ def create_server(
     settings_company_open_service = ui_settings_company_open_service or browser
     settings_accounting_open_service = ui_settings_accounting_open_service or browser
     settings_invoicing_open_service = ui_settings_invoicing_open_service or browser
+    settings_user_open_service = ui_settings_user_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -436,6 +441,12 @@ def create_server(
 
         UiSettingsInvoicingOpenInput()
         return await settings_invoicing_open_service.ui_settings_invoicing_open()
+
+    async def ui_settings_user_open() -> UiSettingsUserOpenSuccess | ToolError:
+        """Observe the Indstillinger Profil settings panel without write actions."""
+
+        UiSettingsUserOpenInput()
+        return await settings_user_open_service.ui_settings_user_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -661,6 +672,14 @@ def create_server(
             "does not click Gem, Opret betalingsmetode, Upload, or other write actions)."
         ),
     )(ui_settings_invoicing_open)
+    server.tool(
+        name="ui_settings_user_open",
+        description=(
+            "Open the Billy user settings (Indstillinger / Profil) panel for the "
+            "authenticated session (read-only path, heading, and user panel markers; "
+            "does not click Gem, Upload, password submit, or other write actions)."
+        ),
+    )(ui_settings_user_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

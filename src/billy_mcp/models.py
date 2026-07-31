@@ -546,6 +546,23 @@ class UiSettingsInvoicingOpenSuccess(BaseModel):
     invoicing_panel_markers_present: bool
 
 
+class UiSettingsUserOpenInput(BaseModel):
+    """Empty, strict input for the read-only user settings (Profil) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsUserOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Profil panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_user"] = "settings_user"
+    user_panel_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

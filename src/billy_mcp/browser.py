@@ -47,6 +47,7 @@ from billy_mcp.models import (
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsUserOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -174,6 +175,35 @@ _SETTINGS_INVOICING_PATH = _SETTINGS_COMPANY_PATH
 _SETTINGS_INVOICING_HEADING = "Indstillinger"
 _SETTINGS_INVOICING_REQUIRED_MARKERS = ("Faktura", "Produkter")
 _SETTINGS_INVOICING_OPTIONAL_MARKERS = ("Betalingsmetoder", "Standard fakturalogo")
+# Research129: Indstillinger user (Profil) panel on same hub path.
+# Soft seeds insufficient; open hub then observe-only click side label Profil.
+# Never click Gem / Upload / password submit / Opret* / Tilføj* / Opgrader.
+_SETTINGS_USER_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_USER_HEADING = "Indstillinger"
+_SETTINGS_USER_SIDE_NAV_LABEL = "Profil"
+_SETTINGS_USER_PANEL_MARKERS = (
+    "Profil",
+    "Billede",
+    "Sprog og tema",
+    "Skift adgangskode",
+)
+_SETTINGS_USER_WRITE_CTA_LABELS = frozenset(
+    {
+        "Gem ændringer",
+        "Gem",
+        "Save",
+        "Upload",
+        "Opret",
+        "Tilføj",
+        "Slet",
+        "Opgrader",
+        "Inviter",
+        "Invite",
+        "Opret adgangsnøgle",
+        "Opret betalingsmetode",
+        "Tilføj ejer",
+    }
+)
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -584,6 +614,12 @@ class UiSettingsInvoicingOpenService(Protocol):
     async def ui_settings_invoicing_open(
         self,
     ) -> UiSettingsInvoicingOpenSuccess | ToolError: ...
+
+
+class UiSettingsUserOpenService(Protocol):
+    """Injectable seam for the read-only user settings (Profil) shell open."""
+
+    async def ui_settings_user_open(self) -> UiSettingsUserOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2593,6 +2629,88 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_user_open(self) -> UiSettingsUserOpenSuccess | ToolError:
+        """Open the Indstillinger user (Profil) settings panel.
+
+        Research129: soft URL seeds are insufficient. Open hub
+        /:org_slug/settings then observe-only click side label Profil. Final
+        path stays bare /:org_slug/settings with h1 Indstillinger and panel
+        markers Profil + Billede + Sprog og tema + Skift adgangskode. Distinct
+        from company, accounting, and invoicing panels. Never click Gem /
+        Upload / password submit / Opret* / Tilføj*. No invent api_settings_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_user_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_settings_user_changed_error()
+            if not _is_settings_user_url(page.url):
+                return _ui_settings_user_changed_error()
+
+            clicked = await _click_settings_side_nav_label(page, _SETTINGS_USER_SIDE_NAV_LABEL)
+            if not clicked:
+                return _ui_settings_user_changed_error()
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message=("Browser authentication requires a non-automatable challenge."),
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_user_changed_error()
+                if _is_settings_user_url(page.url) and await _has_settings_user_signature(page):
+                    return UiSettingsUserOpenSuccess(user_panel_markers_present=True)
+                await asyncio.sleep(0.2)
+            return _ui_settings_user_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=("Browser egress policy prevented the settings user shell observation."),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=("Browser settings user shell observation could not be completed."),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -3023,6 +3141,12 @@ def _is_settings_invoicing_url(url: str) -> bool:
     return _is_settings_company_url(url)
 
 
+def _is_settings_user_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (Profil panel path)."""
+
+    return _is_settings_company_url(url)
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -3314,6 +3438,15 @@ def _ui_settings_invoicing_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy settings invoicing shell was not available in the expected form.",
+    )
+
+
+def _ui_settings_user_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings user (Profil) shell classification failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings user shell was not available in the expected form.",
     )
 
 
@@ -3982,6 +4115,86 @@ async def _has_settings_invoicing_signature(page: LoginPage) -> bool:
                 accounting_hits += 1
         if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
             return False
+        return True
+    except Exception:
+        return False
+
+
+async def _click_settings_side_nav_label(page: LoginPage, label: str) -> bool:
+    """Observe-only click of an Indstillinger side-nav label. Never write CTAs."""
+
+    if label in _SETTINGS_USER_WRITE_CTA_LABELS or label.startswith(
+        ("Gem", "Opret", "Slet", "Tilføj", "Upload", "Inviter", "Opgrader", "Save")
+    ):
+        return False
+    try:
+        control = page.locator(f"text={label}")
+        if await control.count() < 1:
+            return False
+        first = control.first
+        if not await first.is_visible():
+            return False
+        await first.click()
+        return True
+    except Exception:
+        return False
+
+
+async def _has_settings_user_signature(page: LoginPage) -> bool:
+    """Verify research129 Indstillinger + Profil panel markers; never click writes.
+
+    Requires h1 Indstillinger and Profil + Billede + Sprog og tema + Skift
+    adgangskode. Rejects company default, accounting Regnskab, and invoicing
+    Faktura panels. Soft seeds and other settings panels are not success.
+    Use .first for multi-match rail/body labels (Profil may appear twice).
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_USER_HEADING:
+            return False
+        for label in _SETTINGS_USER_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        # Reject company default panel.
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        # Reject accounting Regnskab panel.
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
+            return False
+        # Reject invoicing Faktura panel when required markers + optional present.
+        invoicing_required = 0
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                invoicing_required += 1
+        if invoicing_required >= len(_SETTINGS_INVOICING_REQUIRED_MARKERS):
+            optional_ok = False
+            for label in _SETTINGS_INVOICING_OPTIONAL_MARKERS:
+                control = page.locator(f"text={label}")
+                if await control.count() >= 1 and await control.first.is_visible():
+                    optional_ok = True
+                    break
+            if optional_ok:
+                return False
         return True
     except Exception:
         return False
