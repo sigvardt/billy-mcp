@@ -31,6 +31,7 @@ from billy_mcp.models import (
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
+    UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
@@ -166,6 +167,17 @@ _REPORTS_TAB_MARKERS = (
 _VAT_DECLARATIONS_LIST_PATH = re.compile(r"^/[^/]+/vat-declarations$")
 _VAT_DECLARATIONS_LIST_HEADING = "Momsangivelser"
 _VAT_DECLARATIONS_PERIOD_MARKER = "Periode"
+# Research121: exports hub (Eksportér data). Soft aliases reject. Never click
+# Eksport / Download / Eksportér som SAF-T (observe-only).
+_EXPORTS_HUB_PATH = re.compile(r"^/[^/]+/exports$")
+_EXPORTS_HUB_HEADING = "Eksportér data"
+_EXPORTS_HUB_CHROME_MARKERS = (
+    "Genveje til rapporten",
+    "Eksport",
+    "Debitorliste",
+    "Kreditorliste",
+)
+_EXPORTS_SAFT_CTA = "Eksportér som SAF-T"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -476,6 +488,12 @@ class UiVatDeclarationsListService(Protocol):
     """Injectable seam for the read-only VAT declarations (Momsangivelser) list shell."""
 
     async def ui_vat_declarations_list(self) -> UiVatDeclarationsListSuccess | ToolError: ...
+
+
+class UiExportsOpenService(Protocol):
+    """Injectable seam for the read-only exports (Eksportér data) hub shell open."""
+
+    async def ui_exports_open(self) -> UiExportsOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1948,6 +1966,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_exports_open(self) -> UiExportsOpenSuccess | ToolError:
+        """Open the exports (Eksportér data) hub shell for the authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_exports_changed_error()
+
+            exports_url = f"https://mit.billy.dk/{slug}/exports"
+            await page.goto(exports_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_exports_changed_error()
+                if _is_exports_hub_url(page.url) and await _has_exports_hub_signature(page):
+                    return UiExportsOpenSuccess(
+                        saft_export_cta_observed=await _has_exports_saft_cta_visible(page),
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_exports_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the exports hub observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser exports hub observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2384,6 +2462,24 @@ def _is_vat_declarations_list_url(url: str) -> bool:
     )
 
 
+def _is_exports_hub_url(url: str) -> bool:
+    """Return True when the URL is the Eksportér data hub path (soft aliases reject)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_EXPORTS_HUB_PATH.match(parsed.path or ""))
+    )
+
+
 def _absolute_billy_app_url(href: str) -> str | None:
     """Normalize a harvested relative or absolute mit.billy.dk href; never leak raw ids."""
 
@@ -2504,6 +2600,15 @@ def _ui_vat_declarations_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy VAT declarations list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_exports_changed_error() -> ToolError:
+    """Fail closed when the exports hub shell no longer matches research121."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy exports hub interface no longer matches the recorded signature.",
     )
 
 
@@ -2832,6 +2937,41 @@ async def _has_vat_declarations_period_visible(page: LoginPage) -> bool:
         if await period.count() < 1:
             return False
         return await period.first.is_visible()
+    except Exception:
+        return False
+
+
+async def _has_exports_hub_signature(page: LoginPage) -> bool:
+    """Verify research121 Eksportér data heading and export hub chrome without clicks."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _EXPORTS_HUB_HEADING:
+            return False
+        for label in _EXPORTS_HUB_CHROME_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                continue
+            if await control.first.is_visible():
+                return True
+        return False
+    except Exception:
+        return False
+
+
+async def _has_exports_saft_cta_visible(page: LoginPage) -> bool:
+    """Observe-only: true when Eksportér som SAF-T is present (never click)."""
+
+    try:
+        control = page.locator(f"text={_EXPORTS_SAFT_CTA}")
+        if await control.count() < 1:
+            return False
+        return await control.first.is_visible()
     except Exception:
         return False
 

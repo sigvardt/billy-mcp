@@ -409,6 +409,23 @@ class UiVatDeclarationsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiExportsOpenInput(BaseModel):
+    """Empty, strict input for the read-only exports (Eksportér data) hub shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiExportsOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy Eksportér data hub shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/exports"] = "/:org_slug/exports"
+    heading: Literal["Eksportér data"] = "Eksportér data"
+    saft_export_cta_observed: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

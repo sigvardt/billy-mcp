@@ -41,6 +41,8 @@ updated: 2026-07-31T16:07:04Z
 
 [[ui_debtor_balances_list_shell|ui_debtor_balances_list_shell]]: Read-only headless ui_debtor_balances_list contract for Billy debtor balances (Tilgodehavender) list shell open only.
 
+[[ui_exports_open_shell|ui_exports_open_shell]]: Read-only Billy exports (Eksportér data) hub shell contract (research121 freeze).
+
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
 [[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.

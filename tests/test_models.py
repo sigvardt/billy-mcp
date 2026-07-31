@@ -27,6 +27,8 @@ from billy_mcp.models import (
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
+    UiExportsOpenInput,
+    UiExportsOpenSuccess,
     UiFinancingOpenInput,
     UiFinancingOpenSuccess,
     UiInvoicesListInput,
@@ -821,6 +823,53 @@ def test_ui_vat_declarations_list_models_are_empty_input_and_non_pii_success() -
                 "path_class": "/:org_slug/vat",
                 "heading": "Momsangivelser",
                 "period_column_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_exports_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiExportsOpenInput().model_dump() == {}
+    success = UiExportsOpenSuccess(
+        saft_export_cta_observed=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/exports",
+        "heading": "Eksportér data",
+        "saft_export_cta_observed": True,
+        "shell_markers_present": True,
+    }
+    properties = UiExportsOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "download",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiExportsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiExportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/exports",
+                "heading": "Eksportér data",
+                "saft_export_cta_observed": True,
+                "shell_markers_present": True,
+                "download_url": "secret",
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiExportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/export",
+                "heading": "Eksportér data",
+                "saft_export_cta_observed": True,
                 "shell_markers_present": True,
             }
         )

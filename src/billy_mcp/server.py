@@ -69,6 +69,7 @@ from billy_mcp.browser import (
     UiCreditorBalancesListService,
     UiDaybooksOpenService,
     UiDebtorBalancesListService,
+    UiExportsOpenService,
     UiFinancingOpenService,
     UiInvoicesListService,
     UiProductsImportService,
@@ -113,6 +114,8 @@ from billy_mcp.models import (
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
+    UiExportsOpenInput,
+    UiExportsOpenSuccess,
     UiFinancingOpenInput,
     UiFinancingOpenSuccess,
     UiInvoicesListInput,
@@ -164,6 +167,7 @@ def create_server(
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
+    ui_exports_open_service: UiExportsOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -197,6 +201,7 @@ def create_server(
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
+    exports_open_service = ui_exports_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -348,6 +353,12 @@ def create_server(
 
         UiVatDeclarationsListInput()
         return await vat_declarations_list_service.ui_vat_declarations_list()
+
+    async def ui_exports_open() -> UiExportsOpenSuccess | ToolError:
+        """Observe the authenticated Billy Eksportér data hub shell without export actions."""
+
+        UiExportsOpenInput()
+        return await exports_open_service.ui_exports_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -509,6 +520,14 @@ def create_server(
             "not declare, submit, export, or create VAT returns)."
         ),
     )(ui_vat_declarations_list)
+    server.tool(
+        name="ui_exports_open",
+        description=(
+            "Open the Billy exports (Eksportér data) hub shell for the authenticated "
+            "session (read-only path and heading classification; does not export, "
+            "download, or run SAF-T export)."
+        ),
+    )(ui_exports_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
