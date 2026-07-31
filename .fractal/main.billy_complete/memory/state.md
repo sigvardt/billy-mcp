@@ -6,24 +6,26 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T21:25:00Z
+updated: 2026-07-31T22:26:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 30 COMMIT. Product tip settings_user 186.30 (`ui_settings_user_open`). Coverage live/vision 32; complete false. Next: remaining settings_* (vat/users/subscription/access_token/beta) or annual red. No invent api_settings_*.
-- Review: product `ui_settings_user_open` **ACCEPT** (IR 186.30).
+- Continue mode iter 31 SYNC pre-COMMIT. Product tip settings_vat 186.31 (`ui_settings_vat_open`). Coverage live/vision 33; complete false. Ready COMMIT. annual red. No invent api_settings_*.
+- Review: product `ui_settings_vat_open` **ACCEPT** (IR 186.31).
 
 ## Verification
 
 - Last product: `ui_settings_user_open` dual-session + vision purge_verified (FIX-VERIFY reconfirm).
-- Offline baseline product: 1520 passed non-live.
-- Live baseline: 32 UI discovery/parity rows green.
+- Offline baseline product: 1528 passed non-live.
+- Live baseline: 33 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
+- Product `ui_settings_vat_open`: **ACCEPT** (IR 186.31; no required fixes; egress
+  retains prior lives; other settings_* and annual stay red).
 - Product `ui_settings_company_open`: **ACCEPT** (IR 186.27; no required fixes; egress
   retains prior lives; other settings_* and annual stay red).
 - Product `ui_inventory_open`: **ACCEPT** (IR 186.26; no required fixes; egress
@@ -50,7 +52,7 @@ updated: 2026-07-31T21:25:00Z
 
 ## Open coverage work
 
-1. Next after COMMIT: remaining settings_* (vat/users/subscription/access_token/beta
+1. Next after COMMIT: remaining settings_* (users/subscription/access_token/beta
    via SPA click-nav from Indstillinger hub). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
@@ -63,9 +65,10 @@ updated: 2026-07-31T21:25:00Z
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
   reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
-  settings_company, settings_accounting, settings_invoicing, settings_user.
+  settings_company, settings_accounting, settings_invoicing, settings_user,
+  settings_vat.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (6): annual_reports (inaccessible freeze), settings_vat,
+- discovery still red (5): annual_reports (inaccessible freeze),
   settings_users, settings_subscription, settings_access_token, settings_beta.
 
 ## Evidence boundaries
@@ -102,7 +105,7 @@ updated: 2026-07-31T21:25:00Z
   `wiki/ui_settings_accounting_open_shell.md`,
   `wiki/ui_settings_invoicing_open_shell.md`
 - Tip product: `663586e` `ui_settings_invoicing_open`
-- Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_user`)
+- Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_vat`)
 
 ## SYNC (iter 30)
 
@@ -1600,4 +1603,141 @@ updated: 2026-07-31T21:25:00Z
 
 - `fractal commit` product: ui integrations open soft-empty shell with dual live and vision (`f34c9cf`).
 - Not node finish (complete false; bulk + remaining UI still red).
+
+## SYNC (iter 31)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 00898504 reacted (+): next remaining settings after settings_user COMMIT.
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `9a0b180` vs origin/main.billy_complete.
+- Coverage: implemented/contract 216; live/vision 32; complete false.
+- Discovery still red (6): annual_reports, settings_vat, settings_users,
+  settings_subscription, settings_access_token, settings_beta.
+- research129 already dual-froze Momssatser/Brugere/Adgangsnøgler/Betas click-nav
+  (subscription empty chrome stays red). Prefer product slice settings_vat next.
+- Outbox: 7CEFD615 sync iter31 ready research settings_vat.
+- Private next: 3E3B8BFD RESEARCH settings_vat.
+- Ready for PREPARE then RESEARCH (settings_vat click-nav freeze). Not finish.
+
+## PREPARE (iter 31)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 157 local; 62 with commits ahead of tip. All historical.
+  Material non-fractal candidates inspected and skipped:
+  - `ui_auth_status`: tip already has auth_status + full UI product path; child
+    three-dot src is an older/narrower browser tree (would downgrade).
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`:
+    wiki pages already on tip; residual is fractal scaffolding.
+  - `ui_auth_credentials_research_codex_fallback`: optional wiki
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` still
+    missing on tip — Codex-power fallback research only; superseded by landed
+    Grok auth research/product on tip; skip (same decision as prior iters).
+  - Review/init-only and memory-only children: skip.
+- No child merges this iteration.
+- No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC+PREPARE notes).
+- Ready RESEARCH freeze: `ui.discovery.settings_vat` (click Momssatser).
+
+## SYNC pre-RESEARCH (iter 31)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- PREPARE: parent up to date; no child merges.
+- Tip `9a0b180`; dirty: memory/state.md only.
+- Outbox: pre-research note posted.
+- Ready RESEARCH freeze: `ui.discovery.settings_vat` (click Momssatser from Indstillinger).
+
+## Research (iter 31)
+
+- research130 freeze: `ui.discovery.settings_vat` via dual click-nav **Momssatser**.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- No API settings resource; do not invent `api_settings_*`. api_token_used false.
+- Soft seeds settings/vat|moms|tax soft-empty; hub default is company panel.
+- Click **Momssatser** dual success: path `/:org_slug/settings`, h1 `Indstillinger`,
+  h2 `Regelsæt` + `Satser for salg` + `Satser for køb` (strict triad).
+- Distinct from company/accounting/invoicing/user. Visible write CTA `Opret`
+  (Opret regelsæt / Opret sats) — never click.
+- beta_panel heuristic can false-positive from side-nav labels; product must
+  use h2 triad only.
+- Frames purged; writes false. Brief: `tmp/grok-research.md`.
+- Recommended product: `ui_settings_vat_open` only. Ready for PLAN.
+
+## SYNC pre-PLAN (iter 31)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 89C2CB94 reacted (+): PLAN ui_settings_vat_open.
+- No running children.
+- Research130 brief present; frames purged; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN product `ui_settings_vat_open`.
+
+## Plan (iter 31)
+
+- Plan: `plans/2026-07-31T22:00:12.459Z-186.31-ui_settings_vat_open.md`
+  — product `ui_settings_vat_open` for `ui.discovery.settings_vat` only;
+  root-only; dual live+vision; open hub `/:org_slug/settings` then click
+  **Momssatser** (soft seeds reject); path class `/:org_slug/settings`, h1
+  `Indstillinger`, shell_kind=`settings_vat`, required h2
+  Regelsæt/Satser for salg/Satser for køb; distinct from
+  company/accounting/invoicing/user; never Opret/Gem/write CTAs; no invent
+  api_settings_*; no greening other settings_*/annual; egress append without
+  drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 31)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2303674F reacted (+): EXECUTE ui_settings_vat_open.
+- No running children.
+- Plan 186.31 present (untracked until commit). Ready EXECUTE product.
+
+## Execute (iter 31)
+
+- Producted `ui_settings_vat_open` (models/browser/server/tests/coverage/wiki).
+- Open: hub `/:org_slug/settings` + observe-only click Momssatser; soft seeds reject.
+- Success: path/h1 Indstillinger, shell_kind settings_vat, h2 markers
+  Regelsæt/Satser for salg/Satser for køb.
+- Offline non-live suite green (1528 passed).
+- Live dual + vision purge_verified for Momssatser panel.
+- Coverage live/vision 33; complete false.
+- Greens only `ui.discovery.settings_vat`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 31)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 1AEFE723 reacted (+): REVIEW ui_settings_vat_open.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_settings_vat_open` (186.31).
+
+## Independent review (iter 31)
+
+- Product `ui_settings_vat_open`: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1 live-assert copy leftover only.
+- Egress refs intact (user + company + accounting + invoicing + vat).
+- Other settings_*/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 31)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 547E9E94 reacted (+): FIX-VERIFY then COMMIT.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 31)
+
+- IR product ACCEPT; optional N1 applied (live assert message user→VAT).
+- lint pass (wiki _index link added); offline 1528; live settings_vat reconfirm pass; vision purge_verified.
+- Egress refs intact (company + accounting + invoicing + user + vat).
+- Coverage live/vision 33; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 31)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F228DABA reacted (+): ready COMMIT.
+- No running children.
+- FIX-VERIFY clean; commit product next.
 

@@ -134,6 +134,10 @@ UI_SETTINGS_USER_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SETTINGS_USER_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_settings_user_open.py"
 UI_SETTINGS_USER_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_SETTINGS_USER_OPEN_TOOL_NAME = "ui_settings_user_open"
+UI_SETTINGS_VAT_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_SETTINGS_VAT_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_settings_vat_open.py"
+UI_SETTINGS_VAT_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_SETTINGS_VAT_OPEN_TOOL_NAME = "ui_settings_vat_open"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2912,6 +2916,69 @@ def apply_ui_settings_user_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark Indstillinger Momssatser (VAT) panel shell open evidence (research130).
+
+    Empty-input tool; open hub /:org_slug/settings then observe-only click
+    Momssatser; final path /:org_slug/settings; h1 Indstillinger; markers
+    Regelsæt + Satser for salg + Satser for køb. Soft seeds rejected. Distinct
+    from company/accounting/invoicing/user. Never click Opret / Gem. No invent
+    api_settings_*. Does not green other settings_* or annual_reports.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/settings (read-only Indstillinger Momssatser/VAT "
+        "panel open via hub + side-nav click Momssatser; never click "
+        "Opret/Gem/Tilføj/Upload)"
+    )
+    row["tool_name"] = UI_SETTINGS_VAT_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "vat_panel_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_SETTINGS_VAT_OPEN_MODEL_TEST_REFERENCE,
+        UI_SETTINGS_VAT_OPEN_UNIT_TEST_REFERENCE,
+        UI_SETTINGS_VAT_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research130 dual-session headless observation + ui_settings_vat_open "
+        "product; shell open only (hub /:org_slug/settings + click Momssatser → "
+        "path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_vat, "
+        "Regelsæt/Satser for salg/Satser for køb markers; distinct from "
+        "company/accounting/invoicing/user); soft seeds rejected; no invent "
+        "api_settings_*; never click Opret/Gem; does not green other settings_* "
+        "or annual_reports; vision record "
+        "tmp/vision-records/ui_settings_vat_open.json "
+        "(Indstillinger Momssatser frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2998,6 +3065,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_invoicing_open_shell_evidence(row)
         if family == "settings_user":
             apply_ui_settings_user_open_shell_evidence(row)
+        if family == "settings_vat":
+            apply_ui_settings_vat_open_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -3091,6 +3160,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_SETTINGS_ACCOUNTING_OPEN_LIVE_TEST_REFERENCE,
                     UI_SETTINGS_INVOICING_OPEN_LIVE_TEST_REFERENCE,
                     UI_SETTINGS_USER_OPEN_LIVE_TEST_REFERENCE,
+                    UI_SETTINGS_VAT_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -3157,6 +3227,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_SETTINGS_ACCOUNTING_OPEN_LIVE_TEST_REFERENCE,
                     UI_SETTINGS_INVOICING_OPEN_LIVE_TEST_REFERENCE,
                     UI_SETTINGS_USER_OPEN_LIVE_TEST_REFERENCE,
+                    UI_SETTINGS_VAT_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {

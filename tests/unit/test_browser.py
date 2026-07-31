@@ -46,6 +46,7 @@ from billy_mcp.models import (
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
     UiSettingsUserOpenSuccess,
+    UiSettingsVatOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -6682,6 +6683,258 @@ def test_ui_settings_user_open_returns_ui_changed_for_error_shell(tmp_path: Path
     )
 
     result = asyncio.run(runtime.ui_settings_user_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _settings_vat_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Indstillinger"),
+        "text=Regelsæt": FakeLoginControl(text="Regelsæt"),
+        "text=Satser for salg": FakeLoginControl(text="Satser for salg"),
+        "text=Satser for køb": FakeLoginControl(text="Satser for køb"),
+        "text=Momssatser": FakeLoginControl(text="Momssatser"),
+        "text=Profil": FakeLoginControl(text="Profil"),
+        "text=Billede": FakeLoginControl(count=0, visible=False),
+        "text=Sprog og tema": FakeLoginControl(count=0, visible=False),
+        "text=Skift adgangskode": FakeLoginControl(count=0, visible=False),
+        "text=Faktura": FakeLoginControl(count=0, visible=False),
+        "text=Produkter": FakeLoginControl(count=0, visible=False),
+        "text=Betalingsmetoder": FakeLoginControl(count=0, visible=False),
+        "text=Standard fakturalogo": FakeLoginControl(count=0, visible=False),
+        "text=Regnskab": FakeLoginControl(count=0, visible=False),
+        "text=Køb": FakeLoginControl(count=0, visible=False),
+        "text=Kontoplan": FakeLoginControl(count=0, visible=False),
+        "text=Navn og adresse": FakeLoginControl(count=0, visible=False),
+        "text=Kontaktinformation": FakeLoginControl(count=0, visible=False),
+        "text=Opret": FakeLoginControl(text="Opret"),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def _bind_momssatser_click_to_vat_panel(page: FakeLoginPage) -> None:
+    """Hub starts as company; clicking Momssatser swaps controls to VAT panel."""
+
+    def apply_vat() -> None:
+        vat = _settings_vat_shell_controls()
+        page.controls = vat
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    hub = _settings_company_shell_controls()
+    hub["text=Momssatser"] = FakeLoginControl(text="Momssatser", on_click=apply_vat)
+    hub["text=Regelsæt"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Satser for salg"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Satser for køb"] = FakeLoginControl(count=0, visible=False)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+
+
+def test_ui_settings_vat_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_settings_vat_open_returns_success_for_vat_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    _bind_momssatser_click_to_vat_panel(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
+
+    assert result == UiSettingsVatOpenSuccess(vat_panel_markers_present=True)
+    assert isinstance(result, UiSettingsVatOpenSuccess)
+    assert result.path_class == "/:org_slug/settings"
+    assert result.heading == "Indstillinger"
+    assert result.shell_kind == "settings_vat"
+    assert result.vat_panel_markers_present is True
+    assert any(url.rstrip("/").endswith("/settings") for url, _ in page.navigation)
+    assert "click:text=Momssatser" in page.events
+    assert page.closed
+
+
+def test_ui_settings_vat_open_returns_ui_changed_for_company_panel_without_click(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_company_shell_controls()
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_vat_open_returns_ui_changed_when_click_leaves_company(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_company_shell_controls()
+    controls["text=Momssatser"] = FakeLoginControl(text="Momssatser")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_vat_open_returns_ui_changed_for_user_panel(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+
+    def apply_user() -> None:
+        user = _settings_user_shell_controls()
+        user["text=Momssatser"] = FakeLoginControl(text="Momssatser")
+        page.controls = user
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    hub = _settings_company_shell_controls()
+    hub["text=Momssatser"] = FakeLoginControl(text="Momssatser", on_click=apply_user)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_vat_open_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_vat_shell_controls()
+    controls["text=Upsedasse"] = FakeLoginControl(text="Upsedasse")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_vat_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED
