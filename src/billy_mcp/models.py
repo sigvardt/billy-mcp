@@ -255,6 +255,23 @@ class UiDebtorBalancesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiCreditorBalancesListInput(BaseModel):
+    """Empty, strict input boundary for the read-only creditor balances list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiCreditorBalancesListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy creditor balances (Skyldige udgifter) shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/creditorbalance"] = "/:org_slug/creditorbalance"
+    heading: Literal["Skyldige udgifter"] = "Skyldige udgifter"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

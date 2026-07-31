@@ -65,6 +65,7 @@ from billy_mcp.browser import (
     UiBankAccountsListService,
     UiBillsListService,
     UiClientsListService,
+    UiCreditorBalancesListService,
     UiDebtorBalancesListService,
     UiInvoicesListService,
     UiProductsImportService,
@@ -96,6 +97,8 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
+    UiCreditorBalancesListInput,
+    UiCreditorBalancesListSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiInvoicesListInput,
@@ -128,6 +131,7 @@ def create_server(
     ui_suppliers_list_service: UiSuppliersListService | None = None,
     ui_bills_list_service: UiBillsListService | None = None,
     ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
+    ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -152,6 +156,7 @@ def create_server(
     suppliers_list_service = ui_suppliers_list_service or browser
     bills_list_service = ui_bills_list_service or browser
     debtor_balances_list_service = ui_debtor_balances_list_service or browser
+    creditor_balances_list_service = ui_creditor_balances_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -250,6 +255,12 @@ def create_server(
         UiDebtorBalancesListInput()
         return await debtor_balances_list_service.ui_debtor_balances_list()
 
+    async def ui_creditor_balances_list() -> UiCreditorBalancesListSuccess | ToolError:
+        """Observe the authenticated Billy creditor balances list shell without writes."""
+
+        UiCreditorBalancesListInput()
+        return await creditor_balances_list_service.ui_creditor_balances_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -340,6 +351,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_debtor_balances_list)
+    server.tool(
+        name="ui_creditor_balances_list",
+        description=(
+            "Open the Billy creditor balances list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_creditor_balances_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

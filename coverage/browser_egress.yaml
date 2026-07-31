@@ -21,7 +21,8 @@
         "tests/live/test_ui_products_import.py",
         "tests/live/test_ui_suppliers_list.py",
         "tests/live/test_ui_bills_list.py",
-        "tests/live/test_ui_debtor_balances_list.py"
+        "tests/live/test_ui_debtor_balances_list.py",
+        "tests/live/test_ui_creditor_balances_list.py"
       ]
     },
     {
@@ -128,7 +129,8 @@
         "tests/live/test_ui_products_import.py",
         "tests/live/test_ui_suppliers_list.py",
         "tests/live/test_ui_bills_list.py",
-        "tests/live/test_ui_debtor_balances_list.py"
+        "tests/live/test_ui_debtor_balances_list.py",
+        "tests/live/test_ui_creditor_balances_list.py"
       ]
     },
     {

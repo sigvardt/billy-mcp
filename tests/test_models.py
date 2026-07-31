@@ -19,6 +19,8 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
+    UiCreditorBalancesListInput,
+    UiCreditorBalancesListSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiInvoicesListInput,
@@ -385,6 +387,39 @@ def test_ui_debtor_balances_list_models_are_empty_input_and_non_pii_success() ->
         pass
     try:
         UiDebtorBalancesListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/other",
+                "heading": "X",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_creditor_balances_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiCreditorBalancesListInput().model_dump() == {}
+    success = UiCreditorBalancesListSuccess(create_action_visible=True, shell_markers_present=True)
+    assert success.path_class == "/:org_slug/creditorbalance"
+    assert success.heading == "Skyldige udgifter"
+    assert success.create_action_visible is True
+    assert success.shell_markers_present is True
+    properties = UiCreditorBalancesListSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    }
+    try:
+        UiCreditorBalancesListInput.model_validate({"url": "https://untrusted.example"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiCreditorBalancesListSuccess.model_validate(
             {
                 "path_class": "/:org_slug/other",
                 "heading": "X",

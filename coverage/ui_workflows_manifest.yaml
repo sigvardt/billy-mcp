@@ -313,33 +313,45 @@
     {
       "api_row_id": null,
       "area": "creditor_balances",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research112 dual-session headless observation + ui_creditor_balances_list product; list shell only (path class /:org_slug/creditorbalance, h1 Skyldige udgifter, CTA Opret k\u00f8b present, no create); no invent api_creditor_balances_*; aliases creditor-balances/creditor_balances/payables/skyldige-udgifter rejected; does not green uploads, contactBalance*, balanceModifiers, or debtor re-scope; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_creditor_balances_list.json (list surface frames, accept)",
       "filters": [],
       "id": "ui.discovery.creditor_balances",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family creditor_balances",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/creditorbalance (read-only list shell open)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "list_shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_creditor_balances_list.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_creditor_balances_list",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {
