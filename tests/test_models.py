@@ -53,6 +53,8 @@ from billy_mcp.models import (
     UiReportsOpenSuccess,
     UiSaftExportsOpenInput,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccessTokenOpenInput,
+    UiSettingsAccessTokenOpenSuccess,
     UiSettingsAccountingOpenInput,
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenInput,
@@ -1313,5 +1315,38 @@ def test_ui_settings_users_open_models_users_shell() -> None:
                 "heading": "Indstillinger",
                 "shell_kind": "settings_users",
                 "users_panel_markers_present": True,
+            }
+        )
+
+
+def test_ui_settings_access_token_open_models_access_token_shell() -> None:
+    assert UiSettingsAccessTokenOpenInput().model_dump() == {}
+    success = UiSettingsAccessTokenOpenSuccess(access_token_panel_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/settings",
+        "heading": "Indstillinger",
+        "shell_kind": "settings_access_token",
+        "access_token_panel_markers_present": True,
+    }
+    properties = UiSettingsAccessTokenOpenSuccess.model_json_schema().get("properties", {})
+    assert "path_class" in properties
+    with pytest.raises(ValidationError):
+        UiSettingsAccessTokenOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSettingsAccessTokenOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_users",
+                "access_token_panel_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSettingsAccessTokenOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/other",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_access_token",
+                "access_token_panel_markers_present": True,
             }
         )

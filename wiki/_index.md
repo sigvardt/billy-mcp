@@ -71,6 +71,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_saft_exports_open_shell|ui_saft_exports_open_shell]]: Read-only Billy SAF-T CTA observe shell on exports hub (research122 freeze).
 
+[[ui_settings_access_token_open_shell|ui_settings_access_token_open_shell]]: Read-only Billy Indstillinger Adgangsnøgler (access keys) settings panel open (research132 freeze).
+
 [[ui_settings_accounting_open_shell|ui_settings_accounting_open_shell]]: Read-only Billy Indstillinger Regnskab (accounting) settings panel open (research127 freeze).
 
 [[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126 freeze).

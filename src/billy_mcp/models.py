@@ -597,6 +597,23 @@ class UiSettingsUsersOpenSuccess(BaseModel):
     users_panel_markers_present: bool
 
 
+class UiSettingsAccessTokenOpenInput(BaseModel):
+    """Empty, strict input for the read-only access-token settings (Adgangsnøgler) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsAccessTokenOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Adgangsnøgler panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_access_token"] = "settings_access_token"
+    access_token_panel_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

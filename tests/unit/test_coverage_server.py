@@ -33,6 +33,7 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenSuccess,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccessTokenOpenSuccess,
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
@@ -671,6 +672,15 @@ class FakeUiSettingsVatOpenService:
         return UiSettingsVatOpenSuccess(vat_panel_markers_present=True)
 
 
+class FakeUiSettingsAccessTokenOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_settings_access_token_open(self) -> UiSettingsAccessTokenOpenSuccess:
+        self.calls += 1
+        return UiSettingsAccessTokenOpenSuccess(access_token_panel_markers_present=True)
+
+
 class FakeUiSettingsUsersOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -886,6 +896,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_settings_user_open",
         "ui_settings_vat_open",
         "ui_settings_users_open",
+        "ui_settings_access_token_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1842,6 +1853,40 @@ def test_ui_settings_users_open_registration_has_empty_input_and_typed_output(
             "heading": "Indstillinger",
             "shell_kind": "settings_users",
             "users_panel_markers_present": True,
+        }
+    }
+    assert settings.calls == 1
+
+
+def test_ui_settings_access_token_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    settings = FakeUiSettingsAccessTokenOpenService()
+    server = create_server(tmp_path, ui_settings_access_token_open_service=settings)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}[
+        "ui_settings_access_token_open"
+    ]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    # shell_kind contains "access_token"; ban secret material only (not the public name).
+    assert not any(
+        term in schema for term in ("email", "password", "totp", "cookie", "bearer", "secret")
+    )
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_settings_access_token_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/settings",
+            "heading": "Indstillinger",
+            "shell_kind": "settings_access_token",
+            "access_token_panel_markers_present": True,
         }
     }
     assert settings.calls == 1

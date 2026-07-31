@@ -82,6 +82,7 @@ from billy_mcp.browser import (
     UiRecurringInvoicesListService,
     UiReportsOpenService,
     UiSaftExportsOpenService,
+    UiSettingsAccessTokenOpenService,
     UiSettingsAccountingOpenService,
     UiSettingsCompanyOpenService,
     UiSettingsInvoicingOpenService,
@@ -150,6 +151,8 @@ from billy_mcp.models import (
     UiReportsOpenSuccess,
     UiSaftExportsOpenInput,
     UiSaftExportsOpenSuccess,
+    UiSettingsAccessTokenOpenInput,
+    UiSettingsAccessTokenOpenSuccess,
     UiSettingsAccountingOpenInput,
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenInput,
@@ -208,6 +211,7 @@ def create_server(
     ui_settings_user_open_service: UiSettingsUserOpenService | None = None,
     ui_settings_vat_open_service: UiSettingsVatOpenService | None = None,
     ui_settings_users_open_service: UiSettingsUsersOpenService | None = None,
+    ui_settings_access_token_open_service: UiSettingsAccessTokenOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -252,6 +256,7 @@ def create_server(
     settings_user_open_service = ui_settings_user_open_service or browser
     settings_vat_open_service = ui_settings_vat_open_service or browser
     settings_users_open_service = ui_settings_users_open_service or browser
+    settings_access_token_open_service = ui_settings_access_token_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -469,6 +474,12 @@ def create_server(
 
         UiSettingsUsersOpenInput()
         return await settings_users_open_service.ui_settings_users_open()
+
+    async def ui_settings_access_token_open() -> UiSettingsAccessTokenOpenSuccess | ToolError:
+        """Open the Billy Indstillinger Adgangsnøgler (access keys) settings panel (read-only)."""
+
+        UiSettingsAccessTokenOpenInput()
+        return await settings_access_token_open_service.ui_settings_access_token_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -718,6 +729,15 @@ def create_server(
             "does not click Invitér, Overdrag, Gem, or other write actions)."
         ),
     )(ui_settings_users_open)
+
+    server.tool(
+        name="ui_settings_access_token_open",
+        description=(
+            "Open the Billy access-token settings (Indstillinger / Adgangsnøgler) panel "
+            "for the authenticated session (read-only path, heading, and access-token "
+            "panel markers; does not click Opret adgangsnøgle, Gem, or other write actions)."
+        ),
+    )(ui_settings_access_token_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
