@@ -13,7 +13,7 @@ updated: 2026-07-31T12:47:15Z
 
 ## Current state
 
-- Continue mode iter 13 FIX-VERIFY complete; tip `93912a1` + uncommitted product.
+- Continue mode iter 13 COMMIT complete; tip product commit (creditor balances).
 - Coverage: implemented/contract 199; live/vision 15; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
 - Operator: grok-only; no live API; no running children.
@@ -26,7 +26,7 @@ updated: 2026-07-31T12:47:15Z
 
 ## Review decisions (authoritative)
 
-- Product `ui_creditor_balances_list`: **ACCEPT** (tmp/grok-review.md; uncommitted).
+- Product `ui_creditor_balances_list`: **ACCEPT** (committed 186.13).
 - Product `ui_debtor_balances_list`: **ACCEPT** (committed 186.12).
 - Product `ui_bills_list`: **ACCEPT** (committed 186.11).
 - Prior suppliers/products_import/recurring/quotes/bank/clients/products/invoices/auth: **ACCEPT**.
@@ -34,16 +34,15 @@ updated: 2026-07-31T12:47:15Z
 
 ## Open coverage work
 
-1. Next UI shell: `ui.discovery.creditor_balances` (`/:org_slug/creditorbalance`).
-2. Then uploads, receipt_inbox, bank/financing/daybooks, settings.
+1. Next UI shell: `ui.discovery.uploads`.
+2. Then receipt_inbox, bank/financing/daybooks, settings.
 3. Residual/bulk offline API reds only; no live API methods.
-4. Red discovery remaining: 24 rows (creditor_balances first).
 
-## Live UI tools (14 rows)
+## Live UI tools (15 rows)
 
 - list/import shells greened: invoices, products, clients, bank_accounts, quotes,
-  recurring_invoices, products_import, suppliers, bills, debtor_balances
-  (+ parity list shells where applicable).
+  recurring_invoices, products_import, suppliers, bills, debtor_balances,
+  creditor_balances (+ parity list shells where applicable).
 
 ## Evidence boundaries
 
@@ -150,3 +149,8 @@ updated: 2026-07-31T12:47:15Z
 
 - Unread inbox/feed: empty. Saved: empty. No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 13)
+
+- `fractal commit` product: ui creditor balances list shell with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
