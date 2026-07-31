@@ -13,6 +13,8 @@ from billy_mcp.models import (
     CoverageStatus,
     StableErrorCode,
     ToolError,
+    UiClientsListInput,
+    UiClientsListSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsListInput,
@@ -122,5 +124,39 @@ def test_ui_products_list_models_are_empty_input_and_non_pii_success() -> None:
                 "search_control_visible": True,
                 "shell_markers_present": True,
                 "product_name": "secret",
+            }
+        )
+
+
+def test_ui_clients_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiClientsListInput().model_dump() == {}
+    success = UiClientsListSuccess(create_action_visible=True, shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/clients",
+        "heading": "Kunder",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiClientsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "contact_name",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiClientsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiClientsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/clients",
+                "heading": "Kunder",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "contact_name": "secret",
             }
         )

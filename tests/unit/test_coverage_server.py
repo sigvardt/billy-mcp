@@ -13,6 +13,7 @@ from billy_mcp.models import (
     AuthLoginWaitSuccess,
     AuthStatusSuccess,
     StableErrorCode,
+    UiClientsListSuccess,
     UiInvoicesListSuccess,
     UiProductsListSuccess,
 )
@@ -393,6 +394,15 @@ class FakeUiInvoicesListService:
         return UiInvoicesListSuccess(create_action_visible=True, shell_markers_present=True)
 
 
+class FakeUiClientsListService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_clients_list(self) -> UiClientsListSuccess:
+        self.calls += 1
+        return UiClientsListSuccess(create_action_visible=True, shell_markers_present=True)
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -550,7 +560,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(api_tool_names) == 271
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
-    assert ui_tool_names == {"ui_invoices_list", "ui_products_list"}
+    assert ui_tool_names == {"ui_invoices_list", "ui_products_list", "ui_clients_list"}
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -687,3 +697,30 @@ def test_ui_products_list_registration_has_empty_input_and_typed_output(tmp_path
         }
     }
     assert products.calls == 1
+
+
+def test_ui_clients_list_registration_has_empty_input_and_typed_output(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    clients = FakeUiClientsListService()
+    server = create_server(tmp_path, ui_clients_list_service=clients)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_clients_list"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_clients_list", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/clients",
+            "heading": "Kunder",
+            "create_action_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert clients.calls == 1

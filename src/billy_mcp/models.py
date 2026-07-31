@@ -119,6 +119,23 @@ class UiProductsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiClientsListInput(BaseModel):
+    """Empty, strict input boundary for the read-only clients list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiClientsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy clients list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/clients"] = "/:org_slug/clients"
+    heading: Literal["Kunder"] = "Kunder"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

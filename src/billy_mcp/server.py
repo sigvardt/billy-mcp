@@ -62,6 +62,7 @@ from billy_mcp.browser import (
     AuthLoginService,
     AuthStatusChecker,
     BrowserRuntime,
+    UiClientsListService,
     UiInvoicesListService,
     UiProductsListService,
 )
@@ -82,6 +83,8 @@ from billy_mcp.models import (
     AuthStatusInput,
     AuthStatusSuccess,
     ToolError,
+    UiClientsListInput,
+    UiClientsListSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsListInput,
@@ -96,6 +99,7 @@ def create_server(
     auth_login_service: AuthLoginService | None = None,
     ui_invoices_list_service: UiInvoicesListService | None = None,
     ui_products_list_service: UiProductsListService | None = None,
+    ui_clients_list_service: UiClientsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -112,6 +116,7 @@ def create_server(
     login_service = auth_login_service or browser
     invoices_list_service = ui_invoices_list_service or browser
     products_list_service = ui_products_list_service or browser
+    clients_list_service = ui_clients_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -162,6 +167,12 @@ def create_server(
         UiProductsListInput()
         return await products_list_service.ui_products_list()
 
+    async def ui_clients_list() -> UiClientsListSuccess | ToolError:
+        """Observe the authenticated Billy clients list shell without writes."""
+
+        UiClientsListInput()
+        return await clients_list_service.ui_clients_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -196,6 +207,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_products_list)
+    server.tool(
+        name="ui_clients_list",
+        description=(
+            "Open the Billy clients list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_clients_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
