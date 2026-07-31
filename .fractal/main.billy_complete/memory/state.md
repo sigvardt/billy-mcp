@@ -6,14 +6,14 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T22:26:00Z
+updated: 2026-07-31T22:30:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 31 SYNC pre-COMMIT. Product tip settings_vat 186.31 (`ui_settings_vat_open`). Coverage live/vision 33; complete false. Ready COMMIT. annual red. No invent api_settings_*.
+- Continue mode iter 31 COMMIT. Product tip settings_vat 186.31 (`ui_settings_vat_open`, `bc0865e`). Coverage live/vision 33; complete false. Next: remaining settings_* (users/subscription/access_token/beta) or annual red. No invent api_settings_*.
 - Review: product `ui_settings_vat_open` **ACCEPT** (IR 186.31).
 
 ## Verification
@@ -104,7 +104,7 @@ updated: 2026-07-31T22:26:00Z
 - Wiki settings: `wiki/ui_settings_company_open_shell.md`,
   `wiki/ui_settings_accounting_open_shell.md`,
   `wiki/ui_settings_invoicing_open_shell.md`
-- Tip product: `663586e` `ui_settings_invoicing_open`
+- Tip product: `bc0865e` `ui_settings_vat_open`
 - Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_vat`)
 
 ## SYNC (iter 30)
@@ -1740,4 +1740,9 @@ updated: 2026-07-31T22:26:00Z
 - Private F228DABA reacted (+): ready COMMIT.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 31)
+
+- `fractal commit` product: ui settings vat open momssatser panel with dual live and vision (`bc0865e`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
