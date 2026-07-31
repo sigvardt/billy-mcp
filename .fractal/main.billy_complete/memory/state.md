@@ -13,17 +13,17 @@ updated: 2026-07-31T14:22:00Z
 
 ## Current state
 
-- Continue mode iter 17 FIX-VERIFY clean; tip still `c5b054c` until COMMIT.
+- Continue mode iter 17 COMMIT complete; tip product financing 186.17 (`8ad1215`).
 - Coverage: implemented/contract 203; live/vision 19; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Next: COMMIT product `ui_financing_open`.
+- Branch clean at `8ad1215` vs origin (dirty only this memory file).
 
 ## Verification
 
-- Last product: `ui_bank_reconciliation_open` dual-session + vision purge_verified (COMMIT 186.16).
-- Offline baseline product: 1414 passed class.
-- Live baseline: 18 UI discovery/parity rows green.
+- Last product: `ui_financing_open` dual-session + vision purge_verified (COMMIT 186.17).
+- Offline baseline product: 1422 passed class.
+- Live baseline: 19 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
@@ -39,9 +39,9 @@ updated: 2026-07-31T14:22:00Z
 
 ## Open coverage work
 
-1. COMMIT product `ui_financing_open` (this iteration).
-2. Then discovery freezes: daybooks, transactions, reports, vat, annual, exports,
-   saft, addons, integrations, inventory, settings_*.
+1. Next UI discovery freeze: `ui.discovery.daybooks`.
+2. Then transactions, reports, vat, annual, exports, saft, addons, integrations,
+   inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
@@ -68,7 +68,7 @@ updated: 2026-07-31T14:22:00Z
 - Research: `tmp/grok-research.md` (research116 financing freeze)
 - Plan: `plans/2026-07-31T14:31:32.054Z-186.17-ui_financing_open.md`
 - Wiki: `wiki/ui_financing_open_shell.md`
-- Next: REVIEW product `ui_financing_open`
+- Next: RESEARCH freeze `ui.discovery.daybooks`
 
 ## SYNC (iter 17)
 
@@ -182,6 +182,11 @@ updated: 2026-07-31T14:22:00Z
 - Unread inbox/feed/private: empty. Saved: empty.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 17)
+
+- `fractal commit` product: ui financing open shell with dual live and vision (`8ad1215`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 15)
 
