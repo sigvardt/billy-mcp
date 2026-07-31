@@ -117,6 +117,256 @@ class BulkDeleteFormAssessment(BaseModel):
         return self
 
 
+class ResidualUnauthenticatedClassification(StrEnum):
+    """Research96's non-qualifying classifications for residual method gates."""
+
+    PERMANENT_METHOD_NOT_ALLOWED = "permanent_method_not_allowed"
+    AUTHENTICATION_GATED = "authentication_gated"
+    METADATA_ONLY_UNQUALIFIED = "metadata_only_unqualified"
+
+
+class ResidualUnauthenticatedOutcome(BaseModel):
+    """One immutable unauthenticated outcome that cannot open a product path."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    candidate_id: str = Field(min_length=1)
+    unauthenticated_status_code: Literal[200, 401, 405]
+    classification: ResidualUnauthenticatedClassification
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    claims_cleanup: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_non_qualifying_semantics(self) -> ResidualUnauthenticatedOutcome:
+        """Keep each recorded status tied to its only permitted interpretation."""
+
+        expected = {
+            ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED: 405,
+            ResidualUnauthenticatedClassification.AUTHENTICATION_GATED: 401,
+            ResidualUnauthenticatedClassification.METADATA_ONLY_UNQUALIFIED: 200,
+        }
+        if self.unauthenticated_status_code != expected[self.classification]:
+            raise ValueError("residual classification does not match its unauthenticated status")
+        return self
+
+
+class ResidualUnauthenticatedOutcomeFixture(BaseModel):
+    """The exact Research96 outcome fixture for every frozen residual candidate."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    outcomes: tuple[ResidualUnauthenticatedOutcome, ...]
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    claims_cleanup: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_exact_research88_membership(self) -> ResidualUnauthenticatedOutcomeFixture:
+        """Reject missing, duplicate, or reclassified residual outcome rows."""
+
+        expected = {
+            candidate_id: (status_code, classification)
+            for candidate_id, status_code, classification in _RESEARCH96_RESIDUAL_OUTCOMES
+        }
+        frozen_residual_ids = {
+            candidate.id
+            for candidate in research88_candidates()
+            if candidate.kind is CandidateKind.RESIDUAL
+        }
+        actual = {
+            outcome.candidate_id: (outcome.unauthenticated_status_code, outcome.classification)
+            for outcome in self.outcomes
+        }
+        if len(actual) != len(self.outcomes):
+            raise ValueError("residual outcome fixture must not duplicate candidate ids")
+        if set(expected) != frozen_residual_ids:
+            raise ValueError(
+                "residual outcome fixture no longer matches frozen candidate membership"
+            )
+        if actual != expected:
+            raise ValueError(
+                "residual outcome fixture must cover each frozen candidate exactly once"
+            )
+        return self
+
+
+class BulkDeleteWireClassification(StrEnum):
+    """Whether a form is the static query template or a rejected body form."""
+
+    QUERY_ONLY = "query_only"
+    REJECTED_NON_PRODUCT_BODY = "rejected_non_product_body"
+
+
+class CanonicalBulkDeleteForm(BaseModel):
+    """A no-input immutable template for Billy's repeated-query bulk delete form."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    claims_cleanup: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @property
+    def method(self) -> Literal["DELETE"]:
+        """Return the server-stated fixed method without accepting a caller value."""
+
+        return "DELETE"
+
+    @property
+    def route_template(self) -> Literal["/{resource}"]:
+        """Return the symbolic resource route; no concrete route can be supplied."""
+
+        return "/{resource}"
+
+    @property
+    def query_items(self) -> tuple[tuple[str, str], tuple[str, str]]:
+        """Return the exact repeated `ids[]` query sequence from the server message."""
+
+        return ((BULK_DELETE_QUERY_NAME, "123"), (BULK_DELETE_QUERY_NAME, "456"))
+
+    @property
+    def request_body(self) -> None:
+        """Keep the canonical bulk-delete form bodyless."""
+
+        return None
+
+    @property
+    def classification(self) -> Literal[BulkDeleteWireClassification.QUERY_ONLY]:
+        """Mark the template as the sole recognised input encoding, not a product form."""
+
+        return BulkDeleteWireClassification.QUERY_ONLY
+
+    @property
+    def encoded_template(self) -> Literal["/{resource}?ids[]=123&ids[]=456"]:
+        """Expose the exact query-only server form without building a request."""
+
+        return "/{resource}?ids[]=123&ids[]=456"
+
+
+class BulkDeleteRejectedBodyFormKind(StrEnum):
+    """Research96 body encodings that the server rejected for bulk delete."""
+
+    JSON_BODY = "json_body"
+    FORM_BODY = "form_body"
+
+
+class BulkDeleteRejectedBodyForm(BaseModel):
+    """An immutable rejected body encoding; it is never a product request form."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    form: BulkDeleteRejectedBodyFormKind
+    unauthenticated_status_code: Literal[400]
+    error_code: Literal["INVALID_DELETE_ID_ARRAY"]
+    classification: BulkDeleteWireClassification
+    request_body_present: Literal[True] = True
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    claims_cleanup: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_rejected_body_semantics(self) -> BulkDeleteRejectedBodyForm:
+        """Prevent JSON or form data from being misclassified as the query form."""
+
+        if (
+            self.error_code != BULK_DELETE_EMPTY_ERROR_CODE
+            or self.classification is not BulkDeleteWireClassification.REJECTED_NON_PRODUCT_BODY
+        ):
+            raise ValueError("bulk-delete body forms are rejected non-product validation errors")
+        return self
+
+
+class OrganizationPathClassification(StrEnum):
+    """Static Research96 classifications that intentionally do not infer a route."""
+
+    UNKNOWN_RESOURCE = "unknown_resource"
+    AUTHENTICATION_REQUIRED = "authentication_required"
+    AUTH_FIRST_PATH_AGNOSTIC = "auth_first_path_agnostic"
+
+
+class OrganizationPathNoTokenOutcome(BaseModel):
+    """One no-token route observation retained solely as an ambiguity fixture."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    route: Literal["/user/organizations", "/organizations"]
+    unauthenticated_status_code: Literal[401, 404]
+    error_code: Literal["UNKNOWN_RESOURCE", "AUTHENTICATION_REQUIRED"]
+    classification: OrganizationPathClassification
+
+    @model_validator(mode="after")
+    def _enforce_no_token_semantics(self) -> OrganizationPathNoTokenOutcome:
+        """Keep each no-token path bound to the observed Research96 result."""
+
+        expected = {
+            "/user/organizations": (
+                404,
+                "UNKNOWN_RESOURCE",
+                OrganizationPathClassification.UNKNOWN_RESOURCE,
+            ),
+            "/organizations": (
+                401,
+                "AUTHENTICATION_REQUIRED",
+                OrganizationPathClassification.AUTHENTICATION_REQUIRED,
+            ),
+        }
+        if (
+            self.unauthenticated_status_code,
+            self.error_code,
+            self.classification,
+        ) != expected[self.route]:
+            raise ValueError("no-token organisation path outcome does not match Research96")
+        return self
+
+
+class OrganizationPathInvalidTokenOutcome(BaseModel):
+    """The path-agnostic invalid-token result, which proves no route existence."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    status_code: Literal[401]
+    error_code: Literal["OAUTH_INVALID_ACCESS_TOKEN"]
+    classification: OrganizationPathClassification
+
+    @model_validator(mode="after")
+    def _enforce_auth_first_semantics(self) -> OrganizationPathInvalidTokenOutcome:
+        """Forbid interpreting invalid-token authentication failure as path evidence."""
+
+        if self.classification is not OrganizationPathClassification.AUTH_FIRST_PATH_AGNOSTIC:
+            raise ValueError("invalid-token result must remain auth-first and path-agnostic")
+        return self
+
+
+class OrganizationPathAmbiguityFixture(BaseModel):
+    """Static route ambiguity evidence that preserves the documented tool path."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    no_token_outcomes: tuple[OrganizationPathNoTokenOutcome, ...]
+    invalid_token_outcome: OrganizationPathInvalidTokenOutcome
+    documented_tool_route: Literal["/user/organizations"] = "/user/organizations"
+    alternate_route_inferred: Literal[False] = False
+    requires_valid_dedicated_non_production_observation: Literal[True] = True
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_exact_no_token_paths(self) -> OrganizationPathAmbiguityFixture:
+        """Require both no-token outcomes exactly once while retaining route ambiguity."""
+
+        expected_routes = {"/user/organizations", "/organizations"}
+        actual_routes = tuple(outcome.route for outcome in self.no_token_outcomes)
+        if len(actual_routes) != len(set(actual_routes)) or set(actual_routes) != expected_routes:
+            raise ValueError("organisation path fixture must contain both no-token routes once")
+        return self
+
+
 class RealMethodSafetyGate(BaseModel):
     """Current candidate state: every real residual or bulk method is blocked locally."""
 
@@ -458,6 +708,235 @@ def research88_candidates() -> tuple[LiveProbeCandidate, ...]:
             )
         )
     return residual + tuple(bulk)
+
+
+_RESEARCH96_RESIDUAL_OUTCOMES: Final[
+    tuple[tuple[str, Literal[200, 401, 405], ResidualUnauthenticatedClassification], ...]
+] = (
+    (
+        "api.accountNatures.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.accountNatures.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.balanceModifiers.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.balanceModifiers.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.bankPayments.delete",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.cities.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.cities.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.contactBalancePostings.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.contactBalancePostings.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.countryGroups.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.countryGroups.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.countries.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.countries.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.currencies.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.currencies.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.invoiceReminderAssociations.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.invoiceReminderAssociations.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.invoiceReminderAssociations.delete",
+        200,
+        ResidualUnauthenticatedClassification.METADATA_ONLY_UNQUALIFIED,
+    ),
+    (
+        "api.locales.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.locales.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.postings.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.postings.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.states.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.states.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.transactions.create",
+        401,
+        ResidualUnauthenticatedClassification.AUTHENTICATION_GATED,
+    ),
+    (
+        "api.transactions.update",
+        401,
+        ResidualUnauthenticatedClassification.AUTHENTICATION_GATED,
+    ),
+    (
+        "api.transactions.delete",
+        200,
+        ResidualUnauthenticatedClassification.METADATA_ONLY_UNQUALIFIED,
+    ),
+    (
+        "api.zipcodes.create",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+    (
+        "api.zipcodes.update",
+        405,
+        ResidualUnauthenticatedClassification.PERMANENT_METHOD_NOT_ALLOWED,
+    ),
+)
+
+_RESEARCH96_RESIDUAL_UNAUTHENTICATED_OUTCOMES: Final[ResidualUnauthenticatedOutcomeFixture] = (
+    ResidualUnauthenticatedOutcomeFixture(
+        outcomes=tuple(
+            ResidualUnauthenticatedOutcome(
+                candidate_id=candidate_id,
+                unauthenticated_status_code=status_code,
+                classification=classification,
+            )
+            for candidate_id, status_code, classification in _RESEARCH96_RESIDUAL_OUTCOMES
+        )
+    )
+)
+
+_RESEARCH96_CANONICAL_BULK_DELETE_FORM: Final[CanonicalBulkDeleteForm] = CanonicalBulkDeleteForm()
+
+_RESEARCH96_REJECTED_BULK_DELETE_BODY_FORMS: Final[tuple[BulkDeleteRejectedBodyForm, ...]] = (
+    BulkDeleteRejectedBodyForm(
+        form=BulkDeleteRejectedBodyFormKind.JSON_BODY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        classification=BulkDeleteWireClassification.REJECTED_NON_PRODUCT_BODY,
+    ),
+    BulkDeleteRejectedBodyForm(
+        form=BulkDeleteRejectedBodyFormKind.FORM_BODY,
+        unauthenticated_status_code=400,
+        error_code=BULK_DELETE_EMPTY_ERROR_CODE,
+        classification=BulkDeleteWireClassification.REJECTED_NON_PRODUCT_BODY,
+    ),
+)
+
+_RESEARCH96_ORGANIZATION_PATH_AMBIGUITY: Final[OrganizationPathAmbiguityFixture] = (
+    OrganizationPathAmbiguityFixture(
+        no_token_outcomes=(
+            OrganizationPathNoTokenOutcome(
+                route="/user/organizations",
+                unauthenticated_status_code=404,
+                error_code="UNKNOWN_RESOURCE",
+                classification=OrganizationPathClassification.UNKNOWN_RESOURCE,
+            ),
+            OrganizationPathNoTokenOutcome(
+                route="/organizations",
+                unauthenticated_status_code=401,
+                error_code="AUTHENTICATION_REQUIRED",
+                classification=OrganizationPathClassification.AUTHENTICATION_REQUIRED,
+            ),
+        ),
+        invalid_token_outcome=OrganizationPathInvalidTokenOutcome(
+            status_code=401,
+            error_code="OAUTH_INVALID_ACCESS_TOKEN",
+            classification=OrganizationPathClassification.AUTH_FIRST_PATH_AGNOSTIC,
+        ),
+    )
+)
+
+
+def research96_residual_unauthenticated_outcomes() -> ResidualUnauthenticatedOutcomeFixture:
+    """Return the static exact-29 residual outcome fixture without issuing a request."""
+
+    return _RESEARCH96_RESIDUAL_UNAUTHENTICATED_OUTCOMES
+
+
+def research96_canonical_bulk_delete_form() -> CanonicalBulkDeleteForm:
+    """Return the no-input query-only bulk-delete fixture without building a request."""
+
+    return _RESEARCH96_CANONICAL_BULK_DELETE_FORM
+
+
+def research96_rejected_bulk_delete_body_forms() -> tuple[BulkDeleteRejectedBodyForm, ...]:
+    """Return the explicit rejected JSON and form-body bulk-delete forms."""
+
+    return _RESEARCH96_REJECTED_BULK_DELETE_BODY_FORMS
+
+
+def research96_organization_path_ambiguity() -> OrganizationPathAmbiguityFixture:
+    """Return static path ambiguity evidence without inferring or probing a route."""
+
+    return _RESEARCH96_ORGANIZATION_PATH_AMBIGUITY
 
 
 def _fixed_observation_url(candidate: LiveProbeCandidate) -> str:
