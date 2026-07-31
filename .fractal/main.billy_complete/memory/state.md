@@ -13,16 +13,15 @@ updated: 2026-07-31T17:39:18Z
 
 ## Current state
 
-- Continue mode iter 23 EXECUTE done for `ui_saft_exports_open` (uncommitted product).
+- Continue mode iter 23 COMMIT done. Product tip saft_exports 186.23.
 - Coverage: implemented/contract 209; live/vision 25; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_exports_open`: **ACCEPT** (committed). Product `ui_saft_exports_open` EXECUTE ready for REVIEW.
-- Next: independent REVIEW of `ui_saft_exports_open`.
+- Product `ui_saft_exports_open`: **ACCEPT** (committed). Next: RESEARCH freeze next red discovery (addons/integrations/inventory/settings_*; annual stays red).
 
 ## Verification
 
-- Last product: `ui_saft_exports_open` dual-session + vision purge_verified (EXECUTE 186.23).
+- Last product: `ui_saft_exports_open` dual-session + vision purge_verified (committed 186.23).
 - Offline baseline product: 1471 passed non-live.
 - Live baseline: 25 UI discovery/parity rows green.
 
@@ -46,24 +45,22 @@ updated: 2026-07-31T17:39:18Z
 
 ## Open coverage work
 
-1. Next: PLAN/EXECUTE `ui_saft_exports_open` for `ui.discovery.saft_exports`
-   (research122: no dedicated saft route; hub `/:org_slug/exports` + button
-   `Eksportér som SAF-T` observe-only). Then addons, integrations, inventory,
-   settings_*.
+1. Next: RESEARCH freeze next red discovery (addons, integrations, inventory,
+   settings_*).
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (24 rows)
+## Live UI tools (25 rows)
 
-- discovery greened (20): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (21): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
-  reports, vat_declarations, exports.
+  reports, vat_declarations, exports, saft_exports.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (14): annual_reports (inaccessible freeze),
-  saft_exports, addons, integrations, inventory, settings_*.
+- discovery still red (13): annual_reports (inaccessible freeze),
+  addons, integrations, inventory, settings_*.
 
 ## Evidence boundaries
 
@@ -180,6 +177,11 @@ updated: 2026-07-31T17:39:18Z
 - Private 6B13BFC4 read/reacted (next COMMIT then next discovery freeze).
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 23)
+
+- `fractal commit` product: ui saft exports open shell with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 23)
 
