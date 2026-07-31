@@ -25,6 +25,7 @@ from billy_mcp.models import (
     StableErrorCode,
     ToolError,
     UiBankAccountsListSuccess,
+    UiBillsListSuccess,
     UiClientsListSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
@@ -88,6 +89,10 @@ _PRODUCTS_IMPORT_CHOOSE_CSV_CTA = "Vælg CSV-fil"
 _SUPPLIERS_LIST_PATH = re.compile(r"^/[^/]+/suppliers$")
 _SUPPLIERS_LIST_HEADING = "Leverandører"
 _SUPPLIERS_CREATE_CTA = "Opret kontakt"
+# Research110: purchases discovery maps to bills list shell (Køb); no /purchases route.
+_BILLS_LIST_PATH = re.compile(r"^/[^/]+/bills$")
+_BILLS_LIST_HEADING = "Køb"
+_BILLS_CREATE_CTA = "Opret køb"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -232,6 +237,11 @@ class PersistentContext(Protocol):
 class LoginControl(Protocol):
     """The exact, internal DOM reads needed to verify the recorded login form."""
 
+    @property
+    def first(self) -> LoginControl:
+        """Playwright first-match seam for multi-match locators."""
+        ...
+
     async def count(self) -> int: ...
 
     async def is_visible(self) -> bool: ...
@@ -325,6 +335,12 @@ class UiSuppliersListService(Protocol):
     """Injectable seam for the read-only suppliers list shell observation."""
 
     async def ui_suppliers_list(self) -> UiSuppliersListSuccess | ToolError: ...
+
+
+class UiBillsListService(Protocol):
+    """Injectable seam for the read-only bills (purchases) list shell observation."""
+
+    async def ui_bills_list(self) -> UiBillsListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1088,6 +1104,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_bills_list(self) -> UiBillsListSuccess | ToolError:
+        """Open the bills (purchases / Køb) list shell for the authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bills_changed_error()
+
+            bills_url = f"https://mit.billy.dk/{slug}/bills"
+            await page.goto(bills_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bills_changed_error()
+                if _is_bills_list_url(page.url) and await _has_bills_list_signature(page):
+                    return UiBillsListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_bills_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the bills list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bills list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1305,6 +1381,24 @@ def _is_suppliers_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_SUPPLIERS_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_bills_list_url(url: str) -> bool:
+    """Return True when the URL is the bills list shell path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_BILLS_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1527,6 +1621,29 @@ async def _has_suppliers_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_bills_list_signature(page: LoginPage) -> bool:
+    """Verify the research110 bills list heading and create CTA without clicking.
+
+    Bills shell can render more than one h1; use the first visible heading text.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _BILLS_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_BILLS_CREATE_CTA}")
+        if await create_action.count() < 1:
+            return False
+        return await create_action.first.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -1673,6 +1790,15 @@ def _ui_suppliers_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy suppliers list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_bills_changed_error() -> ToolError:
+    """Fail closed when the bills list shell no longer matches research110."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy bills list interface no longer matches the recorded signature.",
     )
 
 

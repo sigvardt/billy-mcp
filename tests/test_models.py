@@ -15,6 +15,8 @@ from billy_mcp.models import (
     ToolError,
     UiBankAccountsListInput,
     UiBankAccountsListSuccess,
+    UiBillsListInput,
+    UiBillsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
     UiInvoicesListInput,
@@ -356,5 +358,41 @@ def test_ui_suppliers_list_models_are_empty_input_and_non_pii_success() -> None:
                 "create_action_visible": True,
                 "shell_markers_present": True,
                 "contact_name": "secret",
+            }
+        )
+
+
+def test_ui_bills_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiBillsListInput().model_dump() == {}
+    success = UiBillsListSuccess(create_action_visible=True, shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/bills",
+        "heading": "Køb",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiBillsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "bill_number",
+        "supplier_name",
+        "voucher_no",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiBillsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiBillsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/bills",
+                "heading": "Køb",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "supplier_name": "secret",
             }
         )

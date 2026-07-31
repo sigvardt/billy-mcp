@@ -221,6 +221,23 @@ class UiSuppliersListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBillsListInput(BaseModel):
+    """Empty, strict input boundary for the read-only bills (purchases) list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBillsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy bills list shell (UI purchases / Køb)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bills"] = "/:org_slug/bills"
+    heading: Literal["Køb"] = "Køb"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

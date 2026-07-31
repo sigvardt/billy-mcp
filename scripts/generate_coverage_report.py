@@ -54,6 +54,10 @@ UI_SUPPLIERS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_list.py"
 UI_SUPPLIERS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_SUPPLIERS_LIST_TOOL_NAME = "ui_suppliers_list"
+UI_BILLS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_BILLS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_list.py"
+UI_BILLS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_BILLS_LIST_TOOL_NAME = "ui_bills_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1661,6 +1665,68 @@ def apply_ui_suppliers_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_bills_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
+    """Mark bills/purchases list **shell open** evidence only (research110 / plan 186.11).
+
+    Empty-input tool; path /bills, h1 Køb, CTA Opret køb present only (never create).
+    Discovery family is purchases; real route is bills. vision_evidence stays null.
+    Does not green bill create/update/delete/bulk or billLines parity rows.
+    """
+
+    row["method_or_route"] = "mit.billy.dk /:org_slug/bills (read-only list shell open)"
+    row["tool_name"] = UI_BILLS_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_BILLS_LIST_MODEL_TEST_REFERENCE,
+        UI_BILLS_LIST_UNIT_TEST_REFERENCE,
+        UI_BILLS_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research110 dual-session headless observation + ui_bills_list product; "
+        "list shell only (path class /:org_slug/bills, h1 Køb, CTA Opret køb present, "
+        "no create); inventory discovery family purchases maps to bills route; "
+        "do not invent api_purchases_*; aliases purchases/purchase/bill/regninger/kob "
+        "rejected; does not green bill create/bulk, billLines, balances, or uploads; "
+        "API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_bills_list.json (list surface frames, accept)"
+    )
+    if parity_of_api_list:
+        row["evidence"] = f"{row['evidence']}; maps api.bills.list to UI list-shell open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1707,6 +1773,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_products_import_shell_evidence(row)
         if family == "suppliers":
             apply_ui_suppliers_list_shell_evidence(row)
+        if family == "purchases":
+            apply_ui_bills_list_shell_evidence(row, parity_of_api_list=False)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -1742,6 +1810,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.contacts.list":
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.bills.list":
+            apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         workflows.append(row)
 
     return {
@@ -1778,6 +1848,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,
                     UI_PRODUCTS_IMPORT_LIVE_TEST_REFERENCE,
                     UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
+                    UI_BILLS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -1824,6 +1895,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,
                     UI_PRODUCTS_IMPORT_LIVE_TEST_REFERENCE,
                     UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
+                    UI_BILLS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
