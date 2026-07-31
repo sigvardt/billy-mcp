@@ -74,6 +74,10 @@ UI_RECEIPT_INBOX_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_receipt_inbox_list.py"
 UI_RECEIPT_INBOX_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_RECEIPT_INBOX_LIST_TOOL_NAME = "ui_receipt_inbox_list"
+UI_BANK_RECONCILIATION_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bank_reconciliation_open.py"
+UI_BANK_RECONCILIATION_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_BANK_RECONCILIATION_OPEN_TOOL_NAME = "ui_bank_reconciliation_open"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1968,6 +1972,67 @@ def apply_ui_receipt_inbox_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_bank_reconciliation_open_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark bank reconciliation (Afstemning) **shell open** evidence only (research115).
+
+    Empty-input tool; path /:org_slug/bank_accounts/:id/sync (underscore); harvest
+    Afstemning nav href; empty content shell valid in test org. Distinct from
+    bank-accounts list / Bankkonti. No invent api_bank_accounts_*/reconciliation.
+    Does not green bank_accounts discovery or bankLines/bankLineMatches/bankPayments
+    UI parity. Never connect/import/match.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/bank_accounts/:id/sync (Afstemning shell open only)"
+    )
+    row["tool_name"] = UI_BANK_RECONCILIATION_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "empty_content_shell",
+        "afstemning_nav_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_BANK_RECONCILIATION_OPEN_MODEL_TEST_REFERENCE,
+        UI_BANK_RECONCILIATION_OPEN_UNIT_TEST_REFERENCE,
+        UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research115 dual-session headless observation + ui_bank_reconciliation_open product; "
+        "shell open only (path class /:org_slug/bank_accounts/:id/sync via Afstemning href "
+        "harvest; empty content shell valid; never invent account id; never click Forbind/"
+        "Importer/Match); no invent api_bank_accounts_*/api_reconciliation_*/api_afstemning_*; "
+        "aliases bank-reconciliation/afstemning/query variants rejected; distinct from "
+        "bank-accounts Bankkonti; does not green bank_accounts, bankLines*, bankLineMatches*, "
+        "bankPayments* parity; vision record tmp/vision-records/ui_bank_reconciliation_open.json "
+        "(recon surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2024,6 +2089,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_uploads_list_shell_evidence(row)
         if family == "receipt_inbox":
             apply_ui_receipt_inbox_list_shell_evidence(row)
+        if family == "bank_reconciliation":
+            apply_ui_bank_reconciliation_open_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2100,6 +2167,9 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BILLS_LIST_LIVE_TEST_REFERENCE,
                     UI_DEBTOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
                     UI_CREDITOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
+                    UI_UPLOADS_LIST_LIVE_TEST_REFERENCE,
+                    UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE,
+                    UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2149,6 +2219,9 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BILLS_LIST_LIVE_TEST_REFERENCE,
                     UI_DEBTOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
                     UI_CREDITOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
+                    UI_UPLOADS_LIST_LIVE_TEST_REFERENCE,
+                    UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE,
+                    UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {

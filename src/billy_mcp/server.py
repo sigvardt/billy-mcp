@@ -63,6 +63,7 @@ from billy_mcp.browser import (
     AuthStatusChecker,
     BrowserRuntime,
     UiBankAccountsListService,
+    UiBankReconciliationOpenService,
     UiBillsListService,
     UiClientsListService,
     UiCreditorBalancesListService,
@@ -95,6 +96,8 @@ from billy_mcp.models import (
     ToolError,
     UiBankAccountsListInput,
     UiBankAccountsListSuccess,
+    UiBankReconciliationOpenInput,
+    UiBankReconciliationOpenSuccess,
     UiBillsListInput,
     UiBillsListSuccess,
     UiClientsListInput,
@@ -140,6 +143,7 @@ def create_server(
     ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
     ui_uploads_list_service: UiUploadsListService | None = None,
     ui_receipt_inbox_list_service: UiReceiptInboxListService | None = None,
+    ui_bank_reconciliation_open_service: UiBankReconciliationOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -167,6 +171,7 @@ def create_server(
     creditor_balances_list_service = ui_creditor_balances_list_service or browser
     uploads_list_service = ui_uploads_list_service or browser
     receipt_inbox_list_service = ui_receipt_inbox_list_service or browser
+    bank_reconciliation_open_service = ui_bank_reconciliation_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -283,6 +288,12 @@ def create_server(
         UiReceiptInboxListInput()
         return await receipt_inbox_list_service.ui_receipt_inbox_list()
 
+    async def ui_bank_reconciliation_open() -> UiBankReconciliationOpenSuccess | ToolError:
+        """Observe the authenticated Billy bank reconciliation (Afstemning) shell without writes."""
+
+        UiBankReconciliationOpenInput()
+        return await bank_reconciliation_open_service.ui_bank_reconciliation_open()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -395,6 +406,14 @@ def create_server(
             "choose files or click edit actions)."
         ),
     )(ui_receipt_inbox_list)
+    server.tool(
+        name="ui_bank_reconciliation_open",
+        description=(
+            "Open the Billy bank reconciliation (Afstemning) shell for the authenticated "
+            "session (read-only path classification via nav harvest; does not connect "
+            "bank, import transactions, or match lines)."
+        ),
+    )(ui_bank_reconciliation_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

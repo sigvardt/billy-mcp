@@ -14,6 +14,7 @@ from billy_mcp.models import (
     AuthStatusSuccess,
     StableErrorCode,
     UiBankAccountsListSuccess,
+    UiBankReconciliationOpenSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
@@ -512,6 +513,19 @@ class FakeUiReceiptInboxListService:
         return UiReceiptInboxListSuccess(file_control_present=True, shell_markers_present=True)
 
 
+class FakeUiBankReconciliationOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_bank_reconciliation_open(self) -> UiBankReconciliationOpenSuccess:
+        self.calls += 1
+        return UiBankReconciliationOpenSuccess(
+            empty_content_shell=True,
+            afstemning_nav_visible=True,
+            shell_markers_present=True,
+        )
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -683,6 +697,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_creditor_balances_list",
         "ui_uploads_list",
         "ui_receipt_inbox_list",
+        "ui_bank_reconciliation_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1140,3 +1155,37 @@ def test_ui_receipt_inbox_list_registration_has_empty_input_and_typed_output(
         }
     }
     assert receipt_inbox.calls == 1
+
+
+def test_ui_bank_reconciliation_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    recon = FakeUiBankReconciliationOpenService()
+    server = create_server(tmp_path, ui_bank_reconciliation_open_service=recon)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}[
+        "ui_bank_reconciliation_open"
+    ]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+    assert "account_id" not in properties
+    assert "url" not in properties
+
+    result = asyncio.run(server.call_tool("ui_bank_reconciliation_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/bank_accounts/:id/sync",
+            "heading": "",
+            "empty_content_shell": True,
+            "afstemning_nav_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert recon.calls == 1

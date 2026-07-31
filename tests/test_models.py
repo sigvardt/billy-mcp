@@ -15,6 +15,8 @@ from billy_mcp.models import (
     ToolError,
     UiBankAccountsListInput,
     UiBankAccountsListSuccess,
+    UiBankReconciliationOpenInput,
+    UiBankReconciliationOpenSuccess,
     UiBillsListInput,
     UiBillsListSuccess,
     UiClientsListInput,
@@ -504,6 +506,53 @@ def test_ui_receipt_inbox_list_models_are_empty_input_and_non_pii_success() -> N
                 "path_class": "/:org_slug/uploads",
                 "heading": "Bilag",
                 "file_control_present": True,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_bank_reconciliation_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiBankReconciliationOpenInput().model_dump() == {}
+    success = UiBankReconciliationOpenSuccess(
+        empty_content_shell=True,
+        afstemning_nav_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/bank_accounts/:id/sync"
+    assert success.heading == ""
+    assert success.empty_content_shell is True
+    assert success.afstemning_nav_visible is True
+    assert success.shell_markers_present is True
+    properties = UiBankReconciliationOpenSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "empty_content_shell",
+        "afstemning_nav_visible",
+        "shell_markers_present",
+    }
+    try:
+        UiBankReconciliationOpenInput.model_validate({"account_id": "x"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiBankReconciliationOpenInput.model_validate(
+            {"url": "https://mit.billy.dk/x/bank_accounts/y/sync"}
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiBankReconciliationOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/bank-accounts",
+                "heading": "Bankkonti",
+                "empty_content_shell": False,
+                "afstemning_nav_visible": True,
                 "shell_markers_present": True,
             }
         )

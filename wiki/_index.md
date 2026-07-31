@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T13:47:18Z
+updated: 2026-07-31T14:11:14Z
 ---
 
 # billy_mcp
@@ -28,6 +28,8 @@ updated: 2026-07-31T13:47:18Z
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 
 [[ui_bank_accounts_list_shell|ui_bank_accounts_list_shell]]: Read-only headless ui_bank_accounts_list contract for Billy bank accounts list shell open only.
+
+[[ui_bank_reconciliation_open_shell|ui_bank_reconciliation_open_shell]]: Read-only headless ui_bank_reconciliation_open contract for Billy Afstemning shell open only.
 
 [[ui_bills_list_shell|ui_bills_list_shell]]: Read-only headless ui_bills_list contract for Billy bills (purchases / Køb) list shell open only.
 

@@ -25,6 +25,7 @@ from billy_mcp.models import (
     StableErrorCode,
     ToolError,
     UiBankAccountsListSuccess,
+    UiBankReconciliationOpenSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
@@ -113,6 +114,16 @@ _UPLOADS_UPLOAD_CTA = "Upload filer"
 # Never set file inputs; never click Ret or upload CTAs.
 _RECEIPT_INBOX_LIST_PATH = re.compile(r"^/[^/]+/vouchers$")
 _RECEIPT_INBOX_LIST_HEADING = "Bilagsindbakke"
+# Research115: bank reconciliation (Afstemning) via bank_accounts/:id/sync (underscore).
+# Distinct from bank-accounts list (hyphen) / Bankkonti. Harvest Afstemning href only.
+# Never click Forbind til bank / Importer / Match.
+_BANK_RECONCILIATION_PATH = re.compile(r"^/[^/]+/bank_accounts/[^/]+/sync$")
+_AFSTEMNING_NAV_LABEL = "Afstemning"
+_AFSTEMNING_HREF_SELECTORS = (
+    "a[href*='/bank_accounts/'][href*='/sync']",
+    "a[href*='bank_accounts'][href$='/sync']",
+    "text=Afstemning",
+)
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -274,6 +285,8 @@ class LoginControl(Protocol):
 
     async def click(self) -> None: ...
 
+    async def get_attribute(self, name: str) -> str | None: ...
+
 
 class LoginPage(Protocol):
     """A deliberately minimal page surface for the fixed auth workflows."""
@@ -385,6 +398,12 @@ class UiReceiptInboxListService(Protocol):
     """Injectable seam for the read-only receipt inbox (Bilagsindbakke) list shell."""
 
     async def ui_receipt_inbox_list(self) -> UiReceiptInboxListSuccess | ToolError: ...
+
+
+class UiBankReconciliationOpenService(Protocol):
+    """Injectable seam for the read-only bank reconciliation (Afstemning) shell open."""
+
+    async def ui_bank_reconciliation_open(self) -> UiBankReconciliationOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1454,6 +1473,95 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_bank_reconciliation_open(self) -> UiBankReconciliationOpenSuccess | ToolError:
+        """Open the bank reconciliation (Afstemning) shell for the current session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bank_reconciliation_changed_error()
+
+            # Land on bank accounts list first so Afstemning nav href is present.
+            bank_accounts_url = f"https://mit.billy.dk/{slug}/bank-accounts"
+            await page.goto(bank_accounts_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_bank_reconciliation_changed_error()
+
+            recon_url = await _harvest_afstemning_reconciliation_url(page, slug)
+            if recon_url is None:
+                return _ui_bank_reconciliation_changed_error()
+
+            await page.goto(recon_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bank_reconciliation_changed_error()
+                if _is_bank_reconciliation_url(page.url):
+                    heading = await _read_optional_heading(page)
+                    empty_shell = await _is_empty_content_shell(page, heading)
+                    # Reject conflation with bank accounts list (Bankkonti on hyphen path).
+                    if heading.strip() == _BANK_ACCOUNTS_LIST_HEADING:
+                        return _ui_bank_reconciliation_changed_error()
+                    if _is_bank_accounts_list_url(page.url):
+                        return _ui_bank_reconciliation_changed_error()
+                    return UiBankReconciliationOpenSuccess(
+                        heading=heading,
+                        empty_content_shell=empty_shell,
+                        afstemning_nav_visible=await _has_afstemning_nav_visible(page),
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_bank_reconciliation_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the bank reconciliation shell observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bank reconciliation shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1761,6 +1869,106 @@ def _is_receipt_inbox_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_RECEIPT_INBOX_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_bank_reconciliation_url(url: str) -> bool:
+    """Return True when the URL is the Afstemning bank_accounts/:id/sync path class."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_BANK_RECONCILIATION_PATH.match(parsed.path or ""))
+    )
+
+
+def _absolute_billy_app_url(href: str) -> str | None:
+    """Normalize a harvested relative or absolute mit.billy.dk href; never leak raw ids."""
+
+    href = (href or "").strip()
+    if not href or href.startswith("#") or href.startswith("mailto:"):
+        return None
+    if href.startswith("/"):
+        return f"https://mit.billy.dk{href}"
+    try:
+        parsed = urlsplit(href)
+    except ValueError:
+        return None
+    if parsed.scheme == "https" and (parsed.hostname or "").lower() == "mit.billy.dk":
+        return href
+    return None
+
+
+async def _harvest_afstemning_reconciliation_url(page: LoginPage, org_slug: str) -> str | None:
+    """Harvest the Afstemning nav href; never invent account ids."""
+
+    del org_slug  # slug only used by callers for pre-navigation; harvest must not invent ids
+    for selector in _AFSTEMNING_HREF_SELECTORS:
+        try:
+            control = page.locator(selector)
+            if await control.count() < 1:
+                continue
+            href = await control.get_attribute("href")
+            absolute = _absolute_billy_app_url(href or "")
+            if absolute is not None and _is_bank_reconciliation_url(absolute):
+                return absolute
+        except Exception:
+            continue
+    return None
+
+
+async def _read_optional_heading(page: LoginPage) -> str:
+    """Return stripped h1 text when present; empty string for empty content shells."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return ""
+        text = (await heading.inner_text()).strip()
+        # Never return multi-line PII dumps; keep short heading class only.
+        text = re.sub(r"\s+", " ", text)
+        if len(text) > 80:
+            return text[:80]
+        return text
+    except Exception:
+        return ""
+
+
+async def _is_empty_content_shell(page: LoginPage, heading: str) -> bool:
+    """True when no h1 and no table/grid (research115 test-org empty Afstemning shell)."""
+
+    if heading.strip():
+        return False
+    try:
+        table_count = await page.locator("table").count()
+        grid_count = await page.locator("[role=grid], [role=table]").count()
+        return table_count == 0 and grid_count == 0
+    except Exception:
+        return False
+
+
+async def _has_afstemning_nav_visible(page: LoginPage) -> bool:
+    """True when the Afstemning nav label is visible on the shell."""
+
+    try:
+        control = page.locator(f"text={_AFSTEMNING_NAV_LABEL}")
+        return await control.count() >= 1 and await control.is_visible()
+    except Exception:
+        return False
+
+
+def _ui_bank_reconciliation_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy bank reconciliation shell could not be classified.",
     )
 
 

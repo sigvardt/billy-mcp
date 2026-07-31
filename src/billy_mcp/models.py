@@ -306,6 +306,24 @@ class UiReceiptInboxListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBankReconciliationOpenInput(BaseModel):
+    """Empty, strict input for the read-only bank reconciliation (Afstemning) shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBankReconciliationOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy bank reconciliation (Afstemning) shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bank_accounts/:id/sync"] = "/:org_slug/bank_accounts/:id/sync"
+    heading: str = ""
+    empty_content_shell: bool
+    afstemning_nav_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
