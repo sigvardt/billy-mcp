@@ -31,6 +31,8 @@ from billy_mcp.models import (
     UiProductsListSuccess,
     UiQuotesListInput,
     UiQuotesListSuccess,
+    UiReceiptInboxListInput,
+    UiReceiptInboxListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
@@ -464,6 +466,44 @@ def test_ui_uploads_list_models_are_empty_input_and_non_pii_success() -> None:
                 "path_class": "/:org_slug/other",
                 "heading": "X",
                 "upload_action_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_receipt_inbox_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiReceiptInboxListInput().model_dump() == {}
+    success = UiReceiptInboxListSuccess(file_control_present=True, shell_markers_present=True)
+    assert success.path_class == "/:org_slug/vouchers"
+    assert success.heading == "Bilagsindbakke"
+    assert success.file_control_present is True
+    assert success.shell_markers_present is True
+    properties = UiReceiptInboxListSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "file_control_present",
+        "shell_markers_present",
+    }
+    try:
+        UiReceiptInboxListInput.model_validate({"file_path": "/tmp/x.pdf"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiReceiptInboxListInput.model_validate({"url": "https://mit.billy.dk/x/vouchers"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiReceiptInboxListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/uploads",
+                "heading": "Bilag",
+                "file_control_present": True,
                 "shell_markers_present": True,
             }
         )

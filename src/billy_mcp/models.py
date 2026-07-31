@@ -289,6 +289,23 @@ class UiUploadsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiReceiptInboxListInput(BaseModel):
+    """Empty, strict input boundary for the read-only receipt inbox list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiReceiptInboxListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy receipt inbox (Bilagsindbakke) shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/vouchers"] = "/:org_slug/vouchers"
+    heading: Literal["Bilagsindbakke"] = "Bilagsindbakke"
+    file_control_present: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

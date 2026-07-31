@@ -71,6 +71,7 @@ from billy_mcp.browser import (
     UiProductsImportService,
     UiProductsListService,
     UiQuotesListService,
+    UiReceiptInboxListService,
     UiRecurringInvoicesListService,
     UiSuppliersListService,
     UiUploadsListService,
@@ -110,6 +111,8 @@ from billy_mcp.models import (
     UiProductsListSuccess,
     UiQuotesListInput,
     UiQuotesListSuccess,
+    UiReceiptInboxListInput,
+    UiReceiptInboxListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListInput,
@@ -136,6 +139,7 @@ def create_server(
     ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
     ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
     ui_uploads_list_service: UiUploadsListService | None = None,
+    ui_receipt_inbox_list_service: UiReceiptInboxListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -162,6 +166,7 @@ def create_server(
     debtor_balances_list_service = ui_debtor_balances_list_service or browser
     creditor_balances_list_service = ui_creditor_balances_list_service or browser
     uploads_list_service = ui_uploads_list_service or browser
+    receipt_inbox_list_service = ui_receipt_inbox_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -272,6 +277,12 @@ def create_server(
         UiUploadsListInput()
         return await uploads_list_service.ui_uploads_list()
 
+    async def ui_receipt_inbox_list() -> UiReceiptInboxListSuccess | ToolError:
+        """Observe the authenticated Billy receipt inbox (Bilagsindbakke) shell without writes."""
+
+        UiReceiptInboxListInput()
+        return await receipt_inbox_list_service.ui_receipt_inbox_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -376,6 +387,14 @@ def create_server(
             "(read-only path and heading classification; does not choose or upload files)."
         ),
     )(ui_uploads_list)
+    server.tool(
+        name="ui_receipt_inbox_list",
+        description=(
+            "Open the Billy receipt inbox (Bilagsindbakke / vouchers) list shell for the "
+            "authenticated session (read-only path and heading classification; does not "
+            "choose files or click edit actions)."
+        ),
+    )(ui_receipt_inbox_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

@@ -33,6 +33,7 @@ from billy_mcp.models import (
     UiProductsImportSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
+    UiReceiptInboxListSuccess,
     UiRecurringInvoicesListSuccess,
     UiSuppliersListSuccess,
     UiUploadsListSuccess,
@@ -108,6 +109,10 @@ _CREDITOR_BALANCES_CREATE_CTA = "Opret køb"
 _UPLOADS_LIST_PATH = re.compile(r"^/[^/]+/uploads$")
 _UPLOADS_LIST_HEADING = "Bilag"
 _UPLOADS_UPLOAD_CTA = "Upload filer"
+# Research114: receipt inbox (Bilagsindbakke) via /vouchers; distinct from uploads/Bilag.
+# Never set file inputs; never click Ret or upload CTAs.
+_RECEIPT_INBOX_LIST_PATH = re.compile(r"^/[^/]+/vouchers$")
+_RECEIPT_INBOX_LIST_HEADING = "Bilagsindbakke"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -374,6 +379,12 @@ class UiUploadsListService(Protocol):
     """Injectable seam for the read-only uploads (Bilag) list shell observation."""
 
     async def ui_uploads_list(self) -> UiUploadsListSuccess | ToolError: ...
+
+
+class UiReceiptInboxListService(Protocol):
+    """Injectable seam for the read-only receipt inbox (Bilagsindbakke) list shell."""
+
+    async def ui_receipt_inbox_list(self) -> UiReceiptInboxListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1381,6 +1392,68 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_receipt_inbox_list(self) -> UiReceiptInboxListSuccess | ToolError:
+        """Open the receipt inbox (Bilagsindbakke / vouchers) list shell only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_receipt_inbox_changed_error()
+
+            vouchers_url = f"https://mit.billy.dk/{slug}/vouchers"
+            await page.goto(vouchers_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_receipt_inbox_changed_error()
+                if _is_receipt_inbox_list_url(page.url) and await _has_receipt_inbox_list_signature(
+                    page
+                ):
+                    return UiReceiptInboxListSuccess(
+                        file_control_present=await _has_file_input_present(page),
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_receipt_inbox_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the receipt inbox list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser receipt inbox list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1670,6 +1743,24 @@ def _is_uploads_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_UPLOADS_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_receipt_inbox_list_url(url: str) -> bool:
+    """Return True when the URL is the receipt inbox (vouchers) list shell path."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_RECEIPT_INBOX_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1984,6 +2075,33 @@ async def _has_uploads_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_receipt_inbox_list_signature(page: LoginPage) -> bool:
+    """Verify research114 receipt inbox heading Bilagsindbakke without write actions.
+
+    Never set file inputs; never click Ret. Distinct from uploads/Bilag.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        return (await first.inner_text()).strip() == _RECEIPT_INBOX_LIST_HEADING
+    except Exception:
+        return False
+
+
+async def _has_file_input_present(page: LoginPage) -> bool:
+    """Report whether any file input is present without setting or activating it."""
+
+    try:
+        return await page.locator("input[type=file]").count() >= 1
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -2166,6 +2284,15 @@ def _ui_uploads_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy uploads list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_receipt_inbox_changed_error() -> ToolError:
+    """Fail closed when the receipt inbox list shell no longer matches research114."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy receipt inbox list interface no longer matches the recorded signature.",
     )
 
 

@@ -70,6 +70,10 @@ UI_UPLOADS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_UPLOADS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_uploads_list.py"
 UI_UPLOADS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_UPLOADS_LIST_TOOL_NAME = "ui_uploads_list"
+UI_RECEIPT_INBOX_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_receipt_inbox_list.py"
+UI_RECEIPT_INBOX_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_RECEIPT_INBOX_LIST_TOOL_NAME = "ui_receipt_inbox_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1907,6 +1911,63 @@ def apply_ui_uploads_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_receipt_inbox_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark receipt inbox (Bilagsindbakke) list **shell open** evidence only (research114).
+
+    Empty-input tool; path /vouchers, h1 Bilagsindbakke; file input presence only
+    (never set). Distinct from uploads/Bilag. No official /v2/vouchers resource.
+    Does not green uploads, files/attachments/files_upload parity.
+    """
+
+    row["method_or_route"] = "mit.billy.dk /:org_slug/vouchers (read-only list shell open)"
+    row["tool_name"] = UI_RECEIPT_INBOX_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "file_control_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_RECEIPT_INBOX_LIST_MODEL_TEST_REFERENCE,
+        UI_RECEIPT_INBOX_LIST_UNIT_TEST_REFERENCE,
+        UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research114 dual-session headless observation + ui_receipt_inbox_list product; "
+        "list shell only (path class /:org_slug/vouchers, h1 Bilagsindbakke, "
+        "file input present observe-only, never set, never click Ret); "
+        "no invent api_vouchers_*/api_receipt_inbox_*/api_bilagsindbakke_*; "
+        "aliases inbox/receipts/kvittering/indbakke/voucher rejected; "
+        "distinct from uploads Bilag; does not green uploads, files*, attachments*, "
+        "special.files_upload; API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_receipt_inbox_list.json "
+        "(list surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1961,6 +2022,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_creditor_balances_list_shell_evidence(row)
         if family == "uploads":
             apply_ui_uploads_list_shell_evidence(row)
+        if family == "receipt_inbox":
+            apply_ui_receipt_inbox_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:

@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T13:16:18Z
+updated: 2026-07-31T13:47:18Z
 ---
 
 # billy_mcp
@@ -48,6 +48,8 @@ updated: 2026-07-31T13:16:18Z
 [[ui_products_list_shell|ui_products_list_shell]]: Read-only headless ui_products_list contract for Billy products list shell open only.
 
 [[ui_quotes_list_shell|ui_quotes_list_shell]]: Read-only headless ui_quotes_list contract for Billy quotes list shell open only.
+
+[[ui_receipt_inbox_list_shell|ui_receipt_inbox_list_shell]]: Read-only headless ui_receipt_inbox_list contract for Billy receipt inbox (Bilagsindbakke / vouchers) list shell open only.
 
 [[ui_recurring_invoices_list_shell|ui_recurring_invoices_list_shell]]: Read-only headless ui_recurring_invoices_list contract for Billy Abonnementer list shell open only.
 
