@@ -23,6 +23,8 @@ from billy_mcp.models import (
     UiProductsListSuccess,
     UiQuotesListInput,
     UiQuotesListSuccess,
+    UiRecurringInvoicesListInput,
+    UiRecurringInvoicesListSuccess,
 )
 
 
@@ -235,6 +237,44 @@ def test_ui_quotes_list_models_are_empty_input_and_non_pii_success() -> None:
             {
                 "path_class": "/:org_slug/quotes",
                 "heading": "Tilbud",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "customer": "secret",
+            }
+        )
+
+
+def test_ui_recurring_invoices_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiRecurringInvoicesListInput().model_dump() == {}
+    success = UiRecurringInvoicesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/recurring_invoices",
+        "heading": "Abonnementer",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiRecurringInvoicesListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "recurring_invoice_id",
+        "customer",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiRecurringInvoicesListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiRecurringInvoicesListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/recurring_invoices",
+                "heading": "Abonnementer",
                 "create_action_visible": True,
                 "shell_markers_present": True,
                 "customer": "secret",

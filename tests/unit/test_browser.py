@@ -27,6 +27,7 @@ from billy_mcp.models import (
     UiInvoicesListSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
+    UiRecurringInvoicesListSuccess,
 )
 
 
@@ -1664,6 +1665,23 @@ def _quotes_shell_controls() -> dict[str, FakeLoginControl]:
     }
 
 
+def _recurring_invoices_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Abonnementer"),
+        "text=Opret abonnement": FakeLoginControl(text="Opret abonnement"),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
 def test_ui_quotes_list_returns_auth_required_on_login_page(tmp_path: Path) -> None:
     page = FakeLoginPage()
     context = FakeLoginContext(page)
@@ -1867,6 +1885,218 @@ def test_ui_quotes_list_accepts_list_url_with_query_params(tmp_path: Path) -> No
     result = asyncio.run(runtime.ui_quotes_list())
 
     assert result == UiQuotesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+
+
+def test_ui_recurring_invoices_list_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_recurring_invoices_list_returns_success_for_list_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_recurring_invoices_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert result == UiRecurringInvoicesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert any(url.endswith("/recurring_invoices") for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+
+
+def test_ui_recurring_invoices_list_accepts_empty_path_suffix(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_recurring_invoices_shell_controls(),
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_empty_state(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/recurring_invoices"):
+            page.url = "https://mit.billy.dk/test-org-slug/recurring_invoices/empty"
+        return result
+
+    page.goto = goto_empty_state  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert isinstance(result, UiRecurringInvoicesListSuccess)
+    assert result == UiRecurringInvoicesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert result.path_class == "/:org_slug/recurring_invoices"
+
+
+def test_ui_recurring_invoices_list_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _recurring_invoices_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Upsedasse!")
+    controls["text=Opret abonnement"] = FakeLoginControl(count=0, visible=False)
+    controls["text=Upsedasse!"] = FakeLoginControl(text="Upsedasse!")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert "recurring invoices list" in result.message
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+
+
+def test_ui_recurring_invoices_list_returns_ui_changed_when_heading_missing(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _recurring_invoices_shell_controls()
+    controls["h1"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_recurring_invoices_list_accepts_list_url_with_query_params(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url=(
+            "https://mit.billy.dk/test-org-slug/recurring_invoices"
+            "?page=1&pageSize=50&sortDirection=DESC"
+        ),
+        controls=_recurring_invoices_shell_controls(),
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_keep_query(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/recurring_invoices"):
+            page.url = (
+                "https://mit.billy.dk/test-org-slug/recurring_invoices"
+                "?page=1&pageSize=50&sortDirection=DESC"
+            )
+        return result
+
+    page.goto = goto_keep_query  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_recurring_invoices_list())
+
+    assert result == UiRecurringInvoicesListSuccess(
         create_action_visible=True,
         shell_markers_present=True,
     )

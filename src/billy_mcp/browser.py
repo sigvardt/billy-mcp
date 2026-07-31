@@ -29,6 +29,7 @@ from billy_mcp.models import (
     UiInvoicesListSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
+    UiRecurringInvoicesListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -73,6 +74,10 @@ _BANK_ACCOUNTS_CONNECT_CTA = "Forbind til bank"
 _QUOTES_LIST_PATH = re.compile(r"^/[^/]+/quotes(?:/empty)?$")
 _QUOTES_LIST_HEADING = "Tilbud"
 _QUOTES_CREATE_CTA = "Opret tilbud"
+# Research107: bare /recurring_invoices observed; optional /empty accepted for symmetry.
+_RECURRING_INVOICES_LIST_PATH = re.compile(r"^/[^/]+/recurring_invoices(?:/empty)?$")
+_RECURRING_INVOICES_LIST_HEADING = "Abonnementer"
+_RECURRING_INVOICES_CREATE_CTA = "Opret abonnement"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -292,6 +297,12 @@ class UiQuotesListService(Protocol):
     """Injectable seam for the read-only quotes list shell observation."""
 
     async def ui_quotes_list(self) -> UiQuotesListSuccess | ToolError: ...
+
+
+class UiRecurringInvoicesListService(Protocol):
+    """Injectable seam for the read-only recurring invoices list shell observation."""
+
+    async def ui_recurring_invoices_list(self) -> UiRecurringInvoicesListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -873,6 +884,68 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_recurring_invoices_list(self) -> UiRecurringInvoicesListSuccess | ToolError:
+        """Open the recurring invoices list shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_recurring_invoices_changed_error()
+
+            recurring_url = f"https://mit.billy.dk/{slug}/recurring_invoices"
+            await page.goto(recurring_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_recurring_invoices_changed_error()
+                if _is_recurring_invoices_list_url(
+                    page.url
+                ) and await _has_recurring_invoices_list_signature(page):
+                    return UiRecurringInvoicesListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_recurring_invoices_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the recurring invoices list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser recurring invoices list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1036,6 +1109,24 @@ def _is_quotes_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_QUOTES_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_recurring_invoices_list_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/recurring_invoices or optional /empty, including query."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_RECURRING_INVOICES_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1213,6 +1304,21 @@ async def _has_quotes_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_recurring_invoices_list_signature(page: LoginPage) -> bool:
+    """Verify the research107 recurring invoices list heading and create CTA without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _RECURRING_INVOICES_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_RECURRING_INVOICES_CREATE_CTA}")
+        return await create_action.count() >= 1 and await create_action.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -1332,6 +1438,15 @@ def _ui_quotes_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy quotes list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_recurring_invoices_changed_error() -> ToolError:
+    """Fail closed when the recurring invoices list shell no longer matches research107."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy recurring invoices list interface no longer matches the recorded signature.",
     )
 
 

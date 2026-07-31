@@ -170,6 +170,23 @@ class UiQuotesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiRecurringInvoicesListInput(BaseModel):
+    """Empty, strict input boundary for the read-only recurring invoices list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiRecurringInvoicesListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy recurring invoices list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/recurring_invoices"] = "/:org_slug/recurring_invoices"
+    heading: Literal["Abonnementer"] = "Abonnementer"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

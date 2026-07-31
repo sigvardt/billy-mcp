@@ -42,6 +42,10 @@ UI_QUOTES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_QUOTES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_quotes_list.py"
 UI_QUOTES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_QUOTES_LIST_TOOL_NAME = "ui_quotes_list"
+UI_RECURRING_INVOICES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_recurring_invoices_list.py"
+UI_RECURRING_INVOICES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_RECURRING_INVOICES_LIST_TOOL_NAME = "ui_recurring_invoices_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1479,6 +1483,64 @@ def apply_ui_quotes_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_recurring_invoices_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark recurring invoices list **shell open** evidence only (research107 / plan 186.8).
+
+    UI-only: no recurring invoices API resource. Empty-input tool; path
+    /recurring_invoices (optional /empty), h1 Abonnementer, CTA Opret abonnement.
+    vision_evidence stays null.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/recurring_invoices "
+        "(read-only list shell open; empty suffix allowed)"
+    )
+    row["tool_name"] = UI_RECURRING_INVOICES_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_RECURRING_INVOICES_LIST_MODEL_TEST_REFERENCE,
+        UI_RECURRING_INVOICES_LIST_UNIT_TEST_REFERENCE,
+        UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research107 dual-session headless observation + ui_recurring_invoices_list product; "
+        "UI-only list shell (path class /:org_slug/recurring_invoices, optional /empty, "
+        "h1 Abonnementer, CTA Opret abonnement present, no create); "
+        "no recurring invoices API resource; do not invent api_recurring_*; "
+        "does not green invoices recurringInvoiceId UI parity; "
+        "vision record tmp/vision-records/ui_recurring_invoices_list.json "
+        "(list surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1519,6 +1581,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_bank_accounts_list_shell_evidence(row)
         if family == "quotes":
             apply_ui_quotes_list_shell_evidence(row)
+        if family == "recurring_invoices":
+            apply_ui_recurring_invoices_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:

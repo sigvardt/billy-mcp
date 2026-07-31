@@ -67,6 +67,7 @@ from billy_mcp.browser import (
     UiInvoicesListService,
     UiProductsListService,
     UiQuotesListService,
+    UiRecurringInvoicesListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -95,6 +96,8 @@ from billy_mcp.models import (
     UiProductsListSuccess,
     UiQuotesListInput,
     UiQuotesListSuccess,
+    UiRecurringInvoicesListInput,
+    UiRecurringInvoicesListSuccess,
 )
 
 
@@ -108,6 +111,7 @@ def create_server(
     ui_clients_list_service: UiClientsListService | None = None,
     ui_bank_accounts_list_service: UiBankAccountsListService | None = None,
     ui_quotes_list_service: UiQuotesListService | None = None,
+    ui_recurring_invoices_list_service: UiRecurringInvoicesListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -127,6 +131,7 @@ def create_server(
     clients_list_service = ui_clients_list_service or browser
     bank_accounts_list_service = ui_bank_accounts_list_service or browser
     quotes_list_service = ui_quotes_list_service or browser
+    recurring_invoices_list_service = ui_recurring_invoices_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -195,6 +200,12 @@ def create_server(
         UiQuotesListInput()
         return await quotes_list_service.ui_quotes_list()
 
+    async def ui_recurring_invoices_list() -> UiRecurringInvoicesListSuccess | ToolError:
+        """Observe the authenticated Billy recurring invoices list shell without writes."""
+
+        UiRecurringInvoicesListInput()
+        return await recurring_invoices_list_service.ui_recurring_invoices_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -250,6 +261,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_quotes_list)
+    server.tool(
+        name="ui_recurring_invoices_list",
+        description=(
+            "Open the Billy recurring invoices list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_recurring_invoices_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

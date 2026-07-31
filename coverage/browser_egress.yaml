@@ -15,8 +15,7 @@
         "tests/live/test_ui_invoices_list.py",
         "tests/live/test_ui_products_list.py",
         "tests/live/test_ui_clients_list.py",
-        "tests/live/test_ui_bank_accounts_list.py",
-        "tests/live/test_ui_quotes_list.py"
+        "tests/live/test_ui_bank_accounts_list.py"
       ]
     },
     {
@@ -117,8 +116,7 @@
         "tests/live/test_ui_invoices_list.py",
         "tests/live/test_ui_products_list.py",
         "tests/live/test_ui_clients_list.py",
-        "tests/live/test_ui_bank_accounts_list.py",
-        "tests/live/test_ui_quotes_list.py"
+        "tests/live/test_ui_bank_accounts_list.py"
       ]
     },
     {
