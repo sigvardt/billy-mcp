@@ -6,27 +6,59 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T08:48:28Z
+updated: 2026-07-31T09:45:00Z
 ---
 
 # state
 
 ## Current state
 
+- FIX-VERIFY 186.1: IR non-blocking residuals applied — docs fingerprint
+  `wcw4x9hqvu3603` / `8b94b013…` on status+api official_docs; blocker text no
+  longer cites missing `BILLY_API_TOKEN`. `complete: false` unchanged.
+  lint + commit-mode tests **1307 passed**. Slice offline ACCEPT; completeness FAIL.
+- EXECUTE 186.1 **delivered offline + live smoke READY** (not coverage green):
+  path-scoped `browser_action: path_allow` on `api.billysbilling.com`;
+  `AuthLoginWaitSuccess` AUTH_REQUIRED|READY; dual live wait READY; org slug
+  persisted outside git (`~/.local/share/billy-mcp/ui-org-identity.json`).
+  Wiki: `wiki/auth_scoped_egress_ready_wait.md`. Live/vision coverage still red.
+- PLAN 186.1:
+  `plans/2026-07-31T09:05:11.028Z-186.1-auth_scoped_egress_ready_wait.md`.
+- RESEARCH100 written: `.fractal/main.billy_complete/tmp/grok-research.md`.
+  Docs ETag `wcw4x9hqvu3603` / MD5 `8b94b013…` match research99. Credentialed
+  headless discovery: under current browser egress (deny API host) login stays
+  on `/login` with send-failure error because `POST /v2/user/login` is blocked.
+  Research-only allow of `api.billysbilling.com` yields dual-session
+  `ready_shell_candidate` at path class `/:org_slug/dashboard` (no picker/MFA).
+  Frames purged; JSON scrubbed. Next product slice: path-scoped auth egress +
+  post-login `auth_login_wait` observation; live/vision stay red.
+- PREPARE iter1: parent `main` already up to date. No child merges.
+  Product candidate `ui_auth_status` already on root via later integrate +
+  login product commits (child tip is stale relative to label repair and
+  login tools). Wiki-only children: credentials Codex fallback superseded by
+  Grok auth freeze; wave5t trailing-newline only; wave5u tip regresses
+  research95 bulk-delete table — keep root. All other tips are init/fail/
+  kill scaffolding. No running children.
 - Wave-5c through Wave-5s-C write/special modules merged on root.
 - All **6** specials offline producted; live false. Residual clear **29** red. Bulk **92** red. UI **339** red.
 - Root offline coverage: **184** implemented + contract_tested. API live/vision **0**. `complete: false`.
 - Offline auth: `auth_status` / `auth_login_start` / `auth_login_wait` with submit labels **`Log in`** / **`Log ind`** (ACCEPT offline only).
 - Research96 harness fixtures **merged**. Research97–98 **ACCEPT as research**. Review98 **ACCEPT** login-surface wiki as documentation only.
 - Research99 **recorded**: docs byte-identical to research98; residual full matrix **25×405 / 2×401 / 2×meta-200**; login EN/DA reconfirmed; **credentialed session discovery protocol frozen** in research brief.
-- Operator directive: stop residual/bulk fixture loop; UI/auth product lane active. **No new `ui_*` login tool.** Post-login org/session tools blocked without non-prod secrets.
+- Operator directive: stop residual/bulk fixture loop; UI/auth product lane active. **No new `ui_*` login tool.**
 - UI login-surface contract **merged** (`5e9cb61`). No product tool invent from login-only evidence.
 - UI coverage stays red. Completeness **FAIL**.
 - Wave-5u: every residual/bulk real-method candidate **BLOCK BEFORE NETWORK**.
 - API live qualification is outside user-approved scope: API `live_tested` must
-  stay false with `out_of_scope_by_user`; UI live qualification remains blocked
-  without dedicated non-production browser credentials.
-- `BILLY_*` env keys verified **absent** on the research runner (no token, no browser refs).
+  stay false with `out_of_scope_by_user`. Never live-verify the API lane.
+- **2026-07-31 continue:** parent scope override + grok-only + interface
+  credentials available. Keyring service `billy-mcp` accounts
+  `browser-primary` / `browser-secondary` resolve. Env refs
+  `BILLY_BROWSER_PRIMARY_REFERENCE` and `BILLY_BROWSER_SECONDARY_REFERENCE` set.
+  `BILLY_API_TOKEN` not required and not set. `BILLY_ORGANIZATION_ID` still
+  unset. Next work is headless credentialed session discovery per
+  `wiki/credentialed_session_discovery_protocol.md`, then product only the
+  observed post-login auth/ui capability.
 
 ## Verification
 
@@ -53,17 +85,25 @@ updated: 2026-07-31T08:48:28Z
 
 ## Open coverage work
 
-1. Dedicated non-production browser credential references and organisation
-   identity before post-login UI discovery.
-2. Execute the research99 credentialed discovery protocol headlessly; obtain a
-   cited Grok brief with a fresh second-interface read-back; then implement only
-   the observed next `auth_*` capability.
+1. PLAN/EXECUTE research100 slice: path-scoped browser allow for auth/bootstrap
+   API paths; extend `auth_login_wait` for READY vs login-failure vs interaction;
+   offline tests; no live/vision green.
+2. Parent 07F2D101: `BILLY_ORGANIZATION_ID` is **not** a user blocker. Derive
+   the dedicated test org identity from the authenticated headless UI only.
+   Persist only a non-secret identifier **outside git**. No API for org
+   discovery. Ask Joakim only if multiple orgs appear and the correct one is
+   ambiguous. Research100 saw single-org auto dashboard (path class
+   `/:org_slug/dashboard`).
+3. After independent review of research100, implement only the observed shared
+   `auth_*` capability. Keep live/vision red until real e2e + vision record.
 3. API live tests and credentialed API calls are prohibited by user scope. Keep
    all API `live_tested` values false with `out_of_scope_by_user`; do not
    resolve `/user/organizations` through a token call.
 4. Residual/bulk product remains blocked pending official and defensible offline
    contract evidence; never use live methods to close it.
 5. Full UI parity + vision under the dedicated non-production browser org.
+6. Align `coverage/status.json` blocker text with scoped policy (drop false
+   BILLY_API_TOKEN requirement for completeness once UI path qualifies).
 
 ## Evidence boundaries
 
@@ -85,10 +125,12 @@ updated: 2026-07-31T08:48:28Z
 - `Login` is only a possible page title; exact submit labels remain `Log in` and `Log ind`.
 - Danish login discovery requires browser context locale + Accept-Language; query `?locale=` alone is insufficient.
 - Offline product ACCEPT does not authorise CI live password submit without non-prod secrets + fresh Grok re-review.
-- Operator interface lane: do not spawn residual/bulk fixture-only children until non-production credentials arrive.
-- There is no remaining offline FastMCP product slice without non-production credentials.
+- Operator interface lane: do not spawn residual/bulk fixture-only children.
 - Interface live read-back must use a second interface path or a fresh browser
   session; it must not use an API token or live API call.
+- Grok-only execution: every child spawn must pass `--agent=grok`. No
+  `codex-power`, bare `codex`, `claude`, `opencode`, or `omp`.
+- Browser keyring credentials are available; do not claim they are absent.
 
 ## References
 

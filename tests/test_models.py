@@ -7,6 +7,7 @@ from billy_mcp.models import (
     AuthLoginStartInput,
     AuthLoginStartSuccess,
     AuthLoginWaitInput,
+    AuthLoginWaitSuccess,
     AuthStatusInput,
     AuthStatusSuccess,
     CoverageStatus,
@@ -47,12 +48,21 @@ def test_login_tool_models_have_empty_inputs_and_no_secret_bearing_schema() -> N
     assert AuthLoginStartInput().model_dump() == {}
     assert AuthLoginWaitInput().model_dump() == {}
     assert AuthLoginStartSuccess().model_dump() == {"status": "AUTHENTICATING"}
+    assert AuthLoginWaitSuccess(status="READY").model_dump() == {"status": "READY"}
+    assert AuthLoginWaitSuccess(status="AUTH_REQUIRED").model_dump() == {"status": "AUTH_REQUIRED"}
 
-    for model in (AuthLoginStartInput, AuthLoginWaitInput, AuthLoginStartSuccess):
+    for model in (
+        AuthLoginStartInput,
+        AuthLoginWaitInput,
+        AuthLoginStartSuccess,
+        AuthLoginWaitSuccess,
+    ):
         properties = model.model_json_schema().get("properties", {})
-        assert not ({"email", "password", "totp", "cookie", "token"} & set(properties))
+        assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
 
     with pytest.raises(ValidationError):
         AuthLoginStartInput.model_validate({"selector": "button"})
     with pytest.raises(ValidationError):
         AuthLoginWaitInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        AuthLoginWaitSuccess.model_validate({"status": "AUTHENTICATING"})

@@ -72,6 +72,7 @@ from billy_mcp.models import (
     AuthLoginStartInput,
     AuthLoginStartSuccess,
     AuthLoginWaitInput,
+    AuthLoginWaitSuccess,
     AuthStatusInput,
     AuthStatusSuccess,
     ToolError,
@@ -129,8 +130,8 @@ def create_server(
         AuthLoginStartInput()
         return await login_service.auth_login_start()
 
-    async def auth_login_wait() -> AuthStatusSuccess | ToolError:
-        """Observe only the reviewed login state after a login transition begins."""
+    async def auth_login_wait() -> AuthLoginWaitSuccess | ToolError:
+        """Observe login-required vs READY shell after a login transition begins."""
 
         AuthLoginWaitInput()
         return await login_service.auth_login_wait()
@@ -151,7 +152,9 @@ def create_server(
     )(auth_login_start)
     server.tool(
         name="auth_login_wait",
-        description="Observe only the reviewed Billy login state after a transition starts.",
+        description=(
+            "Observe Billy session after login start: AUTH_REQUIRED login form or READY shell."
+        ),
     )(auth_login_wait)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)

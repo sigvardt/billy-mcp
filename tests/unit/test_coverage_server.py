@@ -8,7 +8,12 @@ from typing import Any, cast
 import pytest
 
 from billy_mcp.coverage import CoverageLoadError, load_coverage_report
-from billy_mcp.models import AuthLoginStartSuccess, AuthStatusSuccess, StableErrorCode
+from billy_mcp.models import (
+    AuthLoginStartSuccess,
+    AuthLoginWaitSuccess,
+    AuthStatusSuccess,
+    StableErrorCode,
+)
 from billy_mcp.server import create_server
 
 WAVE_FOUR_API_TOOL_NAMES = frozenset(
@@ -363,9 +368,9 @@ class FakeAuthLoginService:
         self.start_calls += 1
         return AuthLoginStartSuccess()
 
-    async def auth_login_wait(self) -> AuthStatusSuccess:
+    async def auth_login_wait(self) -> AuthLoginWaitSuccess:
         self.wait_calls += 1
-        return AuthStatusSuccess()
+        return AuthLoginWaitSuccess(status="AUTH_REQUIRED")
 
 
 def write_coverage_fixture(root: Path) -> None:

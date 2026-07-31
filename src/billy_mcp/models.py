@@ -72,9 +72,17 @@ class AuthLoginStartSuccess(BaseModel):
 
 
 class AuthLoginWaitInput(BaseModel):
-    """Empty, strict input boundary for observing only the known login state."""
+    """Empty, strict input boundary for observing post-login session state."""
 
     model_config = ConfigDict(extra="forbid")
+
+
+class AuthLoginWaitSuccess(BaseModel):
+    """Post-login observation: login still required, or authenticated shell READY."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    status: Literal["AUTH_REQUIRED", "READY"]
 
 
 class CoverageStatus(BaseModel):

@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import asyncio
-from collections.abc import Awaitable, Callable, Iterable
+import json
+import re
+from collections.abc import Awaitable, Callable, Iterable, Mapping
 from pathlib import Path
 from typing import Literal, Protocol, cast
 from urllib.parse import urlsplit
@@ -16,7 +18,13 @@ from billy_mcp.credentials import (
     CredentialResolver,
     KeyringCredentialResolver,
 )
-from billy_mcp.models import AuthLoginStartSuccess, AuthStatusSuccess, StableErrorCode, ToolError
+from billy_mcp.models import (
+    AuthLoginStartSuccess,
+    AuthLoginWaitSuccess,
+    AuthStatusSuccess,
+    StableErrorCode,
+    ToolError,
+)
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
     Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
@@ -30,6 +38,46 @@ _LOGIN_CONTROL_SELECTORS = (
 )
 _LOGIN_SUBMIT_SELECTOR = "button[data-cy='login-button']"
 _LOGIN_SUBMIT_LABELS = frozenset({"Log in", "Log ind"})
+# Non-PII shell markers from research100 (Danish authenticated dashboard).
+_SHELL_NAV_MARKERS = (
+    "text=Overblik",
+    "text=Fakturering",
+    "text=Menu",
+)
+_INTERACTION_CHALLENGE_SELECTORS = (
+    "iframe[src*='recaptcha']",
+    "iframe[src*='hcaptcha']",
+    "input[autocomplete='one-time-code']",
+    "input[name*='otp' i]",
+    "input[name*='totp' i]",
+)
+_DASHBOARD_PATH = re.compile(r"^/[^/]+/dashboard$")
+_ORG_IDENTITY_PATH = Path.home() / ".local" / "share" / "billy-mcp" / "ui-org-identity.json"
+_HttpMethod = Literal["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
+
+
+class BrowserPathAllowRule(BaseModel):
+    """One reviewed method+path exception for a host that is not fully browser-open."""
+
+    model_config = ConfigDict(extra="forbid", strict=True)
+
+    methods: list[_HttpMethod] = Field(min_length=1)
+    match: Literal["exact", "prefix"]
+    path: str = Field(min_length=1)
+
+    @field_validator("path")
+    @classmethod
+    def require_absolute_path(cls, value: str) -> str:
+        if not value.startswith("/") or "*" in value or "://" in value:
+            raise ValueError("path must be an absolute path without wildcards")
+        return value
+
+    @field_validator("methods")
+    @classmethod
+    def require_unique_methods(cls, value: list[_HttpMethod]) -> list[_HttpMethod]:
+        if len(value) != len(set(value)):
+            raise ValueError("path allow methods must be unique")
+        return value
 
 
 class BrowserEgressManifestHost(BaseModel):
@@ -38,7 +86,10 @@ class BrowserEgressManifestHost(BaseModel):
     model_config = ConfigDict(extra="forbid", strict=True)
 
     api_client_action: Literal["deny", "exclusive_allow"]
-    browser_action: Literal["allow", "deny"]
+    browser_action: Literal["allow", "deny", "path_allow"]
+    browser_path_allows: list[BrowserPathAllowRule] = Field(
+        default_factory=lambda: list[BrowserPathAllowRule]()
+    )
     condition: str
     evidence: str
     host: str
@@ -53,6 +104,14 @@ class BrowserEgressManifestHost(BaseModel):
         if value != value.strip() or not _is_exact_host(normalized):
             raise ValueError("host must be an exact DNS host name")
         return normalized
+
+    @model_validator(mode="after")
+    def require_path_rules_for_path_allow(self) -> BrowserEgressManifestHost:
+        if self.browser_action == "path_allow" and not self.browser_path_allows:
+            raise ValueError("path_allow requires at least one browser_path_allows rule")
+        if self.browser_action != "path_allow" and self.browser_path_allows:
+            raise ValueError("browser_path_allows is only valid with browser_action path_allow")
+        return self
 
 
 class BrowserEgressManifest(BaseModel):
@@ -101,6 +160,9 @@ class BrowserRequest(Protocol):
     @property
     def url(self) -> str: ...
 
+    @property
+    def method(self) -> str: ...
+
 
 class BrowserRoute(Protocol):
     """The small route surface needed for allow/deny decisions."""
@@ -141,7 +203,7 @@ class LoginControl(Protocol):
 
 
 class LoginPage(Protocol):
-    """A deliberately minimal page surface for the fixed auth-status workflow."""
+    """A deliberately minimal page surface for the fixed auth workflows."""
 
     @property
     def url(self) -> str: ...
@@ -151,6 +213,13 @@ class LoginPage(Protocol):
     def locator(self, selector: str) -> LoginControl: ...
 
     async def close(self) -> None: ...
+
+    async def wait_for_load_state(
+        self,
+        state: Literal["load", "domcontentloaded", "networkidle"],
+        *,
+        timeout: float | None = None,
+    ) -> None: ...
 
 
 class AuthStatusChecker(Protocol):
@@ -164,7 +233,7 @@ class AuthLoginService(Protocol):
 
     async def auth_login_start(self) -> AuthLoginStartSuccess | ToolError: ...
 
-    async def auth_login_wait(self) -> AuthStatusSuccess | ToolError: ...
+    async def auth_login_wait(self) -> AuthLoginWaitSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -180,13 +249,25 @@ class PersistentContextLauncher(Protocol):
 
 
 class BrowserEgressPolicy:
-    """Exact, trusted hosts only; callers cannot expand this policy per request."""
+    """Trusted hosts and optional path-scoped API exceptions; no per-request expansion."""
 
-    def __init__(self, allowed_hosts: Iterable[str]) -> None:
+    def __init__(
+        self,
+        allowed_hosts: Iterable[str],
+        path_allows: Mapping[str, tuple[BrowserPathAllowRule, ...]] | None = None,
+    ) -> None:
         hosts = frozenset(host.strip().lower() for host in allowed_hosts if host.strip())
-        if not hosts or any("*" in host or "/" in host for host in hosts):
-            raise ValueError("Browser egress hosts must be non-empty exact host names")
+        if any("*" in host or "/" in host for host in hosts):
+            raise ValueError("Browser egress hosts must be exact host names")
+        path_map = {
+            host.strip().lower(): rules
+            for host, rules in (path_allows or {}).items()
+            if host.strip() and rules
+        }
+        if not hosts and not path_map:
+            raise ValueError("Browser egress policy must allow at least one host or path rule")
         self._allowed_hosts = hosts
+        self._path_allows = path_map
 
     @classmethod
     def from_manifest(cls, manifest_path: Path) -> BrowserEgressPolicy:
@@ -196,7 +277,13 @@ class BrowserEgressPolicy:
             with manifest_path.open(encoding="utf-8") as manifest_file:
                 raw_manifest = yaml.safe_load(manifest_file)
             manifest = BrowserEgressManifest.model_validate(raw_manifest)
-            return cls(entry.host for entry in manifest.hosts if entry.browser_action == "allow")
+            full_hosts = [entry.host for entry in manifest.hosts if entry.browser_action == "allow"]
+            path_allows = {
+                entry.host: tuple(entry.browser_path_allows)
+                for entry in manifest.hosts
+                if entry.browser_action == "path_allow"
+            }
+            return cls(full_hosts, path_allows)
         except (OSError, ValidationError, ValueError, yaml.YAMLError) as error:
             raise BrowserEgressPolicyLoadError(
                 "Browser egress manifest is unavailable or invalid."
@@ -206,17 +293,30 @@ class BrowserEgressPolicy:
     def allowed_hosts(self) -> frozenset[str]:
         return self._allowed_hosts
 
-    def allows(self, url: str) -> bool:
+    def allows(self, url: str, method: str = "GET") -> bool:
         parsed = urlsplit(url)
         try:
             port = parsed.port
         except ValueError:
             return False
-        return (
-            parsed.scheme == "https"
-            and port in {None, 443}
-            and (parsed.hostname or "").lower() in self._allowed_hosts
-        )
+        if parsed.scheme != "https" or port not in {None, 443}:
+            return False
+        host = (parsed.hostname or "").lower()
+        if host in self._allowed_hosts:
+            return True
+        rules = self._path_allows.get(host)
+        if not rules:
+            return False
+        request_method = method.upper()
+        path = parsed.path or "/"
+        for rule in rules:
+            if request_method not in rule.methods:
+                continue
+            if rule.match == "exact" and path == rule.path:
+                return True
+            if rule.match == "prefix" and path.startswith(rule.path):
+                return True
+        return False
 
 
 class BrowserRuntime:
@@ -230,6 +330,7 @@ class BrowserRuntime:
         launcher: PersistentContextLauncher | None = None,
         credential_references: BrowserCredentialReferences | None = None,
         credential_resolver: CredentialResolver | None = None,
+        org_identity_path: Path | None = None,
     ) -> None:
         self._profile_path = profile_path.expanduser().resolve(strict=False)
         self._egress_manifest_path = egress_manifest_path.expanduser().resolve(strict=False)
@@ -237,6 +338,11 @@ class BrowserRuntime:
         self._launcher = launcher
         self._credential_references = credential_references or BrowserCredentialReferences()
         self._credential_resolver = credential_resolver or KeyringCredentialResolver()
+        self._org_identity_path = (
+            org_identity_path.expanduser().resolve(strict=False)
+            if org_identity_path is not None
+            else _ORG_IDENTITY_PATH
+        )
         self._context: PersistentContext | None = None
         self._playwright_stopper: Callable[[], Awaitable[None]] | None = None
         self._lock = asyncio.Lock()
@@ -342,6 +448,9 @@ class BrowserRuntime:
             if not await _has_known_login_page(page):
                 return _ui_changed_error()
             await page.locator(_LOGIN_SUBMIT_SELECTOR).click()
+            # Keep the page open long enough for the path-scoped login XHR and
+            # cookie write to complete; classification remains auth_login_wait.
+            await _await_login_transition_settle(page)
             return AuthLoginStartSuccess()
         except BrowserEgressPolicyLoadError:
             return ToolError(
@@ -362,10 +471,41 @@ class BrowserRuntime:
                     # implementation cannot confirm page closure.
                     pass
 
-    async def auth_login_wait(self) -> AuthStatusSuccess | ToolError:
-        """Observe only the already-reviewed login state after a transition starts."""
+    async def auth_login_wait(self) -> AuthLoginWaitSuccess | ToolError:
+        """Classify login-required vs READY shell after a transition on the persistent profile."""
 
-        return await self.auth_status()
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            # Poll briefly so real sessions can settle after auth_login_start.
+            for _ in range(30):
+                classification = await _classify_session_page(page)
+                if isinstance(classification, AuthLoginWaitSuccess):
+                    if classification.status == "READY":
+                        _persist_org_slug_outside_git(page.url, self._org_identity_path)
+                    return classification
+                if isinstance(classification, ToolError):
+                    return classification
+                await asyncio.sleep(0.2)
+            return _ui_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the login wait observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser login wait observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
 
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
@@ -393,9 +533,10 @@ class BrowserRuntime:
 
     async def _enforce_egress(self, route: BrowserRoute) -> None:
         policy = self._policy
+        method = getattr(route.request, "method", "GET") or "GET"
         if policy is None:
             await route.abort("blockedbyclient")
-        elif policy.allows(route.request.url):
+        elif policy.allows(route.request.url, method):
             await route.continue_()
         else:
             await route.abort("blockedbyclient")
@@ -418,6 +559,26 @@ def _is_known_login_url(url: str) -> bool:
         and parsed.path == _BILLY_LOGIN_URL_PATH
         and not parsed.query
         and not parsed.fragment
+    )
+
+
+def _is_dashboard_shell_url(url: str) -> bool:
+    """Accept only mit.billy.dk /:org_slug/dashboard without leaking the slug."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and not parsed.query
+        and not parsed.fragment
+        and bool(_DASHBOARD_PATH.match(parsed.path or ""))
     )
 
 
@@ -445,6 +606,88 @@ async def _has_known_login_page(page: LoginPage) -> bool:
     """Validate the fixed URL and exact signature without exposing page content."""
 
     return _is_known_login_url(page.url) and await _has_login_signature(page)
+
+
+async def _await_login_transition_settle(page: LoginPage) -> None:
+    """Allow the login XHR and navigation to finish without classifying success."""
+
+    try:
+        await page.wait_for_load_state("networkidle", timeout=15000)
+        return
+    except Exception:
+        pass
+    for _ in range(8):
+        if not await _has_known_login_page(page):
+            return
+        await asyncio.sleep(0.05)
+
+
+async def _has_shell_nav_markers(page: LoginPage) -> bool:
+    """Require at least one non-PII shell marker observed in research100."""
+
+    try:
+        for selector in _SHELL_NAV_MARKERS:
+            control = page.locator(selector)
+            if await control.count() >= 1 and await control.is_visible():
+                return True
+        return False
+    except Exception:
+        return False
+
+
+async def _has_interaction_challenge(page: LoginPage) -> bool:
+    """Detect captcha/MFA-style controls without naming page content in errors."""
+
+    try:
+        for selector in _INTERACTION_CHALLENGE_SELECTORS:
+            control = page.locator(selector)
+            if await control.count() >= 1:
+                return True
+        return False
+    except Exception:
+        return False
+
+
+async def _classify_session_page(page: LoginPage) -> AuthLoginWaitSuccess | ToolError | None:
+    """Return a terminal classification, or None when the page is still settling."""
+
+    if await _has_known_login_page(page):
+        return AuthLoginWaitSuccess(status="AUTH_REQUIRED")
+    if await _has_interaction_challenge(page):
+        return ToolError(
+            code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+            message="Browser authentication requires a non-automatable challenge.",
+        )
+    if _is_dashboard_shell_url(page.url) and await _has_shell_nav_markers(page):
+        if await _has_login_signature(page):
+            return None
+        return AuthLoginWaitSuccess(status="READY")
+    # Login controls away from the fixed login URL, or an incomplete shell, are
+    # treated as settling rather than hard drift until the wait timeout.
+    return None
+
+
+def _persist_org_slug_outside_git(url: str, destination: Path) -> None:
+    """Store only the UI-derived org slug outside the repository for later equality checks."""
+
+    try:
+        parsed = urlsplit(url)
+        match = _DASHBOARD_PATH.match(parsed.path or "")
+        if match is None:
+            return
+        slug = (parsed.path or "").strip("/").split("/", 1)[0]
+        if not slug or "/" in slug:
+            return
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        payload = {"source": "ui_dashboard_path", "org_slug": slug}
+        destination.write_text(json.dumps(payload, sort_keys=True) + "\n", encoding="utf-8")
+        try:
+            destination.chmod(0o600)
+        except OSError:
+            pass
+    except Exception:
+        # Persistence is best-effort and must never change the tool result.
+        return
 
 
 def _ui_changed_error() -> ToolError:

@@ -16,17 +16,24 @@ from billy_mcp.browser import (
     RouteHandler,
 )
 from billy_mcp.credentials import BrowserCredentialReferences, CredentialReference
-from billy_mcp.models import AuthLoginStartSuccess, AuthStatusSuccess, StableErrorCode, ToolError
+from billy_mcp.models import (
+    AuthLoginStartSuccess,
+    AuthLoginWaitSuccess,
+    AuthStatusSuccess,
+    StableErrorCode,
+    ToolError,
+)
 
 
 class FakeRequest:
-    def __init__(self, url: str) -> None:
+    def __init__(self, url: str, method: str = "GET") -> None:
         self.url = url
+        self.method = method
 
 
 class FakeRoute:
-    def __init__(self, url: str) -> None:
-        self.request = FakeRequest(url)
+    def __init__(self, url: str, method: str = "GET") -> None:
+        self.request = FakeRequest(url, method=method)
         self.action = ""
 
     async def continue_(self) -> None:
@@ -140,6 +147,10 @@ class FakeLoginPage:
     async def close(self) -> None:
         self.closed = True
 
+    async def wait_for_load_state(self, state: str, *, timeout: float | None = None) -> None:
+        del state, timeout
+        self.events.append("wait_for_load_state")
+
 
 class FakeLoginContext(FakeContext):
     def __init__(self, page: FakeLoginPage) -> None:
@@ -194,8 +205,29 @@ async def invoke_handler(handler: RouteHandler, route: FakeRoute) -> None:
     await handler(route)
 
 
-def write_browser_egress_fixture(tmp_path: Path, *, browser_action: str = "allow") -> Path:
+def write_browser_egress_fixture(
+    tmp_path: Path,
+    *,
+    browser_action: str = "allow",
+    api_browser_action: str = "path_allow",
+) -> Path:
     path = tmp_path / "browser_egress.yaml"
+    api_host: dict[str, object] = {
+        "host": "api.billysbilling.com",
+        "browser_action": api_browser_action,
+        "api_client_action": "exclusive_allow",
+        "condition": "browser auth/bootstrap paths only",
+        "evidence": "reviewed fixture",
+        "owner": "ui_auth",
+        "purpose": "path-scoped login XHR",
+        "test_references": ["tests/unit/test_browser.py"],
+    }
+    if api_browser_action == "path_allow":
+        api_host["browser_path_allows"] = [
+            {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
+            {"match": "exact", "methods": ["GET"], "path": "/v2/user"},
+            {"match": "prefix", "methods": ["GET"], "path": "/v2/organizations/"},
+        ]
     path.write_text(
         json.dumps(
             {
@@ -213,16 +245,7 @@ def write_browser_egress_fixture(tmp_path: Path, *, browser_action: str = "allow
                         "purpose": "headless authentication only",
                         "test_references": ["tests/unit/test_browser.py"],
                     },
-                    {
-                        "host": "api.billysbilling.com",
-                        "browser_action": "deny",
-                        "api_client_action": "exclusive_allow",
-                        "condition": "not available to browser lane",
-                        "evidence": "reviewed fixture",
-                        "owner": "api_client",
-                        "purpose": "locked official API destination",
-                        "test_references": ["tests/unit/test_browser.py"],
-                    },
+                    api_host,
                 ],
             }
         ),
@@ -236,7 +259,10 @@ def test_browser_policy_loads_only_explicit_manifest_allow_hosts(tmp_path: Path)
 
     assert policy.allowed_hosts == frozenset({"mit.billy.dk"})
     assert policy.allows("https://mit.billy.dk/")
-    assert not policy.allows("https://api.billysbilling.com/v2/user")
+    assert policy.allows("https://api.billysbilling.com/v2/user/login", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/user", "GET")
+    assert not policy.allows("https://api.billysbilling.com/v2/user/login", "GET")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoices", "GET")
 
 
 def test_browser_policy_rejects_missing_manifest(tmp_path: Path) -> None:
@@ -244,13 +270,20 @@ def test_browser_policy_rejects_missing_manifest(tmp_path: Path) -> None:
         BrowserEgressPolicy.from_manifest(tmp_path / "browser_egress.yaml")
 
 
-@pytest.mark.parametrize("browser_action", ["prompt", "deny"])
+@pytest.mark.parametrize(
+    ("browser_action", "api_browser_action"),
+    [("prompt", "deny"), ("deny", "deny")],
+)
 def test_browser_policy_rejects_unknown_or_no_allow_manifest_policy(
-    tmp_path: Path, browser_action: str
+    tmp_path: Path, browser_action: str, api_browser_action: str
 ) -> None:
     with pytest.raises(BrowserEgressPolicyLoadError, match="unavailable or invalid"):
         BrowserEgressPolicy.from_manifest(
-            write_browser_egress_fixture(tmp_path, browser_action=browser_action)
+            write_browser_egress_fixture(
+                tmp_path,
+                browser_action=browser_action,
+                api_browser_action=api_browser_action,
+            )
         )
 
 
@@ -513,7 +546,10 @@ def test_auth_login_start_resolves_only_after_validation_and_rechecks_before_act
     assert page.events.index("fill:input[type='password'][name='password']") > page.events.index(
         "fill:input[type='email'][name='email']"
     )
-    assert page.events[-1] == "click:button[data-cy='login-button']"
+    assert "click:button[data-cy='login-button']" in page.events
+    assert page.events.index("wait_for_load_state") > page.events.index(
+        "click:button[data-cy='login-button']"
+    )
     assert "fill:input[type='checkbox'][name='remember']" not in page.events
     assert page.events.count("count:input[type='email'][name='email']") == 4
     assert page.closed
@@ -743,6 +779,13 @@ def test_auth_login_start_redacts_unexpected_runtime_failure_and_closes_page(
     assert page.closed
 
 
+def test_browser_policy_path_allow_denies_unlisted_api_methods(tmp_path: Path) -> None:
+    policy = BrowserEgressPolicy.from_manifest(write_browser_egress_fixture(tmp_path))
+
+    assert not policy.allows("https://api.billysbilling.com/v2/user", "DELETE")
+    assert not policy.allows("http://api.billysbilling.com/v2/user/login", "POST")
+
+
 def test_auth_login_wait_observes_only_the_existing_known_login_state(tmp_path: Path) -> None:
     page = FakeLoginPage()
     context = FakeLoginContext(page)
@@ -761,9 +804,70 @@ def test_auth_login_wait_observes_only_the_existing_known_login_state(tmp_path: 
 
     result = asyncio.run(runtime.auth_login_wait())
 
-    assert result == AuthStatusSuccess()
+    assert result == AuthLoginWaitSuccess(status="AUTH_REQUIRED")
     assert resolver.calls == []
     assert page.closed
+
+
+def test_auth_login_wait_returns_ready_for_dashboard_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls={
+            "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+            "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+            "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+            "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+            "text=Overblik": FakeLoginControl(text="Overblik"),
+            "text=Menu": FakeLoginControl(text="Menu"),
+        },
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.auth_login_wait())
+
+    assert result == AuthLoginWaitSuccess(status="READY")
+    assert page.closed
+    stored = json.loads(identity_path.read_text(encoding="utf-8"))
+    assert stored == {"source": "ui_dashboard_path", "org_slug": "test-org-slug"}
+
+
+def test_auth_login_wait_returns_interaction_required_for_challenge(tmp_path: Path) -> None:
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/login",
+        controls={
+            "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+            "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+            "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+            "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+            "iframe[src*='recaptcha']": FakeLoginControl(count=1, visible=True),
+        },
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.auth_login_wait())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_INTERACTION_REQUIRED
 
 
 def test_auth_login_wait_returns_ui_changed_for_unreviewed_state(tmp_path: Path) -> None:

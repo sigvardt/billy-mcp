@@ -334,11 +334,29 @@ def egress_errors(egress: dict[str, Any]) -> list[str]:
     ):
         errors.append("download.billy.dk must be limited to future typed download handling")
     api_host = by_host["api.billysbilling.com"]
-    if (
-        api_host.get("browser_action") != "deny"
-        or api_host.get("api_client_action") != "exclusive_allow"
-    ):
-        errors.append("api.billysbilling.com must be exclusive to the API client")
+    api_browser_action = api_host.get("browser_action")
+    path_allows = api_host.get("browser_path_allows")
+    if api_host.get("api_client_action") != "exclusive_allow":
+        errors.append("api.billysbilling.com must remain exclusive_allow for the API client")
+    if api_browser_action == "allow":
+        errors.append("api.billysbilling.com must not be fully open to the browser lane")
+    elif api_browser_action == "path_allow":
+        if not isinstance(path_allows, list) or not path_allows:
+            errors.append("api.billysbilling.com path_allow requires browser_path_allows rules")
+        else:
+            has_login = any(
+                isinstance(rule, dict)
+                and rule.get("match") == "exact"
+                and rule.get("path") == "/v2/user/login"
+                and "POST" in (rule.get("methods") or [])
+                for rule in path_allows
+            )
+            if not has_login:
+                errors.append(
+                    "api.billysbilling.com path_allow must include exact POST /v2/user/login"
+                )
+    elif api_browser_action != "deny":
+        errors.append("api.billysbilling.com browser_action must be deny or path_allow")
     alias = by_host["api.billy.dk"]
     if alias.get("browser_action") != "deny" or alias.get("api_client_action") != "deny":
         errors.append("api.billy.dk must be denied")

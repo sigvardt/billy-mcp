@@ -335,6 +335,11 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert by_host["mit.billy.dk"]["browser_action"] == "allow"
     assert by_host["download.billy.dk"]["owner"] == "future_typed_download"
     assert by_host["api.billysbilling.com"]["api_client_action"] == "exclusive_allow"
+    assert by_host["api.billysbilling.com"]["browser_action"] == "path_allow"
+    assert any(
+        rule.get("path") == "/v2/user/login" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
     assert by_host["api.billy.dk"]["browser_action"] == "deny"
 
 

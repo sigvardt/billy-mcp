@@ -4,12 +4,14 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T00:53:53Z
+updated: 2026-07-31T09:11:00Z
 ---
 
 # billy_mcp
 
 [[auth_credentials_pre_submit_research|auth_credentials_pre_submit_research]]: Grok research92 freeze plus research93 reconfirm for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
+
+[[auth_scoped_egress_ready_wait|auth_scoped_egress_ready_wait]]: Path-scoped browser allow for Billy login/bootstrap API XHR and typed auth_login_wait READY vs AUTH_REQUIRED observation.
 
 [[billy_api_v2_research_seed|billy_api_v2_research_seed]]: Official Billy API v2 inventory seed from docs review (2026-07-29). Not a completeness claim.
 

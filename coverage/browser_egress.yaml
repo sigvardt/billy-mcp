@@ -10,7 +10,8 @@
       "owner": "ui_auth",
       "purpose": "Billy web interface and headless authentication only",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/unit/test_browser.py"
       ]
     },
     {
@@ -27,13 +28,66 @@
     },
     {
       "api_client_action": "exclusive_allow",
-      "browser_action": "deny",
-      "condition": "not available to browser lane",
-      "evidence": "Approved design \u00a711.1 and frozen brief \u00a73",
+      "browser_action": "path_allow",
+      "browser_path_allows": [
+        {
+          "match": "exact",
+          "methods": ["POST"],
+          "path": "/v2/user/login"
+        },
+        {
+          "match": "prefix",
+          "methods": ["GET"],
+          "path": "/v2/auth/"
+        },
+        {
+          "match": "exact",
+          "methods": ["GET"],
+          "path": "/v2/user"
+        },
+        {
+          "match": "exact",
+          "methods": ["GET"],
+          "path": "/v2/user/bootstrap"
+        },
+        {
+          "match": "exact",
+          "methods": ["GET"],
+          "path": "/oauth2/tokeninfo"
+        },
+        {
+          "match": "exact",
+          "methods": ["GET"],
+          "path": "/user/organizations"
+        },
+        {
+          "match": "exact",
+          "methods": ["GET"],
+          "path": "/user/umbrellas"
+        },
+        {
+          "match": "prefix",
+          "methods": ["GET"],
+          "path": "/v2/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": ["GET"],
+          "path": "/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": ["GET"],
+          "path": "/e-invoicing/"
+        }
+      ],
+      "condition": "browser auth/bootstrap paths only; never full API browse",
+      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard",
       "host": "api.billysbilling.com",
-      "owner": "api_client",
-      "purpose": "Locked official API client destination",
+      "owner": "ui_auth",
+      "purpose": "Path-scoped browser XHR for headless login and shell settle only",
       "test_references": [
+        "tests/unit/test_browser.py",
         "tests/coverage/test_coverage_inventory.py"
       ]
     },

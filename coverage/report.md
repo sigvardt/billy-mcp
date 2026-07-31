@@ -13,4 +13,4 @@ This generated inventory is currently incomplete. It freezes the official-doc sn
 
 Complete: `false`
 
-Blocker: BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed
+Blocker: Unresolved ambiguous bulk API contracts remain red; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete

@@ -16,8 +16,9 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_URL = "https://www.billy.dk/api/"
-DOCS_ETAG = "hsisik4g9p3603"
-DOCS_MD5 = "c2efda0ee4cf9cf200e14910c5fc6996"
+# Official docs fingerprint reconfirmed 2026-07-31 (research100 / independent review).
+DOCS_ETAG = "wcw4x9hqvu3603"
+DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -1277,13 +1278,28 @@ def build_browser_egress() -> dict[str, Any]:
             },
             {
                 "host": "api.billysbilling.com",
-                "browser_action": "deny",
+                "browser_action": "path_allow",
                 "api_client_action": "exclusive_allow",
-                "owner": "api_client",
-                "purpose": "Locked official API client destination",
-                "condition": "not available to browser lane",
-                "evidence": "Approved design §11.1 and frozen brief §3",
-                "test_references": [TEST_REFERENCE],
+                "owner": "ui_auth",
+                "purpose": "Path-scoped browser XHR for headless login and shell settle only",
+                "condition": "browser auth/bootstrap paths only; never full API browse",
+                "evidence": (
+                    "research100 headless credentialed discovery: POST /v2/user/login "
+                    "then bootstrap GETs reach /:org_slug/dashboard"
+                ),
+                "browser_path_allows": [
+                    {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/auth/"},
+                    {"match": "exact", "methods": ["GET"], "path": "/v2/user"},
+                    {"match": "exact", "methods": ["GET"], "path": "/v2/user/bootstrap"},
+                    {"match": "exact", "methods": ["GET"], "path": "/oauth2/tokeninfo"},
+                    {"match": "exact", "methods": ["GET"], "path": "/user/organizations"},
+                    {"match": "exact", "methods": ["GET"], "path": "/user/umbrellas"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/organizations/"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/organizations/"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/e-invoicing/"},
+                ],
+                "test_references": [TEST_REFERENCE, "tests/unit/test_browser.py"],
             },
             {
                 "host": "api.billy.dk",
@@ -1333,12 +1349,27 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
 
     if coverage_is_complete(api_rows, ui_rows):
         return "No manifest qualification blockers remain."
-    if any(row.get("live_tested") is not True for row in [*api_rows, *ui_rows]):
-        return "BILLY_API_TOKEN is unavailable; no live or UI qualification is claimed"
+    # User scope (2026-07-31): API live testing is out of scope. Do not blame a
+    # missing BILLY_API_TOKEN for incomplete UI qualification.
     if any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows):
-        return "Unresolved ambiguous bulk contracts prevent a completeness claim"
-    if any(row.get("vision_verified") is not True for row in ui_rows):
-        return "UI vision verification is incomplete"
+        return (
+            "Unresolved ambiguous bulk API contracts remain red; "
+            "API live_tested stays false (out_of_scope_by_user); "
+            "UI live and vision qualification incomplete"
+        )
+    if any(
+        not row.get("implemented") or not row.get("contract_tested")
+        for row in api_rows
+        if row.get("source_kind") != "ambiguous_bulk"
+    ):
+        return "API offline implementation or contract evidence is incomplete"
+    if any(not row.get("live_tested") for row in ui_rows) or any(
+        row.get("vision_verified") is not True for row in ui_rows
+    ):
+        return (
+            "UI interface live qualification and vision verification incomplete; "
+            "API live testing is out of scope by user policy"
+        )
     return "Manifest qualification evidence is incomplete"
 
 
