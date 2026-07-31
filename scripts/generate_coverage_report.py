@@ -22,6 +22,10 @@ DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
+UI_INVOICES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INVOICES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_list.py"
+UI_INVOICES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INVOICES_LIST_TOOL_NAME = "ui_invoices_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1181,6 +1185,65 @@ def build_api_manifest() -> dict[str, Any]:
     }
 
 
+def apply_ui_invoices_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
+    """Mark invoices list **shell open** evidence only (IR 186.3 R1/R2).
+
+    The tool has empty input and does not implement API list filters or
+    pagination UI. Parity rows must not keep the full API request schema while
+    claiming contract/live green. vision_evidence stays null in the inventory;
+    the durable review record lives outside git under node tmp.
+    """
+
+    row["method_or_route"] = "mit.billy.dk /:org_slug/invoices (read-only list shell open)"
+    row["tool_name"] = UI_INVOICES_LIST_TOOL_NAME
+    # Shell-only contract actually tested by ui_invoices_list (empty tool input).
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INVOICES_LIST_MODEL_TEST_REFERENCE,
+        UI_INVOICES_LIST_UNIT_TEST_REFERENCE,
+        UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research102 dual-session headless observation + ui_invoices_list product; "
+        "list shell only (path class, h1 Fakturaer, CTA Opret faktura present, no create); "
+        "API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_invoices_list.json (list surface frames, accept)"
+    )
+    if parity_of_api_list:
+        row["evidence"] = f"{row['evidence']}; maps api.invoices.list to UI list-shell open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1211,6 +1274,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         }
         row.update(red_status(discovered=False))
         row["vision_verified"] = False
+        if family == "invoices":
+            apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=False)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -1239,6 +1304,9 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         }
         row.update(red_status(discovered=False))
         row["vision_verified"] = False
+        # Shell-open only: rewrite schema to the empty-input tool contract (R1).
+        if api_row["id"] == "api.invoices.list":
+            apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=True)
         workflows.append(row)
 
     return {
@@ -1264,7 +1332,11 @@ def build_browser_egress() -> dict[str, Any]:
                 "purpose": "Billy web interface and headless authentication only",
                 "condition": "typed UI/auth workflow",
                 "evidence": "Frozen brief §10.3: official app host",
-                "test_references": [TEST_REFERENCE],
+                "test_references": [
+                    TEST_REFERENCE,
+                    "tests/unit/test_browser.py",
+                    UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+                ],
             },
             {
                 "host": "download.billy.dk",
@@ -1299,7 +1371,11 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["GET"], "path": "/organizations/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/e-invoicing/"},
                 ],
-                "test_references": [TEST_REFERENCE, "tests/unit/test_browser.py"],
+                "test_references": [
+                    TEST_REFERENCE,
+                    "tests/unit/test_browser.py",
+                    UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+                ],
             },
             {
                 "host": "api.billy.dk",

@@ -16,7 +16,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.get",
       "implemented": true,
@@ -54,7 +54,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.accountGroups.list",
       "implemented": true,
@@ -113,7 +113,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.create",
       "implemented": true,
@@ -151,7 +151,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.update",
       "implemented": true,
@@ -190,7 +190,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.delete",
       "implemented": true,
@@ -228,7 +228,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.bulk_save",
       "implemented": false,
@@ -259,7 +259,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountGroups.bulk_delete",
       "implemented": false,
@@ -290,7 +290,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountNatures.get",
       "implemented": true,
@@ -328,7 +328,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.accountNatures.list",
       "implemented": true,
@@ -387,7 +387,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountNatures.create",
       "implemented": false,
@@ -423,7 +423,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountNatures.update",
       "implemented": false,
@@ -460,7 +460,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountNatures.bulk_save",
       "implemented": false,
@@ -491,7 +491,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accountNatures.bulk_delete",
       "implemented": false,
@@ -522,7 +522,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.get",
       "implemented": true,
@@ -560,7 +560,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.accounts.list",
       "implemented": true,
@@ -619,7 +619,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.create",
       "implemented": true,
@@ -657,7 +657,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.update",
       "implemented": true,
@@ -696,7 +696,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.delete",
       "implemented": true,
@@ -734,7 +734,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.bulk_save",
       "implemented": false,
@@ -765,7 +765,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.accounts.bulk_delete",
       "implemented": false,
@@ -796,7 +796,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.get",
       "implemented": true,
@@ -834,7 +834,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.attachments.list",
       "implemented": true,
@@ -893,7 +893,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.create",
       "implemented": true,
@@ -932,7 +932,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.update",
       "implemented": true,
@@ -972,7 +972,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.delete",
       "implemented": true,
@@ -1011,7 +1011,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.bulk_save",
       "implemented": false,
@@ -1042,7 +1042,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.attachments.bulk_delete",
       "implemented": false,
@@ -1073,7 +1073,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.balanceModifiers.get",
       "implemented": true,
@@ -1111,7 +1111,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.balanceModifiers.list",
       "implemented": true,
@@ -1170,7 +1170,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.balanceModifiers.create",
       "implemented": false,
@@ -1206,7 +1206,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.balanceModifiers.update",
       "implemented": false,
@@ -1243,7 +1243,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.balanceModifiers.bulk_save",
       "implemented": false,
@@ -1274,7 +1274,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.balanceModifiers.bulk_delete",
       "implemented": false,
@@ -1305,7 +1305,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.get",
       "implemented": true,
@@ -1343,7 +1343,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.bankLineMatches.list",
       "implemented": true,
@@ -1402,7 +1402,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.create",
       "implemented": true,
@@ -1441,7 +1441,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.update",
       "implemented": true,
@@ -1481,7 +1481,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.delete",
       "implemented": true,
@@ -1520,7 +1520,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.bulk_save",
       "implemented": false,
@@ -1551,7 +1551,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineMatches.bulk_delete",
       "implemented": false,
@@ -1582,7 +1582,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.get",
       "implemented": true,
@@ -1620,7 +1620,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.bankLines.list",
       "implemented": true,
@@ -1679,7 +1679,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.create",
       "implemented": true,
@@ -1718,7 +1718,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.update",
       "implemented": true,
@@ -1758,7 +1758,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.delete",
       "implemented": true,
@@ -1797,7 +1797,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.bulk_save",
       "implemented": false,
@@ -1828,7 +1828,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLines.bulk_delete",
       "implemented": false,
@@ -1859,7 +1859,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.get",
       "implemented": true,
@@ -1897,7 +1897,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.bankLineSubjectAssociations.list",
       "implemented": true,
@@ -1956,7 +1956,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.create",
       "implemented": true,
@@ -1995,7 +1995,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.update",
       "implemented": true,
@@ -2035,7 +2035,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.delete",
       "implemented": true,
@@ -2074,7 +2074,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_save",
       "implemented": false,
@@ -2105,7 +2105,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_delete",
       "implemented": false,
@@ -2136,7 +2136,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.get",
       "implemented": true,
@@ -2174,7 +2174,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.bankPayments.list",
       "implemented": true,
@@ -2233,7 +2233,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.create",
       "implemented": true,
@@ -2271,7 +2271,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.update",
       "implemented": true,
@@ -2310,7 +2310,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.delete",
       "implemented": false,
@@ -2346,7 +2346,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.bulk_save",
       "implemented": false,
@@ -2377,7 +2377,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bankPayments.bulk_delete",
       "implemented": false,
@@ -2408,7 +2408,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.get",
       "implemented": true,
@@ -2446,7 +2446,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.billLines.list",
       "implemented": true,
@@ -2505,7 +2505,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.create",
       "implemented": true,
@@ -2543,7 +2543,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.update",
       "implemented": true,
@@ -2582,7 +2582,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.delete",
       "implemented": true,
@@ -2620,7 +2620,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.bulk_save",
       "implemented": false,
@@ -2651,7 +2651,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.billLines.bulk_delete",
       "implemented": false,
@@ -2682,7 +2682,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.get",
       "implemented": true,
@@ -2720,7 +2720,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {
         "amount": "float",
         "contactId": "string",
@@ -2838,7 +2838,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.create",
       "implemented": true,
@@ -2876,7 +2876,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.update",
       "implemented": true,
@@ -2915,7 +2915,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.delete",
       "implemented": true,
@@ -2953,7 +2953,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.bulk_save",
       "implemented": false,
@@ -2984,7 +2984,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.bills.bulk_delete",
       "implemented": false,
@@ -3015,7 +3015,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.cities.get",
       "implemented": true,
@@ -3053,7 +3053,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
       "filters": {
         "countryId": {
           "required": true,
@@ -3118,7 +3118,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.cities.create",
       "implemented": false,
@@ -3154,7 +3154,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.cities.update",
       "implemented": false,
@@ -3191,7 +3191,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.cities.bulk_save",
       "implemented": false,
@@ -3222,7 +3222,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.cities.bulk_delete",
       "implemented": false,
@@ -3253,7 +3253,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePayments.get",
       "implemented": true,
@@ -3291,7 +3291,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.contactBalancePayments.list",
       "implemented": true,
@@ -3350,7 +3350,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePayments.create",
       "implemented": true,
@@ -3388,7 +3388,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePayments.update",
       "implemented": true,
@@ -3427,7 +3427,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_save",
       "implemented": false,
@@ -3458,7 +3458,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_delete",
       "implemented": false,
@@ -3489,7 +3489,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePostings.get",
       "implemented": true,
@@ -3527,7 +3527,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.contactBalancePostings.list",
       "implemented": true,
@@ -3586,7 +3586,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePostings.create",
       "implemented": false,
@@ -3622,7 +3622,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePostings.update",
       "implemented": false,
@@ -3659,7 +3659,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_save",
       "implemented": false,
@@ -3690,7 +3690,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_delete",
       "implemented": false,
@@ -3721,7 +3721,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.get",
       "implemented": true,
@@ -3759,7 +3759,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.contactPersons.list",
       "implemented": true,
@@ -3818,7 +3818,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.create",
       "implemented": true,
@@ -3856,7 +3856,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.update",
       "implemented": true,
@@ -3895,7 +3895,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.delete",
       "implemented": true,
@@ -3933,7 +3933,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.bulk_save",
       "implemented": false,
@@ -3964,7 +3964,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contactPersons.bulk_delete",
       "implemented": false,
@@ -3995,7 +3995,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.get",
       "implemented": true,
@@ -4033,7 +4033,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.contacts.list",
       "implemented": true,
@@ -4092,7 +4092,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.create",
       "implemented": true,
@@ -4130,7 +4130,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.update",
       "implemented": true,
@@ -4169,7 +4169,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.delete",
       "implemented": true,
@@ -4207,7 +4207,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.bulk_save",
       "implemented": false,
@@ -4238,7 +4238,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.contacts.bulk_delete",
       "implemented": false,
@@ -4269,7 +4269,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countryGroups.get",
       "implemented": true,
@@ -4307,7 +4307,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.countryGroups.list",
       "implemented": true,
@@ -4366,7 +4366,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countryGroups.create",
       "implemented": false,
@@ -4402,7 +4402,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countryGroups.update",
       "implemented": false,
@@ -4439,7 +4439,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countryGroups.bulk_save",
       "implemented": false,
@@ -4470,7 +4470,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countryGroups.bulk_delete",
       "implemented": false,
@@ -4501,7 +4501,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countries.get",
       "implemented": true,
@@ -4539,7 +4539,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.countries.list",
       "implemented": true,
@@ -4598,7 +4598,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countries.create",
       "implemented": false,
@@ -4634,7 +4634,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countries.update",
       "implemented": false,
@@ -4671,7 +4671,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countries.bulk_save",
       "implemented": false,
@@ -4702,7 +4702,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.countries.bulk_delete",
       "implemented": false,
@@ -4733,7 +4733,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.currencies.get",
       "implemented": true,
@@ -4771,7 +4771,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.currencies.list",
       "implemented": true,
@@ -4830,7 +4830,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.currencies.create",
       "implemented": false,
@@ -4866,7 +4866,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.currencies.update",
       "implemented": false,
@@ -4903,7 +4903,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.currencies.bulk_save",
       "implemented": false,
@@ -4934,7 +4934,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.currencies.bulk_delete",
       "implemented": false,
@@ -4965,7 +4965,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.get",
       "implemented": true,
@@ -5003,7 +5003,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.daybookBalanceAccounts.list",
       "implemented": true,
@@ -5062,7 +5062,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.create",
       "implemented": true,
@@ -5100,7 +5100,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.update",
       "implemented": true,
@@ -5139,7 +5139,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.delete",
       "implemented": true,
@@ -5177,7 +5177,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_save",
       "implemented": false,
@@ -5208,7 +5208,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_delete",
       "implemented": false,
@@ -5239,7 +5239,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.get",
       "implemented": true,
@@ -5277,7 +5277,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.daybooks.list",
       "implemented": true,
@@ -5336,7 +5336,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.create",
       "implemented": true,
@@ -5374,7 +5374,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.update",
       "implemented": true,
@@ -5413,7 +5413,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.delete",
       "implemented": true,
@@ -5451,7 +5451,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.bulk_save",
       "implemented": false,
@@ -5482,7 +5482,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybooks.bulk_delete",
       "implemented": false,
@@ -5513,7 +5513,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.get",
       "implemented": true,
@@ -5551,7 +5551,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.daybookTransactionLines.list",
       "implemented": true,
@@ -5610,7 +5610,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.create",
       "implemented": true,
@@ -5648,7 +5648,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.update",
       "implemented": true,
@@ -5687,7 +5687,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.delete",
       "implemented": true,
@@ -5725,7 +5725,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_save",
       "implemented": false,
@@ -5756,7 +5756,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_delete",
       "implemented": false,
@@ -5787,7 +5787,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.get",
       "implemented": true,
@@ -5825,7 +5825,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {
         "apiType": "string",
         "daybookId": "string",
@@ -5916,7 +5916,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.create",
       "implemented": true,
@@ -5954,7 +5954,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.update",
       "implemented": true,
@@ -5993,7 +5993,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.delete",
       "implemented": true,
@@ -6031,7 +6031,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.bulk_save",
       "implemented": false,
@@ -6062,7 +6062,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.daybookTransactions.bulk_delete",
       "implemented": false,
@@ -6093,7 +6093,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.files.get",
       "implemented": true,
@@ -6131,7 +6131,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.files.list",
       "implemented": true,
@@ -6191,7 +6191,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.files.create",
       "implemented": true,
@@ -6236,7 +6236,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.files.bulk_save",
       "implemented": false,
@@ -6267,7 +6267,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.files.bulk_delete",
       "implemented": false,
@@ -6298,7 +6298,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLateFees.get",
       "implemented": true,
@@ -6336,7 +6336,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.invoiceLateFees.list",
       "implemented": true,
@@ -6395,7 +6395,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLateFees.create",
       "implemented": true,
@@ -6433,7 +6433,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLateFees.update",
       "implemented": true,
@@ -6472,7 +6472,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_save",
       "implemented": false,
@@ -6503,7 +6503,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_delete",
       "implemented": false,
@@ -6534,7 +6534,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.get",
       "implemented": true,
@@ -6572,7 +6572,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.invoiceLines.list",
       "implemented": true,
@@ -6631,7 +6631,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.create",
       "implemented": true,
@@ -6669,7 +6669,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.update",
       "implemented": true,
@@ -6708,7 +6708,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.delete",
       "implemented": true,
@@ -6746,7 +6746,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.bulk_save",
       "implemented": false,
@@ -6777,7 +6777,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceLines.bulk_delete",
       "implemented": false,
@@ -6808,7 +6808,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.get",
       "implemented": true,
@@ -6846,7 +6846,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.invoiceReminderAssociations.list",
       "implemented": true,
@@ -6905,7 +6905,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.create",
       "implemented": false,
@@ -6941,7 +6941,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.update",
       "implemented": false,
@@ -6978,7 +6978,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.delete",
       "implemented": false,
@@ -7014,7 +7014,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_save",
       "implemented": false,
@@ -7045,7 +7045,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_delete",
       "implemented": false,
@@ -7076,7 +7076,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminders.get",
       "implemented": true,
@@ -7114,7 +7114,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.invoiceReminders.list",
       "implemented": true,
@@ -7173,7 +7173,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminders.create",
       "implemented": true,
@@ -7210,7 +7210,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminders.bulk_save",
       "implemented": false,
@@ -7241,7 +7241,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoiceReminders.bulk_delete",
       "implemented": false,
@@ -7272,7 +7272,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.get",
       "implemented": true,
@@ -7310,7 +7310,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {
         "amount": "float",
         "approvedTimePeriod": [
@@ -7458,7 +7458,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.create",
       "implemented": true,
@@ -7496,7 +7496,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.update",
       "implemented": true,
@@ -7535,7 +7535,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.delete",
       "implemented": true,
@@ -7573,7 +7573,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.bulk_save",
       "implemented": false,
@@ -7604,7 +7604,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.invoices.bulk_delete",
       "implemented": false,
@@ -7635,7 +7635,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.locales.get",
       "implemented": true,
@@ -7673,7 +7673,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.locales.list",
       "implemented": true,
@@ -7732,7 +7732,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.locales.create",
       "implemented": false,
@@ -7768,7 +7768,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.locales.update",
       "implemented": false,
@@ -7805,7 +7805,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.locales.bulk_save",
       "implemented": false,
@@ -7836,7 +7836,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.locales.bulk_delete",
       "implemented": false,
@@ -7867,7 +7867,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.organizations.get",
       "implemented": true,
@@ -7905,7 +7905,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.organizations.list",
       "implemented": true,
@@ -7964,7 +7964,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.organizations.create",
       "implemented": true,
@@ -8001,7 +8001,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.organizations.update",
       "implemented": true,
@@ -8040,7 +8040,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.organizations.bulk_save",
       "implemented": false,
@@ -8071,7 +8071,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.organizations.bulk_delete",
       "implemented": false,
@@ -8102,7 +8102,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.postings.get",
       "implemented": true,
@@ -8140,7 +8140,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.postings.list",
       "implemented": true,
@@ -8199,7 +8199,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.postings.create",
       "implemented": false,
@@ -8235,7 +8235,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.postings.update",
       "implemented": false,
@@ -8272,7 +8272,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.postings.bulk_save",
       "implemented": false,
@@ -8303,7 +8303,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.postings.bulk_delete",
       "implemented": false,
@@ -8334,7 +8334,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.get",
       "implemented": true,
@@ -8372,7 +8372,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.productPrices.list",
       "implemented": true,
@@ -8431,7 +8431,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.create",
       "implemented": true,
@@ -8469,7 +8469,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.update",
       "implemented": true,
@@ -8508,7 +8508,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.delete",
       "implemented": true,
@@ -8546,7 +8546,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.bulk_save",
       "implemented": false,
@@ -8577,7 +8577,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.productPrices.bulk_delete",
       "implemented": false,
@@ -8608,7 +8608,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.get",
       "implemented": true,
@@ -8646,7 +8646,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.products.list",
       "implemented": true,
@@ -8705,7 +8705,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.create",
       "implemented": true,
@@ -8743,7 +8743,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.update",
       "implemented": true,
@@ -8782,7 +8782,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.delete",
       "implemented": true,
@@ -8820,7 +8820,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.bulk_save",
       "implemented": false,
@@ -8851,7 +8851,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.products.bulk_delete",
       "implemented": false,
@@ -8882,7 +8882,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.get",
       "implemented": true,
@@ -8920,7 +8920,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxAccounts.list",
       "implemented": true,
@@ -8979,7 +8979,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.create",
       "implemented": true,
@@ -9018,7 +9018,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.update",
       "implemented": true,
@@ -9058,7 +9058,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.delete",
       "implemented": true,
@@ -9097,7 +9097,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_save",
       "implemented": false,
@@ -9128,7 +9128,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_delete",
       "implemented": false,
@@ -9159,7 +9159,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.get",
       "implemented": true,
@@ -9197,7 +9197,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxMetaFields.list",
       "implemented": true,
@@ -9256,7 +9256,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.create",
       "implemented": true,
@@ -9295,7 +9295,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.update",
       "implemented": true,
@@ -9335,7 +9335,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.delete",
       "implemented": true,
@@ -9374,7 +9374,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_save",
       "implemented": false,
@@ -9405,7 +9405,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_delete",
       "implemented": false,
@@ -9436,7 +9436,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxPayments.get",
       "implemented": true,
@@ -9474,7 +9474,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxPayments.list",
       "implemented": true,
@@ -9533,7 +9533,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxPayments.create",
       "implemented": true,
@@ -9571,7 +9571,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxPayments.update",
       "implemented": true,
@@ -9610,7 +9610,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_save",
       "implemented": false,
@@ -9641,7 +9641,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_delete",
       "implemented": false,
@@ -9672,7 +9672,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxReturns.get",
       "implemented": true,
@@ -9710,7 +9710,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxReturns.list",
       "implemented": true,
@@ -9769,7 +9769,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxReturns.update",
       "implemented": true,
@@ -9808,7 +9808,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_save",
       "implemented": false,
@@ -9839,7 +9839,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_delete",
       "implemented": false,
@@ -9870,7 +9870,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.get",
       "implemented": true,
@@ -9908,7 +9908,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxRules.list",
       "implemented": true,
@@ -9967,7 +9967,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.create",
       "implemented": true,
@@ -10006,7 +10006,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.update",
       "implemented": true,
@@ -10046,7 +10046,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.delete",
       "implemented": true,
@@ -10085,7 +10085,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.bulk_save",
       "implemented": false,
@@ -10116,7 +10116,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRules.bulk_delete",
       "implemented": false,
@@ -10147,7 +10147,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.get",
       "implemented": true,
@@ -10185,7 +10185,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.salesTaxRulesets.list",
       "implemented": true,
@@ -10244,7 +10244,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.create",
       "implemented": true,
@@ -10283,7 +10283,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.update",
       "implemented": true,
@@ -10323,7 +10323,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.delete",
       "implemented": true,
@@ -10362,7 +10362,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_save",
       "implemented": false,
@@ -10393,7 +10393,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_delete",
       "implemented": false,
@@ -10424,7 +10424,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.states.get",
       "implemented": true,
@@ -10462,7 +10462,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
       "filters": {
         "countryId": {
           "required": true,
@@ -10527,7 +10527,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.states.create",
       "implemented": false,
@@ -10563,7 +10563,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.states.update",
       "implemented": false,
@@ -10600,7 +10600,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.states.bulk_save",
       "implemented": false,
@@ -10631,7 +10631,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.states.bulk_delete",
       "implemented": false,
@@ -10662,7 +10662,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.get",
       "implemented": true,
@@ -10700,7 +10700,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.taxRateDeductionComponents.list",
       "implemented": true,
@@ -10759,7 +10759,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.create",
       "implemented": true,
@@ -10797,7 +10797,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.update",
       "implemented": true,
@@ -10836,7 +10836,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.delete",
       "implemented": true,
@@ -10874,7 +10874,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_save",
       "implemented": false,
@@ -10905,7 +10905,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_delete",
       "implemented": false,
@@ -10936,7 +10936,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.get",
       "implemented": true,
@@ -10974,7 +10974,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.taxRates.list",
       "implemented": true,
@@ -11033,7 +11033,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.create",
       "implemented": true,
@@ -11071,7 +11071,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.update",
       "implemented": true,
@@ -11110,7 +11110,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.delete",
       "implemented": true,
@@ -11148,7 +11148,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.bulk_save",
       "implemented": false,
@@ -11179,7 +11179,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.taxRates.bulk_delete",
       "implemented": false,
@@ -11210,7 +11210,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.get",
       "implemented": true,
@@ -11248,7 +11248,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.transactions.list",
       "implemented": true,
@@ -11307,7 +11307,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.create",
       "implemented": false,
@@ -11343,7 +11343,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.update",
       "implemented": false,
@@ -11380,7 +11380,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.delete",
       "implemented": false,
@@ -11416,7 +11416,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.bulk_save",
       "implemented": false,
@@ -11447,7 +11447,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.transactions.bulk_delete",
       "implemented": false,
@@ -11478,7 +11478,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.users.get",
       "implemented": true,
@@ -11516,7 +11516,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {},
       "id": "api.users.list",
       "implemented": true,
@@ -11575,7 +11575,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.users.update",
       "implemented": true,
@@ -11614,7 +11614,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.users.bulk_save",
       "implemented": false,
@@ -11645,7 +11645,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.users.bulk_delete",
       "implemented": false,
@@ -11676,7 +11676,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.zipcodes.get",
       "implemented": true,
@@ -11714,7 +11714,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; Cited Wave-4 Grok brief: unauthenticated list requests without a non-empty countryId return Billy 400 OTHER before authentication.",
       "filters": {
         "countryId": {
           "required": true,
@@ -11779,7 +11779,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.zipcodes.create",
       "implemented": false,
@@ -11815,7 +11815,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.zipcodes.update",
       "implemented": false,
@@ -11852,7 +11852,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.zipcodes.bulk_save",
       "implemented": false,
@@ -11883,7 +11883,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.zipcodes.bulk_delete",
       "implemented": false,
@@ -11914,7 +11914,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.special.files_upload",
       "implemented": true,
@@ -11959,7 +11959,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.special.invoice_email",
       "implemented": true,
@@ -12000,7 +12000,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.special.invoice_delivery",
       "implemented": true,
@@ -12042,7 +12042,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": {
         "sortDirection": [
           "DESC"
@@ -12089,7 +12089,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.special.user_get",
       "implemented": true,
@@ -12124,7 +12124,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag hsisik4g9p3603; MD5 c2efda0ee4cf9cf200e14910c5fc6996",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "api.special.user_organizations",
       "implemented": true,

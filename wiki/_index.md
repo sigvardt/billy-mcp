@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T09:33:04Z
+updated: 2026-07-31T10:04:24Z
 ---
 
 # billy_mcp
@@ -26,6 +26,8 @@ updated: 2026-07-31T09:33:04Z
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
+
+[[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.
 
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.
 

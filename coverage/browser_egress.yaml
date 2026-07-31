@@ -11,7 +11,8 @@
       "purpose": "Billy web interface and headless authentication only",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py",
-        "tests/unit/test_browser.py"
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_list.py"
       ]
     },
     {
@@ -32,52 +33,72 @@
       "browser_path_allows": [
         {
           "match": "exact",
-          "methods": ["POST"],
+          "methods": [
+            "POST"
+          ],
           "path": "/v2/user/login"
         },
         {
           "match": "prefix",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/v2/auth/"
         },
         {
           "match": "exact",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/v2/user"
         },
         {
           "match": "exact",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/v2/user/bootstrap"
         },
         {
           "match": "exact",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/oauth2/tokeninfo"
         },
         {
           "match": "exact",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/user/organizations"
         },
         {
           "match": "exact",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/user/umbrellas"
         },
         {
           "match": "prefix",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/v2/organizations/"
         },
         {
           "match": "prefix",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/organizations/"
         },
         {
           "match": "prefix",
-          "methods": ["GET"],
+          "methods": [
+            "GET"
+          ],
           "path": "/e-invoicing/"
         }
       ],
@@ -87,8 +108,9 @@
       "owner": "ui_auth",
       "purpose": "Path-scoped browser XHR for headless login and shell settle only",
       "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
         "tests/unit/test_browser.py",
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/live/test_ui_invoices_list.py"
       ]
     },
     {

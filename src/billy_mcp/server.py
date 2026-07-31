@@ -58,7 +58,12 @@ from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.user_writes import register_user_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
-from billy_mcp.browser import AuthLoginService, AuthStatusChecker, BrowserRuntime
+from billy_mcp.browser import (
+    AuthLoginService,
+    AuthStatusChecker,
+    BrowserRuntime,
+    UiInvoicesListService,
+)
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
 from billy_mcp.confirmations import ConfirmationStore
@@ -76,6 +81,8 @@ from billy_mcp.models import (
     AuthStatusInput,
     AuthStatusSuccess,
     ToolError,
+    UiInvoicesListInput,
+    UiInvoicesListSuccess,
 )
 
 
@@ -84,6 +91,7 @@ def create_server(
     *,
     auth_status_checker: AuthStatusChecker | None = None,
     auth_login_service: AuthLoginService | None = None,
+    ui_invoices_list_service: UiInvoicesListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -98,6 +106,7 @@ def create_server(
     )
     checker = auth_status_checker or browser
     login_service = auth_login_service or browser
+    invoices_list_service = ui_invoices_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -136,6 +145,12 @@ def create_server(
         AuthLoginWaitInput()
         return await login_service.auth_login_wait()
 
+    async def ui_invoices_list() -> UiInvoicesListSuccess | ToolError:
+        """Observe the authenticated Billy invoices list shell without writes."""
+
+        UiInvoicesListInput()
+        return await invoices_list_service.ui_invoices_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -156,6 +171,13 @@ def create_server(
             "Observe Billy session after login start: AUTH_REQUIRED login form or READY shell."
         ),
     )(auth_login_wait)
+    server.tool(
+        name="ui_invoices_list",
+        description=(
+            "Open the Billy invoices list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_invoices_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

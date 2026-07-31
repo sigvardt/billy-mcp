@@ -6,23 +6,27 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T11:40:00Z
+updated: 2026-07-31T11:50:00Z
 ---
 
 # state
 
 ## Current state
 
-- FIX-VERIFY 186.2 done: R1 token-env assert removed; R2 vision accept+purge. Offline 1310 passed. complete:false. COMMIT next.
-- IR 186.2 ACCEPT product offline+live DOM; completeness FAIL (tmp/grok-review.md).
-- EXECUTE 186.2 delivered remember check, dual live READY+restore, vision helpers.
-- PLAN 186.2 with post-mortem: plans/2026-07-31T09:29:42.163Z-186.2-auth_remember_dual_session_live.md
-- RESEARCH101 docs unchanged; dual READY; remember gap closed in 186.2.
-- 186.1 path-scoped egress + READY wait offline ACCEPT (tip 161e2dd base).
-- Root offline: 184 implemented+contract_tested. API live 0. UI 339 red. Residual 29 + bulk 92 red. complete:false.
-- Offline auth tools: auth_status, auth_login_start (remember check), auth_login_wait READY.
-- Operator: grok-only; no live API; interface credentials available; no new ui_* login tool.
+- RESEARCH102 done: first business UI seed routes. Brief:
+  `.fractal/main.billy_complete/tmp/grok-research.md`. Artifacts:
+  `tmp/discovery102/summary.json` (scrubbed; frames purged).
+- Docs unchanged (ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`).
+- Live headless dual-session: invoices list shell OK (path/h1/CTA match A↔B);
+  bank-accounts shell OK (`Bankkonti`; no official `bankAccounts` API resource);
+  daybooks **error shell** (`Upsedasse!` / `Log ind igen`) — blocked.
+- Tip `dda8ff6` on origin: 186.2 remember + dual READY + vision harness.
+- Root offline: 184 implemented+contract_tested. API live 0 (`out_of_scope_by_user`). UI 0/339 live/vision. Residual 29 + bulk 92 red. `complete: false`.
+- Operator: grok-only; no live API; interface credentials available.
 - Wave-5u residual/bulk real methods remain BLOCK BEFORE NETWORK.
+- FIX-VERIFY 186.3: R1 shell-only inventory schema; R2 list-surface vision accept
+  + purge; R4 invoices UI_CHANGED message. Offline 1317 pass; live invoices pass.
+  vision record accept+purge_verified. complete:false. COMMIT next.
 
 ## Verification
 
@@ -34,6 +38,8 @@ updated: 2026-07-31T11:40:00Z
 - No offline FastMCP product slice remains without non-production credentials.
 - The credentialed discovery protocol uses fresh second-interface browser
   read-back only; it must not invoke API traffic or require an API token.
+- 186.2 IR: ACCEPT product offline+live DOM; vision harness ACCEPT with purge;
+  completeness FAIL. Plan: `plans/2026-07-31T09:29:42.163Z-186.2-auth_remember_dual_session_live.md`.
 
 ## Review decisions (authoritative)
 
@@ -51,9 +57,9 @@ updated: 2026-07-31T11:40:00Z
 
 ## Open coverage work
 
-1. COMMIT 186.2 product (remember + dual live + vision harness). Then first
-   business UI discovery (invoices/daybooks/bank-accounts seeds) under dedicated
-   org with dual-session + vision per workflow.
+1. Product first read-only invoices UI list from research102 freeze. Auth lane
+   ready. Do not invent login-only `ui_*`. Daybooks stays blocked on error
+   shell. Bank-accounts is UI shell only (no `api_bank_accounts_*`).
 2. Parent 07F2D101: `BILLY_ORGANIZATION_ID` is **not** a user blocker. Derive
    the dedicated test org identity from the authenticated headless UI only.
    Persist only a non-secret identifier **outside git**. No API for org

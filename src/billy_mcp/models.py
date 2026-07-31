@@ -85,6 +85,23 @@ class AuthLoginWaitSuccess(BaseModel):
     status: Literal["AUTH_REQUIRED", "READY"]
 
 
+class UiInvoicesListInput(BaseModel):
+    """Empty, strict input boundary for the read-only invoices list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInvoicesListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy invoices list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/invoices"] = "/:org_slug/invoices"
+    heading: Literal["Fakturaer"] = "Fakturaer"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

@@ -13,6 +13,7 @@ from billy_mcp.models import (
     AuthLoginWaitSuccess,
     AuthStatusSuccess,
     StableErrorCode,
+    UiInvoicesListSuccess,
 )
 from billy_mcp.server import create_server
 
@@ -373,6 +374,15 @@ class FakeAuthLoginService:
         return AuthLoginWaitSuccess(status="AUTH_REQUIRED")
 
 
+class FakeUiInvoicesListService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_invoices_list(self) -> UiInvoicesListSuccess:
+        self.calls += 1
+        return UiInvoicesListSuccess(create_action_visible=True, shell_markers_present=True)
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -503,6 +513,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     tool_names = {tool.name for tool in tools}
     api_tool_names = {name for name in tool_names if name.startswith("api_")}
     auth_tool_names = {name for name in tool_names if name.startswith("auth_")}
+    ui_tool_names = {name for name in tool_names if name.startswith("ui_")}
     coverage_tool_names = {name for name in tool_names if name.startswith("coverage_")}
 
     assert len(WAVE_FOUR_API_TOOL_NAMES) == 50
@@ -529,6 +540,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(api_tool_names) == 271
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
+    assert ui_tool_names == {"ui_invoices_list"}
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
         expected_pre_wave_four_tools
@@ -555,6 +567,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | WAVE_FIVESB_API_TOOL_NAMES
         | WAVE_FIVESC_API_TOOL_NAMES
         | auth_tool_names
+        | ui_tool_names
     )
 
 
@@ -609,3 +622,31 @@ def test_login_registration_has_empty_inputs_and_typed_stable_outputs(tmp_path: 
     assert wait_result.structured_content == {"result": {"status": "AUTH_REQUIRED"}}
     assert login_service.start_calls == 1
     assert login_service.wait_calls == 1
+
+
+def test_ui_invoices_list_registration_has_empty_input_and_typed_output(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    invoices = FakeUiInvoicesListService()
+    server = create_server(tmp_path, ui_invoices_list_service=invoices)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_invoices_list"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    # path_class may mention the redacted segment name; property keys must not.
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_invoices_list", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/invoices",
+            "heading": "Fakturaer",
+            "create_action_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert invoices.calls == 1

@@ -24,6 +24,7 @@ from billy_mcp.models import (
     AuthStatusSuccess,
     StableErrorCode,
     ToolError,
+    UiInvoicesListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -52,6 +53,14 @@ _INTERACTION_CHALLENGE_SELECTORS = (
     "input[name*='totp' i]",
 )
 _DASHBOARD_PATH = re.compile(r"^/[^/]+/dashboard$")
+_INVOICES_LIST_PATH = re.compile(r"^/[^/]+/invoices$")
+_INVOICES_LIST_HEADING = "Fakturaer"
+_INVOICES_CREATE_CTA = "Opret faktura"
+_ERROR_SHELL_MARKERS = (
+    "text=Upsedasse!",
+    "text=Upsedasse",
+    "text=Log ind igen",
+)
 _ORG_IDENTITY_PATH = Path.home() / ".local" / "share" / "billy-mcp" / "ui-org-identity.json"
 _HttpMethod = Literal["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
 
@@ -236,6 +245,12 @@ class AuthLoginService(Protocol):
     async def auth_login_start(self) -> AuthLoginStartSuccess | ToolError: ...
 
     async def auth_login_wait(self) -> AuthLoginWaitSuccess | ToolError: ...
+
+
+class UiInvoicesListService(Protocol):
+    """Injectable seam for the read-only invoices list shell observation."""
+
+    async def ui_invoices_list(self) -> UiInvoicesListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -515,6 +530,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_invoices_list(self) -> UiInvoicesListSuccess | ToolError:
+        """Open the invoices list shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_invoices_changed_error()
+
+            invoices_url = f"https://mit.billy.dk/{slug}/invoices"
+            await page.goto(invoices_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_invoices_changed_error()
+                if _is_invoices_list_url(page.url) and await _has_invoices_list_signature(page):
+                    return UiInvoicesListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_invoices_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the invoices list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser invoices list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -590,6 +665,62 @@ def _is_dashboard_shell_url(url: str) -> bool:
     )
 
 
+def _is_invoices_list_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/invoices, including Billy's list query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    # Query params (page, filters) are allowed; the path class stays redacted.
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_INVOICES_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _org_slug_from_url(url: str) -> str | None:
+    """Return the first path segment for an authenticated Billy app URL, or None."""
+
+    try:
+        parsed = urlsplit(url)
+        if parsed.scheme != "https" or (parsed.hostname or "").lower() != "mit.billy.dk":
+            return None
+        path = parsed.path or ""
+        if path == _BILLY_LOGIN_URL_PATH:
+            return None
+        parts = [segment for segment in path.split("/") if segment]
+        if not parts:
+            return None
+        slug = parts[0]
+        if slug == "login" or "/" in slug:
+            return None
+        return slug
+    except Exception:
+        return None
+
+
+def _resolve_org_slug(url: str, identity_path: Path) -> str | None:
+    """Resolve org slug from the current URL or the outside-git identity file only."""
+
+    from_url = _org_slug_from_url(url)
+    if from_url is not None:
+        return from_url
+    try:
+        payload = json.loads(identity_path.read_text(encoding="utf-8"))
+        slug = payload.get("org_slug")
+        if isinstance(slug, str) and slug and "/" not in slug and slug != "login":
+            return slug
+    except Exception:
+        return None
+    return None
+
+
 async def _has_login_signature(page: LoginPage) -> bool:
     """Verify every observed login control exactly once and visibly present."""
 
@@ -630,11 +761,48 @@ async def _await_login_transition_settle(page: LoginPage) -> None:
         await asyncio.sleep(0.05)
 
 
+async def _await_page_settle(page: LoginPage) -> None:
+    """Wait briefly for SPA navigation without classifying page content."""
+
+    try:
+        await page.wait_for_load_state("networkidle", timeout=15000)
+    except Exception:
+        await asyncio.sleep(0.2)
+
+
 async def _has_shell_nav_markers(page: LoginPage) -> bool:
     """Require at least one non-PII shell marker observed in research100."""
 
     try:
         for selector in _SHELL_NAV_MARKERS:
+            control = page.locator(selector)
+            if await control.count() >= 1 and await control.is_visible():
+                return True
+        return False
+    except Exception:
+        return False
+
+
+async def _has_invoices_list_signature(page: LoginPage) -> bool:
+    """Verify the research102 invoices list heading and create CTA without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _INVOICES_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_INVOICES_CREATE_CTA}")
+        return await create_action.count() >= 1 and await create_action.is_visible()
+    except Exception:
+        return False
+
+
+async def _has_error_shell_markers(page: LoginPage) -> bool:
+    """Detect Billy error shells (for example Upsedasse) without echoing page text."""
+
+    try:
+        for selector in _ERROR_SHELL_MARKERS:
             control = page.locator(selector)
             if await control.count() >= 1 and await control.is_visible():
                 return True
@@ -704,6 +872,15 @@ def _ui_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy login interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_invoices_changed_error() -> ToolError:
+    """Fail closed when the invoices list shell no longer matches research102."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy invoices list interface no longer matches the recorded signature.",
     )
 
 

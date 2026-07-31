@@ -13,6 +13,8 @@ from billy_mcp.models import (
     CoverageStatus,
     StableErrorCode,
     ToolError,
+    UiInvoicesListInput,
+    UiInvoicesListSuccess,
 )
 
 
@@ -66,3 +68,31 @@ def test_login_tool_models_have_empty_inputs_and_no_secret_bearing_schema() -> N
         AuthLoginWaitInput.model_validate({"url": "https://untrusted.example"})
     with pytest.raises(ValidationError):
         AuthLoginWaitSuccess.model_validate({"status": "AUTHENTICATING"})
+
+
+def test_ui_invoices_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiInvoicesListInput().model_dump() == {}
+    success = UiInvoicesListSuccess(create_action_visible=True, shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/invoices",
+        "heading": "Fakturaer",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiInvoicesListSuccess.model_json_schema().get("properties", {})
+    assert not (
+        {"email", "password", "totp", "cookie", "token", "org_slug", "url", "selector"}
+        & set(properties)
+    )
+    with pytest.raises(ValidationError):
+        UiInvoicesListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiInvoicesListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/invoices",
+                "heading": "Fakturaer",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "org_slug": "secret",
+            }
+        )

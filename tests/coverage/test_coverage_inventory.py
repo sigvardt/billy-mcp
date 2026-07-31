@@ -173,9 +173,11 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["complete"] is False
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence)
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence)
-    assert status["qualification"]["live_tested_rows"] == 0
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 2
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 2
+    # API live remains 0 (out of scope); two UI invoices list rows are live-qualified.
+    assert status["qualification"]["live_tested_rows"] == 2
+    assert status["qualification"]["vision_verified_rows"] == 2
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -315,19 +317,40 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     workflows = ui_manifest["workflows"]
     parity_rows = [row for row in workflows if row["workflow_kind"] == "api_parity"]
     discovery_rows = [row for row in workflows if row["workflow_kind"] == "discovery"]
+    qualified_ids = {"ui.discovery.invoices", "ui.parity.invoices.list"}
+    remaining = [row for row in workflows if row["id"] not in qualified_ids]
+    qualified = [row for row in workflows if row["id"] in qualified_ids]
 
     assert {row["api_row_id"] for row in parity_rows} == {
         row["id"] for row in api_manifest["operations"]
     }
     assert {row["area"] for row in discovery_rows} == set(generator.UI_DISCOVERY_FAMILIES)
-    assert all(row["vision_verified"] is False for row in workflows)
-    assert all(row["implemented"] is False for row in workflows)
-    assert all(row["contract_tested"] is False for row in workflows)
-    assert all(row["live_tested"] is False for row in workflows)
+    assert all(row["vision_verified"] is False for row in remaining)
+    assert all(row["implemented"] is False for row in remaining)
+    assert all(row["contract_tested"] is False for row in remaining)
+    assert all(row["live_tested"] is False for row in remaining)
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in workflows)
+    assert len(qualified) == 2
+    for row in qualified:
+        assert row["tool_name"] == "ui_invoices_list"
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        # Shell-open only: must not claim full API list filters (IR 186.3 R1).
+        assert row["request_fields"] == []
+        assert row["filters"] in ([], {})
+        assert row["pagination"] is None
+        assert row["parity_status"] == "list_shell_open_only"
+    parity_list = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
+    assert "api.invoices.list" in parity_list["evidence"]
+    assert "filters/sort/pagination UI not producted" in parity_list["evidence"]
     assert checker.raw_evidence_errors(ui_manifest) == []
     assert status["source_counts"]["ui_api_parity"] == 305
+    assert status["complete"] is False
     assert '"bankLineMatche"' not in json.dumps(ui_manifest)
 
     by_host = {rule["host"]: rule for rule in browser_egress["hosts"]}
