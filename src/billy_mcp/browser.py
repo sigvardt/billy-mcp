@@ -40,6 +40,7 @@ from billy_mcp.models import (
     UiReceiptInboxListSuccess,
     UiRecurringInvoicesListSuccess,
     UiReportsOpenSuccess,
+    UiSaftExportsOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -494,6 +495,12 @@ class UiExportsOpenService(Protocol):
     """Injectable seam for the read-only exports (Eksportér data) hub shell open."""
 
     async def ui_exports_open(self) -> UiExportsOpenSuccess | ToolError: ...
+
+
+class UiSaftExportsOpenService(Protocol):
+    """Injectable seam for SAF-T CTA observe-only open on the exports hub."""
+
+    async def ui_saft_exports_open(self) -> UiSaftExportsOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2026,6 +2033,67 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_saft_exports_open(self) -> UiSaftExportsOpenSuccess | ToolError:
+        """Open exports hub and require SAF-T CTA observe-only (research122; never click)."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_saft_exports_changed_error()
+
+            exports_url = f"https://mit.billy.dk/{slug}/exports"
+            await page.goto(exports_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_saft_exports_changed_error()
+                if _is_exports_hub_url(page.url) and await _has_exports_hub_signature(page):
+                    if not await _has_exports_saft_cta_visible(page):
+                        return _ui_saft_exports_changed_error()
+                    return UiSaftExportsOpenSuccess(
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_saft_exports_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the SAF-T exports observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser SAF-T exports observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2609,6 +2677,15 @@ def _ui_exports_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy exports hub interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_saft_exports_changed_error() -> ToolError:
+    """Fail closed when SAF-T CTA or exports hub no longer matches research122."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy SAF-T exports interface no longer matches the recorded signature.",
     )
 
 

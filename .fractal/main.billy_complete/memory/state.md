@@ -6,28 +6,30 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T17:04:11Z
+updated: 2026-07-31T17:39:18Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 22 COMMIT done. Product tip exports 186.22 (`14b5639`).
-- Coverage: implemented/contract 208; live/vision 24; API live 0; complete false.
+- Continue mode iter 23 EXECUTE done for `ui_saft_exports_open` (uncommitted product).
+- Coverage: implemented/contract 209; live/vision 25; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_exports_open`: **ACCEPT** (committed). Next: RESEARCH freeze `ui.discovery.saft_exports`.
+- Product `ui_exports_open`: **ACCEPT** (committed). Product `ui_saft_exports_open` EXECUTE ready for REVIEW.
+- Next: independent REVIEW of `ui_saft_exports_open`.
 
 ## Verification
 
-- Last product: `ui_exports_open` dual-session + vision purge_verified (FIX-VERIFY 186.22; COMMIT pending).
-- Offline baseline product: 1465 passed non-live.
-- Live baseline: 24 UI discovery/parity rows green.
+- Last product: `ui_saft_exports_open` dual-session + vision purge_verified (EXECUTE 186.23).
+- Offline baseline product: 1471 passed non-live.
+- Live baseline: 25 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
-- Product `ui_exports_open`: **ACCEPT** (IR 186.22; no required fixes; egress retains prior lives; annual/saft stay red).
+- Product `ui_saft_exports_open`: **ACCEPT** (IR 186.23; no required fixes; egress retains prior lives; annual stays red).
+- Product `ui_exports_open`: **ACCEPT** (IR 186.22; no required fixes; egress retains prior lives; annual stays red).
 - Product `ui_vat_declarations_list`: **ACCEPT** (IR 186.21; no required fixes; egress retains prior lives).
 - Product `ui_reports_open`: **ACCEPT** (IR 186.20; no required fixes; egress retains prior lives).
 - Product `ui_transactions_list`: **ACCEPT** (IR 186.19; no required fixes; egress retains prior lives).
@@ -44,8 +46,10 @@ updated: 2026-07-31T17:04:11Z
 
 ## Open coverage work
 
-1. Next after COMMIT: `ui.discovery.saft_exports` freeze (then addons, integrations,
-   inventory, settings_*).
+1. Next: PLAN/EXECUTE `ui_saft_exports_open` for `ui.discovery.saft_exports`
+   (research122: no dedicated saft route; hub `/:org_slug/exports` + button
+   `Eksportér som SAF-T` observe-only). Then addons, integrations, inventory,
+   settings_*.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
@@ -67,7 +71,8 @@ updated: 2026-07-31T17:04:11Z
 - Annual reports nav `/:org_slug/annual_reports` dual Upsedasse (CVR hint);
   not plan gate; not success open; no invent api_annual_*.
 - Exports path is `/:org_slug/exports` h1 `Eksportér data`; never click Eksport /
-  Download / SAF-T; no invent api_exports_*; do not green saft_exports alone.
+  Download / SAF-T; no invent api_exports_*; do not green saft_exports alone from
+  the exports hub product.
 - Reports path is `/:org_slug/reports-all` h1 `Rapporter`; bare `/reports`
   rejected; never click Eksport; no invent api_reports_*.
 - Transactions path is `/:org_slug/transactions` h1 `Posteringer`; nested create
@@ -81,12 +86,135 @@ updated: 2026-07-31T17:04:11Z
 
 ## References
 
-- Research121: `tmp/grok-research.md` (annual inaccessible; next exports product)
-- Plan vat: `plans/2026-07-31T16:39:57.357Z-186.21-ui_vat_declarations_list.md`
-- Wiki: `wiki/ui_vat_declarations_list_shell.md`
-- Plan reports: `plans/2026-07-31T16:00:58.156Z-186.20-ui_reports_open.md`
-- Wiki: `wiki/ui_reports_open_shell.md`
-- Next: PLAN product `ui_exports_open`
+- Research122: `tmp/grok-research.md` (saft = CTA on exports hub; next product)
+- Discovery122: `.fractal/main.billy_complete/tmp/discovery122/summary_dual_saft.json`
+- Plan exports: `plans/2026-07-31T17:18:04.362Z-186.22-ui_exports_open.md`
+- Wiki: `wiki/ui_exports_open_shell.md`
+- Research121: annual inaccessible; product tip exports.
+- Next: PLAN product `ui_saft_exports_open`
+
+## Research (iter 23)
+
+- research122 freeze: `ui.discovery.saft_exports` — no dedicated route; soft
+  `saft*` empty; nested `exports/saft*` SPA-falls to exports hub.
+- Canonical shell: path `/:org_slug/exports` h1 `Eksportér data` with button
+  `Eksportér som SAF-T` (`saft_button_count=1`, no href). Dual match; plan gate
+  false; never click SAF-T/Eksport/Download.
+- No official API saft/export resource; do not invent `api_saft_*` / `api_exports_*`.
+- annual_reports reconfirmed dual Upsedasse (stays red).
+- Frames purged; api_token_used false; writes/saft clicks false.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Recommended product: `ui_saft_exports_open` (require SAF-T CTA; distinct from
+  `ui_exports_open` greening).
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 23)
+
+- Unread inbox/feed: empty after react on 73925A29 and 763FE0EF. Saved: empty.
+- No running children.
+- Outbox: research122 freeze already announced (94C146A9); ready PLAN product
+  `ui_saft_exports_open`.
+- Tip exports product; dirty memory/state.md only (+ tmp research artifacts).
+- Ready for PLAN: product `ui_saft_exports_open`.
+
+## Plan (iter 23)
+
+- Plan: `plans/2026-07-31T17:51:51.917Z-186.23-ui_saft_exports_open.md`
+  — product `ui_saft_exports_open` for `ui.discovery.saft_exports` only;
+  root-only; dual live+vision; path `/:org_slug/exports` h1 `Eksportér data`;
+  **require** `saft_export_cta_observed=true` (button `Eksportér som SAF-T`);
+  soft `saft*` reject; never click SAF-T/Eksport/Download; no invent api_saft_*;
+  no greening annual_reports or re-green exports row; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 23)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.23 ready; next EXECUTE product `ui_saft_exports_open`.
+- Dirty: memory + untracked plan/tmp research.
+
+## Execute (iter 23)
+
+- Producted `ui_saft_exports_open` (models/browser/server/tests/coverage/wiki).
+- Offline non-live suite green (1471 after product).
+- Live dual + vision purge_verified for SAF-T CTA on Eksportér data hub.
+- Coverage live/vision 25; complete false.
+- Greens only `ui.discovery.saft_exports`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 23)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 455ACC7E read/reacted (EXECUTE done).
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_saft_exports_open` (186.23).
+
+## Independent review (iter 23)
+
+- Product `ui_saft_exports_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (exports + prior lives + saft).
+- annual_reports remains red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 23)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 23)
+
+- IR product ACCEPT; optional N1/N2 no-op (left as-is).
+- lint pass; offline 1471; live saft reconfirm pass; vision purge_verified.
+- Egress refs intact (exports + vat + reports + transactions + daybooks +
+  financing + bank recon + uploads + receipt_inbox + bank_accounts + saft).
+- Coverage live/vision 25; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 23)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 6B13BFC4 read/reacted (next COMMIT then next discovery freeze).
+- No running children.
+- FIX-VERIFY clean; commit product next.
+
+## SYNC (iter 23)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 4985A253 read/reacted (next saft_exports freeze); refreshed private note.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override: no live API; grok-only).
+- Branch clean at product tip exports 186.22 (`14b5639`) vs origin (auto `2a32882`).
+- Coverage: implemented/contract 208; live/vision 24; complete false.
+- Outbox posted: iter23 progress.
+- Discovery still red (14): annual_reports, saft_exports, addons, integrations,
+  inventory, settings_*.
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.saft_exports`.
+
+## PREPARE (iter 23)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: scaffold/init/review stubs only, or product already
+  superseded on root (`auth_status` present and evolved; wave5t/wave5u research
+  wiki already on root; wave5j bank-line fractal-only). Optional unmerged wiki-only
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip,
+  superseded auth research already on root product path.
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.saft_exports`.
+
+## SYNC pre-RESEARCH (iter 23)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8BEDF04D read/reacted (next: saft_exports freeze).
+- No running children. Parent merge already done (no-op).
+- Tip exports product `14b5639` / auto `2a32882`; dirty: memory/state.md only.
+- Outbox: pre-research saft_exports freeze announced.
+- Ready for RESEARCH freeze: `ui.discovery.saft_exports`.
 
 ## SYNC (iter 21)
 

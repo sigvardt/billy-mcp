@@ -918,33 +918,45 @@
     {
       "api_row_id": null,
       "area": "saft_exports",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research122 dual-session headless observation + ui_saft_exports_open product; shell open only (path class /:org_slug/exports, h1 Eksport\u00e9r data, required SAF-T CTA Eksport\u00e9r som SAF-T observe-only); soft saft* rejected; no invent api_saft_*/api_exports_*; does not re-green exports/annual_reports/settings; vision record tmp/vision-records/ui_saft_exports_open.json (hub frames, accept)",
       "filters": [],
       "id": "ui.discovery.saft_exports",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family saft_exports",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/exports (read-only SAF-T CTA observe on Eksport\u00e9r data hub; never click Eksport\u00e9r som SAF-T / Eksport / Download)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "saft_export_cta_observed",
+        "shell_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_saft_exports_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_saft_exports_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {

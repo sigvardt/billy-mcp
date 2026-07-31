@@ -45,6 +45,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenInput,
     UiReportsOpenSuccess,
+    UiSaftExportsOpenInput,
+    UiSaftExportsOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -868,6 +870,49 @@ def test_ui_exports_open_models_are_empty_input_and_non_pii_success() -> None:
         UiExportsOpenSuccess.model_validate(
             {
                 "path_class": "/:org_slug/export",
+                "heading": "Eksportér data",
+                "saft_export_cta_observed": True,
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_saft_exports_open_models_require_saft_cta() -> None:
+    assert UiSaftExportsOpenInput().model_dump() == {}
+    success = UiSaftExportsOpenSuccess(shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/exports",
+        "heading": "Eksportér data",
+        "saft_export_cta_observed": True,
+        "shell_markers_present": True,
+    }
+    properties = UiSaftExportsOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "download",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiSaftExportsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSaftExportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/exports",
+                "heading": "Eksportér data",
+                "saft_export_cta_observed": False,
+                "shell_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSaftExportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/saft",
                 "heading": "Eksportér data",
                 "saft_export_cta_observed": True,
                 "shell_markers_present": True,

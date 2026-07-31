@@ -426,6 +426,23 @@ class UiExportsOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiSaftExportsOpenInput(BaseModel):
+    """Empty, strict input for the read-only SAF-T CTA observe shell on exports hub."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSaftExportsOpenSuccess(BaseModel):
+    """Non-PII classification requiring SAF-T CTA on the Eksportér data hub."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/exports"] = "/:org_slug/exports"
+    heading: Literal["Eksportér data"] = "Eksportér data"
+    saft_export_cta_observed: Literal[True] = True
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

@@ -102,6 +102,10 @@ UI_EXPORTS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_EXPORTS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_exports_open.py"
 UI_EXPORTS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_EXPORTS_OPEN_TOOL_NAME = "ui_exports_open"
+UI_SAFT_EXPORTS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_saft_exports_open.py"
+UI_SAFT_EXPORTS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_SAFT_EXPORTS_OPEN_TOOL_NAME = "ui_saft_exports_open"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2401,6 +2405,62 @@ def apply_ui_exports_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_saft_exports_open_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark SAF-T observe-only shell evidence on exports hub (research122).
+
+    Empty-input tool; path /:org_slug/exports; h1 Eksportér data; requires
+    Eksportér som SAF-T CTA present (never click). Soft saft* aliases rejected.
+    No invent api_saft_*/api_exports_*. Does not re-green exports or annual_reports.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/exports (read-only SAF-T CTA observe on Eksportér "
+        "data hub; never click Eksportér som SAF-T / Eksport / Download)"
+    )
+    row["tool_name"] = UI_SAFT_EXPORTS_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "saft_export_cta_observed",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_SAFT_EXPORTS_OPEN_MODEL_TEST_REFERENCE,
+        UI_SAFT_EXPORTS_OPEN_UNIT_TEST_REFERENCE,
+        UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research122 dual-session headless observation + ui_saft_exports_open product; "
+        "shell open only (path class /:org_slug/exports, h1 Eksportér data, required "
+        "SAF-T CTA Eksportér som SAF-T observe-only); soft saft* rejected; no invent "
+        "api_saft_*/api_exports_*; does not re-green exports/annual_reports/settings; "
+        "vision record tmp/vision-records/ui_saft_exports_open.json (hub frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2471,6 +2531,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_vat_declarations_list_shell_evidence(row)
         if family == "exports":
             apply_ui_exports_open_shell_evidence(row)
+        if family == "saft_exports":
+            apply_ui_saft_exports_open_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2556,6 +2618,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2614,6 +2677,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {

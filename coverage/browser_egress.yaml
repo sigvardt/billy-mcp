@@ -31,7 +31,8 @@
         "tests/live/test_ui_transactions_list.py",
         "tests/live/test_ui_reports_open.py",
         "tests/live/test_ui_vat_declarations_list.py",
-        "tests/live/test_ui_exports_open.py"
+        "tests/live/test_ui_exports_open.py",
+        "tests/live/test_ui_saft_exports_open.py"
       ]
     },
     {
@@ -148,7 +149,8 @@
         "tests/live/test_ui_transactions_list.py",
         "tests/live/test_ui_reports_open.py",
         "tests/live/test_ui_vat_declarations_list.py",
-        "tests/live/test_ui_exports_open.py"
+        "tests/live/test_ui_exports_open.py",
+        "tests/live/test_ui_saft_exports_open.py"
       ]
     },
     {

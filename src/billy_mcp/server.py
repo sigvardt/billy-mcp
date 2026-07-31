@@ -78,6 +78,7 @@ from billy_mcp.browser import (
     UiReceiptInboxListService,
     UiRecurringInvoicesListService,
     UiReportsOpenService,
+    UiSaftExportsOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
@@ -132,6 +133,8 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenInput,
     UiReportsOpenSuccess,
+    UiSaftExportsOpenInput,
+    UiSaftExportsOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -168,6 +171,7 @@ def create_server(
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
     ui_exports_open_service: UiExportsOpenService | None = None,
+    ui_saft_exports_open_service: UiSaftExportsOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -202,6 +206,7 @@ def create_server(
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
     exports_open_service = ui_exports_open_service or browser
+    saft_exports_open_service = ui_saft_exports_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -359,6 +364,12 @@ def create_server(
 
         UiExportsOpenInput()
         return await exports_open_service.ui_exports_open()
+
+    async def ui_saft_exports_open() -> UiSaftExportsOpenSuccess | ToolError:
+        """Observe SAF-T CTA on the exports hub without export or download actions."""
+
+        UiSaftExportsOpenInput()
+        return await saft_exports_open_service.ui_saft_exports_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -528,6 +539,14 @@ def create_server(
             "download, or run SAF-T export)."
         ),
     )(ui_exports_open)
+    server.tool(
+        name="ui_saft_exports_open",
+        description=(
+            "Open the Billy exports hub and verify the SAF-T export control is present "
+            "for the authenticated session (read-only; does not click Eksportér som "
+            "SAF-T, Eksport, or Download)."
+        ),
+    )(ui_saft_exports_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
