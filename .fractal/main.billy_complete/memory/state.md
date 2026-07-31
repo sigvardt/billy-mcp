@@ -6,30 +6,21 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T20:22:46Z
+updated: 2026-07-31T22:20:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 28 COMMIT. Product tip settings_accounting 186.28 (`ui_settings_accounting_open`, `aaa54c4`). Coverage live/vision 30; complete false. Next: remaining settings_* (prefer invoicing SPA seed) or annual red.
-- Review: product `ui_settings_accounting_open` **ACCEPT** (IR 186.28).
-- Continue mode iter 28 SYNC pre-REVIEW. EXECUTE product uncommitted. Ready IR.
-- Continue mode iter 28 EXECUTE 186.28 done: producted `ui_settings_accounting_open`. Offline 1504; live dual+vision purge_verified. Coverage live/vision 30.
-- Continue mode iter 28 SYNC pre-EXECUTE. Plan 186.28 ready.
-- Continue mode iter 28 PLAN 186.28 ready: product `ui_settings_accounting_open`.
-- Continue mode iter 28 SYNC pre-PLAN. Research127 freeze ready PLAN.
-- Continue mode iter 28 RESEARCH127 done. Settings accounting freeze dual OK.
-- Continue mode iter 28 SYNC pre-RESEARCH. Ready RESEARCH settings_* freeze.
-- Continue mode iter 28 PREPARE. Parent main up to date; no child product merges. Tip affbd3b.
-- Continue mode iter 28 SYNC. Tip affbd3b (settings company 186.27). Coverage live/vision 29; complete false.
+- Continue mode iter 29 COMMIT. Product tip settings_invoicing 186.29 (`ui_settings_invoicing_open`). Coverage live/vision 31; complete false. Next: remaining settings_* (user/vat/users/subscription/access_token/beta) or annual red. No invent api_settings_*.
+- Review: product `ui_settings_invoicing_open` **ACCEPT** (IR 186.29).
 
 ## Verification
 
-- Last product: `ui_settings_company_open` dual-session + vision purge_verified (committed 186.27).
-- Offline baseline product: 1497 passed non-live.
-- Live baseline: 29 UI discovery/parity rows green.
+- Last product: `ui_settings_accounting_open` dual-session + vision purge_verified (committed 186.28).
+- Offline baseline product: 1504 passed non-live.
+- Live baseline: 30 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
@@ -59,24 +50,24 @@ updated: 2026-07-31T20:22:46Z
 
 ## Open coverage work
 
-1. Next: remaining settings_* (user/accounting/vat/invoicing/users/subscription/
-   access_token/beta via SPA click-nav from Indstillinger hub). annual_reports stays red.
+1. Next: remaining settings_* (user/vat/users/subscription/access_token/beta
+   via SPA click-nav from Indstillinger hub). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (29 rows)
+## Live UI tools (31 rows)
 
-- discovery greened (25): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (26): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
   reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
-  settings_company.
+  settings_company, settings_accounting, settings_invoicing.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (9): annual_reports (inaccessible freeze), settings_user,
-  settings_accounting, settings_vat, settings_invoicing, settings_users,
-  settings_subscription, settings_access_token, settings_beta.
+- discovery still red (7): annual_reports (inaccessible freeze), settings_user,
+  settings_vat, settings_users, settings_subscription, settings_access_token,
+  settings_beta.
 
 ## Evidence boundaries
 

@@ -84,6 +84,7 @@ from billy_mcp.browser import (
     UiSaftExportsOpenService,
     UiSettingsAccountingOpenService,
     UiSettingsCompanyOpenService,
+    UiSettingsInvoicingOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
@@ -150,6 +151,8 @@ from billy_mcp.models import (
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenInput,
     UiSettingsCompanyOpenSuccess,
+    UiSettingsInvoicingOpenInput,
+    UiSettingsInvoicingOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -192,6 +195,7 @@ def create_server(
     ui_inventory_open_service: UiInventoryOpenService | None = None,
     ui_settings_company_open_service: UiSettingsCompanyOpenService | None = None,
     ui_settings_accounting_open_service: UiSettingsAccountingOpenService | None = None,
+    ui_settings_invoicing_open_service: UiSettingsInvoicingOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -232,6 +236,7 @@ def create_server(
     inventory_open_service = ui_inventory_open_service or browser
     settings_company_open_service = ui_settings_company_open_service or browser
     settings_accounting_open_service = ui_settings_accounting_open_service or browser
+    settings_invoicing_open_service = ui_settings_invoicing_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -425,6 +430,12 @@ def create_server(
 
         UiSettingsAccountingOpenInput()
         return await settings_accounting_open_service.ui_settings_accounting_open()
+
+    async def ui_settings_invoicing_open() -> UiSettingsInvoicingOpenSuccess | ToolError:
+        """Observe the Indstillinger Faktura settings panel without write actions."""
+
+        UiSettingsInvoicingOpenInput()
+        return await settings_invoicing_open_service.ui_settings_invoicing_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -642,6 +653,14 @@ def create_server(
             "does not click Gem, Sæt låsedato, or other write actions)."
         ),
     )(ui_settings_accounting_open)
+    server.tool(
+        name="ui_settings_invoicing_open",
+        description=(
+            "Open the Billy invoicing settings (Indstillinger / Faktura) panel for the "
+            "authenticated session (read-only path, heading, and invoicing panel markers; "
+            "does not click Gem, Opret betalingsmetode, Upload, or other write actions)."
+        ),
+    )(ui_settings_invoicing_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

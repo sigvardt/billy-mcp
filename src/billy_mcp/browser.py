@@ -46,6 +46,7 @@ from billy_mcp.models import (
     UiSaftExportsOpenSuccess,
     UiSettingsAccountingOpenSuccess,
     UiSettingsCompanyOpenSuccess,
+    UiSettingsInvoicingOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -166,6 +167,13 @@ _SETTINGS_COMPANY_WRITE_CTAS = (
 _SETTINGS_ACCOUNTING_PATH = _SETTINGS_COMPANY_PATH
 _SETTINGS_ACCOUNTING_HEADING = "Indstillinger"
 _SETTINGS_ACCOUNTING_PANEL_MARKERS = ("Regnskab", "Køb", "Kontoplan")
+# Research128: Indstillinger invoicing (Faktura) panel on same hub path.
+# Open via settings/invoicing SPA seed (rewrites to bare /settings).
+# Never click Gem / Opret* / Tilføj* / Upload / Opgrader / Opret betalingsmetode.
+_SETTINGS_INVOICING_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_INVOICING_HEADING = "Indstillinger"
+_SETTINGS_INVOICING_REQUIRED_MARKERS = ("Faktura", "Produkter")
+_SETTINGS_INVOICING_OPTIONAL_MARKERS = ("Betalingsmetoder", "Standard fakturalogo")
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -568,6 +576,14 @@ class UiSettingsAccountingOpenService(Protocol):
     async def ui_settings_accounting_open(
         self,
     ) -> UiSettingsAccountingOpenSuccess | ToolError: ...
+
+
+class UiSettingsInvoicingOpenService(Protocol):
+    """Injectable seam for the read-only invoicing settings shell open."""
+
+    async def ui_settings_invoicing_open(
+        self,
+    ) -> UiSettingsInvoicingOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2503,6 +2519,80 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_invoicing_open(
+        self,
+    ) -> UiSettingsInvoicingOpenSuccess | ToolError:
+        """Open the Indstillinger invoicing (Faktura) settings panel.
+
+        Research128: request /:org_slug/settings/invoicing (SPA lands bare
+        /:org_slug/settings), h1 Indstillinger, panel markers Faktura + Produkter +
+        (Betalingsmetoder or Standard fakturalogo). Distinct from company default
+        and accounting Regnskab panel. Soft aliases rejected. Never click Gem /
+        Opret* / Tilføj* / Upload / Opgrader / Opret betalingsmetode. No invent
+        api_settings_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_invoicing_changed_error()
+
+            # SPA seed: nested invoicing rewrites to bare settings with Faktura panel.
+            invoicing_url = f"https://mit.billy.dk/{slug}/settings/invoicing"
+            await page.goto(invoicing_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_invoicing_changed_error()
+                if _is_settings_invoicing_url(page.url) and await _has_settings_invoicing_signature(
+                    page
+                ):
+                    return UiSettingsInvoicingOpenSuccess(
+                        invoicing_panel_markers_present=True,
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_settings_invoicing_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the settings invoicing shell observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=("Browser settings invoicing shell observation could not be completed."),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2927,6 +3017,12 @@ def _is_settings_accounting_url(url: str) -> bool:
     return _is_settings_company_url(url)
 
 
+def _is_settings_invoicing_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (after SPA rewrite)."""
+
+    return _is_settings_company_url(url)
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -3209,6 +3305,15 @@ def _ui_settings_accounting_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy settings accounting shell was not available in the expected form.",
+    )
+
+
+def _ui_settings_invoicing_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings invoicing shell classification failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings invoicing shell was not available in the expected form.",
     )
 
 
@@ -3822,6 +3927,60 @@ async def _has_settings_accounting_signature(page: LoginPage) -> bool:
             if await control.count() >= 1 and await control.first.is_visible():
                 company_hits += 1
         if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        return True
+    except Exception:
+        return False
+
+
+async def _has_settings_invoicing_signature(page: LoginPage) -> bool:
+    """Verify research128 Indstillinger + Faktura panel markers; never click writes.
+
+    Requires h1 Indstillinger, Faktura + Produkter, and Betalingsmetoder or
+    Standard fakturalogo. Rejects company default panel and accounting Regnskab
+    panel (Regnskab+Køb+Kontoplan). Soft aliases and other settings panels are
+    not success for this tool. Use .first for multi-match rail/body labels
+    (Faktura appears on the left rail of other panels).
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_INVOICING_HEADING:
+            return False
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        optional_ok = False
+        for label in _SETTINGS_INVOICING_OPTIONAL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                optional_ok = True
+                break
+        if not optional_ok:
+            return False
+        # Reject company default panel (rail alone may show Faktura label).
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        # Reject accounting Regnskab panel when its required trio is active.
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
             return False
         return True
     except Exception:

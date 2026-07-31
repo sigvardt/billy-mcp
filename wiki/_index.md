@@ -75,6 +75,8 @@ updated: 2026-07-31T20:02:06Z
 
 [[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126 freeze).
 
+[[ui_settings_invoicing_open_shell|ui_settings_invoicing_open_shell]]: Read-only Billy Indstillinger Faktura (invoicing) settings panel open (research128 freeze).
+
 [[ui_suppliers_list_shell|ui_suppliers_list_shell]]: Read-only headless ui_suppliers_list contract for Billy suppliers list shell open only.
 
 [[ui_transactions_list_shell|ui_transactions_list_shell]]: Read-only Billy transactions (Posteringer) list shell contract (research118 freeze).
