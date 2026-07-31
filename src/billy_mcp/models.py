@@ -392,6 +392,23 @@ class UiReportsOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiVatDeclarationsListInput(BaseModel):
+    """Empty, strict input for the read-only VAT declarations (Momsangivelser) list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiVatDeclarationsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy Momsangivelser list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/vat-declarations"] = "/:org_slug/vat-declarations"
+    heading: Literal["Momsangivelser"] = "Momsangivelser"
+    period_column_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

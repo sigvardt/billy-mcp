@@ -80,6 +80,7 @@ from billy_mcp.browser import (
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
+    UiVatDeclarationsListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -134,6 +135,8 @@ from billy_mcp.models import (
     UiTransactionsListSuccess,
     UiUploadsListInput,
     UiUploadsListSuccess,
+    UiVatDeclarationsListInput,
+    UiVatDeclarationsListSuccess,
 )
 
 
@@ -160,6 +163,7 @@ def create_server(
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
+    ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -192,6 +196,7 @@ def create_server(
     daybooks_open_service = ui_daybooks_open_service or browser
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
+    vat_declarations_list_service = ui_vat_declarations_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -337,6 +342,12 @@ def create_server(
 
         UiReportsOpenInput()
         return await reports_open_service.ui_reports_open()
+
+    async def ui_vat_declarations_list() -> UiVatDeclarationsListSuccess | ToolError:
+        """Observe the authenticated Billy Momsangivelser list shell without write actions."""
+
+        UiVatDeclarationsListInput()
+        return await vat_declarations_list_service.ui_vat_declarations_list()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -490,6 +501,14 @@ def create_server(
             "download, or generate reports)."
         ),
     )(ui_reports_open)
+    server.tool(
+        name="ui_vat_declarations_list",
+        description=(
+            "Open the Billy VAT declarations (Momsangivelser) list shell for the "
+            "authenticated session (read-only path and heading classification; does "
+            "not declare, submit, export, or create VAT returns)."
+        ),
+    )(ui_vat_declarations_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

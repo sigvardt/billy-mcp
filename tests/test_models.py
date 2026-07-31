@@ -49,6 +49,8 @@ from billy_mcp.models import (
     UiTransactionsListSuccess,
     UiUploadsListInput,
     UiUploadsListSuccess,
+    UiVatDeclarationsListInput,
+    UiVatDeclarationsListSuccess,
 )
 
 
@@ -771,6 +773,54 @@ def test_ui_reports_open_models_are_empty_input_and_non_pii_success() -> None:
                 "path_class": "/:org_slug/reports",
                 "heading": "Rapporter",
                 "export_action_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_vat_declarations_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiVatDeclarationsListInput().model_dump() == {}
+    success = UiVatDeclarationsListSuccess(
+        period_column_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/vat-declarations",
+        "heading": "Momsangivelser",
+        "period_column_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiVatDeclarationsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "period",
+        "amount",
+        "selector",
+        "account",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiVatDeclarationsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiVatDeclarationsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/vat-declarations",
+                "heading": "Momsangivelser",
+                "period_column_visible": True,
+                "shell_markers_present": True,
+                "period": "secret",
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiVatDeclarationsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/vat",
+                "heading": "Momsangivelser",
+                "period_column_visible": True,
                 "shell_markers_present": True,
             }
         )

@@ -94,6 +94,10 @@ UI_REPORTS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_REPORTS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_reports_open.py"
 UI_REPORTS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_REPORTS_OPEN_TOOL_NAME = "ui_reports_open"
+UI_VAT_DECLARATIONS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_vat_declarations_list.py"
+UI_VAT_DECLARATIONS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_VAT_DECLARATIONS_LIST_TOOL_NAME = "ui_vat_declarations_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2281,6 +2285,62 @@ def apply_ui_reports_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_vat_declarations_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark VAT declarations (Momsangivelser) list **shell open** evidence only (research120).
+
+    Empty-input tool; path /:org_slug/vat-declarations; h1 Momsangivelser; Periode
+    chrome; empty table body valid. Soft aliases rejected. No invent api_vat_*.
+    Does not green annual/exports/settings discovery rows or re-scope salesTaxReturns.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/vat-declarations (read-only Momsangivelser list shell "
+        "open only; soft aliases rejected; empty list valid)"
+    )
+    row["tool_name"] = UI_VAT_DECLARATIONS_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "period_column_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_VAT_DECLARATIONS_LIST_MODEL_TEST_REFERENCE,
+        UI_VAT_DECLARATIONS_LIST_UNIT_TEST_REFERENCE,
+        UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research120 dual-session headless observation + ui_vat_declarations_list product; "
+        "list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, "
+        "Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; "
+        "does not green annual_reports/exports/settings or re-scope salesTaxReturns; "
+        "vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2347,6 +2407,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_transactions_list_shell_evidence(row)
         if family == "reports":
             apply_ui_reports_open_shell_evidence(row)
+        if family == "vat_declarations":
+            apply_ui_vat_declarations_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2430,6 +2492,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2486,6 +2549,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {

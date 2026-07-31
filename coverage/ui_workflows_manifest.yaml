@@ -798,33 +798,45 @@
     {
       "api_row_id": null,
       "area": "vat_declarations",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research120 dual-session headless observation + ui_vat_declarations_list product; list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; does not green annual_reports/exports/settings or re-scope salesTaxReturns; vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept)",
       "filters": [],
       "id": "ui.discovery.vat_declarations",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family vat_declarations",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/vat-declarations (read-only Momsangivelser list shell open only; soft aliases rejected; empty list valid)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "list_shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "period_column_visible",
+        "shell_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_vat_declarations_list.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_vat_declarations_list",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {

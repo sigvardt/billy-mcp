@@ -67,6 +67,8 @@ updated: 2026-07-31T16:07:04Z
 
 [[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list contract for Billy uploads (Bilag) list shell open only.
 
+[[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell contract (research120 freeze).
+
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
 [[wave5t_ui_auth_discovery|wave5t_ui_auth_discovery]]: Cited headless Billy UI/auth discovery fallback: session reuse reaches login only; no UI coverage is qualified.

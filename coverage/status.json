@@ -7,10 +7,10 @@
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
     "blocker": "Unresolved ambiguous bulk API contracts remain red; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete",
-    "contract_tested_rows": 206,
-    "implemented_rows": 206,
-    "live_tested_rows": 22,
-    "vision_verified_rows": 22
+    "contract_tested_rows": 207,
+    "implemented_rows": 207,
+    "live_tested_rows": 23,
+    "vision_verified_rows": 23
   },
   "schema_version": 1,
   "source_counts": {

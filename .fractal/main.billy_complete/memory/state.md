@@ -6,27 +6,28 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T15:50:16Z
+updated: 2026-07-31T16:27:11Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 20 COMMIT done. Product tip reports 186.20 (`6a6b94f`).
-- Coverage: implemented/contract 206; live/vision 22; API live 0; complete false.
+- Continue mode iter 21 pre-COMMIT. Product tip still reports 186.20 until COMMIT.
+- Coverage: implemented/contract 207; live/vision 23; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Next: RESEARCH freeze `ui.discovery.vat_declarations`.
+- Next: COMMIT product `ui_vat_declarations_list`.
 
 ## Verification
 
-- Last product: `ui_reports_open` dual-session + vision purge_verified (COMMIT 186.20).
-- Offline baseline product: 1448 passed non-live.
-- Live baseline: 22 UI discovery/parity rows green.
+- Last product: `ui_vat_declarations_list` dual-session + vision purge_verified (EXECUTE 186.21).
+- Offline baseline product: 1457 passed non-live (expected after inventory count bump).
+- Live baseline: 23 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
+- Product `ui_vat_declarations_list`: **ACCEPT** (IR 186.21; no required fixes; egress retains prior lives).
 - Product `ui_reports_open`: **ACCEPT** (IR 186.20; no required fixes; egress retains prior lives).
 - Product `ui_transactions_list`: **ACCEPT** (IR 186.19; no required fixes; egress retains prior lives).
 - Product `ui_daybooks_open`: **ACCEPT** (IR 186.18; no required fixes; egress retains prior lives).
@@ -42,20 +43,19 @@ updated: 2026-07-31T15:50:16Z
 
 ## Open coverage work
 
-1. Next UI discovery freeze after COMMIT: `ui.discovery.vat_declarations`.
-2. Then annual_reports, exports, saft_exports, addons, integrations, inventory,
-   settings_*.
+1. Next UI discovery freeze after COMMIT: `ui.discovery.annual_reports`.
+2. Then exports, saft_exports, addons, integrations, inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (22 rows)
+## Live UI tools (23 rows)
 
-- discovery greened (18): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (19): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
-  reports.
+  reports, vat_declarations.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (16): vat_declarations, annual_reports,
+- discovery still red (15): annual_reports,
   exports, saft_exports, addons, integrations, inventory, settings_*.
 
 ## Evidence boundaries
@@ -74,10 +74,131 @@ updated: 2026-07-31T15:50:16Z
 
 ## References
 
+- Plan reports: `plans/2026-07-31T16:00:58.156Z-186.20-ui_reports_open.md`
+- Wiki: `wiki/ui_reports_open_shell.md`
 - Plan transactions: `plans/2026-07-31T15:28:53.633Z-186.19-ui_transactions_list.md`
 - Wiki: `wiki/ui_transactions_list_shell.md`
-- Plan daybooks: look up 186.18 in plans/; wiki `wiki/ui_daybooks_open_shell.md`
-- Next: RESEARCH freeze `ui.discovery.reports`
+- Next: RESEARCH freeze `ui.discovery.vat_declarations`
+
+## SYNC (iter 21)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 0B2A374F read/reacted (next vat_declarations freeze); refreshed private 189757F1.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override: no live API; grok-only).
+- Branch clean at product tip reports 186.20 (`6a6b94f`) vs origin (auto `fd88478`).
+- Coverage: implemented/contract 206; live/vision 22; complete false.
+- Outbox posted: iter21 progress (2FEA43D1).
+- Prior reports wiki notes sibling `Momsangivelser` for vat_declarations.
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.vat_declarations`.
+
+## PREPARE (iter 21)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: scaffold/init/review stubs only, or product already
+  superseded on root (`auth_status` present and evolved; wave5t/wave5u research
+  wiki already on root; wave5j bank-line fractal-only). Optional unmerged wiki-only
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip,
+  superseded auth research already on root product path.
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.vat_declarations`.
+
+## SYNC pre-RESEARCH (iter 21)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 189757F1 read/reacted (next: vat_declarations freeze).
+- No running children. Parent merge already done (no-op).
+- Tip reports product `6a6b94f`; dirty: memory/state.md only.
+- Outbox: pre-research vat_declarations freeze announced.
+- Ready for RESEARCH freeze: `ui.discovery.vat_declarations`.
+
+## Research (iter 21)
+
+- research120 freeze: `ui_vat_declarations_list` for `ui.discovery.vat_declarations`
+  → path class `/:org_slug/vat-declarations` h1 `Momsangivelser` (nav label
+  `Momsopgørelser`).
+- Dual session path/h1/title/markers match; soft aliases (vat, moms, underscore
+  vat_declarations, sales-tax-returns) are empty chrome (reject); empty list
+  body valid in test org; Periode chrome present.
+- Closest API is `/v2/salesTaxReturns` (get/list/update; no create) — do not invent
+  api_vat_*; do not re-scope salesTaxReturns from this shell.
+- Frames purged; api_token_used false; writes/clicks false.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 21)
+
+- Unread inbox/feed/private: empty after react on 88B0A7FA. Saved: empty.
+- No running children.
+- Outbox: research120 freeze already announced (C966B80F); ready PLAN product
+  `ui_vat_declarations_list`.
+- Tip reports product; dirty memory/state.md only (+ tmp research artifacts).
+- Ready for PLAN: product `ui_vat_declarations_list`.
+
+## Plan (iter 21)
+
+- Plan: `plans/2026-07-31T16:39:57.357Z-186.21-ui_vat_declarations_list.md`
+  — product `ui_vat_declarations_list` for `ui.discovery.vat_declarations` only;
+  root-only; dual live+vision; path `/:org_slug/vat-declarations` h1
+  `Momsangivelser`; Periode chrome; empty list valid; soft aliases reject; no
+  invent api_vat_*; no annual/exports re-green; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 21)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.21 ready; next EXECUTE product `ui_vat_declarations_list`.
+- Dirty: memory + untracked plan/tmp research.
+
+## Execute (iter 21)
+
+- Producted `ui_vat_declarations_list` (models/browser/server/tests/coverage/wiki).
+- Offline non-live suite green (1457 after count update; was 2 hard-coded 22→23 fails fixed).
+- Live dual + vision purge_verified for Momsangivelser list shell.
+- Coverage live/vision 23; complete false.
+- Greens only `ui.discovery.vat_declarations`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 21)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_vat_declarations_list` (186.21).
+
+## Independent review (iter 21)
+
+- Product `ui_vat_declarations_list`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (reports + prior lives + vat).
+- Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 21)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 21)
+
+- IR product ACCEPT; optional N1/N2 no-op (left as-is).
+- lint pass (wiki `_index` link added; ruff format generator); offline 1457;
+  live vat reconfirm pass; vision purge_verified.
+- Egress refs intact (uploads + receipt_inbox + bank_recon + bank_accounts +
+  financing + daybooks + transactions + reports + vat_declarations).
+- Coverage live/vision 23; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 21)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+- Private note: next annual_reports freeze after commit.
 
 ## SYNC (iter 20)
 
