@@ -13,6 +13,8 @@ from billy_mcp.models import (
     CoverageStatus,
     StableErrorCode,
     ToolError,
+    UiAddonsOpenInput,
+    UiAddonsOpenSuccess,
     UiBankAccountsListInput,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenInput,
@@ -915,6 +917,46 @@ def test_ui_saft_exports_open_models_require_saft_cta() -> None:
                 "path_class": "/:org_slug/saft",
                 "heading": "Eksportér data",
                 "saft_export_cta_observed": True,
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_addons_open_models_fordele_shell() -> None:
+    assert UiAddonsOpenInput().model_dump() == {}
+    success = UiAddonsOpenSuccess(shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/add-ons",
+        "heading": "Fordele",
+        "shell_markers_present": True,
+    }
+    properties = UiAddonsOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "partner",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiAddonsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiAddonsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/addons",
+                "heading": "Fordele",
+                "shell_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiAddonsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/add-ons",
+                "heading": "Integrationer",
                 "shell_markers_present": True,
             }
         )

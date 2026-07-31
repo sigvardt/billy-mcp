@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T18:00:45Z
+updated: 2026-07-31T18:31:35Z
 ---
 
 # billy_mcp
@@ -26,6 +26,8 @@ updated: 2026-07-31T18:00:45Z
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
+
+[[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
 [[ui_bank_accounts_list_shell|ui_bank_accounts_list_shell]]: Read-only headless ui_bank_accounts_list contract for Billy bank accounts list shell open only.
 

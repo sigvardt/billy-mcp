@@ -962,33 +962,44 @@
     {
       "api_row_id": null,
       "area": "addons",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research123 dual-session headless observation + ui_addons_open product; shell open only (path class /:org_slug/add-ons, h1 Fordele); soft aliases rejected; no invent api_addons_*/api_integrations_*; does not green integrations/inventory/settings/annual_reports; vision record tmp/vision-records/ui_addons_open.json (hub frames, accept)",
       "filters": [],
       "id": "ui.discovery.addons",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family addons",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/add-ons (read-only Fordele hub shell open only; never click partner install/connect/access-token/loan CTAs)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_addons_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_addons_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {

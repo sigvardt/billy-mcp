@@ -13,6 +13,7 @@ from billy_mcp.models import (
     AuthLoginWaitSuccess,
     AuthStatusSuccess,
     StableErrorCode,
+    UiAddonsOpenSuccess,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsListSuccess,
@@ -599,6 +600,15 @@ class FakeUiSaftExportsOpenService:
         return UiSaftExportsOpenSuccess(shell_markers_present=True)
 
 
+class FakeUiAddonsOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_addons_open(self) -> UiAddonsOpenSuccess:
+        self.calls += 1
+        return UiAddonsOpenSuccess(shell_markers_present=True)
+
+
 class FakeUiFinancingOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -787,6 +797,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_vat_declarations_list",
         "ui_exports_open",
         "ui_saft_exports_open",
+        "ui_addons_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1478,3 +1489,31 @@ def test_ui_saft_exports_open_registration_has_empty_input_and_typed_output(
         }
     }
     assert saft.calls == 1
+
+
+def test_ui_addons_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    addons = FakeUiAddonsOpenService()
+    server = create_server(tmp_path, ui_addons_open_service=addons)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_addons_open"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_addons_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/add-ons",
+            "heading": "Fordele",
+            "shell_markers_present": True,
+        }
+    }
+    assert addons.calls == 1

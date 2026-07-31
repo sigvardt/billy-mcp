@@ -6,27 +6,30 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T17:39:18Z
+updated: 2026-07-31T18:14:09Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 23 COMMIT done. Product tip saft_exports 186.23.
-- Coverage: implemented/contract 209; live/vision 25; API live 0; complete false.
+- Continue mode iter 24 SYNC pre-COMMIT done. Product tip pending COMMIT: `ui_addons_open`.
+- Coverage: implemented/contract 210; live/vision 26; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_saft_exports_open`: **ACCEPT** (committed). Next: RESEARCH freeze next red discovery (addons/integrations/inventory/settings_*; annual stays red).
+- Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes). FIX-VERIFY
+  reconfirm clean. Ready COMMIT product.
 
 ## Verification
 
-- Last product: `ui_saft_exports_open` dual-session + vision purge_verified (committed 186.23).
-- Offline baseline product: 1471 passed non-live.
-- Live baseline: 25 UI discovery/parity rows green.
+- Last product: `ui_addons_open` dual-session + vision purge_verified (EXECUTE 186.24).
+- Offline baseline product: 1477 passed non-live.
+- Live baseline: 26 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
+- Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes; egress
+  retains prior lives; integrations/annual/settings stay red).
 - Product `ui_saft_exports_open`: **ACCEPT** (IR 186.23; no required fixes; egress retains prior lives; annual stays red).
 - Product `ui_exports_open`: **ACCEPT** (IR 186.22; no required fixes; egress retains prior lives; annual stays red).
 - Product `ui_vat_declarations_list`: **ACCEPT** (IR 186.21; no required fixes; egress retains prior lives).
@@ -45,26 +48,32 @@ updated: 2026-07-31T17:39:18Z
 
 ## Open coverage work
 
-1. Next: RESEARCH freeze next red discovery (addons, integrations, inventory,
-   settings_*).
+1. Next: REVIEW/FIX-VERIFY/COMMIT `ui_addons_open`, then RESEARCH integrations
+   (soft empty separate), inventory (`Lagermodul` seed), settings_*.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (25 rows)
+## Live UI tools (26 rows)
 
-- discovery greened (21): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (22): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
-  reports, vat_declarations, exports, saft_exports.
+  reports, vat_declarations, exports, saft_exports, addons.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (13): annual_reports (inaccessible freeze),
-  addons, integrations, inventory, settings_*.
+- discovery still red (12): annual_reports (inaccessible freeze),
+  integrations, inventory, settings_*.
 
 ## Evidence boundaries
 
 - No invent API tools for pure UI shells.
+- Add-ons path is `/:org_slug/add-ons` h1 `Fordele` (nav Udforsk integrationer);
+  soft aliases (`addons`, `integrations`, nested, settings/*) reject; never click
+  partner CTAs (Opret adgangsnøgle, Tilføj som betalingsmetode, Aktivér
+  rykkerservice, Kom i gang, Ansøg om lån, Læs mere, Se alle vores integrationer);
+  no invent api_addons_*/api_integrations_*; do not green integrations row from
+  the addons open shell alone.
 - Annual reports nav `/:org_slug/annual_reports` dual Upsedasse (CVR hint);
   not plan gate; not success open; no invent api_annual_*.
 - Exports path is `/:org_slug/exports` h1 `Eksportér data`; never click Eksport /
@@ -182,6 +191,127 @@ updated: 2026-07-31T17:39:18Z
 
 - `fractal commit` product: ui saft exports open shell with dual live and vision.
 - Not node finish (complete false; bulk + remaining UI still red).
+
+## SYNC (iter 24)
+
+- Unread inbox/feed/private: empty. Saved queue: empty.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override: no live API; grok-only).
+- Branch clean at product tip saft_exports 186.23 (`844996a` / `bcb8507`) vs origin.
+- Coverage: implemented/contract 209; live/vision 25; complete false.
+- Outbox posted: iter24 progress (1CA7298C).
+- Private note: next freeze addons (9DF683A6).
+- Discovery still red (13): annual_reports (inaccessible), addons, integrations,
+  inventory, settings_*.
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.addons`.
+
+## PREPARE (iter 24)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: scaffold/init/review stubs only, or product already
+  superseded on root (`auth_status` code present on root; wave5t/wave5u research
+  wiki already on root; wave5j bank-line has no unmerged product delta outside
+  `.fractal`). Optional unmerged wiki-only:
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+  (superseded auth research already applied on root product path).
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.addons`.
+
+## SYNC pre-RESEARCH (iter 24)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 9DF683A6 read/reacted (next freeze addons).
+- No running children. Parent merge already done (no-op).
+- Tip still `844996a`; dirty: memory/state.md only.
+- Outbox: pre-RESEARCH ready posted.
+- Ready for RESEARCH freeze: `ui.discovery.addons`.
+
+## Research (iter 24)
+
+- research123 freeze: `ui_addons_open` for `ui.discovery.addons`
+  → path class `/:org_slug/add-ons` (hyphen), h1 `Fordele`, title `Fordele - [org]`,
+  nav label `Udforsk integrationer`.
+- Dual session path/h1/title/structure match; partner card hub (no table);
+  not plan-paywall; frames purged; api_token_used false; writes/clicks false.
+- Soft aliases (`addons`, `integrations`, nested, settings/*) empty chrome shells.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`. No API addons/integrations resource.
+- Do not invent api_addons_*/api_integrations_*; do not green integrations from this
+  shell; never click partner CTAs.
+- Bonus seeds (not greened): inventory h1 `Lagermodul`; settings h1 `Indstillinger`.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 24)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 1BD38F8F and 0A1824CF read/reacted (freeze done; PLAN ui_addons_open).
+- No running children.
+- Outbox: research123 freeze already announced (AC0F6092); pre-PLAN ready posted.
+- Tip `844996a`; dirty memory/state.md only (+ tmp research artifacts untracked).
+- Ready for PLAN: product `ui_addons_open`.
+
+## Plan (iter 24)
+
+- Plan: `plans/2026-07-31T18:25:46.779Z-186.24-ui_addons_open.md`
+  — product `ui_addons_open` for `ui.discovery.addons` only;
+  root-only; dual live+vision; path `/:org_slug/add-ons` h1 `Fordele`;
+  nav `Udforsk integrationer`; soft aliases reject; never partner CTAs;
+  no invent api_addons_*/api_integrations_*; no greening integrations/inventory/
+  settings/annual; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 24)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.24 ready; next EXECUTE product `ui_addons_open`.
+- Tip `844996a`; dirty: memory + untracked plan.
+
+## Execute (iter 24)
+
+- Producted `ui_addons_open` (models/browser/server/tests/coverage/wiki).
+- Offline non-live 1477; live dual + vision purge_verified.
+- Coverage live/vision 26; complete false.
+- Greens only `ui.discovery.addons`. Ready for REVIEW.
+- Egress retains prior lives + addons live ref.
+
+## SYNC pre-REVIEW (iter 24)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete already announced (8308B3C3).
+- Ready for independent review of `ui_addons_open` (186.24).
+
+## Independent review (iter 24)
+
+- Product `ui_addons_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (saft + exports + prior + addons).
+- integrations/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 24)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 24)
+
+- IR product ACCEPT; no product code fixes required (N1 left as-is).
+- lint pass; offline 1477; live addons reconfirm pass; vision purge_verified.
+- Egress refs intact (saft + exports + vat + reports + transactions + daybooks +
+  financing + bank recon + uploads + receipt_inbox + bank_accounts + addons).
+- Coverage live/vision 26; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 24)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
 
 ## SYNC (iter 23)
 

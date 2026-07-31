@@ -443,6 +443,22 @@ class UiSaftExportsOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiAddonsOpenInput(BaseModel):
+    """Empty, strict input for the read-only Fordele (add-ons) hub shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiAddonsOpenSuccess(BaseModel):
+    """Non-PII classification for the Fordele hub at /:org_slug/add-ons."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/add-ons"] = "/:org_slug/add-ons"
+    heading: Literal["Fordele"] = "Fordele"
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

@@ -24,6 +24,7 @@ from billy_mcp.models import (
     AuthStatusSuccess,
     StableErrorCode,
     ToolError,
+    UiAddonsOpenSuccess,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsListSuccess,
@@ -131,6 +132,11 @@ _AFSTEMNING_HREF_SELECTORS = (
     "a[href*='bank_accounts'][href$='/sync']",
     "text=Afstemning",
 )
+# Research123: add-ons (Fordele) hub. Path hyphen required. Soft aliases rejected.
+# Never click partner CTAs (install/connect/access-token/loan/apply).
+_ADDONS_PATH = re.compile(r"^/[^/]+/add-ons$")
+_ADDONS_HEADING = "Fordele"
+_ADDONS_NAV_LABEL = "Udforsk integrationer"
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -501,6 +507,12 @@ class UiSaftExportsOpenService(Protocol):
     """Injectable seam for SAF-T CTA observe-only open on the exports hub."""
 
     async def ui_saft_exports_open(self) -> UiSaftExportsOpenSuccess | ToolError: ...
+
+
+class UiAddonsOpenService(Protocol):
+    """Injectable seam for the read-only Fordele (add-ons) hub shell open."""
+
+    async def ui_addons_open(self) -> UiAddonsOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2094,6 +2106,71 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_addons_open(self) -> UiAddonsOpenSuccess | ToolError:
+        """Open the Fordele (add-ons) hub shell for the current session only.
+
+        Research123: path /:org_slug/add-ons, h1 Fordele. Soft aliases rejected.
+        Never click partner CTAs (Opret adgangsnøgle, Tilføj som betalingsmetode,
+        Aktivér rykkerservice, Kom i gang, Ansøg om lån, Læs mere, Se alle vores
+        integrationer, Install/Connect).
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_addons_changed_error()
+
+            addons_url = f"https://mit.billy.dk/{slug}/add-ons"
+            await page.goto(addons_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_addons_changed_error()
+                if _is_addons_url(page.url) and await _has_addons_signature(page):
+                    return UiAddonsOpenSuccess(
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_addons_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the add-ons shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser add-ons shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2440,6 +2517,24 @@ def _is_financing_url(url: str) -> bool:
     )
 
 
+def _is_addons_url(url: str) -> bool:
+    """Return True when the URL is the add-ons (Fordele) hub path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_ADDONS_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -2686,6 +2781,15 @@ def _ui_saft_exports_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy SAF-T exports interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_addons_changed_error() -> ToolError:
+    """Fail closed when Fordele (add-ons) hub no longer matches research123."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy add-ons interface no longer matches the recorded signature.",
     )
 
 
@@ -3155,6 +3259,27 @@ async def _has_financing_signature(page: LoginPage) -> bool:
         if not await first.is_visible():
             return False
         return (await first.inner_text()).strip() == _FINANCING_HEADING
+    except Exception:
+        return False
+
+
+async def _has_addons_signature(page: LoginPage) -> bool:
+    """Verify research123 Fordele (add-ons) hub heading without partner CTA clicks.
+
+    Never click Opret adgangsnøgle / Tilføj som betalingsmetode / Aktivér
+    rykkerservice / Kom i gang / Ansøg om lån / Læs mere / Se alle vores
+    integrationer / Install / Connect. Soft aliases (addons, integrations) are
+    not success paths for this tool.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        return (await first.inner_text()).strip() == _ADDONS_HEADING
     except Exception:
         return False
 

@@ -62,6 +62,7 @@ from billy_mcp.browser import (
     AuthLoginService,
     AuthStatusChecker,
     BrowserRuntime,
+    UiAddonsOpenService,
     UiBankAccountsListService,
     UiBankReconciliationOpenService,
     UiBillsListService,
@@ -101,6 +102,8 @@ from billy_mcp.models import (
     AuthStatusInput,
     AuthStatusSuccess,
     ToolError,
+    UiAddonsOpenInput,
+    UiAddonsOpenSuccess,
     UiBankAccountsListInput,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenInput,
@@ -172,6 +175,7 @@ def create_server(
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
     ui_exports_open_service: UiExportsOpenService | None = None,
     ui_saft_exports_open_service: UiSaftExportsOpenService | None = None,
+    ui_addons_open_service: UiAddonsOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -207,6 +211,7 @@ def create_server(
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
     exports_open_service = ui_exports_open_service or browser
     saft_exports_open_service = ui_saft_exports_open_service or browser
+    addons_open_service = ui_addons_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -370,6 +375,12 @@ def create_server(
 
         UiSaftExportsOpenInput()
         return await saft_exports_open_service.ui_saft_exports_open()
+
+    async def ui_addons_open() -> UiAddonsOpenSuccess | ToolError:
+        """Observe the authenticated Billy Fordele (add-ons) hub without partner actions."""
+
+        UiAddonsOpenInput()
+        return await addons_open_service.ui_addons_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -547,6 +558,14 @@ def create_server(
             "SAF-T, Eksport, or Download)."
         ),
     )(ui_saft_exports_open)
+    server.tool(
+        name="ui_addons_open",
+        description=(
+            "Open the Billy add-ons (Fordele) hub shell for the authenticated session "
+            "(read-only path and heading classification; does not install, connect, "
+            "create access keys, or open partner destinations)."
+        ),
+    )(ui_addons_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
