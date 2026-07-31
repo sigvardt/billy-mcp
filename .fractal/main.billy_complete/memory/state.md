@@ -108,7 +108,7 @@ updated: 2026-07-31T23:00:00Z
 - Wiki settings: `wiki/ui_settings_company_open_shell.md`,
   `wiki/ui_settings_accounting_open_shell.md`,
   `wiki/ui_settings_invoicing_open_shell.md`
-- Tip product: (pending commit) `ui_settings_access_token_open`
+- Tip product: `b1ea805` `ui_settings_access_token_open`
 - Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_beta`)
 
 ## SYNC (iter 30)
