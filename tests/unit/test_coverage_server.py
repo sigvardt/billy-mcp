@@ -16,6 +16,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
+    UiDebtorBalancesListSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -472,6 +473,15 @@ class FakeUiBillsListService:
         return UiBillsListSuccess(create_action_visible=True, shell_markers_present=True)
 
 
+class FakeUiDebtorBalancesListService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_debtor_balances_list(self) -> UiDebtorBalancesListSuccess:
+        self.calls += 1
+        return UiDebtorBalancesListSuccess(create_action_visible=True, shell_markers_present=True)
+
+
 def write_coverage_fixture(root: Path) -> None:
     coverage = root / "coverage"
     coverage.mkdir()
@@ -639,6 +649,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_products_import",
         "ui_suppliers_list",
         "ui_bills_list",
+        "ui_debtor_balances_list",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -974,3 +985,32 @@ def test_ui_bills_list_registration_has_empty_input_and_typed_output(tmp_path: P
         }
     }
     assert bills.calls == 1
+
+
+def test_ui_debtor_balances_list_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    debtor = FakeUiDebtorBalancesListService()
+    server = create_server(tmp_path, ui_debtor_balances_list_service=debtor)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_debtor_balances_list"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_debtor_balances_list", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/debtorbalance",
+            "heading": "Tilgodehavender",
+            "create_action_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert debtor.calls == 1

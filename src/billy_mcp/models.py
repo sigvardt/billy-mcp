@@ -238,6 +238,23 @@ class UiBillsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiDebtorBalancesListInput(BaseModel):
+    """Empty, strict input boundary for the read-only debtor balances list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiDebtorBalancesListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy debtor balances (Tilgodehavender) shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/debtorbalance"] = "/:org_slug/debtorbalance"
+    heading: Literal["Tilgodehavender"] = "Tilgodehavender"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

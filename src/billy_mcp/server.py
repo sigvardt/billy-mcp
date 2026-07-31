@@ -65,6 +65,7 @@ from billy_mcp.browser import (
     UiBankAccountsListService,
     UiBillsListService,
     UiClientsListService,
+    UiDebtorBalancesListService,
     UiInvoicesListService,
     UiProductsImportService,
     UiProductsListService,
@@ -95,6 +96,8 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
+    UiDebtorBalancesListInput,
+    UiDebtorBalancesListSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -124,6 +127,7 @@ def create_server(
     ui_products_import_service: UiProductsImportService | None = None,
     ui_suppliers_list_service: UiSuppliersListService | None = None,
     ui_bills_list_service: UiBillsListService | None = None,
+    ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -147,6 +151,7 @@ def create_server(
     products_import_service = ui_products_import_service or browser
     suppliers_list_service = ui_suppliers_list_service or browser
     bills_list_service = ui_bills_list_service or browser
+    debtor_balances_list_service = ui_debtor_balances_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -239,6 +244,12 @@ def create_server(
         UiBillsListInput()
         return await bills_list_service.ui_bills_list()
 
+    async def ui_debtor_balances_list() -> UiDebtorBalancesListSuccess | ToolError:
+        """Observe the authenticated Billy debtor balances list shell without writes."""
+
+        UiDebtorBalancesListInput()
+        return await debtor_balances_list_service.ui_debtor_balances_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -322,6 +333,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_bills_list)
+    server.tool(
+        name="ui_debtor_balances_list",
+        description=(
+            "Open the Billy debtor balances list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_debtor_balances_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
