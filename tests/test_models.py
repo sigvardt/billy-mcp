@@ -23,6 +23,8 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksOpenInput,
+    UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiFinancingOpenInput,
@@ -593,6 +595,43 @@ def test_ui_financing_open_models_are_empty_input_and_non_pii_success() -> None:
                 "path_class": "/:org_slug/bank-accounts",
                 "heading": "Bankkonti",
                 "apply_cta_observed": False,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_daybooks_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiDaybooksOpenInput().model_dump() == {}
+    success = UiDaybooksOpenSuccess(editor_markers_present=True, shell_markers_present=True)
+    assert success.path_class == "/:org_slug/daybooks/new"
+    assert success.heading == ""
+    assert success.editor_markers_present is True
+    assert success.shell_markers_present is True
+    properties = UiDaybooksOpenSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "editor_markers_present",
+        "shell_markers_present",
+    }
+    try:
+        UiDaybooksOpenInput.model_validate({"url": "https://mit.billy.dk/x/daybooks/new"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiDaybooksOpenInput.model_validate({"create": True})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiDaybooksOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/daybooks",
+                "editor_markers_present": True,
                 "shell_markers_present": True,
             }
         )

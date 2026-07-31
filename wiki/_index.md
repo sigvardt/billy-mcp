@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T14:36:54Z
+updated: 2026-07-31T15:08:25Z
 ---
 
 # billy_mcp
@@ -36,6 +36,8 @@ updated: 2026-07-31T14:36:54Z
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.
 
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
+
+[[ui_daybooks_open_shell|ui_daybooks_open_shell]]: Read-only Billy daybook editor (Kassekladde) shell contract (research117 freeze).
 
 [[ui_debtor_balances_list_shell|ui_debtor_balances_list_shell]]: Read-only headless ui_debtor_balances_list contract for Billy debtor balances (Tilgodehavender) list shell open only.
 

@@ -341,6 +341,23 @@ class UiFinancingOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiDaybooksOpenInput(BaseModel):
+    """Empty, strict input for the read-only daybook (Kassekladde) editor shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiDaybooksOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy daybook editor shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/daybooks/new"] = "/:org_slug/daybooks/new"
+    heading: str = ""
+    editor_markers_present: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

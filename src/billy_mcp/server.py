@@ -67,6 +67,7 @@ from billy_mcp.browser import (
     UiBillsListService,
     UiClientsListService,
     UiCreditorBalancesListService,
+    UiDaybooksOpenService,
     UiDebtorBalancesListService,
     UiFinancingOpenService,
     UiInvoicesListService,
@@ -105,6 +106,8 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksOpenInput,
+    UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiFinancingOpenInput,
@@ -148,6 +151,7 @@ def create_server(
     ui_receipt_inbox_list_service: UiReceiptInboxListService | None = None,
     ui_bank_reconciliation_open_service: UiBankReconciliationOpenService | None = None,
     ui_financing_open_service: UiFinancingOpenService | None = None,
+    ui_daybooks_open_service: UiDaybooksOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -177,6 +181,7 @@ def create_server(
     receipt_inbox_list_service = ui_receipt_inbox_list_service or browser
     bank_reconciliation_open_service = ui_bank_reconciliation_open_service or browser
     financing_open_service = ui_financing_open_service or browser
+    daybooks_open_service = ui_daybooks_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -304,6 +309,12 @@ def create_server(
 
         UiFinancingOpenInput()
         return await financing_open_service.ui_financing_open()
+
+    async def ui_daybooks_open() -> UiDaybooksOpenSuccess | ToolError:
+        """Observe the authenticated Billy daybook editor shell without create/add-line actions."""
+
+        UiDaybooksOpenInput()
+        return await daybooks_open_service.ui_daybooks_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -433,6 +444,14 @@ def create_server(
             "loan or submit partner financing)."
         ),
     )(ui_financing_open)
+    server.tool(
+        name="ui_daybooks_open",
+        description=(
+            "Open the Billy daybook editor (Kassekladde) shell for the authenticated "
+            "session (read-only path and marker classification; does not create daybooks, "
+            "add lines, or post entries)."
+        ),
+    )(ui_daybooks_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

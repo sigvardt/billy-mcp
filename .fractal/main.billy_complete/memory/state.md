@@ -6,18 +6,148 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T14:22:00Z
+updated: 2026-07-31T15:42:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 17 COMMIT complete; tip product financing 186.17 (`8ad1215`).
-- Coverage: implemented/contract 203; live/vision 19; API live 0; complete false.
+- Continue mode iter 18 SYNC; tip product financing 186.17 (`8ad1215` / auto `d5b2d05`).
+- Coverage: implemented/contract 204; live/vision 20; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Branch clean at `8ad1215` vs origin (dirty only this memory file).
+- Branch clean at `d5b2d05` vs origin before this memory edit.
+
+
+## SYNC (iter 18)
+
+- Unread inbox/feed: empty. Private D878BF13 read (next: daybooks freeze). Saved: empty.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override: no live API; grok-only).
+- Branch tip product financing 186.17 (`8ad1215`); iteration auto `d5b2d05`.
+- Coverage: implemented/contract 203; live/vision 19; complete false.
+- Outbox posted: iter18 progress.
+- Ready for PREPARE.
+
+
+## PREPARE (iter 18)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: fractal-only review/scaffold stubs, or product already
+  superseded on root (`auth_status` / `AuthStatusChecker` present on root; wave5t/wave5u
+  research wiki already on root; wave5j bank-line and wave5sb upload branches have no
+  unmerged product delta outside `.fractal`). Optional unmerged wiki-only:
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+  (superseded auth research already applied on root product path).
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.daybooks`.
+
+
+## SYNC pre-RESEARCH (iter 18)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. Parent merge already done (no-op).
+- Tip product financing; dirty: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.daybooks`.
+
+
+## Research (iter 18)
+
+- research117 freeze: `ui_daybooks_open` for `ui.discovery.daybooks`.
+- Bare `/:org_slug/daybooks` dual-session **Upsedasse!** (Ukendt fejl); not list shell.
+- Editor shell at `/:org_slug/daybooks/new` (also `/daybooks/:id` etc.): markers
+  `Opret ny kassekladde`, `Tilføj kassekladdelinje`, `Ingen postering valgt`; dual match.
+- `/:org_slug/transactions` h1 `Posteringer` works — leave for `ui.discovery.transactions`.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- API daybooks already offline producted; no invent API; no live API; no create clicks.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+
+## SYNC pre-PLAN (iter 18)
+
+- Unread inbox/feed/private: empty after reading private next-product note. Saved: empty.
+- No running children.
+- Outbox: research117 freeze already announced; ready PLAN product `ui_daybooks_open`.
+- Dirty: memory + untracked research/tmp artifacts.
+- Ready for PLAN: product `ui_daybooks_open`.
+
+
+## Plan (iter 18)
+
+- Plan: `plans/2026-07-31T15:03:33.315Z-186.18-ui_daybooks_open.md`
+  — product `ui_daybooks_open` for `ui.discovery.daybooks` only;
+  root-only; dual live+vision; path `/:org_slug/daybooks/new` editor markers;
+  bare `/daybooks` is Upsedasse reject; no invent API; no create/add-line click;
+  no transactions re-green; egress append without drop.
+- Ready for EXECUTE.
+
+
+## SYNC pre-EXECUTE (iter 18)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.18 ready; next EXECUTE product `ui_daybooks_open`.
+- Dirty: memory + untracked plan/research.
+
+
+## Execute (iter 18)
+
+- Producted `ui_daybooks_open` (models/browser/server/tests/coverage/wiki).
+- Offline 1430; live dual + vision purge_verified.
+- Coverage live/vision 20; complete false.
+- Greens only `ui.discovery.daybooks`. Path `/:org_slug/daybooks/new`.
+- Bare `/daybooks` rejected (Upsedasse). Ready for REVIEW.
+
+
+## SYNC pre-REVIEW (iter 18)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_daybooks_open` (186.18).
+
+
+## Independent review (iter 18)
+
+- Product `ui_daybooks_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (financing + recon + receipt + uploads + daybooks).
+- N1 non-blocking: heading is open str (empty in freeze).
+- Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+
+## SYNC pre-FIX-VERIFY (iter 18)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+
+## FIX-VERIFY (iter 18)
+
+- IR product ACCEPT; no product code fixes required.
+- lint pass; offline 1430; live daybooks reconfirm pass; vision purge_verified.
+- Egress refs intact (financing + recon + receipt + uploads + bank_accounts + daybooks).
+- Coverage live/vision 20; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+
+## SYNC pre-COMMIT (iter 18)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+
+
+## COMMIT (iter 18)
+
+- `fractal commit` product: ui daybooks open shell with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## Verification
 
@@ -27,6 +157,7 @@ updated: 2026-07-31T14:22:00Z
 
 ## Review decisions (authoritative)
 
+- Product `ui_daybooks_open`: **ACCEPT** (IR 186.18; no required fixes; egress retains prior lives).
 - Product `ui_financing_open`: **ACCEPT** (IR 186.17; no required fixes; egress retains prior lives).
 - Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16; egress generator retains prior lives).
 - Product `ui_receipt_inbox_list`: **ACCEPT** (committed 186.15).
@@ -39,7 +170,7 @@ updated: 2026-07-31T14:22:00Z
 
 ## Open coverage work
 
-1. Next UI discovery freeze: `ui.discovery.daybooks`.
+1. Next UI discovery freeze: `ui.discovery.transactions`.
 2. Then transactions, reports, vat, annual, exports, saft, addons, integrations,
    inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.

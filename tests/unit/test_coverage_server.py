@@ -18,6 +18,7 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiFinancingOpenSuccess,
     UiInvoicesListSuccess,
@@ -527,6 +528,15 @@ class FakeUiBankReconciliationOpenService:
         )
 
 
+class FakeUiDaybooksOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_daybooks_open(self) -> UiDaybooksOpenSuccess:
+        self.calls += 1
+        return UiDaybooksOpenSuccess(editor_markers_present=True, shell_markers_present=True)
+
+
 class FakeUiFinancingOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -709,6 +719,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_receipt_inbox_list",
         "ui_bank_reconciliation_open",
         "ui_financing_open",
+        "ui_daybooks_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1200,6 +1211,28 @@ def test_ui_bank_reconciliation_open_registration_has_empty_input_and_typed_outp
         }
     }
     assert recon.calls == 1
+
+
+def test_ui_daybooks_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    daybooks = FakeUiDaybooksOpenService()
+    server = create_server(tmp_path, ui_daybooks_open_service=daybooks)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_daybooks_open"]
+
+    assert tool.parameters["properties"] == {}
+    result = asyncio.run(server.call_tool("ui_daybooks_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/daybooks/new",
+            "heading": "",
+            "editor_markers_present": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert daybooks.calls == 1
 
 
 def test_ui_financing_open_registration_has_empty_input_and_typed_output(

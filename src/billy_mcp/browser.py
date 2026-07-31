@@ -29,6 +29,7 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiFinancingOpenSuccess,
     UiInvoicesListSuccess,
@@ -131,6 +132,15 @@ _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
 _FINANCING_HEADING = "Ansøg om erhvervslån"
 _FINANCING_NAV_LABEL = "Ansøg om lån"
 _FINANCING_APPLY_CTA = "Få et uforpligtende tilbud"
+# Research117: daybook editor shell (Kassekladde). Bare /daybooks is Upsedasse.
+# Never click Opret ny kassekladde / Tilføj kassekladdelinje / Bogfør / Ny postering.
+_DAYBOOKS_EDITOR_PATH = re.compile(r"^/[^/]+/daybooks/new$")
+_DAYBOOKS_BARE_PATH = re.compile(r"^/[^/]+/daybooks$")
+_DAYBOOKS_EDITOR_MARKERS = (
+    "Opret ny kassekladde",
+    "Tilføj kassekladdelinje",
+    "Ingen postering valgt",
+)
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -417,6 +427,12 @@ class UiFinancingOpenService(Protocol):
     """Injectable seam for the read-only financing (Ansøg om erhvervslån) shell open."""
 
     async def ui_financing_open(self) -> UiFinancingOpenSuccess | ToolError: ...
+
+
+class UiDaybooksOpenService(Protocol):
+    """Injectable seam for the read-only daybook (Kassekladde) editor shell open."""
+
+    async def ui_daybooks_open(self) -> UiDaybooksOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1640,6 +1656,71 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_daybooks_open(self) -> UiDaybooksOpenSuccess | ToolError:
+        """Open the daybook editor (Kassekladde) shell for the current session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_daybooks_changed_error()
+
+            daybooks_url = f"https://mit.billy.dk/{slug}/daybooks/new"
+            await page.goto(daybooks_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_daybooks_changed_error()
+                if _is_daybooks_bare_url(page.url):
+                    return _ui_daybooks_changed_error()
+                if _is_daybooks_editor_url(page.url) and await _has_daybooks_editor_signature(page):
+                    if _is_transactions_list_url(page.url):
+                        return _ui_daybooks_changed_error()
+                    return UiDaybooksOpenSuccess(
+                        heading=await _read_optional_heading(page),
+                        editor_markers_present=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_daybooks_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the daybooks shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser daybooks shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1986,6 +2067,61 @@ def _is_financing_url(url: str) -> bool:
     )
 
 
+def _is_daybooks_editor_url(url: str) -> bool:
+    """Return True when the URL is the daybook editor open path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_DAYBOOKS_EDITOR_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_daybooks_bare_url(url: str) -> bool:
+    """Return True when the URL is bare /daybooks (research117 Upsedasse shell)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_DAYBOOKS_BARE_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_transactions_list_url(url: str) -> bool:
+    """Return True when the URL is the Posteringer list path (not daybooks editor)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+        path = parsed.path or ""
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(re.match(r"^/[^/]+/transactions/?$", path))
+    )
+
+
 def _absolute_billy_app_url(href: str) -> str | None:
     """Normalize a harvested relative or absolute mit.billy.dk href; never leak raw ids."""
 
@@ -2072,6 +2208,13 @@ def _ui_financing_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy financing shell could not be classified.",
+    )
+
+
+def _ui_daybooks_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy daybooks shell could not be classified.",
     )
 
 
@@ -2432,6 +2575,26 @@ async def _has_financing_apply_cta_observed(page: LoginPage) -> bool:
             if await control.count() >= 1 and await control.first.is_visible():
                 return True
         return False
+    except Exception:
+        return False
+
+
+async def _has_daybooks_editor_signature(page: LoginPage) -> bool:
+    """Verify research117 daybook editor chrome without create/add-line actions.
+
+    Never click Opret ny kassekladde / Tilføj kassekladdelinje / Bogfør / Ny postering.
+    Requires all three dual-stable markers. Empty h1 is allowed.
+    Distinct from bare /daybooks Upsedasse and transactions Posteringer.
+    """
+
+    try:
+        for label in _DAYBOOKS_EDITOR_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        return True
     except Exception:
         return False
 
