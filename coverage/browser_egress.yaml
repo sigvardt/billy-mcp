@@ -12,7 +12,8 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py",
         "tests/unit/test_browser.py",
-        "tests/live/test_ui_invoices_list.py"
+        "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_products_list.py"
       ]
     },
     {
@@ -110,7 +111,8 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py",
         "tests/unit/test_browser.py",
-        "tests/live/test_ui_invoices_list.py"
+        "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_products_list.py"
       ]
     },
     {

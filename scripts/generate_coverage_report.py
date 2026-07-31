@@ -26,6 +26,10 @@ UI_INVOICES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_INVOICES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_list.py"
 UI_INVOICES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_INVOICES_LIST_TOOL_NAME = "ui_invoices_list"
+UI_PRODUCTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_list.py"
+UI_PRODUCTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_PRODUCTS_LIST_TOOL_NAME = "ui_products_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1244,6 +1248,62 @@ def apply_ui_invoices_list_shell_evidence(
     ]
 
 
+def apply_ui_products_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
+    """Mark products list **shell open** evidence only (research103 / plan 186.4).
+
+    Empty-input tool; no API list filters or pagination UI. vision_evidence stays
+    null in the inventory; durable review record lives under node tmp.
+    """
+
+    row["method_or_route"] = "mit.billy.dk /:org_slug/products (read-only list shell open)"
+    row["tool_name"] = UI_PRODUCTS_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "search_control_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_PRODUCTS_LIST_MODEL_TEST_REFERENCE,
+        UI_PRODUCTS_LIST_UNIT_TEST_REFERENCE,
+        UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research103 dual-session headless observation + ui_products_list product; "
+        "list shell only (path class, h1 Produkter, data-cy search-button present, no create); "
+        "API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_products_list.json (list surface frames, accept)"
+    )
+    if parity_of_api_list:
+        row["evidence"] = f"{row['evidence']}; maps api.products.list to UI list-shell open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1276,6 +1336,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         row["vision_verified"] = False
         if family == "invoices":
             apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=False)
+        if family == "products":
+            apply_ui_products_list_shell_evidence(row, parity_of_api_list=False)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -1307,6 +1369,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         # Shell-open only: rewrite schema to the empty-input tool contract (R1).
         if api_row["id"] == "api.invoices.list":
             apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.products.list":
+            apply_ui_products_list_shell_evidence(row, parity_of_api_list=True)
         workflows.append(row)
 
     return {
@@ -1336,6 +1400,7 @@ def build_browser_egress() -> dict[str, Any]:
                     TEST_REFERENCE,
                     "tests/unit/test_browser.py",
                     UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+                    UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -1375,6 +1440,7 @@ def build_browser_egress() -> dict[str, Any]:
                     TEST_REFERENCE,
                     "tests/unit/test_browser.py",
                     UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+                    UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {

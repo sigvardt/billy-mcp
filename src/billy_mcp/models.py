@@ -102,6 +102,23 @@ class UiInvoicesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiProductsListInput(BaseModel):
+    """Empty, strict input boundary for the read-only products list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiProductsListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy products list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/products"] = "/:org_slug/products"
+    heading: Literal["Produkter"] = "Produkter"
+    search_control_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

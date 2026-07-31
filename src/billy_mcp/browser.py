@@ -25,6 +25,7 @@ from billy_mcp.models import (
     StableErrorCode,
     ToolError,
     UiInvoicesListSuccess,
+    UiProductsListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -56,6 +57,9 @@ _DASHBOARD_PATH = re.compile(r"^/[^/]+/dashboard$")
 _INVOICES_LIST_PATH = re.compile(r"^/[^/]+/invoices$")
 _INVOICES_LIST_HEADING = "Fakturaer"
 _INVOICES_CREATE_CTA = "Opret faktura"
+_PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
+_PRODUCTS_LIST_HEADING = "Produkter"
+_PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -251,6 +255,12 @@ class UiInvoicesListService(Protocol):
     """Injectable seam for the read-only invoices list shell observation."""
 
     async def ui_invoices_list(self) -> UiInvoicesListSuccess | ToolError: ...
+
+
+class UiProductsListService(Protocol):
+    """Injectable seam for the read-only products list shell observation."""
+
+    async def ui_products_list(self) -> UiProductsListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -590,6 +600,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_products_list(self) -> UiProductsListSuccess | ToolError:
+        """Open the products list shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_products_changed_error()
+
+            products_url = f"https://mit.billy.dk/{slug}/products"
+            await page.goto(products_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_products_changed_error()
+                if _is_products_list_url(page.url) and await _has_products_list_signature(page):
+                    return UiProductsListSuccess(
+                        search_control_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_products_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the products list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser products list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -681,6 +751,24 @@ def _is_invoices_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_INVOICES_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_products_list_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/products, including Billy list query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_PRODUCTS_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -798,6 +886,21 @@ async def _has_invoices_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_products_list_signature(page: LoginPage) -> bool:
+    """Verify the research103 products list heading and search control without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _PRODUCTS_LIST_HEADING:
+            return False
+        search = page.locator(_PRODUCTS_SEARCH_CONTROL)
+        return await search.count() >= 1 and await search.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -881,6 +984,15 @@ def _ui_invoices_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_products_changed_error() -> ToolError:
+    """Fail closed when the products list shell no longer matches research103."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy products list interface no longer matches the recorded signature.",
     )
 
 

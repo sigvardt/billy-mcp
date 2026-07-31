@@ -63,6 +63,7 @@ from billy_mcp.browser import (
     AuthStatusChecker,
     BrowserRuntime,
     UiInvoicesListService,
+    UiProductsListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -83,6 +84,8 @@ from billy_mcp.models import (
     ToolError,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsListInput,
+    UiProductsListSuccess,
 )
 
 
@@ -92,6 +95,7 @@ def create_server(
     auth_status_checker: AuthStatusChecker | None = None,
     auth_login_service: AuthLoginService | None = None,
     ui_invoices_list_service: UiInvoicesListService | None = None,
+    ui_products_list_service: UiProductsListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -107,6 +111,7 @@ def create_server(
     checker = auth_status_checker or browser
     login_service = auth_login_service or browser
     invoices_list_service = ui_invoices_list_service or browser
+    products_list_service = ui_products_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -151,6 +156,12 @@ def create_server(
         UiInvoicesListInput()
         return await invoices_list_service.ui_invoices_list()
 
+    async def ui_products_list() -> UiProductsListSuccess | ToolError:
+        """Observe the authenticated Billy products list shell without writes."""
+
+        UiProductsListInput()
+        return await products_list_service.ui_products_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -178,6 +189,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_invoices_list)
+    server.tool(
+        name="ui_products_list",
+        description=(
+            "Open the Billy products list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_products_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

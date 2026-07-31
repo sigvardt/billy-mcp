@@ -15,6 +15,8 @@ from billy_mcp.models import (
     ToolError,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsListInput,
+    UiProductsListSuccess,
 )
 
 
@@ -94,5 +96,31 @@ def test_ui_invoices_list_models_are_empty_input_and_non_pii_success() -> None:
                 "create_action_visible": True,
                 "shell_markers_present": True,
                 "org_slug": "secret",
+            }
+        )
+
+
+def test_ui_products_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiProductsListInput().model_dump() == {}
+    success = UiProductsListSuccess(search_control_visible=True, shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/products",
+        "heading": "Produkter",
+        "search_control_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiProductsListSuccess.model_json_schema().get("properties", {})
+    for forbidden in ("email", "password", "token", "org_slug", "url", "product_name"):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiProductsListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiProductsListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/products",
+                "heading": "Produkter",
+                "search_control_visible": True,
+                "shell_markers_present": True,
+                "product_name": "secret",
             }
         )
