@@ -13,10 +13,8 @@ updated: 2026-07-31T20:22:46Z
 
 ## Current state
 
-- Continue mode iter 28 SYNC pre-COMMIT. Inbox/feed/private empty; saved empty; no running children. FIX-VERIFY clean; commit product next.
-- Continue mode iter 28 FIX-VERIFY 186.28 clean: lint pass; offline 1504; live accounting reconfirm pass; vision purge_verified; egress company+prior lives intact. Coverage live/vision 30; complete false. Ready COMMIT.
-- Continue mode iter 28 IR 186.28: product `ui_settings_accounting_open` **ACCEPT**. No required fixes. Overall completeness FAIL.
-- Continue mode iter 28 EXECUTE 186.28 done: producted `ui_settings_accounting_open`.
+- Continue mode iter 28 COMMIT. Product tip settings_accounting 186.28 (`ui_settings_accounting_open`, `aaa54c4`). Coverage live/vision 30; complete false. Next: remaining settings_* (prefer invoicing SPA seed) or annual red.
+- Review: product `ui_settings_accounting_open` **ACCEPT** (IR 186.28).
 - Continue mode iter 28 SYNC pre-REVIEW. EXECUTE product uncommitted. Ready IR.
 - Continue mode iter 28 EXECUTE 186.28 done: producted `ui_settings_accounting_open`. Offline 1504; live dual+vision purge_verified. Coverage live/vision 30.
 - Continue mode iter 28 SYNC pre-EXECUTE. Plan 186.28 ready.
