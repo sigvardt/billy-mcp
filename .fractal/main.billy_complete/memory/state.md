@@ -190,6 +190,11 @@ updated: 2026-07-31T15:25:00Z
 - No running children.
 - FIX-VERIFY clean; commit product next.
 
+## COMMIT (iter 19)
+
+- `fractal commit` product: ui transactions list shell with dual live and vision (`c4206ef`).
+- Not node finish (complete false; bulk + remaining UI still red).
+
 ## SYNC (iter 17)
 
 - Unread inbox/feed/private: empty. Saved queue: empty.
