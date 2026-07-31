@@ -6,19 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T18:14:09Z
+updated: 2026-07-31T19:16:26Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 24 COMMIT done. Product tip addons 186.24 (`4fa1976`).
-- Coverage: implemented/contract 210; live/vision 26; API live 0; complete false.
-- Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
+- Continue mode iter 25 pre-COMMIT SYNC done. FIX-VERIFY clean for integrations.
+- Coverage: implemented/contract 211; live/vision 27; complete false.
 - Operator: grok-only; no live API; no running children.
-- Product `ui_addons_open`: **ACCEPT** (committed). Next: RESEARCH freeze next red
-  discovery (integrations, then inventory, settings_*; annual stays red).
+- Ready COMMIT product `ui_integrations_open` (not node finish).
 
 ## Verification
 
@@ -28,6 +26,8 @@ updated: 2026-07-31T18:14:09Z
 
 ## Review decisions (authoritative)
 
+- Product `ui_integrations_open`: **ACCEPT** (IR 186.25; no required fixes; egress
+  retains prior lives; inventory/settings/annual stay red).
 - Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes; egress
   retains prior lives; integrations/annual/settings stay red).
 - Product `ui_saft_exports_open`: **ACCEPT** (IR 186.23; no required fixes; egress retains prior lives; annual stays red).
@@ -48,8 +48,9 @@ updated: 2026-07-31T18:14:09Z
 
 ## Open coverage work
 
-1. Next: RESEARCH freeze `ui.discovery.integrations` (soft empty separate from
-   Fordele hub), then inventory (`Lagermodul` seed), settings_*.
+1. Next: PLAN product `ui_integrations_open` soft-empty classification for
+   `ui.discovery.integrations`; then inventory (Lagermodul), settings_*.
+
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
@@ -1197,3 +1198,124 @@ updated: 2026-07-31T18:14:09Z
 
 - `fractal commit` product: ui bank reconciliation open shell with dual live and vision (`ffe1b46`).
 - Not node finish (complete false; bulk + remaining UI still red).
+
+## SYNC (iter 25)
+
+- Unread inbox/feed/private: empty. Saved queue: empty.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope: no live API; grok-only; --agent=grok children).
+- Branch clean at product tip addons 186.24 (`cf93096`) vs origin.
+- Coverage: implemented/contract 210; live/vision 26; complete false.
+- Last outbox before this step: COMMIT ui_addons_open (5096038D).
+- Outbox: continue SYNC posted. Private: next integrations freeze.
+- Discovery still red (12): integrations, inventory, settings_* (8), annual_reports.
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.integrations`.
+
+## PREPARE (iter 25)
+
+- Parent `main`: already up to date; no merge commit.
+- No local child branches with commits ahead.
+- Remote children "ahead" are historical: shared_foundation/wave1* ~600 behind
+  root; ui_auth_status/ui_auth credentials research tips superseded on root
+  product path; review stubs fractal-only. Skip all child merges.
+- Optional unmerged wiki-only
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+  (superseded auth research already applied on root).
+- No integration outbox note (no material merge).
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.integrations`.
+
+## SYNC pre-RESEARCH (iter 25)
+
+- Unread inbox/feed: empty. Private 4CEA0B7B read/reacted (integrations next).
+- Saved: empty. No running children.
+- PREPARE already done (parent up to date; no merges).
+- Tip `cf93096`; dirty: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.integrations`.
+
+## Research (iter 25)
+
+- research124 freeze: `ui.discovery.integrations` — soft empty dual at
+  `/:org_slug/integrations` (empty h1, chrome only); not same shell as Fordele.
+- Nav `Udforsk integrationer` still → `/:org_slug/add-ons` (addons already green).
+- `Se alle vores integrationer` href host `www.billy.dk` path `/apps/` (marketing;
+  not navigated; not on browser egress). Never click; no invent api_integrations_*.
+- 0 dedicated shell seeds; all integrations query variants soft empty.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- Incidental (not greened): inventory `/:org_slug/inventory` h1 `Lagermodul`.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Recommended product: `ui_integrations_open` soft-empty classification only.
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 25)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: research124 freeze already announced (D6AA17A1); ready PLAN product
+  `ui_integrations_open`.
+- Tip `cf93096`; dirty memory/state.md only (+ tmp research artifacts).
+- Ready for PLAN: product `ui_integrations_open`.
+
+## Plan (iter 25)
+
+- Plan: `plans/2026-07-31T18:58:22.501Z-186.25-ui_integrations_open.md`
+  — product `ui_integrations_open` for `ui.discovery.integrations` only;
+  root-only; dual live+vision; path `/:org_slug/integrations`;
+  success = soft_empty classification (empty h1, dedicated_shell=false,
+  same_shell_as_addons=false); reject Fordele/add-ons and soft aliases;
+  never navigate www.billy.dk or click Se alle/partner CTAs; no invent
+  api_integrations_*; no greening inventory/settings/annual or re-green addons;
+  egress append without drop; parity `soft_empty_shell_observed`.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 25)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.25 ready; next EXECUTE product `ui_integrations_open`.
+- Dirty: memory + untracked plan/tmp research.
+
+## Execute (iter 25)
+
+- Producted `ui_integrations_open` (models/browser/server/tests/coverage/wiki).
+- Offline non-live suite green (1484 passed).
+- Live dual + vision purge_verified for soft-empty integrations shell.
+- Coverage live/vision 27; complete false.
+- Greens only `ui.discovery.integrations` (parity soft_empty_shell_observed).
+- Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 25)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_integrations_open` (186.25).
+
+## Independent review (iter 25)
+
+- Product `ui_integrations_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (addons + prior lives + integrations).
+- inventory/settings/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 25)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 25)
+
+- IR product ACCEPT; optional N1/N2 no-op (left as-is).
+- lint pass; offline 1484; live integrations reconfirm pass; vision purge_verified.
+- Egress refs intact (addons + prior lives + integrations).
+- Coverage live/vision 27; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 25)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+

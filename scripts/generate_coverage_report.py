@@ -110,6 +110,10 @@ UI_ADDONS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_ADDONS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_addons_open.py"
 UI_ADDONS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_ADDONS_OPEN_TOOL_NAME = "ui_addons_open"
+UI_INTEGRATIONS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INTEGRATIONS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_integrations_open.py"
+UI_INTEGRATIONS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INTEGRATIONS_OPEN_TOOL_NAME = "ui_integrations_open"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2521,6 +2525,66 @@ def apply_ui_addons_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_integrations_open_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark integrations soft-empty classification evidence (research124).
+
+    Empty-input tool; path /:org_slug/integrations; empty h1 soft-empty chrome.
+    Not Fordele/add-ons. Soft aliases rejected. Never navigate www.billy.dk or
+    partner CTAs. No invent api_integrations_*. Does not green addons,
+    inventory, settings_*, or annual_reports.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/integrations (read-only soft-empty shell "
+        "classification only; never navigate www.billy.dk; never partner CTAs)"
+    )
+    row["tool_name"] = UI_INTEGRATIONS_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "dedicated_shell",
+        "same_shell_as_addons",
+        "heading",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INTEGRATIONS_OPEN_MODEL_TEST_REFERENCE,
+        UI_INTEGRATIONS_OPEN_UNIT_TEST_REFERENCE,
+        UI_INTEGRATIONS_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research124 dual-session headless observation + ui_integrations_open product; "
+        "soft_empty_shell_observed (path class /:org_slug/integrations, empty h1, "
+        "dedicated_shell=false, same_shell_as_addons=false); soft aliases rejected; "
+        "Fordele not success; no invent api_integrations_*; does not green "
+        "addons/inventory/settings/annual_reports; vision record "
+        "tmp/vision-records/ui_integrations_open.json (soft-empty chrome, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "soft_empty_shell_observed"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2595,6 +2659,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_saft_exports_open_shell_evidence(row)
         if family == "addons":
             apply_ui_addons_open_shell_evidence(row)
+        if family == "integrations":
+            apply_ui_integrations_open_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2682,6 +2748,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_ADDONS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_INTEGRATIONS_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2742,6 +2809,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_SAFT_EXPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_ADDONS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_INTEGRATIONS_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {

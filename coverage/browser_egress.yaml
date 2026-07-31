@@ -33,7 +33,8 @@
         "tests/live/test_ui_vat_declarations_list.py",
         "tests/live/test_ui_exports_open.py",
         "tests/live/test_ui_saft_exports_open.py",
-        "tests/live/test_ui_addons_open.py"
+        "tests/live/test_ui_addons_open.py",
+        "tests/live/test_ui_integrations_open.py"
       ]
     },
     {
@@ -152,7 +153,8 @@
         "tests/live/test_ui_vat_declarations_list.py",
         "tests/live/test_ui_exports_open.py",
         "tests/live/test_ui_saft_exports_open.py",
-        "tests/live/test_ui_addons_open.py"
+        "tests/live/test_ui_addons_open.py",
+        "tests/live/test_ui_integrations_open.py"
       ]
     },
     {

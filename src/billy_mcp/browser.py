@@ -34,6 +34,7 @@ from billy_mcp.models import (
     UiDebtorBalancesListSuccess,
     UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
+    UiIntegrationsOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -137,6 +138,9 @@ _AFSTEMNING_HREF_SELECTORS = (
 _ADDONS_PATH = re.compile(r"^/[^/]+/add-ons$")
 _ADDONS_HEADING = "Fordele"
 _ADDONS_NAV_LABEL = "Udforsk integrationer"
+# Research124: integrations soft-empty classification (not Fordele; not marketing).
+# Path exact integrations leaf. Never navigate www.billy.dk; never partner CTAs.
+_INTEGRATIONS_PATH = re.compile(r"^/[^/]+/integrations$")
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -513,6 +517,12 @@ class UiAddonsOpenService(Protocol):
     """Injectable seam for the read-only Fordele (add-ons) hub shell open."""
 
     async def ui_addons_open(self) -> UiAddonsOpenSuccess | ToolError: ...
+
+
+class UiIntegrationsOpenService(Protocol):
+    """Injectable seam for integrations soft-empty classification (research124)."""
+
+    async def ui_integrations_open(self) -> UiIntegrationsOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2171,6 +2181,76 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_integrations_open(self) -> UiIntegrationsOpenSuccess | ToolError:
+        """Classify the integrations soft-empty shell for the current session only.
+
+        Research124: path /:org_slug/integrations is soft empty (empty h1, chrome
+        only). Not Fordele/add-ons. Soft aliases rejected. Never navigate
+        www.billy.dk. Never click Se alle vores integrationer or partner CTAs.
+        Do not use nav label Udforsk integrationer (targets add-ons).
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_integrations_changed_error()
+
+            integrations_url = f"https://mit.billy.dk/{slug}/integrations"
+            await page.goto(integrations_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_integrations_changed_error()
+                # Fail closed if Billy starts routing integrations to Fordele.
+                if _is_addons_url(page.url) or await _has_addons_signature(page):
+                    return _ui_integrations_changed_error()
+                if _is_integrations_url(page.url) and await _has_integrations_soft_empty_signature(
+                    page
+                ):
+                    return UiIntegrationsOpenSuccess(
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_integrations_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the integrations shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser integrations shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2535,6 +2615,24 @@ def _is_addons_url(url: str) -> bool:
     )
 
 
+def _is_integrations_url(url: str) -> bool:
+    """Return True when the URL is the integrations soft-empty path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_INTEGRATIONS_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -2790,6 +2888,15 @@ def _ui_addons_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy add-ons interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_integrations_changed_error() -> ToolError:
+    """Fail closed when integrations soft-empty shell no longer matches research124."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy integrations interface no longer matches the recorded signature.",
     )
 
 
@@ -3280,6 +3387,28 @@ async def _has_addons_signature(page: LoginPage) -> bool:
         if not await first.is_visible():
             return False
         return (await first.inner_text()).strip() == _ADDONS_HEADING
+    except Exception:
+        return False
+
+
+async def _has_integrations_soft_empty_signature(page: LoginPage) -> bool:
+    """Verify research124 soft-empty integrations chrome without partner CTAs.
+
+    Success requires empty/absent content h1 (not Fordele, not marketplace title),
+    authenticated app chrome, and no error shell. Never click Se alle vores
+    integrationer / Install / Connect. Soft aliases and Fordele are not success.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() >= 1:
+            first = heading.first
+            if await first.is_visible():
+                text = (await first.inner_text()).strip()
+                if text:
+                    # Any non-empty content h1 is not the soft-empty freeze.
+                    return False
+        return await _has_shell_nav_markers(page)
     except Exception:
         return False
 

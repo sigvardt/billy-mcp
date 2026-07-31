@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T18:31:35Z
+updated: 2026-07-31T19:03:54Z
 ---
 
 # billy_mcp
@@ -46,6 +46,8 @@ updated: 2026-07-31T18:31:35Z
 [[ui_exports_open_shell|ui_exports_open_shell]]: Read-only Billy exports (Eksportér data) hub shell contract (research121 freeze).
 
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
+
+[[ui_integrations_open_shell|ui_integrations_open_shell]]: Read-only Billy integrations soft-empty shell classification (research124 freeze).
 
 [[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.
 

@@ -72,6 +72,7 @@ from billy_mcp.browser import (
     UiDebtorBalancesListService,
     UiExportsOpenService,
     UiFinancingOpenService,
+    UiIntegrationsOpenService,
     UiInvoicesListService,
     UiProductsImportService,
     UiProductsListService,
@@ -122,6 +123,8 @@ from billy_mcp.models import (
     UiExportsOpenSuccess,
     UiFinancingOpenInput,
     UiFinancingOpenSuccess,
+    UiIntegrationsOpenInput,
+    UiIntegrationsOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -176,6 +179,7 @@ def create_server(
     ui_exports_open_service: UiExportsOpenService | None = None,
     ui_saft_exports_open_service: UiSaftExportsOpenService | None = None,
     ui_addons_open_service: UiAddonsOpenService | None = None,
+    ui_integrations_open_service: UiIntegrationsOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -212,6 +216,7 @@ def create_server(
     exports_open_service = ui_exports_open_service or browser
     saft_exports_open_service = ui_saft_exports_open_service or browser
     addons_open_service = ui_addons_open_service or browser
+    integrations_open_service = ui_integrations_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -381,6 +386,12 @@ def create_server(
 
         UiAddonsOpenInput()
         return await addons_open_service.ui_addons_open()
+
+    async def ui_integrations_open() -> UiIntegrationsOpenSuccess | ToolError:
+        """Classify the integrations soft-empty shell without partner actions."""
+
+        UiIntegrationsOpenInput()
+        return await integrations_open_service.ui_integrations_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -566,6 +577,14 @@ def create_server(
             "create access keys, or open partner destinations)."
         ),
     )(ui_addons_open)
+    server.tool(
+        name="ui_integrations_open",
+        description=(
+            "Classify the Billy integrations soft-empty shell for the authenticated "
+            "session (path /:org_slug/integrations only; not Fordele; does not open "
+            "marketing apps, install partners, or navigate off mit.billy.dk)."
+        ),
+    )(ui_integrations_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

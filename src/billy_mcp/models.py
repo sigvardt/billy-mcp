@@ -459,6 +459,25 @@ class UiAddonsOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiIntegrationsOpenInput(BaseModel):
+    """Empty, strict input for integrations soft-empty classification."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiIntegrationsOpenSuccess(BaseModel):
+    """Non-PII soft-empty classification for /:org_slug/integrations (research124)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/integrations"] = "/:org_slug/integrations"
+    shell_kind: Literal["soft_empty"] = "soft_empty"
+    dedicated_shell: Literal[False] = False
+    same_shell_as_addons: Literal[False] = False
+    heading: Literal[""] = ""
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

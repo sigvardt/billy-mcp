@@ -33,6 +33,8 @@ from billy_mcp.models import (
     UiExportsOpenSuccess,
     UiFinancingOpenInput,
     UiFinancingOpenSuccess,
+    UiIntegrationsOpenInput,
+    UiIntegrationsOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -957,6 +959,66 @@ def test_ui_addons_open_models_fordele_shell() -> None:
             {
                 "path_class": "/:org_slug/add-ons",
                 "heading": "Integrationer",
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_integrations_open_models_soft_empty_shell() -> None:
+    assert UiIntegrationsOpenInput().model_dump() == {}
+    success = UiIntegrationsOpenSuccess(shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/integrations",
+        "shell_kind": "soft_empty",
+        "dedicated_shell": False,
+        "same_shell_as_addons": False,
+        "heading": "",
+        "shell_markers_present": True,
+    }
+    properties = UiIntegrationsOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "partner",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiIntegrationsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiIntegrationsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/add-ons",
+                "shell_kind": "soft_empty",
+                "dedicated_shell": False,
+                "same_shell_as_addons": False,
+                "heading": "",
+                "shell_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiIntegrationsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/integrations",
+                "shell_kind": "soft_empty",
+                "dedicated_shell": True,
+                "same_shell_as_addons": False,
+                "heading": "",
+                "shell_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiIntegrationsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/integrations",
+                "shell_kind": "soft_empty",
+                "dedicated_shell": False,
+                "same_shell_as_addons": False,
+                "heading": "Fordele",
                 "shell_markers_present": True,
             }
         )
