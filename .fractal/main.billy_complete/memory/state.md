@@ -13,16 +13,16 @@ updated: 2026-07-31T18:14:09Z
 
 ## Current state
 
-- Continue mode iter 24 SYNC pre-COMMIT done. Product tip pending COMMIT: `ui_addons_open`.
+- Continue mode iter 24 COMMIT done. Product tip addons 186.24 (`4fa1976`).
 - Coverage: implemented/contract 210; live/vision 26; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes). FIX-VERIFY
-  reconfirm clean. Ready COMMIT product.
+- Product `ui_addons_open`: **ACCEPT** (committed). Next: RESEARCH freeze next red
+  discovery (integrations, then inventory, settings_*; annual stays red).
 
 ## Verification
 
-- Last product: `ui_addons_open` dual-session + vision purge_verified (EXECUTE 186.24).
+- Last product: `ui_addons_open` dual-session + vision purge_verified (committed 186.24).
 - Offline baseline product: 1477 passed non-live.
 - Live baseline: 26 UI discovery/parity rows green.
 
@@ -48,8 +48,8 @@ updated: 2026-07-31T18:14:09Z
 
 ## Open coverage work
 
-1. Next: REVIEW/FIX-VERIFY/COMMIT `ui_addons_open`, then RESEARCH integrations
-   (soft empty separate), inventory (`Lagermodul` seed), settings_*.
+1. Next: RESEARCH freeze `ui.discovery.integrations` (soft empty separate from
+   Fordele hub), then inventory (`Lagermodul` seed), settings_*.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
@@ -312,6 +312,11 @@ updated: 2026-07-31T18:14:09Z
 - Unread inbox/feed/private: empty. Saved: empty.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 24)
+
+- `fractal commit` product: ui addons open shell with dual live and vision (`4fa1976`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 23)
 
