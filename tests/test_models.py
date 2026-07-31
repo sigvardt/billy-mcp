@@ -27,6 +27,8 @@ from billy_mcp.models import (
     UiQuotesListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
+    UiSuppliersListInput,
+    UiSuppliersListSuccess,
 )
 
 
@@ -319,5 +321,40 @@ def test_ui_products_import_models_are_empty_input_and_non_pii_success() -> None
                 "choose_csv_action_visible": True,
                 "shell_markers_present": True,
                 "customer": "secret",
+            }
+        )
+
+
+def test_ui_suppliers_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiSuppliersListInput().model_dump() == {}
+    success = UiSuppliersListSuccess(create_action_visible=True, shell_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/suppliers",
+        "heading": "Leverandører",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiSuppliersListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "contact_name",
+        "supplier_name",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiSuppliersListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSuppliersListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/suppliers",
+                "heading": "Leverandører",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "contact_name": "secret",
             }
         )

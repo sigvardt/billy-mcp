@@ -50,6 +50,10 @@ UI_PRODUCTS_IMPORT_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_PRODUCTS_IMPORT_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_import.py"
 UI_PRODUCTS_IMPORT_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_PRODUCTS_IMPORT_TOOL_NAME = "ui_products_import"
+UI_SUPPLIERS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_list.py"
+UI_SUPPLIERS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_SUPPLIERS_LIST_TOOL_NAME = "ui_suppliers_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1602,6 +1606,61 @@ def apply_ui_products_import_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_suppliers_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark suppliers list **shell open** evidence only (research109 / plan 186.10).
+
+    Empty-input tool; path /suppliers, h1 Leverandører, CTA Opret kontakt present only
+    (never create). No separate suppliers API resource (contacts isSupplier).
+    vision_evidence stays null. Does not re-green api.contacts.list live cells.
+    """
+
+    row["method_or_route"] = "mit.billy.dk /:org_slug/suppliers (read-only list shell open)"
+    row["tool_name"] = UI_SUPPLIERS_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_SUPPLIERS_LIST_MODEL_TEST_REFERENCE,
+        UI_SUPPLIERS_LIST_UNIT_TEST_REFERENCE,
+        UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research109 dual-session headless observation + ui_suppliers_list product; "
+        "list shell only (path class /:org_slug/suppliers, h1 Leverandører, "
+        "CTA Opret kontakt present, no create); no suppliers API resource "
+        "(vendors are contacts with isSupplier); do not invent api_suppliers_*; "
+        "does not green purchases/bills/balances/uploads discovery; "
+        "vision record tmp/vision-records/ui_suppliers_list.json "
+        "(list surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1646,6 +1705,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_recurring_invoices_list_shell_evidence(row)
         if family == "product_import":
             apply_ui_products_import_shell_evidence(row)
+        if family == "suppliers":
+            apply_ui_suppliers_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -1716,6 +1777,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_QUOTES_LIST_LIVE_TEST_REFERENCE,
                     UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,
                     UI_PRODUCTS_IMPORT_LIVE_TEST_REFERENCE,
+                    UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -1761,6 +1823,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_QUOTES_LIST_LIVE_TEST_REFERENCE,
                     UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,
                     UI_PRODUCTS_IMPORT_LIVE_TEST_REFERENCE,
+                    UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -1871,15 +1934,19 @@ def render_report(status: dict[str, Any]) -> str:
 
     counts = status["source_counts"]
     qualification = status["qualification"]
-    state_summary = (
-        "This generated inventory currently satisfies the manifest qualification rules."
-        if status["complete"]
-        else (
-            "This generated inventory is currently incomplete. It freezes the official-doc "
-            "snapshot with row-level implementation and contract-test evidence, without asserting "
-            "live testing or vision verification."
+    if status["complete"]:
+        state_summary = (
+            "This generated inventory currently satisfies the manifest qualification rules."
         )
-    )
+    else:
+        state_summary = (
+            "This generated inventory is currently incomplete. It freezes the official-doc "
+            "snapshot with row-level implementation and contract-test evidence. "
+            f"Implemented/contract rows: {qualification['implemented_rows']}/"
+            f"{qualification['contract_tested_rows']}; UI live/vision rows: "
+            f"{qualification['live_tested_rows']}/{qualification['vision_verified_rows']}. "
+            "API live_tested remains false under out_of_scope_by_user (not live-verified)."
+        )
     return "\n".join(
         [
             "# Phase 1 offline API read-and-write coverage status",

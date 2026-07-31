@@ -31,6 +31,7 @@ from billy_mcp.models import (
     UiProductsListSuccess,
     UiQuotesListSuccess,
     UiRecurringInvoicesListSuccess,
+    UiSuppliersListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -83,6 +84,10 @@ _RECURRING_INVOICES_CREATE_CTA = "Opret abonnement"
 _PRODUCTS_IMPORT_PATH = re.compile(r"^/[^/]+/products/import$")
 _PRODUCTS_IMPORT_HEADING = "Import af produkter"
 _PRODUCTS_IMPORT_CHOOSE_CSV_CTA = "Vælg CSV-fil"
+# Research109: suppliers list shell (vendors; contacts isSupplier UI surface).
+_SUPPLIERS_LIST_PATH = re.compile(r"^/[^/]+/suppliers$")
+_SUPPLIERS_LIST_HEADING = "Leverandører"
+_SUPPLIERS_CREATE_CTA = "Opret kontakt"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -314,6 +319,12 @@ class UiProductsImportService(Protocol):
     """Injectable seam for the read-only products import shell observation."""
 
     async def ui_products_import(self) -> UiProductsImportSuccess | ToolError: ...
+
+
+class UiSuppliersListService(Protocol):
+    """Injectable seam for the read-only suppliers list shell observation."""
+
+    async def ui_suppliers_list(self) -> UiSuppliersListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1017,6 +1028,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_suppliers_list(self) -> UiSuppliersListSuccess | ToolError:
+        """Open the suppliers list shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_suppliers_changed_error()
+
+            suppliers_url = f"https://mit.billy.dk/{slug}/suppliers"
+            await page.goto(suppliers_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_suppliers_changed_error()
+                if _is_suppliers_list_url(page.url) and await _has_suppliers_list_signature(page):
+                    return UiSuppliersListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_suppliers_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the suppliers list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser suppliers list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1216,6 +1287,24 @@ def _is_products_import_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_PRODUCTS_IMPORT_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_suppliers_list_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/suppliers, including Billy list query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_SUPPLIERS_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1423,6 +1512,21 @@ async def _has_products_import_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_suppliers_list_signature(page: LoginPage) -> bool:
+    """Verify the research109 suppliers list heading and create CTA without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _SUPPLIERS_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_SUPPLIERS_CREATE_CTA}")
+        return await create_action.count() >= 1 and await create_action.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -1560,6 +1664,15 @@ def _ui_products_import_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy products import interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_suppliers_changed_error() -> ToolError:
+    """Fail closed when the suppliers list shell no longer matches research109."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy suppliers list interface no longer matches the recorded signature.",
     )
 
 

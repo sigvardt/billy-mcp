@@ -69,6 +69,7 @@ from billy_mcp.browser import (
     UiProductsListService,
     UiQuotesListService,
     UiRecurringInvoicesListService,
+    UiSuppliersListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -101,6 +102,8 @@ from billy_mcp.models import (
     UiQuotesListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
+    UiSuppliersListInput,
+    UiSuppliersListSuccess,
 )
 
 
@@ -116,6 +119,7 @@ def create_server(
     ui_quotes_list_service: UiQuotesListService | None = None,
     ui_recurring_invoices_list_service: UiRecurringInvoicesListService | None = None,
     ui_products_import_service: UiProductsImportService | None = None,
+    ui_suppliers_list_service: UiSuppliersListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -137,6 +141,7 @@ def create_server(
     quotes_list_service = ui_quotes_list_service or browser
     recurring_invoices_list_service = ui_recurring_invoices_list_service or browser
     products_import_service = ui_products_import_service or browser
+    suppliers_list_service = ui_suppliers_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -217,6 +222,12 @@ def create_server(
         UiProductsImportInput()
         return await products_import_service.ui_products_import()
 
+    async def ui_suppliers_list() -> UiSuppliersListSuccess | ToolError:
+        """Observe the authenticated Billy suppliers list shell without writes."""
+
+        UiSuppliersListInput()
+        return await suppliers_list_service.ui_suppliers_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -286,6 +297,13 @@ def create_server(
             "(read-only path and heading classification; does not choose or upload files)."
         ),
     )(ui_products_import)
+    server.tool(
+        name="ui_suppliers_list",
+        description=(
+            "Open the Billy suppliers list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_suppliers_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

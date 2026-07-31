@@ -173,11 +173,11 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["complete"] is False
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 10
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 10
-    # API live remains 0 (out of scope); ten UI shell rows are live-qualified.
-    assert status["qualification"]["live_tested_rows"] == 10
-    assert status["qualification"]["vision_verified_rows"] == 10
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 11
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 11
+    # API live remains 0 (out of scope); eleven UI shell rows are live-qualified.
+    assert status["qualification"]["live_tested_rows"] == 11
+    assert status["qualification"]["vision_verified_rows"] == 11
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -328,6 +328,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.quotes",
         "ui.discovery.recurring_invoices",
         "ui.discovery.product_import",
+        "ui.discovery.suppliers",
     }
     tool_by_id = {
         "ui.discovery.invoices": "ui_invoices_list",
@@ -340,6 +341,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.quotes": "ui_quotes_list",
         "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
         "ui.discovery.product_import": "ui_products_import",
+        "ui.discovery.suppliers": "ui_suppliers_list",
     }
     remaining = [row for row in workflows if row["id"] not in qualified_ids]
     qualified = [row for row in workflows if row["id"] in qualified_ids]
@@ -354,7 +356,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["live_tested"] is False for row in remaining)
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in workflows)
-    assert len(qualified) == 10
+    assert len(qualified) == 11
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
         assert row["discovered"] is True

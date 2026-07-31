@@ -204,6 +204,23 @@ class UiProductsImportSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiSuppliersListInput(BaseModel):
+    """Empty, strict input boundary for the read-only suppliers list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSuppliersListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy suppliers list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/suppliers"] = "/:org_slug/suppliers"
+    heading: Literal["Leverandører"] = "Leverandører"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
