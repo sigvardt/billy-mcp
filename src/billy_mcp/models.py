@@ -187,6 +187,23 @@ class UiRecurringInvoicesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiProductsImportInput(BaseModel):
+    """Empty, strict input boundary for the read-only products import shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiProductsImportSuccess(BaseModel):
+    """Non-PII classification of the observed Billy products import shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/products/import"] = "/:org_slug/products/import"
+    heading: Literal["Import af produkter"] = "Import af produkter"
+    choose_csv_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

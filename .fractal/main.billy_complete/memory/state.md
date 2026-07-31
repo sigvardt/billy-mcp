@@ -6,19 +6,20 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T11:45:00Z
+updated: 2026-07-31T12:30:00Z
 ---
 
 # state
 
 ## Current state
 
-- Product `ui_recurring_invoices_list` ACCEPT (IR 186.8). FIX-VERIFY clean: no
-  product fixes; lint pass; 1354 offline; live reconfirm + vision purge_verified.
-  Uncommitted product ready for COMMIT.
-- Coverage: implemented/contract 193; live/vision 9; API live 0; complete false.
+- Product `ui_products_import` ACCEPT (IR 186.9). FIX-VERIFY: egress generator
+  live test_references fixed; lint pass; 1361 offline; live reconfirm + vision
+  purge_verified. Uncommitted product ready for COMMIT.
+- Coverage: implemented/contract 194; live/vision 10; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
 - Operator: grok-only; no live API.
+
 
 ## Verification
 
@@ -33,9 +34,10 @@ updated: 2026-07-31T11:45:00Z
 
 ## Open coverage work
 
-1. COMMIT ui_recurring_invoices_list product.
-2. Next UI shell after commit (next red discovery family research).
-3. Residual/bulk offline red only; no live API methods.
+1. COMMIT ui_products_import product.
+2. Next UI shell after commit (suppliers / bills-Køb / balances / uploads).
+3. Residual/bulk offline API reds only; no live API methods.
+
 
 ## Live UI tools (9 rows)
 
@@ -57,3 +59,16 @@ updated: 2026-07-31T11:45:00Z
 - IR: `tmp/grok-review.md`
 - Vision: `tmp/vision-records/ui_recurring_invoices_list.json`
 - Wiki: `wiki/ui_recurring_invoices_list_shell.md`
+
+## Prepare notes (iteration 9 continue)
+
+- Parent `main`: already fully contained in HEAD; merge no-op.
+- 62 child branches still show commits ahead of `main.billy_complete`; none
+  carry unmerged product worth integrating:
+  - `ui_auth_status` product already on root and child is behind on src/tests.
+  - Remaining ahead commits are fractal scaffolding, failed research leaves, or
+    older wiki drafts superseded by root wiki.
+  - Missing-on-root research wiki candidate
+    (`ui_auth_credentials_login_organization_research_codex_fallback.md`) left
+    unmerged; root already has auth credentials research pages.
+- No child merges this PREPARE. No running children.

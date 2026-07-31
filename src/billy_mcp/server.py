@@ -65,6 +65,7 @@ from billy_mcp.browser import (
     UiBankAccountsListService,
     UiClientsListService,
     UiInvoicesListService,
+    UiProductsImportService,
     UiProductsListService,
     UiQuotesListService,
     UiRecurringInvoicesListService,
@@ -92,6 +93,8 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsImportInput,
+    UiProductsImportSuccess,
     UiProductsListInput,
     UiProductsListSuccess,
     UiQuotesListInput,
@@ -112,6 +115,7 @@ def create_server(
     ui_bank_accounts_list_service: UiBankAccountsListService | None = None,
     ui_quotes_list_service: UiQuotesListService | None = None,
     ui_recurring_invoices_list_service: UiRecurringInvoicesListService | None = None,
+    ui_products_import_service: UiProductsImportService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -132,6 +136,7 @@ def create_server(
     bank_accounts_list_service = ui_bank_accounts_list_service or browser
     quotes_list_service = ui_quotes_list_service or browser
     recurring_invoices_list_service = ui_recurring_invoices_list_service or browser
+    products_import_service = ui_products_import_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -206,6 +211,12 @@ def create_server(
         UiRecurringInvoicesListInput()
         return await recurring_invoices_list_service.ui_recurring_invoices_list()
 
+    async def ui_products_import() -> UiProductsImportSuccess | ToolError:
+        """Observe the Billy products import shell without file selection or upload."""
+
+        UiProductsImportInput()
+        return await products_import_service.ui_products_import()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -268,6 +279,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_recurring_invoices_list)
+    server.tool(
+        name="ui_products_import",
+        description=(
+            "Open the Billy products import shell for the authenticated session "
+            "(read-only path and heading classification; does not choose or upload files)."
+        ),
+    )(ui_products_import)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

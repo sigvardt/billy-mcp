@@ -27,6 +27,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiClientsListSuccess,
     UiInvoicesListSuccess,
+    UiProductsImportSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
     UiRecurringInvoicesListSuccess,
@@ -78,6 +79,10 @@ _QUOTES_CREATE_CTA = "Opret tilbud"
 _RECURRING_INVOICES_LIST_PATH = re.compile(r"^/[^/]+/recurring_invoices(?:/empty)?$")
 _RECURRING_INVOICES_LIST_HEADING = "Abonnementer"
 _RECURRING_INVOICES_CREATE_CTA = "Opret abonnement"
+# Research108: product CSV import shell under products (shell open only; never choose file).
+_PRODUCTS_IMPORT_PATH = re.compile(r"^/[^/]+/products/import$")
+_PRODUCTS_IMPORT_HEADING = "Import af produkter"
+_PRODUCTS_IMPORT_CHOOSE_CSV_CTA = "Vælg CSV-fil"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -303,6 +308,12 @@ class UiRecurringInvoicesListService(Protocol):
     """Injectable seam for the read-only recurring invoices list shell observation."""
 
     async def ui_recurring_invoices_list(self) -> UiRecurringInvoicesListSuccess | ToolError: ...
+
+
+class UiProductsImportService(Protocol):
+    """Injectable seam for the read-only products import shell observation."""
+
+    async def ui_products_import(self) -> UiProductsImportSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -946,6 +957,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_products_import(self) -> UiProductsImportSuccess | ToolError:
+        """Open the products import shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_products_import_changed_error()
+
+            import_url = f"https://mit.billy.dk/{slug}/products/import"
+            await page.goto(import_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_products_import_changed_error()
+                if _is_products_import_url(page.url) and await _has_products_import_signature(page):
+                    return UiProductsImportSuccess(
+                        choose_csv_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_products_import_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the products import observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser products import observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1127,6 +1198,24 @@ def _is_recurring_invoices_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_RECURRING_INVOICES_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_products_import_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/products/import, including Billy query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_PRODUCTS_IMPORT_PATH.match(parsed.path or ""))
     )
 
 
@@ -1319,6 +1408,21 @@ async def _has_recurring_invoices_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_products_import_signature(page: LoginPage) -> bool:
+    """Verify the research108 products import heading and choose-CSV control without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _PRODUCTS_IMPORT_HEADING:
+            return False
+        choose_csv = page.locator(f"text={_PRODUCTS_IMPORT_CHOOSE_CSV_CTA}")
+        return await choose_csv.count() >= 1 and await choose_csv.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -1447,6 +1551,15 @@ def _ui_recurring_invoices_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy recurring invoices list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_products_import_changed_error() -> ToolError:
+    """Fail closed when the products import shell no longer matches research108."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy products import interface no longer matches the recorded signature.",
     )
 
 

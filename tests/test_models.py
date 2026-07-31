@@ -19,6 +19,8 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsImportInput,
+    UiProductsImportSuccess,
     UiProductsListInput,
     UiProductsListSuccess,
     UiQuotesListInput,
@@ -276,6 +278,45 @@ def test_ui_recurring_invoices_list_models_are_empty_input_and_non_pii_success()
                 "path_class": "/:org_slug/recurring_invoices",
                 "heading": "Abonnementer",
                 "create_action_visible": True,
+                "shell_markers_present": True,
+                "customer": "secret",
+            }
+        )
+
+
+def test_ui_products_import_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiProductsImportInput().model_dump() == {}
+    success = UiProductsImportSuccess(
+        choose_csv_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/products/import",
+        "heading": "Import af produkter",
+        "choose_csv_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiProductsImportSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "file_path",
+        "digest",
+        "customer",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiProductsImportInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiProductsImportSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/products/import",
+                "heading": "Import af produkter",
+                "choose_csv_action_visible": True,
                 "shell_markers_present": True,
                 "customer": "secret",
             }
