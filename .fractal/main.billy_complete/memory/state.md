@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T13:01:00Z
+updated: 2026-07-31T13:05:00Z
 ---
 
 # state
@@ -26,7 +26,7 @@ updated: 2026-07-31T13:01:00Z
 
 ## Review decisions (authoritative)
 
-- Product `ui_debtor_balances_list`: **ACCEPT** (pending commit 186.12).
+- Product `ui_debtor_balances_list`: **ACCEPT** (committed 186.12).
 - Product `ui_bills_list`: **ACCEPT** (committed 186.11).
 - Prior suppliers/products_import/recurring/quotes/bank/clients/products/invoices/auth: **ACCEPT**.
 - Overall completeness: **FAIL**.
