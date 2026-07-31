@@ -44,6 +44,7 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenSuccess,
     UiSaftExportsOpenSuccess,
+    UiSettingsCompanyOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -147,6 +148,17 @@ _INTEGRATIONS_PATH = re.compile(r"^/[^/]+/integrations$")
 _INVENTORY_PATH = re.compile(r"^/[^/]+/inventory$")
 _INVENTORY_HEADING = "Lagermodul"
 _INVENTORY_CREATE_CTAS = ("Opret primo", "Opret produkt", "Opret status")
+# Research126: Indstillinger company (Virksomhed) open shell.
+# Never click Gem ændringer / Tilføj ejer / upload / Opret* / Opgrader.
+_SETTINGS_COMPANY_PATH = re.compile(r"^/[^/]+/settings$")
+_SETTINGS_COMPANY_HEADING = "Indstillinger"
+_SETTINGS_COMPANY_PANEL_MARKERS = ("Navn og adresse", "Kontaktinformation")
+_SETTINGS_COMPANY_WRITE_CTAS = (
+    "Gem ændringer",
+    "Tilføj ejer",
+    "Opret adgangsnøgle",
+    "Opret betalingsmetode",
+)
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -535,6 +547,12 @@ class UiInventoryOpenService(Protocol):
     """Injectable seam for the read-only Lagermodul inventory shell open."""
 
     async def ui_inventory_open(self) -> UiInventoryOpenSuccess | ToolError: ...
+
+
+class UiSettingsCompanyOpenService(Protocol):
+    """Injectable seam for the read-only company settings shell open."""
+
+    async def ui_settings_company_open(self) -> UiSettingsCompanyOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2330,6 +2348,73 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_company_open(self) -> UiSettingsCompanyOpenSuccess | ToolError:
+        """Open the Indstillinger company (Virksomhed) settings shell.
+
+        Research126: path /:org_slug/settings, h1 Indstillinger, company panel
+        markers (Navn og adresse + Kontaktinformation). Soft aliases rejected.
+        Never click Gem / Tilføj ejer / upload / Opret* / Opgrader. No invent
+        api_settings_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_company_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_company_changed_error()
+                if _is_settings_company_url(page.url) and await _has_settings_company_signature(
+                    page
+                ):
+                    return UiSettingsCompanyOpenSuccess(
+                        company_panel_markers_present=True,
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_settings_company_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the settings company shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser settings company shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2730,6 +2815,24 @@ def _is_inventory_url(url: str) -> bool:
     )
 
 
+def _is_settings_company_url(url: str) -> bool:
+    """Return True when the URL is the settings hub leaf on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_SETTINGS_COMPANY_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -3003,6 +3106,15 @@ def _ui_inventory_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy inventory interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_settings_company_changed_error() -> ToolError:
+    """Fail closed when company settings shell no longer matches research126."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings company interface no longer matches the recorded signature.",
     )
 
 
@@ -3547,6 +3659,31 @@ async def _has_inventory_create_cta_markers(page: LoginPage) -> bool:
             if await control.count() >= 1 and await control.is_visible():
                 return True
         return False
+    except Exception:
+        return False
+
+
+async def _has_settings_company_signature(page: LoginPage) -> bool:
+    """Verify research126 Indstillinger + company panel markers; never click writes.
+
+    Requires h1 Indstillinger and both Navn og adresse + Kontaktinformation.
+    Soft aliases and other settings panels are not success for this tool.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_COMPANY_HEADING:
+            return False
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1 or not await control.is_visible():
+                return False
+        return True
     except Exception:
         return False
 

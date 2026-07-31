@@ -495,6 +495,23 @@ class UiInventoryOpenSuccess(BaseModel):
     create_cta_markers_present: bool
 
 
+class UiSettingsCompanyOpenInput(BaseModel):
+    """Empty, strict input for the read-only company settings shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsCompanyOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger company panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_company"] = "settings_company"
+    company_panel_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

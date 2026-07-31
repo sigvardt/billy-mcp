@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T19:30:18Z
+updated: 2026-07-31T20:02:06Z
 ---
 
 # billy_mcp
@@ -70,6 +70,8 @@ updated: 2026-07-31T19:30:18Z
 [[ui_reports_open_shell|ui_reports_open_shell]]: Read-only Billy reports (Rapporter) hub shell contract (research119 freeze).
 
 [[ui_saft_exports_open_shell|ui_saft_exports_open_shell]]: Read-only Billy SAF-T CTA observe shell on exports hub (research122 freeze).
+
+[[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126 freeze).
 
 [[ui_suppliers_list_shell|ui_suppliers_list_shell]]: Read-only headless ui_suppliers_list contract for Billy suppliers list shell open only.
 

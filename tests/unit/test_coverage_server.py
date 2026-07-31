@@ -33,6 +33,7 @@ from billy_mcp.models import (
     UiRecurringInvoicesListSuccess,
     UiReportsOpenSuccess,
     UiSaftExportsOpenSuccess,
+    UiSettingsCompanyOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -620,6 +621,15 @@ class FakeUiAddonsOpenService:
         return UiAddonsOpenSuccess(shell_markers_present=True)
 
 
+class FakeUiSettingsCompanyOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_settings_company_open(self) -> UiSettingsCompanyOpenSuccess:
+        self.calls += 1
+        return UiSettingsCompanyOpenSuccess(company_panel_markers_present=True)
+
+
 class FakeUiInventoryOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -820,6 +830,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_addons_open",
         "ui_integrations_open",
         "ui_inventory_open",
+        "ui_settings_company_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1599,3 +1610,34 @@ def test_ui_inventory_open_registration_has_empty_input_and_typed_output(
         }
     }
     assert inventory.calls == 1
+
+
+def test_ui_settings_company_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    settings = FakeUiSettingsCompanyOpenService()
+    server = create_server(tmp_path, ui_settings_company_open_service=settings)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}[
+        "ui_settings_company_open"
+    ]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_settings_company_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/settings",
+            "heading": "Indstillinger",
+            "shell_kind": "settings_company",
+            "company_panel_markers_present": True,
+        }
+    }
+    assert settings.calls == 1

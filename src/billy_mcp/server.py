@@ -82,6 +82,7 @@ from billy_mcp.browser import (
     UiRecurringInvoicesListService,
     UiReportsOpenService,
     UiSaftExportsOpenService,
+    UiSettingsCompanyOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
@@ -144,6 +145,8 @@ from billy_mcp.models import (
     UiReportsOpenSuccess,
     UiSaftExportsOpenInput,
     UiSaftExportsOpenSuccess,
+    UiSettingsCompanyOpenInput,
+    UiSettingsCompanyOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -184,6 +187,7 @@ def create_server(
     ui_addons_open_service: UiAddonsOpenService | None = None,
     ui_integrations_open_service: UiIntegrationsOpenService | None = None,
     ui_inventory_open_service: UiInventoryOpenService | None = None,
+    ui_settings_company_open_service: UiSettingsCompanyOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -222,6 +226,7 @@ def create_server(
     addons_open_service = ui_addons_open_service or browser
     integrations_open_service = ui_integrations_open_service or browser
     inventory_open_service = ui_inventory_open_service or browser
+    settings_company_open_service = ui_settings_company_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -403,6 +408,12 @@ def create_server(
 
         UiInventoryOpenInput()
         return await inventory_open_service.ui_inventory_open()
+
+    async def ui_settings_company_open() -> UiSettingsCompanyOpenSuccess | ToolError:
+        """Observe the Indstillinger company settings panel without write actions."""
+
+        UiSettingsCompanyOpenInput()
+        return await settings_company_open_service.ui_settings_company_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -604,6 +615,14 @@ def create_server(
             "Opret produkt, Opret status, or other create actions)."
         ),
     )(ui_inventory_open)
+    server.tool(
+        name="ui_settings_company_open",
+        description=(
+            "Open the Billy company settings (Indstillinger / Virksomhed) shell for the "
+            "authenticated session (read-only path, heading, and company panel markers; "
+            "does not click Gem, Tilføj ejer, upload, or other write actions)."
+        ),
+    )(ui_settings_company_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
