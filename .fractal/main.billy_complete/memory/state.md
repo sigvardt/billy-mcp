@@ -13,12 +13,11 @@ updated: 2026-07-31T17:04:11Z
 
 ## Current state
 
-- Continue mode iter 22 COMMIT. Product tip will be exports 186.22 after commit.
+- Continue mode iter 22 COMMIT done. Product tip exports 186.22 (`14b5639`).
 - Coverage: implemented/contract 208; live/vision 24; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_exports_open`: **ACCEPT**; FIX-VERIFY clean. Committing.
-- Next after commit: RESEARCH freeze `ui.discovery.saft_exports`.
+- Product `ui_exports_open`: **ACCEPT** (committed). Next: RESEARCH freeze `ui.discovery.saft_exports`.
 
 ## Verification
 
@@ -334,7 +333,7 @@ updated: 2026-07-31T17:04:11Z
 
 ## COMMIT (iter 22)
 
-- `fractal commit` product: ui exports open shell with dual live and vision.
+- `fractal commit` product: ui exports open shell with dual live and vision (`14b5639`).
 - Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 20)
