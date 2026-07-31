@@ -68,6 +68,7 @@ from billy_mcp.browser import (
     UiClientsListService,
     UiCreditorBalancesListService,
     UiDebtorBalancesListService,
+    UiFinancingOpenService,
     UiInvoicesListService,
     UiProductsImportService,
     UiProductsListService,
@@ -106,6 +107,8 @@ from billy_mcp.models import (
     UiCreditorBalancesListSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
+    UiFinancingOpenInput,
+    UiFinancingOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -144,6 +147,7 @@ def create_server(
     ui_uploads_list_service: UiUploadsListService | None = None,
     ui_receipt_inbox_list_service: UiReceiptInboxListService | None = None,
     ui_bank_reconciliation_open_service: UiBankReconciliationOpenService | None = None,
+    ui_financing_open_service: UiFinancingOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -172,6 +176,7 @@ def create_server(
     uploads_list_service = ui_uploads_list_service or browser
     receipt_inbox_list_service = ui_receipt_inbox_list_service or browser
     bank_reconciliation_open_service = ui_bank_reconciliation_open_service or browser
+    financing_open_service = ui_financing_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -294,6 +299,12 @@ def create_server(
         UiBankReconciliationOpenInput()
         return await bank_reconciliation_open_service.ui_bank_reconciliation_open()
 
+    async def ui_financing_open() -> UiFinancingOpenSuccess | ToolError:
+        """Observe the authenticated Billy financing shell without apply/submit actions."""
+
+        UiFinancingOpenInput()
+        return await financing_open_service.ui_financing_open()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -414,6 +425,14 @@ def create_server(
             "bank, import transactions, or match lines)."
         ),
     )(ui_bank_reconciliation_open)
+    server.tool(
+        name="ui_financing_open",
+        description=(
+            "Open the Billy financing (Ansøg om erhvervslån) shell for the authenticated "
+            "session (read-only path and heading classification; does not apply for a "
+            "loan or submit partner financing)."
+        ),
+    )(ui_financing_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

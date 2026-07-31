@@ -25,6 +25,8 @@ from billy_mcp.models import (
     UiCreditorBalancesListSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
+    UiFinancingOpenInput,
+    UiFinancingOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -553,6 +555,44 @@ def test_ui_bank_reconciliation_open_models_are_empty_input_and_non_pii_success(
                 "heading": "Bankkonti",
                 "empty_content_shell": False,
                 "afstemning_nav_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+
+
+def test_ui_financing_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiFinancingOpenInput().model_dump() == {}
+    success = UiFinancingOpenSuccess(apply_cta_observed=True, shell_markers_present=True)
+    assert success.path_class == "/:org_slug/financing"
+    assert success.heading == "Ansøg om erhvervslån"
+    assert success.apply_cta_observed is True
+    assert success.shell_markers_present is True
+    properties = UiFinancingOpenSuccess.model_json_schema().get("properties", {})
+    assert set(properties) == {
+        "path_class",
+        "heading",
+        "apply_cta_observed",
+        "shell_markers_present",
+    }
+    try:
+        UiFinancingOpenInput.model_validate({"url": "https://mit.billy.dk/x/financing"})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiFinancingOpenInput.model_validate({"apply": True})
+        raise AssertionError("expected validation error")
+    except Exception:
+        pass
+    try:
+        UiFinancingOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/bank-accounts",
+                "heading": "Bankkonti",
+                "apply_cta_observed": False,
                 "shell_markers_present": True,
             }
         )

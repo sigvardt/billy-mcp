@@ -6,18 +6,18 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T13:54:00Z
+updated: 2026-07-31T14:22:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 16 COMMIT complete; tip product bank recon 186.16 (`ffe1b46`).
-- Coverage: implemented/contract 202; live/vision 18; API live 0; complete false.
-- Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- Continue mode iter 17 FIX-VERIFY clean; tip still `c5b054c` until COMMIT.
+- Coverage: implemented/contract 203; live/vision 19; API live 0; complete false.
+- Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Branch clean at `ffe1b46` vs origin (dirty only this memory file).
+- Next: COMMIT product `ui_financing_open`.
 
 ## Verification
 
@@ -27,6 +27,7 @@ updated: 2026-07-31T13:54:00Z
 
 ## Review decisions (authoritative)
 
+- Product `ui_financing_open`: **ACCEPT** (IR 186.17; no required fixes; egress retains prior lives).
 - Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16; egress generator retains prior lives).
 - Product `ui_receipt_inbox_list`: **ACCEPT** (committed 186.15).
 - Product `ui_uploads_list`: **ACCEPT** (committed 186.14).
@@ -38,16 +39,17 @@ updated: 2026-07-31T13:54:00Z
 
 ## Open coverage work
 
-1. Next UI discovery freeze: `ui.discovery.financing`.
-2. Then daybooks, transactions, reports, vat, annual, exports, saft, addons, integrations, inventory, settings_*.
+1. COMMIT product `ui_financing_open` (this iteration).
+2. Then discovery freezes: daybooks, transactions, reports, vat, annual, exports,
+   saft, addons, integrations, inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (18 rows)
+## Live UI tools (19 rows)
 
 - discovery greened: invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
-  suppliers, bank_accounts, bank_reconciliation.
+  suppliers, bank_accounts, bank_reconciliation, financing.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
 
 ## Evidence boundaries
@@ -63,7 +65,123 @@ updated: 2026-07-31T13:54:00Z
 
 - Plan: `plans/2026-07-31T14:06:12.186Z-186.16-ui_bank_reconciliation_open.md`
 - Wiki: `wiki/ui_bank_reconciliation_open_shell.md`
-- Next: RESEARCH freeze `ui.discovery.financing`
+- Research: `tmp/grok-research.md` (research116 financing freeze)
+- Plan: `plans/2026-07-31T14:31:32.054Z-186.17-ui_financing_open.md`
+- Wiki: `wiki/ui_financing_open_shell.md`
+- Next: REVIEW product `ui_financing_open`
+
+## SYNC (iter 17)
+
+- Unread inbox/feed/private: empty. Saved queue: empty.
+- No running children; historical only (none need merge this step).
+- Parent directives: none (scope override already applied: no live API; grok-only).
+- Branch clean at `c5b054c` vs origin (product tip bank recon 186.16 at `ffe1b46`).
+- Coverage: implemented/contract 202; live/vision 18; complete false.
+- Outbox posted: iter17 progress (D9AA3D84).
+- Private note: next financing freeze (A25545DD).
+- Ready for PREPARE.
+
+## PREPARE (iter 17)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead: scaffold/init/review stubs only, or product already
+  superseded on root (`ui_auth_status` code present on root; wave5t/wave5u research
+  wiki already on root; wave5j bank-line and wave5sb upload branches have no
+  unmerged product delta outside `.fractal`). Optional unmerged wiki-only:
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+  (superseded auth research already applied on root product path).
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.financing`.
+
+## SYNC pre-RESEARCH (iter 17)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private note A25545DD read (next: financing freeze).
+- No running children. Parent merge already done (no-op).
+- Tip still `c5b054c`; dirty: memory/state.md only.
+- Ready for RESEARCH freeze: `ui.discovery.financing`.
+
+## Research (iter 17)
+
+- research116 freeze: `ui_financing_open` for `ui.discovery.financing`
+  → `/:org_slug/financing` h1 `Ansøg om erhvervslån` (Bank nav `Ansøg om lån`).
+- Dual session path/h1/title match; apply CTA observe-only
+  (`Få et uforpligtende tilbud`); frames purged; api_token_used false; writes false.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`.
+- Design §14.4: external financing writes not tested — product is read-only open.
+- Aliases/subpaths empty or false-positive; query variants stay financing landing.
+- Do not invent api_financing_*/api_loans_*; no bank_* re-green.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+## SYNC pre-PLAN (iter 17)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: research116 freeze already announced (9BE5071A); ready PLAN product
+  `ui_financing_open`.
+- Tip `c5b054c`; dirty memory/state.md only (+ tmp research artifacts untracked).
+- Ready for PLAN: product `ui_financing_open`.
+
+## Plan (iter 17)
+
+- Plan: `plans/2026-07-31T14:31:32.054Z-186.17-ui_financing_open.md`
+  — product `ui_financing_open` for `ui.discovery.financing` only;
+  root-only; dual live+vision; path `/:org_slug/financing` h1 `Ansøg om erhvervslån`;
+  no invent API; no apply/offer/submit click (§14.4); no bank_* re-green;
+  egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 17)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.17 ready; next EXECUTE product `ui_financing_open`.
+- Tip `c5b054c`; dirty: memory + untracked plan.
+
+## Execute (iter 17)
+
+- Producted `ui_financing_open` (models/browser/server/tests/coverage/wiki).
+- Offline 1422; live dual + vision purge_verified.
+- Coverage live/vision 19; complete false.
+- Greens only `ui.discovery.financing`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 17)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced (B38E2018). Ready for independent review of
+  `ui_financing_open` (186.17).
+
+## Independent review (iter 17)
+
+- Product `ui_financing_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (uploads + receipt + recon + financing).
+- Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 17)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 17)
+
+- IR product ACCEPT; no product code fixes required.
+- lint pass; offline 1422; live financing reconfirm pass; vision purge_verified.
+- Egress refs intact (uploads + receipt_inbox + bank_recon + bank_accounts + financing).
+- Coverage live/vision 19; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 17)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
 
 ## SYNC (iter 15)
 

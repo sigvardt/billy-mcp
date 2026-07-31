@@ -30,6 +30,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
     UiDebtorBalancesListSuccess,
+    UiFinancingOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -124,6 +125,12 @@ _AFSTEMNING_HREF_SELECTORS = (
     "a[href*='bank_accounts'][href$='/sync']",
     "text=Afstemning",
 )
+# Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
+# Never click apply/offer/consent/submit (design §14.4 external financing).
+_FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
+_FINANCING_HEADING = "Ansøg om erhvervslån"
+_FINANCING_NAV_LABEL = "Ansøg om lån"
+_FINANCING_APPLY_CTA = "Få et uforpligtende tilbud"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -404,6 +411,12 @@ class UiBankReconciliationOpenService(Protocol):
     """Injectable seam for the read-only bank reconciliation (Afstemning) shell open."""
 
     async def ui_bank_reconciliation_open(self) -> UiBankReconciliationOpenSuccess | ToolError: ...
+
+
+class UiFinancingOpenService(Protocol):
+    """Injectable seam for the read-only financing (Ansøg om erhvervslån) shell open."""
+
+    async def ui_financing_open(self) -> UiFinancingOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -1562,6 +1575,71 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_financing_open(self) -> UiFinancingOpenSuccess | ToolError:
+        """Open the financing (Ansøg om erhvervslån) shell for the current session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_financing_changed_error()
+
+            financing_url = f"https://mit.billy.dk/{slug}/financing"
+            await page.goto(financing_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_financing_changed_error()
+                if _is_financing_url(page.url) and await _has_financing_signature(page):
+                    # Reject bank shells if Billy ever redirects incorrectly.
+                    if _is_bank_accounts_list_url(page.url) or _is_bank_reconciliation_url(
+                        page.url
+                    ):
+                        return _ui_financing_changed_error()
+                    return UiFinancingOpenSuccess(
+                        apply_cta_observed=await _has_financing_apply_cta_observed(page),
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_financing_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the financing shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser financing shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -1890,6 +1968,24 @@ def _is_bank_reconciliation_url(url: str) -> bool:
     )
 
 
+def _is_financing_url(url: str) -> bool:
+    """Return True when the URL is the financing landing path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_FINANCING_PATH.match(parsed.path or ""))
+    )
+
+
 def _absolute_billy_app_url(href: str) -> str | None:
     """Normalize a harvested relative or absolute mit.billy.dk href; never leak raw ids."""
 
@@ -1969,6 +2065,13 @@ def _ui_bank_reconciliation_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy bank reconciliation shell could not be classified.",
+    )
+
+
+def _ui_financing_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy financing shell could not be classified.",
     )
 
 
@@ -2297,6 +2400,38 @@ async def _has_receipt_inbox_list_signature(page: LoginPage) -> bool:
         if not await first.is_visible():
             return False
         return (await first.inner_text()).strip() == _RECEIPT_INBOX_LIST_HEADING
+    except Exception:
+        return False
+
+
+async def _has_financing_signature(page: LoginPage) -> bool:
+    """Verify research116 financing heading without apply/submit actions.
+
+    Never click Få et uforpligtende tilbud / Ansøg / Fortsæt / Send ansøgning.
+    Distinct from bank-accounts and Afstemning shells.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        return (await first.inner_text()).strip() == _FINANCING_HEADING
+    except Exception:
+        return False
+
+
+async def _has_financing_apply_cta_observed(page: LoginPage) -> bool:
+    """True when marketing apply CTA or financing nav label is present (observe only)."""
+
+    try:
+        for label in (_FINANCING_APPLY_CTA, _FINANCING_NAV_LABEL):
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                return True
+        return False
     except Exception:
         return False
 

@@ -324,6 +324,23 @@ class UiBankReconciliationOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiFinancingOpenInput(BaseModel):
+    """Empty, strict input for the read-only financing (Ansøg om erhvervslån) shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiFinancingOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy financing shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/financing"] = "/:org_slug/financing"
+    heading: Literal["Ansøg om erhvervslån"] = "Ansøg om erhvervslån"
+    apply_cta_observed: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

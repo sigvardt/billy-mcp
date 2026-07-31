@@ -28,6 +28,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
     UiDebtorBalancesListSuccess,
+    UiFinancingOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -3759,6 +3760,229 @@ def test_ui_bank_reconciliation_open_rejects_bank_accounts_list_conflation(
     )
 
     result = asyncio.run(runtime.ui_bank_reconciliation_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _financing_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Ansøg om erhvervslån"),
+        "text=Få et uforpligtende tilbud": FakeLoginControl(text="Få et uforpligtende tilbud"),
+        "text=Ansøg om lån": FakeLoginControl(text="Ansøg om lån"),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def test_ui_financing_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_financing_open_returns_success_for_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_financing_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
+
+    assert result == UiFinancingOpenSuccess(
+        apply_cta_observed=True,
+        shell_markers_present=True,
+    )
+    assert any(url.rstrip("/").endswith("/financing") for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert "fill:" not in " ".join(page.events)
+    assert "click:" not in " ".join(page.events)
+    assert page.closed
+
+
+def test_ui_financing_open_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _financing_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Upsedasse!")
+    controls["text=Upsedasse!"] = FakeLoginControl(text="Upsedasse!")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert "financing" in result.message
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+
+
+def test_ui_financing_open_returns_ui_changed_when_heading_missing(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _financing_shell_controls()
+    controls["h1"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_financing_open_rejects_soft_subpath(tmp_path: Path) -> None:
+    """Must not accept financing/apply empty soft shell as the landing product."""
+
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_financing_shell_controls(),
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_to_soft_subpath(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/financing"):
+            page.url = "https://mit.billy.dk/test-org-slug/financing/apply"
+            page.controls["h1"] = FakeLoginControl(count=0, visible=False)
+        return result
+
+    page.goto = goto_to_soft_subpath  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_financing_open_rejects_bank_accounts_path(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_financing_shell_controls(),
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_to_bank(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/financing"):
+            page.url = "https://mit.billy.dk/test-org-slug/bank-accounts"
+            page.controls["h1"] = FakeLoginControl(text="Bankkonti")
+        return result
+
+    page.goto = goto_to_bank  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_financing_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED

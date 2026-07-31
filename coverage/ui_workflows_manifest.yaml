@@ -622,33 +622,45 @@
     {
       "api_row_id": null,
       "area": "financing",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research116 dual-session headless observation + ui_financing_open product; shell open only (path class /:org_slug/financing; h1 Ans\u00f8g om erhvervsl\u00e5n; Bank nav Ans\u00f8g om l\u00e5n; apply CTA observe-only F\u00e5 et uforpligtende tilbud; never click apply/offer/consent/submit per design \u00a714.4); no invent api_financing_*/api_loans_*/api_froda_*; soft subpaths and aliases rejected; distinct from bank-accounts Bankkonti and bank recon Afstemning; does not green bank_accounts or bank_reconciliation; vision record tmp/vision-records/ui_financing_open.json (landing frames, accept)",
       "filters": [],
       "id": "ui.discovery.financing",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family financing",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/financing (read-only financing shell open only)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "apply_cta_observed",
+        "shell_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_financing_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_financing_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {

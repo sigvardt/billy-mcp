@@ -78,6 +78,10 @@ UI_BANK_RECONCILIATION_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bank_reconciliation_open.py"
 UI_BANK_RECONCILIATION_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_BANK_RECONCILIATION_OPEN_TOOL_NAME = "ui_bank_reconciliation_open"
+UI_FINANCING_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_FINANCING_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_financing_open.py"
+UI_FINANCING_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_FINANCING_OPEN_TOOL_NAME = "ui_financing_open"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -2033,6 +2037,64 @@ def apply_ui_bank_reconciliation_open_shell_evidence(row: dict[str, Any]) -> Non
     ]
 
 
+def apply_ui_financing_open_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark financing **shell open** evidence only (research116).
+
+    Empty-input tool; path /:org_slug/financing; h1 Ansøg om erhvervslån.
+    No invent api_financing_*/loans. Never click apply/offer/submit (design §14.4).
+    Does not green bank_accounts or bank_reconciliation discovery.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/financing (read-only financing shell open only)"
+    )
+    row["tool_name"] = UI_FINANCING_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "apply_cta_observed",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_FINANCING_OPEN_MODEL_TEST_REFERENCE,
+        UI_FINANCING_OPEN_UNIT_TEST_REFERENCE,
+        UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research116 dual-session headless observation + ui_financing_open product; "
+        "shell open only (path class /:org_slug/financing; h1 Ansøg om erhvervslån; "
+        "Bank nav Ansøg om lån; apply CTA observe-only Få et uforpligtende tilbud; "
+        "never click apply/offer/consent/submit per design §14.4); no invent "
+        "api_financing_*/api_loans_*/api_froda_*; soft subpaths and aliases rejected; "
+        "distinct from bank-accounts Bankkonti and bank recon Afstemning; does not "
+        "green bank_accounts or bank_reconciliation; vision record "
+        "tmp/vision-records/ui_financing_open.json (landing frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -2091,6 +2153,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_receipt_inbox_list_shell_evidence(row)
         if family == "bank_reconciliation":
             apply_ui_bank_reconciliation_open_shell_evidence(row)
+        if family == "financing":
+            apply_ui_financing_open_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -2170,6 +2234,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_UPLOADS_LIST_LIVE_TEST_REFERENCE,
                     UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE,
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
+                    UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {
@@ -2222,6 +2287,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_UPLOADS_LIST_LIVE_TEST_REFERENCE,
                     UI_RECEIPT_INBOX_LIST_LIVE_TEST_REFERENCE,
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
+                    UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                 ],
             },
             {

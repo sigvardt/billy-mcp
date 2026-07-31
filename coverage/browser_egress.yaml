@@ -25,7 +25,8 @@
         "tests/live/test_ui_creditor_balances_list.py",
         "tests/live/test_ui_uploads_list.py",
         "tests/live/test_ui_receipt_inbox_list.py",
-        "tests/live/test_ui_bank_reconciliation_open.py"
+        "tests/live/test_ui_bank_reconciliation_open.py",
+        "tests/live/test_ui_financing_open.py"
       ]
     },
     {
@@ -136,7 +137,8 @@
         "tests/live/test_ui_creditor_balances_list.py",
         "tests/live/test_ui_uploads_list.py",
         "tests/live/test_ui_receipt_inbox_list.py",
-        "tests/live/test_ui_bank_reconciliation_open.py"
+        "tests/live/test_ui_bank_reconciliation_open.py",
+        "tests/live/test_ui_financing_open.py"
       ]
     },
     {
