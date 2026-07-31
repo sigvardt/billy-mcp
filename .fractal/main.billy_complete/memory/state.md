@@ -1746,3 +1746,148 @@ updated: 2026-07-31T22:30:00Z
 - `fractal commit` product: ui settings vat open momssatser panel with dual live and vision (`bc0865e`).
 - Not node finish (complete false; bulk + remaining UI still red).
 
+## SYNC (iter 32)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 76427E1E reacted (+): next remaining settings after settings_vat COMMIT
+  (prefer settings_users Brugere click-nav; annual stays red; no invent api_settings_*).
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `0247dcd` vs origin/main.billy_complete.
+- Coverage: implemented/contract 217; live/vision 33; complete false.
+- Discovery still red (5): annual_reports, settings_users, settings_subscription,
+  settings_access_token, settings_beta.
+- research129 already dual-froze Momssatser/Brugere/Adgangsnøgler/Betas click-nav
+  (subscription empty chrome stays red). Prefer product slice settings_users next.
+- Outbox: F12E50EB sync iter32 ready research settings_users.
+- Private next: 98B54127 RESEARCH settings_users.
+- Ready for PREPARE then RESEARCH (settings_users Brugere click-nav freeze). Not finish.
+
+## PREPARE (iter 32)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 157 local; 62 with commits ahead of tip. All historical.
+  Material non-fractal candidates inspected and skipped:
+  - `ui_auth_status`: tip already has auth_status + full UI product path; child
+    three-dot src is an older/narrower browser tree (376 vs 4661 LOC) and would
+    downgrade.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`:
+    wiki pages already on tip; residual is fractal scaffolding.
+  - `ui_auth_credentials_research_codex_fallback`: optional wiki
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` still
+    missing on tip — Codex-power fallback research only; superseded by landed
+    Grok auth research/product on tip; skip (same decision as prior iters).
+  - `wave5j_bank_line_product` and other product/review tips: fractal/memory
+    only or superseded product already on tip; skip.
+  - Review/init-only and memory-only children: skip.
+- No child merges this iteration.
+- No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC+PREPARE notes).
+- Ready RESEARCH freeze: `ui.discovery.settings_users` (click Brugere).
+
+## SYNC pre-RESEARCH (iter 32)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 98B54127 reacted (+): RESEARCH settings_users Brugere click-nav.
+- No running children.
+- PREPARE: parent up to date; no child merges.
+- Tip `0247dcd`; dirty: memory/state.md only.
+- Outbox: pre-research note posted.
+- Ready RESEARCH freeze: `ui.discovery.settings_users` (click Brugere from Indstillinger).
+
+## Research (iter 32)
+
+- research131 freeze: `ui.discovery.settings_users` via dual click-nav **Brugere**.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- No API settings resource; do not invent `api_settings_*`. api_token_used false.
+- Soft seeds settings/users|brugere|team|members soft-empty; settings/user → company.
+- Click **Brugere** dual success: path `/:org_slug/settings`, h1 `Indstillinger`,
+  h2 `Brugere` + `Revisorer og bogholdere` (strict pair).
+- Distinct from company/user/vat. Write CTAs observe-only: Invitér bruger/revisor,
+  Overdrag ejerskab, Find en bogholder — never click.
+- beta_panel heuristic can false-positive from side-nav; product must use h2 pair only.
+- Frames purged; writes false. Brief: `tmp/grok-research.md`.
+- Recommended product: `ui_settings_users_open` only. Ready for PLAN.
+
+## SYNC pre-PLAN (iter 32)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Research131 brief present; frames purged; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN product `ui_settings_users_open`.
+
+## Plan (iter 32)
+
+- Plan: `plans/2026-07-31T22:32:52.863Z-186.32-ui_settings_users_open.md`
+  — product `ui_settings_users_open` for `ui.discovery.settings_users` only;
+  root-only; dual live+vision; open hub `/:org_slug/settings` then click
+  **Brugere** (soft seeds reject); path class `/:org_slug/settings`, h1
+  `Indstillinger`, shell_kind=`settings_users`, required h2
+  Brugere/Revisorer og bogholdere; distinct from
+  company/accounting/invoicing/user/vat; never Invitér/Overdrag/write CTAs;
+  no invent api_settings_*; no greening other settings_*/annual; egress append
+  without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 32)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private E3188F6A reacted (+): EXECUTE ui_settings_users_open.
+- No running children.
+- Plan 186.32 present (untracked until commit). Ready EXECUTE product.
+
+## Execute (iter 32)
+
+- Producted `ui_settings_users_open` (models/browser/server/tests/coverage/wiki).
+- Open: hub `/:org_slug/settings` + observe-only click Brugere; soft seeds reject.
+- Success: path/h1 Indstillinger, shell_kind settings_users, h2 markers
+  Brugere/Revisorer og bogholdere.
+- Offline non-live suite green (1537 passed).
+- Live dual + vision purge_verified for Brugere panel.
+- Coverage live/vision 34; complete false.
+- Greens only `ui.discovery.settings_users`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 32)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7E7C399B reacted (+): REVIEW ui_settings_users_open.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_settings_users_open` (186.32).
+
+## Independent review (iter 32)
+
+- Product `ui_settings_users_open`: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1 live-assert Rolle header only.
+- Egress refs intact (vat + user + company + accounting + invoicing + users).
+- Other settings_*/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 32)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 6D199DE1 reacted (+): FIX-VERIFY then COMMIT.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+## FIX-VERIFY (iter 32)
+
+- IR product ACCEPT; optional N1 applied (drop live Rolle assert).
+- lint pass; offline 1537; live settings_users reconfirm pass; vision purge_verified.
+- Egress refs intact (company + accounting + invoicing + user + vat + users).
+- Coverage live/vision 34; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 32)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 93862954 reacted (+): ready COMMIT.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 32)
+
+- `fractal commit` product: ui settings users open Brugere panel with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
+

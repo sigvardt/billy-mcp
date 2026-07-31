@@ -1315,33 +1315,45 @@
     {
       "api_row_id": null,
       "area": "settings_users",
-      "cleanup": "not_applicable for route discovery; no records may be created",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research131 dual-session headless observation + ui_settings_users_open product; shell open only (hub /:org_slug/settings + click Brugere \u2192 path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_users, Brugere/Revisorer og bogholdere markers; distinct from company/accounting/invoicing/user/vat); soft seeds rejected; no invent api_settings_*; never click Invit\u00e9r/Overdrag/Gem; does not green other settings_* or annual_reports; vision record tmp/vision-records/ui_settings_users_open.json (Indstillinger Brugere frames, accept)",
       "filters": [],
       "id": "ui.discovery.settings_users",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family settings_users",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/settings (read-only Indstillinger Brugere/org users panel open via hub + side-nav click Brugere; never click Invit\u00e9r/Overdrag/Gem/Opret/Tilf\u00f8j/Upload)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "discovery_required",
+      "parity_status": "shell_open_only",
       "request_fields": [],
-      "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
-      "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "users_panel_markers_present"
       ],
-      "tool_name": "",
+      "sensitivity": "low",
+      "side_effects": "none",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_settings_users_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_settings_users_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "discovery"
     },
     {

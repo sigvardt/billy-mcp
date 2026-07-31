@@ -580,6 +580,23 @@ class UiSettingsVatOpenSuccess(BaseModel):
     vat_panel_markers_present: bool
 
 
+class UiSettingsUsersOpenInput(BaseModel):
+    """Empty, strict input for the read-only org users settings (Brugere) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsUsersOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Brugere panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_users"] = "settings_users"
+    users_panel_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

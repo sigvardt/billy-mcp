@@ -40,7 +40,8 @@
         "tests/live/test_ui_settings_accounting_open.py",
         "tests/live/test_ui_settings_invoicing_open.py",
         "tests/live/test_ui_settings_user_open.py",
-        "tests/live/test_ui_settings_vat_open.py"
+        "tests/live/test_ui_settings_vat_open.py",
+        "tests/live/test_ui_settings_users_open.py"
       ]
     },
     {
@@ -166,7 +167,8 @@
         "tests/live/test_ui_settings_accounting_open.py",
         "tests/live/test_ui_settings_invoicing_open.py",
         "tests/live/test_ui_settings_user_open.py",
-        "tests/live/test_ui_settings_vat_open.py"
+        "tests/live/test_ui_settings_vat_open.py",
+        "tests/live/test_ui_settings_users_open.py"
       ]
     },
     {

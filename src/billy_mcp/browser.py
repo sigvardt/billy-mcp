@@ -48,6 +48,7 @@ from billy_mcp.models import (
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
     UiSettingsUserOpenSuccess,
+    UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
@@ -220,6 +221,25 @@ _SETTINGS_VAT_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS | frozenset(
     {
         "Opret regelsæt",
         "Opret sats",
+    }
+)
+# Research131: Indstillinger org users (Brugere) panel on same hub path.
+# Soft seeds insufficient; open hub then observe-only click side label Brugere.
+# Never click Invitér* / Overdrag* / Find en bogholder* / Gem* / Opret*.
+_SETTINGS_USERS_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_USERS_HEADING = "Indstillinger"
+_SETTINGS_USERS_SIDE_NAV_LABEL = "Brugere"
+_SETTINGS_USERS_PANEL_MARKERS = (
+    "Brugere",
+    "Revisorer og bogholdere",
+)
+_SETTINGS_USERS_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS | frozenset(
+    {
+        "Invitér",
+        "Invitér bruger",
+        "Invitér revisor",
+        "Overdrag ejerskab",
+        "Find en bogholder eller revisor",
     }
 )
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
@@ -644,6 +664,12 @@ class UiSettingsVatOpenService(Protocol):
     """Injectable seam for the read-only VAT settings (Momssatser) shell open."""
 
     async def ui_settings_vat_open(self) -> UiSettingsVatOpenSuccess | ToolError: ...
+
+
+class UiSettingsUsersOpenService(Protocol):
+    """Injectable seam for the read-only org users settings (Brugere) shell open."""
+
+    async def ui_settings_users_open(self) -> UiSettingsUsersOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2817,6 +2843,88 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_users_open(self) -> UiSettingsUsersOpenSuccess | ToolError:
+        """Open the Indstillinger org users (Brugere) settings panel.
+
+        Research131: soft URL seeds are insufficient. Open hub
+        /:org_slug/settings then observe-only click side label Brugere. Final
+        path stays bare /:org_slug/settings with h1 Indstillinger and panel
+        markers Brugere + Revisorer og bogholdere. Distinct from company,
+        accounting, invoicing, user, and vat panels. Never click Invitér /
+        Overdrag / Find en bogholder / Gem / Opret. No invent api_settings_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_users_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_settings_users_changed_error()
+            if not _is_settings_users_url(page.url):
+                return _ui_settings_users_changed_error()
+
+            clicked = await _click_settings_side_nav_label(page, _SETTINGS_USERS_SIDE_NAV_LABEL)
+            if not clicked:
+                return _ui_settings_users_changed_error()
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message=("Browser authentication requires a non-automatable challenge."),
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_users_changed_error()
+                if _is_settings_users_url(page.url) and await _has_settings_users_signature(page):
+                    return UiSettingsUsersOpenSuccess(users_panel_markers_present=True)
+                await asyncio.sleep(0.2)
+            return _ui_settings_users_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=("Browser egress policy prevented the settings users shell observation."),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=("Browser settings users shell observation could not be completed."),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -4232,8 +4340,20 @@ async def _click_settings_side_nav_label(page: LoginPage, label: str) -> bool:
     if (
         label in _SETTINGS_USER_WRITE_CTA_LABELS
         or label in _SETTINGS_VAT_WRITE_CTA_LABELS
+        or label in _SETTINGS_USERS_WRITE_CTA_LABELS
         or label.startswith(
-            ("Gem", "Opret", "Slet", "Tilføj", "Upload", "Inviter", "Opgrader", "Save")
+            (
+                "Gem",
+                "Opret",
+                "Slet",
+                "Tilføj",
+                "Upload",
+                "Inviter",
+                "Invitér",
+                "Overdrag",
+                "Opgrader",
+                "Save",
+            )
         )
     ):
         return False
@@ -4387,6 +4507,98 @@ async def _has_settings_vat_signature(page: LoginPage) -> bool:
             if await control.count() >= 1 and await control.first.is_visible():
                 user_hits += 1
         if user_hits >= len(_SETTINGS_USER_PANEL_MARKERS):
+            return False
+        return True
+    except Exception:
+        return False
+
+
+def _is_settings_users_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (Brugere path)."""
+
+    return _is_settings_company_url(url)
+
+
+def _ui_settings_users_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings users (Brugere) shell classification failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings users shell could not be classified.",
+    )
+
+
+async def _has_settings_users_signature(page: LoginPage) -> bool:
+    """Verify research131 Indstillinger + Brugere panel markers; never click writes.
+
+    Requires h1 Indstillinger and Brugere + Revisorer og bogholdere.
+    Rejects company default, accounting Regnskab, invoicing Faktura, user
+    Profil, and VAT Momssatser panels. Soft seeds and other settings panels
+    are not success. Use .first for multi-match rail/body labels (Brugere may
+    appear as side-nav + panel h2).
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_USERS_HEADING:
+            return False
+        for label in _SETTINGS_USERS_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        # Reject company default panel.
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        # Reject accounting Regnskab panel.
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
+            return False
+        # Reject invoicing Faktura panel when required markers + optional present.
+        invoicing_required = 0
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                invoicing_required += 1
+        if invoicing_required >= len(_SETTINGS_INVOICING_REQUIRED_MARKERS):
+            optional_ok = False
+            for label in _SETTINGS_INVOICING_OPTIONAL_MARKERS:
+                control = page.locator(f"text={label}")
+                if await control.count() >= 1 and await control.first.is_visible():
+                    optional_ok = True
+                    break
+            if optional_ok:
+                return False
+        # Reject user Profil panel when full marker set is active.
+        user_hits = 0
+        for label in _SETTINGS_USER_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                user_hits += 1
+        if user_hits >= len(_SETTINGS_USER_PANEL_MARKERS):
+            return False
+        # Reject VAT Momssatser panel when triad is active.
+        vat_hits = 0
+        for label in _SETTINGS_VAT_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                vat_hits += 1
+        if vat_hits >= len(_SETTINGS_VAT_PANEL_MARKERS):
             return False
         return True
     except Exception:

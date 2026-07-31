@@ -86,6 +86,7 @@ from billy_mcp.browser import (
     UiSettingsCompanyOpenService,
     UiSettingsInvoicingOpenService,
     UiSettingsUserOpenService,
+    UiSettingsUsersOpenService,
     UiSettingsVatOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
@@ -157,6 +158,8 @@ from billy_mcp.models import (
     UiSettingsInvoicingOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
+    UiSettingsUsersOpenInput,
+    UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenInput,
     UiSettingsVatOpenSuccess,
     UiSuppliersListInput,
@@ -204,6 +207,7 @@ def create_server(
     ui_settings_invoicing_open_service: UiSettingsInvoicingOpenService | None = None,
     ui_settings_user_open_service: UiSettingsUserOpenService | None = None,
     ui_settings_vat_open_service: UiSettingsVatOpenService | None = None,
+    ui_settings_users_open_service: UiSettingsUsersOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -247,6 +251,7 @@ def create_server(
     settings_invoicing_open_service = ui_settings_invoicing_open_service or browser
     settings_user_open_service = ui_settings_user_open_service or browser
     settings_vat_open_service = ui_settings_vat_open_service or browser
+    settings_users_open_service = ui_settings_users_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -458,6 +463,12 @@ def create_server(
 
         UiSettingsVatOpenInput()
         return await settings_vat_open_service.ui_settings_vat_open()
+
+    async def ui_settings_users_open() -> UiSettingsUsersOpenSuccess | ToolError:
+        """Observe the Indstillinger Brugere settings panel without write actions."""
+
+        UiSettingsUsersOpenInput()
+        return await settings_users_open_service.ui_settings_users_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -699,6 +710,14 @@ def create_server(
             "does not click Opret, Gem, or other write actions)."
         ),
     )(ui_settings_vat_open)
+    server.tool(
+        name="ui_settings_users_open",
+        description=(
+            "Open the Billy org users settings (Indstillinger / Brugere) panel for the "
+            "authenticated session (read-only path, heading, and users panel markers; "
+            "does not click Invitér, Overdrag, Gem, or other write actions)."
+        ),
+    )(ui_settings_users_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

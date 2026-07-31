@@ -79,6 +79,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_settings_user_open_shell|ui_settings_user_open_shell]]: Read-only Billy Indstillinger Profil (user) settings panel open (research129 freeze).
 
+[[ui_settings_users_open_shell|ui_settings_users_open_shell]]: Read-only Billy Indstillinger Brugere (org users) settings panel open (research131 freeze).
+
 [[ui_settings_vat_open_shell|ui_settings_vat_open_shell]]: Read-only Billy Indstillinger Momssatser (VAT) settings panel open (research130 freeze).
 
 [[ui_suppliers_list_shell|ui_suppliers_list_shell]]: Read-only headless ui_suppliers_list contract for Billy suppliers list shell open only.

@@ -61,6 +61,8 @@ from billy_mcp.models import (
     UiSettingsInvoicingOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
+    UiSettingsUsersOpenInput,
+    UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenInput,
     UiSettingsVatOpenSuccess,
     UiSuppliersListInput,
@@ -1278,5 +1280,38 @@ def test_ui_settings_vat_open_models_vat_shell() -> None:
                 "heading": "Indstillinger",
                 "shell_kind": "settings_vat",
                 "vat_panel_markers_present": True,
+            }
+        )
+
+
+def test_ui_settings_users_open_models_users_shell() -> None:
+    assert UiSettingsUsersOpenInput().model_dump() == {}
+    success = UiSettingsUsersOpenSuccess(users_panel_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/settings",
+        "heading": "Indstillinger",
+        "shell_kind": "settings_users",
+        "users_panel_markers_present": True,
+    }
+    properties = UiSettingsUsersOpenSuccess.model_json_schema().get("properties", {})
+    assert "org_slug" not in properties
+    assert "email" not in str(properties).lower()
+    with pytest.raises(ValidationError):
+        UiSettingsUsersOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSettingsUsersOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_users",
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSettingsUsersOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/other",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_users",
+                "users_panel_markers_present": True,
             }
         )
