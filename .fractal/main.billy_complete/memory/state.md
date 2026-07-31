@@ -13,21 +13,22 @@ updated: 2026-07-31T13:54:00Z
 
 ## Current state
 
-- Continue mode iter 16 SYNC complete; tip product commit receipt_inbox 186.15 (`7d86a0c`).
-- Coverage: implemented/contract 201; live/vision 17; API live 0; complete false.
+- Continue mode iter 16 COMMIT complete; tip product bank recon 186.16 (`ffe1b46`).
+- Coverage: implemented/contract 202; live/vision 18; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
 - Operator: grok-only; no live API; no running children.
-- Branch clean at `7d86a0c` vs origin (dirty only this memory file until later COMMIT).
+- Branch clean at `ffe1b46` vs origin (dirty only this memory file).
 
 ## Verification
 
-- Last product: `ui_receipt_inbox_list` dual-session + vision purge_verified (COMMIT 186.15).
-- Offline baseline product: 1408 passed class.
-- Live baseline: 17 UI discovery/parity rows green.
+- Last product: `ui_bank_reconciliation_open` dual-session + vision purge_verified (COMMIT 186.16).
+- Offline baseline product: 1414 passed class.
+- Live baseline: 18 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
-- Product `ui_receipt_inbox_list`: **ACCEPT** (IR 186.15; egress test_references fixed before COMMIT).
+- Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16; egress generator retains prior lives).
+- Product `ui_receipt_inbox_list`: **ACCEPT** (committed 186.15).
 - Product `ui_uploads_list`: **ACCEPT** (committed 186.14).
 - Product `ui_creditor_balances_list`: **ACCEPT** (committed 186.13).
 - Product `ui_debtor_balances_list`: **ACCEPT** (committed 186.12).
@@ -37,31 +38,32 @@ updated: 2026-07-31T13:54:00Z
 
 ## Open coverage work
 
-1. Next UI discovery freeze: `ui.discovery.bank_reconciliation`.
-2. Then financing, daybooks, transactions, reports, vat, annual, exports, saft, addons, integrations, inventory, settings_*.
+1. Next UI discovery freeze: `ui.discovery.financing`.
+2. Then daybooks, transactions, reports, vat, annual, exports, saft, addons, integrations, inventory, settings_*.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (17 rows)
+## Live UI tools (18 rows)
 
 - discovery greened: invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
-  suppliers, bank_accounts.
+  suppliers, bank_accounts, bank_reconciliation.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
 
 ## Evidence boundaries
 
 - No invent API tools for pure UI shells.
-- Receipt inbox is `/:org_slug/vouchers` (Bilagsindbakke), distinct from uploads Bilag.
+- Bank recon is `/:org_slug/bank_accounts/:id/sync` (Afstemning), distinct from
+  bank-accounts Bankkonti; empty content shell valid in test org.
 - Interface read-back: second browser session only.
 - Grok-only children (`--agent=grok`).
 - API live_tested stays false with out_of_scope_by_user.
 
 ## References
 
-- Plan: `plans/2026-07-31T13:38:05.270Z-186.15-ui_receipt_inbox_list.md`
-- Wiki: `wiki/ui_receipt_inbox_list_shell.md`
-- Next: RESEARCH freeze `ui.discovery.bank_reconciliation`
+- Plan: `plans/2026-07-31T14:06:12.186Z-186.16-ui_bank_reconciliation_open.md`
+- Wiki: `wiki/ui_bank_reconciliation_open_shell.md`
+- Next: RESEARCH freeze `ui.discovery.financing`
 
 ## SYNC (iter 15)
 
@@ -295,3 +297,8 @@ updated: 2026-07-31T13:54:00Z
 - Unread inbox/feed/private: empty. Saved: empty.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 16)
+
+- `fractal commit` product: ui bank reconciliation open shell with dual live and vision (`ffe1b46`).
+- Not node finish (complete false; bulk + remaining UI still red).
