@@ -13,16 +13,16 @@ updated: 2026-07-31T16:27:11Z
 
 ## Current state
 
-- Continue mode iter 21 pre-COMMIT. Product tip still reports 186.20 until COMMIT.
+- Continue mode iter 21 COMMIT done. Product tip vat_declarations 186.21 (`61a0998`).
 - Coverage: implemented/contract 207; live/vision 23; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Next: COMMIT product `ui_vat_declarations_list`.
+- Next: RESEARCH freeze `ui.discovery.annual_reports`.
 
 ## Verification
 
-- Last product: `ui_vat_declarations_list` dual-session + vision purge_verified (EXECUTE 186.21).
-- Offline baseline product: 1457 passed non-live (expected after inventory count bump).
+- Last product: `ui_vat_declarations_list` dual-session + vision purge_verified (COMMIT 186.21).
+- Offline baseline product: 1457 passed non-live.
 - Live baseline: 23 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
@@ -199,6 +199,11 @@ updated: 2026-07-31T16:27:11Z
 - No running children.
 - FIX-VERIFY clean; commit product next.
 - Private note: next annual_reports freeze after commit.
+
+## COMMIT (iter 21)
+
+- `fractal commit` product: ui vat declarations list shell with dual live and vision (`61a0998`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
 ## SYNC (iter 20)
 
