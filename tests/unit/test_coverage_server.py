@@ -27,6 +27,7 @@ from billy_mcp.models import (
     UiQuotesListSuccess,
     UiReceiptInboxListSuccess,
     UiRecurringInvoicesListSuccess,
+    UiReportsOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -550,6 +551,18 @@ class FakeUiTransactionsListService:
         )
 
 
+class FakeUiReportsOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_reports_open(self) -> UiReportsOpenSuccess:
+        self.calls += 1
+        return UiReportsOpenSuccess(
+            export_action_visible=True,
+            shell_markers_present=True,
+        )
+
+
 class FakeUiFinancingOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -734,6 +747,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_financing_open",
         "ui_daybooks_open",
         "ui_transactions_list",
+        "ui_reports_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1276,6 +1290,35 @@ def test_ui_transactions_list_registration_has_empty_input_and_typed_output(
         }
     }
     assert transactions.calls == 1
+
+
+def test_ui_reports_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    reports = FakeUiReportsOpenService()
+    server = create_server(tmp_path, ui_reports_open_service=reports)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_reports_open"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_reports_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/reports-all",
+            "heading": "Rapporter",
+            "export_action_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert reports.calls == 1
 
 
 def test_ui_financing_open_registration_has_empty_input_and_typed_output(

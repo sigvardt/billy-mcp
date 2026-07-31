@@ -76,6 +76,7 @@ from billy_mcp.browser import (
     UiQuotesListService,
     UiReceiptInboxListService,
     UiRecurringInvoicesListService,
+    UiReportsOpenService,
     UiSuppliersListService,
     UiTransactionsListService,
     UiUploadsListService,
@@ -125,6 +126,8 @@ from billy_mcp.models import (
     UiReceiptInboxListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
+    UiReportsOpenInput,
+    UiReportsOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -156,6 +159,7 @@ def create_server(
     ui_financing_open_service: UiFinancingOpenService | None = None,
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
+    ui_reports_open_service: UiReportsOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -187,6 +191,7 @@ def create_server(
     financing_open_service = ui_financing_open_service or browser
     daybooks_open_service = ui_daybooks_open_service or browser
     transactions_list_service = ui_transactions_list_service or browser
+    reports_open_service = ui_reports_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -326,6 +331,12 @@ def create_server(
 
         UiTransactionsListInput()
         return await transactions_list_service.ui_transactions_list()
+
+    async def ui_reports_open() -> UiReportsOpenSuccess | ToolError:
+        """Observe the authenticated Billy Rapporter hub shell without export actions."""
+
+        UiReportsOpenInput()
+        return await reports_open_service.ui_reports_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -471,6 +482,14 @@ def create_server(
             "void, or delete transactions)."
         ),
     )(ui_transactions_list)
+    server.tool(
+        name="ui_reports_open",
+        description=(
+            "Open the Billy reports (Rapporter) hub shell for the authenticated "
+            "session (read-only path and heading classification; does not export, "
+            "download, or generate reports)."
+        ),
+    )(ui_reports_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

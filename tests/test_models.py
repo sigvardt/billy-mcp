@@ -41,6 +41,8 @@ from billy_mcp.models import (
     UiReceiptInboxListSuccess,
     UiRecurringInvoicesListInput,
     UiRecurringInvoicesListSuccess,
+    UiReportsOpenInput,
+    UiReportsOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -721,6 +723,54 @@ def test_ui_transactions_list_models_are_empty_input_and_non_pii_success() -> No
                 "path_class": "/:org_slug/transactions/new",
                 "heading": "Posteringer",
                 "create_action_visible": True,
+                "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_reports_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiReportsOpenInput().model_dump() == {}
+    success = UiReportsOpenSuccess(
+        export_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/reports-all",
+        "heading": "Rapporter",
+        "export_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiReportsOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "period",
+        "amount",
+        "selector",
+        "account",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiReportsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiReportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/reports-all",
+                "heading": "Rapporter",
+                "export_action_visible": True,
+                "shell_markers_present": True,
+                "period": "secret",
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiReportsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/reports",
+                "heading": "Rapporter",
+                "export_action_visible": True,
                 "shell_markers_present": True,
             }
         )

@@ -375,6 +375,23 @@ class UiTransactionsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiReportsOpenInput(BaseModel):
+    """Empty, strict input for the read-only reports (Rapporter) hub shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiReportsOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy Rapporter hub shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/reports-all"] = "/:org_slug/reports-all"
+    heading: Literal["Rapporter"] = "Rapporter"
+    export_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
