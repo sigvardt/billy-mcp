@@ -15,7 +15,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - "parent scratch: .fractal/main.billy_complete/tmp/grok-research.md (research88)"
 created: 2026-07-30T16:05:00Z
-updated: 2026-07-31T23:35:00Z
+updated: 2026-07-31T00:00:00Z
 ---
 
 # Wave-5s residual clear and specials research
@@ -52,7 +52,7 @@ offline freeze detail: [[wave_fivesb_files_upload_research]]. Product-ready:
 | Wave-5s-B product | **Merged** offline (containment-repaired upload; live false) |
 | Wave-5s-C product | **Merged** offline (`0efceae`; review87 ACCEPT offline only) |
 | Next offline product tools | **None** — residual/bulk require live token |
-| Recommended next slice | **Wave-5u residual unauth gate + bulk-delete canonical-form fixtures** (infrastructure only; form-matrix already merged). Live residual/bulk observation still blocked without `BILLY_API_TOKEN` |
+| Recommended next slice | **(A)** merge + IR Research96 residual/canonical-form fixtures; **(B)** research97 bulk open/closed class fixtures (infrastructure only). Live residual/bulk observation still blocked without `BILLY_API_TOKEN` |
 
 ## Official docs fingerprint
 
@@ -129,6 +129,20 @@ host `api.billy.dk` must never become the client base.
 | Recommended slice | Encode residual unauth gate fixtures + bulk-delete canonical `ids[]` query template into Wave-5u harness only; still no residual/bulk tools; live needs `BILLY_API_TOKEN` |
 | Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research96) |
 | Independent review | **ACCEPT as research** — [[wave_fives_research96_independent_review]] |
+
+## Research97 reconfirm (no coverage green)
+
+| Check | Result |
+| --- | --- |
+| Docs body | Unchanged vs research88–96 (ETag `"wcw4x9hqvu3603"`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`) |
+| Residual 29 full matrix | **25** unauth **405**; transactions create/update **401**; transactions delete + invoiceReminderAssociations delete **200** meta-only |
+| Bulk save empty plural | Closed unauth **405** on residual false-friends + files; open **401** on contacts/products/… including bankPayments and transactions |
+| Bulk delete empty `ids[]` | Open collections **400** `INVALID_DELETE_ID_ARRAY`; closed **405** on false-friends, bankPayments, users, organizations, salesTaxReturns, files |
+| cities list filter | Unauth `GET /cities` **400** OTHER requiring `countryId` (example `GET /cities?countryId=US`) |
+| Research96 harness child | **Completed** fixture encode on branch tip `6099f20`; parent merge + IR still required |
+| UI login EN/DA | Labels reconfirmed; Danish requires Playwright context locale + Accept-Language (query alone insufficient); localStorage `en_US` / `da_DK` |
+| Recommended slice | (A) merge + IR Research96 harness; (B) encode bulk open/closed class fixtures for all 92 bulk rows; residual/bulk tools still blocked; live needs `BILLY_API_TOKEN` |
+| Scratch brief | `.fractal/main.billy_complete/tmp/grok-research.md` (research97) |
 
 ## Residual ranking (research88; held by research89)
 
