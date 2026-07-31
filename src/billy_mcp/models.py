@@ -153,6 +153,23 @@ class UiBankAccountsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiQuotesListInput(BaseModel):
+    """Empty, strict input boundary for the read-only quotes list shell tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiQuotesListSuccess(BaseModel):
+    """Non-PII classification of the observed Billy quotes list shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/quotes"] = "/:org_slug/quotes"
+    heading: Literal["Tilbud"] = "Tilbud"
+    create_action_visible: bool
+    shell_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

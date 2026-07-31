@@ -21,6 +21,8 @@ from billy_mcp.models import (
     UiInvoicesListSuccess,
     UiProductsListInput,
     UiProductsListSuccess,
+    UiQuotesListInput,
+    UiQuotesListSuccess,
 )
 
 
@@ -198,5 +200,43 @@ def test_ui_bank_accounts_list_models_are_empty_input_and_non_pii_success() -> N
                 "connect_bank_action_visible": True,
                 "shell_markers_present": True,
                 "iban": "secret",
+            }
+        )
+
+
+def test_ui_quotes_list_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiQuotesListInput().model_dump() == {}
+    success = UiQuotesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/quotes",
+        "heading": "Tilbud",
+        "create_action_visible": True,
+        "shell_markers_present": True,
+    }
+    properties = UiQuotesListSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "quote_id",
+        "customer",
+        "selector",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiQuotesListInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiQuotesListSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/quotes",
+                "heading": "Tilbud",
+                "create_action_visible": True,
+                "shell_markers_present": True,
+                "customer": "secret",
             }
         )

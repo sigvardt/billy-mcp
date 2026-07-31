@@ -66,6 +66,7 @@ from billy_mcp.browser import (
     UiClientsListService,
     UiInvoicesListService,
     UiProductsListService,
+    UiQuotesListService,
 )
 from billy_mcp.client import BillyHttpClient
 from billy_mcp.config import AppConfig
@@ -92,6 +93,8 @@ from billy_mcp.models import (
     UiInvoicesListSuccess,
     UiProductsListInput,
     UiProductsListSuccess,
+    UiQuotesListInput,
+    UiQuotesListSuccess,
 )
 
 
@@ -104,6 +107,7 @@ def create_server(
     ui_products_list_service: UiProductsListService | None = None,
     ui_clients_list_service: UiClientsListService | None = None,
     ui_bank_accounts_list_service: UiBankAccountsListService | None = None,
+    ui_quotes_list_service: UiQuotesListService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -122,6 +126,7 @@ def create_server(
     products_list_service = ui_products_list_service or browser
     clients_list_service = ui_clients_list_service or browser
     bank_accounts_list_service = ui_bank_accounts_list_service or browser
+    quotes_list_service = ui_quotes_list_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -184,6 +189,12 @@ def create_server(
         UiBankAccountsListInput()
         return await bank_accounts_list_service.ui_bank_accounts_list()
 
+    async def ui_quotes_list() -> UiQuotesListSuccess | ToolError:
+        """Observe the authenticated Billy quotes list shell without writes."""
+
+        UiQuotesListInput()
+        return await quotes_list_service.ui_quotes_list()
+
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
     )
@@ -232,6 +243,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_bank_accounts_list)
+    server.tool(
+        name="ui_quotes_list",
+        description=(
+            "Open the Billy quotes list shell for the authenticated session "
+            "(read-only path and heading classification)."
+        ),
+    )(ui_quotes_list)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

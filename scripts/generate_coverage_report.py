@@ -38,6 +38,10 @@ UI_BANK_ACCOUNTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BANK_ACCOUNTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_bank_accounts_list.py"
 UI_BANK_ACCOUNTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_BANK_ACCOUNTS_LIST_TOOL_NAME = "ui_bank_accounts_list"
+UI_QUOTES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_QUOTES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_quotes_list.py"
+UI_QUOTES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_QUOTES_LIST_TOOL_NAME = "ui_quotes_list"
 COMMON_ERRORS = ["AUTHENTICATION_REQUIRED", "OAUTH_INVALID_ACCESS_TOKEN"]
 FILES_UPLOAD_ALIAS = "api.special.files_upload"
 FILES_UPLOAD_TOOL_NAME = "api_files_upload_preview"
@@ -1420,6 +1424,61 @@ def apply_ui_bank_accounts_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
+def apply_ui_quotes_list_shell_evidence(row: dict[str, Any]) -> None:
+    """Mark quotes list **shell open** evidence only (research106 / plan 186.7).
+
+    UI-only: no quotes API resource. Empty-input tool; path /quotes (optional /empty),
+    h1 Tilbud, CTA Opret tilbud. vision_evidence stays null.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/quotes (read-only list shell open; empty suffix allowed)"
+    )
+    row["tool_name"] = UI_QUOTES_LIST_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_QUOTES_LIST_MODEL_TEST_REFERENCE,
+        UI_QUOTES_LIST_UNIT_TEST_REFERENCE,
+        UI_QUOTES_LIST_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research106 dual-session headless observation + ui_quotes_list product; "
+        "UI-only list shell (path class /:org_slug/quotes, empty /quotes/empty accepted, "
+        "h1 Tilbud, CTA Opret tilbud present, no create); "
+        "no quotes API resource; do not invent api_quotes_*; "
+        "does not green invoices quoteId UI parity or recurring_invoices; "
+        "vision record tmp/vision-records/ui_quotes_list.json (list surface frames, accept)"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "list_shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -1458,6 +1517,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=False)
         if family == "bank_accounts":
             apply_ui_bank_accounts_list_shell_evidence(row)
+        if family == "quotes":
+            apply_ui_quotes_list_shell_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:

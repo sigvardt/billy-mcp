@@ -28,6 +28,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiInvoicesListSuccess,
     UiProductsListSuccess,
+    UiQuotesListSuccess,
 )
 
 DEFAULT_BROWSER_EGRESS_MANIFEST = (
@@ -68,6 +69,10 @@ _CLIENTS_CREATE_CTA = "Opret kontakt"
 _BANK_ACCOUNTS_LIST_PATH = re.compile(r"^/[^/]+/bank-accounts$")
 _BANK_ACCOUNTS_LIST_HEADING = "Bankkonti"
 _BANK_ACCOUNTS_CONNECT_CTA = "Forbind til bank"
+# Empty orgs land on /quotes/empty (research106); bare /quotes is also valid.
+_QUOTES_LIST_PATH = re.compile(r"^/[^/]+/quotes(?:/empty)?$")
+_QUOTES_LIST_HEADING = "Tilbud"
+_QUOTES_CREATE_CTA = "Opret tilbud"
 _ERROR_SHELL_MARKERS = (
     "text=Upsedasse!",
     "text=Upsedasse",
@@ -281,6 +286,12 @@ class UiBankAccountsListService(Protocol):
     """Injectable seam for the read-only bank accounts list shell observation."""
 
     async def ui_bank_accounts_list(self) -> UiBankAccountsListSuccess | ToolError: ...
+
+
+class UiQuotesListService(Protocol):
+    """Injectable seam for the read-only quotes list shell observation."""
+
+    async def ui_quotes_list(self) -> UiQuotesListSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -802,6 +813,66 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_quotes_list(self) -> UiQuotesListSuccess | ToolError:
+        """Open the quotes list shell for the current authenticated UI session only."""
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_quotes_changed_error()
+
+            quotes_url = f"https://mit.billy.dk/{slug}/quotes"
+            await page.goto(quotes_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_quotes_changed_error()
+                if _is_quotes_list_url(page.url) and await _has_quotes_list_signature(page):
+                    return UiQuotesListSuccess(
+                        create_action_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_quotes_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the quotes list observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser quotes list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -947,6 +1018,24 @@ def _is_bank_accounts_list_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_BANK_ACCOUNTS_LIST_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_quotes_list_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/quotes or /quotes/empty, including query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_QUOTES_LIST_PATH.match(parsed.path or ""))
     )
 
 
@@ -1109,6 +1198,21 @@ async def _has_bank_accounts_list_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _has_quotes_list_signature(page: LoginPage) -> bool:
+    """Verify the research106 quotes list heading and create CTA without clicking."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _QUOTES_LIST_HEADING:
+            return False
+        create_action = page.locator(f"text={_QUOTES_CREATE_CTA}")
+        return await create_action.count() >= 1 and await create_action.is_visible()
+    except Exception:
+        return False
+
+
 async def _has_error_shell_markers(page: LoginPage) -> bool:
     """Detect Billy error shells (for example Upsedasse) without echoing page text."""
 
@@ -1219,6 +1323,15 @@ def _ui_bank_accounts_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy bank accounts list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_quotes_changed_error() -> ToolError:
+    """Fail closed when the quotes list shell no longer matches research106."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy quotes list interface no longer matches the recorded signature.",
     )
 
 

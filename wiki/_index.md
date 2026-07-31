@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T10:48:20Z
+updated: 2026-07-31T11:06:24Z
 ---
 
 # billy_mcp
@@ -38,6 +38,8 @@ updated: 2026-07-31T10:48:20Z
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
 
 [[ui_products_list_shell|ui_products_list_shell]]: Read-only headless ui_products_list contract for Billy products list shell open only.
+
+[[ui_quotes_list_shell|ui_quotes_list_shell]]: Read-only headless ui_quotes_list contract for Billy quotes list shell open only.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
