@@ -173,11 +173,11 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["complete"] is False
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 27
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 27
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 28
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 28
     # API live remains 0 (out of scope); UI shell rows are live-qualified.
-    assert status["qualification"]["live_tested_rows"] == 27
-    assert status["qualification"]["vision_verified_rows"] == 27
+    assert status["qualification"]["live_tested_rows"] == 28
+    assert status["qualification"]["vision_verified_rows"] == 28
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -345,6 +345,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.saft_exports",
         "ui.discovery.addons",
         "ui.discovery.integrations",
+        "ui.discovery.inventory",
     }
     tool_by_id = {
         "ui.discovery.invoices": "ui_invoices_list",
@@ -374,6 +375,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.saft_exports": "ui_saft_exports_open",
         "ui.discovery.addons": "ui_addons_open",
         "ui.discovery.integrations": "ui_integrations_open",
+        "ui.discovery.inventory": "ui_inventory_open",
     }
     remaining = [row for row in workflows if row["id"] not in qualified_ids]
     qualified = [row for row in workflows if row["id"] in qualified_ids]
@@ -388,7 +390,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["live_tested"] is False for row in remaining)
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in workflows)
-    assert len(qualified) == 27
+    assert len(qualified) == 28
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
         assert row["discovered"] is True

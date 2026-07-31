@@ -73,6 +73,7 @@ from billy_mcp.browser import (
     UiExportsOpenService,
     UiFinancingOpenService,
     UiIntegrationsOpenService,
+    UiInventoryOpenService,
     UiInvoicesListService,
     UiProductsImportService,
     UiProductsListService,
@@ -125,6 +126,8 @@ from billy_mcp.models import (
     UiFinancingOpenSuccess,
     UiIntegrationsOpenInput,
     UiIntegrationsOpenSuccess,
+    UiInventoryOpenInput,
+    UiInventoryOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -180,6 +183,7 @@ def create_server(
     ui_saft_exports_open_service: UiSaftExportsOpenService | None = None,
     ui_addons_open_service: UiAddonsOpenService | None = None,
     ui_integrations_open_service: UiIntegrationsOpenService | None = None,
+    ui_inventory_open_service: UiInventoryOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -217,6 +221,7 @@ def create_server(
     saft_exports_open_service = ui_saft_exports_open_service or browser
     addons_open_service = ui_addons_open_service or browser
     integrations_open_service = ui_integrations_open_service or browser
+    inventory_open_service = ui_inventory_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -392,6 +397,12 @@ def create_server(
 
         UiIntegrationsOpenInput()
         return await integrations_open_service.ui_integrations_open()
+
+    async def ui_inventory_open() -> UiInventoryOpenSuccess | ToolError:
+        """Observe the authenticated Billy Lagermodul inventory shell without create actions."""
+
+        UiInventoryOpenInput()
+        return await inventory_open_service.ui_inventory_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -585,6 +596,14 @@ def create_server(
             "marketing apps, install partners, or navigate off mit.billy.dk)."
         ),
     )(ui_integrations_open)
+    server.tool(
+        name="ui_inventory_open",
+        description=(
+            "Open the Billy inventory (Lagermodul) shell for the authenticated session "
+            "(read-only path and heading classification; does not click Opret primo, "
+            "Opret produkt, Opret status, or other create actions)."
+        ),
+    )(ui_inventory_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

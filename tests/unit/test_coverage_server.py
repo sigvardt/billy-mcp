@@ -24,6 +24,7 @@ from billy_mcp.models import (
     UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
     UiIntegrationsOpenSuccess,
+    UiInventoryOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -619,6 +620,15 @@ class FakeUiAddonsOpenService:
         return UiAddonsOpenSuccess(shell_markers_present=True)
 
 
+class FakeUiInventoryOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_inventory_open(self) -> UiInventoryOpenSuccess:
+        self.calls += 1
+        return UiInventoryOpenSuccess(create_cta_markers_present=True)
+
+
 class FakeUiFinancingOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -809,6 +819,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_saft_exports_open",
         "ui_addons_open",
         "ui_integrations_open",
+        "ui_inventory_open",
     }
     assert coverage_tool_names == {"coverage_status", "coverage_report"}
     assert tool_names == (
@@ -1559,3 +1570,32 @@ def test_ui_integrations_open_registration_has_empty_input_and_typed_output(
         }
     }
     assert integrations.calls == 1
+
+
+def test_ui_inventory_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    inventory = FakeUiInventoryOpenService()
+    server = create_server(tmp_path, ui_inventory_open_service=inventory)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_inventory_open"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_inventory_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/inventory",
+            "heading": "Lagermodul",
+            "shell_kind": "lagermodul",
+            "create_cta_markers_present": True,
+        }
+    }
+    assert inventory.calls == 1

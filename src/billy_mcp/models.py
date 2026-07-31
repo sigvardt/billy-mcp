@@ -478,6 +478,23 @@ class UiIntegrationsOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiInventoryOpenInput(BaseModel):
+    """Empty, strict input for the read-only Lagermodul inventory shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInventoryOpenSuccess(BaseModel):
+    """Non-PII classification for the Lagermodul shell at /:org_slug/inventory."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/inventory"] = "/:org_slug/inventory"
+    heading: Literal["Lagermodul"] = "Lagermodul"
+    shell_kind: Literal["lagermodul"] = "lagermodul"
+    create_cta_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

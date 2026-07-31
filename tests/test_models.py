@@ -35,6 +35,8 @@ from billy_mcp.models import (
     UiFinancingOpenSuccess,
     UiIntegrationsOpenInput,
     UiIntegrationsOpenSuccess,
+    UiInventoryOpenInput,
+    UiInventoryOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -1020,5 +1022,57 @@ def test_ui_integrations_open_models_soft_empty_shell() -> None:
                 "same_shell_as_addons": False,
                 "heading": "Fordele",
                 "shell_markers_present": True,
+            }
+        )
+
+
+def test_ui_inventory_open_models_lagermodul_shell() -> None:
+    assert UiInventoryOpenInput().model_dump() == {}
+    success = UiInventoryOpenSuccess(create_cta_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/inventory",
+        "heading": "Lagermodul",
+        "shell_kind": "lagermodul",
+        "create_cta_markers_present": True,
+    }
+    properties = UiInventoryOpenSuccess.model_json_schema().get("properties", {})
+    for forbidden in (
+        "email",
+        "password",
+        "token",
+        "org_slug",
+        "url",
+        "selector",
+        "partner",
+        "file",
+    ):
+        assert forbidden not in properties
+    with pytest.raises(ValidationError):
+        UiInventoryOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiInventoryOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/products",
+                "heading": "Lagermodul",
+                "shell_kind": "lagermodul",
+                "create_cta_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiInventoryOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/inventory",
+                "heading": "Produkter",
+                "shell_kind": "lagermodul",
+                "create_cta_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiInventoryOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/inventory",
+                "heading": "Lagermodul",
+                "shell_kind": "soft_empty",
+                "create_cta_markers_present": True,
             }
         )

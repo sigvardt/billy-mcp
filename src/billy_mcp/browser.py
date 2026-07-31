@@ -35,6 +35,7 @@ from billy_mcp.models import (
     UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
     UiIntegrationsOpenSuccess,
+    UiInventoryOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -141,6 +142,11 @@ _ADDONS_NAV_LABEL = "Udforsk integrationer"
 # Research124: integrations soft-empty classification (not Fordele; not marketing).
 # Path exact integrations leaf. Never navigate www.billy.dk; never partner CTAs.
 _INTEGRATIONS_PATH = re.compile(r"^/[^/]+/integrations$")
+# Research125: Lagermodul inventory open shell (not products list).
+# Never click Opret primo / Opret produkt / Opret status.
+_INVENTORY_PATH = re.compile(r"^/[^/]+/inventory$")
+_INVENTORY_HEADING = "Lagermodul"
+_INVENTORY_CREATE_CTAS = ("Opret primo", "Opret produkt", "Opret status")
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -523,6 +529,12 @@ class UiIntegrationsOpenService(Protocol):
     """Injectable seam for integrations soft-empty classification (research124)."""
 
     async def ui_integrations_open(self) -> UiIntegrationsOpenSuccess | ToolError: ...
+
+
+class UiInventoryOpenService(Protocol):
+    """Injectable seam for the read-only Lagermodul inventory shell open."""
+
+    async def ui_inventory_open(self) -> UiInventoryOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -2251,6 +2263,73 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_inventory_open(self) -> UiInventoryOpenSuccess | ToolError:
+        """Open the Lagermodul inventory shell for the current session only.
+
+        Research125: path /:org_slug/inventory, h1 Lagermodul. Soft aliases
+        rejected. Distinct from products (Produkter). Never click Opret primo /
+        Opret produkt / Opret status or other create CTAs. No invent api_inventory_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_inventory_changed_error()
+
+            inventory_url = f"https://mit.billy.dk/{slug}/inventory"
+            await page.goto(inventory_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_inventory_changed_error()
+                # Fail closed if Billy routes inventory to products list shell.
+                if await _has_products_list_signature(page):
+                    return _ui_inventory_changed_error()
+                if _is_inventory_url(page.url) and await _has_inventory_signature(page):
+                    return UiInventoryOpenSuccess(
+                        create_cta_markers_present=await _has_inventory_create_cta_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_inventory_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the inventory shell observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser inventory shell observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -2633,6 +2712,24 @@ def _is_integrations_url(url: str) -> bool:
     )
 
 
+def _is_inventory_url(url: str) -> bool:
+    """Return True when the URL is the inventory (Lagermodul) path on the app host."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_INVENTORY_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_daybooks_editor_url(url: str) -> bool:
     """Return True when the URL is the daybook editor open path on the app host."""
 
@@ -2897,6 +2994,15 @@ def _ui_integrations_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy integrations interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_inventory_changed_error() -> ToolError:
+    """Fail closed when Lagermodul inventory shell no longer matches research125."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy inventory interface no longer matches the recorded signature.",
     )
 
 
@@ -3409,6 +3515,38 @@ async def _has_integrations_soft_empty_signature(page: LoginPage) -> bool:
                     # Any non-empty content h1 is not the soft-empty freeze.
                     return False
         return await _has_shell_nav_markers(page)
+    except Exception:
+        return False
+
+
+async def _has_inventory_signature(page: LoginPage) -> bool:
+    """Verify research125 Lagermodul heading without create CTA clicks.
+
+    Never click Opret primo / Opret produkt / Opret status. Soft aliases and
+    products list (Produkter) are not success paths for this tool.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        return (await first.inner_text()).strip() == _INVENTORY_HEADING
+    except Exception:
+        return False
+
+
+async def _has_inventory_create_cta_markers(page: LoginPage) -> bool:
+    """Observe Lagermodul create CTA text only; never click."""
+
+    try:
+        for label in _INVENTORY_CREATE_CTAS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.is_visible():
+                return True
+        return False
     except Exception:
         return False
 

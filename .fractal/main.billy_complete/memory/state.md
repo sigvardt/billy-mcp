@@ -6,28 +6,30 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T19:17:03Z
+updated: 2026-07-31T19:43:40Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 25 COMMIT done. Product tip integrations 186.25 (`f34c9cf`).
-- Coverage: implemented/contract 211; live/vision 27; API live 0; complete false.
+- Continue mode iter 26 COMMIT. Product tip inventory 186.26.
+- Coverage: implemented/contract 212; live/vision 28; API live 0; complete false.
 - Docs fingerprint ETag `wcw4x9hqvu3603` (unchanged).
 - Operator: grok-only; no live API; no running children.
-- Product `ui_integrations_open`: **ACCEPT** (committed). Next: RESEARCH freeze
-  inventory (Lagermodul), then settings_*; annual stays red.
+- Product `ui_inventory_open`: **ACCEPT** (committed). Next: RESEARCH freeze settings_*
+  (Indstillinger); annual stays red.
 
 ## Verification
 
-- Last product: `ui_addons_open` dual-session + vision purge_verified (committed 186.24).
-- Offline baseline product: 1477 passed non-live.
-- Live baseline: 26 UI discovery/parity rows green.
+- Last product: `ui_inventory_open` dual-session + vision purge_verified (committed 186.26).
+- Offline baseline product: 1490 passed non-live.
+- Live baseline: 28 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
+- Product `ui_inventory_open`: **ACCEPT** (IR 186.26; no required fixes; egress
+  retains prior lives; settings/annual stay red).
 - Product `ui_integrations_open`: **ACCEPT** (IR 186.25; no required fixes; egress
   retains prior lives; inventory/settings/annual stay red).
 - Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes; egress
@@ -50,27 +52,27 @@ updated: 2026-07-31T19:17:03Z
 
 ## Open coverage work
 
-1. Next: PLAN product `ui_integrations_open` soft-empty classification for
-   `ui.discovery.integrations`; then inventory (Lagermodul), settings_*.
-
+1. Next: RESEARCH freeze settings_* (Indstillinger tip). Then product if dual ok; annual stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (26 rows)
+## Live UI tools (28 rows)
 
-- discovery greened (22): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (24): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
-  reports, vat_declarations, exports, saft_exports, addons.
+  reports, vat_declarations, exports, saft_exports, addons, integrations, inventory.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (12): annual_reports (inaccessible freeze),
-  integrations, inventory, settings_*.
+- discovery still red (10): annual_reports (inaccessible freeze), settings_*.
 
 ## Evidence boundaries
 
 - No invent API tools for pure UI shells.
+- Integrations path is `/:org_slug/integrations` soft-empty chrome (empty h1);
+  not Fordele; marketing `www.billy.dk/apps/` never navigated; never Install/Connect;
+  do not invent api_integrations_*; greened as soft-empty classification only.
 - Add-ons path is `/:org_slug/add-ons` h1 `Fordele` (nav Udforsk integrationer);
   soft aliases (`addons`, `integrations`, nested, settings/*) reject; never click
   partner CTAs (Opret adgangsnøgle, Tilføj som betalingsmetode, Aktivér
@@ -100,7 +102,7 @@ updated: 2026-07-31T19:17:03Z
 - Plan exports: `plans/2026-07-31T17:18:04.362Z-186.22-ui_exports_open.md`
 - Wiki: `wiki/ui_exports_open_shell.md`
 - Research121: annual inaccessible; product tip exports.
-- Next: PLAN product `ui_saft_exports_open`
+- Next: RESEARCH freeze `ui.discovery.inventory` (Lagermodul)
 
 ## Research (iter 23)
 
@@ -194,6 +196,144 @@ updated: 2026-07-31T19:17:03Z
 
 - `fractal commit` product: ui saft exports open shell with dual live and vision.
 - Not node finish (complete false; bulk + remaining UI still red).
+
+
+## SYNC (iter 26)
+
+- Unread inbox/feed/private: empty. Saved queue: empty.
+- No running children; historical only (none need merge this step).
+- Parent directives: none new (scope override still: no live API; grok-only).
+- Branch clean at product tip integrations 186.25 (`2d75af8` / `f34c9cf`) vs origin.
+- Coverage: implemented/contract 211; live/vision 27; complete false.
+- Outbox posted: iter26 SYNC progress.
+- Private note: next freeze inventory.
+- Discovery still red (11): annual_reports (inaccessible), inventory, settings_*.
+- Ready for PREPARE then RESEARCH freeze: `ui.discovery.inventory`.
+
+## PREPARE (iter 26)
+
+- Parent `main`: already up to date; no merge commit.
+- No running children.
+- Children with commits ahead of root: historical only. Sampled non-fractal deltas
+  (`ui_auth_status`, `shared_foundation`, wave1–5 product tips, wave5t/wave5u wiki):
+  root already has evolved product code (often many× larger); unique child content is
+  superseded scaffolding or older wiki drafts. Optional missing research wiki only:
+  `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+  (superseded auth research already on root product path).
+- No child merges this iteration. No integration outbox note.
+- Uncommitted: memory/state.md only (SYNC+PREPARE).
+- Ready for RESEARCH freeze: `ui.discovery.inventory` (Lagermodul).
+
+
+## SYNC pre-RESEARCH (iter 26)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private D7D12B7F read/reacted (next freeze inventory).
+- No running children. Parent merge already done (no-op).
+- Tip integrations product `2d75af8` / `f34c9cf`; dirty: memory/state.md only.
+- Outbox: pre-RESEARCH inventory freeze announced.
+- Ready for RESEARCH freeze: `ui.discovery.inventory`.
+
+
+## Research (iter 26)
+
+- research125 freeze: `ui_inventory_open` for `ui.discovery.inventory`
+  → path class `/:org_slug/inventory`, h1 `Lagermodul`, title `Lagermodul - [org]`.
+- Dual session path/h1/title match; create CTAs observed text-only (Opret primo /
+  produkt / status) — never clicked; not plan-paywall; frames purged;
+  api_token_used false; writes/clicks false.
+- Soft aliases (lager, stock, warehouse, nested inventory/*, settings/inventory,
+  products/inventory) empty chrome (reject). Distinct from products Produkter.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603`. No API inventory/stock resource.
+- Do not invent api_inventory_*; do not green settings_*/annual; never click Opret CTAs.
+- Bonus tip only: settings h1 `Indstillinger`; annual still red.
+- Brief: `tmp/grok-research.md`. Do not green coverage in research.
+- Ready for PLAN.
+
+
+## SYNC pre-PLAN (iter 26)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DC2F41A2 read/reacted (PLAN ui_inventory_open).
+- No running children.
+- Outbox: research125 freeze already announced (6399043D); pre-PLAN ready posted.
+- Tip `2d75af8`; dirty memory/state.md only (+ tmp research artifacts untracked).
+- Ready for PLAN: product `ui_inventory_open`.
+
+
+## Plan (iter 26)
+
+- Plan: `plans/2026-07-31T19:26:43.566Z-186.26-ui_inventory_open.md`
+  — product `ui_inventory_open` for `ui.discovery.inventory` only;
+  root-only; dual live+vision; path `/:org_slug/inventory` h1 `Lagermodul`;
+  soft aliases reject; never Opret CTAs; no invent api_inventory_*; no greening
+  settings/annual/products re-green; egress append without drop.
+- Ready for EXECUTE.
+
+
+## SYNC pre-EXECUTE (iter 26)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Plan 186.26 ready; next EXECUTE product `ui_inventory_open`.
+- Tip `2d75af8`; dirty: memory + untracked plan.
+
+
+## Execute (iter 26)
+
+- Producted `ui_inventory_open` (models/browser/server/tests/coverage/wiki).
+- Offline non-live 1490; live dual + vision purge_verified.
+- Coverage live/vision 28; complete false.
+- Greens only `ui.discovery.inventory`. Ready for REVIEW.
+- Egress retains prior lives + inventory live ref.
+- Hard ban: Opret primo/produkt/status never clicked; no api_inventory_*.
+
+
+## SYNC pre-REVIEW (iter 26)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete already announced (0E645BC2).
+- Ready for independent review of `ui_inventory_open` (186.26).
+
+
+## Independent review (iter 26)
+
+- Product `ui_inventory_open`: **ACCEPT** (tmp/grok-review.md).
+- No required product fixes. Egress refs intact (integrations + prior + inventory).
+- settings/annual remain red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+
+## SYNC pre-FIX-VERIFY (iter 26)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm.
+
+
+## FIX-VERIFY (iter 26)
+
+- IR product ACCEPT; optional N1/N2 no-op (left as-is).
+- lint pass; offline 1490; live inventory reconfirm pass; vision purge_verified.
+- Egress refs intact (integrations + addons + saft + exports + prior + inventory).
+- Coverage live/vision 28; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+
+## SYNC pre-COMMIT (iter 26)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
+
+
+## COMMIT (iter 26)
+
+- `fractal commit` product: ui inventory open Lagermodul shell with dual live and vision.
+- Not node finish (complete false; bulk + remaining UI still red).
+
 
 ## SYNC (iter 24)
 

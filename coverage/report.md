@@ -1,6 +1,6 @@
 # Phase 1 offline API read-and-write coverage status
 
-This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 211/211; UI live/vision rows: 27/27. API live_tested remains false under out_of_scope_by_user (not live-verified).
+This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 212/212; UI live/vision rows: 28/28. API live_tested remains false under out_of_scope_by_user (not live-verified).
 
 | Source | Count |
 | --- | ---: |
