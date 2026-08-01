@@ -105,6 +105,10 @@ UI_CLIENTS_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_CLIENTS_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_get_open.py"
 UI_CLIENTS_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_CLIENTS_GET_OPEN_TOOL_NAME = "ui_clients_get_open"
+UI_CLIENTS_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_CLIENTS_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_update_open.py"
+UI_CLIENTS_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_CLIENTS_UPDATE_OPEN_TOOL_NAME = "ui_clients_update_open"
 UI_SUPPLIERS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SUPPLIERS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_create_open.py"
 UI_SUPPLIERS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1915,6 +1919,83 @@ def apply_ui_clients_get_open_shell_evidence(
     row["vision_verified"] = True
     row["vision_evidence"] = None
     row["parity_status"] = "detail_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness may create disposable contact "
+        "then delete in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_clients_update_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_update: bool = False,
+) -> None:
+    """Mark clients update form **open only** evidence (research166).
+
+    Empty-input tool; open /:org_slug/clients, open contact detail, click Ret,
+    classify name-valued edit fields. Never Gem/Slet/Save. Distinct from get
+    overview and create form. When ``parity_of_api_update`` is true, dual-counts
+    exact ``ui.parity.contacts.update``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Ret edit form "
+        "(read-only clients update open; never Gem/Slet/Save submit; "
+        "get overview without Ret not success; soft /clients/new not success)"
+    )
+    row["tool_name"] = UI_CLIENTS_UPDATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "edit_form_open",
+        "name_field_visible",
+        "name_field_has_value",
+        "address_or_person_fields_present",
+        "country_field_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_update:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_CLIENTS_UPDATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_CLIENTS_UPDATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_CLIENTS_UPDATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research166 dual-session headless observation + ui_clients_update_open product; "
+        "scoped api.billysbilling.com path_allow for contacts data-plane (from research164); "
+        "Ret edit form open only (path class /:org_slug/contacts/:id/customer, "
+        "shell_kind=clients_update, name input valued + address/country content fields; "
+        "never Gem/Slet submit; distinct from list shell ui_clients_list, create form_open "
+        "ui_clients_create_open, and get overview ui_clients_get_open); "
+        "vision record tmp/vision-records/ui_clients_update_open.json "
+        "(client edit form frames, accept)"
+    )
+    if parity_of_api_update:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.contacts.update to UI Ret edit form open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = (
@@ -4656,6 +4737,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.contacts.get":
             apply_ui_clients_get_open_shell_evidence(row, parity_of_api_get=True)
+        if api_row["id"] == "api.contacts.update":
+            apply_ui_clients_update_open_shell_evidence(row, parity_of_api_update=True)
         if api_row["id"] == "api.bills.list":
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":

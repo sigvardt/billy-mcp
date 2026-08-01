@@ -7,7 +7,7 @@ import json
 import re
 from collections.abc import Awaitable, Callable, Iterable, Mapping
 from pathlib import Path
-from typing import Literal, Protocol, cast
+from typing import Any, Literal, Protocol, cast
 from urllib.parse import urlsplit
 
 import yaml
@@ -32,6 +32,7 @@ from billy_mcp.models import (
     UiClientsCreateOpenSuccess,
     UiClientsGetOpenSuccess,
     UiClientsListSuccess,
+    UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
@@ -635,6 +636,12 @@ class UiClientsGetOpenService(Protocol):
     """Injectable seam for the read-only clients detail get-open observation."""
 
     async def ui_clients_get_open(self) -> UiClientsGetOpenSuccess | ToolError: ...
+
+
+class UiClientsUpdateOpenService(Protocol):
+    """Injectable seam for the read-only clients update (Ret) form open observation."""
+
+    async def ui_clients_update_open(self) -> UiClientsUpdateOpenSuccess | ToolError: ...
 
 
 class UiSuppliersCreateOpenService(Protocol):
@@ -1536,6 +1543,96 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser clients detail observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_clients_update_open(self) -> UiClientsUpdateOpenSuccess | ToolError:
+        """Open a client edit form (Ret) for the authenticated UI session only.
+
+        Research166: open /:org_slug/clients, open non-header contact detail
+        (/contacts/:id/customer), click Ret, classify name-valued edit fields.
+        Never Gem/Slet/Save submit. Distinct from get overview and create form.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_clients_update_changed_error()
+
+            clients_url = f"https://mit.billy.dk/{slug}/clients"
+            await page.goto(clients_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_clients_update_changed_error()
+                if _is_clients_new_soft_url(page.url):
+                    return _ui_clients_update_changed_error()
+
+                if await _has_clients_update_form_signature(page):
+                    flags = await _clients_update_form_field_flags(page)
+                    # Ret panel can collapse primary nav labels; shell_markers_present
+                    # is the edit-ready aggregate (path + valued name + content floor).
+                    return UiClientsUpdateOpenSuccess(
+                        edit_form_open=True,
+                        name_field_visible=flags["name_field_visible"],
+                        name_field_has_value=flags["name_field_has_value"],
+                        address_or_person_fields_present=flags["address_or_person_fields_present"],
+                        country_field_present=flags["country_field_present"],
+                        shell_markers_present=True,
+                    )
+
+                if _is_clients_detail_url(page.url) and await _has_clients_detail_signature(
+                    page, slug
+                ):
+                    clicked_ret = await _click_clients_ret_action(page)
+                    if clicked_ret:
+                        await _await_page_settle(page)
+                        continue
+                    return _ui_clients_update_changed_error()
+
+                if _is_clients_list_url(page.url) and await _has_clients_list_heading(page):
+                    opened = await _click_clients_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_clients_update_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the clients update form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser clients update form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5167,6 +5264,103 @@ async def _click_clients_detail_candidate(page: LoginPage, slug: str) -> bool:
     return False
 
 
+async def _click_clients_ret_action(page: LoginPage) -> bool:
+    """Click Ret/Edit on contact detail without Gem/Slet. Research166 update open."""
+
+    live = cast(Any, page)
+    for selector in ("text=Ret", "text=Edit"):
+        try:
+            ret = live.locator(selector)
+            count = int(await ret.count())
+            for index in range(min(count, 6)):
+                el = ret.nth(index)
+                try:
+                    if await el.is_visible():
+                        await el.click()
+                        return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    return False
+
+
+async def _clients_update_form_field_flags(page: LoginPage) -> dict[str, Any]:
+    """Non-PII edit-form flags after Ret (research166). Never reads PII into return."""
+
+    live = cast(Any, page)
+    name_visible = False
+    name_has_value = False
+    address_or_person = False
+    country_present = False
+    named_content = 0
+    try:
+        name = live.locator("input[name='name']")
+        if await name.count() >= 1 and await name.first.is_visible():
+            name_visible = True
+            try:
+                val = str(await name.first.input_value()).strip()
+                name_has_value = bool(val)
+            except Exception:
+                name_has_value = False
+    except Exception:
+        pass
+    for selector in (
+        "input[name='street']",
+        "input[name='city']",
+        "input[name='zipcode']",
+        "input[name='phone']",
+        "input[name='person_email']",
+        "input[name='person_firstName']",
+        "input[name='person_lastName']",
+    ):
+        try:
+            field = live.locator(selector)
+            if await field.count() >= 1 and await field.first.is_visible():
+                address_or_person = True
+                named_content += 1
+        except Exception:
+            continue
+    try:
+        country = live.locator("select[name='country'], input[name='country']")
+        if await country.count() >= 1 and await country.first.is_visible():
+            country_present = True
+            named_content += 1
+    except Exception:
+        pass
+    if name_visible:
+        named_content += 1
+    return {
+        "name_field_visible": name_visible,
+        "name_field_has_value": name_has_value,
+        "address_or_person_fields_present": address_or_person,
+        "country_field_present": country_present,
+        "named_content_count": named_content,
+    }
+
+
+async def _has_clients_update_form_signature(page: LoginPage) -> bool:
+    """Strict edit-form signature after Ret — path + valued name + content floor."""
+
+    try:
+        if _is_clients_new_soft_url(page.url):
+            return False
+        if not _is_clients_detail_url(page.url):
+            return False
+        flags = await _clients_update_form_field_flags(page)
+        content_count = int(flags.get("named_content_count") or 0)
+        return bool(
+            flags.get("name_field_visible")
+            and flags.get("name_field_has_value")
+            and content_count >= 3
+            and (
+                flags.get("address_or_person_fields_present") or flags.get("country_field_present")
+            )
+        )
+    except Exception:
+        return False
+
+
 async def _has_bank_accounts_list_signature(page: LoginPage) -> bool:
     """Verify the research105 bank accounts list heading and connect CTA without clicking."""
 
@@ -6738,6 +6932,15 @@ def _ui_clients_get_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy clients detail interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_clients_update_changed_error() -> ToolError:
+    """Fail closed when the clients update form no longer matches research166."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy clients update form interface no longer matches the recorded signature.",
     )
 
 

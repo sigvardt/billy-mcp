@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-01T18:43:20Z
+updated: 2026-08-01T20:08:46Z
 ---
 
 # billy_mcp
@@ -48,6 +48,8 @@ updated: 2026-08-01T18:43:20Z
 [[ui_clients_get_open_shell|ui_clients_get_open_shell]]: Read-only headless ui_clients_get_open contract for Billy contact customer profile get/open only (research164).
 
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.
+
+[[ui_clients_update_open_shell|ui_clients_update_open_shell]]: Read-only Billy UI tool that opens a client contact in Ret edit mode and classifies non-PII form flags without submitting.
 
 [[ui_contact_balance_payments_not_applicable|ui_contact_balance_payments_not_applicable]]: Dual-session research147 freeze — no equivalent mit.billy.dk workflow for contactBalancePayments API parity; soft-empty path matches nonsense; balance shells are contrast only; NA accepted.
 

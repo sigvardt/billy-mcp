@@ -6456,39 +6456,49 @@
     {
       "api_row_id": "api.contacts.update",
       "area": "contacts",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness may create disposable contact then delete in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.update",
+      "evidence": "research166 dual-session headless observation + ui_clients_update_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Ret edit form open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_update, name input valued + address/country content fields; never Gem/Slet submit; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, and get overview ui_clients_get_open); vision record tmp/vision-records/ui_clients_update_open.json (client edit form frames, accept); maps api.contacts.update to UI Ret edit form open only",
       "filters": [],
       "id": "ui.parity.contacts.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contacts.update",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Ret edit form (read-only clients update open; never Gem/Slet/Save submit; get overview without Ret not success; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "contact"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "edit_form_open",
+        "name_field_visible",
+        "name_field_has_value",
+        "address_or_person_fields_present",
+        "country_field_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "updates contact",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_clients_update_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_clients_update_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

@@ -29,6 +29,8 @@ from billy_mcp.models import (
     UiClientsGetOpenSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
+    UiClientsUpdateOpenInput,
+    UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenInput,
@@ -299,6 +301,22 @@ def test_ui_clients_get_open_models_are_empty_input_and_non_pii_success() -> Non
     assert "url" not in dumped
     properties = UiClientsGetOpenSuccess.model_json_schema().get("properties", {})
     assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+
+
+def test_ui_clients_update_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiClientsUpdateOpenInput().model_dump() == {}
+    success = UiClientsUpdateOpenSuccess(
+        edit_form_open=True,
+        name_field_visible=True,
+        name_field_has_value=True,
+        address_or_person_fields_present=True,
+        country_field_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/contacts/:id/customer"
+    assert success.shell_kind == "clients_update"
+    assert success.edit_form_open is True
+    assert success.name_field_has_value is True
 
 
 def test_ui_suppliers_create_open_models_are_empty_input_and_non_pii_success() -> None:

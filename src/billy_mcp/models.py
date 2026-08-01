@@ -219,6 +219,31 @@ class UiClientsGetOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiClientsUpdateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only clients update (Ret) form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiClientsUpdateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy client edit form after Ret.
+
+    Research166: open contacts/:id/customer profile, click Ret, observe name-valued
+    edit fields. Never Gem/Slet submit. Distinct from get overview and create dialog.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/contacts/:id/customer"] = "/:org_slug/contacts/:id/customer"
+    shell_kind: Literal["clients_update"] = "clients_update"
+    edit_form_open: bool
+    name_field_visible: bool
+    name_field_has_value: bool
+    address_or_person_fields_present: bool
+    country_field_present: bool
+    shell_markers_present: bool
+
+
 class UiSuppliersCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only suppliers create form open tool."""
 
