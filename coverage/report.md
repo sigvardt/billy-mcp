@@ -1,6 +1,6 @@
 # Phase 1 offline API read-and-write coverage status
 
-This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 338/338; UI live/vision rows: 154/154. API live_tested remains false under out_of_scope_by_user (not live-verified).
+This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 340/340; UI live/vision rows: 156/156. API live_tested remains false under out_of_scope_by_user (not live-verified).
 
 | Source | Count |
 | --- | ---: |
@@ -8,7 +8,7 @@ This generated inventory is currently incomplete. It freezes the official-doc sn
 | Ambiguous bulk mentions | 92 |
 | Documented special routes | 6 |
 | API snapshot total | 305 |
-| UI discovery seeds | 37 |
+| UI discovery seeds | 38 |
 | UI API-parity mappings | 305 |
 
 Complete: `false`

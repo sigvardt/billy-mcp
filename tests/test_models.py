@@ -23,6 +23,8 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsListInput,
     UiBillsListSuccess,
+    UiClientsCreateOpenInput,
+    UiClientsCreateOpenSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
     UiCreditorBalancesListInput,
@@ -227,6 +229,44 @@ def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> No
                 "shell_kind": "bills_create",
                 "draft_save_chrome_visible": True,
                 "line_chrome_visible": True,
+                "shell_markers_present": True,
+                "org_slug": "secret",
+            }
+        )
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+
+
+def test_ui_clients_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiClientsCreateOpenInput().model_dump() == {}
+    success = UiClientsCreateOpenSuccess(
+        create_dialog_open=True,
+        name_field_visible=True,
+        registration_no_field_present=True,
+        address_or_person_fields_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/clients"
+    assert success.heading == "Kunder"
+    assert success.shell_kind == "clients_create"
+    properties = UiClientsCreateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+    try:
+        UiClientsCreateOpenInput.model_validate({"url": "https://untrusted.example"})
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+    try:
+        UiClientsCreateOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/clients",
+                "heading": "Kunder",
+                "shell_kind": "clients_create",
+                "create_dialog_open": True,
+                "name_field_visible": True,
+                "registration_no_field_present": True,
+                "address_or_person_fields_present": True,
                 "shell_markers_present": True,
                 "org_slug": "secret",
             }

@@ -360,6 +360,54 @@
     },
     {
       "api_row_id": null,
+      "area": "clients_create",
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
+      "errors": [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
+      ],
+      "evidence": "research160 dual-session headless observation + ui_clients_create_open product; form open only (path class /:org_slug/clients, h1 Kunder, shell_kind=clients_create, CTA Opret kontakt dialog with name+registrationNo+street/person fields; never submit; soft /clients/new chrome-only rejected; distinct from list shell ui_clients_list and special POST /invoices/:id/emails); vision record tmp/vision-records/ui_clients_create_open.json (Opret kontakt create dialog frames, accept)",
+      "filters": [],
+      "id": "ui.discovery.clients_create",
+      "implemented": true,
+      "lane": "ui",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/clients + Opret kontakt dialog (read-only clients create form open; never Gem/Opret/Save submit; soft /clients/new not success)",
+      "operation": "discovery",
+      "pagination": null,
+      "parity_status": "form_open_only",
+      "request_fields": [],
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_dialog_open",
+        "name_field_visible",
+        "registration_no_field_present",
+        "address_or_person_fields_present",
+        "shell_markers_present"
+      ],
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_clients_create_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_clients_create_open",
+      "vision_evidence": null,
+      "vision_verified": true,
+      "workflow_kind": "discovery"
+    },
+    {
+      "api_row_id": null,
       "area": "debtor_balances",
       "cleanup": "not_applicable; read-only observation creates no records",
       "contract_tested": true,
@@ -6253,38 +6301,49 @@
     {
       "api_row_id": "api.contacts.create",
       "area": "contacts",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.create",
+      "evidence": "research160 dual-session headless observation + ui_clients_create_open product; form open only (path class /:org_slug/clients, h1 Kunder, shell_kind=clients_create, CTA Opret kontakt dialog with name+registrationNo+street/person fields; never submit; soft /clients/new chrome-only rejected; distinct from list shell ui_clients_list and special POST /invoices/:id/emails); vision record tmp/vision-records/ui_clients_create_open.json (Opret kontakt create dialog frames, accept); maps api.contacts.create to UI create-form open only",
       "filters": [],
       "id": "ui.parity.contacts.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contacts.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/clients + Opret kontakt dialog (read-only clients create form open; never Gem/Opret/Save submit; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "contact"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_dialog_open",
+        "name_field_visible",
+        "registration_no_field_present",
+        "address_or_person_fields_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates contact",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_clients_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_clients_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

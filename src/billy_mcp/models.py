@@ -174,6 +174,27 @@ class UiClientsListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiClientsCreateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only clients create form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiClientsCreateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy clients create form dialog."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/clients"] = "/:org_slug/clients"
+    heading: Literal["Kunder"] = "Kunder"
+    shell_kind: Literal["clients_create"] = "clients_create"
+    create_dialog_open: bool
+    name_field_visible: bool
+    registration_no_field_present: bool
+    address_or_person_fields_present: bool
+    shell_markers_present: bool
+
+
 class UiBankAccountsListInput(BaseModel):
     """Empty, strict input boundary for the read-only bank accounts list shell tool."""
 

@@ -29,6 +29,7 @@ from billy_mcp.models import (
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
+    UiClientsCreateOpenSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenSuccess,
@@ -609,6 +610,12 @@ class UiClientsListService(Protocol):
     """Injectable seam for the read-only clients list shell observation."""
 
     async def ui_clients_list(self) -> UiClientsListSuccess | ToolError: ...
+
+
+class UiClientsCreateOpenService(Protocol):
+    """Injectable seam for the read-only clients create form open observation."""
+
+    async def ui_clients_create_open(self) -> UiClientsCreateOpenSuccess | ToolError: ...
 
 
 class UiBankAccountsListService(Protocol):
@@ -1329,6 +1336,96 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser clients list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_clients_create_open(self) -> UiClientsCreateOpenSuccess | ToolError:
+        """Open the clients create form dialog for the current authenticated UI session only.
+
+        Research160: open /:org_slug/clients, click text CTA Opret kontakt, classify
+        dialog form fields (name / registrationNo / address-or-person). Form open only
+        — never Gem / Opret submit / Save / Create. Soft /clients/new is not success.
+        Distinct from list shell ui_clients_list and special invoice email.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_clients_create_changed_error()
+
+            clients_url = f"https://mit.billy.dk/{slug}/clients"
+            await page.goto(clients_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_clients_create_changed_error()
+                if _is_clients_new_soft_url(page.url):
+                    return _ui_clients_create_changed_error()
+                if not _is_clients_list_url(page.url):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_clients_list_heading(page):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_clients_create_form_signature(page):
+                    clicked = await _click_clients_create_cta(page)
+                    if not clicked:
+                        await asyncio.sleep(0.2)
+                        continue
+                    await _await_page_settle(page)
+                if _is_clients_new_soft_url(page.url):
+                    return _ui_clients_create_changed_error()
+                if _is_clients_list_url(page.url) and await _has_clients_create_form_signature(
+                    page
+                ):
+                    signature = await _clients_create_form_field_flags(page)
+                    return UiClientsCreateOpenSuccess(
+                        create_dialog_open=True,
+                        name_field_visible=signature["name_field_visible"],
+                        registration_no_field_present=signature["registration_no_field_present"],
+                        address_or_person_fields_present=signature[
+                            "address_or_person_fields_present"
+                        ],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_clients_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the clients create form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser clients create form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4535,6 +4632,107 @@ async def _has_products_list_signature(page: LoginPage) -> bool:
         return False
 
 
+def _is_clients_new_soft_url(url: str) -> bool:
+    """Reject soft /:org_slug/clients/new chrome-only routes (research160)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    path = parsed.path or ""
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(re.match(r"^/[^/]+/clients/new/?$", path))
+    )
+
+
+async def _has_clients_list_heading(page: LoginPage) -> bool:
+    """True when the clients list h1 is Kunder."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        return (await heading.inner_text()).strip() == _CLIENTS_LIST_HEADING
+    except Exception:
+        return False
+
+
+async def _click_clients_create_cta(page: LoginPage) -> bool:
+    """Observe-only click of research160 text CTA Opret kontakt. Never submits the form."""
+
+    try:
+        cta = page.locator(f"text={_CLIENTS_CREATE_CTA}")
+        if await cta.count() < 1:
+            return False
+        target = cta.first
+        if not await target.is_visible():
+            return False
+        await target.click()
+        return True
+    except Exception:
+        return False
+
+
+async def _clients_create_form_field_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII field presence flags for the clients create dialog (research160)."""
+
+    name_visible = False
+    registration_present = False
+    address_or_person = False
+    try:
+        name = page.locator("input[name='name']")
+        if await name.count() >= 1 and await name.first.is_visible():
+            name_visible = True
+    except Exception:
+        pass
+    try:
+        reg = page.locator("input[name='registrationNo']")
+        if await reg.count() >= 1:
+            registration_present = True
+    except Exception:
+        pass
+    for selector in (
+        "input[name='street']",
+        "input[name='person_email']",
+        "input[name='person_firstName']",
+        "input[name='person_lastName']",
+    ):
+        try:
+            field = page.locator(selector)
+            if await field.count() >= 1:
+                address_or_person = True
+                break
+        except Exception:
+            continue
+    return {
+        "name_field_visible": name_visible,
+        "registration_no_field_present": registration_present,
+        "address_or_person_fields_present": address_or_person,
+    }
+
+
+async def _has_clients_create_form_signature(page: LoginPage) -> bool:
+    """Verify research160 create dialog form signature without submitting."""
+
+    try:
+        if not await _has_clients_list_heading(page):
+            return False
+        flags = await _clients_create_form_field_flags(page)
+        return (
+            flags["name_field_visible"]
+            and flags["registration_no_field_present"]
+            and flags["address_or_person_fields_present"]
+        )
+    except Exception:
+        return False
+
+
 async def _has_clients_list_signature(page: LoginPage) -> bool:
     """Verify the research104 clients list heading and create CTA without clicking."""
 
@@ -5885,6 +6083,15 @@ def _ui_invoices_create_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices create form interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_clients_create_changed_error() -> ToolError:
+    """Fail closed when the clients create form no longer matches research160."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy clients create form interface no longer matches the recorded signature.",
     )
 
 

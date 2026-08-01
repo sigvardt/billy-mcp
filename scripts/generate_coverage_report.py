@@ -93,6 +93,10 @@ UI_CLIENTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_CLIENTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_list.py"
 UI_CLIENTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_CLIENTS_LIST_TOOL_NAME = "ui_clients_list"
+UI_CLIENTS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_CLIENTS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_create_open.py"
+UI_CLIENTS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_CLIENTS_CREATE_OPEN_TOOL_NAME = "ui_clients_create_open"
 UI_BANK_ACCOUNTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BANK_ACCOUNTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_bank_accounts_list.py"
 UI_BANK_ACCOUNTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -445,6 +449,7 @@ UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
     "products",
     "product_import",
     "customers",
+    "clients_create",
     "debtor_balances",
     "creditor_balances",
     "uploads",
@@ -1749,6 +1754,78 @@ def apply_ui_clients_list_shell_evidence(
     row["parity_status"] = "list_shell_open_only"
     row["sensitivity"] = "low"
     row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_clients_create_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_create: bool = False,
+) -> None:
+    """Mark clients create form **open only** evidence (research160).
+
+    Empty-input tool; open /:org_slug/clients then click Opret kontakt dialog.
+    Form open only — never Gem/Opret submit. Soft /clients/new rejected.
+    Distinct from list shell and special invoice_email. When
+    ``parity_of_api_create`` is true, dual-counts exact
+    ``ui.parity.contacts.create`` for ``api.contacts.create``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/clients + Opret kontakt dialog "
+        "(read-only clients create form open; never Gem/Opret/Save submit; "
+        "soft /clients/new not success)"
+    )
+    row["tool_name"] = UI_CLIENTS_CREATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_dialog_open",
+        "name_field_visible",
+        "registration_no_field_present",
+        "address_or_person_fields_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_create:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_CLIENTS_CREATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_CLIENTS_CREATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_CLIENTS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research160 dual-session headless observation + ui_clients_create_open product; "
+        "form open only (path class /:org_slug/clients, h1 Kunder, shell_kind=clients_create, "
+        "CTA Opret kontakt dialog with name+registrationNo+street/person fields; never submit; "
+        "soft /clients/new chrome-only rejected; distinct from list shell ui_clients_list "
+        "and special POST /invoices/:id/emails); "
+        "vision record tmp/vision-records/ui_clients_create_open.json "
+        "(Opret kontakt create dialog frames, accept)"
+    )
+    if parity_of_api_create:
+        row["evidence"] = f"{row['evidence']}; maps api.contacts.create to UI create-form open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
     row["errors"] = [
         "AUTH_REQUIRED",
@@ -4201,6 +4278,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=False)
         if family == "customers":
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=False)
+        if family == "clients_create":
+            apply_ui_clients_create_open_shell_evidence(row, parity_of_api_create=False)
         if family == "bank_accounts":
             apply_ui_bank_accounts_list_shell_evidence(row)
         if family == "quotes":
@@ -4304,6 +4383,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.contacts.list":
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.contacts.create":
+            apply_ui_clients_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.bills.list":
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":
