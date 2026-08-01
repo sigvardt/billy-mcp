@@ -6,17 +6,16 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T11:00:00Z
+updated: 2026-08-01T11:01:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **53** COMMIT 186.53 product `1b97715` + memory `611f346`. live/vision
-  **145**; implemented/contract **329**; complete false. Not node finish.
-- ui_settings_user_organizations_open + dual-count special.user_organizations.
-- Bulk 92 + annual_reports still red.
+- Continue mode iter **54** pre-COMMIT SYNC after FIX-VERIFY clean 186.54 uncommitted.
+  live/vision **147**; implemented/contract **331**; complete false. Not node finish.
+- Product: ui_invoices_create_open ready fractal commit. Not finish.
 
 
 ## SYNC (iter 53)
@@ -4743,4 +4742,139 @@ updated: 2026-08-01T11:00:00Z
 - `fractal commit` product: ui specials invoice_delivery+invoice_logs not_applicable freeze (`c1baf53`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 54)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7B47F008 (iter53 COMMIT done) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `4929360` == origin/main.billy_complete.
+- Coverage: implemented/contract 329; live/vision 145; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Outbox: iter54 SYNC residual (91B65B54). Private pointer 7AFAB9A5.
+- Next residual (186.53 post-mortem): special.invoice_email isolation first;
+  files_upload pure NA rejected previously; postings→transactions steal
+  rejected; multi-resource tax*/bank*/productPrices deferred. Bulk 92 + annual red.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 54)
+
+- Parent `main`: fetch + merge Already up to date.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; **0** commits ahead of tip `4929360`.
+- Remote origin children: **75** with commits ahead of tip. Product review of non-fractal three-dot deltas → **skip all merges**:
+  - Unique non-fractal path missing on tip: only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` (from `ui_auth_credentials_research_codex_fallback`) — skip (superseded auth research already on root product path; same decision as iters 51–53).
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (WIKI): pages already on tip (equal or longer; wave5t tip 7028 vs child 7029 one-byte trivial).
+  - `ui_auth_status` (SRC): tip browser/models/server much larger; product live.
+  - `wave5g_sales_tax_product`, `shared_foundation`, early wave product stubs: tip equal or longer; product already on tip.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or older wave product already integrated; no unique src/tests tip lacks.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `4929360`. Ready RESEARCH residual dual-count/NA (prefer
+  special.invoice_email isolation first per 186.53 post-mortem). Not finish.
+
+## SYNC (iter 54 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7AFAB9A5 + E4359D4C (iter54 SYNC residual / PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `4929360`.
+- Coverage: implemented/contract 329; live/vision 145; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email isolation
+  first per 186.53 post-mortem; no postings steal; files_upload pure NA
+  rejected previously). Not finish.
+
+## RESEARCH (iter 54 / research153)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual residual: soft emails/invoiceEmails == nonsense body 127; `/invoices/new`
+  dual real form body 580 h1 Opret faktura; list empty dual (no detail).
+- Disposable draft create failed (contact TimeoutError; Gem som kladde not clicked);
+  no disposable left; profiles purged; api_token_used false.
+- settings Levering email still dual true (blocks weak invoice_email NA).
+- Decision: ACCEPT product ui_invoices_create_open + dual-count
+  ui.parity.invoices.create (1); DEFER special.invoice_email; REJECT files_upload
+  pure NA and postings→transactions steal.
+- Brief: tmp/grok-research.md. Dual: tmp/research153_residual_dual.json.
+- No coverage greening. Ready PLAN. Not finish.
+
+## SYNC (iter 54 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 55A4DC41 + 7BF322BB (pre-RESEARCH / research153 done) reacted (+).
+- No running children. No parent directives.
+- research153 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for ui_invoices_create_open + dual-count
+  invoices.create (1). Not finish.
+
+## Plan (iter 54)
+
+- Plan: `plans/2026-08-01T10:22:23.232Z-186.54-ui_invoices_create_open.md`
+  — research153: product ui_invoices_create_open + dual-count
+  ui.parity.invoices.create (1) + discovery invoices_create; live/vision
+  145→147; GEO NA 100; complete false; no children; invoice_email stays red.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 54 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C0170339 + 3BDEB4AD (pre-PLAN / PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.54 + research153 brief present. Tip `4929360`.
+- Ready EXECUTE product ui_invoices_create_open (root; no children). Not finish.
+
+## Execute (iter 54)
+
+- Producted research153 / plan 186.54: ui_invoices_create_open form open only;
+  discovery invoices_create; dual-count exact api.invoices.create.
+- Models/browser/server/unit/live/coverage/wiki landed.
+- Regenerated coverage: live/vision 145→147; implemented/contract 329→331;
+  complete false; invoice_email stays red.
+- lint.sh pass (wiki index clean). test.sh offline **1578 passed**, 37 deselected.
+- Live dual test ui_invoices_create_open **1 passed** (26s). Vision record purge path present.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 54 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B9F65D70 + 29FEC7E9 (pre-EXECUTE / EXECUTE done) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.54 uncommitted: create open shell; live/vision 147;
+  implemented/contract 331; complete=false; offline 1578 pass; live dual 1 pass.
+- Outbox: ready for IR of product. Not finish.
+
+## Independent review (iter 54)
+
+- Product 186.54 ui_invoices_create_open package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (no list CTA fallback;
+  hardcoded bools after signature — same pattern as sibling shells).
+- Discovery + create parity integrity OK; residual invoice ops + invoice_email
+  stay red; bulk 92 red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 54 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4AF23AA2 + CCD91199 (pre-IR / IR ACCEPT) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.54 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 54 / 186.54)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1578 passed / 37 deselected.
+- wiki lint: wiki + memory clean (rejoined PREPARE nested bullets).
+- check_coverage: invoices_create discovery + create parity green; live/vision 147;
+  NA 100; implemented/contract 331; complete false; bulk 92 external-contract;
+  annual stay red; invoice_email residual red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 54 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8268A444 + 639D58B6 (pre-FIX-VERIFY / FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1578 offline pass; IR ACCEPT). Ready COMMIT 186.54
+  ui_invoices_create_open package. Not node finish (complete false).
 

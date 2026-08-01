@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 43 greened shells/parity + discovery settings_user_organizations
-    # + special.user_organizations dual-count = 45 live/vision rows without GEO NA.
-    ui_shell_green = 45
+    # Prior 45 greened shells/parity + discovery invoices_create
+    # + invoices.create dual-count = 47 live/vision rows without GEO NA.
+    ui_shell_green = 47
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -655,9 +655,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 45 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 47 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 145
+    assert status["qualification"]["live_tested_rows"] == 147
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -671,6 +671,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     qualified_ids = {
         "ui.discovery.invoices",
         "ui.parity.invoices.list",
+        "ui.discovery.invoices_create",
+        "ui.parity.invoices.create",
         "ui.discovery.products",
         "ui.parity.products.list",
         "ui.discovery.customers",
@@ -718,6 +720,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     tool_by_id = {
         "ui.discovery.invoices": "ui_invoices_list",
         "ui.parity.invoices.list": "ui_invoices_list",
+        "ui.discovery.invoices_create": "ui_invoices_create_open",
+        "ui.parity.invoices.create": "ui_invoices_create_open",
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
         "ui.discovery.customers": "ui_clients_list",
@@ -780,7 +784,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 45
+    assert len(qualified) == 47
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -797,6 +801,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         assert row["parity_status"] in {
             "list_shell_open_only",
             "shell_open_only",
+            "form_open_only",
             "soft_empty_shell_observed",
         }
     invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
@@ -906,7 +911,25 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert user_orgs_special_parity["parity_status"] == "shell_open_only"
     assert "api.special.user_organizations" in user_orgs_special_parity["evidence"]
     assert "research152" in user_orgs_special_parity["evidence"]
+    invoices_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.invoices.create"
+    )
+    assert invoices_create_parity["api_row_id"] == "api.invoices.create"
+    assert invoices_create_parity["tool_name"] == "ui_invoices_create_open"
+    assert invoices_create_parity["parity_status"] == "form_open_only"
+    assert "api.invoices.create" in invoices_create_parity["evidence"]
+    assert "research153" in invoices_create_parity["evidence"]
+    invoices_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.invoices_create"
+    )
+    assert invoices_create_discovery["tool_name"] == "ui_invoices_create_open"
+    assert invoices_create_discovery["api_row_id"] is None
     for red_id in (
+        "ui.parity.invoices.get",
+        "ui.parity.invoices.update",
+        "ui.parity.invoices.delete",
+        "ui.parity.invoices.bulk_save",
+        "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",
         "ui.parity.special.files_upload",
     ):

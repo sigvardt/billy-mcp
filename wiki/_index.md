@@ -69,6 +69,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_invoice_reminders_not_applicable|ui_invoice_reminders_not_applicable]]: Dual-session research149 freeze — no equivalent mit.billy.dk workflow for invoiceReminders API parity; soft-empty path matches nonsense; invoices/Fakturaer shell is invoices only; NA accepted.
 
+[[ui_invoices_create_open_shell|ui_invoices_create_open_shell]]: Read-only headless ui_invoices_create_open contract for Billy invoice create form open only (research153).
+
 [[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.
 
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.

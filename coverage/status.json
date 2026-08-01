@@ -7,20 +7,20 @@
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
     "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (annual_reports org_inaccessible; residual UI parity open)",
-    "contract_tested_rows": 329,
-    "implemented_rows": 329,
-    "live_tested_rows": 145,
-    "vision_verified_rows": 145
+    "contract_tested_rows": 331,
+    "implemented_rows": 331,
+    "live_tested_rows": 147,
+    "vision_verified_rows": 147
   },
   "schema_version": 1,
   "source_counts": {
-    "all_rows": 645,
+    "all_rows": 646,
     "api_ambiguous_bulk": 92,
     "api_clear": 207,
     "api_special": 6,
     "api_total": 305,
     "ui_api_parity": 305,
-    "ui_discovery": 35,
-    "ui_total": 340
+    "ui_discovery": 36,
+    "ui_total": 341
   }
 }

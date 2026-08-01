@@ -48,6 +48,52 @@
     },
     {
       "api_row_id": null,
+      "area": "invoices_create",
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
+      "errors": [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
+      ],
+      "evidence": "research153 dual-session headless observation + ui_invoices_create_open product; form open only (path class /:org_slug/invoices/new, h1 Opret faktura, shell_kind=invoices_create, Gem som kladde + line chrome; never submit; distinct from list shell and special POST /invoices/:id/emails; Levering settings not this form); soft /emails empty dual; vision record tmp/vision-records/ui_invoices_create_open.json (Opret faktura form frames, accept)",
+      "filters": [],
+      "id": "ui.discovery.invoices_create",
+      "implemented": true,
+      "lane": "ui",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/invoices/new (read-only invoice create form open; never Godkend/Send/Gem som kladde/Vis preview/Tilf\u00f8j linje/Vedh\u00e6ft/Slet)",
+      "operation": "discovery",
+      "pagination": null,
+      "parity_status": "form_open_only",
+      "request_fields": [],
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "draft_save_chrome_visible",
+        "line_chrome_visible",
+        "shell_markers_present"
+      ],
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_create_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_invoices_create_open",
+      "vision_evidence": null,
+      "vision_verified": true,
+      "workflow_kind": "discovery"
+    },
+    {
+      "api_row_id": null,
       "area": "quotes",
       "cleanup": "not_applicable; read-only observation creates no records",
       "contract_tested": true,
@@ -9964,38 +10010,47 @@
     {
       "api_row_id": "api.invoices.create",
       "area": "invoices",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.create",
+      "evidence": "research153 dual-session headless observation + ui_invoices_create_open product; form open only (path class /:org_slug/invoices/new, h1 Opret faktura, shell_kind=invoices_create, Gem som kladde + line chrome; never submit; distinct from list shell and special POST /invoices/:id/emails; Levering settings not this form); soft /emails empty dual; vision record tmp/vision-records/ui_invoices_create_open.json (Opret faktura form frames, accept); maps api.invoices.create to UI create-form open only",
       "filters": [],
       "id": "ui.parity.invoices.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoices.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/invoices/new (read-only invoice create form open; never Godkend/Send/Gem som kladde/Vis preview/Tilf\u00f8j linje/Vedh\u00e6ft/Slet)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "invoice"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "draft_save_chrome_visible",
+        "line_chrome_visible",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates invoice",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_invoices_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

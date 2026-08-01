@@ -37,6 +37,8 @@ from billy_mcp.models import (
     UiIntegrationsOpenSuccess,
     UiInventoryOpenInput,
     UiInventoryOpenSuccess,
+    UiInvoicesCreateOpenInput,
+    UiInvoicesCreateOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsImportInput,
@@ -162,6 +164,40 @@ def test_ui_invoices_list_models_are_empty_input_and_non_pii_success() -> None:
                 "org_slug": "secret",
             }
         )
+
+
+def test_ui_invoices_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiInvoicesCreateOpenInput().model_dump() == {}
+    success = UiInvoicesCreateOpenSuccess(
+        draft_save_chrome_visible=True,
+        line_chrome_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/invoices/new"
+    assert success.heading == "Opret faktura"
+    assert success.shell_kind == "invoices_create"
+    properties = UiInvoicesCreateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+    try:
+        UiInvoicesCreateOpenInput.model_validate({"url": "https://untrusted.example"})
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+    try:
+        UiInvoicesCreateOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/invoices/new",
+                "heading": "Opret faktura",
+                "shell_kind": "invoices_create",
+                "draft_save_chrome_visible": True,
+                "line_chrome_visible": True,
+                "shell_markers_present": True,
+                "org_slug": "secret",
+            }
+        )
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
 
 
 def test_ui_products_list_models_are_empty_input_and_non_pii_success() -> None:

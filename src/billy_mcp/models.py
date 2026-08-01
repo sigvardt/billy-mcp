@@ -102,6 +102,25 @@ class UiInvoicesListSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiInvoicesCreateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only invoice create form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInvoicesCreateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy invoice create form shell."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/invoices/new"] = "/:org_slug/invoices/new"
+    heading: Literal["Opret faktura"] = "Opret faktura"
+    shell_kind: Literal["invoices_create"] = "invoices_create"
+    draft_save_chrome_visible: bool
+    line_chrome_visible: bool
+    shell_markers_present: bool
+
+
 class UiProductsListInput(BaseModel):
     """Empty, strict input boundary for the read-only products list shell tool."""
 

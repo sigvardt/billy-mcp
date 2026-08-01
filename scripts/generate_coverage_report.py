@@ -77,6 +77,10 @@ UI_INVOICES_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_INVOICES_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_list.py"
 UI_INVOICES_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_INVOICES_LIST_TOOL_NAME = "ui_invoices_list"
+UI_INVOICES_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INVOICES_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_create_open.py"
+UI_INVOICES_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INVOICES_CREATE_OPEN_TOOL_NAME = "ui_invoices_create_open"
 UI_PRODUCTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_list.py"
 UI_PRODUCTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -430,6 +434,7 @@ LIST_FILTERS: dict[str, dict[str, Any]] = {
 
 UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
     "invoices",
+    "invoices_create",
     "quotes",
     "recurring_invoices",
     "products",
@@ -1489,6 +1494,75 @@ def apply_ui_invoices_list_shell_evidence(
     row["parity_status"] = "list_shell_open_only"
     row["sensitivity"] = "low"
     row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_invoices_create_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_create: bool = False,
+) -> None:
+    """Mark invoices create form **open only** evidence (research153).
+
+    Empty-input tool; open /:org_slug/invoices/new; h1 Opret faktura; markers
+    Gem som kladde + line chrome (Tilføj linje/Beskrivelse). Never submit
+    Godkend/Send/Gem/Tilføj/Vedhæft. Distinct from list shell and special
+    invoice_email. When ``parity_of_api_create`` is true, dual-counts exact
+    ``ui.parity.invoices.create`` for ``api.invoices.create``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/invoices/new (read-only invoice create form open; "
+        "never Godkend/Send/Gem som kladde/Vis preview/Tilføj linje/Vedhæft/Slet)"
+    )
+    row["tool_name"] = UI_INVOICES_CREATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "draft_save_chrome_visible",
+        "line_chrome_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_create:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INVOICES_CREATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_INVOICES_CREATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_INVOICES_CREATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research153 dual-session headless observation + ui_invoices_create_open product; "
+        "form open only (path class /:org_slug/invoices/new, h1 Opret faktura, "
+        "shell_kind=invoices_create, Gem som kladde + line chrome; never submit; "
+        "distinct from list shell and special POST /invoices/:id/emails; "
+        "Levering settings not this form); soft /emails empty dual; "
+        "vision record tmp/vision-records/ui_invoices_create_open.json "
+        "(Opret faktura form frames, accept)"
+    )
+    if parity_of_api_create:
+        row["evidence"] = f"{row['evidence']}; maps api.invoices.create to UI create-form open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
     row["errors"] = [
         "AUTH_REQUIRED",
@@ -3955,6 +4029,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         row["vision_verified"] = False
         if family == "invoices":
             apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=False)
+        if family == "invoices_create":
+            apply_ui_invoices_create_open_shell_evidence(row, parity_of_api_create=False)
         if family == "products":
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=False)
         if family == "customers":
@@ -4054,6 +4130,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         # Shell-open only: rewrite schema to the empty-input tool contract (R1).
         if api_row["id"] == "api.invoices.list":
             apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.invoices.create":
+            apply_ui_invoices_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.products.list":
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.contacts.list":
