@@ -2465,20 +2465,32 @@ def apply_ui_daybooks_open_shell_evidence(
     row: dict[str, Any],
     *,
     parity_of_api_list: bool = False,
+    parity_of_api_create: bool = False,
 ) -> None:
-    """Mark daybooks **editor shell open** evidence only (research117).
+    """Mark daybooks **editor shell / create-form open** evidence (research117).
 
     Empty-input tool; path /:org_slug/daybooks/new; editor markers (no h1).
     Bare /daybooks is Upsedasse (not success). No invent API tools.
     Never click create/add-line/post. Does not green transactions discovery.
     When ``parity_of_api_list`` is true, dual-counts ``ui.parity.daybooks.list``
-    for ``api.daybooks.list`` (research156).
+    for ``api.daybooks.list`` (research156). When ``parity_of_api_create`` is
+    true, dual-counts ``ui.parity.daybooks.create`` for ``api.daybooks.create``
+    (research157, form_open_only). Flags are mutually exclusive per call.
     """
 
-    row["method_or_route"] = (
-        "mit.billy.dk /:org_slug/daybooks/new (read-only daybook editor shell open only; "
-        "bare /daybooks is error shell)"
-    )
+    if parity_of_api_list and parity_of_api_create:
+        raise ValueError("daybooks dual-count flags are mutually exclusive")
+
+    if parity_of_api_create:
+        row["method_or_route"] = (
+            "mit.billy.dk /:org_slug/daybooks/new (read-only daybook create form open only; "
+            "bare /daybooks is error shell; never Opret/Tilføj/Bogfør)"
+        )
+    else:
+        row["method_or_route"] = (
+            "mit.billy.dk /:org_slug/daybooks/new (read-only daybook editor shell open only; "
+            "bare /daybooks is error shell)"
+        )
     row["tool_name"] = UI_DAYBOOKS_OPEN_TOOL_NAME
     row["request_fields"] = []
     row["response_fields"] = [
@@ -2489,7 +2501,7 @@ def apply_ui_daybooks_open_shell_evidence(
     ]
     row["filters"] = []
     row["pagination"] = None
-    if not parity_of_api_list:
+    if not parity_of_api_list and not parity_of_api_create:
         row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
@@ -2504,7 +2516,7 @@ def apply_ui_daybooks_open_shell_evidence(
         "kassekladde / Tilføj kassekladdelinje / Ingen postering valgt; empty h1 "
         "allowed; bare /daybooks dual Upsedasse rejected); never click create/"
         "add-line/post; no invent api_daybooks_* beyond offline product; does not "
-        "green ui.discovery.transactions or daybooks get/create/update/delete/bulk "
+        "green ui.discovery.transactions or daybooks get/update/delete/bulk "
         "UI parity or nested daybookTransactions*/lines/balanceAccounts; "
         "API list filters/sort/pagination UI not producted; vision record "
         "tmp/vision-records/ui_daybooks_open.json (editor frames, accept)"
@@ -2514,15 +2526,26 @@ def apply_ui_daybooks_open_shell_evidence(
             f"{row['evidence']}; research156 dual-session reconfirm; "
             "maps api.daybooks.list to UI daybook editor shell open only"
         )
+    if parity_of_api_create:
+        row["evidence"] = (
+            f"{row['evidence']}; research157 dual-session reconfirm; "
+            "maps api.daybooks.create to UI daybook create-form open only "
+            "(form_open_only; never submits)"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
     row["live_tested"] = True
     row["vision_verified"] = True
     row["vision_evidence"] = None
-    row["parity_status"] = "shell_open_only"
-    row["sensitivity"] = "low"
-    row["side_effects"] = "none"
+    if parity_of_api_create:
+        row["parity_status"] = "form_open_only"
+        row["sensitivity"] = "medium"
+        row["side_effects"] = "none when open-only; product path never submits"
+    else:
+        row["parity_status"] = "shell_open_only"
+        row["sensitivity"] = "low"
+        row["side_effects"] = "none"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
     row["errors"] = [
         "AUTH_REQUIRED",
@@ -4261,6 +4284,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.list":
             apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.daybooks.create":
+            apply_ui_daybooks_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.special.user_get":
             apply_ui_settings_user_open_shell_evidence(row, parity_of_special_user_get=True)
         if api_row["id"] == "api.special.user_organizations":

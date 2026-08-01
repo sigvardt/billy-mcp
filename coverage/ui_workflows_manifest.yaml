@@ -769,7 +769,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research117 dual-session headless observation + ui_daybooks_open product; shell open only (path class /:org_slug/daybooks/new; markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; empty h1 allowed; bare /daybooks dual Upsedasse rejected); never click create/add-line/post; no invent api_daybooks_* beyond offline product; does not green ui.discovery.transactions or daybooks get/create/update/delete/bulk UI parity or nested daybookTransactions*/lines/balanceAccounts; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_daybooks_open.json (editor frames, accept)",
+      "evidence": "research117 dual-session headless observation + ui_daybooks_open product; shell open only (path class /:org_slug/daybooks/new; markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; empty h1 allowed; bare /daybooks dual Upsedasse rejected); never click create/add-line/post; no invent api_daybooks_* beyond offline product; does not green ui.discovery.transactions or daybooks get/update/delete/bulk UI parity or nested daybookTransactions*/lines/balanceAccounts; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_daybooks_open.json (editor frames, accept)",
       "filters": [],
       "id": "ui.discovery.daybooks",
       "implemented": true,
@@ -7667,7 +7667,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research117 dual-session headless observation + ui_daybooks_open product; shell open only (path class /:org_slug/daybooks/new; markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; empty h1 allowed; bare /daybooks dual Upsedasse rejected); never click create/add-line/post; no invent api_daybooks_* beyond offline product; does not green ui.discovery.transactions or daybooks get/create/update/delete/bulk UI parity or nested daybookTransactions*/lines/balanceAccounts; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_daybooks_open.json (editor frames, accept); research156 dual-session reconfirm; maps api.daybooks.list to UI daybook editor shell open only",
+      "evidence": "research117 dual-session headless observation + ui_daybooks_open product; shell open only (path class /:org_slug/daybooks/new; markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; empty h1 allowed; bare /daybooks dual Upsedasse rejected); never click create/add-line/post; no invent api_daybooks_* beyond offline product; does not green ui.discovery.transactions or daybooks get/update/delete/bulk UI parity or nested daybookTransactions*/lines/balanceAccounts; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_daybooks_open.json (editor frames, accept); research156 dual-session reconfirm; maps api.daybooks.list to UI daybook editor shell open only",
       "filters": [],
       "id": "ui.parity.daybooks.list",
       "implemented": true,
@@ -7701,38 +7701,45 @@
     {
       "api_row_id": "api.daybooks.create",
       "area": "daybooks",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.create",
+      "evidence": "research117 dual-session headless observation + ui_daybooks_open product; shell open only (path class /:org_slug/daybooks/new; markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; empty h1 allowed; bare /daybooks dual Upsedasse rejected); never click create/add-line/post; no invent api_daybooks_* beyond offline product; does not green ui.discovery.transactions or daybooks get/update/delete/bulk UI parity or nested daybookTransactions*/lines/balanceAccounts; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_daybooks_open.json (editor frames, accept); research157 dual-session reconfirm; maps api.daybooks.create to UI daybook create-form open only (form_open_only; never submits)",
       "filters": [],
       "id": "ui.parity.daybooks.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybooks.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/daybooks/new (read-only daybook create form open only; bare /daybooks is error shell; never Opret/Tilf\u00f8j/Bogf\u00f8r)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "daybook"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "editor_markers_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates daybook",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_daybooks_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_daybooks_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

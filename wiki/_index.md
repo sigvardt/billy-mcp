@@ -55,7 +55,7 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_currencies_locales_not_applicable|ui_currencies_locales_not_applicable]]: Dual-session research139 freeze — no equivalent mit.billy.dk workflow for currencies/locales API parity; soft-empty paths match nonsense; NA accepted.
 
-[[ui_daybooks_open_shell|ui_daybooks_open_shell]]: Read-only Billy daybook editor (Kassekladde) shell contract; dual-counts api.daybooks.list (research156).
+[[ui_daybooks_open_shell|ui_daybooks_open_shell]]: Read-only Billy daybook editor (Kassekladde) shell contract; dual-counts api.daybooks.list (research156) and api.daybooks.create (research157).
 
 [[ui_debtor_balances_list_shell|ui_debtor_balances_list_shell]]: Read-only headless ui_debtor_balances_list contract for Billy debtor balances (Tilgodehavender) list shell open only.
 
