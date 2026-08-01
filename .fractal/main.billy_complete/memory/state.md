@@ -6,21 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T05:34:38Z
+updated: 2026-08-01T06:20:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 45 COMMIT 186.45 at `e95053f`. live/vision 120;
-  implemented/contract 304; complete false. Not node finish.
-- Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
-- 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
-- Residual UI parity open; last NA package research144 join families (19 rows).
-- IR 186.45 NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT**.
-
-- Ready for PREPARE. Not finish.
+- Continue mode iter 47 FIX-VERIFY clean 186.47 (uncommitted). Tip still
+  `d596f73`. live/vision **122**; implemented/contract **306**; complete false.
+- IR ACCEPT; offline 1565 pass. Ready COMMIT. Not finish.
+- Discovery still red (1): annual_reports. Bulk 92 external-contract red.
 
 
 ## PREPARE (iter 45)
@@ -3692,3 +3688,127 @@ updated: 2026-08-01T05:34:38Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 - Tip after bookkeeping: `a8f1821` (product `b6de810`).
+
+## SYNC (iter 47 continue)
+
+- Unread inbox/feed: empty. Private 3961813C iter46 COMMIT pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- Branch clean at `d596f73` (186.46 product `b6de810` + bookkeeping) on
+  origin/main.billy_complete.
+- Coverage: complete=false; implemented/contract 305; live/vision 121; API
+  live_tested false (out_of_scope_by_user).
+- Blockers: 92 bulk external-contract BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS;
+  annual_reports org_inaccessible; residual UI parity open.
+- Next residual candidates (from 186.46 post-mortem): productPrices nested
+  dual-count; bank recon join binding; Momssatser multi-resource; orgs company
+  settings; further GEO NA only with dual soft-empty evidence.
+- Outbox 27731F54 continue status. Private 97C0EE2F residual pointer.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 47)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 62 historical tips still show commits ahead of mainline; none carry
+  material unmerged product:
+  - Fractal-only / failed-review scaffolding: majority.
+  - Wiki-only tips (`wave5t_ui_auth_discovery_fallback`,
+    `wave5u_probe_contract_codex_fallback`): pages already on mainline; do not
+    re-merge stale wiki index rows.
+  - `ui_auth_credentials_research_codex_fallback` wiki-only optional page not
+    on tip — skip (superseded auth research already on root product path).
+  - `ui_auth_status` product (browser/models/server/tests): already on mainline
+    via prior integrate (`auth_status` tools live); child tip far behind on UI
+    files (browser ~376 vs tip ~5550 LOC) — skip re-merge.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `d596f73`. Ready RESEARCH residual dual-count/NA product pick. Not finish.
+
+## SYNC (iter 47 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Private 97C0EE2F residual pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- PREPARE already no-op: parent up to date; no child merges. Tip `d596f73`.
+- Coverage: complete=false; live/vision 121; implemented/contract 305.
+- Ready RESEARCH residual dual-count/NA (prefer dual-count list shells; GEO NA
+  only with dual soft-empty evidence). Not finish.
+
+## RESEARCH (iter 47 / research146)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual headless residual probe: all greened tools dual-ok; soft seeds empty == nonsense for orgs/files/taxRates/bankLines/postings/productPrices and residual join families; company tool dual READY + company_panel_markers_present; products/new body 190 no Pris markers.
+- Decision: dual-count ui.parity.organizations.list via ui_settings_company_open (live/vision 121→122).
+- Defer: taxRates multi-resource; files weak Bilag map; bankLines match isolation; postings no-steal; productPrices nested; contactBalancePayments NA secondary.
+- Brief: tmp/grok-research.md (+ node tmp). Dual JSON: tmp/research146_residual_parity_dual.json.
+- Profiles purged. No coverage greening. Not finish. Next PLAN.
+
+## SYNC (iter 47 pre-PLAN)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- research146 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for organizations.list dual-count (1 row).
+- Not finish.
+
+## Plan (iter 47)
+
+- Plan: `plans/2026-08-01T06:16:48.867Z-186.47-ui_organizations_list_dual_count.md`
+  — research146: dual-count ui.parity.organizations.list onto existing
+  ui_settings_company_open; inventory live/vision 121→122; wiki dual-count
+  note; no new tools; get/create/update/bulk stay red; complete false;
+  no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 47 pre-EXECUTE)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- Plan 186.47 + research146 brief present. Ready EXECUTE product dual-count
+  organizations.list (root; no children). Not finish.
+
+## Execute (iter 47)
+
+- Producted research146 / plan 186.47: dual-count ui.parity.organizations.list
+  onto ui_settings_company_open (parity_of_api_list on company applicator;
+  parity_status shell_open_only).
+- Inventory tests: qualified shells 41→42; live/vision 121→122; get/create/
+  update/bulk organizations parity stay red; company discovery api_row_id None.
+- Wiki: ui_settings_company_open_shell dual-count note + _index desc.
+- Regenerated coverage: implemented/contract 306; live/vision 122; complete false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC (iter 47 pre-INDEPENDENT-REVIEW)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.47 uncommitted: dual-count organizations.list; live/vision 122;
+  implemented/contract 306; complete=false; offline 1565 pass.
+- Outbox: ready for IR of dual-count package. Not finish.
+
+## Independent review (iter 47)
+
+- Product 186.47 organizations.list dual-count: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (tmp dual JSON not
+  commit; live re-run optional).
+- One dual-count row integrity OK; org get/create/update/bulk red; bulk 92
+  red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 47 pre-FIX-VERIFY)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.47 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 47 / 186.47)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: organizations.list dual-count green; live/vision 122;
+  implemented/contract 306; complete false; bulk 92 external-contract; annual
+  stay red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 47 pre-COMMIT)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.47
+  organizations.list dual-count package. Not node finish (complete false).

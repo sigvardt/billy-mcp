@@ -89,7 +89,7 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_settings_beta_open_shell|ui_settings_beta_open_shell]]: Read-only Billy Indstillinger Betas (Tidlig adgang) settings panel open (research133 freeze).
 
-[[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126 freeze).
+[[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126); dual-counts api.organizations.list (research146).
 
 [[ui_settings_invoicing_open_shell|ui_settings_invoicing_open_shell]]: Read-only Billy Indstillinger Faktura (invoicing) settings panel open (research128 freeze).
 

@@ -2811,13 +2811,19 @@ def apply_ui_inventory_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_settings_company_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_settings_company_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark Indstillinger company settings shell open evidence (research126).
 
     Empty-input tool; path /:org_slug/settings; h1 Indstillinger; company panel
     markers Navn og adresse + Kontaktinformation. Soft nested aliases rejected.
     Never click Gem / Tilføj ejer / upload. No invent api_settings_*. Does not
-    green other settings_* or annual_reports.
+    green other settings_* or annual_reports or organizations get/create/update/
+    bulk UI parity. When ``parity_of_api_list`` is true, dual-counts
+    ``ui.parity.organizations.list`` for ``api.organizations.list`` (research146).
     """
 
     row["method_or_route"] = (
@@ -2834,7 +2840,8 @@ def apply_ui_settings_company_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_SETTINGS_COMPANY_OPEN_MODEL_TEST_REFERENCE,
@@ -2847,9 +2854,16 @@ def apply_ui_settings_company_open_shell_evidence(row: dict[str, Any]) -> None:
         "product; shell open only (path class /:org_slug/settings, h1 Indstillinger, "
         "shell_kind=settings_company, company panel markers); soft aliases rejected; "
         "no invent api_settings_*; never click Gem/Tilføj ejer; does not green other "
-        "settings_* or annual_reports; vision record "
-        "tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept)"
+        "settings_* or annual_reports or organizations get/create/update/bulk UI "
+        "parity; API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_settings_company_open.json "
+        "(Indstillinger company frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research146 dual-session reconfirm; "
+            "maps api.organizations.list to UI settings company/Virksomhed shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -3811,6 +3825,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_users_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.accounts.list":
             apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.organizations.list":
+            apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)
