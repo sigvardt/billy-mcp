@@ -2869,14 +2869,20 @@ def apply_ui_settings_company_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_settings_accounting_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_settings_accounting_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark Indstillinger Regnskab (accounting) panel shell open evidence (research127).
 
     Empty-input tool; request settings/accounting SPA seed; final path
     /:org_slug/settings; h1 Indstillinger; markers Regnskab + Køb + Kontoplan.
     Distinct from company default. Soft aliases rejected. Never click Gem /
     Sæt låsedato. No invent api_settings_*. Does not green other settings_* or
-    annual_reports.
+    annual_reports or accounts get/create/update/delete/bulk UI parity. When
+    ``parity_of_api_list`` is true, dual-counts ``ui.parity.accounts.list`` for
+    ``api.accounts.list`` (research145).
     """
 
     row["method_or_route"] = (
@@ -2894,7 +2900,8 @@ def apply_ui_settings_accounting_open_shell_evidence(row: dict[str, Any]) -> Non
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_SETTINGS_ACCOUNTING_OPEN_MODEL_TEST_REFERENCE,
@@ -2908,10 +2915,16 @@ def apply_ui_settings_accounting_open_shell_evidence(row: dict[str, Any]) -> Non
         "/:org_slug/settings, h1 Indstillinger, shell_kind=settings_accounting, "
         "Regnskab/Køb/Kontoplan markers; distinct from company); soft aliases rejected; "
         "no invent api_settings_*; never click Gem/Sæt låsedato; does not green other "
-        "settings_* or annual_reports; vision record "
-        "tmp/vision-records/ui_settings_accounting_open.json "
+        "settings_* or annual_reports or accounts get/create/update/delete/bulk UI "
+        "parity; API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_settings_accounting_open.json "
         "(Indstillinger Regnskab frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research145 dual-session reconfirm; "
+            "maps api.accounts.list to UI settings Regnskab/Kontoplan shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -3796,6 +3809,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_vat_declarations_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.users.list":
             apply_ui_settings_users_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.accounts.list":
+            apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)
