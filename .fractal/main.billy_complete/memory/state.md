@@ -13,7 +13,7 @@ updated: 2026-08-01T14:10:00Z
 
 ## Current state
 
-- Continue mode iter **59** COMMIT 186.59 product pending. live/vision
+- Continue mode iter **59** COMMIT 186.59 product `dad7077`. live/vision
   **153**; implemented/contract **337**; complete false. Not node finish.
 - ui_settings_vat_open dual-counts api.taxRates.list (shell_open_only).
 - Bulk 92 + annual_reports still red. Residual: special.invoice_email; other taxRates.*.
@@ -5636,7 +5636,7 @@ updated: 2026-08-01T14:10:00Z
 
 ## COMMIT (iter 59)
 
-- `fractal commit` product: ui taxRates list dual-count (pending).
+- `fractal commit` product: ui taxRates list dual-count (`dad7077`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
