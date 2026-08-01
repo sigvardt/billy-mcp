@@ -5485,3 +5485,9 @@ updated: 2026-08-01T11:10:00Z
 - FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.58
   ui daybooks.create dual-count package. Not node finish (complete false).
 
+## COMMIT (iter 58)
+
+- `fractal commit` product: ui daybooks create dual-count (`af1934d`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
