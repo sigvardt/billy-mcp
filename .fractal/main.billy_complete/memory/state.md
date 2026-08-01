@@ -13,10 +13,10 @@ updated: 2026-08-01T07:43:12Z
 
 ## Current state
 
-- Continue mode iter 50 EXECUTE 186.50 uncommitted at tip base `dc5f959`.
-  live/vision **140**; implemented/contract **324**; complete false.
-- invoiceReminders NA (5) producted. Residual UI parity open.
-- Bulk 92 + annual_reports still red. Not node finish.
+- Continue mode iter 50 COMMIT 186.50 at `c6582a8`. live/vision **140**;
+  implemented/contract **324**; complete false. Not node finish.
+- invoiceReminders NA (5) greened. Residual UI parity open.
+- Bulk 92 + annual_reports still red.
 
 ## PREPARE (iter 45)
 
@@ -4242,4 +4242,11 @@ updated: 2026-08-01T07:43:12Z
 - Saved: empty. No running children.
 - FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.50
   invoiceReminders NA package. Not node finish (complete false).
+
+## COMMIT (iter 50)
+
+- `fractal commit` product: ui invoiceReminders not_applicable freeze
+  (`c6582a8`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
