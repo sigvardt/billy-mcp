@@ -170,6 +170,12 @@ updated: 2026-08-01T19:05:00Z
 - FIX-VERIFY clean (1610 offline pass; IR ACCEPT). Ready COMMIT 186.66
   products egress package. Not node finish (complete false).
 
+## COMMIT (iter 66)
+
+- `fractal commit` product: ui products data plane egress (`aa8dce6`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open including products.get without detail surface).
+
 ## PREPARE (iter 65)
 
 - Parent `main`: fetch + merge **Already up to date**.
