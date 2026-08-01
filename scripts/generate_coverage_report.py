@@ -1150,20 +1150,46 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
     return rows
 
 
+def bulk_external_contract_qualification() -> dict[str, Any]:
+    """Machine-readable external-contract freeze for ambiguous bulk rows.
+
+    Research137 exhausted official docs and versioned assets: no exact bulk
+    request/response schema. Live API qualification is out of user scope.
+    Rows stay red (ambiguous_bulk); this is not greening and not a tool plan.
+    """
+
+    return {
+        "kind": "external_contract_blocker",
+        "blocker_code": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "asset_sweep": "research137",
+        "offline_shape": "research136",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": False,
+    }
+
+
 def bulk_rows(resource: str) -> list[dict[str, Any]]:
     """Build the two deliberately unimplemented bulk mentions for a resource.
 
-    Research136 freezes offline path/method *shape hints* only. Full request/
-    response contracts remain unresolved, so rows stay ``ambiguous_bulk`` with
-    empty tool names and no implemented/contract_tested green.
+    Research136 freezes offline path/method *shape hints* only. Research137
+    records an external-contract blocker after official docs/asset exhaust.
+    Full request/response contracts remain unresolved, so rows stay
+    ``ambiguous_bulk`` with empty tool names and no implemented/contract_tested
+    green.
     """
 
     area = snake_case(resource)
     route = f"/v2/{resource}"
+    qualification = bulk_external_contract_qualification()
     shape_evidence = (
         f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; "
         "research136 offline unauth shape freeze only (not a full bulk body/"
-        "response contract; not live-qualified)"
+        "response contract; not live-qualified); research137 official docs and "
+        "versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk "
+        "Supports-only; no bulk body/response schema) → external_contract_blocker "
+        f"{qualification['blocker_code']}; live_api=out_of_scope_by_user; no bulk tools"
     )
     bulk_save = base_api_row(
         row_id=f"api.{resource}.bulk_save",
@@ -1180,9 +1206,13 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         side_effects=(
             "unknown until field schema, partial failures, empty-array semantics, "
             "and limits are contracted; offline unauth only proves object-root body "
-            "parse then AUTHENTICATION_REQUIRED"
+            "parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker "
+            f"{qualification['blocker_code']}"
         ),
-        cleanup="unknown until the bulk contract is qualified on a non-production organisation",
+        cleanup=(
+            "unknown until the bulk contract is published by Billy official docs "
+            "or live API scope is re-opened; external_contract_blocker active"
+        ),
         tool_name="",
         source_kind="ambiguous_bulk",
         contract_status="ambiguous_bulk",
@@ -1192,6 +1222,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         "INVALID_REQUEST_BODY",
     ]
     bulk_save["evidence"] = shape_evidence
+    bulk_save["qualification"] = qualification
     bulk_delete = base_api_row(
         row_id=f"api.{resource}.bulk_delete",
         area=area,
@@ -1207,9 +1238,13 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         side_effects=(
             "unknown until identifiers, partial failures, and limits are contracted; "
             "empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id "
-            "200 meta-only is not effect proof"
+            "200 meta-only is not effect proof; blocked by external_contract_blocker "
+            f"{qualification['blocker_code']}"
         ),
-        cleanup="unknown until the bulk contract is qualified on a non-production organisation",
+        cleanup=(
+            "unknown until the bulk contract is published by Billy official docs "
+            "or live API scope is re-opened; external_contract_blocker active"
+        ),
         tool_name="",
         source_kind="ambiguous_bulk",
         contract_status="ambiguous_bulk",
@@ -1219,6 +1254,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         "INVALID_DELETE_ID_ARRAY",
     ]
     bulk_delete["evidence"] = shape_evidence
+    bulk_delete["qualification"] = qualification
     return [bulk_save, bulk_delete]
 
 
@@ -3299,6 +3335,79 @@ def apply_ui_settings_subscription_open_shell_evidence(row: dict[str, Any]) -> N
     ]
 
 
+def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
+    """Record dual-session Upsedasse freeze for annual_reports (research137).
+
+    Nav label Årsrapporter and path class /:org_slug/annual_reports exist, so
+    honest UI not_applicable is rejected (design: NA only when no equivalent UI
+    workflow). Dedicated test org dual-session renders h1 Upsedasse! with CVR
+    companies hint — not a plan gate and not a productable shell. Stay red:
+    no tool, no live/vision green. Unlock requires a non-production org (or
+    Billy platform fix) where annual_reports is non-Upsedasse.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/annual_reports (nav Årsrapporter present; dual "
+        "session h1 Upsedasse! + CVR companies URL hint; not a productable shell; "
+        "blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; not_applicable rejected)"
+    )
+    row["tool_name"] = ""
+    row["request_fields"] = []
+    row["response_fields"] = []
+    row["filters"] = []
+    row["pagination"] = None
+    row["api_row_id"] = None
+    row["test_references"] = [TEST_REFERENCE]
+    row["evidence"] = (
+        "research121/122/135 dual-session headless observation + research137 "
+        "decision: path class /:org_slug/annual_reports dual-renders h1 "
+        "Upsedasse! (error_upsedasse true both sessions) with CVR companies "
+        "hint (# - url: /cvr/dk/companies/#) and recovery CTAs; nav label "
+        "Årsrapporter present so not_applicable is rejected (design: NA only "
+        "when Billy exposes no equivalent UI workflow); "
+        "blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a "
+        "non-production organisation (or Billy platform fix) where "
+        "annual_reports is non-Upsedasse so a typed ui_* shell can be dual-"
+        "session qualified; no invent api_annual_*; no tool; stay red"
+    )
+    row["discovered"] = False
+    row["implemented"] = False
+    row["contract_tested"] = False
+    row["live_tested"] = False
+    row["vision_verified"] = False
+    row["vision_evidence"] = None
+    row["parity_status"] = "discovery_required"
+    row["sensitivity"] = "unknown"
+    row["side_effects"] = (
+        "none until a non-Upsedasse shell exists; current dual observation is "
+        "error shell only (ANNUAL_REPORTS_ORG_INACCESSIBLE)"
+    )
+    row["cleanup"] = (
+        "not_applicable for inaccessible discovery; no records may be created; "
+        "not_applicable parity classification rejected while nav route exists"
+    )
+    row["errors"] = [
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "ANNUAL_REPORTS_ORG_INACCESSIBLE",
+    ]
+    row["qualification"] = {
+        "kind": "org_inaccessible",
+        "blocker_code": "ANNUAL_REPORTS_ORG_INACCESSIBLE",
+        "not_applicable_decision": "rejected",
+        "not_applicable_reason": (
+            "nav Årsrapporter and route family exist; Upsedasse is accessibility "
+            "failure for this test org, not absence of UI workflow"
+        ),
+        "unlock_requirement": (
+            "Non-production Billy organisation (or Billy platform fix) where "
+            "mit.billy.dk/:org_slug/annual_reports dual-session renders a "
+            "non-Upsedasse annual-reports shell"
+        ),
+        "evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+    }
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -3395,6 +3504,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_beta_open_shell_evidence(row)
         if family == "settings_subscription":
             apply_ui_settings_subscription_open_shell_evidence(row)
+        if family == "annual_reports":
+            apply_ui_annual_reports_inaccessible_evidence(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -3620,9 +3731,12 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
     # missing BILLY_API_TOKEN for incomplete UI qualification.
     if any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows):
         return (
-            "Unresolved ambiguous bulk API contracts remain red; "
+            "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: "
+            "92 ambiguous_bulk rows stay red after official docs/asset exhaust "
+            "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
-            "UI live and vision qualification incomplete"
+            "UI live and vision qualification incomplete "
+            "(annual_reports org_inaccessible; residual UI parity open)"
         )
     if any(
         not row.get("implemented") or not row.get("contract_tested")

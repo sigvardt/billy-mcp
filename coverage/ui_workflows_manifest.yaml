@@ -842,27 +842,36 @@
     {
       "api_row_id": null,
       "area": "annual_reports",
-      "cleanup": "not_applicable for route discovery; no records may be created",
+      "cleanup": "not_applicable for inaccessible discovery; no records may be created; not_applicable parity classification rejected while nav route exists",
       "contract_tested": false,
       "discovered": false,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "ANNUAL_REPORTS_ORG_INACCESSIBLE"
       ],
-      "evidence": "Approved design \u00a710.3 route-family discovery seed; no headless qualification yet",
+      "evidence": "research121/122/135 dual-session headless observation + research137 decision: path class /:org_slug/annual_reports dual-renders h1 Upsedasse! (error_upsedasse true both sessions) with CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; nav label \u00c5rsrapporter present so not_applicable is rejected (design: NA only when Billy exposes no equivalent UI workflow); blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a non-production organisation (or Billy platform fix) where annual_reports is non-Upsedasse so a typed ui_* shell can be dual-session qualified; no invent api_annual_*; no tool; stay red",
       "filters": [],
       "id": "ui.discovery.annual_reports",
       "implemented": false,
       "lane": "ui",
       "live_tested": false,
-      "method_or_route": "DISCOVERY REQUIRED: mit.billy.dk route family annual_reports",
+      "method_or_route": "mit.billy.dk /:org_slug/annual_reports (nav \u00c5rsrapporter present; dual session h1 Upsedasse! + CVR companies URL hint; not a productable shell; blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; not_applicable rejected)",
       "operation": "discovery",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "blocker_code": "ANNUAL_REPORTS_ORG_INACCESSIBLE",
+        "evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+        "kind": "org_inaccessible",
+        "not_applicable_decision": "rejected",
+        "not_applicable_reason": "nav \u00c5rsrapporter and route family exist; Upsedasse is accessibility failure for this test org, not absence of UI workflow",
+        "unlock_requirement": "Non-production Billy organisation (or Billy platform fix) where mit.billy.dk/:org_slug/annual_reports dual-session renders a non-Upsedasse annual-reports shell"
+      },
       "request_fields": [],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until a headless typed workflow is verified",
+      "side_effects": "none until a non-Upsedasse shell exists; current dual observation is error shell only (ANNUAL_REPORTS_ORG_INACCESSIBLE)",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1699,7 +1708,7 @@
     {
       "api_row_id": "api.accountGroups.bulk_save",
       "area": "account_groups",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -1721,7 +1730,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1733,7 +1742,7 @@
     {
       "api_row_id": "api.accountGroups.bulk_delete",
       "area": "account_groups",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -1755,7 +1764,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1937,7 +1946,7 @@
     {
       "api_row_id": "api.accountNatures.bulk_save",
       "area": "account_natures",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -1959,7 +1968,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1971,7 +1980,7 @@
     {
       "api_row_id": "api.accountNatures.bulk_delete",
       "area": "account_natures",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -1993,7 +2002,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2212,7 +2221,7 @@
     {
       "api_row_id": "api.accounts.bulk_save",
       "area": "accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2234,7 +2243,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2246,7 +2255,7 @@
     {
       "api_row_id": "api.accounts.bulk_delete",
       "area": "accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2268,7 +2277,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2487,7 +2496,7 @@
     {
       "api_row_id": "api.attachments.bulk_save",
       "area": "attachments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2509,7 +2518,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2521,7 +2530,7 @@
     {
       "api_row_id": "api.attachments.bulk_delete",
       "area": "attachments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2543,7 +2552,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2725,7 +2734,7 @@
     {
       "api_row_id": "api.balanceModifiers.bulk_save",
       "area": "balance_modifiers",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2747,7 +2756,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2759,7 +2768,7 @@
     {
       "api_row_id": "api.balanceModifiers.bulk_delete",
       "area": "balance_modifiers",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -2781,7 +2790,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3000,7 +3009,7 @@
     {
       "api_row_id": "api.bankLineMatches.bulk_save",
       "area": "bank_line_matches",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3022,7 +3031,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3034,7 +3043,7 @@
     {
       "api_row_id": "api.bankLineMatches.bulk_delete",
       "area": "bank_line_matches",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3056,7 +3065,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3275,7 +3284,7 @@
     {
       "api_row_id": "api.bankLines.bulk_save",
       "area": "bank_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3297,7 +3306,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3309,7 +3318,7 @@
     {
       "api_row_id": "api.bankLines.bulk_delete",
       "area": "bank_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3331,7 +3340,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3550,7 +3559,7 @@
     {
       "api_row_id": "api.bankLineSubjectAssociations.bulk_save",
       "area": "bank_line_subject_associations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3572,7 +3581,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3584,7 +3593,7 @@
     {
       "api_row_id": "api.bankLineSubjectAssociations.bulk_delete",
       "area": "bank_line_subject_associations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3606,7 +3615,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3825,7 +3834,7 @@
     {
       "api_row_id": "api.bankPayments.bulk_save",
       "area": "bank_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3847,7 +3856,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3859,7 +3868,7 @@
     {
       "api_row_id": "api.bankPayments.bulk_delete",
       "area": "bank_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -3881,7 +3890,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4100,7 +4109,7 @@
     {
       "api_row_id": "api.billLines.bulk_save",
       "area": "bill_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4122,7 +4131,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4134,7 +4143,7 @@
     {
       "api_row_id": "api.billLines.bulk_delete",
       "area": "bill_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4156,7 +4165,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4361,7 +4370,7 @@
     {
       "api_row_id": "api.bills.bulk_save",
       "area": "bills",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4383,7 +4392,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4395,7 +4404,7 @@
     {
       "api_row_id": "api.bills.bulk_delete",
       "area": "bills",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4417,7 +4426,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4605,7 +4614,7 @@
     {
       "api_row_id": "api.cities.bulk_save",
       "area": "cities",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4627,7 +4636,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4639,7 +4648,7 @@
     {
       "api_row_id": "api.cities.bulk_delete",
       "area": "cities",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4661,7 +4670,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4843,7 +4852,7 @@
     {
       "api_row_id": "api.contactBalancePayments.bulk_save",
       "area": "contact_balance_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4865,7 +4874,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4877,7 +4886,7 @@
     {
       "api_row_id": "api.contactBalancePayments.bulk_delete",
       "area": "contact_balance_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -4899,7 +4908,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5081,7 +5090,7 @@
     {
       "api_row_id": "api.contactBalancePostings.bulk_save",
       "area": "contact_balance_postings",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5103,7 +5112,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5115,7 +5124,7 @@
     {
       "api_row_id": "api.contactBalancePostings.bulk_delete",
       "area": "contact_balance_postings",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5137,7 +5146,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5356,7 +5365,7 @@
     {
       "api_row_id": "api.contactPersons.bulk_save",
       "area": "contact_persons",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5378,7 +5387,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5390,7 +5399,7 @@
     {
       "api_row_id": "api.contactPersons.bulk_delete",
       "area": "contact_persons",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5412,7 +5421,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5617,7 +5626,7 @@
     {
       "api_row_id": "api.contacts.bulk_save",
       "area": "contacts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5639,7 +5648,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5651,7 +5660,7 @@
     {
       "api_row_id": "api.contacts.bulk_delete",
       "area": "contacts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5673,7 +5682,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5855,7 +5864,7 @@
     {
       "api_row_id": "api.countryGroups.bulk_save",
       "area": "country_groups",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5877,7 +5886,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5889,7 +5898,7 @@
     {
       "api_row_id": "api.countryGroups.bulk_delete",
       "area": "country_groups",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -5911,7 +5920,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6093,7 +6102,7 @@
     {
       "api_row_id": "api.countries.bulk_save",
       "area": "countries",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6115,7 +6124,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6127,7 +6136,7 @@
     {
       "api_row_id": "api.countries.bulk_delete",
       "area": "countries",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6149,7 +6158,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6331,7 +6340,7 @@
     {
       "api_row_id": "api.currencies.bulk_save",
       "area": "currencies",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6353,7 +6362,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6365,7 +6374,7 @@
     {
       "api_row_id": "api.currencies.bulk_delete",
       "area": "currencies",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6387,7 +6396,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6606,7 +6615,7 @@
     {
       "api_row_id": "api.daybookBalanceAccounts.bulk_save",
       "area": "daybook_balance_accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6628,7 +6637,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6640,7 +6649,7 @@
     {
       "api_row_id": "api.daybookBalanceAccounts.bulk_delete",
       "area": "daybook_balance_accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6662,7 +6671,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6881,7 +6890,7 @@
     {
       "api_row_id": "api.daybooks.bulk_save",
       "area": "daybooks",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6903,7 +6912,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6915,7 +6924,7 @@
     {
       "api_row_id": "api.daybooks.bulk_delete",
       "area": "daybooks",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -6937,7 +6946,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7156,7 +7165,7 @@
     {
       "api_row_id": "api.daybookTransactionLines.bulk_save",
       "area": "daybook_transaction_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7178,7 +7187,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7190,7 +7199,7 @@
     {
       "api_row_id": "api.daybookTransactionLines.bulk_delete",
       "area": "daybook_transaction_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7212,7 +7221,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7463,7 +7472,7 @@
     {
       "api_row_id": "api.daybookTransactions.bulk_save",
       "area": "daybook_transactions",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7485,7 +7494,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7497,7 +7506,7 @@
     {
       "api_row_id": "api.daybookTransactions.bulk_delete",
       "area": "daybook_transactions",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7519,7 +7528,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7670,7 +7679,7 @@
     {
       "api_row_id": "api.files.bulk_save",
       "area": "files",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7692,7 +7701,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7704,7 +7713,7 @@
     {
       "api_row_id": "api.files.bulk_delete",
       "area": "files",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7726,7 +7735,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7908,7 +7917,7 @@
     {
       "api_row_id": "api.invoiceLateFees.bulk_save",
       "area": "invoice_late_fees",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7930,7 +7939,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7942,7 +7951,7 @@
     {
       "api_row_id": "api.invoiceLateFees.bulk_delete",
       "area": "invoice_late_fees",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -7964,7 +7973,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8183,7 +8192,7 @@
     {
       "api_row_id": "api.invoiceLines.bulk_save",
       "area": "invoice_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8205,7 +8214,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8217,7 +8226,7 @@
     {
       "api_row_id": "api.invoiceLines.bulk_delete",
       "area": "invoice_lines",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8239,7 +8248,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8458,7 +8467,7 @@
     {
       "api_row_id": "api.invoiceReminderAssociations.bulk_save",
       "area": "invoice_reminder_associations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8480,7 +8489,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8492,7 +8501,7 @@
     {
       "api_row_id": "api.invoiceReminderAssociations.bulk_delete",
       "area": "invoice_reminder_associations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8514,7 +8523,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8657,7 +8666,7 @@
     {
       "api_row_id": "api.invoiceReminders.bulk_save",
       "area": "invoice_reminders",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8679,7 +8688,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8691,7 +8700,7 @@
     {
       "api_row_id": "api.invoiceReminders.bulk_delete",
       "area": "invoice_reminders",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8713,7 +8722,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8918,7 +8927,7 @@
     {
       "api_row_id": "api.invoices.bulk_save",
       "area": "invoices",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8940,7 +8949,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8952,7 +8961,7 @@
     {
       "api_row_id": "api.invoices.bulk_delete",
       "area": "invoices",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -8974,7 +8983,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9156,7 +9165,7 @@
     {
       "api_row_id": "api.locales.bulk_save",
       "area": "locales",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9178,7 +9187,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9190,7 +9199,7 @@
     {
       "api_row_id": "api.locales.bulk_delete",
       "area": "locales",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9212,7 +9221,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9393,7 +9402,7 @@
     {
       "api_row_id": "api.organizations.bulk_save",
       "area": "organizations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9415,7 +9424,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9427,7 +9436,7 @@
     {
       "api_row_id": "api.organizations.bulk_delete",
       "area": "organizations",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9449,7 +9458,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9631,7 +9640,7 @@
     {
       "api_row_id": "api.postings.bulk_save",
       "area": "postings",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9653,7 +9662,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9665,7 +9674,7 @@
     {
       "api_row_id": "api.postings.bulk_delete",
       "area": "postings",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9687,7 +9696,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9906,7 +9915,7 @@
     {
       "api_row_id": "api.productPrices.bulk_save",
       "area": "product_prices",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9928,7 +9937,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9940,7 +9949,7 @@
     {
       "api_row_id": "api.productPrices.bulk_delete",
       "area": "product_prices",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -9962,7 +9971,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10167,7 +10176,7 @@
     {
       "api_row_id": "api.products.bulk_save",
       "area": "products",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10189,7 +10198,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10201,7 +10210,7 @@
     {
       "api_row_id": "api.products.bulk_delete",
       "area": "products",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10223,7 +10232,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10442,7 +10451,7 @@
     {
       "api_row_id": "api.salesTaxAccounts.bulk_save",
       "area": "sales_tax_accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10464,7 +10473,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10476,7 +10485,7 @@
     {
       "api_row_id": "api.salesTaxAccounts.bulk_delete",
       "area": "sales_tax_accounts",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10498,7 +10507,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10717,7 +10726,7 @@
     {
       "api_row_id": "api.salesTaxMetaFields.bulk_save",
       "area": "sales_tax_meta_fields",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10739,7 +10748,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10751,7 +10760,7 @@
     {
       "api_row_id": "api.salesTaxMetaFields.bulk_delete",
       "area": "sales_tax_meta_fields",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10773,7 +10782,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10955,7 +10964,7 @@
     {
       "api_row_id": "api.salesTaxPayments.bulk_save",
       "area": "sales_tax_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -10977,7 +10986,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10989,7 +10998,7 @@
     {
       "api_row_id": "api.salesTaxPayments.bulk_delete",
       "area": "sales_tax_payments",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11011,7 +11020,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11156,7 +11165,7 @@
     {
       "api_row_id": "api.salesTaxReturns.bulk_save",
       "area": "sales_tax_returns",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11178,7 +11187,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11190,7 +11199,7 @@
     {
       "api_row_id": "api.salesTaxReturns.bulk_delete",
       "area": "sales_tax_returns",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11212,7 +11221,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11431,7 +11440,7 @@
     {
       "api_row_id": "api.salesTaxRules.bulk_save",
       "area": "sales_tax_rules",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11453,7 +11462,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11465,7 +11474,7 @@
     {
       "api_row_id": "api.salesTaxRules.bulk_delete",
       "area": "sales_tax_rules",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11487,7 +11496,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11706,7 +11715,7 @@
     {
       "api_row_id": "api.salesTaxRulesets.bulk_save",
       "area": "sales_tax_rulesets",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11728,7 +11737,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11740,7 +11749,7 @@
     {
       "api_row_id": "api.salesTaxRulesets.bulk_delete",
       "area": "sales_tax_rulesets",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11762,7 +11771,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11950,7 +11959,7 @@
     {
       "api_row_id": "api.states.bulk_save",
       "area": "states",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -11972,7 +11981,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11984,7 +11993,7 @@
     {
       "api_row_id": "api.states.bulk_delete",
       "area": "states",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12006,7 +12015,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12225,7 +12234,7 @@
     {
       "api_row_id": "api.taxRateDeductionComponents.bulk_save",
       "area": "tax_rate_deduction_components",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12247,7 +12256,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12259,7 +12268,7 @@
     {
       "api_row_id": "api.taxRateDeductionComponents.bulk_delete",
       "area": "tax_rate_deduction_components",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12281,7 +12290,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12500,7 +12509,7 @@
     {
       "api_row_id": "api.taxRates.bulk_save",
       "area": "tax_rates",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12522,7 +12531,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12534,7 +12543,7 @@
     {
       "api_row_id": "api.taxRates.bulk_delete",
       "area": "tax_rates",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12556,7 +12565,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12761,7 +12770,7 @@
     {
       "api_row_id": "api.transactions.bulk_save",
       "area": "transactions",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12783,7 +12792,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12795,7 +12804,7 @@
     {
       "api_row_id": "api.transactions.bulk_delete",
       "area": "transactions",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12817,7 +12826,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12962,7 +12971,7 @@
     {
       "api_row_id": "api.users.bulk_save",
       "area": "users",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -12984,7 +12993,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12996,7 +13005,7 @@
     {
       "api_row_id": "api.users.bulk_delete",
       "area": "users",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -13018,7 +13027,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -13206,7 +13215,7 @@
     {
       "api_row_id": "api.zipcodes.bulk_save",
       "area": "zipcodes",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -13228,7 +13237,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -13240,7 +13249,7 @@
     {
       "api_row_id": "api.zipcodes.bulk_delete",
       "area": "zipcodes",
-      "cleanup": "unknown until the bulk contract is qualified on a non-production organisation",
+      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
       "contract_tested": false,
       "discovered": false,
       "errors": [
@@ -13262,7 +13271,7 @@
       ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],

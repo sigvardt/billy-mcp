@@ -6,7 +6,7 @@
   },
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
-    "blocker": "Unresolved ambiguous bulk API contracts remain red; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete",
+    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (annual_reports org_inaccessible; residual UI parity open)",
     "contract_tested_rows": 222,
     "implemented_rows": 222,
     "live_tested_rows": 38,

@@ -12,7 +12,7 @@ sources:
   - tests/unit/test_live_probe.py
   - tests/live/test_live_probe.py
 created: 2026-07-30T21:25:30Z
-updated: 2026-08-01T01:20:00Z
+updated: 2026-08-01T01:45:00Z
 ---
 
 # Wave-5u safe method-observation contract
@@ -203,4 +203,13 @@ only. It does **not** open real-method network paths, register tools, claim
 cleanup, or change coverage green state. Bulk delete empty-`ids[]` and
 synthetic meta-only 200 rules remain research95/96. All 92 bulk inventory rows
 stay `ambiguous_bulk` with empty tools.
+
+## Bulk external-contract blocker (research137)
+
+After official documentation and versioned official asset exhaust, bulk save and
+bulk delete remain **BLOCK BEFORE NETWORK** for product tools. Inventory rows
+carry `qualification.blocker_code=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS` and
+stay `ambiguous_bulk`. Offline object-root / `ids[]` shape hints (research136)
+are not a full contract. Live API bulk qualification is out of user scope.
+Further bulk evidence-only loops are closed until Billy publishes schemas.
 

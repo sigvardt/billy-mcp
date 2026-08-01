@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-01T01:20:00Z
+updated: 2026-08-01T01:45:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -37,10 +37,33 @@ coverage green.
    until authenticated non-production evidence or an official docs change
    proves the method.
 4. Bulk save/delete remain empty-tool red until a request/response body contract
-   exists. Supports bulk mentions alone are not enough.
+   exists. Supports bulk mentions alone are not enough. After research137 docs/asset exhaust, treat bulk as **external-contract blocked** (see below), not as
+   an open evidence loop.
 5. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests
    should still deny it.
+
+
+## Bulk external-contract freeze (research137)
+
+Official docs and versioned assets were exhausted for exact bulk save/delete
+request and response schemas (public page ETag `wcw4x9hqvu3603`, MD5
+`8b94b0135c91fd15fe54ea33e088a4be`; page chunk Supports-only; OpenAPI/swagger
+probes on official hosts return 404). No exact bulk body/response contract is
+published.
+
+Under user scope, live credentialed API qualification is out of scope. Offline
+unauth shape evidence (research136) remains: `PUT /{plural}/bulk` requires a
+JSON object root; object roots hit `AUTHENTICATION_REQUIRED` before field-level
+bulk validation is visible; bulk delete form class uses `ids[]` in error text
+only.
+
+**Decision:** all 92 inventory bulk rows stay `ambiguous_bulk` red with machine-readable `qualification.kind=external_contract_blocker` and
+`blocker_code=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. No bulk FastMCP tools.
+Do not run further bulk evidence-only iterations until Billy publishes schemas
+or live API bulk qualification is re-opened by the user.
+
+Shape hints from research136 remain non-authoritative for greening.
 
 ## Confirmed examples (unauth, no token)
 

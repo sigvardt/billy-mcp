@@ -29,6 +29,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
+[[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports; not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.
+
 [[ui_bank_accounts_list_shell|ui_bank_accounts_list_shell]]: Read-only headless ui_bank_accounts_list contract for Billy bank accounts list shell open only.
 
 [[ui_bank_reconciliation_open_shell|ui_bank_reconciliation_open_shell]]: Read-only headless ui_bank_reconciliation_open contract for Billy Afstemning shell open only.

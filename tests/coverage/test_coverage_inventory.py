@@ -332,8 +332,53 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all("INVALID_REQUEST_BODY" in row["errors"] for row in saves)
     assert all("INVALID_DELETE_ID_ARRAY" in row["errors"] for row in deletes)
     assert all("research136 offline unauth shape freeze" in row["evidence"] for row in bulk_rows)
+    assert all(
+        "research137 official docs and versioned-asset exhaust" in row["evidence"]
+        for row in bulk_rows
+    )
+    assert all("BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in row["evidence"] for row in bulk_rows)
+    assert all(isinstance(row.get("qualification"), dict) for row in bulk_rows)
+    assert all(row["qualification"]["kind"] == "external_contract_blocker" for row in bulk_rows)
+    assert all(
+        row["qualification"]["blocker_code"] == "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
+        for row in bulk_rows
+    )
+    assert all(row["qualification"]["live_api"] == "out_of_scope_by_user" for row in bulk_rows)
+    assert all(row["qualification"]["tools_allowed"] is False for row in bulk_rows)
     # Shape hints must never look like a completed contract.
     assert all(row["response_fields"] == [] for row in bulk_rows)
+
+
+def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
+    """Dual Upsedasse keeps annual_reports red; not_applicable is rejected."""
+
+    _, ui_manifest, _, status, _ = documents()
+    annual = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.discovery.annual_reports"
+    )
+
+    assert annual["tool_name"] == ""
+    assert annual["discovered"] is False
+    assert annual["implemented"] is False
+    assert annual["contract_tested"] is False
+    assert annual["live_tested"] is False
+    assert annual["vision_verified"] is False
+    assert annual["parity_status"] == "discovery_required"
+    assert annual["parity_status"] != "not_applicable"
+    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["evidence"]
+    assert "not_applicable is rejected" in annual["evidence"]
+    assert "Upsedasse" in annual["evidence"]
+    assert "/:org_slug/annual_reports" in annual["method_or_route"]
+    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["errors"]
+    qual = annual["qualification"]
+    assert qual["kind"] == "org_inaccessible"
+    assert qual["blocker_code"] == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
+    assert qual["not_applicable_decision"] == "rejected"
+    assert "non-Upsedasse" in qual["unlock_requirement"]
+    assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in status["qualification"]["blocker"]
+    assert "external-contract" in status["qualification"]["blocker"].lower() or (
+        "External-contract" in status["qualification"]["blocker"]
+    )
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:

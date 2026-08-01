@@ -2601,3 +2601,113 @@ updated: 2026-08-01T01:05:00Z
 - Saved parent steer B148CF36 for next iteration: no more evidence-only bulk
   loops; one docs/asset bulk-schema sweep or external-contract blocker; then
   interface parity; annual_reports not_applicable decision from Upsedasse.
+
+## PREPARE (iter 38)
+
+- Parent `main`: fetch + merge Already up to date; no merge commit.
+- Children: 157 child branches; several still show commits ahead of mainline, but none have unmerged product to take this iteration.
+  - `ui_auth_status` product already on mainline (auth_status models/server/browser/tests evolved past child tip).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` wiki targets already present on mainline.
+  - Remaining ahead children are init-only, scaffolding, failed-iteration bookkeeping, or outdated node-local trees; not merged.
+- No running children. No material integration. No outbox integration note.
+- Ready RESEARCH per B148CF36: one official bulk-schema docs/asset sweep; freeze external-contract blocker if still unspecified; annual_reports NA decision; queue next UI parity shell.
+
+## SYNC pre-RESEARCH (iter 38)
+
+- Unread inbox/feed: empty. Private A9D3B571 RESEARCH target reacted (+).
+- Saved: B148CF36 (operator steer; open until bulk-schema sweep + annual decision + parity pivot recorded).
+- No running children (all terminal).
+- PREPARE already done (parent up to date; no child merges).
+- Ready RESEARCH: official docs/assets bulk-schema exhaust once; else external-contract blocker; annual_reports NA decision; queue next UI parity.
+
+## Research (iter 38)
+
+- research137: official bulk-schema exhaust (docs MD5/ETag unchanged; OpenAPI/swagger
+  all 404; page chunk Supports-only; no exact bulk body/response).
+- Freeze: single external-contract blocker `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`
+  for 92 bulk (stay red; no tools; no more evidence-only bulk loops).
+- annual_reports: dual Upsedasse + nav Årsrapporter → honest not_applicable
+  **rejected**; unresolved `ANNUAL_REPORTS_ORG_INACCESSIBLE` (need non-Upsedasse
+  shell on a non-prod org). Stay red.
+- Next product slice: durable blocker + annual decision record, then geo/cities
+  UI parity not_applicable (or shell if found). Not finish.
+- Brief: `tmp/grok-research.md` (and node tmp copy).
+
+## SYNC pre-PLAN (iter 38)
+
+- Unread inbox/feed/private: empty. Saved: B148CF36 open until EXECUTE records
+  bulk external-contract blocker + annual decision + parity pivot.
+- research137 brief present (`tmp/grok-research.md`).
+- Ready PLAN: durable bulk external-contract blocker + annual NA-reject record,
+  then geo cities UI parity NA gate (or shell if dual finds one). Not finish.
+
+## Plan (iter 38)
+
+- Plan: `plans/2026-08-01T01:38:56.742Z-186.38-bulk_external_blocker_annual_decision.md`
+  — research137: machine-readable bulk external-contract blocker (92 stay red,
+  no tools); annual_reports NA rejected + ANNUAL_REPORTS_ORG_INACCESSIBLE
+  evidence (stay red); status/wiki/tests; no geo NA green this package; no
+  children; not finish.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 38)
+
+- Unread inbox/feed: empty. Private 4A96DD45 PLAN target reacted (+).
+- Saved: B148CF36 open until EXECUTE lands blocker + annual decision.
+- Plan 186.38 present (untracked until commit). Ready EXECUTE product
+  (bulk external-contract + annual inaccessible decision; no geo NA green).
+
+## Execute (iter 38)
+
+- Producted research137 package (186.38): bulk external-contract blocker + annual
+  decision; no bulk tools; no annual green; no geo NA product.
+- `bulk_rows()`: `qualification` external_contract_blocker
+  BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; research137 evidence; 92 stay red.
+- `qualification_blocker()` names external-contract freeze.
+- `apply_ui_annual_reports_inaccessible_evidence`: NA rejected;
+  ANNUAL_REPORTS_ORG_INACCESSIBLE; stay red.
+- Wiki: offline_write_probe_rules, wave5u_method_probe_contract,
+  ui_annual_reports_inaccessible.
+- Regenerated coverage; complete=false; live/vision 38; bulk 92 red.
+- lint.sh pass; test.sh offline **1564 passed**, 35 deselected.
+- Ready for REVIEW.
+
+## SYNC pre-INDEPENDENT-REVIEW (iter 38)
+
+- Unread inbox/feed/private: empty. Saved: B148CF36 open until package accepted
+  and committed (bulk external-contract + annual decision).
+- EXECUTE uncommitted on tip; complete=false; live/vision 38; 92 bulk still red
+  with external_contract_blocker; annual NA rejected stay red.
+- Outbox: EXECUTE complete announced. Ready IR of 186.38 package.
+
+## Independent review (iter 38)
+
+- Product 186.38 bulk external-contract + annual decision: **ACCEPT**
+  (`tmp/grok-review.md`). No required product fixes.
+- Optional N1–N3 non-blocking (errors[] inventory code; scratch evidence_ref;
+  geo deferred by plan).
+- 92 bulk stay red external-contract; annual NA rejected stay red;
+  complete false. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY reconfirm then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 38)
+
+- Unread inbox/feed: empty. Private 9341EC8C reacted (+).
+- IR ACCEPT 186.38 (no required fixes; optional N1–N3 deferred).
+- Saved B148CF36 still open until COMMIT lands package.
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 38)
+
+- IR product ACCEPT; no required product fixes (optional N1–N3 deferred).
+- lint.sh pass; test.sh offline **1564 passed**, 35 deselected.
+- check_coverage pass; bulk 92 red external-contract; complete false;
+  live/vision 38; annual NA rejected stay red.
+- Plan post-mortem filled. Wiki lint clean (project + memory).
+- Ready for COMMIT. Not node finish.
+
+## SYNC pre-COMMIT (iter 38)
+
+- Unread inbox/feed/private: empty. Saved: B148CF36 open until COMMIT lands.
+- FIX-VERIFY clean (1564 offline pass; IR ACCEPT). Ready COMMIT 186.38 bulk
+  external-contract + annual decision package. Not node finish (complete false).
