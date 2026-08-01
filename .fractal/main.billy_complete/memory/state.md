@@ -6,17 +6,18 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T11:10:00Z
+updated: 2026-08-01T14:10:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **54** COMMIT 186.54 product `f902848`. live/vision
-  **147**; implemented/contract **331**; complete false. Not node finish.
-- ui_invoices_create_open + dual-count invoices.create + discovery invoices_create.
-- Bulk 92 + annual_reports still red.
+- Continue mode iter **59** COMMIT 186.59 product pending. live/vision
+  **153**; implemented/contract **337**; complete false. Not node finish.
+- ui_settings_vat_open dual-counts api.taxRates.list (shell_open_only).
+- Bulk 92 + annual_reports still red. Residual: special.invoice_email; other taxRates.*.
+
 
 
 ## SYNC (iter 53)
@@ -53,8 +54,7 @@ updated: 2026-08-01T11:10:00Z
     (superseded auth research already on root product path).
   - `wave5n_invoice_late_fee_freeze`, `wave5sa_invoice_logs_product_*`,
     `wave5k_product_ready_review_*`: wiki content equal on tip or index-only.
-  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or
-    older wave product already integrated; no unique src/tests tip lacks.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or older wave product already integrated; no unique src/tests tip lacks.
 - No child merges this iteration. No integration outbox (no material merge).
 - Dirty: memory/state.md only (SYNC + PREPARE notes).
 - Tip `41ad5ee`. Ready RESEARCH residual dual-count/NA (prefer
@@ -5488,6 +5488,155 @@ updated: 2026-08-01T11:10:00Z
 ## COMMIT (iter 58)
 
 - `fractal commit` product: ui daybooks create dual-count (`af1934d`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
+## SYNC (iter 59)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 25BA6650 (iter58 COMMIT done) + 1EDE0EAC (pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `af1934d` / product dual-count daybooks.create == origin/main.billy_complete.
+- Coverage: implemented/contract **336**; live/vision **152**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`).
+- Residual red: UI parity open (special.invoice_email; daybooks get/update/delete/bulk;
+  files*/attachments* without dual); bulk **92** external-contract; annual
+  org_inaccessible.
+- Next residual (186.58 post-mortem): special.invoice_email only with disposable
+  draft + valid client dual; else multi-resource dual packages; no weak NA;
+  no postings/transactions steal; no bulk greening without new official schema.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 59)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; many rev-ahead,
+  product review of non-fractal three-dot deltas vs tip `267fb0a` → **skip all merges**:
+  - Unique non-fractal path missing on tip: only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` (from `ui_auth_credentials_research_codex_fallback`) — skip (superseded auth research already on root product path; same decision as iters 51–58).
+  - `ui_auth_status` SRC/tests: tip much larger (browser 241505 vs child 12953; product already live).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` wiki: tip equal or longer; index-only / fractal scaffolding churn.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or
+    older wave product already integrated; no unique src/tests tip lacks.
+  - Material larger-on-child non-fractal files: **0**.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `267fb0a` / product `af1934d`. Ready RESEARCH residual dual-count/NA (prefer special.invoice_email with disposable draft dual per 186.58 post-mortem; else multi-resource dual packages). Not finish.
+
+## SYNC (iter 59 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C9768351 (iter59 SYNC) + 6A3968D5 (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `267fb0a`.
+- Coverage: implemented/contract 336; live/vision 152; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email with
+  disposable draft dual per 186.58 post-mortem; else multi-resource dual
+  packages; no weak NA; no postings/transactions steal; no bulk greening).
+  Not finish.
+
+## RESEARCH (iter 59 / research158)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603 status pair; body MD5 match).
+- Dual residual: soft taxRates/emails/productPrices/files/postings/bankLines/… == nonsense body 127;
+  invoice detail links 0 dual; client create failed; draft stayed on /invoices/new.
+- Tools dual-ok: settings_vat (vat_panel_markers_present true both), users/company/accounting/invoicing,
+  products/clients/invoices/daybooks/uploads/transactions/bank_recon.
+- Soft /settings hub 626 h1 Indstillinger with Momssatser in nav; tool click required for VAT panel.
+- Decision: **ACCEPT** product dual-count `api.taxRates.list` onto `ui_settings_vat_open`
+  (shell_open_only; live/vision 152→153). **DEFER** special.invoice_email dual/NA;
+  **DEFER** products/contacts create tools; **REJECT** productPrices/bankLines/postings steal.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (+ worktree copy).
+  Dual: `tmp/research158_residual_dual.json`.
+- Profiles purged. api_token_used false. No coverage green. Ready PLAN 186.59.
+
+## SYNC (iter 59 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C873C35B (research158 done) + 0B06BE3D (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research158 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: dual-count api.taxRates.list onto
+  ui_settings_vat_open (shell_open_only); live/vision 152→153. Not finish.
+
+## PLAN (iter 59 / 186.59)
+
+- Plan file
+  `plans/2026-08-01T13:39:10.972Z-186.59-ui_tax_rates_list_dual_count.md`:
+  dual-count exact `api.taxRates.list` onto existing `ui_settings_vat_open`
+  (shell_open_only); live/vision 152→153; implemented/contract 336→337;
+  GEO NA 100 unchanged; root-only Grok; no children; residual invoice_email +
+  other tax* + bulk/annual stay red; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 59 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CD728EFB (pre-PLAN) + 8AB29D9E (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.59 + research158 brief present. Tip `267fb0a`.
+- Ready EXECUTE product ui_settings_vat_open dual-count taxRates.list (root; no
+  children). Not finish.
+
+## EXECUTE (iter 59 / 186.59)
+
+- Producted research158 / plan 186.59: dual-count exact api.taxRates.list onto
+  ui_settings_vat_open (shell_open_only).
+- Generator flag + parity wiring; inventory tests 52→53 shells / 152→153 live;
+  residual taxRates ops stay red assert; wiki dual-count note; coverage regenerated.
+- live/vision **153**; implemented/contract **337**; complete false;
+  invoice_email stays red; other taxRates.* stay red.
+- lint.sh pass. offline test.sh **1586 passed**, 38 deselected.
+- No new tools; no src browser changes. Ready for REVIEW. Not finish.
+
+## SYNC (iter 59 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C401D2D6 (pre-EXECUTE) + 3EAFCA61 (EXECUTE done) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.59 uncommitted: dual-count taxRates.list; live/vision 153;
+  implemented/contract 337; offline 1586 pass; complete=false.
+- Outbox: ready for IR of product. Not finish.
+
+## IR (iter 59 / 186.59)
+
+- Product dual-count taxRates.list onto ui_settings_vat_open: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (vision workflow_ref;
+  research dual auxiliary page-body capture).
+- Discovery settings_vat + taxRates.list integrity OK; residual taxRates ops red;
+  invoice_email red; bulk 92 red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 59 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7D394823 (pre-IR) + 6A0BC005 (IR ACCEPT) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.59 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 59 / 186.59)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1586 passed / 38 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: taxRates.list + discovery settings_vat green; live/vision 153;
+  NA 100; implemented/contract 337; complete false; bulk 92 external-contract;
+  annual stay red; invoice_email residual red; other taxRates.* red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 59 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 39940CDA (pre-FIX-VERIFY) + 23DCE4B7 (FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.59
+  ui taxRates.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 59)
+
+- `fractal commit` product: ui taxRates list dual-count (pending).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 

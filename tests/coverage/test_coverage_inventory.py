@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 51 greened shells/parity + daybooks.create dual-count
-    # (research157) = 52 live/vision rows without GEO NA.
-    ui_shell_green = 52
+    # Prior 52 greened shells/parity + taxRates.list dual-count
+    # (research158) = 53 live/vision rows without GEO NA.
+    ui_shell_green = 53
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -638,7 +638,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert product_prices
     assert all(row.get("parity_status") != "not_applicable" for row in product_prices)
     assert all(row.get("live_tested") is not True for row in product_prices)
-    # related-shell families must stay red (research144/147 rejected pure NA)
+    # related-shell families must stay red (research144/147 rejected pure NA).
+    # taxRates.list dual-counted to Momssatser shell (research158); residual
+    # taxRates ops stay red below.
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
@@ -647,7 +649,6 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         "api.postings.",
         "api.salesTaxRules.",
         "api.salesTaxRulesets.",
-        "api.taxRates.",
         "api.files.",
     ):
         related = [
@@ -658,12 +659,27 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert related, prefix
         assert all(row.get("parity_status") != "not_applicable" for row in related)
         assert all(row.get("live_tested") is not True for row in related)
+    tax_rates_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.taxRates.")
+    ]
+    assert tax_rates_rows
+    assert all(row.get("parity_status") != "not_applicable" for row in tax_rates_rows)
+    tax_rates_list = [row for row in tax_rates_rows if row.get("api_row_id") == "api.taxRates.list"]
+    tax_rates_residual = [
+        row for row in tax_rates_rows if row.get("api_row_id") != "api.taxRates.list"
+    ]
+    assert len(tax_rates_list) == 1
+    assert tax_rates_list[0].get("live_tested") is True
+    assert tax_rates_list[0].get("tool_name") == "ui_settings_vat_open"
+    assert all(row.get("live_tested") is not True for row in tax_rates_residual)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 52 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 53 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 152
+    assert status["qualification"]["live_tested_rows"] == 153
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -722,6 +738,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_user_organizations",
         "ui.parity.special.user_organizations",
         "ui.discovery.settings_vat",
+        "ui.parity.taxRates.list",
         "ui.discovery.settings_users",
         "ui.parity.users.list",
         "ui.discovery.settings_access_token",
@@ -776,6 +793,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_user_organizations": "ui_settings_user_organizations_open",
         "ui.parity.special.user_organizations": "ui_settings_user_organizations_open",
         "ui.discovery.settings_vat": "ui_settings_vat_open",
+        "ui.parity.taxRates.list": "ui_settings_vat_open",
         "ui.discovery.settings_users": "ui_settings_users_open",
         "ui.parity.users.list": "ui_settings_users_open",
         "ui.discovery.settings_access_token": "ui_settings_access_token_open",
@@ -800,7 +818,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 52
+    assert len(qualified) == 53
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -886,6 +904,25 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.accounts.delete",
         "ui.parity.accounts.bulk_save",
         "ui.parity.accounts.bulk_delete",
+    ):
+        red_row = next(row for row in remaining if row["id"] == red_id)
+        assert red_row["discovered"] is False
+        assert red_row["live_tested"] is False
+        assert red_row["parity_status"] == "discovery_required"
+    tax_rates_parity = next(row for row in qualified if row["id"] == "ui.parity.taxRates.list")
+    assert tax_rates_parity["api_row_id"] == "api.taxRates.list"
+    assert tax_rates_parity["tool_name"] == "ui_settings_vat_open"
+    assert tax_rates_parity["parity_status"] == "shell_open_only"
+    assert "api.taxRates.list" in tax_rates_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in tax_rates_parity["evidence"]
+    assert "research158" in tax_rates_parity["evidence"]
+    for red_id in (
+        "ui.parity.taxRates.get",
+        "ui.parity.taxRates.create",
+        "ui.parity.taxRates.update",
+        "ui.parity.taxRates.delete",
+        "ui.parity.taxRates.bulk_save",
+        "ui.parity.taxRates.bulk_delete",
     ):
         red_row = next(row for row in remaining if row["id"] == red_id)
         assert red_row["discovered"] is False

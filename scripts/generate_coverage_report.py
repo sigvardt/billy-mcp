@@ -3405,14 +3405,21 @@ def apply_ui_settings_user_organizations_open_shell_evidence(
     ]
 
 
-def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_settings_vat_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark Indstillinger Momssatser (VAT) panel shell open evidence (research130).
 
     Empty-input tool; open hub /:org_slug/settings then observe-only click
     Momssatser; final path /:org_slug/settings; h1 Indstillinger; markers
     Regelsæt + Satser for salg + Satser for køb. Soft seeds rejected. Distinct
     from company/accounting/invoicing/user. Never click Opret / Gem. No invent
-    api_settings_*. Does not green other settings_* or annual_reports.
+    api_settings_*. Does not green other settings_* or annual_reports or
+    taxRates get/create/update/delete/bulk UI parity or other tax* / salesTax*
+    families. When ``parity_of_api_list`` is true, dual-counts
+    ``ui.parity.taxRates.list`` for ``api.taxRates.list`` (research158).
     """
 
     row["method_or_route"] = (
@@ -3430,7 +3437,8 @@ def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_SETTINGS_VAT_OPEN_MODEL_TEST_REFERENCE,
@@ -3445,10 +3453,17 @@ def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
         "Regelsæt/Satser for salg/Satser for køb markers; distinct from "
         "company/accounting/invoicing/user); soft seeds rejected; no invent "
         "api_settings_*; never click Opret/Gem; does not green other settings_* "
-        "or annual_reports; vision record "
+        "or annual_reports or taxRates get/create/update/delete/bulk UI parity "
+        "or salesTax*/taxRateDeductionComponents UI parity; "
+        "API list filters/sort/pagination UI not producted; vision record "
         "tmp/vision-records/ui_settings_vat_open.json "
         "(Indstillinger Momssatser frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research158 dual-session reconfirm; "
+            "maps api.taxRates.list to UI settings Momssatser shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -4280,6 +4295,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_users_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.accounts.list":
             apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.taxRates.list":
+            apply_ui_settings_vat_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.organizations.list":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.list":
