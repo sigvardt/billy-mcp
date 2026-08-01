@@ -19,6 +19,19 @@ DOCS_URL = "https://www.billy.dk/api/"
 # Official docs fingerprint reconfirmed 2026-07-31 (research100 / independent review).
 DOCS_ETAG = "wcw4x9hqvu3603"
 DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
+
+# Dual-proved geo/reference UI families (research138): no equivalent mit.billy.dk
+# workflow (nav absence + soft-empty path class == nonsense). Currencies/locales
+# deferred until dual path contrast is recorded.
+GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
+    "api.cities.",
+    "api.countries.",
+    "api.countryGroups.",
+    "api.states.",
+    "api.zipcodes.",
+)
+GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 30  # five families × six ops
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -3408,6 +3421,96 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     }
 
 
+def geo_ui_not_applicable_api_row(api_row_id: str) -> bool:
+    """Return whether dual-session research138 freezes this API row as UI NA."""
+
+    return any(api_row_id.startswith(prefix) for prefix in GEO_UI_NOT_APPLICABLE_API_PREFIXES)
+
+
+def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
+    """Record dual-session absence of a Billy UI workflow for geo/reference API ops.
+
+    research138: two independent ephemeral READY sessions on the dedicated
+    non-production organisation found no geo/city/country/state/zip nav labels
+    or hrefs. Candidate path classes (cities, countries, zipcodes, states,
+    countryGroups, settings/cities, …) render soft-empty SPA chrome only
+    (body_len 127, h1_count 0) identical to nonsense paths, while known shells
+    (invoices/products/transactions) expose list headings. Design §10.2 allows
+    UI parity not_applicable only when no equivalent UI workflow exists —
+    accepted here. Contrast annual_reports where nav exists → NA rejected.
+    """
+
+    api_row_id = str(row.get("api_row_id") or "")
+    resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    row["method_or_route"] = (
+        f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+        f"(research138 dual-session: no nav label/href for {resource}; "
+        "candidate path classes soft-empty SPA chrome-only body_len 127 "
+        "h1_count 0 identical to nonsense paths; known list shells contrast "
+        "with h1 Fakturaer/Produkter/Posteringer; "
+        f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+        "not_applicable accepted)"
+    )
+    row["tool_name"] = ""
+    row["request_fields"] = []
+    row["response_fields"] = []
+    row["filters"] = []
+    row["pagination"] = None
+    row["test_references"] = [TEST_REFERENCE]
+    row["evidence"] = (
+        "research138 dual independent ephemeral browser sessions (no "
+        "BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path "
+        "classes soft-empty identical to nonsense "
+        "(zzzz-research138-nonexistent); contrast invoices/products/"
+        "transactions real list shells with h1; design §10.2 UI parity "
+        f"not_applicable accepted for {api_row_id}; "
+        f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+        "no ui_* geo tool; API lane unchanged (reads offline-green, "
+        "live_tested false out_of_scope_by_user; bulk external-contract red); "
+        "evidence_ref=research138_geo_ui_dual+contrast; "
+        f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}"
+    )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "not_applicable"
+    row["sensitivity"] = "low"
+    row["side_effects"] = (
+        "none; UI parity classified not_applicable — no browser workflow tool "
+        "and no records may be created through a geo UI tool"
+    )
+    row["cleanup"] = "not_applicable; no UI tool and no disposable records for this parity row"
+    row["errors"] = [
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
+    ]
+    row["qualification"] = {
+        "kind": "ui_not_applicable",
+        "evidence_code": GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": (
+            "dual-session evidence shows Billy exposes no equivalent UI "
+            "workflow for this geo/reference API capability on the dedicated "
+            "non-production organisation (nav absence + soft-empty == nonsense)"
+        ),
+        "sessions": "dual_independent_ephemeral",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "contrast_controls": [
+            "invoices",
+            "products",
+            "transactions",
+            "zzzz-research138-nonexistent",
+        ],
+        "deferred_families": ["currencies", "locales"],
+    }
+
+
 def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     """Return red UI route seeds and an explicit parity map for every API row."""
 
@@ -3545,6 +3648,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":
             apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=True)
+        if geo_ui_not_applicable_api_row(api_row["id"]):
+            apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)
 
     return {

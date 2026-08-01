@@ -2719,3 +2719,109 @@ updated: 2026-08-01T01:05:00Z
 - Unsaved parent steer B148CF36 (docs exhaust + blocker + annual decision done).
 - Not node finish (complete false; bulk external-contract red, residual 29,
   UI parity geo NA next, annual unlock external).
+
+## SYNC (iter 39 continue)
+
+- Continue mode: worktree clean at tip `e369af4` (186.38 bulk external-contract freeze + annual inaccessible decision).
+- Unread inbox/feed/private: empty. Saved: empty (B148CF36 already unsaved after 186.38 commit).
+- No running children; all historical children terminal.
+- complete=false; implemented/contract 222; live/vision 38; 92 bulk red external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; annual NA rejected stay red ANNUAL_REPORTS_ORG_INACCESSIBLE.
+- Outbox: continue status posted. Next PREPARE then residual UI parity (geo/cities first per 186.38). Not finish.
+
+## PREPARE (iter 39)
+
+- Parent `main`: fetch + merge Already up to date; no merge commit.
+- Children: several still show commits ahead of mainline; none have unmerged product to take.
+  - `ui_auth_status`: tip is stale subset (browser ~376 lines vs mainline ~5550); product already on mainline via later evolution — do not merge.
+  - `wave5u_probe_contract_codex_fallback`: wiki tip would regress research136 bulk shape evidence — do not merge.
+  - `wave5t_ui_auth_discovery_fallback`: trailing newline only on already-present wiki — skip.
+  - `ui_auth_credentials_research_codex_fallback`: fallback research page superseded by auth_credentials_pre_submit + ui_login_surface_contract on mainline — skip.
+  - Remaining ahead children: init-only, failed-iteration bookkeeping, zero product paths — not merged.
+- No running children. No material integration. No outbox integration note.
+- Ready RESEARCH: residual UI parity (geo/cities dual-path first per 186.38); bulk stays external-contract red; annual stays org_inaccessible red. Not finish.
+
+## SYNC pre-RESEARCH (iter 39)
+
+- Unread inbox/feed: empty. Private 100CCCC0 + C8D880FC reacted (+): residual UI parity geo/cities next.
+- Saved: empty. No running children.
+- PREPARE already done (parent up to date; no child merges).
+- Ready RESEARCH: geo/cities dual-path freeze then NA-or-shell product handoff; bulk external-contract red frozen; annual org_inaccessible red. Not finish.
+
+## Research (iter 39)
+
+- research138: dual-session headless geo UI freeze for cities (+ countries/states/zipcodes/countryGroups).
+- Docs ETag/MD5 unchanged (`wcw4x9hqvu3603` / `8b94b0135c91fd15fe54ea33e088a4be`).
+- Dual READY; no geo nav labels/hrefs; geo candidate paths soft-empty body_len 127 / h1=0 **same as nonsense paths**; known shells (invoices/products/transactions) have h1 + larger body.
+- Decision: product **not_applicable** for ui.parity.cities.* (optionally peer geo families); no ui_cities_* shell tool.
+- check_coverage currently blanket-rejects NA — product must evidence-gate.
+- Evidence: tmp/research138_geo_ui_dual.json, tmp/research138_geo_ui_contrast.json; brief tmp/grok-research.md.
+- Not finish. Next PLAN → EXECUTE via codex-power for repo product.
+
+## SYNC pre-PLAN (iter 39)
+
+- Unread inbox/feed: empty. Private 90959390 reacted (+): PLAN cities NA + check_coverage gate.
+- Saved: empty. No running children.
+- research138 brief present (`tmp/grok-research.md`). Ready PLAN product handoff for codex-power EXECUTE. Not finish.
+
+## Plan (iter 39)
+
+- Plan: `plans/2026-08-01T02:11:04.553Z-186.39-ui_geo_cities_not_applicable.md`
+  — research138: evidence-backed UI not_applicable for 30 dual-proved geo parity
+  rows (cities/countries/countryGroups/states/zipcodes × 6 ops); check_coverage
+  evidence-gated NA accept; inventory tests; wiki; no geo UI tools; complete
+  false; currencies/locales deferred; no children.
+- Ready for EXECUTE (codex-power preferred for repo product per routing).
+
+## SYNC pre-EXECUTE (iter 39)
+
+- Unread inbox/feed: empty. Private 0033F76F reacted (+): EXECUTE geo NA package.
+- Saved: empty. No running children.
+- Plan 186.39 + research138 brief present. Ready EXECUTE product (codex-power preferred for repo edits per routing; root may product if no spawn). Not finish.
+
+## Execute (iter 39)
+
+- Producted research138 / plan 186.39: geo UI not_applicable for 30 dual-proved
+  parity rows (cities/countries/countryGroups/states/zipcodes × 6).
+- `apply_ui_geo_reference_not_applicable_evidence` +
+  `GEO_UI_NOT_APPLICABLE_*` constants in generate_coverage_report.py.
+- check_coverage: evidence-gated NA accept (`not_applicable_ui_errors`).
+- Inventory tests + status counts live/vision **68**; implemented/contract **252**.
+- Wiki: `wiki/ui_geo_cities_not_applicable.md` + _index link (alpha order).
+- Regenerated coverage; complete=false; bulk 92 external-contract red; annual NA rejected red.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No geo UI tools. Ready for REVIEW.
+
+## SYNC pre-INDEPENDENT-REVIEW (iter 39)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.39 uncommitted: 30 geo UI not_applicable; live/vision 68; complete=false; offline 1565 pass.
+- Outbox: ready for IR of geo NA freeze package.
+
+## Independent review (iter 39)
+
+- Product 186.39 geo UI not_applicable: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (absence vision record; live dual pytest; currencies/locales later).
+- 30 NA rows integrity OK; bulk 92 red; annual NA rejected; complete false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 39)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.39 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 39)
+
+- IR product ACCEPT; no required product fixes (optional N1–N3 deferred).
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- check_coverage pass; geo NA 30; live/vision 68; complete false;
+  bulk 92 external-contract; annual NA rejected stay red.
+- Plan post-mortem filled. Wiki lint clean (project + memory).
+- Ready for COMMIT. Not node finish.
+
+## SYNC pre-COMMIT (iter 39)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.39 geo UI
+  not_applicable package. Not node finish (complete false).
+

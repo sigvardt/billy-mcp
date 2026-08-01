@@ -305,9 +305,47 @@ def ui_errors(ui_rows: list[dict[str, Any]], api_rows: list[dict[str, Any]]) -> 
     for row in ui_rows:
         row_id = str(row.get("id", "<missing-id>"))
         if row.get("parity_status") == "not_applicable":
-            errors.append(f"{row_id}: not_applicable requires verified UI evidence")
+            errors.extend(not_applicable_ui_errors(row, row_id))
         if row.get("vision_evidence") is not None:
             errors.append(f"{row_id}: UI frame evidence must not be retained")
+    return errors
+
+
+def not_applicable_ui_errors(row: dict[str, Any], row_id: str) -> list[str]:
+    """Require dual-session machine-readable evidence for UI not_applicable rows."""
+
+    errors: list[str] = []
+    qual = row.get("qualification")
+    if not isinstance(qual, dict):
+        errors.append(f"{row_id}: not_applicable requires a qualification object")
+        return errors
+    if qual.get("not_applicable_decision") != "accepted":
+        errors.append(
+            f"{row_id}: not_applicable requires qualification.not_applicable_decision=accepted"
+        )
+    if not isinstance(qual.get("evidence_code"), str) or not str(qual.get("evidence_code")).strip():
+        errors.append(f"{row_id}: not_applicable requires qualification.evidence_code")
+    if qual.get("sessions") != "dual_independent_ephemeral":
+        errors.append(
+            f"{row_id}: not_applicable requires dual_independent_ephemeral sessions evidence"
+        )
+    if not isinstance(qual.get("evidence_ref"), str) or not str(qual.get("evidence_ref")).strip():
+        errors.append(f"{row_id}: not_applicable requires qualification.evidence_ref")
+    for field in (
+        "discovered",
+        "implemented",
+        "contract_tested",
+        "live_tested",
+        "vision_verified",
+    ):
+        if row.get(field) is not True:
+            errors.append(f"{row_id}: not_applicable requires {field}=true")
+    if row.get("tool_name"):
+        errors.append(f"{row_id}: not_applicable rows must not register a tool_name")
+    if row.get("vision_evidence") is not None:
+        errors.append(f"{row_id}: not_applicable must not retain vision_evidence frames")
+    if not isinstance(row.get("evidence"), str) or len(str(row.get("evidence")).strip()) < 40:
+        errors.append(f"{row_id}: not_applicable requires non-empty dual-session evidence text")
     return errors
 
 

@@ -173,11 +173,12 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["complete"] is False
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 38
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 38
-    # API live remains 0 (out of scope); UI shell rows are live-qualified.
-    assert status["qualification"]["live_tested_rows"] == 38
-    assert status["qualification"]["vision_verified_rows"] == 38
+    geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 38 + geo_na
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 38 + geo_na
+    # API live remains 0 (out of scope); UI shell rows + geo NA dual-session freezes.
+    assert status["qualification"]["live_tested_rows"] == 38 + geo_na
+    assert status["qualification"]["vision_verified_rows"] == 38 + geo_na
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -381,6 +382,53 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     )
 
 
+def test_geo_ui_not_applicable_dual_session_freeze() -> None:
+    """research138: dual-proved geo/reference UI parity is not_applicable."""
+
+    _api_manifest, ui_manifest, _egress, status, _report = documents()
+    na_rows = [
+        row for row in ui_manifest["workflows"] if row.get("parity_status") == "not_applicable"
+    ]
+    assert len(na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    expected_prefixes = generator.GEO_UI_NOT_APPLICABLE_API_PREFIXES
+    for row in na_rows:
+        api_id = row["api_row_id"]
+        assert any(api_id.startswith(prefix) for prefix in expected_prefixes)
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["request_fields"] == []
+        assert row["filters"] in ([], {})
+        assert row["pagination"] is None
+        qual = row["qualification"]
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        assert "research138" in qual["evidence_ref"]
+        assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+        assert "ui_cities" not in row["tool_name"]
+    # currencies/locales still discovery_required (not dual-contrasted this package)
+    deferred = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(("api.currencies.", "api.locales."))
+    ]
+    assert deferred
+    assert all(row["parity_status"] == "discovery_required" for row in deferred)
+    assert all(row["implemented"] is False for row in deferred)
+    assert status["complete"] is False
+    assert (
+        status["qualification"]["live_tested_rows"]
+        == 38 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    )
+
+
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     """UI discovery does not use unsupported not-applicable or frame evidence."""
 
@@ -468,7 +516,11 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_beta": "ui_settings_beta_open",
         "ui.discovery.settings_subscription": "ui_settings_subscription_open",
     }
-    remaining = [row for row in workflows if row["id"] not in qualified_ids]
+    geo_na_rows = [row for row in workflows if row.get("parity_status") == "not_applicable"]
+    geo_na_ids = {row["id"] for row in geo_na_rows}
+    remaining = [
+        row for row in workflows if row["id"] not in qualified_ids and row["id"] not in geo_na_ids
+    ]
     qualified = [row for row in workflows if row["id"] in qualified_ids]
 
     assert {row["api_row_id"] for row in parity_rows} == {
@@ -480,8 +532,10 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["contract_tested"] is False for row in remaining)
     assert all(row["live_tested"] is False for row in remaining)
     assert all(row["vision_evidence"] is None for row in workflows)
-    assert all(row["parity_status"] != "not_applicable" for row in workflows)
+    assert all(row["parity_status"] != "not_applicable" for row in remaining)
+    assert all(row["parity_status"] != "not_applicable" for row in qualified)
     assert len(qualified) == 38
+    assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
         assert row["discovered"] is True

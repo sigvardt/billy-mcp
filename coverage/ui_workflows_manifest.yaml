@@ -4438,245 +4438,319 @@
     {
       "api_row_id": "api.cities.get",
       "area": "cities",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.get",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.cities.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.get (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "city"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.cities.list",
       "area": "cities",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.list",
-      "filters": {
-        "countryId": {
-          "required": true,
-          "type": "string"
-        }
-      },
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.cities.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.list (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection",
-        "countryId"
-      ],
-      "response_fields": [
-        "cities[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.cities.create",
       "area": "cities",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.create",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.cities.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.create (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "city"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates city",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.cities.update",
       "area": "cities",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.update",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.cities.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.update (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "city"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates city",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.cities.bulk_save",
       "area": "cities",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.bulk_save",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.cities.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.bulk_save (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.cities.bulk_delete",
       "area": "cities",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.cities.bulk_delete",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.cities.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.cities.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.cities.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.cities.bulk_delete (research138 dual-session: no nav label/href for cities; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -5694,477 +5768,637 @@
     {
       "api_row_id": "api.countryGroups.get",
       "area": "country_groups",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.get",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countryGroups.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.get (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "countryGroup"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countryGroups.list",
       "area": "country_groups",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.list",
-      "filters": {},
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.countryGroups.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.list (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "countryGroups[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countryGroups.create",
       "area": "country_groups",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.create",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countryGroups.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.create (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "countryGroup"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates countryGroup",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countryGroups.update",
       "area": "country_groups",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.update",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countryGroups.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.update (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "countryGroup"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates countryGroup",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countryGroups.bulk_save",
       "area": "country_groups",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.bulk_save",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countryGroups.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.bulk_save (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countryGroups.bulk_delete",
       "area": "country_groups",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countryGroups.bulk_delete",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countryGroups.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countryGroups.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countryGroups.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countryGroups.bulk_delete (research138 dual-session: no nav label/href for countryGroups; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.get",
       "area": "countries",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.get",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countries.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.get (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "country"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.list",
       "area": "countries",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.list",
-      "filters": {},
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.countries.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.list (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "countries[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.create",
       "area": "countries",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.create",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countries.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.create (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "country"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates country",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.update",
       "area": "countries",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.update",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countries.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.update (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "country"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates country",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.bulk_save",
       "area": "countries",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.bulk_save",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countries.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.bulk_save (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.countries.bulk_delete",
       "area": "countries",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.countries.bulk_delete",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.countries.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.countries.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.countries.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.countries.bulk_delete (research138 dual-session: no nav label/href for countries; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -11783,245 +12017,319 @@
     {
       "api_row_id": "api.states.get",
       "area": "states",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.get",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.states.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.get (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "state"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.states.list",
       "area": "states",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.list",
-      "filters": {
-        "countryId": {
-          "required": true,
-          "type": "string"
-        }
-      },
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.states.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.list (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection",
-        "countryId"
-      ],
-      "response_fields": [
-        "states[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.states.create",
       "area": "states",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.create",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.states.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.create (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "state"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates state",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.states.update",
       "area": "states",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.update",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.states.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.update (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "state"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates state",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.states.bulk_save",
       "area": "states",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.bulk_save",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.states.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.bulk_save (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.states.bulk_delete",
       "area": "states",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.states.bulk_delete",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.states.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.states.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.states.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.states.bulk_delete (research138 dual-session: no nav label/href for states; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -13039,245 +13347,319 @@
     {
       "api_row_id": "api.zipcodes.get",
       "area": "zipcodes",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.get",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.zipcodes.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.get (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "zipcode"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.zipcodes.list",
       "area": "zipcodes",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.list",
-      "filters": {
-        "countryId": {
-          "required": true,
-          "type": "string"
-        }
-      },
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.zipcodes.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.list (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection",
-        "countryId"
-      ],
-      "response_fields": [
-        "zipcodes[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.zipcodes.create",
       "area": "zipcodes",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.create",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.zipcodes.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.create (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "zipcode"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates zipcode",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.zipcodes.update",
       "area": "zipcodes",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.update",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.zipcodes.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.update (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "zipcode"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates zipcode",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.zipcodes.bulk_save",
       "area": "zipcodes",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.bulk_save",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.zipcodes.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.bulk_save (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.zipcodes.bulk_delete",
       "area": "zipcodes",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.zipcodes.bulk_delete",
+      "evidence": "research138 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path classes soft-empty identical to nonsense (zzzz-research138-nonexistent); contrast invoices/products/transactions real list shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.zipcodes.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* geo tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research138_geo_ui_dual+contrast; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.zipcodes.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.zipcodes.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.zipcodes.bulk_delete (research138 dual-session: no nav label/href for zipcodes; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "products",
+          "transactions",
+          "zzzz-research138-nonexistent"
+        ],
+        "deferred_families": [
+          "currencies",
+          "locales"
+        ],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research138_geo_ui_dual+contrast",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

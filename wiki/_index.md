@@ -49,6 +49,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
+[[ui_geo_cities_not_applicable|ui_geo_cities_not_applicable]]: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted.
+
 [[ui_integrations_open_shell|ui_integrations_open_shell]]: Read-only Billy integrations soft-empty shell classification (research124 freeze).
 
 [[ui_inventory_open_shell|ui_inventory_open_shell]]: Read-only Billy Lagermodul inventory shell open (research125 freeze).
