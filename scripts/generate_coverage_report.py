@@ -3409,6 +3409,7 @@ def apply_ui_settings_vat_open_shell_evidence(
     row: dict[str, Any],
     *,
     parity_of_api_list: bool = False,
+    parity_of_api_sales_tax_rulesets_list: bool = False,
 ) -> None:
     """Mark Indstillinger Momssatser (VAT) panel shell open evidence (research130).
 
@@ -3417,10 +3418,21 @@ def apply_ui_settings_vat_open_shell_evidence(
     Regelsæt + Satser for salg + Satser for køb. Soft seeds rejected. Distinct
     from company/accounting/invoicing/user. Never click Opret / Gem. No invent
     api_settings_*. Does not green other settings_* or annual_reports or
-    taxRates get/create/update/delete/bulk UI parity or other tax* / salesTax*
-    families. When ``parity_of_api_list`` is true, dual-counts
-    ``ui.parity.taxRates.list`` for ``api.taxRates.list`` (research158).
+    taxRates get/create/update/delete/bulk UI parity or nested salesTaxRules /
+    taxRateDeductionComponents / residual salesTaxRulesets ops. When
+    ``parity_of_api_list`` is true, dual-counts ``ui.parity.taxRates.list`` for
+    ``api.taxRates.list`` (research158). When
+    ``parity_of_api_sales_tax_rulesets_list`` is true, dual-counts
+    ``ui.parity.salesTaxRulesets.list`` for ``api.salesTaxRulesets.list``
+    (research159; Regelsæt section). Flags are mutually exclusive.
     """
+
+    if parity_of_api_list and parity_of_api_sales_tax_rulesets_list:
+        raise ValueError(
+            "apply_ui_settings_vat_open_shell_evidence: "
+            "parity_of_api_list and parity_of_api_sales_tax_rulesets_list "
+            "are mutually exclusive"
+        )
 
     row["method_or_route"] = (
         "mit.billy.dk /:org_slug/settings (read-only Indstillinger Momssatser/VAT "
@@ -3437,7 +3449,7 @@ def apply_ui_settings_vat_open_shell_evidence(
     ]
     row["filters"] = []
     row["pagination"] = None
-    if not parity_of_api_list:
+    if not parity_of_api_list and not parity_of_api_sales_tax_rulesets_list:
         row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
@@ -3454,7 +3466,8 @@ def apply_ui_settings_vat_open_shell_evidence(
         "company/accounting/invoicing/user); soft seeds rejected; no invent "
         "api_settings_*; never click Opret/Gem; does not green other settings_* "
         "or annual_reports or taxRates get/create/update/delete/bulk UI parity "
-        "or salesTax*/taxRateDeductionComponents UI parity; "
+        "or salesTaxRules/taxRateDeductionComponents/residual salesTaxRulesets "
+        "ops UI parity; "
         "API list filters/sort/pagination UI not producted; vision record "
         "tmp/vision-records/ui_settings_vat_open.json "
         "(Indstillinger Momssatser frames, accept)"
@@ -3463,6 +3476,12 @@ def apply_ui_settings_vat_open_shell_evidence(
         row["evidence"] = (
             f"{row['evidence']}; research158 dual-session reconfirm; "
             "maps api.taxRates.list to UI settings Momssatser shell open only"
+        )
+    if parity_of_api_sales_tax_rulesets_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research159 dual-session reconfirm; "
+            "maps api.salesTaxRulesets.list to UI settings Momssatser Regelsæt "
+            "shell open only"
         )
     row["discovered"] = True
     row["implemented"] = True
@@ -4297,6 +4316,10 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.taxRates.list":
             apply_ui_settings_vat_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.salesTaxRulesets.list":
+            apply_ui_settings_vat_open_shell_evidence(
+                row, parity_of_api_sales_tax_rulesets_list=True
+            )
         if api_row["id"] == "api.organizations.list":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.list":

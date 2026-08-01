@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 52 greened shells/parity + taxRates.list dual-count
-    # (research158) = 53 live/vision rows without GEO NA.
-    ui_shell_green = 53
+    # Prior 53 greened shells/parity + salesTaxRulesets.list dual-count
+    # (research159) = 54 live/vision rows without GEO NA.
+    ui_shell_green = 54
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -640,7 +640,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row.get("live_tested") is not True for row in product_prices)
     # related-shell families must stay red (research144/147 rejected pure NA).
     # taxRates.list dual-counted to Momssatser shell (research158); residual
-    # taxRates ops stay red below.
+    # taxRates ops stay red below. salesTaxRulesets.list dual-counted (research159);
+    # residual salesTaxRulesets ops stay red below.
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
@@ -648,7 +649,6 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         "api.daybookBalanceAccounts.",
         "api.postings.",
         "api.salesTaxRules.",
-        "api.salesTaxRulesets.",
         "api.files.",
     ):
         related = [
@@ -674,12 +674,29 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert tax_rates_list[0].get("live_tested") is True
     assert tax_rates_list[0].get("tool_name") == "ui_settings_vat_open"
     assert all(row.get("live_tested") is not True for row in tax_rates_residual)
+    rulesets_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.salesTaxRulesets.")
+    ]
+    assert rulesets_rows
+    assert all(row.get("parity_status") != "not_applicable" for row in rulesets_rows)
+    rulesets_list = [
+        row for row in rulesets_rows if row.get("api_row_id") == "api.salesTaxRulesets.list"
+    ]
+    rulesets_residual = [
+        row for row in rulesets_rows if row.get("api_row_id") != "api.salesTaxRulesets.list"
+    ]
+    assert len(rulesets_list) == 1
+    assert rulesets_list[0].get("live_tested") is True
+    assert rulesets_list[0].get("tool_name") == "ui_settings_vat_open"
+    assert all(row.get("live_tested") is not True for row in rulesets_residual)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 53 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 54 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 153
+    assert status["qualification"]["live_tested_rows"] == 154
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -739,6 +756,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.special.user_organizations",
         "ui.discovery.settings_vat",
         "ui.parity.taxRates.list",
+        "ui.parity.salesTaxRulesets.list",
         "ui.discovery.settings_users",
         "ui.parity.users.list",
         "ui.discovery.settings_access_token",
@@ -794,6 +812,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.special.user_organizations": "ui_settings_user_organizations_open",
         "ui.discovery.settings_vat": "ui_settings_vat_open",
         "ui.parity.taxRates.list": "ui_settings_vat_open",
+        "ui.parity.salesTaxRulesets.list": "ui_settings_vat_open",
         "ui.discovery.settings_users": "ui_settings_users_open",
         "ui.parity.users.list": "ui_settings_users_open",
         "ui.discovery.settings_access_token": "ui_settings_access_token_open",
@@ -818,7 +837,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 53
+    assert len(qualified) == 54
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -923,6 +942,28 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.taxRates.delete",
         "ui.parity.taxRates.bulk_save",
         "ui.parity.taxRates.bulk_delete",
+    ):
+        red_row = next(row for row in remaining if row["id"] == red_id)
+        assert red_row["discovered"] is False
+        assert red_row["live_tested"] is False
+        assert red_row["parity_status"] == "discovery_required"
+    rulesets_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.salesTaxRulesets.list"
+    )
+    assert rulesets_parity["api_row_id"] == "api.salesTaxRulesets.list"
+    assert rulesets_parity["tool_name"] == "ui_settings_vat_open"
+    assert rulesets_parity["parity_status"] == "shell_open_only"
+    assert "api.salesTaxRulesets.list" in rulesets_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in rulesets_parity["evidence"]
+    assert "research159" in rulesets_parity["evidence"]
+    assert "Regelsæt" in rulesets_parity["evidence"] or "rulesets" in rulesets_parity["evidence"]
+    for red_id in (
+        "ui.parity.salesTaxRulesets.get",
+        "ui.parity.salesTaxRulesets.create",
+        "ui.parity.salesTaxRulesets.update",
+        "ui.parity.salesTaxRulesets.delete",
+        "ui.parity.salesTaxRulesets.bulk_save",
+        "ui.parity.salesTaxRulesets.bulk_delete",
     ):
         red_row = next(row for row in remaining if row["id"] == red_id)
         assert red_row["discovered"] is False
