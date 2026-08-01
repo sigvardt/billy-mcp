@@ -1,7 +1,7 @@
 ---
 name: ui_geo_cities_not_applicable
 title: Geo and reference API UI parity not applicable
-desc: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted.
+desc: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted. Currencies/locales: see ui_currencies_locales_not_applicable (research139).
 tags: [billy, ui, parity, geo, cities, not_applicable]
 sources:
   - https://www.billy.dk/api/
@@ -9,7 +9,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - coverage/ui_workflows_manifest.yaml
 created: 2026-08-01T02:15:00Z
-updated: 2026-08-01T02:15:00Z
+updated: 2026-08-01T02:45:00Z
 ---
 
 # Geo and reference API UI parity not applicable
@@ -29,8 +29,8 @@ non-production organisation support that classification for:
 - `states`
 - `zipcodes`
 
-**Not** greened this freeze: `currencies`, `locales` (nav absence only; path
-contrast deferred).
+`currencies` and `locales` were deferred here (nav-only) and are greened NA under
+research139 path contrast in [[ui_currencies_locales_not_applicable]].
 
 ## Dual-session evidence (non-sensitive)
 

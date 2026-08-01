@@ -20,18 +20,21 @@ DOCS_URL = "https://www.billy.dk/api/"
 DOCS_ETAG = "wcw4x9hqvu3603"
 DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 
-# Dual-proved geo/reference UI families (research138): no equivalent mit.billy.dk
-# workflow (nav absence + soft-empty path class == nonsense). Currencies/locales
-# deferred until dual path contrast is recorded.
+# Dual-proved geo/reference UI families (research138 + research139): no equivalent
+# mit.billy.dk workflow (nav absence + soft-empty path class == nonsense).
+# research139 adds currencies/locales after dual path contrast.
 GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.cities.",
     "api.countries.",
     "api.countryGroups.",
+    "api.currencies.",
+    "api.locales.",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 30  # five families × six ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 42  # seven families × six ops
+GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -3422,7 +3425,7 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
 
 
 def geo_ui_not_applicable_api_row(api_row_id: str) -> bool:
-    """Return whether dual-session research138 freezes this API row as UI NA."""
+    """Return whether dual-session research freezes this API row as UI NA."""
 
     return any(api_row_id.startswith(prefix) for prefix in GEO_UI_NOT_APPLICABLE_API_PREFIXES)
 
@@ -3430,24 +3433,44 @@ def geo_ui_not_applicable_api_row(api_row_id: str) -> bool:
 def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     """Record dual-session absence of a Billy UI workflow for geo/reference API ops.
 
-    research138: two independent ephemeral READY sessions on the dedicated
-    non-production organisation found no geo/city/country/state/zip nav labels
-    or hrefs. Candidate path classes (cities, countries, zipcodes, states,
-    countryGroups, settings/cities, …) render soft-empty SPA chrome only
-    (body_len 127, h1_count 0) identical to nonsense paths, while known shells
-    (invoices/products/transactions) expose list headings. Design §10.2 allows
-    UI parity not_applicable only when no equivalent UI workflow exists —
-    accepted here. Contrast annual_reports where nav exists → NA rejected.
+    research138: geo families (cities/countries/countryGroups/states/zipcodes).
+    research139: currencies + locales after dual path contrast closed the
+    research138 deferral. Both: two independent ephemeral READY sessions found
+    no matching nav labels/hrefs; candidate path classes render soft-empty SPA
+    chrome only (body_len 127, h1_count 0) identical to nonsense paths, while
+    known shells expose list headings. Design §10.2 allows UI parity
+    not_applicable only when no equivalent UI workflow exists — accepted here.
+    Contrast annual_reports where nav exists → NA rejected.
     """
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
+    research_id = "research139" if is_research139 else "research138"
+    evidence_ref = (
+        "research139_currencies_locales_dual+contrast"
+        if is_research139
+        else "research138_geo_ui_dual+contrast"
+    )
+    nonsense_path = (
+        "zzzz-research139-nonexistent" if is_research139 else "zzzz-research138-nonexistent"
+    )
+    dual_agree_flag = (
+        "dual_agree_no_currency_locale_nav" if is_research139 else "dual_agree_no_geo_nav"
+    )
+    family_label = "currency/locale" if is_research139 else "geo"
+    contrast_shells = (
+        "invoices/products/transactions/vat-declarations/settings"
+        if is_research139
+        else "invoices/products/transactions"
+    )
     row["method_or_route"] = (
         f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
-        f"(research138 dual-session: no nav label/href for {resource}; "
+        f"({research_id} dual-session: no nav label/href for {resource}; "
         "candidate path classes soft-empty SPA chrome-only body_len 127 "
         "h1_count 0 identical to nonsense paths; known list shells contrast "
-        "with h1 Fakturaer/Produkter/Posteringer; "
+        "with h1 Fakturaer/Produkter/Posteringer"
+        f"{'/Momsangivelser/Indstillinger' if is_research139 else ''}; "
         f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
         "not_applicable accepted)"
     )
@@ -3458,16 +3481,16 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     row["pagination"] = None
     row["test_references"] = [TEST_REFERENCE]
     row["evidence"] = (
-        "research138 dual independent ephemeral browser sessions (no "
-        "BILLY_API_TOKEN): dual_agree_no_geo_nav true; candidate geo path "
-        "classes soft-empty identical to nonsense "
-        "(zzzz-research138-nonexistent); contrast invoices/products/"
-        "transactions real list shells with h1; design §10.2 UI parity "
+        f"{research_id} dual independent ephemeral browser sessions (no "
+        f"BILLY_API_TOKEN): {dual_agree_flag} true; candidate {family_label} path "
+        f"classes soft-empty identical to nonsense "
+        f"({nonsense_path}); contrast {contrast_shells} real shells with h1; "
+        "design §10.2 UI parity "
         f"not_applicable accepted for {api_row_id}; "
         f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
-        "no ui_* geo tool; API lane unchanged (reads offline-green, "
+        f"no ui_* {family_label} tool; API lane unchanged (reads offline-green, "
         "live_tested false out_of_scope_by_user; bulk external-contract red); "
-        "evidence_ref=research138_geo_ui_dual+contrast; "
+        f"evidence_ref={evidence_ref}; "
         f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}"
     )
     row["discovered"] = True
@@ -3480,7 +3503,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     row["sensitivity"] = "low"
     row["side_effects"] = (
         "none; UI parity classified not_applicable — no browser workflow tool "
-        "and no records may be created through a geo UI tool"
+        "and no records may be created through a geo/reference UI tool"
     )
     row["cleanup"] = "not_applicable; no UI tool and no disposable records for this parity row"
     row["errors"] = [
@@ -3488,6 +3511,21 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         "UI_CHANGED",
         GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
     ]
+    contrast_controls = [
+        "invoices",
+        "products",
+        "transactions",
+        nonsense_path,
+    ]
+    if is_research139:
+        contrast_controls = [
+            "invoices",
+            "products",
+            "transactions",
+            "vat-declarations",
+            "settings",
+            nonsense_path,
+        ]
     row["qualification"] = {
         "kind": "ui_not_applicable",
         "evidence_code": GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
@@ -3500,14 +3538,9 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         "sessions": "dual_independent_ephemeral",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research138_geo_ui_dual+contrast",
-        "contrast_controls": [
-            "invoices",
-            "products",
-            "transactions",
-            "zzzz-research138-nonexistent",
-        ],
-        "deferred_families": ["currencies", "locales"],
+        "evidence_ref": evidence_ref,
+        "contrast_controls": contrast_controls,
+        "deferred_families": [],
     }
 
 

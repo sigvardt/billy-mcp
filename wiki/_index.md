@@ -41,6 +41,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
 
+[[ui_currencies_locales_not_applicable|ui_currencies_locales_not_applicable]]: Dual-session research139 freeze — no equivalent mit.billy.dk workflow for currencies/locales API parity; soft-empty paths match nonsense; NA accepted.
+
 [[ui_daybooks_open_shell|ui_daybooks_open_shell]]: Read-only Billy daybook editor (Kassekladde) shell contract (research117 freeze).
 
 [[ui_debtor_balances_list_shell|ui_debtor_balances_list_shell]]: Read-only headless ui_debtor_balances_list contract for Billy debtor balances (Tilgodehavender) list shell open only.
@@ -49,7 +51,7 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
-[[ui_geo_cities_not_applicable|ui_geo_cities_not_applicable]]: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted.
+[[ui_geo_cities_not_applicable|ui_geo_cities_not_applicable]]: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted. Currencies/locales: see ui_currencies_locales_not_applicable (research139).
 
 [[ui_integrations_open_shell|ui_integrations_open_shell]]: Read-only Billy integrations soft-empty shell classification (research124 freeze).
 

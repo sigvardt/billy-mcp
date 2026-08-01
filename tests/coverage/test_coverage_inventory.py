@@ -383,7 +383,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
-    """research138: dual-proved geo/reference UI parity is not_applicable."""
+    """research138/139: dual-proved geo/reference UI parity is not_applicable."""
 
     _api_manifest, ui_manifest, _egress, status, _report = documents()
     na_rows = [
@@ -409,19 +409,30 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["evidence_code"] == generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
-        assert "research138" in qual["evidence_ref"]
+        resource = api_id.split(".", 2)[1]
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
+            assert "research139" in qual["evidence_ref"]
+            assert "research139" in row["evidence"]
+        else:
+            assert "research138" in qual["evidence_ref"]
+            assert "research138" in row["evidence"]
         assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in row["evidence"]
         assert "not_applicable accepted" in row["method_or_route"]
         assert "ui_cities" not in row["tool_name"]
-    # currencies/locales still discovery_required (not dual-contrasted this package)
-    deferred = [
+        assert "ui_currencies" not in row["tool_name"]
+        assert "ui_locales" not in row["tool_name"]
+        assert qual.get("deferred_families") in (None, [])
+    # currencies/locales dual-proved (research139) — no longer discovery_required
+    currency_locale = [
         row
         for row in ui_manifest["workflows"]
         if str(row.get("api_row_id") or "").startswith(("api.currencies.", "api.locales."))
     ]
-    assert deferred
-    assert all(row["parity_status"] == "discovery_required" for row in deferred)
-    assert all(row["implemented"] is False for row in deferred)
+    assert len(currency_locale) == 12
+    assert all(row["parity_status"] == "not_applicable" for row in currency_locale)
+    assert all(row["implemented"] is True for row in currency_locale)
+    assert all(row["live_tested"] is True for row in currency_locale)
+    assert all(row["tool_name"] == "" for row in currency_locale)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]

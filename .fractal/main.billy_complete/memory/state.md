@@ -6,28 +6,27 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T01:05:00Z
+updated: 2026-08-01T02:50:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 36 COMMIT. Tip product dual-count transactions parity
-  186.36 (`ui.parity.transactions.list`, `ae4f0fe`). Coverage live/vision 38;
-  complete false.
-- Discovery still red (1): annual_reports (Upsedasse inaccessible freeze).
-- Residual 29 offline writes blocked; 92 bulk red. Next parity dual-count or
-  bulk offline work. No invent api_annual_*. Not node finish.
-- Review: dual-count `ui.parity.transactions.list` **ACCEPT** (IR 186.36).
+- Continue mode iter 40 FIX-VERIFY. Product currencies/locales UI not_applicable
+  186.40 uncommitted (live/vision 80; implemented/contract 264). complete false.
+- Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
+- 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
+- Review: currencies/locales UI not_applicable 186.40 **ACCEPT**. Not node finish.
 
 
 ## Verification
 
-- Last product: `ui_settings_subscription_open` dual-session + vision purge_verified
-  (FIX-VERIFY N1; tip `88a369e`).
-- Offline baseline product: 1561 passed non-live.
-- Live baseline: 37 UI discovery/parity rows green.
+- Last product: currencies/locales UI not_applicable freeze (12 rows; total NA 42;
+  live/vision 80). Uncommitted pending COMMIT.
+- Offline baseline: 1565 passed non-live (35 deselected).
+- Live baseline inventory: 80 UI live/vision green (38 shells + 42 NA).
+
 
 ## Review decisions (authoritative)
 
@@ -2833,3 +2832,134 @@ updated: 2026-08-01T01:05:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
+
+## SYNC (iter 40 continue)
+
+- Continue mode: worktree clean at tip `37de78a` (186.39 geo UI not_applicable
+  freeze + bookkeeping on origin/main.billy_complete).
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children; all historical children terminal (no active steers).
+- complete=false; implemented/contract 252; live/vision 68; 92 bulk red
+  external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; annual NA
+  rejected stay red ANNUAL_REPORTS_ORG_INACCESSIBLE; residual UI parity open
+  (~189 non-bulk + bulk parity still red).
+- Outbox D675434C continue status. Private 1D98C31C residual pointer.
+- Next PREPARE then residual UI parity (currencies/locales dual-contrast NA or
+  dual-count salesTaxReturns.list per plan 186.39). Not finish.
+
+## PREPARE (iter 40)
+
+- Parent `main`: fetch + merge Already up to date; no merge commit.
+- Children: 62 still show commits ahead of mainline; none have unmerged product to take.
+  - `ui_auth_status`: tip is stale subset (browser ~376 lines vs mainline ~5550; models/server similarly smaller); product already on mainline via later evolution — do not merge.
+  - `wave5u_probe_contract_codex_fallback`: wiki tip would regress mainline `wave5u_method_probe_contract.md` (child ~178 lines vs mainline ~215) — do not merge.
+  - `wave5t_ui_auth_discovery_fallback`: mainline already has `wiki/wave5t_ui_auth_discovery.md` (content differs; product already integrated via later evolution) — skip.
+  - `ui_auth_credentials_research_codex_fallback`: fallback research page superseded by auth_credentials_pre_submit + ui_login_surface_contract + credentialed_session_discovery_protocol on mainline — skip.
+  - Remaining ahead children: init-only, failed-iteration bookkeeping, zero product paths — not merged.
+- No running children. No material integration. No outbox integration note.
+- Ready RESEARCH: residual UI parity (currencies/locales dual-contrast NA or dual-count salesTaxReturns.list per 186.39). Not finish.
+
+## SYNC pre-RESEARCH (iter 40)
+
+- Unread inbox/feed: empty. Private 1D98C31C residual pointer reacted (+).
+- Saved: empty. No running children.
+- PREPARE already done (parent up to date; no child merges).
+- Ready RESEARCH: currencies/locales dual-path freeze then NA-or-shell product
+  handoff; else dual-count salesTaxReturns.list; bulk external-contract red;
+  annual org_inaccessible red. Not finish.
+
+## Research (iter 40)
+
+- research139: dual-session headless currencies/locales UI freeze.
+- Docs ETag/MD5 unchanged (`wcw4x9hqvu3603` / `8b94b0135c91fd15fe54ea33e088a4be`).
+- Dual READY; no currency/locale/valuta/sprog nav labels/hrefs; candidates soft-empty
+  body_len 127 / h1=0 **same as nonsense**; known shells (invoices/products/
+  transactions/vat-declarations/settings) have h1 + larger body.
+- Decision: product **not_applicable** for ui.parity.currencies.* + locales.*
+  (12 rows); no ui_currencies_* / ui_locales_* tools.
+- Alternate residual ready: dual-count salesTaxReturns.list via existing
+  ui_vat_declarations_list (not primary this brief).
+- Evidence: tmp/research139_currencies_locales_dual.json,
+  tmp/research139_currencies_locales_contrast.json; brief tmp/grok-research.md.
+- Not finish. Next PLAN → EXECUTE (codex-power for repo product per routing).
+
+## SYNC pre-PLAN (iter 40)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- research139 brief present (`tmp/grok-research.md`); dual+contrast JSON present.
+- Ready PLAN product handoff for currencies/locales UI not_applicable (12 rows).
+- Routing: research=grok (done); product EXECUTE=codex-power preferred. Not finish.
+
+## Plan (iter 40)
+
+- Plan: `plans/2026-08-01T02:42:22.732Z-186.40-ui_currencies_locales_not_applicable.md`
+  — research139: evidence-backed UI not_applicable for 12 dual-proved
+  currencies+locales parity rows; extend GEO_UI_NOT_APPLICABLE prefixes/count
+  30→42; inventory tests live/vision 68→80; wiki; no currency/locale UI tools;
+  complete false; salesTaxReturns dual-count deferred; no children.
+- Ready for EXECUTE (codex-power preferred for repo product per routing).
+
+## SYNC pre-EXECUTE (iter 40)
+
+- Unread inbox/feed: empty. Private 8E251C3E plan pointer reacted (+).
+- Saved: empty. No running children.
+- Plan 186.40 + research139 brief present. Ready EXECUTE product (codex-power
+  preferred for repo edits per routing; root may product if no spawn). Not finish.
+
+
+## Execute (iter 40)
+
+- Producted research139 / plan 186.40: currencies+locales UI not_applicable for
+  12 dual-proved parity rows.
+- Extended `GEO_UI_NOT_APPLICABLE_API_PREFIXES` with api.currencies./api.locales.;
+  ROW_COUNT 30→42; research139 resource set; applicator evidence_ref per family.
+- Inventory tests updated (no deferred discovery_required for currencies/locales).
+- Wiki: `wiki/ui_currencies_locales_not_applicable.md` + _index; geo wiki deferral closed.
+- Regenerated coverage; live/vision **80**; implemented/contract **264**; complete=false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No currency/locale UI tools. Ready for REVIEW.
+
+## SYNC pre-INDEPENDENT-REVIEW (iter 40)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.40 uncommitted: 12 currencies/locales UI not_applicable; live/vision
+  80; implemented/contract 264; complete=false; offline 1565 pass.
+- Outbox: ready for IR of currencies/locales NA freeze package.
+
+## Independent review (iter 40)
+
+- Product 186.40 currencies/locales UI not_applicable: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (live dual pytest;
+  tmp-only dual JSON; salesTaxReturns dual-count later).
+- 12 NA rows integrity OK; total NA 42; bulk 92 red; annual NA rejected;
+  complete false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 40)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.40 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+
+## FIX-VERIFY (iter 40)
+
+- IR product ACCEPT; no required product fixes (optional N1–N3 deferred).
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- check_coverage pass; currencies/locales NA 12; total NA 42; live/vision 80;
+  complete false; bulk 92 external-contract; annual NA rejected stay red.
+- Plan post-mortem filled. Wiki lint clean (project + memory).
+- Ready for COMMIT. Not node finish.
+
+## SYNC pre-COMMIT (iter 40)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.40
+  currencies/locales UI not_applicable package. Not node finish (complete false).
+
+## COMMIT (iter 40)
+
+- `fractal commit` product: currencies/locales UI not_applicable freeze for dual-proved
+  reference families.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
