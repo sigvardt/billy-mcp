@@ -1334,7 +1334,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research131 dual-session headless observation + ui_settings_users_open product; shell open only (hub /:org_slug/settings + click Brugere \u2192 path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_users, Brugere/Revisorer og bogholdere markers; distinct from company/accounting/invoicing/user/vat); soft seeds rejected; no invent api_settings_*; never click Invit\u00e9r/Overdrag/Gem; does not green other settings_* or annual_reports; vision record tmp/vision-records/ui_settings_users_open.json (Indstillinger Brugere frames, accept)",
+      "evidence": "research131 dual-session headless observation + ui_settings_users_open product; shell open only (hub /:org_slug/settings + click Brugere \u2192 path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_users, Brugere/Revisorer og bogholdere markers; distinct from company/accounting/invoicing/user/vat); soft seeds rejected; no invent api_settings_*; never click Invit\u00e9r/Overdrag/Gem; does not green other settings_* or annual_reports or users get/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_users_open.json (Indstillinger Brugere frames, accept)",
       "filters": [],
       "id": "ui.discovery.settings_users",
       "implemented": true,
@@ -13245,59 +13245,46 @@
     {
       "api_row_id": "api.users.list",
       "area": "users",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.users.list",
-      "filters": {},
+      "evidence": "research131 dual-session headless observation + ui_settings_users_open product; shell open only (hub /:org_slug/settings + click Brugere \u2192 path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_users, Brugere/Revisorer og bogholdere markers; distinct from company/accounting/invoicing/user/vat); soft seeds rejected; no invent api_settings_*; never click Invit\u00e9r/Overdrag/Gem; does not green other settings_* or annual_reports or users get/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_users_open.json (Indstillinger Brugere frames, accept); research141 dual-session reconfirm; maps api.users.list to UI settings Brugere shell open only",
+      "filters": [],
       "id": "ui.parity.users.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.users.list",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/settings (read-only Indstillinger Brugere/org users panel open via hub + side-nav click Brugere; never click Invit\u00e9r/Overdrag/Gem/Opret/Tilf\u00f8j/Upload)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
-        ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
-      },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
+      "pagination": null,
+      "parity_status": "shell_open_only",
+      "request_fields": [],
       "response_fields": [
-        "users[]",
-        "meta.paging"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "users_panel_markers_present"
       ],
       "sensitivity": "low",
       "side_effects": "none",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_settings_users_open.py",
+        "tests/live/test_ui_settings_access_token_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_settings_users_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

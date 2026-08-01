@@ -3105,7 +3105,11 @@ def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_settings_users_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_settings_users_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark Indstillinger Brugere (org users) panel shell open evidence (research131).
 
     Empty-input tool; open hub /:org_slug/settings then observe-only click
@@ -3113,7 +3117,9 @@ def apply_ui_settings_users_open_shell_evidence(row: dict[str, Any]) -> None:
     Brugere + Revisorer og bogholdere. Soft seeds rejected. Distinct from
     company/accounting/invoicing/user/vat. Never click Invitér / Overdrag /
     Gem. No invent api_settings_*. Does not green other settings_* or
-    annual_reports.
+    annual_reports or users get/update/bulk UI parity. When
+    ``parity_of_api_list`` is true, dual-counts ``ui.parity.users.list`` for
+    ``api.users.list`` (research141).
     """
 
     row["method_or_route"] = (
@@ -3131,7 +3137,8 @@ def apply_ui_settings_users_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_SETTINGS_USERS_OPEN_MODEL_TEST_REFERENCE,
@@ -3147,10 +3154,16 @@ def apply_ui_settings_users_open_shell_evidence(row: dict[str, Any]) -> None:
         "Brugere/Revisorer og bogholdere markers; distinct from "
         "company/accounting/invoicing/user/vat); soft seeds rejected; no invent "
         "api_settings_*; never click Invitér/Overdrag/Gem; does not green other "
-        "settings_* or annual_reports; vision record "
-        "tmp/vision-records/ui_settings_users_open.json "
+        "settings_* or annual_reports or users get/update/bulk UI parity; "
+        "API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_settings_users_open.json "
         "(Indstillinger Brugere frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research141 dual-session reconfirm; "
+            "maps api.users.list to UI settings Brugere shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -3697,6 +3710,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.salesTaxReturns.list":
             apply_ui_vat_declarations_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.users.list":
+            apply_ui_settings_users_open_shell_evidence(row, parity_of_api_list=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)

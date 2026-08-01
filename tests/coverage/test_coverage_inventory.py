@@ -174,8 +174,8 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # 38 shells + dual-count parity lists (incl. salesTaxReturns.list) = 39 UI shells.
-    ui_shell_green = 39
+    # 39 shells + dual-count users.list = 40 UI shells.
+    ui_shell_green = 40
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -442,7 +442,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 39 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 40 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
 
 
@@ -490,6 +490,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_user",
         "ui.discovery.settings_vat",
         "ui.discovery.settings_users",
+        "ui.parity.users.list",
         "ui.discovery.settings_access_token",
         "ui.discovery.settings_beta",
         "ui.discovery.settings_subscription",
@@ -531,6 +532,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_user": "ui_settings_user_open",
         "ui.discovery.settings_vat": "ui_settings_vat_open",
         "ui.discovery.settings_users": "ui_settings_users_open",
+        "ui.parity.users.list": "ui_settings_users_open",
         "ui.discovery.settings_access_token": "ui_settings_access_token_open",
         "ui.discovery.settings_beta": "ui_settings_beta_open",
         "ui.discovery.settings_subscription": "ui_settings_subscription_open",
@@ -553,7 +555,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 39
+    assert len(qualified) == 40
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -602,6 +604,23 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.salesTaxReturns.update",
         "ui.parity.salesTaxReturns.bulk_save",
         "ui.parity.salesTaxReturns.bulk_delete",
+    ):
+        red_row = next(row for row in remaining if row["id"] == red_id)
+        assert red_row["discovered"] is False
+        assert red_row["live_tested"] is False
+        assert red_row["parity_status"] == "discovery_required"
+    users_parity = next(row for row in qualified if row["id"] == "ui.parity.users.list")
+    assert users_parity["api_row_id"] == "api.users.list"
+    assert users_parity["tool_name"] == "ui_settings_users_open"
+    assert users_parity["parity_status"] == "shell_open_only"
+    assert "api.users.list" in users_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in users_parity["evidence"]
+    assert "research141" in users_parity["evidence"]
+    for red_id in (
+        "ui.parity.users.get",
+        "ui.parity.users.update",
+        "ui.parity.users.bulk_save",
+        "ui.parity.users.bulk_delete",
     ):
         red_row = next(row for row in remaining if row["id"] == red_id)
         assert red_row["discovered"] is False

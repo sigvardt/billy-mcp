@@ -6,15 +6,14 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T04:00:00Z
+updated: 2026-08-01T04:32:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 41 COMMIT done (`bb86b36` 186.41 dual-count). PREPARE done. Tip `e26f208` (186.40 currencies/locales UI
-  NA). complete false.
+- Continue mode iter 42 EXECUTE 186.42 users.list dual-count uncommitted. Tip base `15cb25a`. complete false. live/vision 82.
 - Live/vision 81 (39 shell/parity + 42 NA); implemented/contract 265.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
@@ -3104,3 +3103,111 @@ updated: 2026-08-01T04:00:00Z
   commit.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 42 continue)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- Branch clean at `15cb25a` (186.41 dual-count + memory bookkeeping). origin synced.
+- Coverage: complete=false; live/vision 81; implemented/contract 265.
+- Open: residual UI parity red; annual_reports inaccessible; 92 bulk external-contract red.
+- Outbox status posted. Ready PREPARE next residual UI product. Not finish.
+
+## PREPARE (iter 42)
+
+- Parent `main`: already up to date (no upstream commits).
+- Children: many historical branches still listed; none have unmerged material product.
+  - `ui_auth_status` three-dot product diff is already on mainline via `cf38b5c` integrate; skip re-merge.
+  - Other children with tip commits are init-only, failed review scaffolding, or empty product diffs.
+- No child merges this iteration. No integration outbox (nothing material).
+- Worktree has local memory/state.md dirty from SYNC (expected; commit later).
+- Ready PLAN residual UI parity next product. Not finish.
+
+## SYNC pre-RESEARCH (iter 42)
+
+- Unread inbox/feed: empty. Private 147AC837 continue context reacted (+).
+- Saved: empty. No running children.
+- PREPARE already done this iteration. Ready RESEARCH residual UI product pick.
+- Not finish.
+
+## RESEARCH (iter 42 / research141)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual headless residual probe: users/vat/uploads/accounting tools dual-ok; /users soft-empty;
+  /accounts rewrites to settings Kontoplan; many reference path seeds soft-empty.
+- Decision: dual-count ui.parity.users.list via ui_settings_users_open (live/vision 81→82).
+- Defer: taxRates multi-panel, files weak map, accounts Kontoplan, NA package natures/modifiers.
+- Brief: tmp/grok-research.md. Dual JSON: tmp/research141_residual_parity_dual.json.
+- Not finish. Next PLAN.
+
+## SYNC pre-PLAN (iter 42)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- research141 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for users.list dual-count (1 row).
+- Not finish.
+
+## Plan (iter 42)
+
+- Plan: `plans/2026-08-01T03:40:16.867Z-186.42-ui_users_list_dual_count.md`
+  — research141: dual-count ui.parity.users.list onto existing
+  ui_settings_users_open; inventory live/vision 81→82; wiki dual-count note;
+  no new tools; get/update/bulk stay red; complete false; no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC pre-EXECUTE (iter 42)
+
+- Unread inbox/feed: empty. Private 159A4F0B plan pointer reacted (+).
+- Saved: empty. No running children.
+- Plan 186.42 + research141 brief present. Ready EXECUTE product dual-count
+  users.list (root; no children). Not finish.
+
+## Execute (iter 42)
+
+- Producted research141 / plan 186.42: dual-count ui.parity.users.list onto
+  ui_settings_users_open (parity_of_api_list on settings users applicator;
+  parity_status shell_open_only).
+- Inventory tests: qualified shells 39→40; live/vision 81→82; get/update/bulk
+  users parity stay red.
+- Wiki: ui_settings_users_open_shell dual-count note + _index desc.
+- Regenerated coverage: implemented/contract 266; live/vision 82; complete false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC pre-INDEPENDENT-REVIEW (iter 42)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.42 uncommitted: dual-count users.list; live/vision 82;
+  implemented/contract 266; complete=false; offline 1565 pass.
+- Outbox: ready for IR of dual-count package. Not finish.
+
+## Independent review (iter 42)
+
+- Product 186.42 users.list dual-count: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (tmp dual JSON not
+  commit; discovery evidence wording).
+- One dual-count row integrity OK; get/update/bulk red; bulk 92 red; annual red;
+  complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 42)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.42 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 42)
+
+- IR product ACCEPT; no required product fixes (optional N1–N2 deferred).
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- check_coverage pass; users.list dual-count green; live/vision 82;
+  implemented/contract 266; complete false; bulk 92 external-contract; annual
+  NA rejected stay red.
+- Plan post-mortem filled. Wiki lint clean (project + memory).
+- Ready for COMMIT. Not node finish.
+
+## SYNC pre-COMMIT (iter 42)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.42
+  users.list dual-count package. Not node finish (complete false).
+
