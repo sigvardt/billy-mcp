@@ -6,16 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T11:01:00Z
+updated: 2026-08-01T11:10:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **54** pre-COMMIT SYNC after FIX-VERIFY clean 186.54 uncommitted.
-  live/vision **147**; implemented/contract **331**; complete false. Not node finish.
-- Product: ui_invoices_create_open ready fractal commit. Not finish.
+- Continue mode iter **54** COMMIT 186.54 product `f902848`. live/vision
+  **147**; implemented/contract **331**; complete false. Not node finish.
+- ui_invoices_create_open + dual-count invoices.create + discovery invoices_create.
+- Bulk 92 + annual_reports still red.
 
 
 ## SYNC (iter 53)
@@ -4877,4 +4878,10 @@ updated: 2026-08-01T11:01:00Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1578 offline pass; IR ACCEPT). Ready COMMIT 186.54
   ui_invoices_create_open package. Not node finish (complete false).
+
+## COMMIT (iter 54)
+
+- `fractal commit` product: ui invoices create open dual-count (`f902848`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
