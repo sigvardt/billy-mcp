@@ -389,7 +389,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
-    """research138/139: dual-proved geo/reference UI parity is not_applicable."""
+    """research138/139/142: dual-proved geo/reference UI parity is not_applicable."""
 
     _api_manifest, ui_manifest, _egress, status, _report = documents()
     na_rows = [
@@ -416,7 +416,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES:
+            assert "research142" in qual["evidence_ref"]
+            assert "research142" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
             assert "research139" in qual["evidence_ref"]
             assert "research139" in row["evidence"]
         else:
@@ -427,6 +430,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_cities" not in row["tool_name"]
         assert "ui_currencies" not in row["tool_name"]
         assert "ui_locales" not in row["tool_name"]
+        assert "ui_account_natures" not in row["tool_name"]
+        assert "ui_balance_modifiers" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
     # currencies/locales dual-proved (research139) — no longer discovery_required
     currency_locale = [
@@ -439,6 +444,19 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["implemented"] is True for row in currency_locale)
     assert all(row["live_tested"] is True for row in currency_locale)
     assert all(row["tool_name"] == "" for row in currency_locale)
+    # accountNatures/balanceModifiers dual-proved (research142)
+    natures_modifiers = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(
+            ("api.accountNatures.", "api.balanceModifiers.")
+        )
+    ]
+    assert len(natures_modifiers) == 12
+    assert all(row["parity_status"] == "not_applicable" for row in natures_modifiers)
+    assert all(row["implemented"] is True for row in natures_modifiers)
+    assert all(row["live_tested"] is True for row in natures_modifiers)
+    assert all(row["tool_name"] == "" for row in natures_modifiers)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]

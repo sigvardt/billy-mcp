@@ -6,27 +6,29 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T04:41:00Z
+updated: 2026-08-01T03:59:22Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 42 COMMIT done (`0e037f9` 186.42 users.list dual-count). complete false.
-- Live/vision 82 (39 shell/parity + 42 NA); implemented/contract 266.
+- Continue mode iter 43 COMMIT 186.43 NA package. live/vision 94; implemented 278;
+  complete false. Not node finish.
+
+- Live/vision 82; implemented/contract 266.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
-- Residual UI parity ~259 red (180 non-bulk + bulk parity).
-- Review: salesTaxReturns.list dual-count 186.41 **ACCEPT**; currencies/locales 186.40 **ACCEPT**. Not node finish.
+- Residual UI parity ~256 red; API offline incomplete 121 (92 bulk + residual non-tool specials).
+- Last dual-counts: users.list 186.42, salesTaxReturns.list 186.41.
+- IR 186.43 NA package accountNatures+balanceModifiers: **ACCEPT**. Not node finish.
 
 
 ## Verification
 
-- Last product: currencies/locales UI not_applicable freeze (12 rows; total NA 42;
-  live/vision 80) committed at `e26f208`.
-- Offline baseline: 1565 passed non-live (35 deselected).
-- Live baseline inventory: 80 UI live/vision green (38 shells + 42 NA).
+- Last product: NA package accountNatures+balanceModifiers (12 rows; live/vision 94).
+- Offline baseline: 1565 passed non-live (35 deselected) after 186.43 EXECUTE.
+- Live baseline inventory: 94 UI live/vision green (40 shell/parity + 54 NA).
 
 
 ## Review decisions (authoritative)
@@ -63,12 +65,120 @@ updated: 2026-08-01T04:41:00Z
 
 ## Open coverage work
 
-1. PLAN/EXECUTE: dual-count `ui.parity.salesTaxReturns.list` via existing
-   `ui_vat_declarations_list` (research140 dual-proved); get/update/bulk stay red.
+1. After COMMIT 186.43: residual dual-count/NA for accounts (Kontoplan), taxRates
+   (Momssatser multi-resource), daybooks.list (editor not list); soft-empty
+   productPrices/organizations/bankPayments need dedicated freeze.
 2. `ui.discovery.annual_reports` stays red (Upsedasse; org_inaccessible).
 3. Residual non-bulk UI writes: no ticketed product until dual-proved live shell.
 4. 92 ambiguous bulk stay red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`; no tools;
    external_contract_blocker; live_api out_of_scope_by_user).
+
+## SYNC (iter 43)
+
+- Unread inbox/feed/private: empty. Saved queue: empty.
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `9cdb534` vs origin/main.billy_complete.
+- Coverage: implemented/contract 266; live/vision 82; complete false.
+- Outbox 8EC9A5F0: iter43 SYNC post-186.42.
+- Private 09BB8763: next residual dual-count after PREPARE.
+- Ready for PREPARE. Not finish.
+
+## PREPARE (iter 43)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children ahead: historical only. Material samples:
+  - `ui_auth_status`: product already on tip (`auth_status` tools live); child tip
+    far older (browser ~376 vs tip ~5550 lines). Skip merge.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`:
+    wiki pages already on tip; remaining delta fractal scaffold / _index only.
+  - Optional missing wiki-only:
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path).
+  - Review/init/product-repair branches: fractal-only or older stubs.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH residual dual-count/NA from
+  existing dual-proved shells. Not finish.
+
+## SYNC (iter 43 pre-RESEARCH)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. No parent directives.
+- PREPARE already no-op (parent up to date; no child merges). Tip `9cdb534`.
+- No new outbox (state unchanged since 8EC9A5F0). Ready RESEARCH residual
+  dual-count/NA from existing dual-proved shells.
+
+## RESEARCH (iter 43 / research142)
+
+- Official docs etag wcw4x9hqvu3603 MD5 8b94b013… unchanged.
+- Dual-session READY; soft seeds accountNatures/balanceModifiers body_len 127
+  = nonsense dual; no UI workflow; design NA accepted (contrast annual nav).
+- Defer accounts (multi-section Kontoplan), taxRates (Momssatser multi-resource),
+  daybooks.list (editor daybooks/new; bare Upsedasse).
+- Brief: tmp/grok-research.md. Dual: tmp/research142_residual_parity_dual.json.
+- Recommend product: NA package 12 rows (accountNatures + balanceModifiers).
+- No coverage green. api_token_used false. Ready PLAN 186.43.
+
+## SYNC (iter 43 pre-PLAN)
+
+- Unread inbox/feed empty. Private 047AEAF2 reacted (+). Saved empty.
+- Research142 outbox already posted (D0A8C322). Tip `9cdb534`.
+- Ready PLAN 186.43 NA package accountNatures+balanceModifiers.
+
+## PLAN (iter 43 / 186.43)
+
+- Plan file `plans/2026-08-01T04:08:21.481Z-186.43-ui_account_natures_balance_modifiers_not_applicable.md`: NA freeze 12 rows (accountNatures + balanceModifiers × 6 ops); GEO NA 42→54; live/vision 82→94; root-only; no new UI tools; annual/bulk stay red.
+- Ready EXECUTE.
+
+## SYNC (iter 43 pre-EXECUTE)
+
+- Unread inbox/feed empty. Private E2AF0301 reacted (+). Saved empty.
+- Plan 186.43 present. Tip `9cdb534`. Outbox plan already posted (E9210D4A).
+- Ready EXECUTE NA package product.
+
+## EXECUTE (iter 43 / 186.43)
+
+- Extended GEO_UI_NOT_APPLICABLE prefixes with accountNatures + balanceModifiers; ROW_COUNT 54; research142 evidence branch.
+- Regenerated manifests: live/vision 94; implemented/contract 278; complete false.
+- Wiki `ui_account_natures_balance_modifiers_not_applicable` + _index link.
+- Offline test.sh: 1565 passed, 35 deselected. Lint green. No new UI tools.
+- Outbox E67ED565. Ready REVIEW.
+
+## SYNC (iter 43 pre-IR)
+
+- Unread inbox/feed empty. Private 7C59DB8D reacted (+). Saved empty.
+- EXECUTE product uncommitted (generator/wiki/coverage/tests). Tip still 9cdb534.
+- live/vision 94; implemented/contract 278; complete false.
+- Ready INDEPENDENT-REVIEW of NA package 186.43.
+
+## IR (iter 43 / 186.43)
+
+- Product NA package accountNatures+balanceModifiers: **ACCEPT** (no required fixes).
+- Report: tmp/grok-review.md. Optional N1/N2 prose hygiene only.
+- Overall completeness: **FAIL** (expected). Ready FIX-VERIFY no-op then COMMIT.
+
+## SYNC (iter 43 pre-FIX-VERIFY)
+
+- Unread inbox/feed empty. Private E80747B3 reacted (+). Saved empty.
+- IR ACCEPT already outboxed (F0765ADA). No required product fixes.
+- Ready FIX-VERIFY reconfirm then COMMIT.
+
+## FIX-VERIFY (iter 43 / 186.43)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- complete false — no full qualification run.
+- Plan post-mortem filled. Ready COMMIT.
+
+## SYNC (iter 43 pre-COMMIT)
+
+- Unread inbox/feed empty. Private 429EEF46 reacted (+). Saved empty.
+- FIX-VERIFY clean; dirty product files uncommitted. Ready COMMIT.
+
+## COMMIT (iter 43 / 186.43)
+
+- fractal commit product: UI NA freeze accountNatures+balanceModifiers (12 rows).
+- complete false. Not node finish.
 
 ## Live UI tools (38 rows)
 

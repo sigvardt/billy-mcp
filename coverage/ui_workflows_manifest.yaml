@@ -1776,239 +1776,307 @@
     {
       "api_row_id": "api.accountNatures.get",
       "area": "account_natures",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.get",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accountNatures.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.get (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "accountNature"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accountNatures.list",
       "area": "account_natures",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.list",
-      "filters": {},
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.accountNatures.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.list (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "accountNatures[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accountNatures.create",
       "area": "account_natures",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.create",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accountNatures.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.create (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "accountNature"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates accountNature",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accountNatures.update",
       "area": "account_natures",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.update",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accountNatures.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.update (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "accountNature"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates accountNature",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accountNatures.bulk_save",
       "area": "account_natures",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.bulk_save",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accountNatures.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.bulk_save (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accountNatures.bulk_delete",
       "area": "account_natures",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accountNatures.bulk_delete",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.accountNatures.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accountNatures.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accountNatures.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accountNatures.bulk_delete (research142 dual-session: no nav label/href for accountNatures; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -2564,239 +2632,307 @@
     {
       "api_row_id": "api.balanceModifiers.get",
       "area": "balance_modifiers",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.get",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.balanceModifiers.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.get (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "balanceModifier"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.balanceModifiers.list",
       "area": "balance_modifiers",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.list",
-      "filters": {},
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.balanceModifiers.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.list (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "balanceModifiers[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.balanceModifiers.create",
       "area": "balance_modifiers",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.create",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.balanceModifiers.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.create (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "balanceModifier"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates balanceModifier",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.balanceModifiers.update",
       "area": "balance_modifiers",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.update",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.balanceModifiers.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.update (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "balanceModifier"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates balanceModifier",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.balanceModifiers.bulk_save",
       "area": "balance_modifiers",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.bulk_save",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.balanceModifiers.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.bulk_save (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.balanceModifiers.bulk_delete",
       "area": "balance_modifiers",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.balanceModifiers.bulk_delete",
+      "evidence": "research142 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_accountNatures_balanceModifiers true; candidate accountNatures/balanceModifiers path classes soft-empty identical to nonsense (zz-research142-no-such-route); contrast settings_accounting/settings_vat/daybooks_new/bank-accounts real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.balanceModifiers.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accountNatures/balanceModifiers tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research142_account_natures_balance_modifiers_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.balanceModifiers.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.balanceModifiers.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.balanceModifiers.bulk_delete (research142 dual-session: no nav label/href for balanceModifiers; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank-accounts",
+          "zz-research142-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research142_account_natures_balance_modifiers_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

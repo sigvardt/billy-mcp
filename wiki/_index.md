@@ -27,6 +27,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 
+[[ui_account_natures_balance_modifiers_not_applicable|ui_account_natures_balance_modifiers_not_applicable]]: Dual-session research142 freeze — no equivalent mit.billy.dk workflow for accountNatures/balanceModifiers API parity; soft-empty paths match nonsense; NA accepted.
+
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
 [[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports; not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.

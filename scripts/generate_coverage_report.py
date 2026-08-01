@@ -20,10 +20,13 @@ DOCS_URL = "https://www.billy.dk/api/"
 DOCS_ETAG = "wcw4x9hqvu3603"
 DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 
-# Dual-proved geo/reference UI families (research138 + research139): no equivalent
-# mit.billy.dk workflow (nav absence + soft-empty path class == nonsense).
-# research139 adds currencies/locales after dual path contrast.
+# Dual-proved geo/reference UI families (research138 + research139 + research142):
+# no equivalent mit.billy.dk workflow (nav absence + soft-empty path class ==
+# nonsense). research139 adds currencies/locales after dual path contrast.
+# research142 adds accountNatures/balanceModifiers after residual dual soft-empty.
 GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
+    "api.accountNatures.",
+    "api.balanceModifiers.",
     "api.cities.",
     "api.countries.",
     "api.countryGroups.",
@@ -33,8 +36,11 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 42  # seven families × six ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 54  # nine families × six ops
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
+GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
+    {"accountNatures", "balanceModifiers"}
+)
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -3462,42 +3468,72 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     research138: geo families (cities/countries/countryGroups/states/zipcodes).
     research139: currencies + locales after dual path contrast closed the
-    research138 deferral. Both: two independent ephemeral READY sessions found
-    no matching nav labels/hrefs; candidate path classes render soft-empty SPA
-    chrome only (body_len 127, h1_count 0) identical to nonsense paths, while
-    known shells expose list headings. Design §10.2 allows UI parity
-    not_applicable only when no equivalent UI workflow exists — accepted here.
-    Contrast annual_reports where nav exists → NA rejected.
+    research138 deferral.
+    research142: accountNatures + balanceModifiers residual soft-empty dual.
+    All: two independent ephemeral READY sessions found no matching UI workflow;
+    candidate path classes render soft-empty SPA chrome only (body_len 127,
+    h1_count 0) identical to nonsense paths, while known shells expose real
+    headings. Design §10.2 allows UI parity not_applicable only when no
+    equivalent UI workflow exists — accepted here. Contrast annual_reports
+    where nav exists → NA rejected.
     """
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    research_id = "research139" if is_research139 else "research138"
-    evidence_ref = (
-        "research139_currencies_locales_dual+contrast"
-        if is_research139
-        else "research138_geo_ui_dual+contrast"
-    )
-    nonsense_path = (
-        "zzzz-research139-nonexistent" if is_research139 else "zzzz-research138-nonexistent"
-    )
-    dual_agree_flag = (
-        "dual_agree_no_currency_locale_nav" if is_research139 else "dual_agree_no_geo_nav"
-    )
-    family_label = "currency/locale" if is_research139 else "geo"
-    contrast_shells = (
-        "invoices/products/transactions/vat-declarations/settings"
-        if is_research139
-        else "invoices/products/transactions"
-    )
+    if is_research142:
+        research_id = "research142"
+        evidence_ref = "research142_account_natures_balance_modifiers_dual"
+        nonsense_path = "zz-research142-no-such-route"
+        dual_agree_flag = "dual_agree_soft_empty_accountNatures_balanceModifiers"
+        family_label = "accountNatures/balanceModifiers"
+        contrast_shells = "settings_accounting/settings_vat/daybooks_new/bank-accounts"
+        list_heading_suffix = "/Indstillinger(Kontoplan|Momssatser)/daybooks editor/Bankkonti"
+        contrast_controls = [
+            "settings_accounting",
+            "settings_vat",
+            "daybooks/new",
+            "bank-accounts",
+            nonsense_path,
+        ]
+    elif is_research139:
+        research_id = "research139"
+        evidence_ref = "research139_currencies_locales_dual+contrast"
+        nonsense_path = "zzzz-research139-nonexistent"
+        dual_agree_flag = "dual_agree_no_currency_locale_nav"
+        family_label = "currency/locale"
+        contrast_shells = "invoices/products/transactions/vat-declarations/settings"
+        list_heading_suffix = "/Momsangivelser/Indstillinger"
+        contrast_controls = [
+            "invoices",
+            "products",
+            "transactions",
+            "vat-declarations",
+            "settings",
+            nonsense_path,
+        ]
+    else:
+        research_id = "research138"
+        evidence_ref = "research138_geo_ui_dual+contrast"
+        nonsense_path = "zzzz-research138-nonexistent"
+        dual_agree_flag = "dual_agree_no_geo_nav"
+        family_label = "geo"
+        contrast_shells = "invoices/products/transactions"
+        list_heading_suffix = ""
+        contrast_controls = [
+            "invoices",
+            "products",
+            "transactions",
+            nonsense_path,
+        ]
     row["method_or_route"] = (
         f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
         f"({research_id} dual-session: no nav label/href for {resource}; "
         "candidate path classes soft-empty SPA chrome-only body_len 127 "
         "h1_count 0 identical to nonsense paths; known list shells contrast "
         "with h1 Fakturaer/Produkter/Posteringer"
-        f"{'/Momsangivelser/Indstillinger' if is_research139 else ''}; "
+        f"{list_heading_suffix}; "
         f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
         "not_applicable accepted)"
     )
@@ -3538,21 +3574,6 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         "UI_CHANGED",
         GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
     ]
-    contrast_controls = [
-        "invoices",
-        "products",
-        "transactions",
-        nonsense_path,
-    ]
-    if is_research139:
-        contrast_controls = [
-            "invoices",
-            "products",
-            "transactions",
-            "vat-declarations",
-            "settings",
-            nonsense_path,
-        ]
     row["qualification"] = {
         "kind": "ui_not_applicable",
         "evidence_code": GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE,
