@@ -46,6 +46,7 @@ from billy_mcp.models import (
     UiSaftExportsOpenSuccess,
     UiSettingsAccessTokenOpenSuccess,
     UiSettingsAccountingOpenSuccess,
+    UiSettingsBetaOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
     UiSettingsUserOpenSuccess,
@@ -255,10 +256,17 @@ _SETTINGS_ACCESS_TOKEN_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS | froz
         "Opret adgangsnøgle",
     }
 )
+# Research133: Indstillinger betas (Betas / Tidlig adgang) panel on same hub path.
+# Soft seeds mostly empty; open hub then observe-only click side label Betas.
+# Never click Opret* / Gem* / Tilføj* / Upload / Opgrader*.
+_SETTINGS_BETA_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_BETA_HEADING = "Indstillinger"
+_SETTINGS_BETA_SIDE_NAV_LABEL = "Betas"
 _SETTINGS_BETA_PANEL_MARKERS = (
     "Betas",
     "Tidlig adgang",
 )
+_SETTINGS_BETA_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -695,6 +703,12 @@ class UiSettingsAccessTokenOpenService(Protocol):
     async def ui_settings_access_token_open(
         self,
     ) -> UiSettingsAccessTokenOpenSuccess | ToolError: ...
+
+
+class UiSettingsBetaOpenService(Protocol):
+    """Injectable seam for the read-only betas settings (Betas) shell open."""
+
+    async def ui_settings_beta_open(self) -> UiSettingsBetaOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -3040,6 +3054,89 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_beta_open(self) -> UiSettingsBetaOpenSuccess | ToolError:
+        """Open the Indstillinger betas (Betas / Tidlig adgang) settings panel.
+
+        Research133: soft URL seeds are mostly insufficient (settings/betas may
+        open beta dual but product uses hub+click). Open hub /:org_slug/settings
+        then observe-only click side label Betas. Final path stays bare
+        /:org_slug/settings with h1 Indstillinger and panel markers Betas +
+        Tidlig adgang. Distinct from company, accounting, invoicing, user, vat,
+        users, and access_token panels. Never click Opret / Gem. No invent
+        api_settings_* / api_beta_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_beta_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_settings_beta_changed_error()
+            if not _is_settings_beta_url(page.url):
+                return _ui_settings_beta_changed_error()
+
+            clicked = await _click_settings_side_nav_label(page, _SETTINGS_BETA_SIDE_NAV_LABEL)
+            if not clicked:
+                return _ui_settings_beta_changed_error()
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message=("Browser authentication requires a non-automatable challenge."),
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_beta_changed_error()
+                if _is_settings_beta_url(page.url) and await _has_settings_beta_signature(page):
+                    return UiSettingsBetaOpenSuccess(beta_panel_markers_present=True)
+                await asyncio.sleep(0.2)
+            return _ui_settings_beta_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=("Browser egress policy prevented the settings beta shell observation."),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=("Browser settings beta shell observation could not be completed."),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -4725,6 +4822,102 @@ async def _has_settings_access_token_signature(page: LoginPage) -> bool:
                 beta_hits += 1
         if beta_hits >= len(_SETTINGS_BETA_PANEL_MARKERS):
             return False
+        return True
+    except Exception:
+        return False
+
+
+def _is_settings_beta_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (Betas path)."""
+
+    return _is_settings_company_url(url)
+
+
+def _ui_settings_beta_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings beta (Betas) shell failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings beta shell could not be classified.",
+    )
+
+
+async def _has_settings_beta_signature(page: LoginPage) -> bool:
+    """Verify research133 Indstillinger + Betas + Tidlig adgang panel markers.
+
+    Requires h1 Indstillinger and Betas + Tidlig adgang. Rejects company
+    default, accounting Regnskab, invoicing Faktura, user Profil, VAT
+    Momssatser, users Brugere, and access-token Adgangsnøgler panels. Soft
+    seeds and other settings panels are not success. Use .first for
+    multi-match rail/body labels (Betas may appear as side-nav + panel h2).
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_BETA_HEADING:
+            return False
+        for label in _SETTINGS_BETA_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
+            return False
+        invoicing_required = 0
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                invoicing_required += 1
+        if invoicing_required >= len(_SETTINGS_INVOICING_REQUIRED_MARKERS):
+            optional_ok = False
+            for label in _SETTINGS_INVOICING_OPTIONAL_MARKERS:
+                control = page.locator(f"text={label}")
+                if await control.count() >= 1 and await control.first.is_visible():
+                    optional_ok = True
+                    break
+            if optional_ok:
+                return False
+        user_hits = 0
+        for label in _SETTINGS_USER_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                user_hits += 1
+        if user_hits >= len(_SETTINGS_USER_PANEL_MARKERS):
+            return False
+        vat_hits = 0
+        for label in _SETTINGS_VAT_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                vat_hits += 1
+        if vat_hits >= len(_SETTINGS_VAT_PANEL_MARKERS):
+            return False
+        users_hits = 0
+        for label in _SETTINGS_USERS_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                users_hits += 1
+        if users_hits >= len(_SETTINGS_USERS_PANEL_MARKERS):
+            return False
+        # Access-token panel lacks Tidlig adgang (required above). Side-nav
+        # Adgangsnøgler may still appear on the beta panel and is not a reject.
         return True
     except Exception:
         return False

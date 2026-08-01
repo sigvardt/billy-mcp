@@ -42,7 +42,8 @@
         "tests/live/test_ui_settings_user_open.py",
         "tests/live/test_ui_settings_vat_open.py",
         "tests/live/test_ui_settings_users_open.py",
-        "tests/live/test_ui_settings_access_token_open.py"
+        "tests/live/test_ui_settings_access_token_open.py",
+        "tests/live/test_ui_settings_beta_open.py"
       ]
     },
     {
@@ -170,7 +171,8 @@
         "tests/live/test_ui_settings_user_open.py",
         "tests/live/test_ui_settings_vat_open.py",
         "tests/live/test_ui_settings_users_open.py",
-        "tests/live/test_ui_settings_access_token_open.py"
+        "tests/live/test_ui_settings_access_token_open.py",
+        "tests/live/test_ui_settings_beta_open.py"
       ]
     },
     {

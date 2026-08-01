@@ -6,15 +6,16 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-07-31T23:00:00Z
+updated: 2026-08-01T00:16:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 33 COMMIT. Product tip settings_access_token 186.33 (`ui_settings_access_token_open`). Coverage live/vision 35; complete false. Next: remaining settings_* (beta/subscription) or annual red. No invent api_settings_*.
-- Review: product `ui_settings_access_token_open` **ACCEPT** (IR 186.33).
+- Continue mode iter 34 SYNC pre-COMMIT. Uncommitted product
+  `ui_settings_beta_open`. Coverage live/vision 36; complete false.
+- FIX-VERIFY clean; commit product next. Not node finish.
 
 ## Verification
 
@@ -56,24 +57,24 @@ updated: 2026-07-31T23:00:00Z
 
 ## Open coverage work
 
-1. Next after COMMIT: remaining settings_* (access_token/beta via SPA click-nav
-   from Indstillinger hub; subscription empty chrome stays red). annual_reports stays red.
+1. Next: remaining settings_* (`settings_beta` / `settings_subscription` via SPA
+   click-nav from Indstillinger hub). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
 4. UI parity rows still largely red after discovery shells.
 
-## Live UI tools (34 rows)
+## Live UI tools (36 rows)
 
-- discovery greened (30): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (32): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
   reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
   settings_company, settings_accounting, settings_invoicing, settings_user,
-  settings_vat, settings_users.
+  settings_vat, settings_users, settings_access_token, settings_beta.
 - parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (4): annual_reports (inaccessible freeze),
-  settings_subscription, settings_access_token, settings_beta.
+- discovery still red (2): annual_reports (inaccessible freeze),
+  settings_subscription.
 
 ## Evidence boundaries
 
@@ -2036,4 +2037,126 @@ updated: 2026-07-31T23:00:00Z
 
 - `fractal commit` product: ui settings access token open Adgangsnøgler panel with dual live and vision.
 - Not node finish (complete false; bulk + remaining UI still red).
+
+## SYNC (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0675826D reacted (+): next settings_beta or subscription; annual red; no invent api_settings_*; not finish.
+- No running children. Parent directives already absorbed (scope/Grok-only).
+- Tip `79e81ae` clean vs origin. Coverage complete false; live/vision 35.
+- Outbox: SYNC progress posted. Private next-note written.
+- Ready PREPARE then RESEARCH freeze: `ui.discovery.settings_beta` (prefer) or
+  `settings_subscription` if beta blocked.
+
+## PREPARE (iter 34)
+
+- Parent `main`: already up to date (fetch + merge).
+- Children ahead of tip: 62; only `ui_auth_status` has product files (auth_status).
+  Tip already has auth_status + auth_login_* and browser 5090 LOC vs child 376 LOC;
+  product commit not linear ancestor but integrated earlier (`cf38b5c`). Merge would
+  downgrade — skip.
+- All other ahead children are fractal/init/review scaffolding or superseded
+  wiki/memory — skip.
+- No material integration; no outbox announce.
+- Dirty: memory/state.md only.
+- Ready RESEARCH freeze: prefer `ui.discovery.settings_beta`, else
+  `settings_subscription`.
+
+## SYNC pre-RESEARCH (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 5E6D6F7F reacted (+): RESEARCH settings_beta or subscription.
+- No running children. PREPARE already done this iteration.
+- Outbox: pre-research note posted.
+- Ready RESEARCH freeze: `ui.discovery.settings_beta`.
+
+## Research (iter 34)
+
+- research133 freeze: `ui.discovery.settings_beta` via dual click-nav **Betas**.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5 `8b94b0135c91fd15fe54ea33e088a4be`.
+- No API beta / settings CRUD resource; do not invent `api_settings_*` or `api_beta_*`.
+  api_token_used false.
+- Soft seed `settings/betas` dual also opens beta panel (path rewrites to hub);
+  other beta-ish seeds soft-empty. Product still prefers hub + click Betas.
+- Click **Betas** dual success: path `/:org_slug/settings`, h1 `Indstillinger`,
+  h2 pair `Betas` + `Tidlig adgang` (strict). Distinct from access_token/users/company.
+- Subscription click dual: empty h2 weak chrome — stays red.
+- Frames purged; writes false. Brief: `tmp/grok-research.md` (node + worktree).
+- Recommended product: `ui_settings_beta_open` only. Ready for PLAN.
+
+## SYNC pre-PLAN (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Research133 brief present; frames purged; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN product `ui_settings_beta_open`.
+
+## Plan (iter 34)
+
+- Plan: `plans/2026-07-31T23:45:26.628Z-186.34-ui_settings_beta_open.md`
+  — product `ui_settings_beta_open` for `ui.discovery.settings_beta` only;
+  root-only; dual live+vision; open hub `/:org_slug/settings` then click
+  **Betas**; path class `/:org_slug/settings`, h1 `Indstillinger`,
+  shell_kind=`settings_beta`, required h2 pair Betas + Tidlig adgang;
+  distinct from company/accounting/invoicing/user/vat/users/access_token;
+  never Opret*/write CTAs; no invent api_settings_*/api_beta_*;
+  no greening subscription/annual; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0CF10D8C reacted (+): EXECUTE ui_settings_beta_open.
+- No running children.
+- Plan 186.34 present (untracked until commit). Ready EXECUTE product.
+
+## Execute (iter 34)
+
+- Producted `ui_settings_beta_open` (models/browser/server/tests/coverage/wiki).
+- Open: hub `/:org_slug/settings` + observe-only click Betas; soft empty seeds reject.
+- Success: path/h1 Indstillinger, shell_kind settings_beta, h2 markers Betas +
+  Tidlig adgang.
+- Offline non-live suite green (1553 passed).
+- Live dual + vision purge_verified for Betas panel.
+- Coverage live/vision 36; complete false.
+- Greens only `ui.discovery.settings_beta`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- No running children.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_settings_beta_open` (186.34).
+
+## Independent review (iter 34)
+
+- Product `ui_settings_beta_open`: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1: live vision body also assert
+  Tidlig adgang.
+- Egress refs intact (access_token + users + vat + user + company + beta).
+- Other settings_subscription + annual remain red. Overall completeness: **FAIL**
+  (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 639FD64F reacted (+): FIX-VERIFY then COMMIT.
+- No running children.
+- IR ACCEPT product; no required product fixes.
+- Ready FIX-VERIFY reconfirm (optional N1).
+
+## FIX-VERIFY (iter 34)
+
+- IR product ACCEPT; optional N1 applied (assert Tidlig adgang in live vision body).
+- lint pass; offline 1553; live settings_beta reconfirm pass; vision purge_verified.
+- Egress refs intact (company + accounting + invoicing + user + vat + users +
+  access_token + beta).
+- Coverage live/vision 36; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 34)
+
+- Unread inbox/feed: empty. Saved: empty.
+- No running children.
+- FIX-VERIFY clean; commit product next.
 

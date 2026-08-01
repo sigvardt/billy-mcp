@@ -84,6 +84,7 @@ from billy_mcp.browser import (
     UiSaftExportsOpenService,
     UiSettingsAccessTokenOpenService,
     UiSettingsAccountingOpenService,
+    UiSettingsBetaOpenService,
     UiSettingsCompanyOpenService,
     UiSettingsInvoicingOpenService,
     UiSettingsUserOpenService,
@@ -155,6 +156,8 @@ from billy_mcp.models import (
     UiSettingsAccessTokenOpenSuccess,
     UiSettingsAccountingOpenInput,
     UiSettingsAccountingOpenSuccess,
+    UiSettingsBetaOpenInput,
+    UiSettingsBetaOpenSuccess,
     UiSettingsCompanyOpenInput,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenInput,
@@ -212,6 +215,7 @@ def create_server(
     ui_settings_vat_open_service: UiSettingsVatOpenService | None = None,
     ui_settings_users_open_service: UiSettingsUsersOpenService | None = None,
     ui_settings_access_token_open_service: UiSettingsAccessTokenOpenService | None = None,
+    ui_settings_beta_open_service: UiSettingsBetaOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -257,6 +261,7 @@ def create_server(
     settings_vat_open_service = ui_settings_vat_open_service or browser
     settings_users_open_service = ui_settings_users_open_service or browser
     settings_access_token_open_service = ui_settings_access_token_open_service or browser
+    settings_beta_open_service = ui_settings_beta_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -480,6 +485,12 @@ def create_server(
 
         UiSettingsAccessTokenOpenInput()
         return await settings_access_token_open_service.ui_settings_access_token_open()
+
+    async def ui_settings_beta_open() -> UiSettingsBetaOpenSuccess | ToolError:
+        """Open the Billy Indstillinger Betas settings panel (read-only)."""
+
+        UiSettingsBetaOpenInput()
+        return await settings_beta_open_service.ui_settings_beta_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -738,6 +749,15 @@ def create_server(
             "panel markers; does not click Opret adgangsnøgle, Gem, or other write actions)."
         ),
     )(ui_settings_access_token_open)
+
+    server.tool(
+        name="ui_settings_beta_open",
+        description=(
+            "Open the Billy betas settings (Indstillinger / Betas) panel for the "
+            "authenticated session (read-only path, heading, and betas panel markers; "
+            "does not click Opret, Gem, or other write actions)."
+        ),
+    )(ui_settings_beta_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)

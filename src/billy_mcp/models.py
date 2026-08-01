@@ -614,6 +614,23 @@ class UiSettingsAccessTokenOpenSuccess(BaseModel):
     access_token_panel_markers_present: bool
 
 
+class UiSettingsBetaOpenInput(BaseModel):
+    """Empty, strict input for the read-only betas settings (Betas) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsBetaOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Betas panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_beta"] = "settings_beta"
+    beta_panel_markers_present: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 
