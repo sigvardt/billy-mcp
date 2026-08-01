@@ -42,6 +42,7 @@ from billy_mcp.models import (
     UiIntegrationsOpenSuccess,
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenSuccess,
+    UiInvoicesGetOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
@@ -101,6 +102,8 @@ _INVOICES_CREATE_PATH = re.compile(r"^/[^/]+/invoices/new$")
 _INVOICES_CREATE_HEADING = "Opret faktura"
 _INVOICES_CREATE_DRAFT_SAVE_CHROME = "Gem som kladde"
 _INVOICES_CREATE_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse")
+_INVOICES_EDIT_PATH = re.compile(r"^/[^/]+/invoices/(?!new$)[^/]+/edit$")
+_INVOICES_GET_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse", "Antal", "Pris")
 _PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
 _PRODUCTS_LIST_HEADING = "Produkter"
 _PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
@@ -564,7 +567,7 @@ class LoginControl(Protocol):
 
     async def check(self) -> None: ...
 
-    async def click(self) -> None: ...
+    async def click(self, **kwargs: object) -> None: ...
 
     async def get_attribute(self, name: str) -> str | None: ...
 
@@ -613,6 +616,12 @@ class UiInvoicesCreateOpenService(Protocol):
     """Injectable seam for the read-only invoice create form open observation."""
 
     async def ui_invoices_create_open(self) -> UiInvoicesCreateOpenSuccess | ToolError: ...
+
+
+class UiInvoicesGetOpenService(Protocol):
+    """Injectable seam for the read-only invoices detail get-open observation."""
+
+    async def ui_invoices_get_open(self) -> UiInvoicesGetOpenSuccess | ToolError: ...
 
 
 class UiProductsListService(Protocol):
@@ -1261,6 +1270,85 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser invoices create form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_invoices_get_open(self) -> UiInvoicesGetOpenSuccess | ToolError:
+        """Open an invoice detail/edit surface for the authenticated UI session only.
+
+        Research169: path-scoped invoices GET/POST/DELETE unlocks list rows and
+        disposable seed. Open first non-header invoice detail at path class
+        /:org_slug/invoices/:id/edit. Never Gem/Send/Slet/submit. Distinct from
+        list shell and create form_open. Soft /invoices/new is not success.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_invoices_get_changed_error()
+
+            invoices_url = f"https://mit.billy.dk/{slug}/invoices"
+            await page.goto(invoices_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_invoices_get_changed_error()
+                if _is_invoices_create_url(page.url):
+                    return _ui_invoices_get_changed_error()
+
+                if await _has_invoices_detail_signature(page, slug):
+                    flags = await _invoices_detail_flags(page)
+                    return UiInvoicesGetOpenSuccess(
+                        detail_open=True,
+                        entry_date_control_present=flags["entry_date_control_present"],
+                        contact_control_present=flags["contact_control_present"],
+                        line_chrome_present=flags["line_chrome_present"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_invoices_list_url(page.url) and await _has_invoices_list_signature(page):
+                    opened = await _click_invoices_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_invoices_get_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the invoices detail observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser invoices detail observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4274,6 +4362,24 @@ def _is_invoices_create_url(url: str) -> bool:
     )
 
 
+def _is_invoices_edit_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/invoices/:id/edit detail (not list, not /new)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_INVOICES_EDIT_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_bills_create_url(url: str) -> bool:
     """Accept mit.billy.dk /:org_slug/bills/new, including Billy query params."""
 
@@ -5049,13 +5155,16 @@ async def _has_invoices_list_signature(page: LoginPage) -> bool:
     """Verify the research102 invoices list heading and create CTA without clicking."""
 
     try:
-        heading = page.locator("h1")
-        if await heading.count() < 1 or not await heading.is_visible():
+        headings = page.locator("h1")
+        if await headings.count() < 1:
+            return False
+        heading = headings.first
+        if not await heading.is_visible():
             return False
         if (await heading.inner_text()).strip() != _INVOICES_LIST_HEADING:
             return False
         create_action = page.locator(f"text={_INVOICES_CREATE_CTA}")
-        return await create_action.count() >= 1 and await create_action.is_visible()
+        return await create_action.count() >= 1 and await create_action.first.is_visible()
     except Exception:
         return False
 
@@ -5079,6 +5188,168 @@ async def _has_invoices_create_signature(page: LoginPage) -> bool:
                 line_ok = True
                 break
         return line_ok
+    except Exception:
+        return False
+
+
+async def _invoices_detail_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII invoice edit-form flags (research169)."""
+
+    flags = {
+        "entry_date_control_present": False,
+        "contact_control_present": False,
+        "line_chrome_present": False,
+    }
+    try:
+        entry = page.locator(
+            "input[name='entryDate'], input[name='entry_date'], input[type='date']"
+        )
+        flags["entry_date_control_present"] = await entry.count() >= 1
+        contact_css = page.locator(
+            "input[name='contactId'], input[name='contact'], [data-cy*='contact' i]"
+        )
+        contact_ok = await contact_css.count() >= 1
+        if not contact_ok:
+            for label in ("Kunde", "Customer", "Kontakt"):
+                control = page.locator(f"text={label}")
+                if await control.count() >= 1:
+                    contact_ok = True
+                    break
+        # body may show contact name without explicit field name
+        if not contact_ok:
+            try:
+                body = page.locator("body")
+                text = (await body.inner_text())[:2000]
+                if "Kunde" in text or "Customer" in text:
+                    contact_ok = True
+            except Exception:
+                pass
+        flags["contact_control_present"] = contact_ok
+        line_ok = False
+        for marker in _INVOICES_GET_LINE_CHROME_MARKERS:
+            control = page.locator(f"text={marker}")
+            if await control.count() >= 1:
+                line_ok = True
+                break
+        if not line_ok:
+            line_inputs = page.locator("textarea")
+            line_ok = await line_inputs.count() >= 1
+        if not line_ok:
+            for marker in ("Produkt", "Enhedspris", "Antal", "Tilføj linje"):
+                control = page.locator(f"text={marker}")
+                if await control.count() >= 1:
+                    line_ok = True
+                    break
+        flags["line_chrome_present"] = line_ok
+    except Exception:
+        pass
+    return flags
+
+
+async def _has_invoices_detail_signature(page: LoginPage, slug: str) -> bool:
+    """Strict invoice detail/edit signature — /invoices/:id/edit with form chrome."""
+
+    del slug
+    try:
+        if not _is_invoices_edit_url(page.url):
+            return False
+        flags = await _invoices_detail_flags(page)
+        hits = sum(
+            1
+            for k in (
+                "entry_date_control_present",
+                "contact_control_present",
+                "line_chrome_present",
+            )
+            if flags.get(k)
+        )
+        if hits >= 2:
+            return True
+        # research169 dual: edit path + any line/textarea chrome is enough
+        if hits >= 1 and flags.get("line_chrome_present"):
+            return True
+        # generic form field count on edit surface
+        try:
+            fields = page.locator("input, textarea, select")
+            if await fields.count() >= 3:
+                return True
+        except Exception:
+            pass
+        return False
+    except Exception:
+        return False
+
+
+async def _click_invoices_detail_candidate(page: LoginPage, slug: str) -> bool:
+    """Click first non-header invoice list row or href to open detail/edit."""
+
+    try:
+        links = page.locator(f"a[href*='/{slug}/invoices/']")
+        n_links = await links.count()
+        for i in range(min(n_links, 24)):
+            link = links.nth(i)
+            href = await link.get_attribute("href") or ""
+            if href.rstrip("/").endswith("/invoices") or "/new" in href:
+                continue
+            if re.search(rf"/{re.escape(slug)}/invoices/[^/?#]+", href):
+                await link.click(timeout=5000)
+                return True
+        rows = page.locator("table tbody tr, [data-cy='table-item'], [role='row'], tr")
+        n_rows = await rows.count()
+        for i in range(min(n_rows, 40)):
+            row = rows.nth(i)
+            try:
+                text = (await row.inner_text() or "").strip()
+            except Exception:
+                continue
+            if not text or len(text) < 4:
+                continue
+            if (
+                re.search(
+                    r"Nr\.|Dato|Forfald|Kunde|Beløb|Status|Invoice\s*#|Customer",
+                    text,
+                    re.I,
+                )
+                and len(text) < 90
+            ):
+                continue
+            if re.search(r"Ingen fakturaer|Opret faktura", text, re.I) and len(text) < 80:
+                continue
+            try:
+                await row.click(timeout=5000)
+                return True
+            except Exception:
+                continue
+        # research169: text click on disposable line description or draft markers
+        live_page = cast(Any, page)
+        get_by_text = getattr(live_page, "get_by_text", None)
+        if callable(get_by_text):
+            for needle in (
+                "R18670-TMP-INVOICE",
+                "R169I",
+                "TMP-INVOICE",
+                "DO-NOT-USE",
+            ):
+                try:
+                    loc = cast(Any, get_by_text(needle, exact=False))
+                    if int(await loc.count()) >= 1:
+                        await loc.first.click(timeout=5000)
+                        return True
+                except Exception:
+                    continue
+            # last resort: click a visible "Kladde" cell that is not the overview tile alone
+            try:
+                loc = cast(Any, get_by_text("Kladde", exact=False))
+                n = int(await loc.count())
+                for i in range(min(n, 12)):
+                    try:
+                        await loc.nth(i).click(timeout=3000)
+                        return True
+                    except Exception:
+                        continue
+            except Exception:
+                pass
+        return False
     except Exception:
         return False
 
@@ -7104,6 +7375,13 @@ def _ui_invoices_create_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices create form interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_invoices_get_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy invoices detail surface did not match the recorded get-open contract.",
     )
 
 

@@ -121,6 +121,30 @@ class UiInvoicesCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiInvoicesGetOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only invoice detail get-open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInvoicesGetOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy invoice detail/edit surface.
+
+    Research169: detail path is /:org_slug/invoices/:id/edit (draft edit form),
+    not list shell and not /invoices/new create.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/invoices/:id/edit"] = "/:org_slug/invoices/:id/edit"
+    shell_kind: Literal["invoices_get"] = "invoices_get"
+    detail_open: bool
+    entry_date_control_present: bool
+    contact_control_present: bool
+    line_chrome_present: bool
+    shell_markers_present: bool
+
+
 class UiBillsCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only bill create form open tool."""
 

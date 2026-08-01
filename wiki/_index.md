@@ -83,6 +83,8 @@ updated: 2026-08-01T21:44:34Z
 
 [[ui_invoices_create_open_shell|ui_invoices_create_open_shell]]: Read-only headless ui_invoices_create_open contract for Billy invoice create form open only (research153).
 
+[[ui_invoices_get_open_shell|ui_invoices_get_open_shell]]: Read-only headless ui_invoices_get_open contract for Billy invoice draft detail/edit get/open only (research169).
+
 [[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.
 
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.

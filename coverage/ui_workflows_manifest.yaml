@@ -39,6 +39,7 @@
         "tests/test_models.py",
         "tests/unit/test_browser.py",
         "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_invoices_get_open.py",
         "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "ui_invoices_list",
@@ -10165,38 +10166,48 @@
     {
       "api_row_id": "api.invoices.get",
       "area": "invoices",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable contact+product+invoice then deletes in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.get",
+      "evidence": "research169 dual-session headless observation + ui_invoices_get_open product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices (GET list settle from research168; POST/DELETE disposable draft seed/cleanup; emails still denied); detail open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_get, entryDate/contact/line chrome; never Gem/Send/Slet; distinct from list shell ui_invoices_list and create form_open ui_invoices_create_open); vision record tmp/vision-records/ui_invoices_get_open.json (invoice detail frames, accept); maps api.invoices.get to UI detail get/open only",
       "filters": [],
       "id": "ui.parity.invoices.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoices.get",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/invoices + first non-header invoice detail (read-only invoices get/open; never Gem/Send/Slet/Godkend submit; /invoices/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
+      "parity_status": "detail_open_only",
+      "request_fields": [],
       "response_fields": [
-        "invoice"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "entry_date_control_present",
+        "contact_control_present",
+        "line_chrome_present",
+        "shell_markers_present"
       ],
-      "sensitivity": "low",
-      "side_effects": "none",
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_get_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_invoices_get_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -10236,6 +10247,7 @@
         "tests/test_models.py",
         "tests/unit/test_browser.py",
         "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_invoices_get_open.py",
         "tests/unit/test_coverage_server.py"
       ],
       "tool_name": "ui_invoices_list",

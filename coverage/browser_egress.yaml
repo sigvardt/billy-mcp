@@ -204,6 +204,20 @@
           "path": "/v2/invoices"
         },
         {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/invoices"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/invoices"
+        },
+        {
           "match": "prefix",
           "methods": [
             "GET"
@@ -211,11 +225,11 @@
           "path": "/v2/bills"
         }
       ],
-      "condition": "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, and bills data-planes (research164/165/168); never full API browse",
-      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary) unblocked under TEMP path_allow for invoices/bills list settle (empty-org lists valid; get-open detail_ready still false; emails/write paths still denied)",
+      "condition": "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, and bills data-planes (research164/165/168/169); never full API browse",
+      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit (emails and bills writes still denied)",
       "host": "api.billysbilling.com",
       "owner": "ui_auth",
-      "purpose": "Path-scoped browser XHR for headless login, shell settle, contacts UI, products UI get/list/create-seed cleanup, and invoices/bills list data-plane GET only",
+      "purpose": "Path-scoped browser XHR for headless login, shell settle, contacts UI, products UI, invoices list/get seed+cleanup, and bills list data-plane GET only",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py",
         "tests/unit/test_browser.py",

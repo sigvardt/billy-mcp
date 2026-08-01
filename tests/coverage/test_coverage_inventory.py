@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 61 greened shells/parity + contacts.delete Mere chrome (research167) = 62
+    # Prior 62 greened shells/parity + invoices.get open (research169) = 63
     # live/vision rows without GEO NA.
-    ui_shell_green = 62
+    ui_shell_green = 63
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -739,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 62 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 63 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 169
+    assert status["qualification"]["live_tested_rows"] == 170
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -757,6 +757,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.list",
         "ui.discovery.invoices_create",
         "ui.parity.invoices.create",
+        "ui.parity.invoices.get",
         "ui.discovery.products",
         "ui.parity.products.list",
         "ui.discovery.products_create",
@@ -821,6 +822,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.list": "ui_invoices_list",
         "ui.discovery.invoices_create": "ui_invoices_create_open",
         "ui.parity.invoices.create": "ui_invoices_create_open",
+        "ui.parity.invoices.get": "ui_invoices_get_open",
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
         "ui.discovery.products_create": "ui_products_create_open",
@@ -898,7 +900,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 62
+    assert len(qualified) == 63
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1111,6 +1113,16 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert invoices_create_discovery["tool_name"] == "ui_invoices_create_open"
     assert invoices_create_discovery["api_row_id"] is None
+
+    invoices_get_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.get")
+    assert invoices_get_parity["api_row_id"] == "api.invoices.get"
+    assert invoices_get_parity["tool_name"] == "ui_invoices_get_open"
+    assert invoices_get_parity["parity_status"] == "detail_open_only"
+    assert invoices_get_parity["live_tested"] is True
+    assert invoices_get_parity["vision_verified"] is True
+    assert "research169" in invoices_get_parity["evidence"]
+    assert "api.invoices.get" in invoices_get_parity["evidence"]
+
     bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
     assert bills_create_parity["api_row_id"] == "api.bills.create"
     assert bills_create_parity["tool_name"] == "ui_bills_create_open"
@@ -1180,7 +1192,6 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert uploads_discovery["api_row_id"] is None
     assert "file_input_present" in uploads_discovery["response_fields"]
     for red_id in (
-        "ui.parity.invoices.get",
         "ui.parity.invoices.update",
         "ui.parity.invoices.delete",
         "ui.parity.invoices.bulk_save",
@@ -1312,9 +1323,13 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         rule.get("path") == "/v2/bills" and "GET" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
-    # research168: invoices/bills GET only — writes and invoice email stay denied
-    assert not any(
+    # research169: invoices GET/POST/DELETE; bills GET only; invoice email stay denied
+    assert any(
         rule.get("path") == "/v2/invoices" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/invoices" and "DELETE" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
     assert not any(

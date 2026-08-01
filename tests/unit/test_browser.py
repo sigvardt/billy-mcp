@@ -40,6 +40,7 @@ from billy_mcp.models import (
     UiIntegrationsOpenSuccess,
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenSuccess,
+    UiInvoicesGetOpenSuccess,
     UiInvoicesListSuccess,
     UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
@@ -173,7 +174,8 @@ class FakeLoginControl:
     async def check(self) -> None:
         self._record("check")
 
-    async def click(self) -> None:
+    async def click(self, **kwargs: object) -> None:
+        del kwargs
         self._record("click")
         if self._click_error is not None:
             raise self._click_error
@@ -345,7 +347,7 @@ def test_browser_policy_loads_only_explicit_manifest_allow_hosts(tmp_path: Path)
 
 
 def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
-    """Research164/165/168: contacts + products + invoices/bills GET data planes."""
+    """Research164/165/168/169: contacts + products + invoices GET/POST/DELETE + bills GET."""
 
     policy = BrowserEgressPolicy.from_manifest(
         Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
@@ -368,7 +370,8 @@ def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
     assert policy.allows("https://api.billysbilling.com/v2/bills/summary", "GET")
     assert policy.allows("https://api.billysbilling.com/v2/bills/abc", "GET")
     assert not policy.allows("https://api.billysbilling.com/v2/invoices/x/emails", "POST")
-    assert not policy.allows("https://api.billysbilling.com/v2/invoices", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/invoices", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/invoices/abc", "DELETE")
     assert not policy.allows("https://api.billysbilling.com/v2/bills", "POST")
     assert not policy.allows("https://api.billysbilling.com/v2/bills", "DELETE")
 
@@ -9823,3 +9826,136 @@ def test_ui_products_create_open_rejects_soft_products_new_path(tmp_path: Path) 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED
     assert page.closed
+
+
+def _invoices_get_shell_controls(
+    page_holder: dict[str, FakeLoginPage],
+) -> dict[str, FakeLoginControl]:
+    def open_detail() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/invoices/inv-1/edit"
+        updates = {
+            "body": FakeLoginControl(
+                text="Kladde Faktura Kunde entryDate Beskrivelse Tilføj linje Overblik Menu"
+            ),
+            (
+                "input[name='entryDate'], input[name='entry_date'], input[type='date']"
+            ): FakeLoginControl(count=1, visible=True),
+            (
+                "input[name='contactId'], input[name='contact'], [data-cy*='contact' i]"
+            ): FakeLoginControl(count=1, visible=True),
+            "text=Beskrivelse": FakeLoginControl(text="Beskrivelse"),
+            "text=Tilføj linje": FakeLoginControl(text="Tilføj linje"),
+            "text=Produkt": FakeLoginControl(text="Produkt"),
+            "textarea": FakeLoginControl(count=1, visible=True),
+            "text=Overblik": FakeLoginControl(text="Overblik"),
+            "text=Menu": FakeLoginControl(text="Menu"),
+            "input, textarea, select": FakeLoginControl(count=5, visible=True),
+        }
+        for sel, control in updates.items():
+            page.controls[sel] = control
+            control.bind(page.events, sel)
+
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Fakturaer"),
+        "body": FakeLoginControl(text="Fakturaer Opret faktura Mere 1 Kladde TMP-INVOICE"),
+        "text=Opret faktura": FakeLoginControl(text="Opret faktura"),
+        "a[href*='/test-org-slug/invoices/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row'], tr": FakeLoginControl(
+            text="1 2026-08-01 TMP-INVOICE 10 DKK Kladde",
+            on_click=open_detail,
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+
+
+def test_ui_invoices_get_open_returns_success_for_detail(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_invoices_get_shell_controls(page_holder),
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_invoices_get_open())
+
+    assert result == UiInvoicesGetOpenSuccess(
+        detail_open=True,
+        entry_date_control_present=True,
+        contact_control_present=True,
+        line_chrome_present=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert not any("click:text=Gem" in e for e in page.events)
+
+
+def test_ui_invoices_get_open_returns_ui_changed_when_empty_list(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Fakturaer"),
+        "body": FakeLoginControl(text="Fakturaer Ingen fakturaer Opret faktura"),
+        "text=Opret faktura": FakeLoginControl(text="Opret faktura"),
+        "a[href*='/test-org-slug/invoices/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row']": FakeLoginControl(
+            count=0, visible=False
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_invoices_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED

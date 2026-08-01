@@ -85,6 +85,10 @@ UI_INVOICES_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_INVOICES_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_create_open.py"
 UI_INVOICES_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_INVOICES_CREATE_OPEN_TOOL_NAME = "ui_invoices_create_open"
+UI_INVOICES_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INVOICES_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_get_open.py"
+UI_INVOICES_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INVOICES_GET_OPEN_TOOL_NAME = "ui_invoices_get_open"
 UI_BILLS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BILLS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_create_open.py"
 UI_BILLS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1511,6 +1515,7 @@ def apply_ui_invoices_list_shell_evidence(
         UI_INVOICES_LIST_MODEL_TEST_REFERENCE,
         UI_INVOICES_LIST_UNIT_TEST_REFERENCE,
         UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
+        UI_INVOICES_GET_OPEN_LIVE_TEST_REFERENCE,
         SERVER_REGISTRY_TEST_REFERENCE,
     ]
     row["evidence"] = (
@@ -1600,6 +1605,81 @@ def apply_ui_invoices_create_open_shell_evidence(
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_invoices_get_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_get: bool = False,
+) -> None:
+    """Mark invoices detail **get/open only** evidence (research169).
+
+    Empty-input tool; open /:org_slug/invoices, open first non-header invoice
+    detail at path class /:org_slug/invoices/:id/edit. Never Gem/Send/Slet.
+    Requires scoped browser path_allow for GET/POST/DELETE /v2/invoices (GET
+    list/data plane; POST/DELETE for disposable seed/cleanup). When
+    ``parity_of_api_get`` is true, dual-counts exact ``ui.parity.invoices.get``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/invoices + first non-header invoice detail "
+        "(read-only invoices get/open; never Gem/Send/Slet/Godkend submit; "
+        "/invoices/new not success)"
+    )
+    row["tool_name"] = UI_INVOICES_GET_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "entry_date_control_present",
+        "contact_control_present",
+        "line_chrome_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_get:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INVOICES_GET_OPEN_MODEL_TEST_REFERENCE,
+        UI_INVOICES_GET_OPEN_UNIT_TEST_REFERENCE,
+        UI_INVOICES_GET_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research169 dual-session headless observation + ui_invoices_get_open product; "
+        "scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices "
+        "(GET list settle from research168; POST/DELETE disposable draft seed/cleanup; "
+        "emails still denied); detail open only (path class /:org_slug/invoices/:id/edit, "
+        "shell_kind=invoices_get, entryDate/contact/line chrome; never Gem/Send/Slet; "
+        "distinct from list shell ui_invoices_list and create form_open "
+        "ui_invoices_create_open); vision record tmp/vision-records/ui_invoices_get_open.json "
+        "(invoice detail frames, accept)"
+    )
+    if parity_of_api_get:
+        row["evidence"] = f"{row['evidence']}; maps api.invoices.get to UI detail get/open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "detail_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable contact+"
+        "product+invoice then deletes in reverse with fresh list read-back"
+    )
     row["errors"] = [
         "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
@@ -4806,6 +4886,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_invoices_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.invoices.create":
             apply_ui_invoices_create_open_shell_evidence(row, parity_of_api_create=True)
+        if api_row["id"] == "api.invoices.get":
+            apply_ui_invoices_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.create":
             apply_ui_bills_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.products.list":
@@ -4934,12 +5016,12 @@ def build_browser_egress() -> dict[str, Any]:
                 "owner": "ui_auth",
                 "purpose": (
                     "Path-scoped browser XHR for headless login, shell settle, contacts UI, "
-                    "products UI get/list/create-seed cleanup, and invoices/bills list "
-                    "data-plane GET only"
+                    "products UI, invoices list/get seed+cleanup, and bills list data-plane "
+                    "GET only"
                 ),
                 "condition": (
                     "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, "
-                    "and bills data-planes (research164/165/168); never full API browse"
+                    "and bills data-planes (research164/165/168/169); never full API browse"
                 ),
                 "evidence": (
                     "research100 headless credentialed discovery: POST /v2/user/login "
@@ -4949,9 +5031,9 @@ def build_browser_egress() -> dict[str, Any]:
                     "and GET /v2/salesTaxRulesets for products list/detail and disposable seed "
                     "(was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); "
                     "research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers "
-                    "/summary) unblocked under TEMP path_allow for invoices/bills list settle "
-                    "(empty-org lists valid; get-open detail_ready still false; "
-                    "emails/write paths still denied)"
+                    "/summary); research169 dual: exact POST /v2/invoices and prefix DELETE "
+                    "/v2/invoices for disposable draft seed/cleanup and invoice detail get-open "
+                    "at /:org_slug/invoices/:id/edit (emails and bills writes still denied)"
                 ),
                 "browser_path_allows": [
                     {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
@@ -4974,6 +5056,8 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/accounts"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/salesTaxRulesets"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/invoices"},
+                    {"match": "exact", "methods": ["POST"], "path": "/v2/invoices"},
+                    {"match": "prefix", "methods": ["DELETE"], "path": "/v2/invoices"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/bills"},
                 ],
                 "test_references": [

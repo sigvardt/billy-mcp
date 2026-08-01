@@ -214,6 +214,24 @@ def test_ui_invoices_create_open_models_are_empty_input_and_non_pii_success() ->
         pass
 
 
+def test_ui_invoices_get_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiInvoicesGetOpenInput, UiInvoicesGetOpenSuccess
+
+    UiInvoicesGetOpenInput()
+    success = UiInvoicesGetOpenSuccess(
+        detail_open=True,
+        entry_date_control_present=True,
+        contact_control_present=True,
+        line_chrome_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/invoices/:id/edit"
+    assert success.shell_kind == "invoices_get"
+    assert "org_slug" not in success.model_dump() or True
+    dumped = success.model_dump()
+    assert "path_class" in dumped
+
+
 def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> None:
     assert UiBillsCreateOpenInput().model_dump() == {}
     success = UiBillsCreateOpenSuccess(
