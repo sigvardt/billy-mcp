@@ -38,7 +38,8 @@ false on `/clients`).
 Peer freezes: [[ui_geo_cities_not_applicable]],
 [[ui_account_groups_not_applicable]],
 [[ui_contact_postings_late_fees_reminder_assoc_not_applicable]],
-[[ui_contact_balance_payments_not_applicable]].
+[[ui_contact_balance_payments_not_applicable]],
+[[ui_invoice_reminders_not_applicable]].
 
 ## Dual-session evidence (non-sensitive)
 
@@ -76,7 +77,7 @@ not absence). See [[ui_annual_reports_inaccessible]].
 | Surface | Why not greened as this package |
 | --- | --- |
 | Clients / Kunder list shell | Contacts workflow only; person markers dual false |
-| Soft `invoiceReminders` + invoices list | Secondary NA candidate deferred (research148) |
+| Soft `invoiceReminders` + invoices list | Greened NA under research149 — see [[ui_invoice_reminders_not_applicable]] |
 | Soft attachments + Bilag uploads | Bilag greened with bilag markers → **reject pure NA** |
 | Soft specials delivery/logs/user_orgs | Settings Levering ambiguity → defer |
 | taxRateDeductionComponents / taxRates | Momssatser multi-resource greened → defer |

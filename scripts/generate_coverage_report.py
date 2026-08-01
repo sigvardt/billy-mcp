@@ -21,14 +21,15 @@ DOCS_ETAG = "wcw4x9hqvu3603"
 DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 
 # Dual-proved geo/reference UI families (research138 + research139 + research142
-# + research143 + research144 + research147 + research148): no equivalent
-# mit.billy.dk workflow (nav absence + soft-empty path class == nonsense).
-# research139 adds currencies/locales after dual path contrast. research142 adds
-# accountNatures/balanceModifiers after residual dual soft-empty. research143
-# adds accountGroups (7 ops including singular delete). research144 adds
-# contactBalancePostings (6) + invoiceReminderAssociations (7) + invoiceLateFees
-# (6) = 19 join/meta ops. research147 adds contactBalancePayments (6 ops).
-# research148 adds contactPersons (7 ops including singular delete).
+# + research143 + research144 + research147 + research148 + research149): no
+# equivalent mit.billy.dk workflow (nav absence + soft-empty path class ==
+# nonsense). research139 adds currencies/locales after dual path contrast.
+# research142 adds accountNatures/balanceModifiers after residual dual soft-empty.
+# research143 adds accountGroups (7 ops including singular delete). research144
+# adds contactBalancePostings (6) + invoiceReminderAssociations (7) +
+# invoiceLateFees (6) = 19 join/meta ops. research147 adds contactBalancePayments
+# (6 ops). research148 adds contactPersons (7 ops including singular delete).
+# research149 adds invoiceReminders (5 ops; no singular update/delete in docs).
 GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.accountGroups.",
     "api.accountNatures.",
@@ -42,12 +43,13 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.currencies.",
     "api.invoiceLateFees.",
     "api.invoiceReminderAssociations.",
+    "api.invoiceReminders.",
     "api.locales.",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 93  # prior 86 + research148 contactPersons 7 ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 98  # prior 93 + research149 invoiceReminders 5 ops
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
     {"accountNatures", "balanceModifiers"}
@@ -58,6 +60,7 @@ GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES: frozenset[str] = frozenset(
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES: frozenset[str] = frozenset({"contactBalancePayments"})
 GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES: frozenset[str] = frozenset({"contactPersons"})
+GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES: frozenset[str] = frozenset({"invoiceReminders"})
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -3521,6 +3524,8 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     freeze; balance shells are contrast only — not a payment workflow).
     research148: contactPersons residual soft-empty dual (dedicated freeze;
     clients/Kunder shell is contacts only — not a contactPersons workflow).
+    research149: invoiceReminders residual soft-empty dual (dedicated freeze;
+    invoices/Fakturaer shell is invoices only — not an invoiceReminders workflow).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -3531,13 +3536,41 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research149 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES
     is_research148 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES
     is_research147 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES
     is_research144 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research148:
+    if is_research149:
+        research_id = "research149"
+        evidence_ref = "research149_invoice_reminders_dual"
+        nonsense_path = "zz-research149-no-such-route"
+        dual_agree_flag = "dual_agree_soft_empty_invoiceReminders"
+        family_label = "invoiceReminders"
+        contrast_shells = (
+            "invoices/clients/suppliers/uploads/settings_company/"
+            "settings_users/settings_invoicing/daybooks/bank_recon/products"
+        )
+        list_heading_suffix = (
+            "/Fakturaer/Kunder/Leverandører/Bilag/Indstillinger/"
+            "daybooks editor/Bankkonti/Afstemning/Produkter"
+        )
+        contrast_controls = [
+            "invoices",
+            "clients",
+            "suppliers",
+            "uploads",
+            "settings_company",
+            "settings_users",
+            "settings_invoicing",
+            "daybooks/new",
+            "bank_reconciliation",
+            "products",
+            nonsense_path,
+        ]
+    elif is_research148:
         research_id = "research148"
         evidence_ref = "research148_contact_persons_dual"
         nonsense_path = "zz-research148-no-such-route"

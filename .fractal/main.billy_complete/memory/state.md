@@ -6,19 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T06:20:00Z
+updated: 2026-08-01T07:43:12Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 47 COMMIT 186.47 at `d9d2c0c`. live/vision **122**;
-  implemented/contract **306**; complete false. Not node finish.
-- Dual-count organizations.list via ui_settings_company_open producted.
-- Discovery still red (1): annual_reports. Bulk 92 external-contract red.
-- Residual UI parity open.
-
+- Continue mode iter 50 EXECUTE 186.50 uncommitted at tip base `dc5f959`.
+  live/vision **140**; implemented/contract **324**; complete false.
+- invoiceReminders NA (5) producted. Residual UI parity open.
+- Bulk 92 + annual_reports still red. Not node finish.
 
 ## PREPARE (iter 45)
 
@@ -4108,3 +4106,140 @@ updated: 2026-08-01T06:20:00Z
 - `fractal commit` product: ui contactPersons not_applicable freeze.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 50 continue)
+
+- Unread inbox/feed: empty. Private BBAD6ED6 + B3A85E2D iter49 COMMIT pointers reacted (+).
+- Saved: empty. No running children (historical only).
+- Branch clean at `dc5f959` (186.49 contactPersons NA freeze) on origin/main.billy_complete.
+- Coverage: complete=false; implemented/contract 319; live/vision 135; API live_tested false (out_of_scope_by_user).
+- Blockers: 92 bulk external-contract BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS;
+  annual_reports org_inaccessible; residual UI parity open (204 incomplete).
+- Next residual candidates (186.49 post-mortem / research148 deferrals):
+  invoiceReminders secondary NA (5 ops, research148 ready); taxRates Momssatser multi-resource;
+  files weak Bilag map; bank recon match isolation; postings no-steal; productPrices nested;
+  daybooks dual-count weak map; specials Levering ambiguity; attachments Bilag markers true.
+- Prefer dual-count list shells onto greened tools where dual soft-empty allows;
+  GEO NA only with dual soft-empty evidence (invoiceReminders next preferred).
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 50)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 75 with commits ahead of tip `dc5f959`; 17 show product-path name deltas.
+  None carry material unmerged product:
+  - Fractal-only / failed-review scaffolding: majority of the 75.
+  - Wiki-only tips (`wave5t_ui_auth_discovery_fallback`,
+    `wave5u_probe_contract_codex_fallback`): pages already on mainline; do not
+    re-merge stale wiki index rows.
+  - `ui_auth_credentials_research_codex_fallback` optional wiki page not on tip —
+    skip (superseded auth research already on root product path).
+  - `ui_auth_status` product (browser/models/server/tests): already on mainline
+    via prior integrate (`auth_status` tools live); child tip far behind on UI
+    files (browser ~376 vs tip ~5550 LOC) — skip re-merge.
+  - Older wave1–5g product tips: tip supersets already integrated; no src/tests
+    content unique to children that tip lacks.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `dc5f959`. Ready RESEARCH residual dual-count/NA (prefer invoiceReminders
+  secondary from research148). Not finish.
+
+## SYNC (iter 50 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Private CE4EFF0E residual pointer + 92E6F4D7 PREPARE done reacted (+).
+- Saved: empty. No running children (historical only).
+- PREPARE already no-op: parent up to date; no child merges. Tip `dc5f959`.
+- Coverage: complete=false; live/vision 135; implemented/contract 319.
+- Ready RESEARCH residual dual-count/NA (prefer invoiceReminders secondary from research148; GEO NA only with dual soft-empty evidence). Not finish.
+
+## RESEARCH (iter 50 / research149)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual headless residual soft routes: invoiceReminders/rykkere/reminders soft-empty
+  == nonsense (body 127) dual agree; tools invoices/clients/uploads dual-ok.
+- Shell-marker dual: invoices Rykker markers dual false; Bilag bilag/upload true
+  (blocks attachments pure NA); settings invoicing Levering true (defer specials).
+- Decision: NA package ui.parity.invoiceReminders.* (5 ops) via GEO NA path
+  (research149; live/vision 135→140; NA 93→98).
+- Defer: specials, attachments, taxRateDeduction, daybooks dual-count, bank*,
+  postings, productPrices, taxRates multi-resource.
+- Brief: tmp/grok-research.md. Dual JSON: research149_residual_dual.json +
+  research149_shell_markers_dual.json.
+- Profiles purged. No coverage greening. Not finish. Next PLAN.
+
+## SYNC (iter 50 pre-PLAN)
+
+- Unread inbox/feed: empty. Private E813A52E pre-RESEARCH + 238D439D research149 done reacted (+).
+- Saved: empty. No running children.
+- research149 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for invoiceReminders NA package (5 rows).
+- Not finish.
+
+## Plan (iter 50)
+
+- Plan: `plans/2026-08-01T07:54:08.039Z-186.50-ui_invoice_reminders_not_applicable.md`
+  — research149: NA package ui.parity.invoiceReminders.* (5 ops) via GEO
+  NA path; inventory live/vision 135→140; NA 93→98; shells 42 unchanged; wiki
+  freeze page; no new tools; complete false; no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 50 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Private 93372C80 pre-PLAN + C344DA21 PLAN done reacted (+).
+- Saved: empty. No running children.
+- Plan 186.50 + research149 brief present. Ready EXECUTE product NA package
+  invoiceReminders (root; no children). Not finish.
+
+## Execute (iter 50)
+
+- Producted research149 / plan 186.50: NA package ui.parity.invoiceReminders.*
+  (5 ops) via GEO NA path (research149 branch + prefix + ROW_COUNT 98).
+- Inventory tests: research149 evidence_ref; invoiceReminders five-row asserts;
+  associations stay green; attachments/specials stay red; live/vision 135→140;
+  NA 93→98.
+- Wiki: ui_invoice_reminders_not_applicable + _index + peer cross-links.
+- Regenerated coverage: implemented/contract 324; live/vision 140; complete false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC (iter 50 pre-INDEPENDENT-REVIEW)
+
+- Unread inbox/feed: empty. Private B5C3143E pre-EXECUTE + 74137286 EXECUTE done reacted (+).
+- Saved: empty. No running children.
+- EXECUTE 186.50 uncommitted: invoiceReminders NA package; live/vision 140;
+  implemented/contract 324; complete=false; offline 1565 pass.
+- Outbox: ready for IR of NA package. Not finish.
+
+## Independent review (iter 50)
+
+- Product 186.50 invoiceReminders NA package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (probe shell_paths
+  TargetClosedError; invoices body_len dual variance; specials Levering defer).
+- Five NA rows integrity OK; attachments/specials/etc stay red; bulk 92 red;
+  annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 50 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Private 7056A3E7 pre-IR + 175D8077 IR ACCEPT reacted (+).
+- Saved: empty. No running children.
+- IR ACCEPT 186.50 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 50 / 186.50)
+
+- IR required fixes: none. Optional N1–N3 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: invoiceReminders NA 5 green; live/vision 140; NA 98;
+  implemented/contract 324; complete false; bulk 92 external-contract; annual
+  stay red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 50 pre-COMMIT)
+
+- Unread inbox/feed: empty. Private D7D4A9F7 pre-FIX-VERIFY + 75E0B402 FIX-VERIFY done reacted (+).
+- Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.50
+  invoiceReminders NA package. Not node finish (complete false).
+
