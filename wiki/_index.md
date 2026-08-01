@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-01T17:46:13Z
+updated: 2026-08-01T18:43:20Z
 ---
 
 # billy_mcp
@@ -44,6 +44,8 @@ updated: 2026-08-01T17:46:13Z
 [[ui_bills_list_shell|ui_bills_list_shell]]: Read-only headless ui_bills_list contract for Billy bills (purchases / Køb) list shell open only.
 
 [[ui_clients_create_open_shell|ui_clients_create_open_shell]]: Read-only headless ui_clients_create_open contract for Billy clients create dialog form open only (research160).
+
+[[ui_clients_get_open_shell|ui_clients_get_open_shell]]: Read-only headless ui_clients_get_open contract for Billy contact customer profile get/open only (research164).
 
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.
 

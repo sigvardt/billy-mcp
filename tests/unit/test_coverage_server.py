@@ -19,6 +19,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
+    UiClientsGetOpenSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenSuccess,
@@ -467,6 +468,21 @@ class FakeUiClientsCreateOpenService:
             name_field_visible=True,
             registration_no_field_present=True,
             address_or_person_fields_present=True,
+            shell_markers_present=True,
+        )
+
+
+class FakeUiClientsGetOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_clients_get_open(self) -> UiClientsGetOpenSuccess:
+        self.calls += 1
+        return UiClientsGetOpenSuccess(
+            detail_open=True,
+            contact_name_visible=True,
+            edit_action_visible=True,
+            detail_markers_present=True,
             shell_markers_present=True,
         )
 
@@ -983,6 +999,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_products_list",
         "ui_clients_list",
         "ui_clients_create_open",
+        "ui_clients_get_open",
         "ui_bank_accounts_list",
         "ui_quotes_list",
         "ui_recurring_invoices_list",
@@ -1248,6 +1265,38 @@ def test_ui_clients_create_open_registration_has_empty_input_and_typed_output(
         }
     }
     assert clients_create.calls == 1
+
+
+def test_ui_clients_get_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    clients_get = FakeUiClientsGetOpenService()
+    server = create_server(tmp_path, ui_clients_get_open_service=clients_get)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_clients_get_open"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_clients_get_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/contacts/:id/customer",
+            "shell_kind": "clients_get",
+            "detail_open": True,
+            "contact_name_visible": True,
+            "edit_action_visible": True,
+            "detail_markers_present": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert clients_get.calls == 1
 
 
 def test_ui_suppliers_create_open_registration_has_empty_input_and_typed_output(

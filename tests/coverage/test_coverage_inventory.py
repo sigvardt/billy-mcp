@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 57 greened shells/parity + products_create discovery+parity (research163) = 59
+    # Prior 59 greened shells/parity + contacts.get detail open (research164) = 60
     # live/vision rows without GEO NA.
-    ui_shell_green = 59
+    ui_shell_green = 60
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -739,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 59 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 60 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 166
+    assert status["qualification"]["live_tested_rows"] == 167
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -765,6 +765,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.contacts.list",
         "ui.discovery.clients_create",
         "ui.parity.contacts.create",
+        "ui.parity.contacts.get",
         "ui.discovery.bank_accounts",
         "ui.discovery.quotes",
         "ui.discovery.recurring_invoices",
@@ -826,6 +827,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.contacts.list": "ui_clients_list",
         "ui.discovery.clients_create": "ui_clients_create_open",
         "ui.parity.contacts.create": "ui_clients_create_open",
+        "ui.parity.contacts.get": "ui_clients_get_open",
         "ui.discovery.bank_accounts": "ui_bank_accounts_list",
         "ui.discovery.quotes": "ui_quotes_list",
         "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
@@ -892,7 +894,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 59
+    assert len(qualified) == 60
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -910,6 +912,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
             "list_shell_open_only",
             "shell_open_only",
             "form_open_only",
+            "detail_open_only",
             "soft_empty_shell_observed",
         }
     invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
@@ -1123,6 +1126,12 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert contacts_create_parity["parity_status"] == "form_open_only"
     assert "api.contacts.create" in contacts_create_parity["evidence"]
     assert "research160" in contacts_create_parity["evidence"]
+    contacts_get_parity = next(row for row in qualified if row["id"] == "ui.parity.contacts.get")
+    assert contacts_get_parity["api_row_id"] == "api.contacts.get"
+    assert contacts_get_parity["tool_name"] == "ui_clients_get_open"
+    assert contacts_get_parity["parity_status"] == "detail_open_only"
+    assert "api.contacts.get" in contacts_get_parity["evidence"]
+    assert "research164" in contacts_get_parity["evidence"]
     clients_create_discovery = next(
         row for row in qualified if row["id"] == "ui.discovery.clients_create"
     )
@@ -1156,7 +1165,6 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",
-        "ui.parity.contacts.get",
         "ui.parity.contacts.update",
         "ui.parity.contacts.delete",
         "ui.parity.files.get",
@@ -1247,6 +1255,18 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert by_host["api.billysbilling.com"]["browser_action"] == "path_allow"
     assert any(
         rule.get("path") == "/v2/user/login" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/contacts" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/contacts" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/countries" and "GET" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
     assert by_host["api.billy.dk"]["browser_action"] == "deny"

@@ -30,6 +30,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
+    UiClientsGetOpenSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
     UiDaybooksOpenSuccess,
@@ -102,8 +103,17 @@ _PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
 _PRODUCTS_LIST_HEADING = "Produkter"
 _PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
 _CLIENTS_LIST_PATH = re.compile(r"^/[^/]+/clients$")
+_CLIENTS_DETAIL_PATH = re.compile(
+    r"^/[^/]+/contacts/([^/]+)/(customer|supplier)$",
+    re.I,
+)
 _CLIENTS_LIST_HEADING = "Kunder"
 _CLIENTS_CREATE_CTA = "Opret kontakt"
+_CLIENTS_HEADER_ROW_RE = re.compile(
+    r"^(navn|e-?mail|telefon|land|oprettet|name|email|phone|country|created)"
+    r"(\s|$)",
+    re.I,
+)
 _BANK_ACCOUNTS_LIST_PATH = re.compile(r"^/[^/]+/bank-accounts$")
 _BANK_ACCOUNTS_LIST_HEADING = "Bankkonti"
 _BANK_ACCOUNTS_CONNECT_CTA = "Forbind til bank"
@@ -619,6 +629,12 @@ class UiClientsCreateOpenService(Protocol):
     """Injectable seam for the read-only clients create form open observation."""
 
     async def ui_clients_create_open(self) -> UiClientsCreateOpenSuccess | ToolError: ...
+
+
+class UiClientsGetOpenService(Protocol):
+    """Injectable seam for the read-only clients detail get-open observation."""
+
+    async def ui_clients_get_open(self) -> UiClientsGetOpenSuccess | ToolError: ...
 
 
 class UiSuppliersCreateOpenService(Protocol):
@@ -1441,6 +1457,85 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser clients create form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_clients_get_open(self) -> UiClientsGetOpenSuccess | ToolError:
+        """Open a client (contact) detail surface for the authenticated UI session only.
+
+        Research164: path-scoped contacts egress unlocks GET /v2/contacts so list rows
+        can load. Open first non-header client detail (path /:org_slug/clients/:id or
+        valued name on detail drawer). Never Gem/Slet/submit. Distinct from list shell
+        and create form_open. Header-only dialogs are not success.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_clients_get_changed_error()
+
+            clients_url = f"https://mit.billy.dk/{slug}/clients"
+            await page.goto(clients_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(40):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_clients_get_changed_error()
+                if _is_clients_new_soft_url(page.url):
+                    return _ui_clients_get_changed_error()
+
+                if await _has_clients_detail_signature(page, slug):
+                    flags = await _clients_detail_flags(page)
+                    return UiClientsGetOpenSuccess(
+                        detail_open=True,
+                        contact_name_visible=flags["contact_name_visible"],
+                        edit_action_visible=flags["edit_action_visible"],
+                        detail_markers_present=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_clients_list_url(page.url) and await _has_clients_list_heading(page):
+                    opened = await _click_clients_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_clients_get_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the clients detail observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser clients detail observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4944,6 +5039,134 @@ async def _has_clients_list_signature(page: LoginPage) -> bool:
         return False
 
 
+def _is_clients_detail_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/contacts/:id/customer|supplier profile paths."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    if not (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+    ):
+        return False
+    return bool(_CLIENTS_DETAIL_PATH.match(parsed.path or ""))
+
+
+def _is_clients_header_row_text(text: str) -> bool:
+    """Reject table header rows (research162 false-positive trap)."""
+
+    compact = re.sub(r"\s+", " ", text).strip()
+    if not compact or len(compact) < 2:
+        return True
+    labels = re.split(r"[\n\t|/]+", compact)
+    hits = sum(1 for lab in labels if _CLIENTS_HEADER_ROW_RE.search(lab.strip()))
+    if hits >= 2:
+        return True
+    if _CLIENTS_HEADER_ROW_RE.search(compact) and len(compact) < 48:
+        return True
+    return False
+
+
+async def _clients_detail_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII detail flags for customer profile overview (research164 execute)."""
+
+    contact_name_visible = False
+    edit_action_visible = False
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:1200]
+    except Exception:
+        body = ""
+    # Profile header uses "Name (Kunde)" / "Name (Leverandør)" without name input.
+    if re.search(r"\(\s*(Kunde|Leverandør|Customer|Supplier)\s*\)", body, re.I):
+        contact_name_visible = True
+    if re.search(r"\b(Ret|Edit)\b", body):
+        edit_action_visible = True
+    try:
+        ret = page.locator("text=Ret")
+        if await ret.count() >= 1 and await ret.first.is_visible():
+            edit_action_visible = True
+    except Exception:
+        pass
+    return {
+        "contact_name_visible": contact_name_visible,
+        "edit_action_visible": edit_action_visible,
+    }
+
+
+async def _has_clients_detail_signature(page: LoginPage, slug: str) -> bool:
+    """Strict clients detail signature — contacts/:id/customer profile overview."""
+
+    del slug
+    try:
+        if _is_clients_new_soft_url(page.url):
+            return False
+        if not _is_clients_detail_url(page.url):
+            return False
+        flags = await _clients_detail_flags(page)
+        return flags["contact_name_visible"] and flags["edit_action_visible"]
+    except Exception:
+        return False
+
+
+async def _click_clients_detail_candidate(page: LoginPage, slug: str) -> bool:
+    """Click first non-header client row or contacts profile link. Never create CTA or Gem."""
+
+    # Prefer anchors to contact profile
+    try:
+        links = page.locator(f"a[href*='/{slug}/contacts/'], a[href*='/{slug}/clients/']")
+        count = await links.count()
+        for index in range(min(count, 20)):
+            link = links.nth(index)
+            try:
+                if not await link.is_visible():
+                    continue
+                href = await link.get_attribute("href") or ""
+                if href.rstrip("/").endswith("/clients") or "/new" in href or "import" in href:
+                    continue
+                if not re.search(
+                    rf"/{re.escape(slug)}/(contacts|clients)/[^/?#]+",
+                    href,
+                ):
+                    continue
+                text = (await link.inner_text()).strip()
+                if _is_clients_header_row_text(text):
+                    continue
+                await link.click()
+                return True
+            except Exception:
+                continue
+    except Exception:
+        pass
+
+    # Table / role rows (Billy clients list often has no id anchors)
+    try:
+        rows = page.locator("table tbody tr, [role='row']")
+        count = await rows.count()
+        for index in range(min(count, 25)):
+            row = rows.nth(index)
+            try:
+                if not await row.is_visible():
+                    continue
+                text = (await row.inner_text()).strip()
+                if _is_clients_header_row_text(text):
+                    continue
+                if len(text) < 2:
+                    continue
+                await row.click()
+                return True
+            except Exception:
+                continue
+    except Exception:
+        pass
+    return False
+
+
 async def _has_bank_accounts_list_signature(page: LoginPage) -> bool:
     """Verify the research105 bank accounts list heading and connect CTA without clicking."""
 
@@ -6506,6 +6729,15 @@ def _ui_clients_create_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy clients create form interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_clients_get_changed_error() -> ToolError:
+    """Fail closed when the clients detail surface no longer matches research164."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy clients detail interface no longer matches the recorded signature.",
     )
 
 

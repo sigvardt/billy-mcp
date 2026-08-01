@@ -25,6 +25,8 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsCreateOpenInput,
     UiClientsCreateOpenSuccess,
+    UiClientsGetOpenInput,
+    UiClientsGetOpenSuccess,
     UiClientsListInput,
     UiClientsListSuccess,
     UiCreditorBalancesListInput,
@@ -278,6 +280,25 @@ def test_ui_clients_create_open_models_are_empty_input_and_non_pii_success() -> 
         raise AssertionError("extra fields must be forbidden")
     except Exception:
         pass
+
+
+def test_ui_clients_get_open_models_are_empty_input_and_non_pii_success() -> None:
+    empty = UiClientsGetOpenInput()
+    assert empty.model_dump() == {}
+    success = UiClientsGetOpenSuccess(
+        detail_open=True,
+        contact_name_visible=True,
+        edit_action_visible=True,
+        detail_markers_present=True,
+        shell_markers_present=True,
+    )
+    assert success.shell_kind == "clients_get"
+    assert success.path_class == "/:org_slug/contacts/:id/customer"
+    dumped = success.model_dump()
+    assert "org_slug" not in dumped
+    assert "url" not in dumped
+    properties = UiClientsGetOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
 
 
 def test_ui_suppliers_create_open_models_are_empty_input_and_non_pii_success() -> None:

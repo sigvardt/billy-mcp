@@ -195,6 +195,30 @@ class UiClientsCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiClientsGetOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only clients detail get-open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiClientsGetOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy client (contact) detail surface.
+
+    Research164 execute: detail path is /:org_slug/contacts/:id/customer (customer
+    profile overview with Ret/Opret chrome), not an editable name input form.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/contacts/:id/customer"] = "/:org_slug/contacts/:id/customer"
+    shell_kind: Literal["clients_get"] = "clients_get"
+    detail_open: bool
+    contact_name_visible: bool
+    edit_action_visible: bool
+    detail_markers_present: bool
+    shell_markers_present: bool
+
+
 class UiSuppliersCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only suppliers create form open tool."""
 

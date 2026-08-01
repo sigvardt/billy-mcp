@@ -101,6 +101,10 @@ UI_CLIENTS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_CLIENTS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_create_open.py"
 UI_CLIENTS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_CLIENTS_CREATE_OPEN_TOOL_NAME = "ui_clients_create_open"
+UI_CLIENTS_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_CLIENTS_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_get_open.py"
+UI_CLIENTS_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_CLIENTS_GET_OPEN_TOOL_NAME = "ui_clients_get_open"
 UI_SUPPLIERS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SUPPLIERS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_create_open.py"
 UI_SUPPLIERS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1841,6 +1845,82 @@ def apply_ui_clients_create_open_shell_evidence(
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_clients_get_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_get: bool = False,
+) -> None:
+    """Mark clients detail **get/open only** evidence (research164).
+
+    Empty-input tool; open /:org_slug/clients, open first non-header contact detail
+    (path class /:org_slug/clients/:id or valued name drawer). Never Gem/Slet.
+    Header-row false positives rejected. Requires scoped browser path_allow for
+    GET /v2/contacts (and seed POST/DELETE when live harness creates disposables).
+    When ``parity_of_api_get`` is true, dual-counts exact ``ui.parity.contacts.get``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/clients + first non-header contact detail "
+        "(read-only clients get/open; never Gem/Slet/Save submit; "
+        "header-only dialog not success; soft /clients/new not success)"
+    )
+    row["tool_name"] = UI_CLIENTS_GET_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "contact_name_visible",
+        "edit_action_visible",
+        "detail_markers_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_get:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_CLIENTS_GET_OPEN_MODEL_TEST_REFERENCE,
+        UI_CLIENTS_GET_OPEN_UNIT_TEST_REFERENCE,
+        UI_CLIENTS_GET_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research164 dual-session headless observation + ui_clients_get_open product; "
+        "scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/contacts and "
+        "GET /v2/countries (data-plane was ERR_BLOCKED_BY_CLIENT under auth-only path_allow); "
+        "detail open only (path class /:org_slug/contacts/:id/customer customer profile "
+        "overview, shell_kind=clients_get, non-header row open with Name (Kunde) + Ret chrome; "
+        "never Gem/Slet/Ret submit; header-only dialog rejected; distinct from list shell "
+        "ui_clients_list and create form_open ui_clients_create_open); "
+        "vision record tmp/vision-records/ui_clients_get_open.json "
+        "(client detail frames, accept)"
+    )
+    if parity_of_api_get:
+        row["evidence"] = f"{row['evidence']}; maps api.contacts.get to UI detail get/open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "detail_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness may create disposable contact "
+        "then delete in reverse with fresh list read-back"
+    )
     row["errors"] = [
         "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
@@ -4574,6 +4654,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.contacts.create":
             apply_ui_clients_create_open_shell_evidence(row, parity_of_api_create=True)
+        if api_row["id"] == "api.contacts.get":
+            apply_ui_clients_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.list":
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":
@@ -4684,11 +4766,20 @@ def build_browser_egress() -> dict[str, Any]:
                 "browser_action": "path_allow",
                 "api_client_action": "exclusive_allow",
                 "owner": "ui_auth",
-                "purpose": "Path-scoped browser XHR for headless login and shell settle only",
-                "condition": "browser auth/bootstrap paths only; never full API browse",
+                "purpose": (
+                    "Path-scoped browser XHR for headless login, shell settle, and "
+                    "typed contacts UI get/list/create-seed cleanup only"
+                ),
+                "condition": (
+                    "browser auth/bootstrap paths plus scoped UI contacts data-plane "
+                    "(research164); never full API browse"
+                ),
                 "evidence": (
                     "research100 headless credentialed discovery: POST /v2/user/login "
-                    "then bootstrap GETs reach /:org_slug/dashboard"
+                    "then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: "
+                    "GET/POST/DELETE /v2/contacts and GET /v2/countries required for clients "
+                    "list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under "
+                    "auth-only path_allow); products/invoices/emails paths still denied"
                 ),
                 "browser_path_allows": [
                     {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
@@ -4701,6 +4792,10 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/organizations/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/organizations/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/e-invoicing/"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/contacts"},
+                    {"match": "prefix", "methods": ["POST"], "path": "/v2/contacts"},
+                    {"match": "prefix", "methods": ["DELETE"], "path": "/v2/contacts"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/countries"},
                 ],
                 "test_references": [
                     TEST_REFERENCE,
@@ -4708,6 +4803,8 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_INVOICES_LIST_LIVE_TEST_REFERENCE,
                     UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE,
                     UI_CLIENTS_LIST_LIVE_TEST_REFERENCE,
+                    UI_CLIENTS_GET_OPEN_LIVE_TEST_REFERENCE,
+                    UI_CLIENTS_CREATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_BANK_ACCOUNTS_LIST_LIVE_TEST_REFERENCE,
                     UI_QUOTES_LIST_LIVE_TEST_REFERENCE,
                     UI_RECURRING_INVOICES_LIST_LIVE_TEST_REFERENCE,

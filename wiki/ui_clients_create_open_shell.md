@@ -47,3 +47,5 @@ the outside-git UI identity file.
 Maps offline `api.contacts.create` (`POST /v2/contacts`) to form-open-only UI
 parity under research160 dual-session evidence.
 
+
+- [[ui_clients_get_open_shell]]

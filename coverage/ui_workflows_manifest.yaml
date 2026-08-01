@@ -6317,38 +6317,48 @@
     {
       "api_row_id": "api.contacts.get",
       "area": "contacts",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness may create disposable contact then delete in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.get",
+      "evidence": "research164 dual-session headless observation + ui_clients_get_open product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/contacts and GET /v2/countries (data-plane was ERR_BLOCKED_BY_CLIENT under auth-only path_allow); detail open only (path class /:org_slug/contacts/:id/customer customer profile overview, shell_kind=clients_get, non-header row open with Name (Kunde) + Ret chrome; never Gem/Slet/Ret submit; header-only dialog rejected; distinct from list shell ui_clients_list and create form_open ui_clients_create_open); vision record tmp/vision-records/ui_clients_get_open.json (client detail frames, accept); maps api.contacts.get to UI detail get/open only",
       "filters": [],
       "id": "ui.parity.contacts.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contacts.get",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/clients + first non-header contact detail (read-only clients get/open; never Gem/Slet/Save submit; header-only dialog not success; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
+      "parity_status": "detail_open_only",
+      "request_fields": [],
       "response_fields": [
-        "contact"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "contact_name_visible",
+        "edit_action_visible",
+        "detail_markers_present",
+        "shell_markers_present"
       ],
-      "sensitivity": "low",
-      "side_effects": "none",
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_clients_get_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_clients_get_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

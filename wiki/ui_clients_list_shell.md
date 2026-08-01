@@ -45,3 +45,5 @@ must not embed full API filter schemas while greened.
 
 Maps offline `api.contacts.list` for list-open parity only. API `live_tested`
 remains false under user-scoped qualification.
+
+- [[ui_clients_get_open_shell]]
