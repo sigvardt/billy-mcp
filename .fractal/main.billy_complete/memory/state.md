@@ -3683,3 +3683,11 @@ updated: 2026-08-01T05:34:38Z
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.46
   accounts.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 46)
+
+- `fractal commit` product: ui accounts list dual-count via settings accounting
+  shell (`b6de810` or tip).
+- Pushed to origin/main.billy_complete (confirm via status).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
