@@ -2591,3 +2591,13 @@ updated: 2026-08-01T01:05:00Z
   annual_reports: decide not_applicable vs exact unresolved requirement from
   Upsedasse dual evidence. No invent/weaken.
 - Still commit 186.37 bulk shape package this step; steer applies after.
+
+
+## COMMIT (iter 37)
+
+- `fractal commit` product: bulk offline shape evidence package no tools
+  (`6ef0e69`).
+- Not node finish (complete false; bulk + residual + annual + UI parity remain).
+- Saved parent steer B148CF36 for next iteration: no more evidence-only bulk
+  loops; one docs/asset bulk-schema sweep or external-contract blocker; then
+  interface parity; annual_reports not_applicable decision from Upsedasse.
