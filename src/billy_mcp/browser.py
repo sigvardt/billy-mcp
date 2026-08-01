@@ -27,6 +27,7 @@ from billy_mcp.models import (
     UiAddonsOpenSuccess,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
+    UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
@@ -123,6 +124,10 @@ _SUPPLIERS_CREATE_CTA = "Opret kontakt"
 _BILLS_LIST_PATH = re.compile(r"^/[^/]+/bills$")
 _BILLS_LIST_HEADING = "Køb"
 _BILLS_CREATE_CTA = "Opret køb"
+_BILLS_CREATE_PATH = re.compile(r"^/[^/]+/bills/new$")
+_BILLS_CREATE_HEADING = "Opret køb"
+_BILLS_CREATE_DRAFT_SAVE_CHROME = "Gem som kladde"
+_BILLS_CREATE_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse", "Linje")
 # Research111: debtor balances list shell (receivables); no /v2/debtorbalance API resource.
 _DEBTOR_BALANCES_LIST_PATH = re.compile(r"^/[^/]+/debtorbalance$")
 _DEBTOR_BALANCES_LIST_HEADING = "Tilgodehavender"
@@ -640,6 +645,12 @@ class UiBillsListService(Protocol):
     """Injectable seam for the read-only bills (purchases) list shell observation."""
 
     async def ui_bills_list(self) -> UiBillsListSuccess | ToolError: ...
+
+
+class UiBillsCreateOpenService(Protocol):
+    """Injectable seam for the read-only bill create form open observation."""
+
+    async def ui_bills_create_open(self) -> UiBillsCreateOpenSuccess | ToolError: ...
 
 
 class UiDebtorBalancesListService(Protocol):
@@ -1682,6 +1693,72 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser bills list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_bills_create_open(self) -> UiBillsCreateOpenSuccess | ToolError:
+        """Open the bill create form shell for the current authenticated UI session only.
+
+        Research154: navigate to /:org_slug/bills/new (dual-proved real form).
+        Form open only — never click Godkend / Gem som kladde / Upload fil / Træk /
+        Tilføj linje / Slet. Distinct from list shell and invoice specials.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bills_create_changed_error()
+
+            create_url = f"https://mit.billy.dk/{slug}/bills/new"
+            await page.goto(create_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bills_create_changed_error()
+                if _is_bills_create_url(page.url) and await _has_bills_create_signature(page):
+                    return UiBillsCreateOpenSuccess(
+                        draft_save_chrome_visible=True,
+                        line_chrome_visible=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_bills_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the bills create form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bills create form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -3597,6 +3674,24 @@ def _is_invoices_create_url(url: str) -> bool:
     )
 
 
+def _is_bills_create_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/bills/new, including Billy query params."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_BILLS_CREATE_PATH.match(parsed.path or ""))
+    )
+
+
 def _is_products_list_url(url: str) -> bool:
     """Accept mit.billy.dk /:org_slug/products, including Billy list query params."""
 
@@ -4381,6 +4476,36 @@ async def _has_invoices_create_signature(page: LoginPage) -> bool:
         for marker in _INVOICES_CREATE_LINE_CHROME_MARKERS:
             control = page.locator(f"text={marker}")
             if await control.count() >= 1 and await control.is_visible():
+                line_ok = True
+                break
+        return line_ok
+    except Exception:
+        return False
+
+
+async def _has_bills_create_signature(page: LoginPage) -> bool:
+    """Verify research154 create form heading + draft chrome + line chrome without clicking.
+
+    Billy may render more than one h1 on /bills/new; use .first so multi-match
+    locators do not fail Playwright strict-mode visibility checks.
+    """
+
+    try:
+        headings = page.locator("h1")
+        if await headings.count() < 1:
+            return False
+        heading = headings.first
+        if not await heading.is_visible():
+            return False
+        if (await heading.inner_text()).strip() != _BILLS_CREATE_HEADING:
+            return False
+        draft = page.locator(f"text={_BILLS_CREATE_DRAFT_SAVE_CHROME}")
+        if await draft.count() < 1 or not await draft.first.is_visible():
+            return False
+        line_ok = False
+        for marker in _BILLS_CREATE_LINE_CHROME_MARKERS:
+            control = page.locator(f"text={marker}")
+            if await control.count() >= 1 and await control.first.is_visible():
                 line_ok = True
                 break
         return line_ok
@@ -5753,6 +5878,15 @@ def _ui_invoices_create_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices create form interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_bills_create_changed_error() -> ToolError:
+    """Fail closed when the bills create form no longer matches research154."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy bills create form interface no longer matches the recorded signature.",
     )
 
 

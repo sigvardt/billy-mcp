@@ -39,6 +39,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_bank_reconciliation_open_shell|ui_bank_reconciliation_open_shell]]: Read-only headless ui_bank_reconciliation_open contract for Billy Afstemning shell open only.
 
+[[ui_bills_create_open_shell|ui_bills_create_open_shell]]: Read-only headless ui_bills_create_open contract for Billy bill create form open only (research154).
+
 [[ui_bills_list_shell|ui_bills_list_shell]]: Read-only headless ui_bills_list contract for Billy bills (purchases / Køb) list shell open only.
 
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.

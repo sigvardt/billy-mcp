@@ -16,6 +16,7 @@ from billy_mcp.models import (
     UiAddonsOpenSuccess,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
+    UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
@@ -433,6 +434,19 @@ class FakeUiInvoicesCreateOpenService:
     async def ui_invoices_create_open(self) -> UiInvoicesCreateOpenSuccess:
         self.calls += 1
         return UiInvoicesCreateOpenSuccess(
+            draft_save_chrome_visible=True,
+            line_chrome_visible=True,
+            shell_markers_present=True,
+        )
+
+
+class FakeUiBillsCreateOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_bills_create_open(self) -> UiBillsCreateOpenSuccess:
+        self.calls += 1
+        return UiBillsCreateOpenSuccess(
             draft_save_chrome_visible=True,
             line_chrome_visible=True,
             shell_markers_present=True,
@@ -912,6 +926,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert ui_tool_names == {
         "ui_invoices_list",
         "ui_invoices_create_open",
+        "ui_bills_create_open",
         "ui_products_list",
         "ui_clients_list",
         "ui_bank_accounts_list",
@@ -1086,6 +1101,37 @@ def test_ui_invoices_create_open_registration_has_empty_input_and_typed_output(
         }
     }
     assert invoices_create.calls == 1
+
+
+def test_ui_bills_create_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    bills_create = FakeUiBillsCreateOpenService()
+    server = create_server(tmp_path, ui_bills_create_open_service=bills_create)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_bills_create_open"]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_bills_create_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/bills/new",
+            "heading": "Opret køb",
+            "shell_kind": "bills_create",
+            "draft_save_chrome_visible": True,
+            "line_chrome_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert bills_create.calls == 1
 
 
 def test_ui_products_list_registration_has_empty_input_and_typed_output(tmp_path: Path) -> None:

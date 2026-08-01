@@ -94,6 +94,52 @@
     },
     {
       "api_row_id": null,
+      "area": "bills_create",
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
+      "errors": [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
+      ],
+      "evidence": "research154 dual-session headless observation + ui_bills_create_open product; form open only (path class /:org_slug/bills/new, h1 Opret k\u00f8b, shell_kind=bills_create, Gem som kladde + line chrome; never submit; distinct from list shell ui_bills_list and special invoice_email); soft /emails empty dual; vision record tmp/vision-records/ui_bills_create_open.json (Opret k\u00f8b form frames, accept)",
+      "filters": [],
+      "id": "ui.discovery.bills_create",
+      "implemented": true,
+      "lane": "ui",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/bills/new (read-only bill create form open; never Godkend/Gem som kladde/Upload fil/Tr\u00e6k/Tilf\u00f8j linje/Slet)",
+      "operation": "discovery",
+      "pagination": null,
+      "parity_status": "form_open_only",
+      "request_fields": [],
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "draft_save_chrome_visible",
+        "line_chrome_visible",
+        "shell_markers_present"
+      ],
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_bills_create_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_bills_create_open",
+      "vision_evidence": null,
+      "vision_verified": true,
+      "workflow_kind": "discovery"
+    },
+    {
+      "api_row_id": null,
       "area": "quotes",
       "cleanup": "not_applicable; read-only observation creates no records",
       "contract_tested": true,
@@ -4566,38 +4612,47 @@
     {
       "api_row_id": "api.bills.create",
       "area": "bills",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.create",
+      "evidence": "research154 dual-session headless observation + ui_bills_create_open product; form open only (path class /:org_slug/bills/new, h1 Opret k\u00f8b, shell_kind=bills_create, Gem som kladde + line chrome; never submit; distinct from list shell ui_bills_list and special invoice_email); soft /emails empty dual; vision record tmp/vision-records/ui_bills_create_open.json (Opret k\u00f8b form frames, accept); maps api.bills.create to UI create-form open only",
       "filters": [],
       "id": "ui.parity.bills.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.bills.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/bills/new (read-only bill create form open; never Godkend/Gem som kladde/Upload fil/Tr\u00e6k/Tilf\u00f8j linje/Slet)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "bill"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "draft_save_chrome_visible",
+        "line_chrome_visible",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates bill",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_bills_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_bills_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

@@ -52,3 +52,7 @@ Dual independent headless sessions prove DOM classification (research153).
 Vision review covers create-form frames only; durable record is non-sensitive
 with `purge_verified` after frame purge. Inventory dual-counts exact
 `api.invoices.create` only.
+
+## Related
+
+- [[ui_bills_create_open_shell]]

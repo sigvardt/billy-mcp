@@ -25,6 +25,7 @@ from billy_mcp.models import (
     UiAddonsOpenSuccess,
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
+    UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsListSuccess,
     UiCreditorBalancesListSuccess,
@@ -984,6 +985,25 @@ def _invoices_create_shell_controls() -> dict[str, FakeLoginControl]:
     }
 
 
+def _bills_create_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Opret køb"),
+        "text=Gem som kladde": FakeLoginControl(text="Gem som kladde"),
+        "text=Tilføj linje": FakeLoginControl(text="Tilføj linje"),
+        "text=Beskrivelse": FakeLoginControl(text="Beskrivelse"),
+        "text=Linje": FakeLoginControl(text="Linje"),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
 def _invoices_shell_controls() -> dict[str, FakeLoginControl]:
     return {
         "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
@@ -1349,6 +1369,175 @@ def test_ui_invoices_create_open_accepts_create_url_with_query_params(tmp_path: 
     result = asyncio.run(runtime.ui_invoices_create_open())
 
     assert result == UiInvoicesCreateOpenSuccess(
+        draft_save_chrome_visible=True,
+        line_chrome_visible=True,
+        shell_markers_present=True,
+    )
+
+
+def test_ui_bills_create_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_bills_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_bills_create_open_returns_success_for_create_form(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_bills_create_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_bills_create_open())
+
+    assert result == UiBillsCreateOpenSuccess(
+        draft_save_chrome_visible=True,
+        line_chrome_visible=True,
+        shell_markers_present=True,
+    )
+    assert any(url.endswith("/bills/new") for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert "click:" not in " ".join(page.events)
+
+
+def test_ui_bills_create_open_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _bills_create_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Upsedasse!")
+    controls["text=Gem som kladde"] = FakeLoginControl(count=0, visible=False)
+    controls["text=Upsedasse!"] = FakeLoginControl(text="Upsedasse!")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_bills_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert "bills create form" in result.message
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+
+
+def test_ui_bills_create_open_returns_ui_changed_when_heading_missing(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _bills_create_shell_controls()
+    controls["h1"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_bills_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_bills_create_open_accepts_create_url_with_query_params(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_bills_create_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    async def goto_keep_query(url: str, *, wait_until: str) -> object:
+        page.navigation.append((url, wait_until))
+        page.events.append("goto")
+        if url.rstrip("/").endswith("/bills/new") or "/bills/new?" in url:
+            page.url = "https://mit.billy.dk/test-org-slug/bills/new?source=nav"
+        else:
+            page.url = url
+        return object()
+
+    page.goto = goto_keep_query  # type: ignore[method-assign]
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_bills_create_open())
+
+    assert result == UiBillsCreateOpenSuccess(
         draft_save_chrome_visible=True,
         line_chrome_visible=True,
         shell_markers_present=True,

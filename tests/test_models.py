@@ -19,6 +19,8 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenInput,
     UiBankReconciliationOpenSuccess,
+    UiBillsCreateOpenInput,
+    UiBillsCreateOpenSuccess,
     UiBillsListInput,
     UiBillsListSuccess,
     UiClientsListInput,
@@ -189,6 +191,40 @@ def test_ui_invoices_create_open_models_are_empty_input_and_non_pii_success() ->
                 "path_class": "/:org_slug/invoices/new",
                 "heading": "Opret faktura",
                 "shell_kind": "invoices_create",
+                "draft_save_chrome_visible": True,
+                "line_chrome_visible": True,
+                "shell_markers_present": True,
+                "org_slug": "secret",
+            }
+        )
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+
+
+def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiBillsCreateOpenInput().model_dump() == {}
+    success = UiBillsCreateOpenSuccess(
+        draft_save_chrome_visible=True,
+        line_chrome_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/bills/new"
+    assert success.heading == "Opret køb"
+    assert success.shell_kind == "bills_create"
+    properties = UiBillsCreateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+    try:
+        UiBillsCreateOpenInput.model_validate({"url": "https://untrusted.example"})
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+    try:
+        UiBillsCreateOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/bills/new",
+                "heading": "Opret køb",
+                "shell_kind": "bills_create",
                 "draft_save_chrome_visible": True,
                 "line_chrome_visible": True,
                 "shell_markers_present": True,

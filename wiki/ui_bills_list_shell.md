@@ -50,3 +50,7 @@ covers list-surface frames only; durable record is non-sensitive with
 
 Offline `api.bills.*` clear CRUD is contract-green separately; API
 `live_tested` remains false under user-scoped qualification.
+
+## Related
+
+- [[ui_bills_create_open_shell]]

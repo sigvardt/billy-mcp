@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 45 greened shells/parity + discovery invoices_create
-    # + invoices.create dual-count = 47 live/vision rows without GEO NA.
-    ui_shell_green = 47
+    # Prior 47 greened shells/parity + discovery bills_create
+    # + bills.create dual-count = 49 live/vision rows without GEO NA.
+    ui_shell_green = 49
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -655,9 +655,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 47 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 49 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 147
+    assert status["qualification"]["live_tested_rows"] == 149
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -684,6 +684,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.suppliers",
         "ui.discovery.purchases",
         "ui.parity.bills.list",
+        "ui.discovery.bills_create",
+        "ui.parity.bills.create",
         "ui.discovery.debtor_balances",
         "ui.discovery.creditor_balances",
         "ui.discovery.uploads",
@@ -733,6 +735,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.suppliers": "ui_suppliers_list",
         "ui.discovery.purchases": "ui_bills_list",
         "ui.parity.bills.list": "ui_bills_list",
+        "ui.discovery.bills_create": "ui_bills_create_open",
+        "ui.parity.bills.create": "ui_bills_create_open",
         "ui.discovery.debtor_balances": "ui_debtor_balances_list",
         "ui.discovery.creditor_balances": "ui_creditor_balances_list",
         "ui.discovery.uploads": "ui_uploads_list",
@@ -784,7 +788,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 47
+    assert len(qualified) == 49
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -924,6 +928,17 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert invoices_create_discovery["tool_name"] == "ui_invoices_create_open"
     assert invoices_create_discovery["api_row_id"] is None
+    bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
+    assert bills_create_parity["api_row_id"] == "api.bills.create"
+    assert bills_create_parity["tool_name"] == "ui_bills_create_open"
+    assert bills_create_parity["parity_status"] == "form_open_only"
+    assert "api.bills.create" in bills_create_parity["evidence"]
+    assert "research154" in bills_create_parity["evidence"]
+    bills_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.bills_create"
+    )
+    assert bills_create_discovery["tool_name"] == "ui_bills_create_open"
+    assert bills_create_discovery["api_row_id"] is None
     for red_id in (
         "ui.parity.invoices.get",
         "ui.parity.invoices.update",
@@ -932,6 +947,11 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",
         "ui.parity.special.files_upload",
+        "ui.parity.bills.get",
+        "ui.parity.bills.update",
+        "ui.parity.bills.delete",
+        "ui.parity.bills.bulk_save",
+        "ui.parity.bills.bulk_delete",
     ):
         red_row = next(row for row in remaining if row["id"] == red_id)
         assert red_row["discovered"] is False
