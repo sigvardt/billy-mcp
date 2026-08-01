@@ -6,15 +6,15 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T09:30:00Z
+updated: 2026-08-01T09:32:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 52 pre-COMMIT ready 186.52 dual-count at tip `446b287`.
-  live/vision **143**; implemented/contract **327**; complete false. Not node finish.
+- Continue mode iter 52 COMMIT 186.52 at `fd63ff2`. live/vision **143**;
+  implemented/contract **327**; complete false. Not node finish.
 - dual-count special.user_get → ui_settings_user_open greened. Residual UI open.
 - Bulk 92 + annual_reports still red.
 
@@ -166,8 +166,9 @@ updated: 2026-08-01T09:30:00Z
 
 ## COMMIT (iter 52)
 
-- About to `fractal commit` product dual-count special.user_get.
-- Not node finish (complete false).
+- `fractal commit` product: ui special user_get dual-count via settings user shell (`fd63ff2`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
 
 ## PREPARE (iter 45)
