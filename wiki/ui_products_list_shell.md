@@ -46,3 +46,7 @@ with empty request fields and null pagination.
 
 Maps offline `api.products.list` for list-open parity only. API `live_tested`
 remains false under user-scoped qualification.
+
+## Related
+
+- Product create form open (inventory entry): [[ui_products_create_open_shell|ui_products_create_open_shell]]

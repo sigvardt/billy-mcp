@@ -38,6 +38,7 @@ from billy_mcp.models import (
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenSuccess,
     UiInvoicesListSuccess,
+    UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
@@ -9017,6 +9018,160 @@ def test_ui_suppliers_create_open_rejects_soft_suppliers_new_path(tmp_path: Path
     )
 
     result = asyncio.run(runtime.ui_suppliers_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _products_create_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Lagermodul"),
+        "text=Opret produkt": FakeLoginControl(text="Opret produkt"),
+        "input[name='name']": FakeLoginControl(text=""),
+        "input[name='account']": FakeLoginControl(text=""),
+        "input[name='salesTaxRuleset']": FakeLoginControl(text=""),
+        "input[name='unitPrice']": FakeLoginControl(text=""),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def test_ui_products_create_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_products_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_products_create_open_returns_success_for_create_form(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_products_create_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_products_create_open())
+
+    assert result == UiProductsCreateOpenSuccess(
+        create_form_open=True,
+        name_field_visible=True,
+        account_field_present=True,
+        sales_tax_ruleset_field_present=True,
+        unit_price_field_present=True,
+        shell_markers_present=True,
+    )
+    assert any(url.rstrip("/").endswith("/inventory") for url, _ in page.navigation)
+    assert not any("/products/new" in url for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert not any("click:text=Gem" in e for e in page.events)
+
+
+def test_ui_products_create_open_returns_ui_changed_when_name_missing(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _products_create_shell_controls()
+    controls["input[name='name']"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_products_create_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert "products create form" in result.message
+    assert page.closed
+
+
+def test_ui_products_create_open_rejects_soft_products_new_path(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_products_create_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    async def goto_to_new(url: str, *, wait_until: str) -> object:
+        page.navigation.append((url, wait_until))
+        page.events.append("goto")
+        if url.rstrip("/").endswith("/inventory"):
+            page.url = "https://mit.billy.dk/test-org-slug/products/new"
+        else:
+            page.url = url
+        return object()
+
+    page.goto = goto_to_new  # type: ignore[method-assign]
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_products_create_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED

@@ -45,6 +45,8 @@ from billy_mcp.models import (
     UiInvoicesCreateOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsCreateOpenInput,
+    UiProductsCreateOpenSuccess,
     UiProductsImportInput,
     UiProductsImportSuccess,
     UiProductsListInput,
@@ -314,6 +316,38 @@ def test_ui_suppliers_create_open_models_are_empty_input_and_non_pii_success() -
         raise AssertionError("extra fields must be forbidden")
     except Exception:
         pass
+
+
+def test_ui_products_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiProductsCreateOpenInput().model_dump() == {}
+    success = UiProductsCreateOpenSuccess(
+        create_form_open=True,
+        name_field_visible=True,
+        account_field_present=True,
+        sales_tax_ruleset_field_present=True,
+        unit_price_field_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/inventory"
+    assert success.heading == "Lagermodul"
+    assert success.shell_kind == "products_create"
+    properties = UiProductsCreateOpenSuccess.model_json_schema().get("properties", {})
+    assert "url" not in properties and "org_slug" not in properties
+    with pytest.raises(ValidationError):
+        UiProductsCreateOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiProductsCreateOpenSuccess.model_validate(
+            {
+                "create_form_open": True,
+                "name_field_visible": True,
+                "account_field_present": True,
+                "sales_tax_ruleset_field_present": True,
+                "unit_price_field_present": True,
+                "shell_markers_present": True,
+                "shell_kind": "products_create",
+                "org_slug": "secret",
+            }
+        )
 
 
 def test_ui_products_list_models_are_empty_input_and_non_pii_success() -> None:

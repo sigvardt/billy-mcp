@@ -216,6 +216,28 @@ class UiSuppliersCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiProductsCreateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only products create form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiProductsCreateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy products create form (inventory entry)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/inventory"] = "/:org_slug/inventory"
+    heading: Literal["Lagermodul"] = "Lagermodul"
+    shell_kind: Literal["products_create"] = "products_create"
+    create_form_open: bool
+    name_field_visible: bool
+    account_field_present: bool
+    sales_tax_ruleset_field_present: bool
+    unit_price_field_present: bool
+    shell_markers_present: bool
+
+
 class UiBankAccountsListInput(BaseModel):
     """Empty, strict input boundary for the read-only bank accounts list shell tool."""
 

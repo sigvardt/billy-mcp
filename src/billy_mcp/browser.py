@@ -40,6 +40,7 @@ from billy_mcp.models import (
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenSuccess,
     UiInvoicesListSuccess,
+    UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
     UiQuotesListSuccess,
@@ -169,6 +170,7 @@ _INTEGRATIONS_PATH = re.compile(r"^/[^/]+/integrations$")
 _INVENTORY_PATH = re.compile(r"^/[^/]+/inventory$")
 _INVENTORY_HEADING = "Lagermodul"
 _INVENTORY_CREATE_CTAS = ("Opret primo", "Opret produkt", "Opret status")
+_PRODUCTS_CREATE_CTA = "Opret produkt"
 # Research126: Indstillinger company (Virksomhed) open shell.
 # Never click Gem ændringer / Tilføj ejer / upload / Opret* / Opgrader.
 _SETTINGS_COMPANY_PATH = re.compile(r"^/[^/]+/settings$")
@@ -623,6 +625,12 @@ class UiSuppliersCreateOpenService(Protocol):
     """Injectable seam for the read-only suppliers create form open observation."""
 
     async def ui_suppliers_create_open(self) -> UiSuppliersCreateOpenSuccess | ToolError: ...
+
+
+class UiProductsCreateOpenService(Protocol):
+    """Injectable seam for the read-only products create form open observation."""
+
+    async def ui_products_create_open(self) -> UiProductsCreateOpenSuccess | ToolError: ...
 
 
 class UiBankAccountsListService(Protocol):
@@ -1828,6 +1836,96 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser suppliers create form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_products_create_open(self) -> UiProductsCreateOpenSuccess | ToolError:
+        """Open the products create form for the current authenticated UI session only.
+
+        Research163: open /:org_slug/inventory, click Opret produkt, classify form fields
+        (name / account / salesTaxRuleset / unitPrice). Form open only — never Gem /
+        Opret submit / Save / Create / file upload. Soft /products/new is not success.
+        Catalog /products has no create CTA. Distinct from list shell ui_products_list
+        and shell-only ui_inventory_open (which never clicks Opret*).
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_products_create_changed_error()
+
+            inventory_url = f"https://mit.billy.dk/{slug}/inventory"
+            await page.goto(inventory_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_products_create_changed_error()
+                if _is_products_new_soft_url(page.url):
+                    return _ui_products_create_changed_error()
+                if not _is_inventory_url(page.url):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_inventory_heading(page):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_products_create_form_signature(page):
+                    clicked = await _click_products_create_cta(page)
+                    if not clicked:
+                        await asyncio.sleep(0.2)
+                        continue
+                    await _await_page_settle(page)
+                if _is_products_new_soft_url(page.url):
+                    return _ui_products_create_changed_error()
+                if _is_inventory_url(page.url) and await _has_products_create_form_signature(page):
+                    signature = await _products_create_form_field_flags(page)
+                    return UiProductsCreateOpenSuccess(
+                        create_form_open=True,
+                        name_field_visible=signature["name_field_visible"],
+                        account_field_present=signature["account_field_present"],
+                        sales_tax_ruleset_field_present=signature[
+                            "sales_tax_ruleset_field_present"
+                        ],
+                        unit_price_field_present=signature["unit_price_field_present"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_products_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the products create form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser products create form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5016,6 +5114,127 @@ async def _has_suppliers_create_form_signature(page: LoginPage) -> bool:
         )
     except Exception:
         return False
+
+
+async def _click_products_create_cta(page: LoginPage) -> bool:
+    """Observe-only click of research163 CTA Opret produkt. Never submits the form."""
+
+    try:
+        cta = page.locator(f"text={_PRODUCTS_CREATE_CTA}")
+        if await cta.count() < 1:
+            return False
+        target = cta.first
+        if not await target.is_visible():
+            return False
+        await target.click()
+        return True
+    except Exception:
+        return False
+
+
+async def _products_create_form_field_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII field presence flags for the inventory product create form (research163)."""
+
+    name_visible = False
+    account_present = False
+    ruleset_present = False
+    unit_price_present = False
+    try:
+        name = page.locator("input[name='name']")
+        if await name.count() >= 1 and await name.first.is_visible():
+            name_visible = True
+    except Exception:
+        pass
+    try:
+        account = page.locator("input[name='account']")
+        if await account.count() >= 1:
+            account_present = True
+    except Exception:
+        pass
+    try:
+        ruleset = page.locator("input[name='salesTaxRuleset']")
+        if await ruleset.count() >= 1:
+            ruleset_present = True
+    except Exception:
+        pass
+    try:
+        unit_price = page.locator("input[name='unitPrice']")
+        if await unit_price.count() >= 1:
+            unit_price_present = True
+    except Exception:
+        pass
+    return {
+        "name_field_visible": name_visible,
+        "account_field_present": account_present,
+        "sales_tax_ruleset_field_present": ruleset_present,
+        "unit_price_field_present": unit_price_present,
+    }
+
+
+async def _has_products_create_form_signature(page: LoginPage) -> bool:
+    """Verify research163 product create form signature without submitting."""
+
+    try:
+        if not await _has_inventory_heading(page):
+            return False
+        flags = await _products_create_form_field_flags(page)
+        if not flags["name_field_visible"]:
+            return False
+        present = sum(
+            1
+            for key in (
+                "account_field_present",
+                "sales_tax_ruleset_field_present",
+                "unit_price_field_present",
+            )
+            if flags[key]
+        )
+        return present >= 2
+    except Exception:
+        return False
+
+
+async def _has_inventory_heading(page: LoginPage) -> bool:
+    """True when the inventory Lagermodul h1 is visible."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        return (await first.inner_text()).strip() == _INVENTORY_HEADING
+    except Exception:
+        return False
+
+
+def _is_products_new_soft_url(url: str) -> bool:
+    """Return True for soft /products/new chrome-only paths (not success)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    path = parsed.path or ""
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and path.rstrip("/").endswith("/products/new")
+    )
+
+
+def _ui_products_create_changed_error() -> ToolError:
+    """Fail closed when the products create form no longer matches research163."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy products create form interface no longer matches the recorded signature.",
+    )
 
 
 async def _has_bills_list_signature(page: LoginPage) -> bool:

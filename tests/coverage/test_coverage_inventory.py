@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 56 greened shells/parity + suppliers_create discovery (research161) = 57
-    # live/vision rows without GEO NA. contacts.create already dual-counted via clients.
-    ui_shell_green = 57
+    # Prior 57 greened shells/parity + products_create discovery+parity (research163) = 59
+    # live/vision rows without GEO NA.
+    ui_shell_green = 59
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -597,6 +597,32 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert products_list_parity[0]["tool_name"] == "ui_products_list"
     assert products_list_parity[0]["live_tested"] is True
     assert products_list_parity[0]["parity_status"] != "not_applicable"
+    # research163 products.create form_open via inventory Opret produkt
+    products_create_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.products.create"
+    ]
+    assert len(products_create_parity) == 1
+    assert products_create_parity[0]["tool_name"] == "ui_products_create_open"
+    assert products_create_parity[0]["live_tested"] is True
+    assert products_create_parity[0]["parity_status"] == "form_open_only"
+    assert "research163" in (products_create_parity[0].get("evidence") or "")
+    products_create_discovery = [
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.discovery.products_create"
+    ]
+    assert len(products_create_discovery) == 1
+    assert products_create_discovery[0]["tool_name"] == "ui_products_create_open"
+    assert products_create_discovery[0]["live_tested"] is True
+    # residual products.get/update/delete stay red
+    for residual_id in (
+        "ui.parity.products.get",
+        "ui.parity.products.update",
+        "ui.parity.products.delete",
+    ):
+        residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
+        assert residual.get("live_tested") is not True
+        assert residual.get("parity_status") == "discovery_required"
     # special.user_get dual-counted to settings Profil (research151); not NA
     user_get_parity = [
         row
@@ -713,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 57 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 59 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 164
+    assert status["qualification"]["live_tested_rows"] == 166
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -733,6 +759,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create",
         "ui.discovery.products",
         "ui.parity.products.list",
+        "ui.discovery.products_create",
+        "ui.parity.products.create",
         "ui.discovery.customers",
         "ui.parity.contacts.list",
         "ui.discovery.clients_create",
@@ -792,6 +820,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create": "ui_invoices_create_open",
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
+        "ui.discovery.products_create": "ui_products_create_open",
+        "ui.parity.products.create": "ui_products_create_open",
         "ui.discovery.customers": "ui_clients_list",
         "ui.parity.contacts.list": "ui_clients_list",
         "ui.discovery.clients_create": "ui_clients_create_open",
@@ -862,7 +892,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 57
+    assert len(qualified) == 59
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]

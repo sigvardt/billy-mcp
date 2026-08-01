@@ -105,6 +105,10 @@ UI_SUPPLIERS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SUPPLIERS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_create_open.py"
 UI_SUPPLIERS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_SUPPLIERS_CREATE_OPEN_TOOL_NAME = "ui_suppliers_create_open"
+UI_PRODUCTS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_PRODUCTS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_create_open.py"
+UI_PRODUCTS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_PRODUCTS_CREATE_OPEN_TOOL_NAME = "ui_products_create_open"
 UI_BANK_ACCOUNTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BANK_ACCOUNTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_bank_accounts_list.py"
 UI_BANK_ACCOUNTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -455,6 +459,7 @@ UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
     "quotes",
     "recurring_invoices",
     "products",
+    "products_create",
     "product_import",
     "customers",
     "clients_create",
@@ -1891,6 +1896,81 @@ def apply_ui_suppliers_create_open_shell_evidence(row: dict[str, Any]) -> None:
         "vision record tmp/vision-records/ui_suppliers_create_open.json "
         "(Opret kontakt create dialog frames, accept)"
     )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_products_create_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_create: bool = False,
+) -> None:
+    """Mark products create form **open only** evidence (research163).
+
+    Empty-input tool; open /:org_slug/inventory then click Opret produkt.
+    Form open only — never Gem/Opret submit. Soft /products/new rejected.
+    Catalog /products has no create CTA. Distinct from list shell and
+    shell-only inventory open. When ``parity_of_api_create`` is true, dual-counts
+    exact ``ui.parity.products.create`` for ``api.products.create``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/inventory + Opret produkt form "
+        "(read-only products create form open; never Gem/Opret/Save submit; "
+        "soft /products/new not success; catalog /products list has no create CTA)"
+    )
+    row["tool_name"] = UI_PRODUCTS_CREATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_form_open",
+        "name_field_visible",
+        "account_field_present",
+        "sales_tax_ruleset_field_present",
+        "unit_price_field_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_create:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_PRODUCTS_CREATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_PRODUCTS_CREATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_PRODUCTS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research163 dual-session headless observation + ui_products_create_open product; "
+        "form open only (path class /:org_slug/inventory, h1 Lagermodul, "
+        "shell_kind=products_create, CTA Opret produkt form with "
+        "name+account+salesTaxRuleset+unitPrice fields; never submit; soft /products/new "
+        "chrome-only rejected; catalog /products Mere export/import only; distinct from "
+        "list shell ui_products_list and shell-only ui_inventory_open; unitPrice is create "
+        "embed chrome not productPrices resource — productPrices dual-NA research162); "
+        "vision record tmp/vision-records/ui_products_create_open.json "
+        "(Opret produkt create form frames, accept)"
+    )
+    if parity_of_api_create:
+        row["evidence"] = f"{row['evidence']}; maps api.products.create to UI create-form open only"
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -4385,6 +4465,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_create_open_shell_evidence(row, parity_of_api_create=False)
         if family == "suppliers_create":
             apply_ui_suppliers_create_open_shell_evidence(row)
+        if family == "products_create":
+            apply_ui_products_create_open_shell_evidence(row, parity_of_api_create=False)
         if family == "bank_accounts":
             apply_ui_bank_accounts_list_shell_evidence(row)
         if family == "quotes":
@@ -4486,6 +4568,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_bills_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.products.list":
             apply_ui_products_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.products.create":
+            apply_ui_products_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.contacts.list":
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.contacts.create":

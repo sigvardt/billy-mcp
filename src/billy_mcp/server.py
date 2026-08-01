@@ -78,6 +78,7 @@ from billy_mcp.browser import (
     UiInventoryOpenService,
     UiInvoicesCreateOpenService,
     UiInvoicesListService,
+    UiProductsCreateOpenService,
     UiProductsImportService,
     UiProductsListService,
     UiQuotesListService,
@@ -150,6 +151,8 @@ from billy_mcp.models import (
     UiInvoicesCreateOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiProductsCreateOpenInput,
+    UiProductsCreateOpenSuccess,
     UiProductsImportInput,
     UiProductsImportSuccess,
     UiProductsListInput,
@@ -205,6 +208,7 @@ def create_server(
     ui_invoices_list_service: UiInvoicesListService | None = None,
     ui_invoices_create_open_service: UiInvoicesCreateOpenService | None = None,
     ui_products_list_service: UiProductsListService | None = None,
+    ui_products_create_open_service: UiProductsCreateOpenService | None = None,
     ui_clients_list_service: UiClientsListService | None = None,
     ui_clients_create_open_service: UiClientsCreateOpenService | None = None,
     ui_bank_accounts_list_service: UiBankAccountsListService | None = None,
@@ -258,6 +262,7 @@ def create_server(
     invoices_list_service = ui_invoices_list_service or browser
     invoices_create_open_service = ui_invoices_create_open_service or browser
     products_list_service = ui_products_list_service or browser
+    products_create_open_service = ui_products_create_open_service or browser
     clients_list_service = ui_clients_list_service or browser
     clients_create_open_service = ui_clients_create_open_service or browser
     bank_accounts_list_service = ui_bank_accounts_list_service or browser
@@ -350,6 +355,12 @@ def create_server(
 
         UiProductsListInput()
         return await products_list_service.ui_products_list()
+
+    async def ui_products_create_open() -> UiProductsCreateOpenSuccess | ToolError:
+        """Observe the authenticated Billy products create form without submitting."""
+
+        UiProductsCreateOpenInput()
+        return await products_create_open_service.ui_products_create_open()
 
     async def ui_clients_list() -> UiClientsListSuccess | ToolError:
         """Observe the authenticated Billy clients list shell without writes."""
@@ -604,6 +615,13 @@ def create_server(
             "(read-only path and heading classification)."
         ),
     )(ui_products_list)
+    server.tool(
+        name="ui_products_create_open",
+        description=(
+            "Open the Billy products create form for the authenticated session "
+            "(read-only form open via Lagermodul Opret produkt; never submit or save)."
+        ),
+    )(ui_products_create_open)
     server.tool(
         name="ui_clients_list",
         description=(

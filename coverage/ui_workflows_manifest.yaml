@@ -272,6 +272,55 @@
     },
     {
       "api_row_id": null,
+      "area": "products_create",
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
+      "errors": [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
+      ],
+      "evidence": "research163 dual-session headless observation + ui_products_create_open product; form open only (path class /:org_slug/inventory, h1 Lagermodul, shell_kind=products_create, CTA Opret produkt form with name+account+salesTaxRuleset+unitPrice fields; never submit; soft /products/new chrome-only rejected; catalog /products Mere export/import only; distinct from list shell ui_products_list and shell-only ui_inventory_open; unitPrice is create embed chrome not productPrices resource \u2014 productPrices dual-NA research162); vision record tmp/vision-records/ui_products_create_open.json (Opret produkt create form frames, accept)",
+      "filters": [],
+      "id": "ui.discovery.products_create",
+      "implemented": true,
+      "lane": "ui",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/inventory + Opret produkt form (read-only products create form open; never Gem/Opret/Save submit; soft /products/new not success; catalog /products list has no create CTA)",
+      "operation": "discovery",
+      "pagination": null,
+      "parity_status": "form_open_only",
+      "request_fields": [],
+      "response_fields": [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_form_open",
+        "name_field_visible",
+        "account_field_present",
+        "sales_tax_ruleset_field_present",
+        "unit_price_field_present",
+        "shell_markers_present"
+      ],
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_products_create_open.py",
+        "tests/unit/test_coverage_server.py"
+      ],
+      "tool_name": "ui_products_create_open",
+      "vision_evidence": null,
+      "vision_verified": true,
+      "workflow_kind": "discovery"
+    },
+    {
+      "api_row_id": null,
       "area": "product_import",
       "cleanup": "not_applicable; read-only observation creates no records",
       "contract_tested": true,
@@ -11601,38 +11650,50 @@
     {
       "api_row_id": "api.products.create",
       "area": "products",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.products.create",
+      "evidence": "research163 dual-session headless observation + ui_products_create_open product; form open only (path class /:org_slug/inventory, h1 Lagermodul, shell_kind=products_create, CTA Opret produkt form with name+account+salesTaxRuleset+unitPrice fields; never submit; soft /products/new chrome-only rejected; catalog /products Mere export/import only; distinct from list shell ui_products_list and shell-only ui_inventory_open; unitPrice is create embed chrome not productPrices resource \u2014 productPrices dual-NA research162); vision record tmp/vision-records/ui_products_create_open.json (Opret produkt create form frames, accept); maps api.products.create to UI create-form open only",
       "filters": [],
       "id": "ui.parity.products.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.products.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/inventory + Opret produkt form (read-only products create form open; never Gem/Opret/Save submit; soft /products/new not success; catalog /products list has no create CTA)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "product"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "create_form_open",
+        "name_field_visible",
+        "account_field_present",
+        "sales_tax_ruleset_field_present",
+        "unit_price_field_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates product",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_products_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_products_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
