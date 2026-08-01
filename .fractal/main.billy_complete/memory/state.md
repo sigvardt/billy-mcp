@@ -6,20 +6,20 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T01:10:00Z
+updated: 2026-08-01T01:05:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 35 COMMIT. Product tip settings_subscription 186.35
-  (`ui_settings_subscription_open`, `88a369e`). Coverage live/vision 37;
-  complete false.
-- Discovery still red (1): annual_reports (Upsedasse inaccessible freeze).
-- Next: remaining annual red or UI parity / bulk API offline work.
-  No invent api_settings_*/api_annual_*. Not node finish.
-- Review: product `ui_settings_subscription_open` **ACCEPT** (IR 186.35).
+- Continue mode iter 36 FIX-VERIFY. Dual-count product ready commit.
+  Coverage live/vision 38; complete false.
+- IR 186.36 **ACCEPT** (no required fixes; O1 vision ref hygiene applied).
+- Offline test.sh: 1561 passed. lint + wiki lint clean.
+- Next after commit: annual red / residual blocked / bulk / more UI parity.
+  Not node finish.
+- Review: dual-count `ui.parity.transactions.list` **ACCEPT** (IR 186.36).
 
 ## Verification
 
@@ -62,14 +62,12 @@ updated: 2026-08-01T01:10:00Z
 
 ## Open coverage work
 
-1. Next product: `ui_settings_subscription_open` for empty-panel Abonnement
-   (research134). annual_reports stays red.
-2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
-   stays red until a non-error shell appears in an approved non-prod org.
-3. Residual/bulk offline API reds only; no live API methods.
-4. UI parity rows still largely red after discovery shells.
+1. EXECUTE: dual-count `ui.parity.transactions.list` (plan 186.36).
+2. `ui.discovery.annual_reports` stays red (Upsedasse).
+3. Residual 29 non-bulk writes: no ticketed product (405 / fixture blocked).
+4. 92 ambiguous bulk stay red until body contract.
 
-## Live UI tools (36 rows)
+## Live UI tools (37 rows)
 
 - discovery greened (33): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
@@ -111,11 +109,122 @@ updated: 2026-08-01T01:10:00Z
 
 ## References
 
-- Wiki settings: company/accounting/invoicing/user/vat/users/access_token/beta shells
-- Tip product: `dfb5f9b` / bookkeeping `d19af4f` `ui_settings_beta_open`
-- Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research134)
-- Discovery: `.fractal/main.billy_complete/tmp/discovery134/`
-- Next: PLAN product `ui_settings_subscription_open`
+- Wiki settings: company/accounting/invoicing/user/vat/users/access_token/beta/subscription shells
+- Tip product: `88a369e` / bookkeeping `5d727c8` `ui_settings_subscription_open`
+- Research135: `.fractal/main.billy_complete/tmp/grok-research.md`
+- Discovery135: `.fractal/main.billy_complete/tmp/discovery135/`
+- Next: PLAN residual offline API package (annual stays red)
+
+## SYNC (iter 36)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 13F384EE reacted (+): COMMIT subscription done; next annual red.
+- Private carry-forward 532B5FA7: re-observe annual_reports next.
+- Outbox E5B9BA4D: sync iter36 ready annual_reports.
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `5d727c8` vs origin/main.billy_complete.
+- Coverage: implemented/contract 221; live/vision 37; complete false.
+- Discovery still red (1): annual_reports (inaccessible freeze).
+- Ready for PREPARE then RESEARCH annual_reports re-observe. Not finish.
+
+
+## PREPARE (iter 36)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 157 branches; 62 with commits ahead of tip; only one material product
+  delta (`ui_auth_status` browser/models/server). Product already on tip
+  (auth_status tools live); child tip is older parallel delta + fractal scaffold.
+  Wiki-only ahead (wave5t/wave5u/ui_auth credentials research) already present or
+  superseded on tip. Historical review/init branches: scaffold or memory only.
+- No child merges this iteration (would re-litigate landed product or pollute with
+  skill/scaffold).
+- No running children. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH annual_reports re-observe.
+
+
+## SYNC (iter 36 pre-RESEARCH)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. No parent directives.
+- State unchanged since PREPARE: tip 5d727c8, live/vision 37, annual_reports red.
+- No new outbox (prior E5B9BA4D already announced annual next). Ready RESEARCH.
+
+
+## RESEARCH (iter 36 / research135)
+
+- Official docs etag wcw4x9hqvu3603 MD5 8b94b013… unchanged; no annual API resource.
+- Dual-session READY; primary `/:org_slug/annual_reports` h1 Upsedasse! + CVR
+  companies URL hint dual; plan_gate false; soft aliases empty; siblings vat/
+  reports/exports/transactions healthy.
+- frames_purged true; api_token_used false; writes_attempted false.
+- Brief: tmp/grok-research.md. annual stays red. Pivot residual offline API.
+- No coverage green. Not finish.
+
+
+## SYNC (iter 36 pre-PLAN)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- No parent directives. Research135 outbox already posted (491AA4BD).
+- Ready PLAN residual offline API (annual stays red).
+
+
+## PLAN (iter 36 / 186.36)
+
+- Plan file: ui_parity_transactions_list (dual-count shell open).
+- Residual offline writes not productable (registers_tool false).
+- annual stays red. Ready EXECUTE.
+
+
+## SYNC (iter 36 pre-EXECUTE)
+
+- Unread inbox/feed/private empty. Saved empty. No children.
+- Outbox: plan 186.36 dual-count transactions parity announced.
+- Ready EXECUTE.
+
+
+## EXECUTE (iter 36 / 186.36)
+
+- Generator: apply_ui_transactions_list_shell_evidence(parity_of_api_list).
+- Wired api.transactions.list parity dual-count; regenerated manifests.
+- Inventory tests: qualified 38; live/vision 38.
+- Offline: tests/coverage + test_coverage_server 50 passed; lint green.
+- Wiki: ui_transactions_list_shell dual-count note.
+- annual still red. No residual 405 tools. Ready REVIEW.
+
+
+## SYNC (iter 36 pre-IR)
+
+- Unread empty. Outbox: execute dual-count ready IR.
+- Ready INDEPENDENT-REVIEW.
+
+
+## IR (iter 36 / 186.36)
+
+- Product dual-count `ui.parity.transactions.list`: **ACCEPT** (no required fixes).
+- Report: tmp/grok-review.md. live/vision 38; annual red; no residual 405 tools.
+- Optional O1 only (vision workflow_ref hygiene). Ready FIX-VERIFY no-op then COMMIT.
+
+
+## SYNC (iter 36 pre-FIX-VERIFY)
+
+- Unread empty. IR ACCEPT already outboxed (A62F8AAC). No required fixes.
+- Ready FIX-VERIFY no-op then COMMIT.
+
+
+## FIX-VERIFY (iter 36 / 186.36)
+
+- IR required fixes: none. O1 vision workflow_ref dual-row hygiene applied (tmp).
+- Wiki lint: fixed _index desc match; both stores clean.
+- lint.sh pass. test.sh offline 1561 passed / 35 deselected.
+- complete false — no full qualification run.
+- Plan post-mortem appended. Ready COMMIT.
+
+
+## SYNC (iter 36 pre-COMMIT)
+
+- Unread empty. Ready COMMIT 186.36 dual-count.
+
 
 ## SYNC (iter 30)
 

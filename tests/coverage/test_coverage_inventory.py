@@ -173,11 +173,11 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["complete"] is False
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 37
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 37
+    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 38
+    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 38
     # API live remains 0 (out of scope); UI shell rows are live-qualified.
-    assert status["qualification"]["live_tested_rows"] == 37
-    assert status["qualification"]["vision_verified_rows"] == 37
+    assert status["qualification"]["live_tested_rows"] == 38
+    assert status["qualification"]["vision_verified_rows"] == 38
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -339,6 +339,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.financing",
         "ui.discovery.daybooks",
         "ui.discovery.transactions",
+        "ui.parity.transactions.list",
         "ui.discovery.reports",
         "ui.discovery.vat_declarations",
         "ui.discovery.exports",
@@ -378,6 +379,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.financing": "ui_financing_open",
         "ui.discovery.daybooks": "ui_daybooks_open",
         "ui.discovery.transactions": "ui_transactions_list",
+        "ui.parity.transactions.list": "ui_transactions_list",
         "ui.discovery.reports": "ui_reports_open",
         "ui.discovery.vat_declarations": "ui_vat_declarations_list",
         "ui.discovery.exports": "ui_exports_open",
@@ -408,7 +410,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["live_tested"] is False for row in remaining)
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in workflows)
-    assert len(qualified) == 37
+    assert len(qualified) == 38
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
         assert row["discovered"] is True
@@ -438,6 +440,15 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     bills_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.list")
     assert "api.bills.list" in bills_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in bills_parity["evidence"]
+    transactions_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.transactions.list"
+    )
+    assert "api.transactions.list" in transactions_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in transactions_parity["evidence"]
+    transactions_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.transactions"
+    )
+    assert transactions_discovery["api_row_id"] is None
     purchases_discovery = next(row for row in qualified if row["id"] == "ui.discovery.purchases")
     assert purchases_discovery["api_row_id"] is None
     assert (

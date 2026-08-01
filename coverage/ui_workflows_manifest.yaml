@@ -720,7 +720,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research118 dual-session headless observation + ui_transactions_list product; list shell only (path class /:org_slug/transactions, h1 Posteringer, CTA Ny postering present, no create); nested /transactions/:segment create shell rejected; soft aliases empty; no invent api_transactions write tools; does not green daybooks or ui.parity.transactions.*; vision record tmp/vision-records/ui_transactions_list.json (list surface frames, accept)",
+      "evidence": "research118 dual-session headless observation + ui_transactions_list product; list shell only (path class /:org_slug/transactions, h1 Posteringer, CTA Ny postering present, no create); nested /transactions/:segment create shell rejected; soft aliases empty; no invent api_transactions write tools; does not green daybooks or transaction create/update/delete/bulk; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_transactions_list.json (list surface frames, accept)",
       "filters": [],
       "id": "ui.discovery.transactions",
       "implemented": true,
@@ -729,7 +729,7 @@
       "method_or_route": "mit.billy.dk /:org_slug/transactions (read-only Posteringer list shell open only; nested /transactions/:segment is create shell)",
       "operation": "discovery",
       "pagination": null,
-      "parity_status": "shell_open_only",
+      "parity_status": "list_shell_open_only",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -12433,59 +12433,45 @@
     {
       "api_row_id": "api.transactions.list",
       "area": "transactions",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.list",
-      "filters": {},
+      "evidence": "research118 dual-session headless observation + ui_transactions_list product; list shell only (path class /:org_slug/transactions, h1 Posteringer, CTA Ny postering present, no create); nested /transactions/:segment create shell rejected; soft aliases empty; no invent api_transactions write tools; does not green daybooks or transaction create/update/delete/bulk; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_transactions_list.json (list surface frames, accept); maps api.transactions.list to UI list-shell open only",
+      "filters": [],
       "id": "ui.parity.transactions.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.transactions.list",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/transactions (read-only Posteringer list shell open only; nested /transactions/:segment is create shell)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
-        ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
-      },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
+      "pagination": null,
+      "parity_status": "list_shell_open_only",
+      "request_fields": [],
       "response_fields": [
-        "transactions[]",
-        "meta.paging"
+        "path_class",
+        "heading",
+        "create_action_visible",
+        "shell_markers_present"
       ],
       "sensitivity": "low",
       "side_effects": "none",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_transactions_list.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_transactions_list",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

@@ -2229,13 +2229,18 @@ def apply_ui_daybooks_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_transactions_list_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_transactions_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark transactions (Posteringer) list **shell open** evidence only (research118).
 
     Empty-input tool; path /:org_slug/transactions (query allowed); h1 Posteringer;
     CTA Ny postering observe-only. Nested /transactions/:segment is create shell
     (not list success). No invent API write tools. Does not green daybooks or
-    transactions parity rows.
+    transaction create/update/delete/bulk. When ``parity_of_api_list`` is true,
+    dual-counts ``ui.parity.transactions.list`` for ``api.transactions.list``.
     """
 
     row["method_or_route"] = (
@@ -2252,7 +2257,8 @@ def apply_ui_transactions_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE,
@@ -2265,16 +2271,21 @@ def apply_ui_transactions_list_shell_evidence(row: dict[str, Any]) -> None:
         "list shell only (path class /:org_slug/transactions, h1 Posteringer, CTA "
         "Ny postering present, no create); nested /transactions/:segment create shell "
         "rejected; soft aliases empty; no invent api_transactions write tools; does not "
-        "green daybooks or ui.parity.transactions.*; vision record "
-        "tmp/vision-records/ui_transactions_list.json (list surface frames, accept)"
+        "green daybooks or transaction create/update/delete/bulk; "
+        "API list filters/sort/pagination UI not producted; "
+        "vision record tmp/vision-records/ui_transactions_list.json (list surface frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.transactions.list to UI list-shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
     row["live_tested"] = True
     row["vision_verified"] = True
     row["vision_evidence"] = None
-    row["parity_status"] = "shell_open_only"
+    row["parity_status"] = "list_shell_open_only"
     row["sensitivity"] = "low"
     row["side_effects"] = "none"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
@@ -3322,7 +3333,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         if family == "daybooks":
             apply_ui_daybooks_open_shell_evidence(row)
         if family == "transactions":
-            apply_ui_transactions_list_shell_evidence(row)
+            apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=False)
         if family == "reports":
             apply_ui_reports_open_shell_evidence(row)
         if family == "vat_declarations":
@@ -3392,6 +3403,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.bills.list":
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.transactions.list":
+            apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=True)
         workflows.append(row)
 
     return {
