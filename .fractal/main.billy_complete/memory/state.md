@@ -5196,3 +5196,145 @@ updated: 2026-08-01T11:10:00Z
 - `fractal commit` product: ui special files_upload dual-count (`299a48c`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 57)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4F2B7D3C (iter56 COMMIT) + 64C85A56 (pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `511cb99` / product `299a48c` == origin/main.billy_complete.
+- Coverage: implemented/contract **334**; live/vision **150**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`).
+- Residual red: **192** UI (1 discovery `annual_reports` org_inaccessible + 191
+  api_parity including `special.invoice_email`); bulk **92** external-contract;
+  special.files_upload greened in 186.56.
+- Next residual (186.56 post-mortem): prefer `special.invoice_email` isolation
+  (disposable draft + send dialog dual or stronger NA; Levering still blocks weak
+  NA); else multi-resource dual packages (bills get/update, products create form);
+  no postings→transactions steal; files.*/attachments.* stay red unless dual.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 57)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; **0** commits ahead of tip `511cb99`.
+- Remote origin children: **75**-ish with commits ahead of tip (listed top by rev-list). Product review of non-fractal three-dot deltas → **skip all merges**:
+  - Unique non-fractal path missing on tip: only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` (from `ui_auth_credentials_research_codex_fallback`) — skip (superseded auth research already on root product path; same decision as iters 51–56).
+  - `wave5t_ui_auth_discovery_fallback` wiki: tip 120 vs child 121 (trailing blank / minor); skip.
+  - `wave5u_probe_contract_codex_fallback` wiki: tip longer (215 > 178).
+  - `ui_auth_status` SRC: tip browser/models/server much larger; product live.
+  - `wave5g_sales_tax_product`, `wave5d_invoice_writes`, `shared_foundation`: tip equal or longer; product already on tip.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or older wave product already integrated; no unique src/tests tip lacks.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `511cb99`. Ready RESEARCH residual dual-count/NA (prefer special.invoice_email isolation first per 186.56 post-mortem). Not finish.
+
+## SYNC (iter 57 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C9EC87DF (SYNC residual) + C1FCD487 (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `511cb99`.
+- Coverage: implemented/contract 334; live/vision 150; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email isolation
+  first per 186.56 post-mortem; no postings steal; files.*/attachments.* pure NA
+  rejected previously unless dual proof). Not finish.
+
+## RESEARCH (iter 57 / research156)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual residual: soft emails/files/postings/bankLines/orgs/users == nonsense body 127;
+  invoice detail links 0 dual; clients row links 0; draft create failed (stayed /new).
+- Daybooks: `ui_daybooks_open` dual-ok path daybooks/new editor+shell markers;
+  bare /daybooks Upsedasse dual reconfirm.
+- Decision: **ACCEPT** product dual-count `api.daybooks.list` onto `ui_daybooks_open`
+  (live/vision 150→151). **DEFER** special.invoice_email dual/NA; **REJECT**
+  daybooks write family, postings steal, suppliers steal contacts.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (+ worktree copy).
+  Dual: `tmp/research156_residual_dual.json`.
+- No coverage greening. Profiles purged. Ready PLAN. Not finish.
+
+## SYNC (iter 57 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DA9AE2E4 (research156 done) + 4FDAECDD (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research156 brief present; dual JSON present.
+- Ready PLAN product handoff: dual-count api.daybooks.list onto
+  ui_daybooks_open (shell_open_only); live/vision 150→151. Not finish.
+
+## Plan (iter 57)
+
+- Plan: `plans/2026-08-01T12:33:19.799Z-186.57-ui_daybooks_list_dual_count.md`
+  — research156: dual-count api.daybooks.list onto ui_daybooks_open
+  (shell_open_only); live/vision 150→151; GEO NA 100; complete false; no
+  children; invoice_email stays red.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 57 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4E2390BA (pre-PLAN) + 9108DF20 (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.57 + research156 brief present. Tip `511cb99`.
+- Ready EXECUTE product ui_daybooks_open dual-count daybooks.list (root; no
+  children). Not finish.
+
+## Execute (iter 57)
+
+- Producted research156 / plan 186.57: dual-count exact api.daybooks.list onto
+  ui_daybooks_open (shell_open_only).
+- Generator flag + parity wiring; inventory tests 50→51 shells / 150→151 live;
+  wiki dual-count note; coverage regenerated.
+- live/vision **151**; implemented/contract **335**; complete false;
+  invoice_email stays red; other daybooks.* stay red.
+- lint.sh pass. test.sh offline **1586 passed**, 38 deselected.
+- No new tools; no src browser changes. Ready for REVIEW. Not finish.
+
+## SYNC (iter 57 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CFAA105D (EXECUTE done) + F34DE0D0 (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.57 uncommitted: dual-count daybooks.list; live/vision 151;
+  implemented/contract 335; complete=false; offline 1586 pass.
+- Outbox: ready for IR of product. Not finish.
+
+## Independent review (iter 57)
+
+- Product 186.57 ui_daybooks_open dual-count daybooks.list: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (vision workflow_ref;
+  nested daybook* residual assert).
+- Discovery daybooks + daybooks.list integrity OK; residual invoice_email +
+  other daybooks.* stay red; bulk 92 red; annual red; complete false;
+  API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 57 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 20B5CFCC (IR ACCEPT) + 738916E5 (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.57 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 57 / 186.57)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1586 passed / 38 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: daybooks.list + discovery daybooks green; live/vision 151;
+  NA 100; implemented/contract 335; complete false; bulk 92 external-contract;
+  annual stay red; invoice_email residual red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 57 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 532024A1 (pre-FIX-VERIFY) + 43467CC7 (FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.57
+  ui daybooks.list dual-count package. Not node finish (complete false).
+

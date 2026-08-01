@@ -1,12 +1,12 @@
 ---
 name: ui_daybooks_open_shell
-desc: Read-only Billy daybook editor (Kassekladde) shell contract (research117 freeze).
+desc: Read-only Billy daybook editor (Kassekladde) shell contract; dual-counts api.daybooks.list (research156).
 tags: [billy, ui, daybooks, discovery]
 sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-31T15:20:00Z
-updated: 2026-07-31T15:20:00Z
+updated: 2026-08-01T12:40:00Z
 ---
 
 # ui_daybooks_open_shell
@@ -16,13 +16,25 @@ updated: 2026-07-31T15:20:00Z
 | Field | Value |
 | --- | --- |
 | Tool | `ui_daybooks_open` |
-| Coverage row | `ui.discovery.daybooks` |
+| Coverage rows | `ui.discovery.daybooks`; dual-count `ui.parity.daybooks.list` |
 | Path class | `/:org_slug/daybooks/new` |
 | Heading | empty allowed (editor has no h1 in freeze) |
 | Editor markers | `Opret ny kassekladde`, `Tilføj kassekladdelinje`, `Ingen postering valgt` |
 | Input | empty (`extra=forbid`) |
 | Success fields | `path_class`, `heading`, `editor_markers_present`, `shell_markers_present` |
 | parity_status | `shell_open_only` |
+| Dual-count API | exact `api.daybooks.list` only (research156) |
+
+## Dual-count (research156)
+
+Maps **`api.daybooks.list`** onto this existing editor shell only. Same dual-count
+class as accounts.list → Regnskab and organizations.list → company settings.
+Discovery keeps `api_row_id=None`. Parity row keeps `api_row_id=api.daybooks.list`.
+
+Evidence: dual independent headless sessions READY; tool dual-ok path
+`/:org_slug/daybooks/new` with editor+shell markers; bare `/daybooks` dual
+Upsedasse (not success); no create/add-line/post clicks; no `BILLY_API_TOKEN`.
+Scratch dual JSON (non-git): `research156_residual_dual.json`.
 
 ## Non-claims
 
@@ -33,7 +45,9 @@ updated: 2026-07-31T15:20:00Z
 - Never click create/add-line/post CTAs (`Opret ny kassekladde`,
   `Tilføj kassekladdelinje`, Bogfør, Ny postering, …).
 - Does not green `ui.discovery.transactions` (Posteringer list is separate).
-- Does not green `ui.parity.daybook*` rows.
+- Does **not** green `ui.parity.daybooks.get|create|update|delete|bulk_*`.
+- Does **not** green nested daybookTransactions / daybookTransactionLines /
+  daybookBalanceAccounts parity rows.
 - Soft aliases (`kassekladde`, `daybook`, …) are not this tool's success path.
 - API `live_tested` remains false with `out_of_scope_by_user`.
 
@@ -42,3 +56,4 @@ updated: 2026-07-31T15:20:00Z
 - Offline unit/model/server registration tests.
 - Live dual independent browser sessions (no `BILLY_API_TOKEN`).
 - Vision review record under tmp with `purge_verified: true` after frame purge.
+- Inventory dual-count asserts research156 + exact list id.

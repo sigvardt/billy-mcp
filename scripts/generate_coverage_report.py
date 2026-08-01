@@ -2461,12 +2461,18 @@ def apply_ui_financing_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_daybooks_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_daybooks_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark daybooks **editor shell open** evidence only (research117).
 
     Empty-input tool; path /:org_slug/daybooks/new; editor markers (no h1).
     Bare /daybooks is Upsedasse (not success). No invent API tools.
     Never click create/add-line/post. Does not green transactions discovery.
+    When ``parity_of_api_list`` is true, dual-counts ``ui.parity.daybooks.list``
+    for ``api.daybooks.list`` (research156).
     """
 
     row["method_or_route"] = (
@@ -2483,7 +2489,8 @@ def apply_ui_daybooks_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_DAYBOOKS_OPEN_MODEL_TEST_REFERENCE,
@@ -2497,9 +2504,16 @@ def apply_ui_daybooks_open_shell_evidence(row: dict[str, Any]) -> None:
         "kassekladde / Tilføj kassekladdelinje / Ingen postering valgt; empty h1 "
         "allowed; bare /daybooks dual Upsedasse rejected); never click create/"
         "add-line/post; no invent api_daybooks_* beyond offline product; does not "
-        "green ui.discovery.transactions or daybook* parity; vision record "
+        "green ui.discovery.transactions or daybooks get/create/update/delete/bulk "
+        "UI parity or nested daybookTransactions*/lines/balanceAccounts; "
+        "API list filters/sort/pagination UI not producted; vision record "
         "tmp/vision-records/ui_daybooks_open.json (editor frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research156 dual-session reconfirm; "
+            "maps api.daybooks.list to UI daybook editor shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -4155,7 +4169,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         if family == "financing":
             apply_ui_financing_open_shell_evidence(row)
         if family == "daybooks":
-            apply_ui_daybooks_open_shell_evidence(row)
+            apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=False)
         if family == "transactions":
             apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=False)
         if family == "reports":
@@ -4245,6 +4259,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.organizations.list":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.daybooks.list":
+            apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.special.user_get":
             apply_ui_settings_user_open_shell_evidence(row, parity_of_special_user_get=True)
         if api_row["id"] == "api.special.user_organizations":

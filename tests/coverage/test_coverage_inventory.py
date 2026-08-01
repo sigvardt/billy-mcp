@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 49 greened shells/parity + special.files_upload dual-count
-    # (research155) = 50 live/vision rows without GEO NA.
-    ui_shell_green = 50
+    # Prior 50 greened shells/parity + daybooks.list dual-count
+    # (research156) = 51 live/vision rows without GEO NA.
+    ui_shell_green = 51
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -644,7 +644,6 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         "api.bankLineSubjectAssociations.",
         "api.bankPayments.",
         "api.daybookBalanceAccounts.",
-        "api.daybooks.",
         "api.postings.",
         "api.salesTaxRules.",
         "api.salesTaxRulesets.",
@@ -662,9 +661,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 50 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 51 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 150
+    assert status["qualification"]["live_tested_rows"] == 151
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -701,6 +700,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.bank_reconciliation",
         "ui.discovery.financing",
         "ui.discovery.daybooks",
+        "ui.parity.daybooks.list",
         "ui.discovery.transactions",
         "ui.parity.transactions.list",
         "ui.discovery.reports",
@@ -753,6 +753,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.bank_reconciliation": "ui_bank_reconciliation_open",
         "ui.discovery.financing": "ui_financing_open",
         "ui.discovery.daybooks": "ui_daybooks_open",
+        "ui.parity.daybooks.list": "ui_daybooks_open",
         "ui.discovery.transactions": "ui_transactions_list",
         "ui.parity.transactions.list": "ui_transactions_list",
         "ui.discovery.reports": "ui_reports_open",
@@ -797,7 +798,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 50
+    assert len(qualified) == 51
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -903,6 +904,28 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.organizations.update",
         "ui.parity.organizations.bulk_save",
         "ui.parity.organizations.bulk_delete",
+    ):
+        red_row = next(row for row in remaining if row["id"] == red_id)
+        assert red_row["discovered"] is False
+        assert red_row["live_tested"] is False
+        assert red_row["parity_status"] == "discovery_required"
+    daybooks_parity = next(row for row in qualified if row["id"] == "ui.parity.daybooks.list")
+    assert daybooks_parity["api_row_id"] == "api.daybooks.list"
+    assert daybooks_parity["tool_name"] == "ui_daybooks_open"
+    assert daybooks_parity["parity_status"] == "shell_open_only"
+    assert "api.daybooks.list" in daybooks_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in daybooks_parity["evidence"]
+    assert "research156" in daybooks_parity["evidence"]
+    daybooks_discovery = next(row for row in qualified if row["id"] == "ui.discovery.daybooks")
+    assert daybooks_discovery["tool_name"] == "ui_daybooks_open"
+    assert daybooks_discovery["api_row_id"] is None
+    for red_id in (
+        "ui.parity.daybooks.get",
+        "ui.parity.daybooks.create",
+        "ui.parity.daybooks.update",
+        "ui.parity.daybooks.delete",
+        "ui.parity.daybooks.bulk_save",
+        "ui.parity.daybooks.bulk_delete",
     ):
         red_row = next(row for row in remaining if row["id"] == red_id)
         assert red_row["discovered"] is False
