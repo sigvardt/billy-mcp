@@ -631,6 +631,23 @@ class UiSettingsBetaOpenSuccess(BaseModel):
     beta_panel_markers_present: bool
 
 
+class UiSettingsSubscriptionOpenInput(BaseModel):
+    """Empty, strict input for the read-only subscription settings (Abonnement) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsSubscriptionOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Abonnement empty panel at /:org_slug/settings."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_subscription"] = "settings_subscription"
+    empty_panel: bool
+
+
 class CoverageStatus(BaseModel):
     """The four required API states plus the UI-only visual verification state."""
 

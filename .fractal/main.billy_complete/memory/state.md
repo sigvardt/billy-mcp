@@ -6,24 +6,23 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T00:20:00Z
+updated: 2026-08-01T01:06:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 34 COMMIT. Product tip settings_beta 186.34
-  (`ui_settings_beta_open`, `dfb5f9b`). Coverage live/vision 36; complete false.
-- Next: remaining settings_subscription (empty chrome red) or annual red.
-  No invent api_settings_*. Not node finish.
-- Review: product `ui_settings_beta_open` **ACCEPT** (IR 186.34).
+- Continue mode iter 35 pre-COMMIT. Product `ui_settings_subscription_open`
+  FIX-VERIFY clean; ready commit. Coverage live/vision 37; complete false.
+- annual red. Not node finish.
 
 ## Verification
 
-- Last product: `ui_settings_users_open` dual-session + vision purge_verified (FIX-VERIFY reconfirm; tip `79048b0`).
-- Offline baseline product: 1537 passed non-live.
-- Live baseline: 34 UI discovery/parity rows green.
+- Last product: `ui_settings_subscription_open` dual-session + vision purge_verified
+  (FIX-VERIFY N1; uncommitted pending COMMIT).
+- Offline baseline product: 1561 passed non-live.
+- Live baseline: 37 UI discovery/parity rows green.
 
 ## Review decisions (authoritative)
 
@@ -59,8 +58,8 @@ updated: 2026-08-01T00:20:00Z
 
 ## Open coverage work
 
-1. Next: remaining settings_* (`settings_beta` / `settings_subscription` via SPA
-   click-nav from Indstillinger hub). annual_reports stays red.
+1. Next product: `ui_settings_subscription_open` for empty-panel Abonnement
+   (research134). annual_reports stays red.
 2. `ui.discovery.annual_reports` dual-frozen inaccessible Upsedasse (research121);
    stays red until a non-error shell appears in an approved non-prod org.
 3. Residual/bulk offline API reds only; no live API methods.
@@ -68,15 +67,15 @@ updated: 2026-08-01T00:20:00Z
 
 ## Live UI tools (36 rows)
 
-- discovery greened (32): invoices, quotes, recurring_invoices, products, product_import,
+- discovery greened (33): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
   suppliers, bank_accounts, bank_reconciliation, financing, daybooks, transactions,
   reports, vat_declarations, exports, saft_exports, addons, integrations, inventory,
   settings_company, settings_accounting, settings_invoicing, settings_user,
-  settings_vat, settings_users, settings_access_token, settings_beta.
-- parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
-- discovery still red (2): annual_reports (inaccessible freeze),
+  settings_vat, settings_users, settings_access_token, settings_beta,
   settings_subscription.
+- parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
+- discovery still red (1): annual_reports (inaccessible freeze).
 
 ## Evidence boundaries
 
@@ -108,11 +107,11 @@ updated: 2026-08-01T00:20:00Z
 
 ## References
 
-- Wiki settings: `wiki/ui_settings_company_open_shell.md`,
-  `wiki/ui_settings_accounting_open_shell.md`,
-  `wiki/ui_settings_invoicing_open_shell.md`
-- Tip product: `b1ea805` `ui_settings_access_token_open`
-- Next: RESEARCH freeze remaining settings_* (prefer `ui.discovery.settings_beta`)
+- Wiki settings: company/accounting/invoicing/user/vat/users/access_token/beta shells
+- Tip product: `dfb5f9b` / bookkeeping `d19af4f` `ui_settings_beta_open`
+- Research: `.fractal/main.billy_complete/tmp/grok-research.md` (research134)
+- Discovery: `.fractal/main.billy_complete/tmp/discovery134/`
+- Next: PLAN product `ui_settings_subscription_open`
 
 ## SYNC (iter 30)
 
@@ -2166,4 +2165,136 @@ updated: 2026-08-01T00:20:00Z
 
 - `fractal commit` product: ui settings beta open betas panel with dual live and vision (`dfb5f9b`).
 - Not node finish (complete false; bulk + remaining UI still red).
+
+## SYNC (iter 35)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 88FC7796 + 77D415A8 reacted (+): COMMIT beta done; next subscription or annual.
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `d19af4f` vs origin/main.billy_complete.
+- Coverage: implemented/contract 220; live/vision 36; complete false.
+- Discovery still red (2): settings_subscription, annual_reports.
+- Outbox: 26586E32 sync iter35 progress.
+- Private next: 0744BF26 RESEARCH settings_subscription.
+- Ready for PREPARE then RESEARCH (settings_subscription click-nav freeze). Not finish.
+
+## PREPARE (iter 35)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children ahead of tip: 62; material checks:
+  - `ui_auth_status`: product files present but tip already has auth_status +
+    auth_login_* and browser 5283 LOC vs older child product commit; merge would
+    downgrade — skip.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`:
+    wiki already on tip; remaining diff scaffolding — skip.
+  - `ui_auth_credentials_research_codex_fallback`: research wiki only; product
+    already landed separately — skip.
+  - `wave5j_bank_line_product` / `wave5sb_files_upload_product` / review branches:
+    zero product file delta or fractal/init only — skip.
+- No running children. No integration outbox (no material merge).
+- Dirty: memory/state.md only.
+- Ready RESEARCH freeze: `ui.discovery.settings_subscription`.
+
+## SYNC pre-RESEARCH (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0744BF26 + 4730ACF1 reacted (+): RESEARCH settings_subscription.
+- No running children. PREPARE already done this iteration.
+- Outbox: pre-research note posted.
+- Ready RESEARCH freeze: `ui.discovery.settings_subscription`.
+
+## Research (iter 35)
+
+- research134 freeze: `ui.discovery.settings_subscription` via dual click-nav
+  **Abonnement**.
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5
+  `8b94b0135c91fd15fe54ea33e088a4be`.
+- No API settings/subscription CRUD resource; do not invent `api_settings_*` or
+  `api_subscription_*`. api_token_used false.
+- Soft seed `settings/subscription` also empty panel; other billing soft seeds
+  soft-empty reject. Product prefers hub + click Abonnement.
+- Click **Abonnement** dual success class: path `/:org_slug/settings`, h1
+  `Indstillinger`, **empty h2**, form/input 0, not company/beta panels, not
+  Upsedasse. Longer SPA settle still empty.
+- Contrast: Virksomhed dual company h2s; Betas dual Betas+Tidlig adgang.
+- Frames purged; writes false. Brief: `tmp/grok-research.md`.
+- Recommended product: `ui_settings_subscription_open` only. Ready for PLAN.
+
+## SYNC pre-PLAN (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private E84C4CF2 reacted (+): PLAN ui_settings_subscription_open.
+- Research134 brief present; frames purged; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN product `ui_settings_subscription_open`.
+
+## Plan (iter 35)
+
+- Plan: `plans/2026-08-01T00:23:04.632Z-186.35-ui_settings_subscription_open.md`
+  — product `ui_settings_subscription_open` for
+  `ui.discovery.settings_subscription` only; root-only; dual live+vision;
+  open hub `/:org_slug/settings` then click **Abonnement** (soft seeds reject
+  except optional note for `settings/subscription`); path class
+  `/:org_slug/settings`, h1 `Indstillinger`, shell_kind=`settings_subscription`,
+  empty h2 panel (not company/accounting/invoicing/user/vat/users/access_token/
+  beta); never billing/write CTAs; no invent api_settings_*/api_subscription_*;
+  no greening annual; egress append without drop.
+- Ready for EXECUTE.
+
+## SYNC pre-EXECUTE (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 747E5414 + 52A87B4C reacted (+): EXECUTE subscription open.
+- Plan 186.35 present (untracked until commit). Ready EXECUTE product.
+
+## Execute (iter 35)
+
+- Producted `ui_settings_subscription_open` (models/browser/server/tests/coverage/wiki).
+- Open: hub `/:org_slug/settings` + observe-only click Abonnement; soft empty seeds reject.
+- Success: path/h1 Indstillinger, shell_kind settings_subscription, empty_panel true
+  (no nonempty h2; no panel-only content markers; distinct from company/beta/…).
+- Offline non-live suite green (1559+ after inventory count fix; commit mode).
+- Live dual + vision purge_verified for Abonnement empty panel.
+- Coverage live/vision 37; complete false.
+- Greens only `ui.discovery.settings_subscription`. Ready for REVIEW.
+
+## SYNC pre-REVIEW (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 0DB2441E reacted (+): EXECUTE done; REVIEW next.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  `ui_settings_subscription_open` (186.35).
+
+## Independent review (iter 35)
+
+- Product `ui_settings_subscription_open`: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1: live vision body also assert empty h2.
+- Egress refs intact (beta + access_token + users + vat + user + company + subscription).
+- annual remains red. Overall completeness: **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 881A9C66 + F205C3A5 reacted (+): IR ACCEPT; FIX-VERIFY then COMMIT.
+- IR product ACCEPT; no required product fixes.
+- Ready FIX-VERIFY reconfirm (optional N1).
+
+## FIX-VERIFY (iter 35)
+
+- IR product ACCEPT; optional N1 applied (empty h2 assert in live vision helper).
+- LoginControl.nth added for typed empty-h2 iteration (pyright).
+- wiki index link for subscription shell; wiki lint clean.
+- lint pass; offline 1561; live settings_subscription reconfirm pass; vision
+  purge_verified.
+- Egress refs intact (company + accounting + invoicing + user + vat + users +
+  access_token + beta + subscription).
+- Coverage live/vision 37; complete false.
+- Plan post-mortem filled. Ready for COMMIT.
+
+## SYNC pre-COMMIT (iter 35)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 8A511323 + 4F7E7FD4 reacted (+): ready COMMIT.
+- FIX-VERIFY clean; commit product next.
 

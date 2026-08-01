@@ -47,6 +47,7 @@ from billy_mcp.models import (
     UiSettingsBetaOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
@@ -124,6 +125,12 @@ class FakeLoginControl:
     def first(self) -> FakeLoginControl:
         """Playwright-style first match; fakes are already a single control."""
 
+        return self
+
+    def nth(self, index: int) -> FakeLoginControl:
+        """Playwright-style nth match; fakes treat every index as this control."""
+
+        del index
         return self
 
     def _record(self, action: str) -> None:
@@ -7779,6 +7786,281 @@ def test_ui_settings_beta_open_returns_ui_changed_for_error_shell(
     )
 
     result = asyncio.run(runtime.ui_settings_beta_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _settings_subscription_empty_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Indstillinger"),
+        "h2": FakeLoginControl(count=0, visible=False),
+        "text=Abonnement": FakeLoginControl(text="Abonnement"),
+        "text=Betas": FakeLoginControl(text="Betas"),
+        "text=Tidlig adgang": FakeLoginControl(count=0, visible=False),
+        "text=Adgangsnøgler": FakeLoginControl(text="Adgangsnøgler"),
+        "text=Opret adgangsnøgle": FakeLoginControl(count=0, visible=False),
+        "text=Brugere": FakeLoginControl(text="Brugere"),
+        "text=Revisorer og bogholdere": FakeLoginControl(count=0, visible=False),
+        "text=Profil": FakeLoginControl(text="Profil"),
+        "text=Billede": FakeLoginControl(count=0, visible=False),
+        "text=Sprog og tema": FakeLoginControl(count=0, visible=False),
+        "text=Skift adgangskode": FakeLoginControl(count=0, visible=False),
+        "text=Faktura": FakeLoginControl(text="Faktura"),
+        "text=Produkter": FakeLoginControl(count=0, visible=False),
+        "text=Betalingsmetoder": FakeLoginControl(count=0, visible=False),
+        "text=Standard fakturalogo": FakeLoginControl(count=0, visible=False),
+        "text=Regnskab": FakeLoginControl(text="Regnskab"),
+        "text=Køb": FakeLoginControl(count=0, visible=False),
+        "text=Kontoplan": FakeLoginControl(count=0, visible=False),
+        "text=Navn og adresse": FakeLoginControl(count=0, visible=False),
+        "text=Kontaktinformation": FakeLoginControl(count=0, visible=False),
+        "text=Virksomhedsikon": FakeLoginControl(count=0, visible=False),
+        "text=Ejere": FakeLoginControl(count=0, visible=False),
+        "text=Regelsæt": FakeLoginControl(count=0, visible=False),
+        "text=Satser for salg": FakeLoginControl(count=0, visible=False),
+        "text=Satser for køb": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def _bind_abonnement_click_to_empty_panel(page: FakeLoginPage) -> None:
+    """Hub starts as company; clicking Abonnement swaps controls to empty panel."""
+
+    def apply_empty() -> None:
+        panel = _settings_subscription_empty_shell_controls()
+        page.controls = panel
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    hub = _settings_company_shell_controls()
+    hub["text=Abonnement"] = FakeLoginControl(text="Abonnement", on_click=apply_empty)
+    hub["text=Tidlig adgang"] = FakeLoginControl(count=0, visible=False)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+
+
+def test_ui_settings_subscription_open_returns_auth_required_on_login_page(
+    tmp_path: Path,
+) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_settings_subscription_open_returns_success_for_empty_panel(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    _bind_abonnement_click_to_empty_panel(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
+
+    assert result == UiSettingsSubscriptionOpenSuccess(empty_panel=True)
+    assert isinstance(result, UiSettingsSubscriptionOpenSuccess)
+    assert result.path_class == "/:org_slug/settings"
+    assert result.heading == "Indstillinger"
+    assert result.shell_kind == "settings_subscription"
+    assert result.empty_panel is True
+    assert any(url.rstrip("/").endswith("/settings") for url, _ in page.navigation)
+    assert "click:text=Abonnement" in page.events
+    assert page.closed
+
+
+def test_ui_settings_subscription_open_returns_ui_changed_for_company_without_click(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_company_shell_controls()
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_subscription_open_returns_ui_changed_when_click_leaves_company(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_company_shell_controls()
+    controls["text=Abonnement"] = FakeLoginControl(text="Abonnement")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_subscription_open_returns_ui_changed_for_beta_panel(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+
+    def apply_beta() -> None:
+        beta = _settings_beta_shell_controls()
+        beta["text=Abonnement"] = FakeLoginControl(text="Abonnement")
+        page.controls = beta
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    hub = _settings_company_shell_controls()
+    hub["text=Abonnement"] = FakeLoginControl(text="Abonnement", on_click=apply_beta)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_subscription_open_returns_ui_changed_for_error_shell(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+
+    def apply_err() -> None:
+        err = _settings_subscription_empty_shell_controls()
+        err["text=Upsedasse!"] = FakeLoginControl(text="Upsedasse!")
+        err["text=Upsedasse"] = FakeLoginControl(text="Upsedasse")
+        page.controls = err
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    hub = _settings_company_shell_controls()
+    hub["text=Abonnement"] = FakeLoginControl(text="Abonnement", on_click=apply_err)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_subscription_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED

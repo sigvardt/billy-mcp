@@ -49,6 +49,7 @@ from billy_mcp.models import (
     UiSettingsBetaOpenSuccess,
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
@@ -267,6 +268,47 @@ _SETTINGS_BETA_PANEL_MARKERS = (
     "Tidlig adgang",
 )
 _SETTINGS_BETA_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS
+# Research134: Indstillinger Abonnement empty panel on same hub path.
+# Soft seeds mostly empty; open hub then observe-only click side label Abonnement.
+# Success = empty h2 panel (not company/beta/other). Never click billing/write CTAs.
+_SETTINGS_SUBSCRIPTION_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_SUBSCRIPTION_HEADING = "Indstillinger"
+_SETTINGS_SUBSCRIPTION_SIDE_NAV_LABEL = "Abonnement"
+# Panel-only content markers that mean the active panel is NOT empty Abonnement.
+# Side-rail labels alone (Profil, Virksomhed, Betas, Adgangsnøgler, …) must not
+# trip this set.
+_SETTINGS_SUBSCRIPTION_NONEMPTY_PANEL_MARKERS = (
+    "Navn og adresse",
+    "Kontaktinformation",
+    "Virksomhedsikon",
+    "Ejere",
+    "Tidlig adgang",
+    "Regelsæt",
+    "Satser for salg",
+    "Satser for køb",
+    "Revisorer og bogholdere",
+    "Billede",
+    "Sprog og tema",
+    "Skift adgangskode",
+    "Produkter",
+    "Betalingsmetoder",
+    "Standard fakturalogo",
+    "Kontoplan",
+    "Opret adgangsnøgle",
+)
+_SETTINGS_SUBSCRIPTION_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS | frozenset(
+    {
+        "Opgrader",
+        "Skift abonnement",
+        "Skift plan",
+        "Betal",
+        "Køb",
+        "Annuller",
+        "Opsig",
+        "Opret adgangsnøgle",
+        "Opret betalingsmetode",
+    }
+)
 # Research116: financing landing shell (Ansøg om erhvervslån). No invent financing API.
 # Never click apply/offer/consent/submit (design §14.4 external financing).
 _FINANCING_PATH = re.compile(r"^/[^/]+/financing$")
@@ -462,6 +504,10 @@ class LoginControl(Protocol):
     @property
     def first(self) -> LoginControl:
         """Playwright first-match seam for multi-match locators."""
+        ...
+
+    def nth(self, index: int) -> LoginControl:
+        """Playwright nth-match seam for multi-match locators."""
         ...
 
     async def count(self) -> int: ...
@@ -709,6 +755,14 @@ class UiSettingsBetaOpenService(Protocol):
     """Injectable seam for the read-only betas settings (Betas) shell open."""
 
     async def ui_settings_beta_open(self) -> UiSettingsBetaOpenSuccess | ToolError: ...
+
+
+class UiSettingsSubscriptionOpenService(Protocol):
+    """Injectable seam for the read-only subscription settings (Abonnement) shell open."""
+
+    async def ui_settings_subscription_open(
+        self,
+    ) -> UiSettingsSubscriptionOpenSuccess | ToolError: ...
 
 
 class PersistentContextLauncher(Protocol):
@@ -3137,6 +3191,97 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_subscription_open(
+        self,
+    ) -> UiSettingsSubscriptionOpenSuccess | ToolError:
+        """Open the Indstillinger Abonnement empty-panel settings shell.
+
+        Research134: soft URL seeds are mostly insufficient (settings/subscription
+        may open empty dual but product uses hub+click). Open hub
+        /:org_slug/settings then observe-only click side label Abonnement. Final
+        path stays bare /:org_slug/settings with h1 Indstillinger and empty h2
+        panel (no company/beta/other panel content). Never click Opgrader /
+        Skift abonnement / Betal / Køb / Gem. No invent api_settings_* /
+        api_subscription_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_subscription_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_settings_subscription_changed_error()
+            if not _is_settings_subscription_url(page.url):
+                return _ui_settings_subscription_changed_error()
+
+            clicked = await _click_settings_side_nav_label(
+                page, _SETTINGS_SUBSCRIPTION_SIDE_NAV_LABEL
+            )
+            if not clicked:
+                return _ui_settings_subscription_changed_error()
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message=("Browser authentication requires a non-automatable challenge."),
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_subscription_changed_error()
+                if _is_settings_subscription_url(
+                    page.url
+                ) and await _has_settings_subscription_signature(page):
+                    return UiSettingsSubscriptionOpenSuccess(empty_panel=True)
+                await asyncio.sleep(0.2)
+            return _ui_settings_subscription_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the settings subscription shell observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=("Browser settings subscription shell observation could not be completed."),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     def _resolve_required_values(self) -> tuple[str, str] | None:
         """Resolve exactly two required values after signature validation only."""
 
@@ -4554,6 +4699,7 @@ async def _click_settings_side_nav_label(page: LoginPage, label: str) -> bool:
         or label in _SETTINGS_VAT_WRITE_CTA_LABELS
         or label in _SETTINGS_USERS_WRITE_CTA_LABELS
         or label in _SETTINGS_ACCESS_TOKEN_WRITE_CTA_LABELS
+        or label in _SETTINGS_SUBSCRIPTION_WRITE_CTA_LABELS
         or label.startswith(
             (
                 "Gem",
@@ -4566,6 +4712,11 @@ async def _click_settings_side_nav_label(page: LoginPage, label: str) -> bool:
                 "Overdrag",
                 "Opgrader",
                 "Save",
+                "Betal",
+                "Køb",
+                "Skift",
+                "Annuller",
+                "Opsig",
             )
         )
     ):
@@ -4918,6 +5069,122 @@ async def _has_settings_beta_signature(page: LoginPage) -> bool:
             return False
         # Access-token panel lacks Tidlig adgang (required above). Side-nav
         # Adgangsnøgler may still appear on the beta panel and is not a reject.
+        return True
+    except Exception:
+        return False
+
+
+def _is_settings_subscription_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (Abonnement path)."""
+
+    return _is_settings_company_url(url)
+
+
+def _ui_settings_subscription_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings subscription (Abonnement) shell failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings subscription shell could not be classified.",
+    )
+
+
+async def _has_settings_subscription_signature(page: LoginPage) -> bool:
+    """Verify research134 Indstillinger empty Abonnement panel.
+
+    Requires h1 Indstillinger, empty non-rail panel content (no nonempty h2 and
+    no panel-only content markers), and rejection of company/accounting/
+    invoicing/user/vat/users/beta full panel signatures. Side-nav labels alone
+    (including Abonnement / Adgangsnøgler / Betas) are not success markers.
+    Soft seeds and other settings panels are not success.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_SUBSCRIPTION_HEADING:
+            return False
+
+        # Empty content panel: no nonempty h2 headings.
+        h2 = page.locator("h2")
+        h2_count = await h2.count()
+        for index in range(h2_count):
+            control = h2.nth(index)
+            try:
+                if not await control.is_visible():
+                    continue
+            except Exception:
+                continue
+            text = (await control.inner_text()).strip()
+            if text:
+                return False
+
+        # Reject panel-only content markers (not side-rail chrome alone).
+        for label in _SETTINGS_SUBSCRIPTION_NONEMPTY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                return False
+
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
+            return False
+        invoicing_required = 0
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                invoicing_required += 1
+        if invoicing_required >= len(_SETTINGS_INVOICING_REQUIRED_MARKERS):
+            optional_ok = False
+            for label in _SETTINGS_INVOICING_OPTIONAL_MARKERS:
+                control = page.locator(f"text={label}")
+                if await control.count() >= 1 and await control.first.is_visible():
+                    optional_ok = True
+                    break
+            if optional_ok:
+                return False
+        user_hits = 0
+        for label in _SETTINGS_USER_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                user_hits += 1
+        if user_hits >= len(_SETTINGS_USER_PANEL_MARKERS):
+            return False
+        vat_hits = 0
+        for label in _SETTINGS_VAT_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                vat_hits += 1
+        if vat_hits >= len(_SETTINGS_VAT_PANEL_MARKERS):
+            return False
+        users_hits = 0
+        for label in _SETTINGS_USERS_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                users_hits += 1
+        if users_hits >= len(_SETTINGS_USERS_PANEL_MARKERS):
+            return False
+        beta_hits = 0
+        for label in _SETTINGS_BETA_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                beta_hits += 1
+        if beta_hits >= len(_SETTINGS_BETA_PANEL_MARKERS):
+            return False
         return True
     except Exception:
         return False

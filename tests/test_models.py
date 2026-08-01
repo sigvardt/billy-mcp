@@ -63,6 +63,8 @@ from billy_mcp.models import (
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenInput,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsSubscriptionOpenInput,
+    UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
     UiSettingsUsersOpenInput,
@@ -1383,5 +1385,37 @@ def test_ui_settings_beta_open_models_beta_shell() -> None:
                 "heading": "Indstillinger",
                 "shell_kind": "settings_beta",
                 "beta_panel_markers_present": True,
+            }
+        )
+
+
+def test_ui_settings_subscription_open_models_empty_panel_shell() -> None:
+    assert UiSettingsSubscriptionOpenInput().model_dump() == {}
+    success = UiSettingsSubscriptionOpenSuccess(empty_panel=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/settings",
+        "heading": "Indstillinger",
+        "shell_kind": "settings_subscription",
+        "empty_panel": True,
+    }
+    properties = UiSettingsSubscriptionOpenSuccess.model_json_schema().get("properties", {})
+    assert "url" not in properties
+    with pytest.raises(ValidationError):
+        UiSettingsSubscriptionOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSettingsSubscriptionOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_beta",
+                "empty_panel": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSettingsSubscriptionOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_subscription",
             }
         )

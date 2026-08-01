@@ -81,6 +81,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_settings_invoicing_open_shell|ui_settings_invoicing_open_shell]]: Read-only Billy Indstillinger Faktura (invoicing) settings panel open (research128 freeze).
 
+[[ui_settings_subscription_open_shell|ui_settings_subscription_open_shell]]: Read-only Billy Indstillinger Abonnement empty settings panel open (research134 freeze).
+
 [[ui_settings_user_open_shell|ui_settings_user_open_shell]]: Read-only Billy Indstillinger Profil (user) settings panel open (research129 freeze).
 
 [[ui_settings_users_open_shell|ui_settings_users_open_shell]]: Read-only Billy Indstillinger Brugere (org users) settings panel open (research131 freeze).

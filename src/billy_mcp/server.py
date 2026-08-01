@@ -87,6 +87,7 @@ from billy_mcp.browser import (
     UiSettingsBetaOpenService,
     UiSettingsCompanyOpenService,
     UiSettingsInvoicingOpenService,
+    UiSettingsSubscriptionOpenService,
     UiSettingsUserOpenService,
     UiSettingsUsersOpenService,
     UiSettingsVatOpenService,
@@ -162,6 +163,8 @@ from billy_mcp.models import (
     UiSettingsCompanyOpenSuccess,
     UiSettingsInvoicingOpenInput,
     UiSettingsInvoicingOpenSuccess,
+    UiSettingsSubscriptionOpenInput,
+    UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
     UiSettingsUsersOpenInput,
@@ -216,6 +219,7 @@ def create_server(
     ui_settings_users_open_service: UiSettingsUsersOpenService | None = None,
     ui_settings_access_token_open_service: UiSettingsAccessTokenOpenService | None = None,
     ui_settings_beta_open_service: UiSettingsBetaOpenService | None = None,
+    ui_settings_subscription_open_service: UiSettingsSubscriptionOpenService | None = None,
 ) -> FastMCP:
     """Create the server with only implemented, typed Billy capabilities."""
 
@@ -262,6 +266,7 @@ def create_server(
     settings_users_open_service = ui_settings_users_open_service or browser
     settings_access_token_open_service = ui_settings_access_token_open_service or browser
     settings_beta_open_service = ui_settings_beta_open_service or browser
+    settings_subscription_open_service = ui_settings_subscription_open_service or browser
     server = FastMCP(
         "Billy MCP",
         instructions=(
@@ -491,6 +496,12 @@ def create_server(
 
         UiSettingsBetaOpenInput()
         return await settings_beta_open_service.ui_settings_beta_open()
+
+    async def ui_settings_subscription_open() -> UiSettingsSubscriptionOpenSuccess | ToolError:
+        """Open the Billy Indstillinger Abonnement empty panel (read-only)."""
+
+        UiSettingsSubscriptionOpenInput()
+        return await settings_subscription_open_service.ui_settings_subscription_open()
 
     server.tool(name="coverage_status", description="Read generated Billy MCP coverage status.")(
         coverage_status
@@ -758,6 +769,15 @@ def create_server(
             "does not click Opret, Gem, or other write actions)."
         ),
     )(ui_settings_beta_open)
+    server.tool(
+        name="ui_settings_subscription_open",
+        description=(
+            "Open the Billy subscription settings (Indstillinger / Abonnement) empty "
+            "panel for the authenticated session (read-only path, heading, and empty-"
+            "panel classification; does not click Opgrader, Skift abonnement, Betal, "
+            "Køb, Gem, or other write actions)."
+        ),
+    )(ui_settings_subscription_open)
     register_bootstrap_read_tools(server, client)
     register_reference_reads(server, client)
     register_catalog_read_tools(server, client)
