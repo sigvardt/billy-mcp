@@ -6,19 +6,220 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T14:08:00Z
+updated: 2026-08-01T15:55:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **60** COMMIT 186.60 product `cdfe986`. live/vision
-  **154**; implemented/contract **338**; complete false. Not node finish.
-- ui_settings_vat_open dual-counts taxRates.list + salesTaxRulesets.list
-  (shell_open_only).
-- Bulk 92 + annual_reports still red. Residual: special.invoice_email; nested
-  salesTax* / taxRates write ops; create forms.
+- Continue mode iter **61** COMMIT product `c551395` (ui clients create open dual-count).
+- live/vision **156**; implemented/contract **340**; complete **false**.
+- Not node finish (bulk external-contract red, annual red, residual UI parity open).
+
+## COMMIT (iter 61)
+
+- `fractal commit` product: ui clients create open dual-count (`c551395`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
+## SYNC (iter 61 pre-COMMIT)
+
+## SYNC (iter 61 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C3CCF552 (FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1592 offline pass; IR ACCEPT). Ready COMMIT 186.61
+  ui clients create open dual-count package. Not node finish (complete false).
+
+## FIX-VERIFY (iter 61 / 186.61)
+
+## FIX-VERIFY (iter 61 / 186.61)
+
+- IR required fixes: none. Optional N1–N3 no-op (left as-is).
+- lint.sh pass. test.sh offline **1592 passed** / 39 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: clients_create + contacts.create green on
+  `ui_clients_create_open`; contacts.list still list shell; residual
+  contacts get/update/delete + invoice_email red; live/vision 156;
+  NA 100; implemented/contract 340; complete false; bulk 92 external-contract;
+  annual stay red; API live false (out_of_scope_by_user).
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.61 clients create open dual-count package. Not node finish.
+
+## SYNC (iter 61 pre-FIX-VERIFY)
+
+## SYNC (iter 61 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 78A4D9F9 (IR ACCEPT) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.61 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## IR (iter 61 / 186.61)
+
+## IR (iter 61 / 186.61)
+
+- Product ui_clients_create_open + dual-count contacts.create: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking.
+- Discovery clients_create + contacts.create integrity OK; residual contacts
+  get/update/delete/bulk red; invoice_email red; bulk 92 red; annual red;
+  complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 61 pre-IR)
+
+## SYNC (iter 61 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 3519D4F7 (EXECUTE done) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.61 uncommitted: ui_clients_create_open form_open_only + discovery
+  clients_create + dual-count api.contacts.create; live/vision 156;
+  implemented/contract 340; offline 1592; live dual 1; complete false.
+- Outbox: ready for IR of product. Not finish.
+
+## EXECUTE (iter 61 / 186.61)
+
+## EXECUTE (iter 61 / 186.61)
+
+- Producted research160 / plan 186.61:
+  - New tool `ui_clients_create_open` (clients list → Opret kontakt dialog;
+    name + registrationNo + street/person fields; never submit; soft /new rejected).
+  - Models/server/unit/live dual-session tests + vision purge path.
+  - Coverage generator: discovery `clients_create` + dual-count exact
+    `api.contacts.create` form_open_only.
+  - Wiki shell page + `_index` link.
+- Regenerated coverage: live/vision **156**; implemented/contract **340**;
+  GEO NA 100; complete false; residual invoice_email + contacts get/update/delete red.
+- lint.sh pass. offline test.sh **1592 passed**, 39 deselected.
+- Live: `test_ui_clients_create_open` **1 passed** (dual session; no API token).
+- Ready REVIEW / IR. Not finish.
+
+## SYNC (iter 61 pre-EXECUTE)
+
+## SYNC (iter 61 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0E610E88 (PLAN 186.61 done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.61 + research160 brief present. Tip `0d6a5e8`.
+- Ready EXECUTE product ui_clients_create_open form_open_only + discovery
+  clients_create + dual-count api.contacts.create (root; no children).
+  Not finish.
+
+## PLAN (iter 61 / 186.61)
+
+## PLAN (iter 61 / 186.61)
+
+- Plan file
+  `plans/2026-08-01T15:07:16.924Z-186.61-ui_clients_create_open.md`:
+  new shell tool `ui_clients_create_open` (clients list → **Opret kontakt**
+  dialog; name + registrationNo + address/person fields; never submit; soft
+  `/clients/new` rejected); discovery `clients_create` + dual-count exact
+  `api.contacts.create`; live/vision 154→156; implemented/contract 338→340;
+  GEO NA 100 unchanged; root-only Grok; no children; residual invoice_email +
+  products.create + nested salesTax* + bulk/annual stay red; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 61 pre-PLAN)
+
+## SYNC (iter 61 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private D7A9FA0C (research160 done) reacted (+).
+- No running children. No parent directives.
+- research160 brief present (`.fractal/main.billy_complete/tmp/grok-research.md`);
+  dual JSON present (residual + clients_create dual2).
+- Ready PLAN product handoff: new `ui_clients_create_open` form_open_only +
+  discovery `clients_create` + dual-count exact `api.contacts.create`
+  (live/vision 154→156; implemented/contract 338→340). Residual invoice_email
+  deferred; bulk92 + annual stay red. Not finish.
+
+## RESEARCH (iter 61 / research160)
+
+## RESEARCH (iter 61 / research160)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual residual READY; soft salesTaxPayments/Rules/Accounts/Meta/files/postings/…
+  == nonsense body 127; annual Upsedasse dual 469.
+- Tools dual-ok: vat (Regelsæt+Satser), users/company/accounting/invoicing/user/orgs,
+  products/clients/suppliers, invoices create/list, daybooks, uploads, transactions,
+  bank recon/accounts, vat declarations.
+- Disposable client: name fill after Opret; save TimeoutError; not listed. Draft
+  stayed on /invoices/new. Cleanup: no residual markers.
+- Focused clients-create dual v2: CTA **Opret kontakt** dual; name+registrationNo+
+  street; 14 visible fields dual; form_open_ready **true**; never submit.
+- Soft `/clients/new` chrome-only 0 fields dual (reject as success path).
+- Decision: **ACCEPT** product `ui_clients_create_open` + dual-count
+  `api.contacts.create` (discovery clients_create). **DEFER** special.invoice_email;
+  **DEFER** products.create; **REJECT** bankLines/postings steal; **REJECT**
+  salesTaxPayments steal onto vat_declarations; nested salesTaxRules DEFER.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+  Dual: `tmp/research160_residual_dual.json` + `tmp/research160_clients_create_dual2.json`.
+- Profiles purged. api_token_used false. No coverage green. Ready PLAN 186.61.
+
+## SYNC (iter 61 pre-RESEARCH)
+
+## SYNC (iter 61 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 1DB6D229 (residual pointer) + 50FD8F52 (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `0d6a5e8`.
+- Coverage: implemented/contract 338; live/vision 154; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email with
+  disposable draft dual per 186.60 post-mortem; else multi-resource dual
+  packages / create-form dual; no weak NA; no postings/transactions steal;
+  no bulk greening without new official schema). Not finish.
+
+## PREPARE (iter 61)
+
+## PREPARE (iter 61)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; local none rev-ahead
+  of tip. Remote origin children with rev-ahead reviewed; non-fractal three-dot
+  product review → **skip all merges**:
+  - `ui_auth_status` (SRC): tip browser/models/server much larger (241505 vs
+    12953; product already live).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback`
+    (WIKI): tip equal or longer; index-only / minor wiki churn.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path; same as iters 51-60).
+  - Early wave1–5g / shared_foundation: three-dot "adds" vs ancient base; tip
+    already has product (tip larger or equal for interesting paths).
+  - Remaining remote-ahead: fractal-only / failed-review scaffolding or older
+    wave product already integrated; material larger-on-child non-fractal
+    src/tests/scripts/coverage unique to tip: **0**.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `0d6a5e8` / product `cdfe986`. Ready RESEARCH residual dual-count/NA
+  (prefer special.invoice_email with disposable draft dual per 186.60 post-mortem;
+  else multi-resource dual packages / create-form dual; no weak NA; no postings
+  steal; no bulk greening without new official schema). Not finish.
+
+## SYNC (iter 61)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 9C10098C (iter60 COMMIT done) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `0d6a5e8` / product `cdfe986` == origin/main.billy_complete.
+- Coverage: implemented/contract **338**; live/vision **154**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`).
+- Residual red: special.invoice_email; annual_reports (ANNUAL_REPORTS_ORG_INACCESSIBLE);
+  bulk **92** external-contract; nested tax/salesTax write ops; create forms;
+  multi-resource dual packages (no postings/transactions steal).
+- Next residual (186.60 post-mortem): prefer special.invoice_email with disposable
+  draft + valid client dual; else multi-resource dual packages / create-form dual;
+  no weak NA; no bulk greening without new official schema.
+- Ready PREPARE. Not finish.
+
 
 ## SYNC (iter 60)
 
