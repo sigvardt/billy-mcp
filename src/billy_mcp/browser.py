@@ -1928,8 +1928,15 @@ class BrowserRuntime:
                 if await _has_error_shell_markers(page):
                     return _ui_uploads_changed_error()
                 if _is_uploads_list_url(page.url) and await _has_uploads_list_signature(page):
+                    file_input_present = await _has_file_input_present(page)
+                    if not file_input_present:
+                        # research155: Bilag upload surface requires file input
+                        # binding chrome; never set_input_files.
+                        await asyncio.sleep(0.2)
+                        continue
                     return UiUploadsListSuccess(
                         upload_action_visible=True,
+                        file_input_present=True,
                         shell_markers_present=await _has_shell_nav_markers(page),
                     )
                 await asyncio.sleep(0.2)

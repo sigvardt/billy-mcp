@@ -552,16 +552,22 @@ def test_ui_creditor_balances_list_models_are_empty_input_and_non_pii_success() 
 
 def test_ui_uploads_list_models_are_empty_input_and_non_pii_success() -> None:
     assert UiUploadsListInput().model_dump() == {}
-    success = UiUploadsListSuccess(upload_action_visible=True, shell_markers_present=True)
+    success = UiUploadsListSuccess(
+        upload_action_visible=True,
+        file_input_present=True,
+        shell_markers_present=True,
+    )
     assert success.path_class == "/:org_slug/uploads"
     assert success.heading == "Bilag"
     assert success.upload_action_visible is True
+    assert success.file_input_present is True
     assert success.shell_markers_present is True
     properties = UiUploadsListSuccess.model_json_schema().get("properties", {})
     assert set(properties) == {
         "path_class",
         "heading",
         "upload_action_visible",
+        "file_input_present",
         "shell_markers_present",
     }
     try:
@@ -580,6 +586,7 @@ def test_ui_uploads_list_models_are_empty_input_and_non_pii_success() -> None:
                 "path_class": "/:org_slug/other",
                 "heading": "X",
                 "upload_action_visible": True,
+                "file_input_present": True,
                 "shell_markers_present": True,
             }
         )

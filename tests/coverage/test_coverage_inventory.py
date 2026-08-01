@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 47 greened shells/parity + discovery bills_create
-    # + bills.create dual-count = 49 live/vision rows without GEO NA.
-    ui_shell_green = 49
+    # Prior 49 greened shells/parity + special.files_upload dual-count
+    # (research155) = 50 live/vision rows without GEO NA.
+    ui_shell_green = 50
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -581,19 +581,26 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert user_get_parity[0]["tool_name"] == "ui_settings_user_open"
     assert user_get_parity[0]["live_tested"] is True
     assert "research151" in (user_get_parity[0].get("evidence") or "")
-    # sibling specials stay red (not greened by accidental api.special. prefix)
-    for special_id in (
-        "api.special.invoice_email",
-        "api.special.files_upload",
-    ):
-        sibling = [
-            row
-            for row in ui_manifest["workflows"]
-            if str(row.get("api_row_id") or "") == special_id
-        ]
-        assert len(sibling) == 1, special_id
-        assert sibling[0].get("parity_status") != "not_applicable"
-        assert sibling[0].get("live_tested") is not True
+    # special.files_upload dual-counted to Bilag upload surface (research155)
+    files_upload_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.files_upload"
+    ]
+    assert len(files_upload_parity) == 1
+    assert files_upload_parity[0]["parity_status"] == "list_shell_open_only"
+    assert files_upload_parity[0]["tool_name"] == "ui_uploads_list"
+    assert files_upload_parity[0]["live_tested"] is True
+    assert "research155" in (files_upload_parity[0].get("evidence") or "")
+    # sibling special invoice_email stays red (not greened by accidental special prefix)
+    invoice_email_sibling = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.invoice_email"
+    ]
+    assert len(invoice_email_sibling) == 1
+    assert invoice_email_sibling[0].get("parity_status") != "not_applicable"
+    assert invoice_email_sibling[0].get("live_tested") is not True
     # special.user_organizations dual-counted to Virksomheder shell (research152)
     user_orgs_parity = [
         row
@@ -655,9 +662,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 49 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 50 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 149
+    assert status["qualification"]["live_tested_rows"] == 150
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -689,6 +696,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.debtor_balances",
         "ui.discovery.creditor_balances",
         "ui.discovery.uploads",
+        "ui.parity.special.files_upload",
         "ui.discovery.receipt_inbox",
         "ui.discovery.bank_reconciliation",
         "ui.discovery.financing",
@@ -740,6 +748,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.debtor_balances": "ui_debtor_balances_list",
         "ui.discovery.creditor_balances": "ui_creditor_balances_list",
         "ui.discovery.uploads": "ui_uploads_list",
+        "ui.parity.special.files_upload": "ui_uploads_list",
         "ui.discovery.receipt_inbox": "ui_receipt_inbox_list",
         "ui.discovery.bank_reconciliation": "ui_bank_reconciliation_open",
         "ui.discovery.financing": "ui_financing_open",
@@ -788,7 +797,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 49
+    assert len(qualified) == 50
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -939,6 +948,19 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert bills_create_discovery["tool_name"] == "ui_bills_create_open"
     assert bills_create_discovery["api_row_id"] is None
+    files_upload_special_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.special.files_upload"
+    )
+    assert files_upload_special_parity["api_row_id"] == "api.special.files_upload"
+    assert files_upload_special_parity["tool_name"] == "ui_uploads_list"
+    assert files_upload_special_parity["parity_status"] == "list_shell_open_only"
+    assert "api.special.files_upload" in files_upload_special_parity["evidence"]
+    assert "research155" in files_upload_special_parity["evidence"]
+    assert "file_input_present" in files_upload_special_parity["response_fields"]
+    uploads_discovery = next(row for row in qualified if row["id"] == "ui.discovery.uploads")
+    assert uploads_discovery["tool_name"] == "ui_uploads_list"
+    assert uploads_discovery["api_row_id"] is None
+    assert "file_input_present" in uploads_discovery["response_fields"]
     for red_id in (
         "ui.parity.invoices.get",
         "ui.parity.invoices.update",
@@ -946,7 +968,11 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",
-        "ui.parity.special.files_upload",
+        "ui.parity.files.get",
+        "ui.parity.files.list",
+        "ui.parity.files.create",
+        "ui.parity.attachments.get",
+        "ui.parity.attachments.list",
         "ui.parity.bills.get",
         "ui.parity.bills.update",
         "ui.parity.bills.delete",

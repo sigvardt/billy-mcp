@@ -5031,3 +5031,161 @@ updated: 2026-08-01T11:10:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
+
+
+## SYNC (iter 56)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 13194B62 + FD59268B (iter55 COMMIT / pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `fff3d2a` (+ `e933e8f` memory) == origin/main.billy_complete.
+- Coverage: implemented/contract **333**; live/vision **149**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`).
+- Residual red: **193** UI (1 discovery `annual_reports` org_inaccessible + 192
+  api_parity); bulk **92** external-contract; `special.invoice_email` +
+  `special.files_upload` red; API incomplete disc/impl/contract includes bulk 92
+  plus residual clear offline gaps (accountNatures/balanceModifiers/cities write
+  class etc. still not contract-green in manifest count).
+- Next residual (186.55 post-mortem): prefer `special.invoice_email` isolation
+  (disposable draft + send dialog dual or stronger NA; Levering still blocks weak
+  NA); products.create if form dual later; nested postings without dual-count
+  steal; bills get/update/delete/bulk stay red. Reject pure files_upload NA.
+- Outbox + private residual pointer posted. Ready PREPARE. Not finish.
+
+
+## PREPARE (iter 56)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; **0** commits ahead of tip `e933e8f`.
+- Remote origin children: **75** with commits ahead of tip. Product review of non-fractal three-dot deltas → **skip all merges**:
+  - Unique non-fractal path missing on tip: only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` (from `ui_auth_credentials_research_codex_fallback`) — skip (superseded auth research already on root product path; same decision as iters 51–55).
+  - `wave5t_ui_auth_discovery_fallback` wiki: tip vs child = trailing blank line only; skip.
+  - `wave5u_probe_contract_codex_fallback` (WIKI): tip longer (`wave5u_method_probe_contract.md` 215 > 178).
+  - `ui_auth_status` (SRC): tip browser/models/server much larger; product live.
+  - `wave5g_sales_tax_product`, `wave5d_invoice_writes`, `shared_foundation`: tip equal or longer; product already on tip.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or older wave product already integrated; no unique src/tests tip lacks.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `e933e8f`. Ready RESEARCH residual dual-count/NA (prefer special.invoice_email isolation first per 186.55 post-mortem). Not finish.
+
+
+## SYNC (iter 56 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 225D9621 (SYNC residual) + CF238618 (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `e933e8f`.
+- Coverage: implemented/contract 333; live/vision 149; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email isolation
+  first per 186.55 post-mortem; no postings steal; files_upload pure NA
+  rejected previously). Not finish.
+
+
+## RESEARCH (iter 56 / research155)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual residual: soft emails/files/postings == nonsense body 127; invoice detail
+  links 0 dual; create forms reconfirmed (invoices/bills greened class).
+- Dialog dual: Bilag `input[type=file]` count **2** both sessions; Upload filer
+  click dual; never set files.
+- Decision: **ACCEPT** product dual-count `special.files_upload` onto
+  `ui_uploads_list` (+ file_input_present); live/vision 149→150.
+  **DEFER** special.invoice_email; **REJECT** products/contacts create dual-count,
+  files pure NA, postings steal.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (+ worktree copy).
+  Dual: `tmp/research155_residual_dual.json`, `tmp/research155_dialog_probe.json`.
+- No coverage greening. Profiles purged. Ready PLAN. Not finish.
+
+
+## SYNC (iter 56 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7E8F3D20 (research155 done) + 5F492E9A (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research155 brief present; dual JSON present.
+- Ready PLAN product handoff: dual-count special.files_upload onto
+  ui_uploads_list (file_input_present); live/vision 149→150. Not finish.
+
+
+## Plan (iter 56)
+
+- Plan: `plans/2026-08-01T11:44:42.967Z-186.56-ui_files_upload_dual_count.md`
+  — research155: strengthen ui_uploads_list with file_input_present + dual-count
+  ui.parity.special.files_upload (1); live/vision 149→150; GEO NA 100; complete
+  false; no children; invoice_email stays red.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+
+## SYNC (iter 56 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4F6CB90E (pre-PLAN) + 4E1B077C (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.56 + research155 brief present. Tip `e933e8f`.
+- Ready EXECUTE product ui_uploads_list file_input + dual-count
+  special.files_upload (root; no children). Not finish.
+
+
+## Execute (iter 56)
+
+- Producted research155 / plan 186.56: ui_uploads_list file_input_present +
+  dual-count exact api.special.files_upload.
+- Models/browser/coverage generator/inventory/wiki landed.
+- Regenerated coverage: live/vision 149→150; implemented/contract 333→334;
+  complete false; invoice_email stays red.
+- lint.sh pass. test.sh offline **1586 passed**, 38 deselected.
+- Live dual test ui_uploads_list **1 passed** (~25s). Vision record purge path present.
+- Ready for REVIEW. Not finish.
+
+
+## SYNC (iter 56 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DEBBE63B (EXECUTE done) + 5833548B (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.56 uncommitted: file_input + dual-count special.files_upload;
+  live/vision 150; implemented/contract 334; complete=false; offline 1586 pass;
+  live dual 1 pass.
+- Outbox: ready for IR of product. Not finish.
+
+
+## Independent review (iter 56)
+
+- Product 186.56 ui_uploads_list file_input + special.files_upload dual-count:
+  **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (hardcoded bools after
+  signature; wiki CTA ban list detail).
+- Discovery uploads + special.files_upload integrity OK; residual invoice_email
+  + files*/attachments* stay red; bulk 92 red; annual red; complete false;
+  API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+
+## SYNC (iter 56 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private E5631C5E (IR ACCEPT) + 63AFF78C (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.56 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+
+## FIX-VERIFY (iter 56 / 186.56)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1586 passed / 38 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: special.files_upload + discovery uploads green; live/vision 150;
+  NA 100; implemented/contract 334; complete false; bulk 92 external-contract;
+  annual stay red; invoice_email residual red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+
+## SYNC (iter 56 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B5EFA421 (pre-FIX-VERIFY) + D9824AC1 (FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.56
+  ui special.files_upload dual-count package. Not node finish (complete false).

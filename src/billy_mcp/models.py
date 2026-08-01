@@ -324,6 +324,7 @@ class UiUploadsListSuccess(BaseModel):
     path_class: Literal["/:org_slug/uploads"] = "/:org_slug/uploads"
     heading: Literal["Bilag"] = "Bilag"
     upload_action_visible: bool
+    file_input_present: bool
     shell_markers_present: bool
 
 

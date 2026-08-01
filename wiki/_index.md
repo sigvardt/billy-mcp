@@ -119,7 +119,7 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_transactions_list_shell|ui_transactions_list_shell]]: Read-only Billy transactions (Posteringer) list shell contract; dual-counts discovery and api.transactions.list parity.
 
-[[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list contract for Billy uploads (Bilag) list shell open only.
+[[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list contract for Billy Bilag list plus special files upload surface open only.
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
 

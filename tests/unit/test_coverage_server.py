@@ -549,7 +549,11 @@ class FakeUiUploadsListService:
 
     async def ui_uploads_list(self) -> UiUploadsListSuccess:
         self.calls += 1
-        return UiUploadsListSuccess(upload_action_visible=True, shell_markers_present=True)
+        return UiUploadsListSuccess(
+            upload_action_visible=True,
+            file_input_present=True,
+            shell_markers_present=True,
+        )
 
 
 class FakeUiReceiptInboxListService:
@@ -1444,6 +1448,7 @@ def test_ui_uploads_list_registration_has_empty_input_and_typed_output(
             "path_class": "/:org_slug/uploads",
             "heading": "Bilag",
             "upload_action_visible": True,
+            "file_input_present": True,
             "shell_markers_present": True,
         }
     }

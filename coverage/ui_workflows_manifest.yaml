@@ -459,13 +459,13 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research113 dual-session headless observation + ui_uploads_list product; list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; aliases upload/bilag/files/inbox/attachments/receipts rejected; does not green receipt_inbox, files*, attachments*, special.files_upload; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept)",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; aliases upload/bilag/files/inbox/attachments/receipts rejected; does not green receipt_inbox, files* CRUD, attachments*, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept)",
       "filters": [],
       "id": "ui.discovery.uploads",
       "implemented": true,
       "lane": "ui",
       "live_tested": true,
-      "method_or_route": "mit.billy.dk /:org_slug/uploads (read-only list shell open)",
+      "method_or_route": "mit.billy.dk /:org_slug/uploads (read-only Bilag list + upload-surface open; never set input[type=file] / never submit upload)",
       "operation": "discovery",
       "pagination": null,
       "parity_status": "list_shell_open_only",
@@ -474,6 +474,7 @@
         "path_class",
         "heading",
         "upload_action_visible",
+        "file_input_present",
         "shell_markers_present"
       ],
       "sensitivity": "low",
@@ -14687,45 +14688,46 @@
     {
       "api_row_id": "api.special.files_upload",
       "area": "files",
-      "cleanup": "delete only dedicated test attachments after live upload contract qualification",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.special.files_upload",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; aliases upload/bilag/files/inbox/attachments/receipts rejected; does not green receipt_inbox, files* CRUD, attachments*, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research155 dual-session reconfirm; maps api.special.files_upload (POST /v2/files binary upload surface) to UI Bilag upload-surface open only",
       "filters": [],
       "id": "ui.parity.special.files_upload",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.special.files_upload",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/uploads (read-only Bilag list + upload-surface open; never set input[type=file] / never submit upload)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "file_bytes",
-        "X-Access-Token",
-        "X-Filename",
-        "Content-Type",
-        "x-create-attachment?",
-        "x-create-variants?",
-        "x-organizationid?",
-        "x-should-scan?"
-      ],
+      "parity_status": "list_shell_open_only",
+      "request_fields": [],
       "response_fields": [
-        "files[]",
-        "attachments?"
+        "path_class",
+        "heading",
+        "upload_action_visible",
+        "file_input_present",
+        "shell_markers_present"
       ],
-      "sensitivity": "high",
-      "side_effects": "high: uploads file content and may create attachment variants",
+      "sensitivity": "low",
+      "side_effects": "none",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_uploads_list.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_uploads_list",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

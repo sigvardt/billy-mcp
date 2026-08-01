@@ -2210,26 +2210,38 @@ def apply_ui_creditor_balances_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_uploads_list_shell_evidence(row: dict[str, Any]) -> None:
-    """Mark uploads (Bilag) list **shell open** evidence only (research113 / plan 186.14).
+def apply_ui_uploads_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_special_files_upload: bool = False,
+) -> None:
+    """Mark uploads (Bilag) list shell + upload-surface open evidence.
 
-    Empty-input tool; path /uploads, h1 Bilag, CTA Upload filer present only (never click;
-    never set file inputs). No official /v2/uploads resource — discovery only.
-    Does not green receipt_inbox or files/attachments/files_upload parity.
+    research113 / plan 186.14 list shell; research155 strengthens file-input
+    binding chrome (input[type=file] present; never set). Empty-input tool;
+    path /uploads, h1 Bilag, CTA Upload filer, file_input_present. No official
+    /v2/uploads resource. Does not green receipt_inbox or files/attachments
+    CRUD parity. When ``parity_of_special_files_upload`` is true, dual-counts
+    ``ui.parity.special.files_upload`` for ``api.special.files_upload``.
     """
 
-    row["method_or_route"] = "mit.billy.dk /:org_slug/uploads (read-only list shell open)"
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/uploads (read-only Bilag list + upload-surface "
+        "open; never set input[type=file] / never submit upload)"
+    )
     row["tool_name"] = UI_UPLOADS_LIST_TOOL_NAME
     row["request_fields"] = []
     row["response_fields"] = [
         "path_class",
         "heading",
         "upload_action_visible",
+        "file_input_present",
         "shell_markers_present",
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_special_files_upload:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_UPLOADS_LIST_MODEL_TEST_REFERENCE,
@@ -2239,14 +2251,21 @@ def apply_ui_uploads_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["evidence"] = (
         "research113 dual-session headless observation + ui_uploads_list product; "
-        "list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer "
-        "present, no file pick); no invent api_uploads_*/api_bilag_*; "
-        "aliases upload/bilag/files/inbox/attachments/receipts rejected; "
-        "does not green receipt_inbox, files*, attachments*, special.files_upload; "
-        "API list filters/sort/pagination UI not producted; "
-        "vision record tmp/vision-records/ui_uploads_list.json "
+        "research155 dual reconfirm file_input_present (input[type=file] count "
+        "class ≥1 both sessions; never set files); list shell only (path class "
+        "/:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); "
+        "no invent api_uploads_*/api_bilag_*; aliases upload/bilag/files/inbox/"
+        "attachments/receipts rejected; does not green receipt_inbox, files* "
+        "CRUD, attachments*, invoice_email; API list filters/sort/pagination UI "
+        "not producted; vision record tmp/vision-records/ui_uploads_list.json "
         "(list surface frames, accept)"
     )
+    if parity_of_special_files_upload:
+        row["evidence"] = (
+            f"{row['evidence']}; research155 dual-session reconfirm; maps "
+            "api.special.files_upload (POST /v2/files binary upload surface) to "
+            "UI Bilag upload-surface open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -4232,6 +4251,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_user_organizations_open_shell_evidence(
                 row, parity_of_special_user_organizations=True
             )
+        if api_row["id"] == "api.special.files_upload":
+            apply_ui_uploads_list_shell_evidence(row, parity_of_special_files_upload=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)

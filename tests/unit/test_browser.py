@@ -2786,6 +2786,8 @@ def _uploads_shell_controls() -> dict[str, FakeLoginControl]:
         "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
         "h1": FakeLoginControl(text="Bilag"),
         "text=Upload filer": FakeLoginControl(text="Upload filer"),
+        # research155: Bilag upload surface dual-proved file input present
+        "input[type=file]": FakeLoginControl(count=2, visible=True),
         "text=Overblik": FakeLoginControl(text="Overblik"),
         "text=Fakturering": FakeLoginControl(text="Fakturering"),
         "text=Menu": FakeLoginControl(text="Menu"),
@@ -3640,11 +3642,44 @@ def test_ui_uploads_list_returns_success_for_list_shell(tmp_path: Path) -> None:
 
     assert result == UiUploadsListSuccess(
         upload_action_visible=True,
+        file_input_present=True,
         shell_markers_present=True,
     )
     assert any(url.rstrip("/").endswith("/uploads") for url, _ in page.navigation)
     assert "test-org-slug" not in str(result.model_dump())
     assert "fill:" not in " ".join(page.events)
+    assert page.closed
+
+
+def test_ui_uploads_list_returns_ui_changed_when_file_input_missing(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _uploads_shell_controls()
+    controls["input[type=file]"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_uploads_list())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
     assert page.closed
 
 
@@ -3793,6 +3828,7 @@ def test_ui_uploads_list_accepts_list_url_with_query_params(tmp_path: Path) -> N
 
     assert result == UiUploadsListSuccess(
         upload_action_visible=True,
+        file_input_present=True,
         shell_markers_present=True,
     )
 

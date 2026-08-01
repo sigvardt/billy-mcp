@@ -116,6 +116,7 @@ async def _capture_uploads_list_frame(
         assert (await heading.first.inner_text()).strip() == "Bilag"
         upload_action = live_page.locator("text=Upload filer")
         assert await upload_action.count() >= 1 and await upload_action.first.is_visible()
+        assert await live_page.locator("input[type=file]").count() >= 1
         await live_page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
     finally:
@@ -150,6 +151,7 @@ async def test_dual_profiles_open_uploads_list_shell() -> None:
         assert list_a.path_class == "/:org_slug/uploads"
         assert list_a.heading == "Bilag"
         assert list_a.upload_action_visible is True
+        assert list_a.file_input_present is True
         assert _org_slug_len_only(org_a) > 0
 
         frame_a = frame_dir / "session_a_uploads_list.png"
@@ -174,7 +176,7 @@ async def test_dual_profiles_open_uploads_list_shell() -> None:
         keep_frames = os.environ.get("BILLY_KEEP_VISION_FRAMES", "").strip() == "1"
         write_vision_record(
             record_path,
-            workflow_ref="ui.discovery.uploads",
+            workflow_ref="ui.discovery.uploads+ui.parity.special.files_upload",
             assertion_refs=[
                 "tests/live/test_ui_uploads_list.py::test_dual_profiles_open_uploads_list_shell",
                 "session_a_ui_uploads_list",
@@ -182,6 +184,7 @@ async def test_dual_profiles_open_uploads_list_shell() -> None:
                 "session_a_uploads_list_frame",
                 "session_b_uploads_list_frame",
                 "list_surface_h1_bilag_upload_filer_cta",
+                "file_input_present_never_set",
             ],
             second_interface_ref="fresh_profile_b_full_login",
             reviewer_verdict="accept",
