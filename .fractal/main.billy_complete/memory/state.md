@@ -13,10 +13,11 @@ updated: 2026-08-01T06:20:00Z
 
 ## Current state
 
-- Continue mode iter 47 FIX-VERIFY clean 186.47 (uncommitted). Tip still
-  `d596f73`. live/vision **122**; implemented/contract **306**; complete false.
-- IR ACCEPT; offline 1565 pass. Ready COMMIT. Not finish.
+- Continue mode iter 47 COMMIT 186.47 at `d9d2c0c`. live/vision **122**;
+  implemented/contract **306**; complete false. Not node finish.
+- Dual-count organizations.list via ui_settings_company_open producted.
 - Discovery still red (1): annual_reports. Bulk 92 external-contract red.
+- Residual UI parity open.
 
 
 ## PREPARE (iter 45)
@@ -3812,3 +3813,12 @@ updated: 2026-08-01T06:20:00Z
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.47
   organizations.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 47)
+
+- `fractal commit` product: ui organizations list dual-count via settings company
+  shell (`d9d2c0c`).
+- Pushed to origin/main.billy_complete.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+- Tip: `d9d2c0c` (product).
