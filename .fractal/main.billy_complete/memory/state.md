@@ -6929,3 +6929,10 @@ updated: 2026-08-01T19:05:00Z
 - FIX-VERIFY clean (1615 offline pass; IR ACCEPT). Ready COMMIT 186.67
   ui clients update open package. Not node finish (complete false).
 - Future live browser: export TMPDIR to node tmp/runtime on ssd_1.
+
+## COMMIT (iter 67)
+
+- `fractal commit` product: ui clients update open (`a6dedab`).
+- Includes plan, live test, wiki shell, coverage, models/browser/server, inventory tests.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
