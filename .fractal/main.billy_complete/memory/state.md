@@ -2711,3 +2711,11 @@ updated: 2026-08-01T01:05:00Z
 - Unread inbox/feed/private: empty. Saved: B148CF36 open until COMMIT lands.
 - FIX-VERIFY clean (1564 offline pass; IR ACCEPT). Ready COMMIT 186.38 bulk
   external-contract + annual decision package. Not node finish (complete false).
+
+## COMMIT (iter 38)
+
+- `fractal commit` product: bulk external-contract freeze + annual inaccessible
+  decision (`1b47c0f`).
+- Unsaved parent steer B148CF36 (docs exhaust + blocker + annual decision done).
+- Not node finish (complete false; bulk external-contract red, residual 29,
+  UI parity geo NA next, annual unlock external).
