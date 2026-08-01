@@ -6,14 +6,14 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T03:56:00Z
+updated: 2026-08-01T04:00:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 41 pre-COMMIT. FIX-VERIFY clean. PREPARE done. Tip `e26f208` (186.40 currencies/locales UI
+- Continue mode iter 41 COMMIT done (`bb86b36` 186.41 dual-count). PREPARE done. Tip `e26f208` (186.40 currencies/locales UI
   NA). complete false.
 - Live/vision 81 (39 shell/parity + 42 NA); implemented/contract 265.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
@@ -3095,3 +3095,12 @@ updated: 2026-08-01T03:56:00Z
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.41
   salesTaxReturns.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 41)
+
+- `fractal commit` product: ui salestaxreturns list dual-count via vat
+  declarations shell (`bb86b36`).
+- Pushed to origin/main.billy_complete (or pending confirm). Worktree clean after
+  commit.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
