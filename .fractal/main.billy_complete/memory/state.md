@@ -13,13 +13,14 @@ updated: 2026-08-01T01:05:00Z
 
 ## Current state
 
-- Continue mode iter 36 FIX-VERIFY. Dual-count product ready commit.
-  Coverage live/vision 38; complete false.
-- IR 186.36 **ACCEPT** (no required fixes; O1 vision ref hygiene applied).
-- Offline test.sh: 1561 passed. lint + wiki lint clean.
-- Next after commit: annual red / residual blocked / bulk / more UI parity.
-  Not node finish.
+- Continue mode iter 36 COMMIT. Tip product dual-count transactions parity
+  186.36 (`ui.parity.transactions.list`, `ae4f0fe`). Coverage live/vision 38;
+  complete false.
+- Discovery still red (1): annual_reports (Upsedasse inaccessible freeze).
+- Residual 29 offline writes blocked; 92 bulk red. Next parity dual-count or
+  bulk offline work. No invent api_annual_*. Not node finish.
 - Review: dual-count `ui.parity.transactions.list` **ACCEPT** (IR 186.36).
+
 
 ## Verification
 
@@ -67,7 +68,7 @@ updated: 2026-08-01T01:05:00Z
 3. Residual 29 non-bulk writes: no ticketed product (405 / fixture blocked).
 4. 92 ambiguous bulk stay red until body contract.
 
-## Live UI tools (37 rows)
+## Live UI tools (38 rows)
 
 - discovery greened (33): invoices, quotes, recurring_invoices, products, product_import,
   customers, debtor_balances, creditor_balances, uploads, receipt_inbox, purchases,
@@ -76,7 +77,7 @@ updated: 2026-08-01T01:05:00Z
   settings_company, settings_accounting, settings_invoicing, settings_user,
   settings_vat, settings_users, settings_access_token, settings_beta,
   settings_subscription.
-- parity greened (list shells): bills.list, contacts.list, invoices.list, products.list.
+- parity greened (list shells): bills.list, contacts.list, invoices.list, products.list, transactions.list.
 - discovery still red (1): annual_reports (inaccessible freeze).
 
 ## Evidence boundaries
@@ -224,6 +225,12 @@ updated: 2026-08-01T01:05:00Z
 ## SYNC (iter 36 pre-COMMIT)
 
 - Unread empty. Ready COMMIT 186.36 dual-count.
+
+
+## COMMIT (iter 36 / 186.36)
+
+- fractal commit landed `ae4f0fe` dual-count ui.parity.transactions.list.
+- complete false. Not node finish.
 
 
 ## SYNC (iter 30)
