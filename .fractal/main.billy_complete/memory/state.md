@@ -6,16 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T08:50:29Z
+updated: 2026-08-01T08:50:45Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 51 COMMIT 186.51. live/vision **142**; implemented/contract
-  **326**; complete false. Not node finish.
+- Continue mode iter 51 COMMIT 186.51 at `c1baf53`. live/vision **142**;
+  implemented/contract **326**; complete false. Not node finish.
 - specials NA invoice_delivery + invoice_logs (2) greened. Residual UI open.
+- Bulk 92 + annual_reports still red.
 
 
 ## PREPARE (iter 45)
@@ -4406,7 +4407,7 @@ updated: 2026-08-01T08:50:29Z
 
 ## COMMIT (iter 51)
 
-- `fractal commit` product: ui specials invoice_delivery+invoice_logs not_applicable freeze.
+- `fractal commit` product: ui specials invoice_delivery+invoice_logs not_applicable freeze (`c1baf53`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
