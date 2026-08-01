@@ -6,15 +6,15 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T04:32:00Z
+updated: 2026-08-01T04:41:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 42 EXECUTE 186.42 users.list dual-count uncommitted. Tip base `15cb25a`. complete false. live/vision 82.
-- Live/vision 81 (39 shell/parity + 42 NA); implemented/contract 265.
+- Continue mode iter 42 COMMIT done (`0e037f9` 186.42 users.list dual-count). complete false.
+- Live/vision 82 (39 shell/parity + 42 NA); implemented/contract 266.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
 - Residual UI parity ~259 red (180 non-bulk + bulk parity).
@@ -3053,7 +3053,7 @@ updated: 2026-08-01T04:32:00Z
 - Inventory tests: qualified shells 38→39; live/vision 80→81; get/update/bulk
   salesTaxReturns parity stay red.
 - Wiki: ui_vat_declarations_list_shell dual-count note + _index desc.
-- Regenerated coverage: implemented/contract 265; live/vision 81; complete false.
+- Regenerated coverage: implemented/contract 266; live/vision 81; complete false.
 - lint.sh pass (wiki index fixed); test.sh offline **1565 passed**, 35 deselected.
 - No new UI tools. Ready for REVIEW.
 
@@ -3061,7 +3061,7 @@ updated: 2026-08-01T04:32:00Z
 
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - EXECUTE 186.41 uncommitted: dual-count salesTaxReturns.list; live/vision 81;
-  implemented/contract 265; complete=false; offline 1565 pass.
+  implemented/contract 266; complete=false; offline 1565 pass.
 - Outbox: ready for IR of dual-count package. Not finish.
 
 ## Independent review (iter 41)
@@ -3084,7 +3084,7 @@ updated: 2026-08-01T04:32:00Z
 - IR product ACCEPT; no required product fixes (optional N1–N2 deferred).
 - lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
 - check_coverage pass; salesTaxReturns.list dual-count green; live/vision 81;
-  implemented/contract 265; complete false; bulk 92 external-contract; annual
+  implemented/contract 266; complete false; bulk 92 external-contract; annual
   NA rejected stay red.
 - Plan post-mortem filled. Wiki lint clean (project + memory).
 - Ready for COMMIT. Not node finish.
@@ -3108,7 +3108,7 @@ updated: 2026-08-01T04:32:00Z
 
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - Branch clean at `15cb25a` (186.41 dual-count + memory bookkeeping). origin synced.
-- Coverage: complete=false; live/vision 81; implemented/contract 265.
+- Coverage: complete=false; live/vision 81; implemented/contract 266.
 - Open: residual UI parity red; annual_reports inaccessible; 92 bulk external-contract red.
 - Outbox status posted. Ready PREPARE next residual UI product. Not finish.
 
@@ -3210,4 +3210,11 @@ updated: 2026-08-01T04:32:00Z
 - Unread inbox/feed/private: empty. Saved: empty. No running children.
 - FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.42
   users.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 42)
+
+- `fractal commit` product: ui users list dual-count via settings brugere shell (`0e037f9`).
+- Pushed to origin/main.billy_complete. Worktree clean.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
