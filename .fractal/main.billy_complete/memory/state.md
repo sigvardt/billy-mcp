@@ -6,17 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T07:43:12Z
+updated: 2026-08-01T08:50:29Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 50 COMMIT 186.50 at `c6582a8`. live/vision **140**;
-  implemented/contract **324**; complete false. Not node finish.
-- invoiceReminders NA (5) greened. Residual UI parity open.
-- Bulk 92 + annual_reports still red.
+- Continue mode iter 51 COMMIT 186.51. live/vision **142**; implemented/contract
+  **326**; complete false. Not node finish.
+- specials NA invoice_delivery + invoice_logs (2) greened. Residual UI open.
+
 
 ## PREPARE (iter 45)
 
@@ -125,6 +125,8 @@ updated: 2026-08-01T07:43:12Z
 
 
 ## Review decisions (authoritative)
+
+- Product NA package specials invoice_delivery+invoice_logs: **ACCEPT** (IR 186.51; no required fixes).
 
 - Product NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT** (IR 186.45; no required fixes).
 
@@ -4247,6 +4249,164 @@ updated: 2026-08-01T07:43:12Z
 
 - `fractal commit` product: ui invoiceReminders not_applicable freeze
   (`c6582a8`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
+## SYNC (iter 51 continue)
+
+- Unread inbox/feed: empty. Private FED12B81 + 35CE5E1B iter50 pre-COMMIT/COMMIT
+  pointers reacted (+).
+- Saved: empty. No running children (historical only; none active).
+- Branch clean at `736278f` on origin/main.billy_complete (186.50 product
+  `c6582a8` + record commit).
+- Coverage: complete=false; implemented/contract 324; live/vision 140;
+  API live_tested false (out_of_scope_by_user).
+- API incomplete: 121 (92 ambiguous_bulk + 29 clear writes still red).
+- UI incomplete: 199 discovery_required (parity open).
+- Blockers: 92 bulk external-contract BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS;
+  annual_reports org_inaccessible; residual UI parity; clear API write residual 29.
+- Next residual candidates (186.50 post-mortem): specials Levering isolation;
+  taxRateDeduction/taxRates multi-resource; files/Bilag map; bank recon match
+  isolation; postings no-steal; productPrices nested; daybooks dual-count weak
+  map. Prefer dual-count list shells onto greened tools where dual soft-empty
+  allows; GEO NA only with dual soft-empty + shell-marker isolation evidence.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 51)
+
+- Parent `main`: fetch + merge Already up to date.
+- Local `git branch --list 'main.billy_complete.*'` shows 0 commits ahead of tip
+  (local child refs not ahead). Remote origin children: 75 with commits ahead
+  of tip `736278f`; product-path deltas reviewed and skip:
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`
+    (WIKI): pages already on tip (tip wiki equal or longer); do not re-merge
+    stale wiki/_index rows.
+  - `ui_auth_status` (SRC): product already on mainline (`auth_status` tools
+    live); child tip far behind (browser ~376 vs tip ~5550 LOC). Skip re-merge.
+  - `ui_auth_credentials_research_codex_fallback` optional wiki page not on tip
+    — skip (superseded auth research already on root product path).
+  - `wave5sa_invoice_logs_product_codex_fallback_review`,
+    `wave5n_invoice_late_fee_freeze`: wiki content equal on tip; skip.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or
+    older wave product already integrated; no unique src/tests content tip lacks.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `736278f`. Ready RESEARCH residual dual-count/NA (prefer specials Levering
+  isolation, taxRates multi-resource, files/Bilag, bank recon, postings,
+  productPrices, daybooks per 186.50 post-mortem). Not finish.
+
+## SYNC (iter 51 pre-RESEARCH)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children to steer (historical children only).
+- PREPARE already no-op: parent up to date; no child merges. Tip `736278f`.
+- Coverage: complete=false; live/vision 140; implemented/contract 324.
+- Ready RESEARCH residual dual-count/NA (prefer specials Levering isolation,
+  taxRates multi-resource, files/Bilag, bank recon, postings, productPrices,
+  daybooks per 186.50 post-mortem; GEO NA only with dual soft-empty + marker
+  isolation). Not finish.
+
+## RESEARCH (iter 51 / research150)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual residual soft routes: invoiceDeliveries/invoiceLogs soft-empty == nonsense
+  (body 127) dual agree; tools invoices/transactions/uploads/settings_invoicing/
+  bank_recon/daybooks dual-ok.
+- Levering context dual on /settings/invoicing body 1494: string is
+  "Levering af faktura pr. e-mail"; e_invoice/GLN markers dual false.
+- Decision: NA package ui.parity.special.invoice_delivery + invoice_logs (2 ops)
+  via GEO NA path (research150; live/vision 140→142; NA 98→100).
+- Defer: invoice_email (email Levering settings), user_get/user_organizations,
+  files_upload, attachments, tax*, bank*, productPrices, daybooks, postings dual-count.
+- Brief: tmp/grok-research.md. Dual JSON: research150_residual_dual.json +
+  research150_levering_context_dual.json.
+- Profiles purged. No coverage greening. Not finish. Next PLAN.
+
+## SYNC (iter 51 pre-PLAN)
+
+- Unread inbox/feed: empty. Private 3B9FD848 pre-RESEARCH + 850D0C22 research150
+  done reacted (+).
+- Saved: empty. No running children.
+- research150 brief present (`tmp/grok-research.md`); dual JSON present
+  (residual + levering context).
+- Ready PLAN product handoff for specials NA package invoice_delivery +
+  invoice_logs (2 rows). Not finish.
+
+## Plan (iter 51)
+
+- Plan: `plans/2026-08-01T08:30:14.785Z-186.51-ui_specials_invoice_delivery_logs_not_applicable.md`
+  — research150: NA package ui.parity.special.invoice_delivery + invoice_logs
+  (2 ops) via GEO NA path with **exact** special ids; inventory live/vision
+  140→142; NA 98→100; shells 42 unchanged; wiki freeze page; no new tools;
+  complete false; no children; invoice_email stays red (email Levering).
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 51 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Private A1C1A768 pre-PLAN + C2598E17 PLAN done
+  reacted (+).
+- Saved: empty. No running children.
+- Plan 186.51 + research150 brief present. Ready EXECUTE product NA package
+  specials invoice_delivery + invoice_logs (root; no children). Not finish.
+
+## Execute (iter 51)
+
+- Producted research150 / plan 186.51: NA package specials invoice_delivery +
+  invoice_logs (2 ops) via GEO NA path (exact ids only; ROW_COUNT 100).
+- Inventory tests: research150 evidence_ref + Levering email contrast; sibling
+  specials stay red; invoiceReminders stay green; live/vision 140→142; NA 98→100.
+- Wiki: ui_specials_invoice_delivery_logs_not_applicable + _index + peer link.
+- Regenerated coverage: implemented/contract 326; live/vision 142; complete false.
+- lint.sh pass; test.sh commit **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC (iter 51 pre-INDEPENDENT-REVIEW)
+
+- Unread inbox/feed: empty. Private CAC04B71 pre-EXECUTE + FCE46C36 EXECUTE done
+  reacted (+).
+- Saved: empty. No running children.
+- EXECUTE 186.51 uncommitted: specials NA delivery+logs; live/vision 142;
+  implemented/contract 326; complete=false; offline 1565 pass.
+- Outbox: ready for IR of NA package. Not finish.
+
+## Independent review (iter 51)
+
+- Product 186.51 specials NA package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (test docstring stale
+  research list; bare /settings vs invoicing panel already documented).
+- Two NA rows integrity OK; sibling specials stay red; bulk 92 red; annual red;
+  complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 51 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Private 1AAE238C pre-IR + F40D14EF IR ACCEPT
+  reacted (+).
+- Saved: empty. No running children.
+- IR ACCEPT 186.51 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 51 / 186.51)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: specials NA 2 green; live/vision 142; NA 100;
+  implemented/contract 326; complete false; bulk 92 external-contract; annual
+  stay red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 51 pre-COMMIT)
+
+- Unread inbox/feed: empty. Private 2CA84989 pre-FIX-VERIFY + 3A478DB5 FIX-VERIFY
+  done reacted (+).
+- Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.51
+  specials NA package. Not node finish (complete false).
+
+## COMMIT (iter 51)
+
+- `fractal commit` product: ui specials invoice_delivery+invoice_logs not_applicable freeze.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 

@@ -40,6 +40,7 @@ Peer freezes: [[ui_geo_cities_not_applicable]],
 [[ui_contact_persons_not_applicable]],
 [[ui_contact_postings_late_fees_reminder_assoc_not_applicable]],
 [[ui_contact_balance_payments_not_applicable]].
+[[ui_specials_invoice_delivery_logs_not_applicable]].
 
 ## Dual-session evidence (non-sensitive)
 

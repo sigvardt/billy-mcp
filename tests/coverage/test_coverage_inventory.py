@@ -416,7 +416,11 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES:
+        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS:
+            assert "research150" in qual["evidence_ref"]
+            assert "research150" in row["evidence"]
+            assert "Levering af faktura pr. e-mail" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES:
             assert "research149" in qual["evidence_ref"]
             assert "research149" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES:
@@ -453,6 +457,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_contact_persons" not in row["tool_name"]
         assert "ui_invoice_late_fees" not in row["tool_name"]
         assert "ui_invoice_reminder_associations" not in row["tool_name"]
+        assert "ui_invoice_deliveries" not in row["tool_name"]
+        assert "ui_invoice_logs" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
     # currencies/locales dual-proved (research139) — no longer discovery_required
     currency_locale = [
@@ -545,6 +551,39 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["vision_verified"] is True for row in invoice_reminders)
     assert all(row["tool_name"] == "" for row in invoice_reminders)
     assert all("research149" in (row.get("evidence") or "") for row in invoice_reminders)
+    # research150 specials invoice_delivery + invoice_logs only (exact ids)
+    specials_delivery_logs = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
+    ]
+    assert len(specials_delivery_logs) == 2
+    assert all(row["parity_status"] == "not_applicable" for row in specials_delivery_logs)
+    assert all(row["implemented"] is True for row in specials_delivery_logs)
+    assert all(row["live_tested"] is True for row in specials_delivery_logs)
+    assert all(row["vision_verified"] is True for row in specials_delivery_logs)
+    assert all(row["tool_name"] == "" for row in specials_delivery_logs)
+    assert all("research150" in (row.get("evidence") or "") for row in specials_delivery_logs)
+    assert all(
+        "Levering af faktura pr. e-mail" in (row.get("evidence") or "")
+        for row in specials_delivery_logs
+    )
+    # sibling specials stay red (not greened by accidental api.special. prefix)
+    for special_id in (
+        "api.special.invoice_email",
+        "api.special.files_upload",
+        "api.special.user_get",
+        "api.special.user_organizations",
+    ):
+        sibling = [
+            row
+            for row in ui_manifest["workflows"]
+            if str(row.get("api_row_id") or "") == special_id
+        ]
+        assert len(sibling) == 1, special_id
+        assert sibling[0].get("parity_status") != "not_applicable"
+        assert sibling[0].get("live_tested") is not True
     # associations remain NA green (research144) — separate resource
     reminder_assoc = [
         row
@@ -597,8 +636,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 42 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 140
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 98
+    assert status["qualification"]["live_tested_rows"] == 142
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:

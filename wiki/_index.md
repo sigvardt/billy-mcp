@@ -107,6 +107,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_settings_vat_open_shell|ui_settings_vat_open_shell]]: Read-only Billy Indstillinger Momssatser (VAT) settings panel open (research130 freeze).
 
+[[ui_specials_invoice_delivery_logs_not_applicable|ui_specials_invoice_delivery_logs_not_applicable]]: Dual-session research150 freeze — no equivalent mit.billy.dk workflow for special invoice_delivery and invoice_logs API parity; soft-empty path matches nonsense; settings Levering is email-only; NA accepted for those two specials only.
+
 [[ui_suppliers_list_shell|ui_suppliers_list_shell]]: Read-only headless ui_suppliers_list contract for Billy suppliers list shell open only.
 
 [[ui_transactions_list_shell|ui_transactions_list_shell]]: Read-only Billy transactions (Posteringer) list shell contract; dual-counts discovery and api.transactions.list parity.

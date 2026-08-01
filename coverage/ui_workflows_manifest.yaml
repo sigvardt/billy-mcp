@@ -14617,88 +14617,113 @@
     {
       "api_row_id": "api.special.invoice_delivery",
       "area": "invoice_deliveries",
-      "cleanup": "not_reversible; requires a supported sandbox or resettable dedicated organisation",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.special.invoice_delivery",
+      "evidence": "research150 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_specials_delivery_logs true; candidate special.invoice_delivery+invoice_logs path classes soft-empty identical to nonsense (zz-research150-no-such-route); contrast invoices/settings_invoicing(email Levering contrast)/uploads/transactions/clients/suppliers/daybooks/bank_recon/products real shells with h1; settings/invoicing dual body_len 1494 shows Levering af faktura pr. e-mail (email settings only; e_invoice/GLN markers dual false) \u2014 blocks special.invoice_email pure NA only, not delivery/logs; design \u00a710.2 UI parity not_applicable accepted for api.special.invoice_delivery; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* special.invoice_delivery+invoice_logs tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research150_specials_invoice_delivery_logs_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.special.invoice_delivery",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.special.invoice_delivery",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.special.invoice_delivery (research150 dual-session: no nav label/href for special; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Fakturaer/Indstillinger(Levering af faktura pr. e-mail)/Bilag/Posteringer/Kunder/Leverand\u00f8rer/daybooks editor/Bankkonti/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "invoiceDelivery.invoiceId",
-        "invoiceDelivery.organizationId",
-        "invoiceDelivery.receiverIdType (gln|cvr)",
-        "invoiceDelivery.receiverGln?",
-        "invoiceDelivery.orderReference?",
-        "invoiceDelivery.senderUserId"
-      ],
-      "response_fields": [
-        "invoiceDelivery"
-      ],
-      "sensitivity": "high",
-      "side_effects": "high: asynchronous external e-invoice delivery",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "settings_invoicing",
+          "uploads",
+          "transactions",
+          "clients",
+          "suppliers",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "zz-research150-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research150_specials_invoice_delivery_logs_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.special.invoice_logs",
       "area": "invoice_logs",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.special.invoice_logs",
-      "filters": {
-        "sortDirection": [
-          "DESC"
-        ],
-        "sortProperty": [
-          "eventTime"
-        ]
-      },
+      "evidence": "research150 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_specials_delivery_logs true; candidate special.invoice_delivery+invoice_logs path classes soft-empty identical to nonsense (zz-research150-no-such-route); contrast invoices/settings_invoicing(email Levering contrast)/uploads/transactions/clients/suppliers/daybooks/bank_recon/products real shells with h1; settings/invoicing dual body_len 1494 shows Levering af faktura pr. e-mail (email settings only; e_invoice/GLN markers dual false) \u2014 blocks special.invoice_email pure NA only, not delivery/logs; design \u00a710.2 UI parity not_applicable accepted for api.special.invoice_logs; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* special.invoice_delivery+invoice_logs tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research150_specials_invoice_delivery_logs_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.special.invoice_logs",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.special.invoice_logs",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.special.invoice_logs (research150 dual-session: no nav label/href for special; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Fakturaer/Indstillinger(Levering af faktura pr. e-mail)/Bilag/Posteringer/Kunder/Leverand\u00f8rer/daybooks editor/Bankkonti/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "invoiceId",
-        "organizationId",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "invoiceLogs[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "settings_invoicing",
+          "uploads",
+          "transactions",
+          "clients",
+          "suppliers",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "zz-research150-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research150_specials_invoice_delivery_logs_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
