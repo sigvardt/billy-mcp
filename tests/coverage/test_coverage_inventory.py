@@ -416,7 +416,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES:
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES:
+            assert "research148" in qual["evidence_ref"]
+            assert "research148" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES:
             assert "research147" in qual["evidence_ref"]
             assert "research147" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES:
@@ -444,6 +447,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_account_groups" not in row["tool_name"]
         assert "ui_contact_balance_postings" not in row["tool_name"]
         assert "ui_contact_balance_payments" not in row["tool_name"]
+        assert "ui_contact_persons" not in row["tool_name"]
         assert "ui_invoice_late_fees" not in row["tool_name"]
         assert "ui_invoice_reminder_associations" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
@@ -512,7 +516,38 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["vision_verified"] is True for row in contact_balance_payments)
     assert all(row["tool_name"] == "" for row in contact_balance_payments)
     assert all("research147" in (row.get("evidence") or "") for row in contact_balance_payments)
-    # productPrices must stay red this slice (research143/144/147 rejected NA)
+    # research148 contactPersons package (7 ops including singular delete)
+    contact_persons = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.contactPersons.")
+    ]
+    assert len(contact_persons) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in contact_persons)
+    assert all(row["implemented"] is True for row in contact_persons)
+    assert all(row["live_tested"] is True for row in contact_persons)
+    assert all(row["vision_verified"] is True for row in contact_persons)
+    assert all(row["tool_name"] == "" for row in contact_persons)
+    assert all("research148" in (row.get("evidence") or "") for row in contact_persons)
+    # invoiceReminders stays red this slice (secondary NA deferred)
+    invoice_reminders = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.invoiceReminders.")
+    ]
+    assert invoice_reminders
+    assert all(row.get("parity_status") != "not_applicable" for row in invoice_reminders)
+    assert all(row.get("live_tested") is not True for row in invoice_reminders)
+    # attachments stays red this slice (Bilag greened → reject pure NA)
+    attachments = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.attachments.")
+    ]
+    assert attachments
+    assert all(row.get("parity_status") != "not_applicable" for row in attachments)
+    assert all(row.get("live_tested") is not True for row in attachments)
+    # productPrices must stay red this slice (research143/144/147/148 rejected NA)
     product_prices = [
         row
         for row in ui_manifest["workflows"]
@@ -547,8 +582,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 42 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 128
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 86
+    assert status["qualification"]["live_tested_rows"] == 135
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 93
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:

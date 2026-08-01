@@ -3963,3 +3963,148 @@ updated: 2026-08-01T06:20:00Z
   residual UI parity open).
 - Tip: `78fd656` (product).
 
+
+## SYNC (iter 49 continue)
+
+- Unread inbox/feed: empty. Private 98EEBB10 iter48 COMMIT pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- Branch clean at `8796536` (186.48 product `78fd656` + bookkeeping) on
+  origin/main.billy_complete.
+- Coverage: complete=false; implemented/contract 312; live/vision 128; API
+  live_tested false (out_of_scope_by_user).
+- Blockers: 92 bulk external-contract BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS;
+  annual_reports org_inaccessible; residual UI parity open.
+- Next residual candidates (from 186.48 post-mortem / research147 deferrals):
+  taxRates Momssatser multi-resource; files weak Bilag map; bank recon match
+  isolation; postings no-steal; productPrices nested; daybooks dual-count weak
+  map.
+- Prefer dual-count list shells onto greened tools where dual soft-empty allows;
+  GEO NA only with dual soft-empty evidence.
+- Outbox 3D74C0AC continue status. Private 9DE06888 residual pointer.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 49)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 62 historical tips still show commits ahead of mainline; none carry
+  material unmerged product:
+  - Fractal-only / failed-review scaffolding: majority.
+  - Wiki-only tips (`wave5t_ui_auth_discovery_fallback`,
+    `wave5u_probe_contract_codex_fallback`): pages already on mainline; do not
+    re-merge stale wiki index rows.
+  - `ui_auth_credentials_research_codex_fallback` wiki-only optional page not
+    on tip — skip (superseded auth research already on root product path).
+  - `ui_auth_status` product (browser/models/server/tests): already on mainline
+    via prior integrate (`auth_status` tools live); child tip far behind on UI
+    files (browser ~376 vs tip ~5550 LOC) — skip re-merge.
+  - `wave5j_bank_line_product` and other review/failed tips: no src/tests diff.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `8796536`. Ready RESEARCH residual dual-count/NA product pick. Not finish.
+
+## SYNC (iter 49 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Private 9DE06888 residual pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- PREPARE already no-op: parent up to date; no child merges. Tip `8796536`.
+- Coverage: complete=false; live/vision 128; implemented/contract 312.
+- Ready RESEARCH residual dual-count/NA (prefer dual-count list shells; GEO NA
+  only with dual soft-empty evidence). Not finish.
+
+## RESEARCH (iter 49 / research148)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual headless residual soft routes: contactPersons/invoiceReminders/specials/attachments
+  soft-empty == nonsense (body 127) dual agree; tools clients/invoices/uploads dual-ok.
+- Shell-marker dual (separate probe, errors null): clients Kunder person markers false;
+  invoices Rykker false; uploads Bilag true (blocks attachments pure NA); settings
+  Levering true (defer specials); vat multi-resource defer.
+- Decision: NA package ui.parity.contactPersons.* (7 ops) via GEO NA path
+  (research148; live/vision 128→135). Secondary ready: invoiceReminders NA (5).
+- Defer: specials, attachments, taxRateDeduction, daybooks dual-count, bank*, postings,
+  productPrices, taxRates multi-resource.
+- Brief: tmp/grok-research.md (+ node tmp). Dual JSON: research148_residual_dual.json +
+  research148_shell_markers_dual.json.
+- Profiles purged. No coverage greening. Not finish. Next PLAN.
+
+## SYNC (iter 49 pre-PLAN)
+
+- Unread inbox/feed: empty. Private 71EE6CAF residual pointer reacted (+).
+- Saved: empty. No running children.
+- research148 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for contactPersons NA package (7 rows).
+- Not finish.
+
+## Plan (iter 49)
+
+- Plan: `plans/2026-08-01T07:23:48.878Z-186.49-ui_contact_persons_not_applicable.md`
+  — research148: NA package ui.parity.contactPersons.* (7 ops) via GEO
+  NA path; inventory live/vision 128→135; NA 86→93; shells 42 unchanged; wiki
+  freeze page; no new tools; complete false; no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 49 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Private FA788CF6 pre-PLAN pointer reacted (+).
+- Saved: empty. No running children.
+- Plan 186.49 + research148 brief present. Ready EXECUTE product NA package
+  contactPersons (root; no children). Not finish.
+
+## Execute (iter 49)
+
+- Producted research148 / plan 186.49: NA package ui.parity.contactPersons.*
+  (7 ops) via GEO NA path (research148 branch + prefix + ROW_COUNT 93).
+- Inventory tests: research148 evidence_ref; contactPersons seven-row asserts;
+  invoiceReminders/attachments stay red; live/vision 128→135; NA 86→93.
+- Wiki: ui_contact_persons_not_applicable + _index + peer cross-links.
+- Regenerated coverage: implemented/contract 319; live/vision 135; complete false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC (iter 49 pre-INDEPENDENT-REVIEW)
+
+- Unread inbox/feed: empty. Private E80E49F0 pre-EXECUTE pointer reacted (+).
+- Saved: empty. No running children.
+- EXECUTE 186.49 uncommitted: contactPersons NA package; live/vision 135;
+  implemented/contract 319; complete=false; offline 1565 pass.
+- Outbox: ready for IR of NA package. Not finish.
+
+## Independent review (iter 49)
+
+- Product 186.49 contactPersons NA package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (residual probe
+  shell_paths TargetClosedError vs soft+shell dual authority; tmp dual JSON
+  not commit).
+- Seven NA rows integrity OK; invoiceReminders/attachments/etc stay red; bulk 92
+  red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 49 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Private 8666C095 pre-IR pointer reacted (+).
+- Saved: empty. No running children.
+- IR ACCEPT 186.49 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 49 / 186.49)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: contactPersons NA 7 green; live/vision 135; NA 93;
+  implemented/contract 319; complete false; bulk 92 external-contract; annual
+  stay red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 49 pre-COMMIT)
+
+- Unread inbox/feed: empty. Private 382AB746 pre-FIX-VERIFY pointer reacted (+).
+- Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.49
+  contactPersons NA package. Not node finish (complete false).
+
+## COMMIT (iter 49)
+
+- `fractal commit` product: ui contactPersons not_applicable freeze.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).

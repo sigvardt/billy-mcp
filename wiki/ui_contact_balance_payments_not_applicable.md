@@ -36,7 +36,8 @@ This is **not** the same family as `contactBalancePostings` (already NA under
 
 Peer freezes: [[ui_geo_cities_not_applicable]],
 [[ui_account_groups_not_applicable]],
-[[ui_contact_postings_late_fees_reminder_assoc_not_applicable]].
+[[ui_contact_postings_late_fees_reminder_assoc_not_applicable]],
+[[ui_contact_persons_not_applicable]].
 
 ## Dual-session evidence (non-sensitive)
 
@@ -79,7 +80,8 @@ not absence). See [[ui_annual_reports_inaccessible]].
 | bankLineMatches / bankLineSubjectAssociations | Bank recon shell greened → **reject pure NA** |
 | daybooks / daybook* soft seeds | Daybooks editor greened; list dual-count deferred (editor ≠ list) |
 | salesTax* / taxRates soft seeds | Momssatser multi-resource greened → **reject pure NA** |
-| Nested invoiceLines / billLines / contactPersons | Nested under parent list shells → not pure absence |
+| Nested invoiceLines / billLines | Nested under parent list shells → not pure absence |
+| Soft contactPersons (research148) | Clients/Kunder is contacts only → see [[ui_contact_persons_not_applicable]] |
 
 ## Non-claims
 

@@ -45,6 +45,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_contact_balance_payments_not_applicable|ui_contact_balance_payments_not_applicable]]: Dual-session research147 freeze — no equivalent mit.billy.dk workflow for contactBalancePayments API parity; soft-empty path matches nonsense; balance shells are contrast only; NA accepted.
 
+[[ui_contact_persons_not_applicable|ui_contact_persons_not_applicable]]: Dual-session research148 freeze — no equivalent mit.billy.dk workflow for contactPersons API parity; soft-empty path matches nonsense; clients/Kunder shell is contacts only; NA accepted.
+
 [[ui_contact_postings_late_fees_reminder_assoc_not_applicable|ui_contact_postings_late_fees_reminder_assoc_not_applicable]]: Dual-session research144 freeze — no equivalent mit.billy.dk workflow for contactBalancePostings, invoiceLateFees, and invoiceReminderAssociations API parity; soft-empty paths match nonsense; NA accepted.
 
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
