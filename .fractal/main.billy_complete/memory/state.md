@@ -13,12 +13,12 @@ updated: 2026-08-01T14:08:00Z
 
 ## Current state
 
-- Continue mode iter **60** FIX-VERIFY clean 186.60 dual-count
-  salesTaxRulesets.list. live/vision **154**; implemented/contract **338**;
-  complete false. Ready COMMIT. Not node finish.
+- Continue mode iter **60** COMMIT 186.60 product `cdfe986`. live/vision
+  **154**; implemented/contract **338**; complete false. Not node finish.
 - ui_settings_vat_open dual-counts taxRates.list + salesTaxRulesets.list
-  (shell_open_only). Offline 1586 pass.
-- Bulk 92 + annual_reports still red. invoice_email + create forms deferred.
+  (shell_open_only).
+- Bulk 92 + annual_reports still red. Residual: special.invoice_email; nested
+  salesTax* / taxRates write ops; create forms.
 
 ## SYNC (iter 60)
 
@@ -169,6 +169,12 @@ updated: 2026-08-01T14:08:00Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.60
   ui salesTaxRulesets.list dual-count package. Not node finish (complete false).
+
+## COMMIT (iter 60)
+
+- `fractal commit` product: ui sales tax rulesets list dual-count (`cdfe986`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
 ## SYNC (iter 53)
 
