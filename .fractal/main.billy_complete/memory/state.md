@@ -146,7 +146,7 @@ updated: 2026-08-01T19:30:00Z
 
 ## COMMIT (iter 65)
 
-- `fractal commit` product: ui clients get open + contacts data-plane egress.
+- `fractal commit` product: ui clients get open + contacts data-plane egress (`66ac07a`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
