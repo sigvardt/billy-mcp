@@ -3040,7 +3040,11 @@ def apply_ui_settings_invoicing_open_shell_evidence(row: dict[str, Any]) -> None
     ]
 
 
-def apply_ui_settings_user_open_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_settings_user_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_special_user_get: bool = False,
+) -> None:
     """Mark Indstillinger Profil (user) panel shell open evidence (research129).
 
     Empty-input tool; open hub /:org_slug/settings then observe-only click
@@ -3048,7 +3052,9 @@ def apply_ui_settings_user_open_shell_evidence(row: dict[str, Any]) -> None:
     Billede + Sprog og tema + Skift adgangskode. Soft seeds rejected. Distinct
     from company/accounting/invoicing. Never click Gem / Upload / password
     submit. No invent api_settings_*. Does not green other settings_* or
-    annual_reports.
+    annual_reports or special.user_organizations / users get/update/bulk UI
+    parity. When ``parity_of_special_user_get`` is true, dual-counts
+    ``ui.parity.special.user_get`` for ``api.special.user_get`` (research151).
     """
 
     row["method_or_route"] = (
@@ -3066,7 +3072,8 @@ def apply_ui_settings_user_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_special_user_get:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_SETTINGS_USER_OPEN_MODEL_TEST_REFERENCE,
@@ -3081,10 +3088,16 @@ def apply_ui_settings_user_open_shell_evidence(row: dict[str, Any]) -> None:
         "Profil/Billede/Sprog og tema/Skift adgangskode markers; distinct from "
         "company/accounting/invoicing); soft seeds rejected; no invent "
         "api_settings_*; never click Gem/Upload/password submit; does not green "
-        "other settings_* or annual_reports; vision record "
+        "other settings_* or annual_reports or special.user_organizations or "
+        "users get/update/bulk UI parity; vision record "
         "tmp/vision-records/ui_settings_user_open.json "
         "(Indstillinger Profil frames, accept)"
     )
+    if parity_of_special_user_get:
+        row["evidence"] = (
+            f"{row['evidence']}; research151 dual-session reconfirm; "
+            "maps api.special.user_get to UI settings Profil shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -3971,6 +3984,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_accounting_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.organizations.list":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.special.user_get":
+            apply_ui_settings_user_open_shell_evidence(row, parity_of_special_user_get=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)

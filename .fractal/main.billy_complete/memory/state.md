@@ -6,17 +6,168 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T08:50:45Z
+updated: 2026-08-01T09:30:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 51 COMMIT 186.51 at `c1baf53`. live/vision **142**;
-  implemented/contract **326**; complete false. Not node finish.
-- specials NA invoice_delivery + invoice_logs (2) greened. Residual UI open.
+- Continue mode iter 52 pre-COMMIT ready 186.52 dual-count at tip `446b287`.
+  live/vision **143**; implemented/contract **327**; complete false. Not node finish.
+- dual-count special.user_get → ui_settings_user_open greened. Residual UI open.
 - Bulk 92 + annual_reports still red.
+
+
+
+## SYNC (iter 52)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CF3D5A42 + BFDAC5DD (iter51 pre-COMMIT / COMMIT) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `446b287` vs origin/main.billy_complete.
+- Coverage: implemented/contract 326; live/vision 142; complete false.
+- Outbox: iter52 SYNC post-186.51.
+- Ready RESEARCH residual dual-count/NA. Not finish.
+
+
+
+## PREPARE (iter 52)
+
+- Parent `main`: fetch + merge Already up to date.
+- Local `git branch --list 'main.billy_complete.*'`: several refs rev-ahead, but **0** with
+  non-fractal file deltas vs tip `446b287` (fractal-only or tip already supersedes).
+- Remote origin children with non-fractal deltas reviewed and **skip** (all tip-superset or
+  superseded product path):
+  - `ui_auth_status` (SRC): tip browser/models/server much larger; product already live.
+  - `shared_foundation`, wave1/2/3/4/5g product stubs: tip longer; product already on tip.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (WIKI):
+    pages already on tip (tip wiki equal or longer); index-only churn.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path).
+  - Review/init branches: wiki-index or fractal-only stubs.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH residual dual-count/NA from
+  existing dual-proved shells. Not finish.
+
+
+
+## SYNC (iter 52 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DF672F09 (residual candidate note) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op (parent up to date; no child merges). Tip `446b287`.
+- Outbox: pre-RESEARCH ready.
+- Ready RESEARCH residual dual-count/NA from existing dual-proved shells.
+
+
+
+## RESEARCH (iter 52 / research151)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual-session READY; soft user/userOrganizations/postings/emails/files body_len 127 = nonsense dual.
+- Tools dual-ok: settings_user/users/company/invoicing, transactions, uploads, invoices.
+- Profil click dual body 523: profil/billede/sprog_tema/skift_adgangskode/email true; brugere false.
+- ACCEPT dual-count special.user_get → ui_settings_user_open (1).
+- REJECT postings dual-count onto transactions (resource identity).
+- DEFER user_organizations (Virksomheder chrome only), invoice_email, files_upload pure NA reject.
+- Brief: tmp/grok-research.md. Dual: tmp/research151_residual_dual.json.
+- No coverage green. api_token_used false. Ready PLAN 186.52.
+
+
+
+## SYNC (iter 52 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty. Private unread: empty.
+- No running children. No parent directives.
+- Research151 outbox already posted. Tip `446b287`.
+- Ready PLAN 186.52 dual-count special.user_get → ui_settings_user_open (1).
+
+
+
+## PLAN (iter 52 / 186.52)
+
+- Plan file `plans/*-186.52-ui_special_user_get_dual_count.md`:
+  dual-count `ui.parity.special.user_get` → `ui_settings_user_open` (1 row);
+  live/vision 142→143; shell dual-count 42→43; GEO NA 100 unchanged; root-only;
+  no new UI tools; residual specials + postings stay red; annual/bulk stay red.
+- Ready EXECUTE.
+
+
+
+## SYNC (iter 52 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty. Private unread: empty.
+- No running children. No parent directives.
+- Plan 186.52 present. Tip `446b287`. Outbox plan already posted.
+- Ready EXECUTE dual-count special.user_get product.
+
+
+
+## EXECUTE (iter 52 / 186.52)
+
+- Extended `apply_ui_settings_user_open_shell_evidence` with
+  `parity_of_special_user_get`; wired `api.special.user_get` parity dual-count.
+- Inventory tests: shell dual-count 42→43; live/vision 142→143; user_get asserts;
+  residual specials stay red.
+- Regenerated manifests: live/vision 143; implemented/contract 327; complete false.
+- Wiki `ui_settings_user_open_shell` dual-count note + _index desc.
+- Offline test.sh: 1565 passed, 35 deselected. Lint green. No new UI tools.
+- Ready REVIEW / IR of dual-count 186.52.
+
+
+
+## SYNC (iter 52 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty. Private unread: empty.
+- No running children. No parent directives.
+- EXECUTE product uncommitted (generator/wiki/coverage/tests). Tip still 446b287.
+- live/vision 143; implemented/contract 327; complete false.
+- Ready INDEPENDENT-REVIEW of dual-count 186.52.
+
+
+
+## IR (iter 52 / 186.52)
+
+- Product dual-count special.user_get → ui_settings_user_open: **ACCEPT** (no required fixes).
+- Report: tmp/grok-review.md. Optional N1 chrome markers only.
+- Overall completeness: **FAIL** (expected). Ready FIX-VERIFY no-op then COMMIT.
+
+
+
+## SYNC (iter 52 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty. Private unread: empty.
+- IR ACCEPT already outboxed (B45EA854). No required product fixes.
+- Ready FIX-VERIFY reconfirm then COMMIT.
+
+
+
+## FIX-VERIFY (iter 52 / 186.52)
+
+- IR required fixes: none. Optional N1 not product-blocking.
+- Reconfirm: user_get dual-count green; residual specials red; live/vision 143;
+  complete false.
+- lint.sh green; offline test.sh 1565 passed, 35 deselected.
+- Plan post-mortem appended. No ui-full (not complete).
+- Ready COMMIT 186.52 dual-count special.user_get. Not node finish.
+
+
+
+## SYNC (iter 52 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty. Private unread: empty.
+- FIX-VERIFY done (1565 offline pass; IR ACCEPT). Ready COMMIT 186.52
+  special.user_get dual-count. Not node finish (complete false).
+
+
+
+## COMMIT (iter 52)
+
+- About to `fractal commit` product dual-count special.user_get.
+- Not node finish (complete false).
 
 
 ## PREPARE (iter 45)
@@ -126,6 +277,8 @@ updated: 2026-08-01T08:50:45Z
 
 
 ## Review decisions (authoritative)
+
+- Product dual-count special.user_get → ui_settings_user_open: **ACCEPT** (IR 186.52; no required fixes).
 
 - Product NA package specials invoice_delivery+invoice_logs: **ACCEPT** (IR 186.51; no required fixes).
 
