@@ -5189,3 +5189,10 @@ updated: 2026-08-01T11:10:00Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1586 offline pass; IR ACCEPT). Ready COMMIT 186.56
   ui special.files_upload dual-count package. Not node finish (complete false).
+
+
+## COMMIT (iter 56)
+
+- `fractal commit` product: ui special files_upload dual-count (`299a48c`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
