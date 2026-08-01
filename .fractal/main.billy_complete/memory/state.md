@@ -6,28 +6,20 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T05:34:08Z
+updated: 2026-08-01T05:34:38Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 45 IR 186.45 ACCEPT. live/vision 120; implemented/contract 304; complete false. Not node finish.
+- Continue mode iter 45 COMMIT 186.45 at `e95053f`. live/vision 120;
+  implemented/contract 304; complete false. Not node finish.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
+- Residual UI parity open; last NA package research144 join families (19 rows).
 - IR 186.45 NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT**.
-- IR 186.44 NA package accountGroups: **ACCEPT**.
 
-
-- Unread inbox/feed: empty. Saved queue: empty.
-- Private 9189E7C1 (iter44 COMMIT done) reacted (+).
-- No running children (historical only; none need merge/steer this step).
-- Parent directives: none (scope: no live API; grok-only children).
-- Branch clean at tip `084d975` vs origin/main.billy_complete.
-- Coverage: implemented/contract 285; live/vision 101; complete false.
-- Outbox: iter45 SYNC post-186.44.
-- Private: next residual dual-count/NA after PREPARE.
 - Ready for PREPARE. Not finish.
 
 
@@ -3573,4 +3565,11 @@ updated: 2026-08-01T05:34:08Z
 
 - Unread inbox/feed: empty. Private 7729F899 reacted (+). Saved empty.
 - FIX-VERIFY clean; dirty product files uncommitted. Ready COMMIT.
+
+
+
+## COMMIT (iter 45 / 186.45)
+
+- fractal commit product: UI NA freeze contactBalancePostings+invoiceReminderAssociations+invoiceLateFees (19 rows) at e95053f.
+- complete false. Not node finish.
 
