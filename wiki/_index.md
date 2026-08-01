@@ -43,6 +43,8 @@ updated: 2026-08-01T21:44:34Z
 
 [[ui_bills_create_open_shell|ui_bills_create_open_shell]]: Read-only headless ui_bills_create_open contract for Billy bill create form open only (research154).
 
+[[ui_bills_get_open_shell|ui_bills_get_open_shell]]: Read-only bill detail get-open shell (maps api.bills.get).
+
 [[ui_bills_list_shell|ui_bills_list_shell]]: Read-only headless ui_bills_list contract for Billy bills (purchases / Køb) list shell open only.
 
 [[ui_clients_create_open_shell|ui_clients_create_open_shell]]: Read-only headless ui_clients_create_open contract for Billy clients create dialog form open only (research160).

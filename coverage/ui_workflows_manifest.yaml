@@ -4678,38 +4678,48 @@
     {
       "api_row_id": "api.bills.get",
       "area": "bills",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable contact+bill then deletes in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.get",
+      "evidence": "research170 dual-session headless observation + ui_bills_get_open product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (GET list settle from research168; POST/DELETE disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); detail open only (path class /:org_slug/bills/:id, shell_kind=bills_get, kladde/supplier/amount chrome; never write submit; distinct from list shell ui_bills_list and create form_open ui_bills_create_open); vision record tmp/vision-records/ui_bills_get_open.json (bill detail frames, accept); maps api.bills.get to UI detail get/open only",
       "filters": [],
       "id": "ui.parity.bills.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.bills.get",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/bills + first non-header bill detail (read-only bills get/open; never Gem/Godkend/Opdater/Slet/Tr\u00e6k submit; /bills/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
+      "parity_status": "detail_open_only",
+      "request_fields": [],
       "response_fields": [
-        "bill"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "kladde_or_state_chrome_present",
+        "supplier_chrome_present",
+        "amount_or_line_chrome_present",
+        "shell_markers_present"
       ],
-      "sensitivity": "low",
-      "side_effects": "none",
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_bills_get_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_bills_get_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

@@ -164,6 +164,31 @@ class UiBillsCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBillsGetOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only bill detail get-open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBillsGetOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy bill detail/get surface.
+
+    Research170: preferred detail path is /:org_slug/bills/:id (read detail),
+    not list shell and not /bills/new create. List text-click may land on
+    /edit first; product normalizes to the read path.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bills/:id"] = "/:org_slug/bills/:id"
+    shell_kind: Literal["bills_get"] = "bills_get"
+    detail_open: bool
+    kladde_or_state_chrome_present: bool
+    supplier_chrome_present: bool
+    amount_or_line_chrome_present: bool
+    shell_markers_present: bool
+
+
 class UiProductsListInput(BaseModel):
     """Empty, strict input boundary for the read-only products list shell tool."""
 

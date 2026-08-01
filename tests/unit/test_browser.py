@@ -26,6 +26,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenSuccess,
+    UiBillsGetOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
     UiClientsDeleteOpenSuccess,
@@ -347,7 +348,7 @@ def test_browser_policy_loads_only_explicit_manifest_allow_hosts(tmp_path: Path)
 
 
 def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
-    """Research164/165/168/169: contacts + products + invoices GET/POST/DELETE + bills GET."""
+    """Research164/165/168/169/170: contacts + products + invoices + bills seed planes."""
 
     policy = BrowserEgressPolicy.from_manifest(
         Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
@@ -369,11 +370,12 @@ def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
     assert policy.allows("https://api.billysbilling.com/v2/bills", "GET")
     assert policy.allows("https://api.billysbilling.com/v2/bills/summary", "GET")
     assert policy.allows("https://api.billysbilling.com/v2/bills/abc", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/bills", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/bills/abc", "DELETE")
+    assert policy.allows("https://api.billysbilling.com/v2/taxRates", "GET")
     assert not policy.allows("https://api.billysbilling.com/v2/invoices/x/emails", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices/abc", "DELETE")
-    assert not policy.allows("https://api.billysbilling.com/v2/bills", "POST")
-    assert not policy.allows("https://api.billysbilling.com/v2/bills", "DELETE")
 
 
 def test_browser_policy_rejects_missing_manifest(tmp_path: Path) -> None:
@@ -9957,5 +9959,132 @@ def test_ui_invoices_get_open_returns_ui_changed_when_empty_list(tmp_path: Path)
         org_identity_path=identity_path,
     )
     result = asyncio.run(runtime.ui_invoices_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
+
+
+def _bills_get_shell_controls(
+    page_holder: dict[str, FakeLoginPage],
+) -> dict[str, FakeLoginControl]:
+    def open_detail() -> None:
+        page = page_holder["page"]
+        # research170: list click may land on edit; runtime soft-navigates to read path.
+        page.url = "https://mit.billy.dk/test-org-slug/bills/bill-1/edit"
+        updates = {
+            "body": FakeLoginControl(
+                text="Ret regning Godkend Leverandør Kladde Restbeløb 25,00 Overblik Menu"
+            ),
+            "text=Kladde": FakeLoginControl(text="Kladde"),
+            "text=Leverandør": FakeLoginControl(text="Leverandør"),
+            "text=Restbeløb": FakeLoginControl(text="Restbeløb"),
+            "text=Overblik": FakeLoginControl(text="Overblik"),
+            "text=Menu": FakeLoginControl(text="Menu"),
+        }
+        for sel, control in updates.items():
+            page.controls[sel] = control
+            control.bind(page.events, sel)
+
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Køb"),
+        "body": FakeLoginControl(text="Køb Opret køb Mere 1 Kladde TMP-BILL"),
+        "text=Opret køb": FakeLoginControl(text="Opret køb"),
+        "a[href*='/test-org-slug/bills/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row'], tr": FakeLoginControl(
+            text="1 2026-08-01 TMP-BILL 25 DKK Kladde",
+            on_click=open_detail,
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+
+
+def test_ui_bills_get_open_returns_success_for_detail(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_bills_get_shell_controls(page_holder),
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_bills_get_open())
+
+    assert result == UiBillsGetOpenSuccess(
+        detail_open=True,
+        kladde_or_state_chrome_present=True,
+        supplier_chrome_present=True,
+        amount_or_line_chrome_present=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert not any("click:text=Gem" in e for e in page.events)
+    assert not any("click:text=Godkend" in e for e in page.events)
+
+
+def test_ui_bills_get_open_returns_ui_changed_when_empty_list(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Køb"),
+        "body": FakeLoginControl(text="Køb Ingen køb Opret køb"),
+        "text=Opret køb": FakeLoginControl(text="Opret køb"),
+        "a[href*='/test-org-slug/bills/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row']": FakeLoginControl(
+            count=0, visible=False
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_bills_get_open())
     assert isinstance(result, ToolError)
     assert result.code == StableErrorCode.UI_CHANGED

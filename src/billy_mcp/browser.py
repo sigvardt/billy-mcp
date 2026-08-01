@@ -28,6 +28,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenSuccess,
+    UiBillsGetOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
     UiClientsDeleteOpenSuccess,
@@ -146,6 +147,12 @@ _BILLS_CREATE_PATH = re.compile(r"^/[^/]+/bills/new$")
 _BILLS_CREATE_HEADING = "Opret køb"
 _BILLS_CREATE_DRAFT_SAVE_CHROME = "Gem som kladde"
 _BILLS_CREATE_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse", "Linje")
+# Research170: bill detail/get path class /:org_slug/bills/:id (not /new, not bare list).
+_BILLS_DETAIL_PATH = re.compile(r"^/[^/]+/bills/(?!new$)[^/]+$")
+_BILLS_EDIT_PATH = re.compile(r"^/[^/]+/bills/(?!new$)[^/]+/edit$")
+_BILLS_GET_STATE_MARKERS = ("Kladde", "Godkendt", "Annulleret", "Draft")
+_BILLS_GET_SUPPLIER_MARKERS = ("Leverandør", "Køb fra", "Ret køb", "Supplier")
+_BILLS_GET_AMOUNT_MARKERS = ("Restbeløb", "Beløb", "Beskrivelse", "Linje", "Amount")
 # Research111: debtor balances list shell (receivables); no /v2/debtorbalance API resource.
 _DEBTOR_BALANCES_LIST_PATH = re.compile(r"^/[^/]+/debtorbalance$")
 _DEBTOR_BALANCES_LIST_HEADING = "Tilgodehavender"
@@ -622,6 +629,12 @@ class UiInvoicesGetOpenService(Protocol):
     """Injectable seam for the read-only invoices detail get-open observation."""
 
     async def ui_invoices_get_open(self) -> UiInvoicesGetOpenSuccess | ToolError: ...
+
+
+class UiBillsGetOpenService(Protocol):
+    """Injectable seam for the read-only bills detail get-open observation."""
+
+    async def ui_bills_get_open(self) -> UiBillsGetOpenSuccess | ToolError: ...
 
 
 class UiProductsListService(Protocol):
@@ -2440,6 +2453,94 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser bills create form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_bills_get_open(self) -> UiBillsGetOpenSuccess | ToolError:
+        """Open a bill detail surface for the authenticated UI session only.
+
+        Research170: path-scoped bills GET/POST/DELETE + taxRates GET unlocks list
+        rows and disposable seed. Open first non-header bill detail at path class
+        /:org_slug/bills/:id. List text-click may land on /edit; normalize by
+        soft-navigating to the read path. Never Gem/Godkend/Opdater/Slet/Træk.
+        Soft /bills/new is not success.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bills_get_changed_error()
+
+            bills_url = f"https://mit.billy.dk/{slug}/bills"
+            await page.goto(bills_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bills_get_changed_error()
+                if _is_bills_create_url(page.url):
+                    return _ui_bills_get_changed_error()
+
+                # research170: text-click often lands on /edit; prefer read path.
+                if _is_bills_edit_url(page.url):
+                    read_url = _bills_edit_url_to_read_url(page.url)
+                    if read_url is not None:
+                        await page.goto(read_url, wait_until="domcontentloaded")
+                        await _await_page_settle(page)
+                        continue
+
+                if await _has_bills_detail_signature(page, slug):
+                    flags = await _bills_detail_flags(page)
+                    return UiBillsGetOpenSuccess(
+                        detail_open=True,
+                        kladde_or_state_chrome_present=flags["kladde_or_state_chrome_present"],
+                        supplier_chrome_present=flags["supplier_chrome_present"],
+                        amount_or_line_chrome_present=flags["amount_or_line_chrome_present"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_bills_list_url(page.url) and await _has_bills_list_signature(page):
+                    opened = await _click_bills_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_bills_get_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the bills detail observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bills detail observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4398,6 +4499,58 @@ def _is_bills_create_url(url: str) -> bool:
     )
 
 
+def _is_bills_detail_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/bills/:id read detail (not list, not /new, not /edit)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_BILLS_DETAIL_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_bills_edit_url(url: str) -> bool:
+    """Accept mit.billy.dk /:org_slug/bills/:id/edit intermediate surface."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_BILLS_EDIT_PATH.match(parsed.path or ""))
+    )
+
+
+def _bills_edit_url_to_read_url(url: str) -> str | None:
+    """Map /bills/:id/edit → /bills/:id for research170 preferred get path."""
+
+    try:
+        parsed = urlsplit(url)
+    except ValueError:
+        return None
+    path = parsed.path or ""
+    if not path.endswith("/edit"):
+        return None
+    read_path = path[: -len("/edit")]
+    if not _BILLS_DETAIL_PATH.match(read_path):
+        return None
+    return f"https://mit.billy.dk{read_path}"
+
+
 def _is_products_list_url(url: str) -> bool:
     """Accept mit.billy.dk /:org_slug/products, including Billy list query params."""
 
@@ -5275,6 +5428,130 @@ async def _has_invoices_detail_signature(page: LoginPage, slug: str) -> bool:
                 return True
         except Exception:
             pass
+        return False
+    except Exception:
+        return False
+
+
+async def _bills_detail_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII bill read-detail flags (research170)."""
+
+    flags = {
+        "kladde_or_state_chrome_present": False,
+        "supplier_chrome_present": False,
+        "amount_or_line_chrome_present": False,
+    }
+    try:
+        body_text = ""
+        try:
+            body_text = (await page.locator("body").inner_text())[:2500]
+        except Exception:
+            body_text = ""
+        flags["kladde_or_state_chrome_present"] = any(
+            m in body_text for m in _BILLS_GET_STATE_MARKERS
+        )
+        supplier_ok = any(m in body_text for m in _BILLS_GET_SUPPLIER_MARKERS)
+        if not supplier_ok:
+            for marker in _BILLS_GET_SUPPLIER_MARKERS:
+                control = page.locator(f"text={marker}")
+                if await control.count() >= 1:
+                    supplier_ok = True
+                    break
+        flags["supplier_chrome_present"] = supplier_ok
+        amount_ok = any(m in body_text for m in _BILLS_GET_AMOUNT_MARKERS)
+        if not amount_ok:
+            for marker in _BILLS_GET_AMOUNT_MARKERS:
+                control = page.locator(f"text={marker}")
+                if await control.count() >= 1:
+                    amount_ok = True
+                    break
+        if not amount_ok:
+            amount_ok = await page.locator("textarea").count() >= 1
+        flags["amount_or_line_chrome_present"] = amount_ok
+    except Exception:
+        pass
+    return flags
+
+
+async def _has_bills_detail_signature(page: LoginPage, slug: str) -> bool:
+    """Strict bill detail signature — /bills/:id with read chrome (research170)."""
+
+    del slug
+    try:
+        if not _is_bills_detail_url(page.url):
+            return False
+        flags = await _bills_detail_flags(page)
+        hits = sum(1 for v in flags.values() if v)
+        if hits >= 2:
+            return True
+        # research170 dual: read path + state/amount chrome is enough
+        if flags.get("kladde_or_state_chrome_present") and flags.get(
+            "amount_or_line_chrome_present"
+        ):
+            return True
+        if flags.get("supplier_chrome_present") and flags.get("amount_or_line_chrome_present"):
+            return True
+        return False
+    except Exception:
+        return False
+
+
+async def _click_bills_detail_candidate(page: LoginPage, slug: str) -> bool:
+    """Click first non-header bill list row or href to open detail/edit."""
+
+    try:
+        links = page.locator(f"a[href*='/{slug}/bills/']")
+        n_links = await links.count()
+        for i in range(min(n_links, 24)):
+            link = links.nth(i)
+            href = await link.get_attribute("href") or ""
+            if href.rstrip("/").endswith("/bills") or "/new" in href:
+                continue
+            if re.search(rf"/{re.escape(slug)}/bills/[^/?#]+", href):
+                await link.click(timeout=5000)
+                return True
+        rows = page.locator("table tbody tr, [data-cy='table-item'], [role='row'], tr")
+        n_rows = await rows.count()
+        for i in range(min(n_rows, 40)):
+            row = rows.nth(i)
+            try:
+                text = (await row.inner_text() or "").strip()
+            except Exception:
+                continue
+            if not text or len(text) < 4:
+                continue
+            if (
+                re.search(
+                    r"Nr\.|Dato|Forfald|Leverandør|Beløb|Status|Supplier|Bill\s*#",
+                    text,
+                    re.I,
+                )
+                and len(text) < 90
+            ):
+                continue
+            if re.search(r"Ingen køb|Opret køb", text, re.I) and len(text) < 80:
+                continue
+            try:
+                await row.click(timeout=5000)
+                return True
+            except Exception:
+                continue
+        live_page = cast(Any, page)
+        get_by_text = getattr(live_page, "get_by_text", None)
+        if callable(get_by_text):
+            for needle in (
+                "R18671-TMP-BILL",
+                "R170B",
+                "TMP-BILL",
+                "DO-NOT-USE",
+            ):
+                try:
+                    loc = cast(Any, get_by_text(needle, exact=False))
+                    if await loc.count() >= 1:
+                        await loc.first.click(timeout=4000)
+                        return True
+                except Exception:
+                    continue
         return False
     except Exception:
         return False
@@ -7382,6 +7659,13 @@ def _ui_invoices_get_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices detail surface did not match the recorded get-open contract.",
+    )
+
+
+def _ui_bills_get_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy bills detail surface did not match the recorded get-open contract.",
     )
 
 

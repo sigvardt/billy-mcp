@@ -66,6 +66,7 @@ from billy_mcp.browser import (
     UiBankAccountsListService,
     UiBankReconciliationOpenService,
     UiBillsCreateOpenService,
+    UiBillsGetOpenService,
     UiBillsListService,
     UiClientsCreateOpenService,
     UiClientsDeleteOpenService,
@@ -131,6 +132,8 @@ from billy_mcp.models import (
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenInput,
     UiBillsCreateOpenSuccess,
+    UiBillsGetOpenInput,
+    UiBillsGetOpenSuccess,
     UiBillsListInput,
     UiBillsListSuccess,
     UiClientsCreateOpenInput,
@@ -235,6 +238,7 @@ def create_server(
     ui_suppliers_create_open_service: UiSuppliersCreateOpenService | None = None,
     ui_bills_list_service: UiBillsListService | None = None,
     ui_bills_create_open_service: UiBillsCreateOpenService | None = None,
+    ui_bills_get_open_service: UiBillsGetOpenService | None = None,
     ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
     ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
     ui_uploads_list_service: UiUploadsListService | None = None,
@@ -293,6 +297,7 @@ def create_server(
     suppliers_create_open_service = ui_suppliers_create_open_service or browser
     bills_list_service = ui_bills_list_service or browser
     bills_create_open_service = ui_bills_create_open_service or browser
+    bills_get_open_service = ui_bills_get_open_service or browser
     debtor_balances_list_service = ui_debtor_balances_list_service or browser
     creditor_balances_list_service = ui_creditor_balances_list_service or browser
     uploads_list_service = ui_uploads_list_service or browser
@@ -465,6 +470,12 @@ def create_server(
 
         UiBillsCreateOpenInput()
         return await bills_create_open_service.ui_bills_create_open()
+
+    async def ui_bills_get_open() -> UiBillsGetOpenSuccess | ToolError:
+        """Observe an authenticated Billy bill detail surface without submitting."""
+
+        UiBillsGetOpenInput()
+        return await bills_get_open_service.ui_bills_get_open()
 
     async def ui_debtor_balances_list() -> UiDebtorBalancesListSuccess | ToolError:
         """Observe the authenticated Billy debtor balances list shell without writes."""
@@ -764,6 +775,13 @@ def create_server(
             "(read-only form open; never submit, save, or upload)."
         ),
     )(ui_bills_create_open)
+    server.tool(
+        name="ui_bills_get_open",
+        description=(
+            "Open a Billy bill detail surface for the authenticated session "
+            "(read-only get/open; never submit, approve, update, or delete)."
+        ),
+    )(ui_bills_get_open)
     server.tool(
         name="ui_debtor_balances_list",
         description=(

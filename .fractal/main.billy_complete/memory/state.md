@@ -6,17 +6,155 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T22:25:00Z
+updated: 2026-08-01T22:56:54Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **69** after COMMIT 186.69 (invoices bills data plane egress).
-- live/vision **169**; implemented/contract **353**; complete **false**.
-- Not node finish (bulk external-contract red, annual red, residual UI parity open).
+- Continue mode iter **71** after COMMIT 186.70 (`f86a802` ui invoices get open; bookkeeping `71e816a`).
+- live/vision **170**; implemented/contract **354**; complete **false**.
+- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
+- Residual UI (non-bulk): bills.get / products.get / products update-delete / invoices update-delete / special.invoice_email; many discovery_required parity rows.
+- Not node finish.
 
+## SYNC (iter 71)
+
+- Continue mode restart after iter70 COMMIT (`f86a802` ui invoices get open).
+- Unread inbox/feed: empty. Saved: empty.
+- Private 41BF7F40 (iter70 COMMIT done) reacted (+).
+- No running children. All historical children terminal (completed/exited/killed/stopped).
+- No parent directives.
+- Tip `71e816a` == origin/main.billy_complete (branch clean; product tip `f86a802`).
+- Coverage: implemented/contract **354**; live/vision **170**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open.
+- Next product candidates (research, not greened): bills.get after invoices.get
+  pattern; products.get only if detail surface dual-stable; special.invoice_email
+  if durable client/draft dual holds; no bulk greening without official schema;
+  no weak NA; no postings/bankLines steal.
+- Last product: 186.70 ui invoices get open (live/vision 169→170).
+- Outbox E81240DC iter71 SYNC resume. Ready PREPARE. Not finish.
+
+## PREPARE (iter 71)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 historical children; none mid-iteration product; none running.
+- Local/remote ahead of tip `71e816a` reviewed → **skip all merges**:
+  - `ui_auth_status` (SRC): tip browser/models/server much larger (302638/28956/46060 vs child 12953/2136/8947); product already live.
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` (WIKI): tip equal or longer; index-only / minor wiki churn; tip src much larger.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path; same as iters 51-70).
+  - wave5j bank_line / freeze reviews / early product stubs: three-dot looks ahead vs ancient base; tip already has product (tip larger).
+  - Remaining remote-ahead: fractal-only / failed-review scaffolding or older wave product already integrated.
+  - Material larger-on-child non-fractal files (src/tests/scripts/coverage unique to tip): **0** (only optional wiki research page above).
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `71e816a` / product `f86a802` ui invoices get open. Ready RESEARCH residual dual-count/NA
+  (prefer bills.get after invoices.get data-plane pattern; products.get only if
+  detail surface dual-stable; special.invoice_email if durable dual holds; no bulk
+  greening; no weak NA; no postings/bankLines steal). Not finish.
+
+## SYNC (iter 71 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private AF4CC030 (iter71 SYNC) + B9F5D0AF (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `71e816a`.
+- Coverage: implemented/contract 354; live/vision 170; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer bills.get after invoices.get
+  data-plane pattern; products.get only if detail surface dual-stable;
+  special.invoice_email if durable dual holds; no weak NA; no postings/bankLines
+  steal; no bulk greening). Not finish.
+
+## RESEARCH (iter 71 / research170)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- bills GET plane 200 dual (committed). TEMP POST/DELETE bills + taxRates GET.
+- Bill seed dual: nested lines with accountId+taxRateId+description+amount,
+  **no paymentDate** → POST 200 draft; paymentDate without paymentAccount → 422 dual.
+- bills.get detail_ready **true dual** (soft `/:org_slug/bills/:id`; text-click
+  lands `/bills/:id/edit` chrome dual). products.get still **false dual**.
+- Cleanup all_clean dual; profiles purged; api_token_used false.
+- Decision: **ACCEPT** `ui_bills_get_open` + egress POST/DELETE bills + GET taxRates
+  (maps bills.get; live/vision 170→~171). DEFER products.get / invoice_email /
+  bills update-delete. REJECT bulk/annual/steal.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research170_focus_dual.json`. No coverage green.
+- Ready PLAN 186.71.
+
+## SYNC (iter 71 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private A0F0F04A (pre-RESEARCH) + 23BA22BF (research170) reacted (+).
+- No running children. No parent directives.
+- research170 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: scoped bills POST/DELETE + taxRates GET path_allow
+  + `ui_bills_get_open` (maps bills.get; live/vision 170→~171).
+  DEFER products.get/invoice_email/bills update-delete. Not finish.
+
+## PLAN (iter 71 / 186.71)
+
+- Plan file
+  `plans/2026-08-01T23:06:32.292Z-186.71-ui_bills_get_open.md`:
+  scoped bills data-plane path_allow (exact POST `/v2/bills`, prefix DELETE
+  `/v2/bills`, prefix GET `/v2/taxRates`) + `ui_bills_get_open` (maps
+  bills.get; path freeze `/:org_slug/bills/:id`); live/vision 170→171;
+  implemented/contract 354→355; root-only Grok; no children; residual
+  products.get + invoice_email + bills update/delete + bulk/annual stay red;
+  complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 71 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8014C0D7 (pre-PLAN) + AE681EB2 (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.71 + research170 brief present. Tip `71e816a`.
+- Ready EXECUTE product ui_bills_get_open + bills path_allow (root; no children). Not finish.
+
+## EXECUTE (iter 71 / 186.71)
+
+- Producted research170 / plan 186.71: bills path_allow POST/DELETE + taxRates GET +
+  `ui_bills_get_open` (maps api.bills.get; path `/:org_slug/bills/:id`).
+- Coverage regenerated: live/vision **171**; implemented/contract **355**;
+  complete false; residual products.get + bills update/delete + invoice_email +
+  bulk 92 + annual red.
+- lint.sh pass. Offline test.sh **1628 passed** / 46 deselected.
+- Live: `test_ui_bills_get_open` **1 passed** (dual session; no API token).
+- Wiki: `ui_bills_get_open_shell.md`.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 71 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F5C9D155 (pre-EXECUTE) + C1BB7F56 (EXECUTE done) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.71 uncommitted: ui_bills_get_open + bills path_allow;
+  live/vision 171; implemented/contract 355; offline 1628 pass; complete=false.
+- Ready for IR of product. Not finish.
+
+## IR (iter 71 / 186.71)
+
+- Product ui_bills_get_open + bills path_allow: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (vision workflow_ref
+  naming; taxRates GET breadth).
+- bills.get discovery+parity green; list+create shells unchanged; residual
+  bills update/delete + products.get + invoice_email red; bulk 92 red; annual
+  red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 71 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4CE23FD9 (pre-IR) + 80893770 (IR done) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.71 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
 
 ## SYNC (iter 66)
 
@@ -7426,3 +7564,23 @@ updated: 2026-08-01T22:25:00Z
   live dual test, vision record path, coverage dual-count, plan, wiki shell.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## FIX-VERIFY (iter 71 / 186.71)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline reconfirm (see FIX-VERIFY log).
+- wiki lint: wiki + memory clean (lint.sh).
+- check_coverage: bills.get discovery/parity green on `ui_bills_get_open`;
+  list+create tools unchanged; residual bills update/delete + invoice_email +
+  products.get red; live/vision 171; implemented/contract 355; complete false;
+  bulk 92 external-contract; annual stay red; API live false (out_of_scope_by_user).
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.71 ui bills get open package. Not node finish.
+
+## SYNC (iter 71 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 61BD0951 (pre-FIX-VERIFY) + D329B3C8 (FIX-VERIFY done) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1628 offline pass; IR ACCEPT). Ready COMMIT 186.71
+  ui bills get open package. Not node finish (complete false).

@@ -232,6 +232,21 @@ def test_ui_invoices_get_open_models_are_empty_input_and_non_pii_success() -> No
     assert "path_class" in dumped
 
 
+def test_ui_bills_get_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiBillsGetOpenInput, UiBillsGetOpenSuccess
+
+    UiBillsGetOpenInput()
+    success = UiBillsGetOpenSuccess(
+        detail_open=True,
+        kladde_or_state_chrome_present=True,
+        supplier_chrome_present=True,
+        amount_or_line_chrome_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/bills/:id"
+    assert success.shell_kind == "bills_get"
+
+
 def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> None:
     assert UiBillsCreateOpenInput().model_dump() == {}
     success = UiBillsCreateOpenSuccess(
