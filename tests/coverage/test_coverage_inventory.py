@@ -174,8 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # 42 shells + dual-count special.user_get = 43 UI shells/parity dual-counts.
-    ui_shell_green = 43
+    # Prior 43 greened shells/parity + discovery settings_user_organizations
+    # + special.user_organizations dual-count = 45 live/vision rows without GEO NA.
+    ui_shell_green = 45
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -584,7 +585,6 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     for special_id in (
         "api.special.invoice_email",
         "api.special.files_upload",
-        "api.special.user_organizations",
     ):
         sibling = [
             row
@@ -594,6 +594,17 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert len(sibling) == 1, special_id
         assert sibling[0].get("parity_status") != "not_applicable"
         assert sibling[0].get("live_tested") is not True
+    # special.user_organizations dual-counted to Virksomheder shell (research152)
+    user_orgs_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.user_organizations"
+    ]
+    assert len(user_orgs_parity) == 1
+    assert user_orgs_parity[0]["parity_status"] == "shell_open_only"
+    assert user_orgs_parity[0]["tool_name"] == "ui_settings_user_organizations_open"
+    assert user_orgs_parity[0]["live_tested"] is True
+    assert "research152" in (user_orgs_parity[0].get("evidence") or "")
     # associations remain NA green (research144) — separate resource
     reminder_assoc = [
         row
@@ -644,9 +655,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 43 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 45 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 143
+    assert status["qualification"]["live_tested_rows"] == 145
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -695,6 +706,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_invoicing",
         "ui.discovery.settings_user",
         "ui.parity.special.user_get",
+        "ui.discovery.settings_user_organizations",
+        "ui.parity.special.user_organizations",
         "ui.discovery.settings_vat",
         "ui.discovery.settings_users",
         "ui.parity.users.list",
@@ -740,6 +753,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_invoicing": "ui_settings_invoicing_open",
         "ui.discovery.settings_user": "ui_settings_user_open",
         "ui.parity.special.user_get": "ui_settings_user_open",
+        "ui.discovery.settings_user_organizations": "ui_settings_user_organizations_open",
+        "ui.parity.special.user_organizations": "ui_settings_user_organizations_open",
         "ui.discovery.settings_vat": "ui_settings_vat_open",
         "ui.discovery.settings_users": "ui_settings_users_open",
         "ui.parity.users.list": "ui_settings_users_open",
@@ -765,7 +780,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 43
+    assert len(qualified) == 45
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -883,8 +898,15 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert user_get_special_parity["parity_status"] == "shell_open_only"
     assert "api.special.user_get" in user_get_special_parity["evidence"]
     assert "research151" in user_get_special_parity["evidence"]
+    user_orgs_special_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.special.user_organizations"
+    )
+    assert user_orgs_special_parity["api_row_id"] == "api.special.user_organizations"
+    assert user_orgs_special_parity["tool_name"] == "ui_settings_user_organizations_open"
+    assert user_orgs_special_parity["parity_status"] == "shell_open_only"
+    assert "api.special.user_organizations" in user_orgs_special_parity["evidence"]
+    assert "research152" in user_orgs_special_parity["evidence"]
     for red_id in (
-        "ui.parity.special.user_organizations",
         "ui.parity.special.invoice_email",
         "ui.parity.special.files_upload",
     ):
@@ -900,6 +922,13 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.discovery.settings_user"
     )
     assert settings_user_discovery["api_row_id"] is None
+    settings_user_organizations_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.settings_user_organizations"
+    )
+    assert settings_user_organizations_discovery["api_row_id"] is None
+    assert settings_user_organizations_discovery["tool_name"] == (
+        "ui_settings_user_organizations_open"
+    )
     accounting_discovery = next(
         row for row in qualified if row["id"] == "ui.discovery.settings_accounting"
     )

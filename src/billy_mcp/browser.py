@@ -51,6 +51,7 @@ from billy_mcp.models import (
     UiSettingsInvoicingOpenSuccess,
     UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenSuccess,
+    UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
     UiSuppliersListSuccess,
@@ -207,6 +208,23 @@ _SETTINGS_USER_WRITE_CTA_LABELS = frozenset(
         "Opret adgangsnøgle",
         "Opret betalingsmetode",
         "Tilføj ejer",
+    }
+)
+# Research152: Indstillinger user organizations (Virksomheder) multi-org panel.
+# Soft seeds insufficient; open hub then observe-only click Profil then Virksomheder.
+# Never click Opret organisation / Gem / Upload / Slet / Tilføj.
+_SETTINGS_USER_ORGANIZATIONS_PATH = _SETTINGS_COMPANY_PATH
+_SETTINGS_USER_ORGANIZATIONS_HEADING = "Indstillinger"
+_SETTINGS_USER_ORGANIZATIONS_SIDE_NAV_LABEL = "Virksomheder"
+_SETTINGS_USER_ORGANIZATIONS_PANEL_MARKERS = (
+    "Virksomheder",
+    "Alle organisationer",
+    "Opret organisation",
+)
+_SETTINGS_USER_ORGANIZATIONS_WRITE_CTA_LABELS = _SETTINGS_USER_WRITE_CTA_LABELS | frozenset(
+    {
+        "Opret organisation",
+        "Opret virksomhed",
     }
 )
 # Research130: Indstillinger VAT (Momssatser) panel on same hub path.
@@ -729,6 +747,14 @@ class UiSettingsUserOpenService(Protocol):
     """Injectable seam for the read-only user settings (Profil) shell open."""
 
     async def ui_settings_user_open(self) -> UiSettingsUserOpenSuccess | ToolError: ...
+
+
+class UiSettingsUserOrganizationsOpenService(Protocol):
+    """Injectable seam for the read-only user organizations (Virksomheder) shell open."""
+
+    async def ui_settings_user_organizations_open(
+        self,
+    ) -> UiSettingsUserOrganizationsOpenSuccess | ToolError: ...
 
 
 class UiSettingsVatOpenService(Protocol):
@@ -2854,6 +2880,105 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_settings_user_organizations_open(
+        self,
+    ) -> UiSettingsUserOrganizationsOpenSuccess | ToolError:
+        """Open the Indstillinger user-organizations (Virksomheder) settings panel.
+
+        Research152: soft URL seeds are insufficient. Open hub
+        /:org_slug/settings then observe-only click Profil (group) then
+        Virksomheder. Final path stays bare /:org_slug/settings with h1
+        Indstillinger and panel markers Virksomheder + Alle organisationer +
+        Opret organisation (chrome only; never click Opret). Distinct from
+        Profil user fields, company form, and Brugere. No invent api_settings_*.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_settings_user_organizations_changed_error()
+
+            settings_url = f"https://mit.billy.dk/{slug}/settings"
+            await page.goto(settings_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+            if await _has_error_shell_markers(page):
+                return _ui_settings_user_organizations_changed_error()
+            if not _is_settings_user_organizations_url(page.url):
+                return _ui_settings_user_organizations_changed_error()
+
+            # Open Profil group first when present (research152 dual path).
+            await _click_settings_side_nav_label(page, _SETTINGS_USER_SIDE_NAV_LABEL)
+            await _await_page_settle(page)
+
+            clicked = await _click_settings_side_nav_label(
+                page, _SETTINGS_USER_ORGANIZATIONS_SIDE_NAV_LABEL
+            )
+            if not clicked:
+                return _ui_settings_user_organizations_changed_error()
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message=("Browser authentication requires a non-automatable challenge."),
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_settings_user_organizations_changed_error()
+                if _is_settings_user_organizations_url(
+                    page.url
+                ) and await _has_settings_user_organizations_signature(page):
+                    return UiSettingsUserOrganizationsOpenSuccess(
+                        user_organizations_panel_markers_present=True
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_settings_user_organizations_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the settings user "
+                    "organizations shell observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=(
+                    "Browser settings user organizations shell observation could not be completed."
+                ),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     async def ui_settings_vat_open(self) -> UiSettingsVatOpenSuccess | ToolError:
         """Open the Indstillinger VAT (Momssatser) settings panel.
 
@@ -4696,6 +4821,7 @@ async def _click_settings_side_nav_label(page: LoginPage, label: str) -> bool:
 
     if (
         label in _SETTINGS_USER_WRITE_CTA_LABELS
+        or label in _SETTINGS_USER_ORGANIZATIONS_WRITE_CTA_LABELS
         or label in _SETTINGS_VAT_WRITE_CTA_LABELS
         or label in _SETTINGS_USERS_WRITE_CTA_LABELS
         or label in _SETTINGS_ACCESS_TOKEN_WRITE_CTA_LABELS
@@ -5184,6 +5310,98 @@ async def _has_settings_subscription_signature(page: LoginPage) -> bool:
             if await control.count() >= 1 and await control.first.is_visible():
                 beta_hits += 1
         if beta_hits >= len(_SETTINGS_BETA_PANEL_MARKERS):
+            return False
+        return True
+    except Exception:
+        return False
+
+
+def _is_settings_user_organizations_url(url: str) -> bool:
+    """Return True when the URL is the bare settings hub leaf (Virksomheder path)."""
+
+    return _is_settings_company_url(url)
+
+
+def _ui_settings_user_organizations_changed_error() -> ToolError:
+    """Stable UI_CHANGED for settings user-organizations shell classification failures."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy settings user organizations shell could not be classified.",
+    )
+
+
+async def _has_settings_user_organizations_signature(page: LoginPage) -> bool:
+    """Verify research152 Indstillinger + Virksomheder multi-org panel markers.
+
+    Requires h1 Indstillinger and Virksomheder + Alle organisationer + Opret
+    organisation (chrome present only). Rejects full Profil user-edit panel,
+    company default, accounting, invoicing, Brugere, and VAT panels. Soft seeds
+    are not success. Never click Opret organisation.
+    """
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1:
+            return False
+        first = heading.first
+        if not await first.is_visible():
+            return False
+        if (await first.inner_text()).strip() != _SETTINGS_USER_ORGANIZATIONS_HEADING:
+            return False
+        for label in _SETTINGS_USER_ORGANIZATIONS_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() < 1:
+                return False
+            if not await control.first.is_visible():
+                return False
+        # Reject full Profil user-edit panel (Billede + Sprog + password).
+        user_hits = 0
+        for label in _SETTINGS_USER_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                user_hits += 1
+        if user_hits >= len(_SETTINGS_USER_PANEL_MARKERS):
+            return False
+        # Reject company default panel.
+        company_hits = 0
+        for label in _SETTINGS_COMPANY_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                company_hits += 1
+        if company_hits >= len(_SETTINGS_COMPANY_PANEL_MARKERS):
+            return False
+        # Reject accounting Regnskab panel.
+        accounting_hits = 0
+        for label in _SETTINGS_ACCOUNTING_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                accounting_hits += 1
+        if accounting_hits >= len(_SETTINGS_ACCOUNTING_PANEL_MARKERS):
+            return False
+        # Reject invoicing Faktura panel (required markers).
+        invoicing_hits = 0
+        for label in _SETTINGS_INVOICING_REQUIRED_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                invoicing_hits += 1
+        if invoicing_hits >= len(_SETTINGS_INVOICING_REQUIRED_MARKERS):
+            return False
+        # Reject Brugere panel.
+        users_hits = 0
+        for label in _SETTINGS_USERS_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                users_hits += 1
+        if users_hits >= len(_SETTINGS_USERS_PANEL_MARKERS):
+            return False
+        # Reject VAT Momssatser panel.
+        vat_hits = 0
+        for label in _SETTINGS_VAT_PANEL_MARKERS:
+            control = page.locator(f"text={label}")
+            if await control.count() >= 1 and await control.first.is_visible():
+                vat_hits += 1
+        if vat_hits >= len(_SETTINGS_VAT_PANEL_MARKERS):
             return False
         return True
     except Exception:

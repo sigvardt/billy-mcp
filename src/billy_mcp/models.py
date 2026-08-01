@@ -563,6 +563,23 @@ class UiSettingsUserOpenSuccess(BaseModel):
     user_panel_markers_present: bool
 
 
+class UiSettingsUserOrganizationsOpenInput(BaseModel):
+    """Empty, strict input for the read-only user organizations (Virksomheder) shell open."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSettingsUserOrganizationsOpenSuccess(BaseModel):
+    """Non-PII classification for Indstillinger Virksomheder multi-org panel."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/settings"] = "/:org_slug/settings"
+    heading: Literal["Indstillinger"] = "Indstillinger"
+    shell_kind: Literal["settings_user_organizations"] = "settings_user_organizations"
+    user_organizations_panel_markers_present: bool
+
+
 class UiSettingsVatOpenInput(BaseModel):
     """Empty, strict input for the read-only VAT settings (Momssatser) shell open."""
 

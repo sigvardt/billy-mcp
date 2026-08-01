@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-31T21:40:00Z
-updated: 2026-08-01T09:10:00Z
+updated: 2026-08-01T09:50:00Z
 ---
 
 # ui_settings_user_open_shell
@@ -37,7 +37,7 @@ updated: 2026-08-01T09:10:00Z
 - Soft seeds (`settings/user`, `settings/profile`, query tabs) are **not** success.
 - Company default, accounting Regnskab, and invoicing Faktura panels are **not** success.
 - Other settings panels (Momssatser, Brugere, Abonnement, Adgangsnøgler, Betas) are **not** greened by this tool.
-- Nested user sub-pages (Notifikationer, Privatliv, Virksomheder) are **not** greened.
+- Nested user sub-pages Notifikationer / Privatliv are **not** greened by this tool. Virksomheder multi-org membership is greened separately via `ui_settings_user_organizations_open` (research152).
 - No official Billy API settings resource. Do **not** invent `api_settings_*`.
 - Never click write CTAs (`Gem ændringer`, Upload, password submit, Opret*, Tilføj*).
 - Does not green settings_company, settings_accounting, settings_invoicing, other settings_*, annual_reports, or prior shells beyond the listed dual-count.

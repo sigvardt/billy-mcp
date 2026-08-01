@@ -49,6 +49,7 @@ from billy_mcp.models import (
     UiSettingsInvoicingOpenSuccess,
     UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenSuccess,
+    UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
     UiSuppliersListSuccess,
@@ -6951,6 +6952,74 @@ def test_ui_settings_vat_open_returns_ui_changed_for_error_shell(tmp_path: Path)
     assert page.closed
 
 
+def _settings_user_organizations_shell_controls() -> dict[str, FakeLoginControl]:
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Indstillinger"),
+        "text=Virksomheder": FakeLoginControl(text="Virksomheder"),
+        "text=Alle organisationer": FakeLoginControl(text="Alle organisationer"),
+        "text=Opret organisation": FakeLoginControl(text="Opret organisation"),
+        "text=Profil": FakeLoginControl(text="Profil"),
+        "text=Billede": FakeLoginControl(count=0, visible=False),
+        "text=Sprog og tema": FakeLoginControl(count=0, visible=False),
+        "text=Skift adgangskode": FakeLoginControl(count=0, visible=False),
+        "text=Brugere": FakeLoginControl(count=0, visible=False),
+        "text=Revisorer og bogholdere": FakeLoginControl(count=0, visible=False),
+        "text=Faktura": FakeLoginControl(count=0, visible=False),
+        "text=Produkter": FakeLoginControl(count=0, visible=False),
+        "text=Betalingsmetoder": FakeLoginControl(count=0, visible=False),
+        "text=Standard fakturalogo": FakeLoginControl(count=0, visible=False),
+        "text=Regnskab": FakeLoginControl(count=0, visible=False),
+        "text=Køb": FakeLoginControl(count=0, visible=False),
+        "text=Kontoplan": FakeLoginControl(count=0, visible=False),
+        "text=Navn og adresse": FakeLoginControl(count=0, visible=False),
+        "text=Kontaktinformation": FakeLoginControl(count=0, visible=False),
+        "text=Regelsæt": FakeLoginControl(count=0, visible=False),
+        "text=Satser for salg": FakeLoginControl(count=0, visible=False),
+        "text=Satser for køb": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Fakturering": FakeLoginControl(text="Fakturering"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def _bind_virksomheder_flow_to_user_orgs_panel(page: FakeLoginPage) -> None:
+    """Hub company → Profil intermediate → Virksomheder multi-org panel."""
+
+    def apply_orgs() -> None:
+        orgs = _settings_user_organizations_shell_controls()
+        page.controls = orgs
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    def after_profil() -> None:
+        mid = _settings_user_shell_controls()
+        mid["text=Virksomheder"] = FakeLoginControl(text="Virksomheder", on_click=apply_orgs)
+        mid["text=Alle organisationer"] = FakeLoginControl(count=0, visible=False)
+        mid["text=Opret organisation"] = FakeLoginControl(count=0, visible=False)
+        page.controls = mid
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    hub = _settings_company_shell_controls()
+    hub["text=Profil"] = FakeLoginControl(text="Profil", on_click=after_profil)
+    hub["text=Virksomheder"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Alle organisationer"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Opret organisation"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Billede"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Sprog og tema"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Skift adgangskode"] = FakeLoginControl(count=0, visible=False)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+
+
 def _settings_users_shell_controls() -> dict[str, FakeLoginControl]:
     return {
         "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
@@ -7301,6 +7370,171 @@ def _bind_adgangsnogler_click_to_access_token_panel(page: FakeLoginPage) -> None
     page.controls = hub
     for selector, control in page.controls.items():
         control.bind(page.events, selector)
+
+
+def test_ui_settings_user_organizations_open_returns_auth_required_on_login_page(
+    tmp_path: Path,
+) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+
+    result = asyncio.run(runtime.ui_settings_user_organizations_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_settings_user_organizations_open_returns_success_for_user_orgs_shell(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    _bind_virksomheder_flow_to_user_orgs_panel(page)
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_user_organizations_open())
+
+    assert result == UiSettingsUserOrganizationsOpenSuccess(
+        user_organizations_panel_markers_present=True
+    )
+    assert isinstance(result, UiSettingsUserOrganizationsOpenSuccess)
+    assert result.path_class == "/:org_slug/settings"
+    assert result.heading == "Indstillinger"
+    assert result.shell_kind == "settings_user_organizations"
+    assert result.user_organizations_panel_markers_present is True
+    assert any(url.rstrip("/").endswith("/settings") for url, _ in page.navigation)
+    assert "click:text=Profil" in page.events
+    assert "click:text=Virksomheder" in page.events
+    assert page.closed
+
+
+def test_ui_settings_user_organizations_open_returns_ui_changed_for_company_panel(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _settings_company_shell_controls()
+    # Profil click leaves company; Virksomheder missing → UI_CHANGED
+    controls["text=Profil"] = FakeLoginControl(text="Profil")
+    controls["text=Virksomheder"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_user_organizations_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def test_ui_settings_user_organizations_open_returns_ui_changed_for_user_panel_only(
+    tmp_path: Path,
+) -> None:
+    """Profil panel without Virksomheder multi-org markers is not success."""
+
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        follow_goto=True,
+    )
+    _bind_profil_click_to_user_panel(page)
+
+    # Virksomheder click re-applies user panel (wrong shell)
+    def stay_user() -> None:
+        user = _settings_user_shell_controls()
+        user["text=Virksomheder"] = FakeLoginControl(text="Virksomheder", on_click=stay_user)
+        user["text=Alle organisationer"] = FakeLoginControl(count=0, visible=False)
+        user["text=Opret organisation"] = FakeLoginControl(count=0, visible=False)
+        page.controls = user
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    def after_profil() -> None:
+        user = _settings_user_shell_controls()
+        user["text=Virksomheder"] = FakeLoginControl(text="Virksomheder", on_click=stay_user)
+        user["text=Alle organisationer"] = FakeLoginControl(count=0, visible=False)
+        user["text=Opret organisation"] = FakeLoginControl(count=0, visible=False)
+        page.controls = user
+        for selector, control in page.controls.items():
+            control.bind(page.events, selector)
+
+    hub = _settings_company_shell_controls()
+    hub["text=Profil"] = FakeLoginControl(text="Profil", on_click=after_profil)
+    hub["text=Virksomheder"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Alle organisationer"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Opret organisation"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Billede"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Sprog og tema"] = FakeLoginControl(count=0, visible=False)
+    hub["text=Skift adgangskode"] = FakeLoginControl(count=0, visible=False)
+    page.controls = hub
+    for selector, control in page.controls.items():
+        control.bind(page.events, selector)
+
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_settings_user_organizations_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
 
 
 def test_ui_settings_access_token_open_returns_auth_required_on_login_page(

@@ -40,6 +40,7 @@ from billy_mcp.models import (
     UiSettingsInvoicingOpenSuccess,
     UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenSuccess,
+    UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
     UiSuppliersListSuccess,
@@ -656,6 +657,15 @@ class FakeUiSettingsInvoicingOpenService:
         return UiSettingsInvoicingOpenSuccess(invoicing_panel_markers_present=True)
 
 
+class FakeUiSettingsUserOrganizationsOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_settings_user_organizations_open(self) -> UiSettingsUserOrganizationsOpenSuccess:
+        self.calls += 1
+        return UiSettingsUserOrganizationsOpenSuccess(user_organizations_panel_markers_present=True)
+
+
 class FakeUiSettingsUserOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -914,6 +924,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_settings_accounting_open",
         "ui_settings_invoicing_open",
         "ui_settings_user_open",
+        "ui_settings_user_organizations_open",
         "ui_settings_vat_open",
         "ui_settings_users_open",
         "ui_settings_access_token_open",
@@ -1817,6 +1828,37 @@ def test_ui_settings_user_open_registration_has_empty_input_and_typed_output(
             "heading": "Indstillinger",
             "shell_kind": "settings_user",
             "user_panel_markers_present": True,
+        }
+    }
+    assert settings.calls == 1
+
+
+def test_ui_settings_user_organizations_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    settings = FakeUiSettingsUserOrganizationsOpenService()
+    server = create_server(tmp_path, ui_settings_user_organizations_open_service=settings)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}[
+        "ui_settings_user_organizations_open"
+    ]
+
+    assert tool.parameters["properties"] == {}
+    output_schema = tool.output_schema
+    assert isinstance(output_schema, dict)
+    schema = json.dumps(output_schema).lower()
+    assert not any(term in schema for term in ("email", "password", "totp", "cookie", "token"))
+    properties = cast(dict[str, Any], output_schema.get("properties") or {})
+    assert "org_slug" not in properties
+
+    result = asyncio.run(server.call_tool("ui_settings_user_organizations_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/settings",
+            "heading": "Indstillinger",
+            "shell_kind": "settings_user_organizations",
+            "user_organizations_panel_markers_present": True,
         }
     }
     assert settings.calls == 1

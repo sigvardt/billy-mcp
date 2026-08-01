@@ -185,6 +185,12 @@ UI_SETTINGS_USER_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SETTINGS_USER_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_settings_user_open.py"
 UI_SETTINGS_USER_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_SETTINGS_USER_OPEN_TOOL_NAME = "ui_settings_user_open"
+UI_SETTINGS_USER_ORGANIZATIONS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_SETTINGS_USER_ORGANIZATIONS_OPEN_LIVE_TEST_REFERENCE = (
+    "tests/live/test_ui_settings_user_organizations_open.py"
+)
+UI_SETTINGS_USER_ORGANIZATIONS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_SETTINGS_USER_ORGANIZATIONS_OPEN_TOOL_NAME = "ui_settings_user_organizations_open"
 UI_SETTINGS_VAT_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SETTINGS_VAT_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_settings_vat_open.py"
 UI_SETTINGS_VAT_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -450,6 +456,7 @@ UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
     "inventory",
     "settings_company",
     "settings_user",
+    "settings_user_organizations",
     "settings_accounting",
     "settings_vat",
     "settings_invoicing",
@@ -3117,6 +3124,83 @@ def apply_ui_settings_user_open_shell_evidence(
     ]
 
 
+def apply_ui_settings_user_organizations_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_special_user_organizations: bool = False,
+) -> None:
+    """Mark Indstillinger Virksomheder (user organizations) panel evidence (research152).
+
+    Empty-input tool; open hub /:org_slug/settings then observe-only click Profil
+    then Virksomheder; final path /:org_slug/settings; h1 Indstillinger; markers
+    Virksomheder + Alle organisationer + Opret organisation (chrome only). Soft
+    seeds rejected. Distinct from Profil user fields, company form, Brugere.
+    Never click Opret organisation / Gem. No invent api_settings_*. When
+    ``parity_of_special_user_organizations`` is true, dual-counts exact
+    ``ui.parity.special.user_organizations`` for ``api.special.user_organizations``.
+    Does not green invoice_email, files_upload, user_get, users.*, organizations.*.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/settings (read-only Indstillinger Virksomheder/"
+        "user-organizations panel open via hub + side-nav click Profil then "
+        "Virksomheder; never click Opret organisation/Gem/Upload/Slet)"
+    )
+    row["tool_name"] = UI_SETTINGS_USER_ORGANIZATIONS_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "heading",
+        "shell_kind",
+        "user_organizations_panel_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_special_user_organizations:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_SETTINGS_USER_ORGANIZATIONS_OPEN_MODEL_TEST_REFERENCE,
+        UI_SETTINGS_USER_ORGANIZATIONS_OPEN_UNIT_TEST_REFERENCE,
+        UI_SETTINGS_USER_ORGANIZATIONS_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research152 dual-session headless observation + "
+        "ui_settings_user_organizations_open product; shell open only (hub "
+        "/:org_slug/settings + click Profil then Virksomheder → path class "
+        "/:org_slug/settings, h1 Indstillinger, shell_kind=settings_user_organizations, "
+        "Virksomheder/Alle organisationer/Opret organisation markers; distinct from "
+        "Profil user fields/company/Brugere); soft seeds rejected; no invent "
+        "api_settings_*; never click Opret organisation/Gem; does not green "
+        "invoice_email/files_upload/user_get/users.* /organizations.* or annual_reports; "
+        "vision record tmp/vision-records/ui_settings_user_organizations_open.json "
+        "(Indstillinger Virksomheder frames, accept)"
+    )
+    if parity_of_special_user_organizations:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.special.user_organizations to UI "
+            "settings Virksomheder multi-org shell open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "shell_open_only"
+    row["sensitivity"] = "low"
+    row["side_effects"] = "none"
+    row["cleanup"] = "not_applicable; read-only observation creates no records"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def apply_ui_settings_vat_open_shell_evidence(row: dict[str, Any]) -> None:
     """Mark Indstillinger Momssatser (VAT) panel shell open evidence (research130).
 
@@ -3925,6 +4009,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_invoicing_open_shell_evidence(row)
         if family == "settings_user":
             apply_ui_settings_user_open_shell_evidence(row)
+        if family == "settings_user_organizations":
+            apply_ui_settings_user_organizations_open_shell_evidence(row)
         if family == "settings_vat":
             apply_ui_settings_vat_open_shell_evidence(row)
         if family == "settings_users":
@@ -3986,6 +4072,10 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.special.user_get":
             apply_ui_settings_user_open_shell_evidence(row, parity_of_special_user_get=True)
+        if api_row["id"] == "api.special.user_organizations":
+            apply_ui_settings_user_organizations_open_shell_evidence(
+                row, parity_of_special_user_organizations=True
+            )
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)

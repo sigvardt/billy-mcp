@@ -103,6 +103,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_settings_user_open_shell|ui_settings_user_open_shell]]: Read-only Billy Indstillinger Profil (user) settings panel open; dual-counts api.special.user_get (research129/151).
 
+[[ui_settings_user_organizations_open_shell|ui_settings_user_organizations_open_shell]]: Read-only Billy Indstillinger Virksomheder multi-org panel open; dual-counts api.special.user_organizations (research152).
+
 [[ui_settings_users_open_shell|ui_settings_users_open_shell]]: Read-only Billy Indstillinger Brugere (org users) settings panel open; dual-counts users.list.
 
 [[ui_settings_vat_open_shell|ui_settings_vat_open_shell]]: Read-only Billy Indstillinger Momssatser (VAT) settings panel open (research130 freeze).

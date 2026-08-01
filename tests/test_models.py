@@ -67,6 +67,8 @@ from billy_mcp.models import (
     UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
+    UiSettingsUserOrganizationsOpenInput,
+    UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenInput,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenInput,
@@ -1253,6 +1255,39 @@ def test_ui_settings_user_open_models_user_shell() -> None:
                 "heading": "Indstillinger",
                 "shell_kind": "settings_user",
                 "user_panel_markers_present": True,
+            }
+        )
+
+
+def test_ui_settings_user_organizations_open_models_user_orgs_shell() -> None:
+    assert UiSettingsUserOrganizationsOpenInput().model_dump() == {}
+    success = UiSettingsUserOrganizationsOpenSuccess(user_organizations_panel_markers_present=True)
+    assert success.model_dump() == {
+        "path_class": "/:org_slug/settings",
+        "heading": "Indstillinger",
+        "shell_kind": "settings_user_organizations",
+        "user_organizations_panel_markers_present": True,
+    }
+    properties = UiSettingsUserOrganizationsOpenSuccess.model_json_schema().get("properties", {})
+    assert "user_organizations_panel_markers_present" in properties
+    with pytest.raises(ValidationError):
+        UiSettingsUserOrganizationsOpenInput.model_validate({"url": "https://untrusted.example"})
+    with pytest.raises(ValidationError):
+        UiSettingsUserOrganizationsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/settings",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_user",
+                "user_organizations_panel_markers_present": True,
+            }
+        )
+    with pytest.raises(ValidationError):
+        UiSettingsUserOrganizationsOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/other",
+                "heading": "Indstillinger",
+                "shell_kind": "settings_user_organizations",
+                "user_organizations_panel_markers_present": True,
             }
         )
 

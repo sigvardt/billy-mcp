@@ -89,6 +89,7 @@ from billy_mcp.browser import (
     UiSettingsInvoicingOpenService,
     UiSettingsSubscriptionOpenService,
     UiSettingsUserOpenService,
+    UiSettingsUserOrganizationsOpenService,
     UiSettingsUsersOpenService,
     UiSettingsVatOpenService,
     UiSuppliersListService,
@@ -167,6 +168,8 @@ from billy_mcp.models import (
     UiSettingsSubscriptionOpenSuccess,
     UiSettingsUserOpenInput,
     UiSettingsUserOpenSuccess,
+    UiSettingsUserOrganizationsOpenInput,
+    UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenInput,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenInput,
@@ -215,6 +218,8 @@ def create_server(
     ui_settings_accounting_open_service: UiSettingsAccountingOpenService | None = None,
     ui_settings_invoicing_open_service: UiSettingsInvoicingOpenService | None = None,
     ui_settings_user_open_service: UiSettingsUserOpenService | None = None,
+    ui_settings_user_organizations_open_service: UiSettingsUserOrganizationsOpenService
+    | None = None,
     ui_settings_vat_open_service: UiSettingsVatOpenService | None = None,
     ui_settings_users_open_service: UiSettingsUsersOpenService | None = None,
     ui_settings_access_token_open_service: UiSettingsAccessTokenOpenService | None = None,
@@ -262,6 +267,9 @@ def create_server(
     settings_accounting_open_service = ui_settings_accounting_open_service or browser
     settings_invoicing_open_service = ui_settings_invoicing_open_service or browser
     settings_user_open_service = ui_settings_user_open_service or browser
+    settings_user_organizations_open_service = (
+        ui_settings_user_organizations_open_service or browser
+    )
     settings_vat_open_service = ui_settings_vat_open_service or browser
     settings_users_open_service = ui_settings_users_open_service or browser
     settings_access_token_open_service = ui_settings_access_token_open_service or browser
@@ -472,6 +480,14 @@ def create_server(
 
         UiSettingsUserOpenInput()
         return await settings_user_open_service.ui_settings_user_open()
+
+    async def ui_settings_user_organizations_open() -> (
+        UiSettingsUserOrganizationsOpenSuccess | ToolError
+    ):
+        """Observe the Indstillinger Virksomheder multi-org panel without write actions."""
+
+        UiSettingsUserOrganizationsOpenInput()
+        return await settings_user_organizations_open_service.ui_settings_user_organizations_open()
 
     async def ui_settings_vat_open() -> UiSettingsVatOpenSuccess | ToolError:
         """Observe the Indstillinger Momssatser settings panel without write actions."""
@@ -735,6 +751,14 @@ def create_server(
             "does not click Gem, Upload, password submit, or other write actions)."
         ),
     )(ui_settings_user_open)
+    server.tool(
+        name="ui_settings_user_organizations_open",
+        description=(
+            "Open the Billy user-organizations settings (Indstillinger / Virksomheder) "
+            "panel for the authenticated session (read-only path, heading, and multi-org "
+            "list markers; does not click Opret organisation, Gem, or other write actions)."
+        ),
+    )(ui_settings_user_organizations_open)
     server.tool(
         name="ui_settings_vat_open",
         description=(

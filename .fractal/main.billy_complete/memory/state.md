@@ -6,19 +6,160 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T09:35:00Z
+updated: 2026-08-01T10:50:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 52 COMMIT 186.52 product `fd63ff2` + memory `c63fe23`.
-  live/vision **143**; implemented/contract **327**; complete false. Not node finish.
-- dual-count special.user_get → ui_settings_user_open greened. Residual UI open.
+- Continue mode iter **53** pre-COMMIT after FIX-VERIFY 186.53 (uncommitted).
+  live/vision **145**; implemented/contract **329**; complete false.
+- Ready COMMIT product. Not node finish.
 - Bulk 92 + annual_reports still red.
 
 
+## SYNC (iter 53)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 827F4919 + 4CFAC6F4 (iter52 pre-COMMIT / COMMIT) reacted (+).
+- No running children. No parent directives.
+- Branch clean at tip `41ad5ee` == origin/main.billy_complete.
+- Coverage: implemented/contract 327; live/vision 143; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Outbox: iter53 SYNC post-186.52.
+- Next residual (186.52 post-mortem): special.user_organizations
+  (Profil→Virksomheder dual), invoice_email isolation, postings no-steal,
+  files_upload, tax*/bank*/productPrices multi-resource. Bulk 92 + annual red.
+- Ready PREPARE. Not finish.
+
+
+
+
+## PREPARE (iter 53)
+
+- Parent `main`: fetch + merge Already up to date.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; many rev-ahead,
+  but product review of non-fractal three-dot deltas vs tip `41ad5ee` → **skip
+  all merges** (tip superset or superseded product path):
+  - `ui_auth_status` (SRC): tip browser/models/server much larger (5550/660/835
+    vs child 376/69/177); product already live.
+  - `shared_foundation` and early wave1–5 product stubs: tip equal or longer;
+    product already on tip (three-dot only looks new vs ancient merge-base).
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`
+    (WIKI): pages already on tip (tip wiki equal or longer); index-only churn.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path).
+  - `wave5n_invoice_late_fee_freeze`, `wave5sa_invoice_logs_product_*`,
+    `wave5k_product_ready_review_*`: wiki content equal on tip or index-only.
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or
+    older wave product already integrated; no unique src/tests tip lacks.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `41ad5ee`. Ready RESEARCH residual dual-count/NA (prefer
+  special.user_organizations Profil→Virksomheder dual; invoice_email isolation;
+  no postings steal). Not finish.
+
+
+## SYNC (iter 53 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DB3454F4 + 8B2F4215 (SYNC residual pointer / PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `41ad5ee`.
+- Outbox: pre-RESEARCH ready.
+- Ready RESEARCH residual dual-count/NA (prefer special.user_organizations
+  Profil→Virksomheder dual; invoice_email isolation; no postings steal onto
+  transactions; files_upload / tax* / bank* / productPrices deferred unless dual
+  soft-empty + shell-marker isolation proves NA). Not finish.
+
+
+## RESEARCH (iter 53 / research152)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual-session READY; soft userOrganizations/emails/files/postings body 127 =
+  nonsense dual.
+- Tools dual-ok: settings_user/users/company/invoicing, transactions, uploads,
+  invoices.
+- Profil click dual body 523 (user fields); Virksomheder click dual body 298
+  (Alle organisationer / Opret organisation / Navn+CVR list chrome).
+- Invoice list empty dual (invoice_opened false); no send-email dual.
+- ACCEPT product new ui_settings_user_organizations_open + dual-count
+  special.user_organizations (1).
+- DEFER invoice_email pure NA. REJECT files_upload pure NA; REJECT postings
+  dual-count onto transactions.
+- Brief: tmp/grok-research.md. Dual: tmp/research152_residual_dual.json.
+- Profiles purged. api_token_used false. No coverage green. Ready PLAN 186.53.
+
+
+## SYNC (iter 53 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 40D2D1D5 (research152 done) reacted (+).
+- No running children. No parent directives.
+- research152 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for ui_settings_user_organizations_open +
+  dual-count special.user_organizations (1). Not finish.
+
+
+## PLAN (iter 53 / 186.53)
+
+- Plan file
+  `plans/*-186.53-ui_settings_user_organizations_open.md`:
+  new shell tool `ui_settings_user_organizations_open` (Profil→Virksomheder /
+  Alle organisationer); discovery + dual-count exact
+  `ui.parity.special.user_organizations`; live/vision 143→145; GEO NA 100
+  unchanged; root-only Grok; no children; residual specials + postings stay red;
+  annual/bulk stay red; complete false.
+- Ready EXECUTE.
+
+
+## SYNC (iter 53 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 72937F94 (PLAN 186.53 done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.53 + research152 brief present. Tip `41ad5ee`.
+- Ready EXECUTE product ui_settings_user_organizations_open + dual-count
+  special.user_organizations (root; no children). Not finish.
+
+
+## EXECUTE (iter 53 / 186.53)
+
+- Producted research152 / plan 186.53:
+  - New tool `ui_settings_user_organizations_open` (Profil→Virksomheder;
+    markers Virksomheder + Alle organisationer + Opret organisation chrome).
+  - Models/server/unit/live dual-session tests + vision purge path.
+  - Coverage generator: discovery `settings_user_organizations` + exact dual-count
+    `api.special.user_organizations`.
+  - Wiki shell page + `_index` + note on settings_user_open.
+- Regenerated coverage: live/vision **145**; implemented/contract **329**;
+  GEO NA 100; complete false; residual specials invoice_email/files_upload red.
+- lint.sh pass. offline test.sh **1571 passed**, 36 deselected.
+- Live: `test_ui_settings_user_organizations_open` **1 passed** (dual session;
+  no API token).
+- Ready REVIEW / IR. Not finish.
+
+
+## SYNC (iter 53 pre-IR)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. No parent directives.
+- EXECUTE 186.53 uncommitted: user_organizations shell + dual-count;
+  live/vision 145; implemented/contract 329; offline 1571; live dual 1;
+  complete false.
+- Outbox: pre-IR ready.
+- Ready INDEPENDENT-REVIEW of product 186.53. Not finish.
+
+
+## IR (iter 53 / 186.53)
+
+- Product dual-count + new Virksomheder shell: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking.
+- Discovery + special.user_organizations integrity OK; residual specials red;
+  bulk 92 red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
 
 ## SYNC (iter 52)
 
@@ -31,6 +172,35 @@ updated: 2026-08-01T09:35:00Z
 - Ready RESEARCH residual dual-count/NA. Not finish.
 
 
+
+
+## SYNC (iter 53 pre-FIX-VERIFY)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- IR ACCEPT already outboxed. No required product fixes (optional N1–N2 deferred).
+- No running children. No parent directives.
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+
+## FIX-VERIFY (iter 53 / 186.53)
+
+- IR required fixes: none. Optional N1–N2 no-op (left as-is).
+- Reconfirm: discovery + special.user_organizations green; residual specials
+  invoice_email/files_upload red; live/vision 145; complete false; API live
+  false (0/305).
+- lint.sh green. offline test.sh **1571 passed**, 36 deselected.
+- wiki lint: wiki + memory clean.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.53 Virksomheder shell + dual-count. Not node finish.
+
+
+## SYNC (iter 53 pre-COMMIT)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. No parent directives.
+- FIX-VERIFY done (1571 offline pass; IR ACCEPT). Ready COMMIT 186.53
+  Virksomheder shell + dual-count user_organizations. Not node finish
+  (complete false).
 
 ## PREPARE (iter 52)
 
