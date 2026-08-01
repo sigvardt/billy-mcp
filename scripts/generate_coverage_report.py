@@ -20,11 +20,13 @@ DOCS_URL = "https://www.billy.dk/api/"
 DOCS_ETAG = "wcw4x9hqvu3603"
 DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 
-# Dual-proved geo/reference UI families (research138 + research139 + research142):
-# no equivalent mit.billy.dk workflow (nav absence + soft-empty path class ==
-# nonsense). research139 adds currencies/locales after dual path contrast.
-# research142 adds accountNatures/balanceModifiers after residual dual soft-empty.
+# Dual-proved geo/reference UI families (research138 + research139 + research142
+# + research143): no equivalent mit.billy.dk workflow (nav absence + soft-empty
+# path class == nonsense). research139 adds currencies/locales after dual path
+# contrast. research142 adds accountNatures/balanceModifiers after residual dual
+# soft-empty. research143 adds accountGroups (7 ops including singular delete).
 GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
+    "api.accountGroups.",
     "api.accountNatures.",
     "api.balanceModifiers.",
     "api.cities.",
@@ -36,11 +38,12 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 54  # nine families × six ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 61  # prior 54 + accountGroups 7 ops
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
     {"accountNatures", "balanceModifiers"}
 )
+GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES: frozenset[str] = frozenset({"accountGroups"})
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -3470,6 +3473,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     research139: currencies + locales after dual path contrast closed the
     research138 deferral.
     research142: accountNatures + balanceModifiers residual soft-empty dual.
+    research143: accountGroups residual soft-empty dual (dedicated freeze).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -3480,9 +3484,31 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research142:
+    if is_research143:
+        research_id = "research143"
+        evidence_ref = "research143_account_groups_dual"
+        nonsense_path = "zz-research143-no-such-route"
+        dual_agree_flag = "dual_agree_soft_empty_accountGroups"
+        family_label = "accountGroups"
+        contrast_shells = (
+            "settings_accounting/settings_vat/settings_company/daybooks_new/bank-accounts/products"
+        )
+        list_heading_suffix = (
+            "/Indstillinger(Kontoplan|Momssatser|company)/daybooks editor/Bankkonti/Produkter"
+        )
+        contrast_controls = [
+            "settings_accounting",
+            "settings_vat",
+            "settings_company",
+            "daybooks/new",
+            "bank-accounts",
+            "products",
+            nonsense_path,
+        ]
+    elif is_research142:
         research_id = "research142"
         evidence_ref = "research142_account_natures_balance_modifiers_dual"
         nonsense_path = "zz-research142-no-such-route"

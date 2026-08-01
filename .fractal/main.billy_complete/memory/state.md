@@ -6,72 +6,190 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T03:59:22Z
+updated: 2026-08-01T04:42:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 43 COMMIT 186.43 NA package. live/vision 94; implemented 278;
-  complete false. Not node finish.
-
-- Live/vision 82; implemented/contract 266.
+- Continue mode iter 44 COMMIT 186.44 accountGroups NA. live/vision 101;
+  implemented/contract 285; complete false. Not node finish.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
-- Residual UI parity ~256 red; API offline incomplete 121 (92 bulk + residual non-tool specials).
+- Residual UI parity red groups ~39; API offline incomplete 121
+  (92 bulk + residual non-tool specials).
 - Last dual-counts: users.list 186.42, salesTaxReturns.list 186.41.
-- IR 186.43 NA package accountNatures+balanceModifiers: **ACCEPT**. Not node finish.
-
+- IR 186.43 NA package accountNatures+balanceModifiers: **ACCEPT**.
 
 ## Verification
 
-- Last product: NA package accountNatures+balanceModifiers (12 rows; live/vision 94).
-- Offline baseline: 1565 passed non-live (35 deselected) after 186.43 EXECUTE.
-- Live baseline inventory: 94 UI live/vision green (40 shell/parity + 54 NA).
-
+- Last product: NA package accountGroups (7 rows; live/vision 101).
+- Offline baseline: 1565 passed non-live (35 deselected) after 186.44 EXECUTE.
+- Live baseline inventory: 101 UI live/vision green (40 shell/parity + 61 NA).
 
 ## Review decisions (authoritative)
 
-- Product `ui_settings_access_token_open`: **ACCEPT** (IR 186.33; no required fixes; egress
-  retains prior lives; other settings_*/annual stay red).
-- Product `ui_settings_users_open`: **ACCEPT** (IR 186.32; no required fixes; egress
-  retains prior lives; other settings_*/annual stay red).
-- Product `ui_settings_vat_open`: **ACCEPT** (IR 186.31; no required fixes; egress
-  retains prior lives; other settings_* and annual stay red).
-- Product `ui_settings_company_open`: **ACCEPT** (IR 186.27; no required fixes; egress
-  retains prior lives; other settings_* and annual stay red).
-- Product `ui_inventory_open`: **ACCEPT** (IR 186.26; no required fixes; egress
-  retains prior lives; settings/annual stay red).
-- Product `ui_integrations_open`: **ACCEPT** (IR 186.25; no required fixes; egress
-  retains prior lives; inventory/settings/annual stay red).
-- Product `ui_addons_open`: **ACCEPT** (IR 186.24; no required fixes; egress
-  retains prior lives; integrations/annual/settings stay red).
-- Product `ui_saft_exports_open`: **ACCEPT** (IR 186.23; no required fixes; egress retains prior lives; annual stays red).
-- Product `ui_exports_open`: **ACCEPT** (IR 186.22; no required fixes; egress retains prior lives; annual stays red).
-- Product `ui_vat_declarations_list`: **ACCEPT** (IR 186.21; no required fixes; egress retains prior lives).
-- Product `ui_reports_open`: **ACCEPT** (IR 186.20; no required fixes; egress retains prior lives).
-- Product `ui_transactions_list`: **ACCEPT** (IR 186.19; no required fixes; egress retains prior lives).
-- Product `ui_daybooks_open`: **ACCEPT** (IR 186.18; no required fixes; egress retains prior lives).
-- Product `ui_financing_open`: **ACCEPT** (IR 186.17; no required fixes; egress retains prior lives).
-- Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16; egress generator retains prior lives).
-- Product `ui_receipt_inbox_list`: **ACCEPT** (committed 186.15).
-- Product `ui_uploads_list`: **ACCEPT** (committed 186.14).
-- Product `ui_creditor_balances_list`: **ACCEPT** (committed 186.13).
-- Product `ui_debtor_balances_list`: **ACCEPT** (committed 186.12).
-- Product `ui_bills_list`: **ACCEPT** (committed 186.11).
+- Product NA package accountGroups: **ACCEPT** (IR 186.44; no required fixes).
+- Product NA package accountNatures+balanceModifiers: **ACCEPT** (IR 186.43).
+- Product `ui_settings_access_token_open`: **ACCEPT** (IR 186.33).
+- Product `ui_settings_users_open`: **ACCEPT** (IR 186.32).
+- Product `ui_settings_vat_open`: **ACCEPT** (IR 186.31).
+- Product `ui_settings_company_open`: **ACCEPT** (IR 186.27).
+- Product `ui_inventory_open`: **ACCEPT** (IR 186.26).
+- Product `ui_integrations_open`: **ACCEPT** (IR 186.25).
+- Product `ui_addons_open`: **ACCEPT** (IR 186.24).
+- Product `ui_saft_exports_open`: **ACCEPT** (IR 186.23).
+- Product `ui_exports_open`: **ACCEPT** (IR 186.22).
+- Product `ui_vat_declarations_list`: **ACCEPT** (IR 186.21).
+- Product `ui_reports_open`: **ACCEPT** (IR 186.20).
+- Product `ui_transactions_list`: **ACCEPT** (IR 186.19).
+- Product `ui_daybooks_open`: **ACCEPT** (IR 186.18).
+- Product `ui_financing_open`: **ACCEPT** (IR 186.17).
+- Product `ui_bank_reconciliation_open`: **ACCEPT** (IR 186.16).
+- Product `ui_receipt_inbox_list`: **ACCEPT** (186.15).
+- Product `ui_uploads_list`: **ACCEPT** (186.14).
+- Product `ui_creditor_balances_list`: **ACCEPT** (186.13).
+- Product `ui_debtor_balances_list`: **ACCEPT** (186.12).
+- Product `ui_bills_list`: **ACCEPT** (186.11).
 - Prior suppliers/products_import/recurring/quotes/bank/clients/products/invoices/auth: **ACCEPT**.
 - Overall completeness: **FAIL**.
 
 ## Open coverage work
 
-1. After COMMIT 186.43: residual dual-count/NA for accounts (Kontoplan), taxRates
-   (Momssatser multi-resource), daybooks.list (editor not list); soft-empty
-   productPrices/organizations/bankPayments need dedicated freeze.
+1. After research143: product **accountGroups** UI NA (7 rows). Defer productPrices,
+   organizations, bankPayments/bankLines, accounts Kontoplan, taxRates Momssatser,
+   daybooks.list. 
 2. `ui.discovery.annual_reports` stays red (Upsedasse; org_inaccessible).
 3. Residual non-bulk UI writes: no ticketed product until dual-proved live shell.
 4. 92 ambiguous bulk stay red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`; no tools;
    external_contract_blocker; live_api out_of_scope_by_user).
+
+## SYNC (iter 44)
+
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private DAB95612 (iter43 pre-COMMIT) reacted (+).
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `4c8dda2` vs origin/main.billy_complete.
+- Coverage: implemented/contract 278; live/vision 94; complete false.
+- Outbox 336E0B1A: iter44 SYNC post-186.43.
+- Private D1C664D0: next residual dual-count after PREPARE.
+- Ready for PREPARE. Not finish.
+
+## PREPARE (iter 44)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 157 branches; 62 with commits ahead of tip; 4 with non-fractal deltas:
+  - `ui_auth_status` (SRC): product already on tip (`auth_status` tools live); child tip
+    older parallel delta (browser ~376 vs tip ~5550 lines). Skip merge.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (WIKI):
+    pages already on tip; remaining delta fractal scaffold / _index only. Skip.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path).
+  - Review/init/product-repair branches: fractal-only or older stubs.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH residual dual-count/NA from
+  existing dual-proved shells. Not finish.
+
+
+## SYNC (iter 44 pre-RESEARCH)
+
+- Unread inbox/feed empty. Private D1C664D0 reacted (+). Saved empty.
+- No running children. No parent directives.
+- PREPARE already no-op (parent up to date; no child merges). Tip `4c8dda2`.
+- Outbox posted pre-RESEARCH ready.
+- Ready RESEARCH residual dual-count/NA from existing dual-proved shells.
+
+
+## RESEARCH (iter 44 / research143)
+
+- Official docs etag wcw4x9hqvu3603 MD5 8b94b013… unchanged.
+- Dual-session READY; soft seeds accountGroups (= nonsense body_len 127).
+- productPrices soft-empty but `/products/new` non-empty dual → **reject NA**.
+- organizations: settings company surface → defer. bank*/accounts multi-section /
+  Momssatser multi-resource / daybooks editor → defer.
+- Brief: tmp/grok-research.md. Dual: tmp/research143_residual_parity_dual.json.
+- Recommend product: NA package **accountGroups only** (7 rows; live/vision 94→101).
+- No coverage green. api_token_used false. Ready PLAN 186.44.
+
+
+## SYNC (iter 44 pre-PLAN)
+
+- Unread inbox/feed empty. Private 4F075D34 reacted (+). Saved empty.
+- Research143 outbox already posted (2E695165). Tip `4c8dda2`.
+- Ready PLAN 186.44 accountGroups NA package (7 rows).
+
+
+## PLAN (iter 44 / 186.44)
+
+- Plan file `plans/*-186.44-ui_account_groups_not_applicable.md`: NA freeze
+  **accountGroups only** (7 rows); GEO NA 54→61; live/vision 94→101; root-only;
+  no new UI tools; productPrices/org/bank/accounts/taxRates/daybooks deferred;
+  annual/bulk stay red.
+- Ready EXECUTE.
+
+
+## SYNC (iter 44 pre-EXECUTE)
+
+- Unread inbox/feed empty. Private DD6E3834 reacted (+). Saved empty.
+- Plan 186.44 present. Tip `4c8dda2`. Outbox plan already posted (CAD22362).
+- Ready EXECUTE NA package product accountGroups.
+
+
+## EXECUTE (iter 44 / 186.44)
+
+- Extended GEO_UI_NOT_APPLICABLE with accountGroups; ROW_COUNT 61; research143
+  evidence branch.
+- Regenerated manifests: live/vision 101; implemented/contract 285; complete false.
+- Wiki `ui_account_groups_not_applicable` + _index link.
+- Offline test.sh: 1565 passed, 35 deselected. Lint green. No new UI tools.
+- productPrices remains red (NA rejected). Ready REVIEW.
+
+
+## SYNC (iter 44 pre-IR)
+
+- Unread inbox/feed empty. Private 6050DEF8 reacted (+). Saved empty.
+- EXECUTE product uncommitted (generator/wiki/coverage/tests). Tip still 4c8dda2.
+- live/vision 101; implemented/contract 285; complete false.
+- Ready INDEPENDENT-REVIEW of NA package 186.44.
+
+
+## IR (iter 44 / 186.44)
+
+- Product NA package accountGroups: **ACCEPT** (no required fixes).
+- Report: tmp/grok-review.md. Optional N1/N2 prose hygiene only.
+- Overall completeness: **FAIL** (expected). Ready FIX-VERIFY no-op then COMMIT.
+
+
+## SYNC (iter 44 pre-FIX-VERIFY)
+
+- Unread inbox/feed empty. Private 8937D6E2 reacted (+). Saved empty.
+- IR ACCEPT already outboxed (229BEB16). No required product fixes.
+- Ready FIX-VERIFY reconfirm then COMMIT.
+
+
+## FIX-VERIFY (iter 44 / 186.44)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- complete false — no full qualification run.
+- Plan post-mortem filled. Ready COMMIT.
+
+
+## SYNC (iter 44 pre-COMMIT)
+
+- Unread inbox/feed empty. Private E791E9E2 reacted (+). Saved empty.
+- FIX-VERIFY clean; dirty product files uncommitted. Ready COMMIT.
+
+
+## COMMIT (iter 44 / 186.44)
+
+- fractal commit product: UI NA freeze accountGroups (7 rows).
+- complete false. Not node finish.
+
 
 ## SYNC (iter 43)
 

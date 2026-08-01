@@ -389,7 +389,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
-    """research138/139/142: dual-proved geo/reference UI parity is not_applicable."""
+    """research138/139/142/143: dual-proved geo/reference UI parity is not_applicable."""
 
     _api_manifest, ui_manifest, _egress, status, _report = documents()
     na_rows = [
@@ -416,7 +416,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES:
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES:
+            assert "research143" in qual["evidence_ref"]
+            assert "research143" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES:
             assert "research142" in qual["evidence_ref"]
             assert "research142" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
@@ -432,6 +435,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_locales" not in row["tool_name"]
         assert "ui_account_natures" not in row["tool_name"]
         assert "ui_balance_modifiers" not in row["tool_name"]
+        assert "ui_account_groups" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
     # currencies/locales dual-proved (research139) — no longer discovery_required
     currency_locale = [
@@ -457,6 +461,26 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["implemented"] is True for row in natures_modifiers)
     assert all(row["live_tested"] is True for row in natures_modifiers)
     assert all(row["tool_name"] == "" for row in natures_modifiers)
+    # accountGroups dual-proved (research143) — includes singular delete (7 ops)
+    account_groups = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.accountGroups.")
+    ]
+    assert len(account_groups) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in account_groups)
+    assert all(row["implemented"] is True for row in account_groups)
+    assert all(row["live_tested"] is True for row in account_groups)
+    assert all(row["tool_name"] == "" for row in account_groups)
+    # productPrices must stay red this slice (research143 rejected NA)
+    product_prices = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.productPrices.")
+    ]
+    assert product_prices
+    assert all(row.get("parity_status") != "not_applicable" for row in product_prices)
+    assert all(row.get("live_tested") is not True for row in product_prices)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
