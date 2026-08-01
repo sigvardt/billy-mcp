@@ -389,7 +389,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
-    """research138/139/142/143: dual-proved geo/reference UI parity is not_applicable."""
+    """research138/139/142/143/144: dual-proved geo/reference UI parity is not_applicable."""
 
     _api_manifest, ui_manifest, _egress, status, _report = documents()
     na_rows = [
@@ -416,7 +416,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES:
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES:
+            assert "research144" in qual["evidence_ref"]
+            assert "research144" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES:
             assert "research143" in qual["evidence_ref"]
             assert "research143" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES:
@@ -436,6 +439,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_account_natures" not in row["tool_name"]
         assert "ui_balance_modifiers" not in row["tool_name"]
         assert "ui_account_groups" not in row["tool_name"]
+        assert "ui_contact_balance_postings" not in row["tool_name"]
+        assert "ui_invoice_late_fees" not in row["tool_name"]
+        assert "ui_invoice_reminder_associations" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
     # currencies/locales dual-proved (research139) — no longer discovery_required
     currency_locale = [
@@ -472,7 +478,24 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["implemented"] is True for row in account_groups)
     assert all(row["live_tested"] is True for row in account_groups)
     assert all(row["tool_name"] == "" for row in account_groups)
-    # productPrices must stay red this slice (research143 rejected NA)
+    # research144 join/meta package (6 + 7 + 6 = 19)
+    join_meta = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(
+            (
+                "api.contactBalancePostings.",
+                "api.invoiceReminderAssociations.",
+                "api.invoiceLateFees.",
+            )
+        )
+    ]
+    assert len(join_meta) == 19
+    assert all(row["parity_status"] == "not_applicable" for row in join_meta)
+    assert all(row["implemented"] is True for row in join_meta)
+    assert all(row["live_tested"] is True for row in join_meta)
+    assert all(row["tool_name"] == "" for row in join_meta)
+    # productPrices must stay red this slice (research143/144 rejected NA)
     product_prices = [
         row
         for row in ui_manifest["workflows"]
@@ -481,6 +504,22 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert product_prices
     assert all(row.get("parity_status") != "not_applicable" for row in product_prices)
     assert all(row.get("live_tested") is not True for row in product_prices)
+    # related-shell families must stay red (research144 rejected pure NA)
+    for prefix in (
+        "api.bankLineMatches.",
+        "api.bankLineSubjectAssociations.",
+        "api.daybookBalanceAccounts.",
+        "api.salesTaxRules.",
+        "api.salesTaxRulesets.",
+    ):
+        related = [
+            row
+            for row in ui_manifest["workflows"]
+            if str(row.get("api_row_id") or "").startswith(prefix)
+        ]
+        assert related, prefix
+        assert all(row.get("parity_status") != "not_applicable" for row in related)
+        assert all(row.get("live_tested") is not True for row in related)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]

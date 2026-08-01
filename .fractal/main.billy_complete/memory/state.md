@@ -6,29 +6,140 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T04:42:00Z
+updated: 2026-08-01T05:34:08Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 44 COMMIT 186.44 accountGroups NA. live/vision 101;
-  implemented/contract 285; complete false. Not node finish.
+- Continue mode iter 45 IR 186.45 ACCEPT. live/vision 120; implemented/contract 304; complete false. Not node finish.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
-- Residual UI parity red groups ~39; API offline incomplete 121
-  (92 bulk + residual non-tool specials).
-- Last dual-counts: users.list 186.42, salesTaxReturns.list 186.41.
-- IR 186.43 NA package accountNatures+balanceModifiers: **ACCEPT**.
+- IR 186.45 NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT**.
+- IR 186.44 NA package accountGroups: **ACCEPT**.
 
-## Verification
 
-- Last product: NA package accountGroups (7 rows; live/vision 101).
-- Offline baseline: 1565 passed non-live (35 deselected) after 186.44 EXECUTE.
-- Live baseline inventory: 101 UI live/vision green (40 shell/parity + 61 NA).
+- Unread inbox/feed: empty. Saved queue: empty.
+- Private 9189E7C1 (iter44 COMMIT done) reacted (+).
+- No running children (historical only; none need merge/steer this step).
+- Parent directives: none (scope: no live API; grok-only children).
+- Branch clean at tip `084d975` vs origin/main.billy_complete.
+- Coverage: implemented/contract 285; live/vision 101; complete false.
+- Outbox: iter45 SYNC post-186.44.
+- Private: next residual dual-count/NA after PREPARE.
+- Ready for PREPARE. Not finish.
+
+
+## PREPARE (iter 45)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 4 with non-fractal deltas ahead of tip `084d975`:
+  - `ui_auth_status` (SRC): product already on tip (`auth_status` tools live); child tip
+    older parallel delta (browser smaller than tip). Skip merge.
+  - `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (WIKI):
+    pages already on tip; remaining delta fractal scaffold / _index only. Skip.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path).
+  - Review/init/product-repair branches: fractal-only or older stubs.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only. Ready RESEARCH residual dual-count/NA from
+  existing dual-proved shells. Not finish.
+
+
+## SYNC (iter 45 pre-RESEARCH)
+
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children. No parent directives.
+- PREPARE already no-op (parent up to date; no child merges). Tip `084d975`.
+- Outbox: pre-RESEARCH ready.
+- Ready RESEARCH residual dual-count/NA from existing dual-proved shells.
+
+
+## RESEARCH (iter 45 / research144)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual-session READY; soft seeds for join families body_len 127 = nonsense dual.
+- Accepted NA (no related greened shell labels): contactBalancePostings (6),
+  invoiceReminderAssociations (7), invoiceLateFees (6) = 19 rows.
+- Reject NA: bankLineMatches/SubjectAssociations (recon shell), daybookBalanceAccounts
+  (daybooks editor), salesTax*+taxRateDeduction (Momssatser), productPrices
+  (`/products/new` body 190), nested lines/files/postings/org/bank/taxRates.
+- Shell markers: no Rykker/Morarente/Gebyr on invoices/balances/settings dual.
+- Brief: tmp/grok-research.md. Dual: tmp/research144_residual_parity_dual.json.
+- Recommend product: NA package 19 rows (live/vision 101→120).
+- No coverage green. api_token_used false. Ready PLAN 186.45.
+
+
+## SYNC (iter 45 pre-PLAN)
+
+- Unread inbox/feed: empty. Private 462D9B38 reacted (+). Saved empty.
+- Research144 outbox already posted (27C6EF28). Tip `084d975`.
+- Ready PLAN 186.45 NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees (19 rows).
+
+
+## PLAN (iter 45 / 186.45)
+
+- Plan file `plans/*-186.45-ui_contact_postings_late_fees_reminder_assoc_not_applicable.md`:
+  NA freeze contactBalancePostings (6) + invoiceReminderAssociations (7) +
+  invoiceLateFees (6) = 19 rows; GEO NA 61→80; live/vision 101→120; root-only;
+  no new UI tools; productPrices/bank*/salesTax*/daybookBalanceAccounts deferred;
+  annual/bulk stay red.
+- Ready EXECUTE.
+
+
+## SYNC (iter 45 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Private CF663C1F reacted (+). Saved empty.
+- Plan 186.45 present. Tip `084d975`. Outbox plan already posted (2C4968D7).
+- Ready EXECUTE NA package product contactBalancePostings+invoiceReminderAssociations+invoiceLateFees.
+
+
+## EXECUTE (iter 45 / 186.45)
+
+- Extended GEO_UI_NOT_APPLICABLE with contactBalancePostings, invoiceLateFees,
+  invoiceReminderAssociations; ROW_COUNT 80; research144 evidence branch.
+- Regenerated manifests: live/vision 120; implemented/contract 304; complete false.
+- Wiki `ui_contact_postings_late_fees_reminder_assoc_not_applicable` + _index link.
+- Offline test.sh: 1565 passed, 35 deselected. Lint green. No new UI tools.
+- productPrices and related-shell families remain red (NA rejected). Ready REVIEW.
+
+
+## SYNC (iter 45 pre-IR)
+
+- Unread inbox/feed: empty. Private D9899876 reacted (+). Saved empty.
+- EXECUTE product uncommitted (generator/wiki/coverage/tests). Tip still 084d975.
+- live/vision 120; implemented/contract 304; complete false.
+- Ready INDEPENDENT-REVIEW of NA package 186.45.
+
+
+## IR (iter 45 / 186.45)
+
+- Product NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT** (no required fixes).
+- Report: tmp/grok-review.md. Optional N1/N2 prose/detail only.
+- Overall completeness: **FAIL** (expected). Ready FIX-VERIFY no-op then COMMIT.
+
+
+## SYNC (iter 45 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Private 3BDF5CCF reacted (+). Saved empty.
+- IR ACCEPT already outboxed (92E5C2C5). No required product fixes.
+- Ready FIX-VERIFY reconfirm then COMMIT.
+
+
+
+
+
+
+
+
+
+
 
 ## Review decisions (authoritative)
+
+- Product NA package contactBalancePostings+invoiceReminderAssociations+invoiceLateFees: **ACCEPT** (IR 186.45; no required fixes).
 
 - Product NA package accountGroups: **ACCEPT** (IR 186.44; no required fixes).
 - Product NA package accountNatures+balanceModifiers: **ACCEPT** (IR 186.43).
@@ -3445,4 +3556,21 @@ updated: 2026-08-01T04:42:00Z
 - Pushed to origin/main.billy_complete. Worktree clean.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+
+
+## FIX-VERIFY (iter 45 / 186.45)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- complete false — no full qualification run.
+- Plan post-mortem filled. Ready COMMIT.
+
+
+
+## SYNC (iter 45 pre-COMMIT)
+
+- Unread inbox/feed: empty. Private 7729F899 reacted (+). Saved empty.
+- FIX-VERIFY clean; dirty product files uncommitted. Ready COMMIT.
 

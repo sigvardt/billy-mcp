@@ -43,6 +43,8 @@ updated: 2026-07-31T21:36:36Z
 
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.
 
+[[ui_contact_postings_late_fees_reminder_assoc_not_applicable|ui_contact_postings_late_fees_reminder_assoc_not_applicable]]: Dual-session research144 freeze — no equivalent mit.billy.dk workflow for contactBalancePostings, invoiceLateFees, and invoiceReminderAssociations API parity; soft-empty paths match nonsense; NA accepted.
+
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
 
 [[ui_currencies_locales_not_applicable|ui_currencies_locales_not_applicable]]: Dual-session research139 freeze — no equivalent mit.billy.dk workflow for currencies/locales API parity; soft-empty paths match nonsense; NA accepted.
