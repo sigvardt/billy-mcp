@@ -4956,239 +4956,337 @@
     {
       "api_row_id": "api.contactBalancePayments.get",
       "area": "contact_balance_payments",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.get",
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.contactBalancePayments.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.get (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "contactBalancePayment"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.contactBalancePayments.list",
       "area": "contact_balance_payments",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.list",
-      "filters": {},
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.contactBalancePayments.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.list (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "contactBalancePayments[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.contactBalancePayments.create",
       "area": "contact_balance_payments",
-      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.create",
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.contactBalancePayments.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.create (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "contactBalancePayment"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates contactBalancePayment",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.contactBalancePayments.update",
       "area": "contact_balance_payments",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.update",
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.contactBalancePayments.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.update (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "contactBalancePayment"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates contactBalancePayment",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.contactBalancePayments.bulk_save",
       "area": "contact_balance_payments",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.bulk_save",
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.contactBalancePayments.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.bulk_save (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.contactBalancePayments.bulk_delete",
       "area": "contact_balance_payments",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contactBalancePayments.bulk_delete",
+      "evidence": "research147 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_contactBalancePayments true; candidate contactBalancePayments path classes soft-empty identical to nonsense (zz-research147-no-such-route); contrast debtor_balances/creditor_balances/invoices/settings_accounting/settings_vat/daybooks/bank_recon/products/uploads real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.contactBalancePayments.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* contactBalancePayments tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research147_contact_balance_payments_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.contactBalancePayments.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contactBalancePayments.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.contactBalancePayments.bulk_delete (research147 dual-session: no nav label/href for contactBalancePayments; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Tilgodehavender/Skyldige udgifter/Fakturaer/Indstillinger/daybooks editor/Bankkonti/Afstemning/Produkter/Bilag; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "debtor_balances",
+          "creditor_balances",
+          "invoices",
+          "settings_accounting",
+          "settings_vat",
+          "daybooks/new",
+          "bank_reconciliation",
+          "products",
+          "uploads",
+          "zz-research147-no-such-route"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research147_contact_balance_payments_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

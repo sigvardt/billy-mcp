@@ -34,7 +34,9 @@ non-production organisation support that classification for:
 
 Peer freezes: [[ui_geo_cities_not_applicable]],
 [[ui_account_groups_not_applicable]],
-[[ui_account_natures_balance_modifiers_not_applicable]].
+[[ui_account_natures_balance_modifiers_not_applicable]],
+[[ui_contact_balance_payments_not_applicable]] (contactBalance**Payments**, not
+Postings).
 
 ## Dual-session evidence (non-sensitive)
 

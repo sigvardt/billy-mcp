@@ -3822,3 +3822,135 @@ updated: 2026-08-01T06:20:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 - Tip: `d9d2c0c` (product).
+
+## SYNC (iter 48 continue)
+
+- Unread inbox/feed: empty. Private 1B7E5FA6 iter47 COMMIT pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- Branch clean at `471c0df` (186.47 product `d9d2c0c` + bookkeeping) on
+  origin/main.billy_complete.
+- Coverage: complete=false; implemented/contract 306; live/vision 122; API
+  live_tested false (out_of_scope_by_user).
+- Blockers: 92 bulk external-contract BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS;
+  annual_reports org_inaccessible; residual UI parity open.
+- Next residual candidates (from 186.47 post-mortem): taxRates Momssatser
+  multi-resource; files weak Bilag map; bank recon match isolation; postings
+  no-steal; productPrices nested; contactBalancePayments NA secondary.
+- Prefer dual-count list shells onto greened tools where dual soft-empty allows;
+  GEO NA only with dual soft-empty evidence.
+- Outbox 3849F2B7 continue status. Private 2AAD71D1 residual pointer.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 48)
+
+- Parent `main`: fetch + merge Already up to date.
+- Children: 62 historical tips still show commits ahead of mainline; none carry
+  material unmerged product:
+  - Fractal-only / failed-review scaffolding: majority (58).
+  - Wiki-only tips (`wave5t_ui_auth_discovery_fallback`,
+    `wave5u_probe_contract_codex_fallback`): pages already on mainline; do not
+    re-merge stale wiki index rows.
+  - `ui_auth_credentials_research_codex_fallback` wiki-only optional page not
+    on tip — skip (superseded auth research already on root product path:
+    auth_credentials_pre_submit, credentialed_session_discovery, login surface).
+  - `ui_auth_status` product (browser/models/server/tests): already on mainline
+    via prior integrate (`auth_status` tools live); child tip far behind on UI
+    files (browser ~376 vs tip ~5550 LOC) — skip re-merge.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `471c0df`. Ready RESEARCH residual dual-count/NA product pick. Not finish.
+
+## SYNC (iter 48 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Private 2AAD71D1 residual pointer reacted (+).
+- Saved: empty. No running children (historical only).
+- PREPARE already no-op: parent up to date; no child merges. Tip `471c0df`.
+- Coverage: complete=false; live/vision 122; implemented/contract 306.
+- Ready RESEARCH residual dual-count/NA (prefer dual-count list shells; GEO NA
+  only with dual soft-empty evidence). Not finish.
+
+## RESEARCH (iter 48 / research147)
+
+- Official docs unchanged (ETag wcw4x9hqvu3603, MD5 8b94b0135c91fd15fe54ea33e088a4be).
+- Dual headless residual: all residual tools dual-ok; soft seeds empty == nonsense for
+  contactBalancePayments and other residual families; debtor/creditor real shells dual
+  with Betaling marker false; daybooks/new editor dual (not list); products/new body 190
+  no Pris markers.
+- Decision: NA package ui.parity.contactBalancePayments.* (6 ops) via GEO NA path
+  (research147; live/vision 122→128).
+- Defer: daybooks dual-count weak map; taxRates multi-resource; files Bilag; bankLines
+  match; postings no-steal; productPrices nested.
+- Brief: tmp/grok-research.md (+ node tmp). Dual JSON: tmp/research147_soft_routes_dual.json
+  + tmp/research147_residual_parity_dual.json.
+- Profiles purged. No coverage greening. Not finish. Next PLAN.
+
+## SYNC (iter 48 pre-PLAN)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- research147 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for contactBalancePayments NA package (6 rows).
+- Not finish.
+
+## Plan (iter 48)
+
+- Plan: `plans/2026-08-01T06:50:59.793Z-186.48-ui_contact_balance_payments_not_applicable.md`
+  — research147: NA package ui.parity.contactBalancePayments.* (6 ops) via GEO
+  NA path; inventory live/vision 122→128; NA 80→86; shells 42 unchanged; wiki
+  freeze page; no new tools; complete false; no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC (iter 48 pre-EXECUTE)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- Plan 186.48 + research147 brief present. Ready EXECUTE product NA package
+  contactBalancePayments (root; no children). Not finish.
+
+## Execute (iter 48)
+
+- Producted research147 / plan 186.48: NA package ui.parity.contactBalancePayments.*
+  (6 ops) via GEO NA path (research147 branch + prefix + ROW_COUNT 86).
+- Inventory tests: research147 evidence_ref; CBP six-row asserts; live/vision
+  122→128; NA 80→86; bankPayments/daybooks/postings/taxRates/files stay red.
+- Wiki: ui_contact_balance_payments_not_applicable + _index + peer cross-link.
+- Regenerated coverage: implemented/contract 312; live/vision 128; complete false.
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC (iter 48 pre-INDEPENDENT-REVIEW)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.48 uncommitted: contactBalancePayments NA package; live/vision 128;
+  implemented/contract 312; complete=false; offline 1565 pass.
+- Outbox: ready for IR of NA package. Not finish.
+
+## Independent review (iter 48)
+
+- Product 186.48 contactBalancePayments NA package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (tmp dual JSON not
+  commit; residual probe route phase noise vs soft-routes authority).
+- Six NA rows integrity OK; bankPayments/productPrices/etc stay red; bulk 92
+  red; annual red; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 48 pre-FIX-VERIFY)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.48 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 48 / 186.48)
+
+- IR required fixes: none. Optional N1/N2 no-op (left as-is).
+- lint.sh pass. test.sh offline 1565 passed / 35 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: contactBalancePayments NA 6 green; live/vision 128; NA 86;
+  implemented/contract 312; complete false; bulk 92 external-contract; annual
+  stay red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 48 pre-COMMIT)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.48
+  contactBalancePayments NA package. Not node finish (complete false).
+

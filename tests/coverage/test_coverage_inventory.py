@@ -389,7 +389,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
-    """research138/139/142/143/144: dual-proved geo/reference UI parity is not_applicable."""
+    """research138/139/142/143/144/147: dual-proved geo/reference UI parity is not_applicable."""
 
     _api_manifest, ui_manifest, _egress, status, _report = documents()
     na_rows = [
@@ -416,7 +416,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES:
+        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES:
+            assert "research147" in qual["evidence_ref"]
+            assert "research147" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES:
             assert "research144" in qual["evidence_ref"]
             assert "research144" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES:
@@ -440,6 +443,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert "ui_balance_modifiers" not in row["tool_name"]
         assert "ui_account_groups" not in row["tool_name"]
         assert "ui_contact_balance_postings" not in row["tool_name"]
+        assert "ui_contact_balance_payments" not in row["tool_name"]
         assert "ui_invoice_late_fees" not in row["tool_name"]
         assert "ui_invoice_reminder_associations" not in row["tool_name"]
         assert qual.get("deferred_families") in (None, [])
@@ -495,7 +499,20 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row["implemented"] is True for row in join_meta)
     assert all(row["live_tested"] is True for row in join_meta)
     assert all(row["tool_name"] == "" for row in join_meta)
-    # productPrices must stay red this slice (research143/144 rejected NA)
+    # research147 contactBalancePayments package (6 ops; not bankPayments)
+    contact_balance_payments = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.contactBalancePayments.")
+    ]
+    assert len(contact_balance_payments) == 6
+    assert all(row["parity_status"] == "not_applicable" for row in contact_balance_payments)
+    assert all(row["implemented"] is True for row in contact_balance_payments)
+    assert all(row["live_tested"] is True for row in contact_balance_payments)
+    assert all(row["vision_verified"] is True for row in contact_balance_payments)
+    assert all(row["tool_name"] == "" for row in contact_balance_payments)
+    assert all("research147" in (row.get("evidence") or "") for row in contact_balance_payments)
+    # productPrices must stay red this slice (research143/144/147 rejected NA)
     product_prices = [
         row
         for row in ui_manifest["workflows"]
@@ -504,13 +521,18 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert product_prices
     assert all(row.get("parity_status") != "not_applicable" for row in product_prices)
     assert all(row.get("live_tested") is not True for row in product_prices)
-    # related-shell families must stay red (research144 rejected pure NA)
+    # related-shell families must stay red (research144/147 rejected pure NA)
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
+        "api.bankPayments.",
         "api.daybookBalanceAccounts.",
+        "api.daybooks.",
+        "api.postings.",
         "api.salesTaxRules.",
         "api.salesTaxRulesets.",
+        "api.taxRates.",
+        "api.files.",
     ):
         related = [
             row
@@ -525,6 +547,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 42 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
+    assert status["qualification"]["live_tested_rows"] == 128
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 86
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
