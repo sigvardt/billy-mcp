@@ -5025,3 +5025,9 @@ updated: 2026-08-01T11:10:00Z
 - FIX-VERIFY clean (1585 offline pass; IR ACCEPT). Ready COMMIT 186.55
   ui_bills_create_open package. Not node finish (complete false).
 
+## COMMIT (iter 55)
+
+- `fractal commit` product: ui bills create open dual-count (`fff3d2a`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
