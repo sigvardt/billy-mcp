@@ -2437,12 +2437,18 @@ def apply_ui_reports_open_shell_evidence(row: dict[str, Any]) -> None:
     ]
 
 
-def apply_ui_vat_declarations_list_shell_evidence(row: dict[str, Any]) -> None:
+def apply_ui_vat_declarations_list_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_list: bool = False,
+) -> None:
     """Mark VAT declarations (Momsangivelser) list **shell open** evidence only (research120).
 
     Empty-input tool; path /:org_slug/vat-declarations; h1 Momsangivelser; Periode
     chrome; empty table body valid. Soft aliases rejected. No invent api_vat_*.
-    Does not green annual/exports/settings discovery rows or re-scope salesTaxReturns.
+    Does not green annual/exports/settings discovery rows or salesTaxReturns
+    get/update/bulk UI parity. When ``parity_of_api_list`` is true, dual-counts
+    ``ui.parity.salesTaxReturns.list`` for ``api.salesTaxReturns.list`` (research140).
     """
 
     row["method_or_route"] = (
@@ -2459,7 +2465,8 @@ def apply_ui_vat_declarations_list_shell_evidence(row: dict[str, Any]) -> None:
     ]
     row["filters"] = []
     row["pagination"] = None
-    row["api_row_id"] = None
+    if not parity_of_api_list:
+        row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
         UI_VAT_DECLARATIONS_LIST_MODEL_TEST_REFERENCE,
@@ -2471,9 +2478,16 @@ def apply_ui_vat_declarations_list_shell_evidence(row: dict[str, Any]) -> None:
         "research120 dual-session headless observation + ui_vat_declarations_list product; "
         "list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, "
         "Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; "
-        "does not green annual_reports/exports/settings or re-scope salesTaxReturns; "
+        "does not green annual_reports/exports/settings or salesTaxReturns "
+        "get/update/bulk UI parity; "
+        "API list filters/sort/pagination UI not producted; "
         "vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept)"
     )
+    if parity_of_api_list:
+        row["evidence"] = (
+            f"{row['evidence']}; research140 dual-session reconfirm; "
+            "maps api.salesTaxReturns.list to UI list-shell open only"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
@@ -3681,6 +3695,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":
             apply_ui_transactions_list_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.salesTaxReturns.list":
+            apply_ui_vat_declarations_list_shell_evidence(row, parity_of_api_list=True)
         if geo_ui_not_applicable_api_row(api_row["id"]):
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)

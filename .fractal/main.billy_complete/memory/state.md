@@ -6,24 +6,26 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T02:50:00Z
+updated: 2026-08-01T03:56:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 40 FIX-VERIFY. Product currencies/locales UI not_applicable
-  186.40 uncommitted (live/vision 80; implemented/contract 264). complete false.
+- Continue mode iter 41 pre-COMMIT. FIX-VERIFY clean. PREPARE done. Tip `e26f208` (186.40 currencies/locales UI
+  NA). complete false.
+- Live/vision 81 (39 shell/parity + 42 NA); implemented/contract 265.
 - Discovery still red (1): annual_reports (`ANNUAL_REPORTS_ORG_INACCESSIBLE`).
 - 92 bulk external-contract red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`).
-- Review: currencies/locales UI not_applicable 186.40 **ACCEPT**. Not node finish.
+- Residual UI parity ~259 red (180 non-bulk + bulk parity).
+- Review: salesTaxReturns.list dual-count 186.41 **ACCEPT**; currencies/locales 186.40 **ACCEPT**. Not node finish.
 
 
 ## Verification
 
 - Last product: currencies/locales UI not_applicable freeze (12 rows; total NA 42;
-  live/vision 80). Uncommitted pending COMMIT.
+  live/vision 80) committed at `e26f208`.
 - Offline baseline: 1565 passed non-live (35 deselected).
 - Live baseline inventory: 80 UI live/vision green (38 shells + 42 NA).
 
@@ -62,10 +64,12 @@ updated: 2026-08-01T02:50:00Z
 
 ## Open coverage work
 
-1. EXECUTE: dual-count `ui.parity.transactions.list` (plan 186.36).
-2. `ui.discovery.annual_reports` stays red (Upsedasse).
-3. Residual 29 non-bulk writes: no ticketed product (405 / fixture blocked).
-4. 92 ambiguous bulk stay red until body contract.
+1. PLAN/EXECUTE: dual-count `ui.parity.salesTaxReturns.list` via existing
+   `ui_vat_declarations_list` (research140 dual-proved); get/update/bulk stay red.
+2. `ui.discovery.annual_reports` stays red (Upsedasse; org_inaccessible).
+3. Residual non-bulk UI writes: no ticketed product until dual-proved live shell.
+4. 92 ambiguous bulk stay red (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`; no tools;
+   external_contract_blocker; live_api out_of_scope_by_user).
 
 ## Live UI tools (38 rows)
 
@@ -2963,3 +2967,131 @@ updated: 2026-08-01T02:50:00Z
   reference families.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 41 continue)
+
+- Continue mode: worktree clean at tip `e26f208` (186.40 currencies/locales UI
+  not_applicable freeze on origin/main.billy_complete).
+- Unread inbox/feed/private: empty. Saved: empty.
+- No running children; all historical children terminal (no active steers).
+- complete=false; implemented/contract 264; live/vision 80; 92 bulk red
+  external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; annual NA
+  rejected stay red ANNUAL_REPORTS_ORG_INACCESSIBLE; residual UI parity ~259 red.
+- Outbox: SYNC iter41 post-186.40 residual UI open. Private: residual pointer
+  salesTaxReturns dual-count next.
+- Next PREPARE then residual UI (salesTaxReturns.list dual-count via
+  ui_vat_declarations_list or next dual-proved NA/shell). Not finish.
+
+## PREPARE (iter 41)
+
+- Parent `main`: fetch + merge Already up to date; no merge commit.
+- Children: 157 remote tips with commits ahead of mainline; none have unmerged
+  product to take.
+  - `ui_auth_status`: tip is stale subset (browser ~376 lines vs mainline ~5550;
+    models/server similarly smaller); product already on mainline — do not merge.
+  - `shared_foundation` / early wave1–wave5* product tips: mainline already has
+    equal or larger product; three-dot diffs are historical + fractal scaffold —
+    do not merge.
+  - Wiki-only ahead (wave5sa/wave5n/wave5k review, credentials research): pages
+    already on mainline or superseded (auth_credentials_pre_submit +
+    ui_login_surface_contract + credentialed_session_discovery_protocol) — skip.
+  - Remaining ahead children: init-only, failed-iteration bookkeeping, zero
+    product paths — not merged.
+- No running children. No material integration. No outbox integration note.
+- Dirty: memory/state.md only (SYNC+PREPARE notes). Ready RESEARCH: residual UI
+  parity (salesTaxReturns.list dual-count via ui_vat_declarations_list, or next
+  dual-proved NA/shell). Not finish.
+
+## SYNC pre-RESEARCH (iter 41)
+
+- Unread inbox/feed: empty. Private A617662E residual pointer reacted (+).
+- Saved: empty. No running children.
+- PREPARE already done (parent up to date; no child merges).
+- Ready RESEARCH: dual-count salesTaxReturns.list via ui_vat_declarations_list
+  (or next dual-proved NA/shell); bulk external-contract red; annual
+  org_inaccessible red. Not finish.
+
+## Research (iter 41)
+
+- research140: dual-session headless salesTaxReturns.list UI parity freeze.
+- Docs ETag/MD5 unchanged (`wcw4x9hqvu3603` / `8b94b0135c91fd15fe54ea33e088a4be`).
+- Dual READY; typed `ui_vat_declarations_list` ok both sessions (Momsangivelser,
+  period chrome); soft aliases dual soft-empty body_len 127; nested detail seeds
+  not list shell; no write markers; no API token; no writes.
+- Decision: product **dual-count** `ui.parity.salesTaxReturns.list` onto existing
+  `ui_vat_declarations_list` (same pattern as transactions.list). get/update/bulk
+  parity stay red. No new UI tool.
+- Evidence: tmp/research140_sales_tax_returns_parity_dual.json;
+  brief tmp/grok-research.md.
+- Not finish. Next PLAN → EXECUTE product dual-count.
+
+## SYNC pre-PLAN (iter 41)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- research140 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff for salesTaxReturns.list UI dual-count (1 row).
+- Outbox RESEARCH140 decision posted. Not finish.
+
+## Plan (iter 41)
+
+- Plan: `plans/2026-08-01T03:11:43.929Z-186.41-ui_sales_tax_returns_list_dual_count.md`
+  — research140: dual-count ui.parity.salesTaxReturns.list onto existing
+  ui_vat_declarations_list; inventory live/vision 80→81; wiki dual-count note;
+  no new tools; get/update/bulk stay red; complete false; no children.
+- Ready for EXECUTE (root product; Grok owns remaining work per node seed).
+
+## SYNC pre-EXECUTE (iter 41)
+
+- Unread inbox/feed: empty. Private 5D3948D3 plan pointer reacted (+).
+- Saved: empty. No running children.
+- Plan 186.41 + research140 brief present. Ready EXECUTE product dual-count
+  salesTaxReturns.list (root; no children). Not finish.
+
+## Execute (iter 41)
+
+- Producted research140 / plan 186.41: dual-count ui.parity.salesTaxReturns.list
+  onto ui_vat_declarations_list (parity_of_api_list on VAT applicator).
+- Inventory tests: qualified shells 38→39; live/vision 80→81; get/update/bulk
+  salesTaxReturns parity stay red.
+- Wiki: ui_vat_declarations_list_shell dual-count note + _index desc.
+- Regenerated coverage: implemented/contract 265; live/vision 81; complete false.
+- lint.sh pass (wiki index fixed); test.sh offline **1565 passed**, 35 deselected.
+- No new UI tools. Ready for REVIEW.
+
+## SYNC pre-INDEPENDENT-REVIEW (iter 41)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- EXECUTE 186.41 uncommitted: dual-count salesTaxReturns.list; live/vision 81;
+  implemented/contract 265; complete=false; offline 1565 pass.
+- Outbox: ready for IR of dual-count package. Not finish.
+
+## Independent review (iter 41)
+
+- Product 186.41 salesTaxReturns.list dual-count: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (live re-run optional;
+  comment wording).
+- One dual-count row integrity OK; get/update/bulk red; bulk 92 red; annual red;
+  complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC pre-FIX-VERIFY (iter 41)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- IR ACCEPT 186.41 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 41)
+
+- IR product ACCEPT; no required product fixes (optional N1–N2 deferred).
+- lint.sh pass; test.sh offline **1565 passed**, 35 deselected.
+- check_coverage pass; salesTaxReturns.list dual-count green; live/vision 81;
+  implemented/contract 265; complete false; bulk 92 external-contract; annual
+  NA rejected stay red.
+- Plan post-mortem filled. Wiki lint clean (project + memory).
+- Ready for COMMIT. Not node finish.
+
+## SYNC pre-COMMIT (iter 41)
+
+- Unread inbox/feed/private: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1565 offline pass; IR ACCEPT). Ready COMMIT 186.41
+  salesTaxReturns.list dual-count package. Not node finish (complete false).

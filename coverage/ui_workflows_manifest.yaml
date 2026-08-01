@@ -808,7 +808,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research120 dual-session headless observation + ui_vat_declarations_list product; list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; does not green annual_reports/exports/settings or re-scope salesTaxReturns; vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept)",
+      "evidence": "research120 dual-session headless observation + ui_vat_declarations_list product; list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; does not green annual_reports/exports/settings or salesTaxReturns get/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept)",
       "filters": [],
       "id": "ui.discovery.vat_declarations",
       "implemented": true,
@@ -11397,59 +11397,45 @@
     {
       "api_row_id": "api.salesTaxReturns.list",
       "area": "sales_tax_returns",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxReturns.list",
-      "filters": {},
+      "evidence": "research120 dual-session headless observation + ui_vat_declarations_list product; list shell only (path class /:org_slug/vat-declarations, h1 Momsangivelser, Periode chrome, empty list valid); soft aliases rejected; no invent api_vat_*; does not green annual_reports/exports/settings or salesTaxReturns get/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_vat_declarations_list.json (list frames, accept); research140 dual-session reconfirm; maps api.salesTaxReturns.list to UI list-shell open only",
+      "filters": [],
       "id": "ui.parity.salesTaxReturns.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.salesTaxReturns.list",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/vat-declarations (read-only Momsangivelser list shell open only; soft aliases rejected; empty list valid)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
-        ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
-      },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
+      "pagination": null,
+      "parity_status": "list_shell_open_only",
+      "request_fields": [],
       "response_fields": [
-        "salesTaxReturns[]",
-        "meta.paging"
+        "path_class",
+        "heading",
+        "period_column_visible",
+        "shell_markers_present"
       ],
       "sensitivity": "low",
       "side_effects": "none",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_vat_declarations_list.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_vat_declarations_list",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

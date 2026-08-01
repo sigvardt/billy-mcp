@@ -174,11 +174,17 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    assert status["qualification"]["implemented_rows"] == len(offline_evidence) + 38 + geo_na
-    assert status["qualification"]["contract_tested_rows"] == len(offline_evidence) + 38 + geo_na
+    # 38 shells + dual-count parity lists (incl. salesTaxReturns.list) = 39 UI shells.
+    ui_shell_green = 39
+    assert status["qualification"]["implemented_rows"] == (
+        len(offline_evidence) + ui_shell_green + geo_na
+    )
+    assert status["qualification"]["contract_tested_rows"] == (
+        len(offline_evidence) + ui_shell_green + geo_na
+    )
     # API live remains 0 (out of scope); UI shell rows + geo NA dual-session freezes.
-    assert status["qualification"]["live_tested_rows"] == 38 + geo_na
-    assert status["qualification"]["vision_verified_rows"] == 38 + geo_na
+    assert status["qualification"]["live_tested_rows"] == ui_shell_green + geo_na
+    assert status["qualification"]["vision_verified_rows"] == ui_shell_green + geo_na
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
 
@@ -436,7 +442,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 38 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 39 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
 
 
@@ -472,6 +478,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.transactions.list",
         "ui.discovery.reports",
         "ui.discovery.vat_declarations",
+        "ui.parity.salesTaxReturns.list",
         "ui.discovery.exports",
         "ui.discovery.saft_exports",
         "ui.discovery.addons",
@@ -512,6 +519,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.transactions.list": "ui_transactions_list",
         "ui.discovery.reports": "ui_reports_open",
         "ui.discovery.vat_declarations": "ui_vat_declarations_list",
+        "ui.parity.salesTaxReturns.list": "ui_vat_declarations_list",
         "ui.discovery.exports": "ui_exports_open",
         "ui.discovery.saft_exports": "ui_saft_exports_open",
         "ui.discovery.addons": "ui_addons_open",
@@ -545,7 +553,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 38
+    assert len(qualified) == 39
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -581,6 +589,24 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert "api.transactions.list" in transactions_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in transactions_parity["evidence"]
+    sales_tax_returns_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.salesTaxReturns.list"
+    )
+    assert sales_tax_returns_parity["api_row_id"] == "api.salesTaxReturns.list"
+    assert sales_tax_returns_parity["tool_name"] == "ui_vat_declarations_list"
+    assert "api.salesTaxReturns.list" in sales_tax_returns_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in sales_tax_returns_parity["evidence"]
+    assert "research140" in sales_tax_returns_parity["evidence"]
+    for red_id in (
+        "ui.parity.salesTaxReturns.get",
+        "ui.parity.salesTaxReturns.update",
+        "ui.parity.salesTaxReturns.bulk_save",
+        "ui.parity.salesTaxReturns.bulk_delete",
+    ):
+        red_row = next(row for row in remaining if row["id"] == red_id)
+        assert red_row["discovered"] is False
+        assert red_row["live_tested"] is False
+        assert red_row["parity_status"] == "discovery_required"
     transactions_discovery = next(
         row for row in qualified if row["id"] == "ui.discovery.transactions"
     )
