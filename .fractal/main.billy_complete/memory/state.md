@@ -6,16 +6,169 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T19:30:00Z
+updated: 2026-08-01T19:05:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **65** COMMIT 186.65 (ui clients get open + contacts egress) product `9d6570a` (ui products create open).
-- live/vision **166**; implemented/contract **350**; complete **false**.
+- Continue mode iter **66** after COMMIT 186.65 (ui clients get open + contacts egress) tip `73c8ebc` / product `66ac07a`.
+- live/vision **167**; implemented/contract **351**; complete **false**.
 - Not node finish (bulk external-contract red, annual red, residual UI parity open).
+
+## SYNC (iter 66)
+
+- Continue mode restart after iter65 COMMIT (`66ac07a` ui_clients_get_open + contacts path_allow; bookkeeping `73c8ebc`).
+- Unread inbox/feed: empty. Saved: empty.
+- Private BD018437 (iter65 COMMIT done) + AAE42E87 (pre-COMMIT) reacted (+).
+- No running children. All historical children terminal (completed/exited/killed/stopped).
+- No parent directives.
+- Tip `73c8ebc` == origin/main.billy_complete (branch clean).
+- Coverage: implemented/contract **351**; live/vision **167**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open.
+- Next product candidates (research, not greened): products/invoices/bills get-open
+  after scoped data-plane egress (pattern from contacts); special.invoice_email if
+  durable client save dual holds; nested salesTaxRules isolation only with dual;
+  no postings/bankLines steal; no bulk greening without official schema.
+- Last product: 186.65 ui_clients_get_open (live/vision 166→167; contract 350→351).
+- Outbox 8093E40E iter66 SYNC resume. Ready PREPARE. Not finish.
+
+## PREPARE (iter 66)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 historical children; none mid-iteration product.
+- Local ahead (62 branches, mostly 1-commit review/exit noise) → **skip all merges**.
+- Remote `origin/main.billy_complete.*` ahead of tip `73c8ebc`: **0**.
+- Material larger-on-child product files (src/tests/coverage): **0**.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `73c8ebc` / product 186.65 ui_clients_get_open. Ready RESEARCH residual dual-count/NA (prefer products/invoices/bills get-open after scoped data-plane egress pattern; special.invoice_email if durable client save dual holds; nested salesTaxRules isolation only with dual; no postings/bankLines steal; no bulk greening). Not finish.
+
+## SYNC (iter 66 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 628CBAAF (SYNC done) + 289962B6 (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `73c8ebc`.
+- Coverage: implemented/contract 351; live/vision 167; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer products/invoices/bills get-open
+  after scoped data-plane egress pattern from 186.65 contacts; special.invoice_email
+  if durable client save dual holds; nested salesTaxRules isolation only with dual;
+  no weak NA; no postings/bankLines steal; no bulk greening). Not finish.
+
+## RESEARCH (iter 66 / research165)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Contacts egress works dual (`GET /v2/contacts` 200); org contacts **empty**
+  (`/:org_slug/clients/empty` dual).
+- Residual products/invoices/bills GET still `ERR_BLOCKED_BY_CLIENT` dual;
+  products/invoices/bills get detail_ready **false** dual; invoice_email n/a.
+- Decision: **ACCEPT** products data-plane path_allow + `ui_products_get_open`
+  (maps products.get). DEFER invoices.get/bills.get/invoice_email/contacts.update;
+  REJECT bulk/annual/salesTaxRules NA steal.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research165_focus_dual.json`. Profiles purged. api_token_used false.
+- No coverage green.
+- Ready PLAN 186.66.
+
+## SYNC (iter 66 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7C94B790 (research165) + 9225B6A9 (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research165 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: scoped products egress path_allow (+ accounts GET
+  as needed) + `ui_products_get_open` (maps products.get; live/vision 167→~168).
+  DEFER invoices.get/bills.get/invoice_email/contacts.update. Not finish.
+
+## PLAN (iter 66 / 186.66)
+
+- Plan file
+  `plans/2026-08-01T19:12:48.676Z-186.66-ui_products_get_open_products_egress.md`:
+  scoped products data-plane path_allow (+ accounts GET; optional rulesets if
+  seed needs) + `ui_products_get_open` (maps products.get); live/vision 167→168;
+  implemented/contract 351→352; root-only Grok; no children; residual
+  invoice_email + invoices/bills get + products update/delete + bulk/annual stay
+  red; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 66 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 3FBD2D5B (pre-PLAN) + 48C7AA97 (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.66 + research165 brief present. Tip `73c8ebc`.
+- Ready EXECUTE product ui_products_get_open + products path_allow (root; no children). Not finish.
+
+## EXECUTE (iter 66 / 186.66)
+
+- Egress expanded on `api.billysbilling.com` path_allow: GET/POST/DELETE `/v2/products`,
+  GET `/v2/accounts`, GET `/v2/salesTaxRulesets` (keep contacts + countries).
+- Dual: GET `/v2/products` **200**; catalog seed POST products **200** via
+  Opret produkter + Gem produkt (name + unitPrice + salesTaxRuleset "Normalt salg
+  af varer"; account prefilled). Inventory Opret produkt seed fails 422 without
+  inventoryAccountId.
+- **Blocker for ui_products_get_open greening:** product detail surface not
+  openable dual — table-item/product-name click stays on list; soft
+  `/products/:id` and `/edit` never hydrate form (nav chrome only). No Slet on
+  list. Plan fallback: **egress-only** this slice; `products.get` stays red.
+- Residual R18666 product cleaned (SPA `x-access-token` DELETE + list empty dual).
+- Tests: unit egress allow products/accounts/rulesets; deny invoices/bills;
+  coverage inventory path_allow asserts. Generator `build_browser_egress` synced.
+- Coverage: live/vision **167**; implemented/contract **351**; complete false;
+  products.get residual red; bulk 92 red; annual red.
+- lint.sh pass. Offline test.sh **1610 passed** / 42 deselected.
+- No ui_products_get_open tool this slice (would be false green). Ready REVIEW.
+  Not finish.
+
+## SYNC (iter 66 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C8045996 (EXECUTE done) + 819F2717 (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.66 uncommitted: products egress path_allow only; no get tool;
+  live/vision 167; implemented/contract 351; offline 1610 pass; complete=false.
+- Ready for IR of egress-only product (plan fallback). Not finish.
+
+## IR (iter 66 / 186.66)
+
+- Product products egress-only (get deferred): **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (evidence wording
+  list/seed not “detail”; inventory DELETE assert; DELETE breadth).
+- products.get stays red (correct); list/create shells unchanged; no false green;
+  live/vision 167; contract 351; complete false; bulk 92 red; annual red; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 66 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 098CFF69 (IR ACCEPT) + C8B28DBB (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.66 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 66 / 186.66)
+
+- IR required fixes: none. Optional N1/N2/N3 no-op (left as-is).
+- lint.sh pass. test.sh offline **1610 passed** / 42 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: products.get stays discovery_required (not greened); products
+  list/create shells unchanged; path_allow products/accounts/salesTaxRulesets present;
+  live/vision 167; implemented/contract 351; complete false; bulk 92 external-contract;
+  annual stay red; API live false (out_of_scope_by_user).
+- Plan post-mortem already filled. No ui-full (not complete).
+- Ready COMMIT 186.66 products egress package. Not node finish.
+
+## SYNC (iter 66 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 60EEE1FF (FIX-VERIFY done) + DF3AA917 (pre-FIX-VERIFY) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1610 offline pass; IR ACCEPT). Ready COMMIT 186.66
+  products egress package. Not node finish (complete false).
 
 ## PREPARE (iter 65)
 

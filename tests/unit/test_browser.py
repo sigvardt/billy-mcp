@@ -343,7 +343,7 @@ def test_browser_policy_loads_only_explicit_manifest_allow_hosts(tmp_path: Path)
 
 
 def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
-    """Research164: production egress must path_allow contacts GET/POST/DELETE."""
+    """Research164/165: production egress path_allow contacts + products data planes."""
 
     policy = BrowserEgressPolicy.from_manifest(
         Path(__file__).resolve().parents[2] / "coverage" / "browser_egress.yaml"
@@ -353,9 +353,15 @@ def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
     assert policy.allows("https://api.billysbilling.com/v2/contacts", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/contacts/abc", "DELETE")
     assert policy.allows("https://api.billysbilling.com/v2/countries", "GET")
-    assert not policy.allows("https://api.billysbilling.com/v2/products", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/products", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/products/abc", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/products", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/products/abc", "DELETE")
+    assert policy.allows("https://api.billysbilling.com/v2/accounts", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/salesTaxRulesets", "GET")
     assert not policy.allows("https://api.billysbilling.com/v2/invoices", "GET")
     assert not policy.allows("https://api.billysbilling.com/v2/invoices/x/emails", "POST")
+    assert not policy.allows("https://api.billysbilling.com/v2/bills", "GET")
 
 
 def test_browser_policy_rejects_missing_manifest(tmp_path: Path) -> None:

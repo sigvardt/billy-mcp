@@ -4767,19 +4767,21 @@ def build_browser_egress() -> dict[str, Any]:
                 "api_client_action": "exclusive_allow",
                 "owner": "ui_auth",
                 "purpose": (
-                    "Path-scoped browser XHR for headless login, shell settle, and "
-                    "typed contacts UI get/list/create-seed cleanup only"
+                    "Path-scoped browser XHR for headless login, shell settle, contacts UI, "
+                    "and products UI get/list/create-seed cleanup only"
                 ),
                 "condition": (
-                    "browser auth/bootstrap paths plus scoped UI contacts data-plane "
-                    "(research164); never full API browse"
+                    "browser auth/bootstrap paths plus scoped UI contacts and products "
+                    "data-planes (research164/165); never full API browse"
                 ),
                 "evidence": (
                     "research100 headless credentialed discovery: POST /v2/user/login "
                     "then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: "
-                    "GET/POST/DELETE /v2/contacts and GET /v2/countries required for clients "
-                    "list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under "
-                    "auth-only path_allow); products/invoices/emails paths still denied"
+                    "GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; "
+                    "research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts "
+                    "and GET /v2/salesTaxRulesets for products list/detail and disposable seed "
+                    "(was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); "
+                    "invoices/emails paths still denied"
                 ),
                 "browser_path_allows": [
                     {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
@@ -4796,6 +4798,11 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["POST"], "path": "/v2/contacts"},
                     {"match": "prefix", "methods": ["DELETE"], "path": "/v2/contacts"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/countries"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/products"},
+                    {"match": "prefix", "methods": ["POST"], "path": "/v2/products"},
+                    {"match": "prefix", "methods": ["DELETE"], "path": "/v2/products"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/accounts"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/salesTaxRulesets"},
                 ],
                 "test_references": [
                     TEST_REFERENCE,

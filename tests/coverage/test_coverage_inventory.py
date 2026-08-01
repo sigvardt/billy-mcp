@@ -1269,6 +1269,22 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         rule.get("path") == "/v2/countries" and "GET" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
+    assert any(
+        rule.get("path") == "/v2/products" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/products" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/accounts" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/salesTaxRulesets" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
     assert by_host["api.billy.dk"]["browser_action"] == "deny"
 
 
