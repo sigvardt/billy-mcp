@@ -6156,3 +6156,151 @@ updated: 2026-08-01T15:55:00Z
 - `fractal commit` product: ui suppliers create open discovery (`b261b21`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 63)
+
+- Continue mode restart. Unread inbox/feed: empty. Saved: empty.
+- Private DDC9FC17 (iter62 COMMIT done at b261b21) + 096AA500 (pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- Tip `cebc208` == origin/main.billy_complete (186.62 product + bookkeeping).
+- Coverage: implemented/contract **341**; live/vision **157**; GEO NA 100; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open.
+- Last product: 186.62 `ui_suppliers_create_open` discovery form_open (live/vision 156→157;
+  contract 340→341; no contacts.create re-count).
+- Next residual (186.62 post-mortem / research161): prefer special.invoice_email with
+  disposable client save dual + draft dual + send dialog dual if client save stabilizes;
+  else products.create form dual if CTA stable; nested salesTaxRules isolation;
+  no postings/bankLines steal; no bulk greening without official schema.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 63)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 refs; **0** local children with commits ahead of tip (`rev-list main.billy_complete..<child>` empty for all).
+- Remote-ahead product review (75 remotes with commits; 17 with non-fractal paths) vs tip `cebc208` → **skip all merges**:
+  - Unique non-fractal path missing on tip: only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` (from `ui_auth_credentials_research_codex_fallback`) — skip (superseded auth research already on root product path; same decision as iters 51–62).
+  - `ui_auth_status` SRC/tests: tip much larger (browser ~258k vs child ~13k; product already live).
+  - `shared_foundation` / early wave* product branches: tip supersedes (larger product code already integrated).
+  - Remaining remote-ahead tips: fractal-only / failed-review scaffolding or older wave product already integrated; no unique src/tests tip lacks.
+  - Material larger-on-child non-fractal product files: **0**.
+- No child merges this iteration. No integration outbox (no material merge).
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `cebc208` / product 186.62 suppliers create. Ready RESEARCH residual dual-count/NA (prefer special.invoice_email with disposable client save dual per research161 / 186.62 post-mortem; else products.create form dual if CTA stable; no bulk greening; no postings/bankLines steal). Not finish.
+
+## SYNC (iter 63 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 3726E55D (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `cebc208`.
+- Coverage: implemented/contract 341; live/vision 157; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer special.invoice_email with
+  disposable client save dual per research161/186.62 post-mortem; else
+  products.create form dual if CTA stable; no weak NA; no postings/bankLines
+  steal; no bulk greening). Not finish.
+
+## RESEARCH (iter 63 / research162)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Focus dual: products/quotes/recurring form_open_ready **false** (strict; rejects search-chrome false positive from research161 products).
+- Client save: name+registration filled; Gem did not persist; no disposable; cleanup clean.
+- Soft long-wait dual: productPrices body **127** == nonsense **127** dual; annual Upsedasse **469** dual; products/new chrome **190**.
+- Detail-open dual true was **false positive** (header row drawer; table td_count 0).
+- Decision: **ACCEPT** productPrices dual-NA (7 rows; live/vision 157→164; NA 100→107).
+  **DEFER** special.invoice_email / products.create / quotes create / detail gets.
+  **REJECT** steals, bulk greening, annual green.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research162_focus_dual.json`, `tmp/research162_soft_longwait_dual.json`,
+  `tmp/research162_detail_dual.json`.
+- Profiles purged. api_token_used false. No coverage green. Ready PLAN 186.63.
+
+## SYNC (iter 63 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 80389626 (research162 done) + 78CBFE82 (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research162 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: productPrices dual-NA (7 rows; live/vision
+  157→164; NA 100→107; contract 341 unchanged unless generator flags match prior
+  NA packages). DEFER invoice_email + products.create. Not finish.
+
+## PLAN (iter 63 / 186.63)
+
+- Plan file
+  `plans/2026-08-01T16:55:25.886Z-186.63-ui_product_prices_not_applicable.md`:
+  productPrices dual-NA (7 rows) + generator/tests/wiki; **no** new ui tools;
+  live/vision 157→164; NA 100→107; implemented/contract 341→348; GEO shell 57
+  unchanged; root-only Grok; no children; residual invoice_email + products.create
+  + bulk/annual stay red; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 63 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C9E75A7E (pre-PLAN) + 14DE87BE (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.63 + research162 brief present. Tip `cebc208`.
+- Ready EXECUTE product ui productPrices dual-NA freeze (root; no children).
+  Not finish.
+
+## EXECUTE (iter 63 / 186.63)
+
+- Producted research162 / plan 186.63: productPrices dual-NA freeze (7 rows).
+- Generator: `api.productPrices.` + RESEARCH162 + ROW_COUNT 107; applicator branch.
+- Inventory tests: NA 107 / live/vision 164 / implemented-contract 348; removed
+  stale productPrices-must-stay-red assert.
+- Wiki: `ui_product_prices_not_applicable.md` + products list / specials cross-links;
+  wiki update index.
+- Coverage regenerated: live/vision **164**; implemented/contract **348**;
+  complete false; invoice_email + products.create residual red; bulk 92 red; annual red.
+- lint.sh pass (memory wrap fix). offline test.sh **1598 passed**, 40 deselected.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 63 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 065AC2A8 (EXECUTE done) + C76A0D79 (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.63 uncommitted: productPrices dual-NA 7 rows; live/vision 164;
+  implemented/contract 348; offline 1598 pass; complete=false.
+- Ready for IR of product. Not finish.
+
+## IR (iter 63 / 186.63)
+
+- Product productPrices dual-NA freeze: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (nonsense path id
+  naming; untracked plan/wiki ride commit; API bulk still red offline).
+- productPrices 7 UI NA green; products.list stays ui_products_list; residual
+  invoice_email + products.create red; bulk 92 red; annual red; complete false;
+  API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 63 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 81319806 (IR ACCEPT) + A7DD81E6 (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.63 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 63 / 186.63)
+
+- IR required fixes: none. Optional N1/N2/N3 no-op (left as-is).
+- lint.sh pass. test.sh offline 1598 passed / 40 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: productPrices 7 NA green; products.list stays clients tool path
+  ui_products_list; live/vision 164; NA 107; implemented/contract 348; complete
+  false; bulk 92 external-contract; annual stay red; invoice_email residual red;
+  products.create red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 63 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8092CD90 (FIX-VERIFY done) + 4F4DCD9C (pre-FIX-VERIFY) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1598 offline pass; IR ACCEPT). Ready COMMIT 186.63
+  productPrices dual-NA package. Not node finish (complete false).

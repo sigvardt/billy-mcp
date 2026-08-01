@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-07-31T21:36:36Z
+updated: 2026-08-01T16:58:05Z
 ---
 
 # billy_mcp
@@ -80,6 +80,8 @@ updated: 2026-07-31T21:36:36Z
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.
 
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
+
+[[ui_product_prices_not_applicable|ui_product_prices_not_applicable]]: Dual-session research162 freeze — no equivalent mit.billy.dk workflow for productPrices API parity; soft-empty path matches nonsense; products/Produkter shell is products only; NA accepted for productPrices only.
 
 [[ui_products_import_shell|ui_products_import_shell]]: Read-only headless ui_products_import contract for Billy products CSV import shell open only.
 

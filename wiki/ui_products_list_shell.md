@@ -30,6 +30,7 @@ the outside-git UI identity file.
 
 ## Explicit non-claims
 
+- ProductPrices UI parity is a separate soft-empty NA freeze: [[ui_product_prices_not_applicable]] (not dual-counted onto this shell)
 - No product create/import/archive mutations
 - No API list filter/sort/pagination UI
 - No live API read-back

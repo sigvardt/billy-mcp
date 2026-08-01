@@ -22,7 +22,7 @@ DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 
 # Dual-proved geo/reference UI families (research138 + research139 + research142
 # + research143 + research144 + research147 + research148 + research149 +
-# research150 specials delivery/logs): no
+# research150 specials delivery/logs + research162 productPrices): no
 # equivalent mit.billy.dk workflow (nav absence + soft-empty path class ==
 # nonsense). research139 adds currencies/locales after dual path contrast.
 # research142 adds accountNatures/balanceModifiers after residual dual soft-empty.
@@ -33,6 +33,8 @@ DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
 # research149 adds invoiceReminders (5 ops; no singular update/delete in docs).
 # research150 adds specials invoice_delivery + invoice_logs only (exact ids; never
 # bare api.special. which would green invoice_email/files_upload/user_*).
+# research162 adds productPrices (7 ops including singular delete; products list
+# shell is products only — not a productPrices workflow).
 GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.accountGroups.",
     "api.accountNatures.",
@@ -48,13 +50,14 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.invoiceReminderAssociations.",
     "api.invoiceReminders.",
     "api.locales.",
+    "api.productPrices.",
     "api.special.invoice_delivery",
     "api.special.invoice_logs",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 100  # prior 98 + research150 specials delivery+logs 2 ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = 107  # prior 100 + research162 productPrices 7 ops
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
     {"accountNatures", "balanceModifiers"}
@@ -66,6 +69,7 @@ GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES: frozenset[str] = frozenset(
 GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES: frozenset[str] = frozenset({"contactBalancePayments"})
 GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES: frozenset[str] = frozenset({"contactPersons"})
 GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES: frozenset[str] = frozenset({"invoiceReminders"})
+GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES: frozenset[str] = frozenset({"productPrices"})
 # Exact full API special row ids (resource segment is "special" for all specials).
 GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS: frozenset[str] = frozenset(
     {"api.special.invoice_delivery", "api.special.invoice_logs"}
@@ -4020,6 +4024,8 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     research150: specials invoice_delivery + invoice_logs residual soft-empty dual
     (dedicated freeze; settings Levering is email-only string, not e-invoice/logs
     workflow; invoices shell lacks e-invoice/log markers).
+    research162: productPrices residual soft-empty dual (dedicated freeze;
+    products/Produkter shell is products only — not a productPrices workflow).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -4030,6 +4036,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
     is_research150 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
     is_research149 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES
     is_research148 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES
@@ -4038,7 +4045,33 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research150:
+    if is_research162:
+        research_id = "research162"
+        evidence_ref = "research162_product_prices_dual"
+        nonsense_path = "zz-r162-none"
+        dual_agree_flag = "dual_agree_soft_empty_productPrices"
+        family_label = "productPrices"
+        contrast_shells = (
+            "products/products_import/invoices/clients/suppliers/uploads/"
+            "daybooks/bank_recon/settings_vat"
+        )
+        list_heading_suffix = (
+            "/Produkter/import shell/Fakturaer/Kunder/Leverandører/Bilag/"
+            "daybooks editor/Bankkonti/Afstemning/Momssatser"
+        )
+        contrast_controls = [
+            "products",
+            "products_import",
+            "invoices",
+            "clients",
+            "suppliers",
+            "uploads",
+            "daybooks/new",
+            "bank_reconciliation",
+            "settings_vat",
+            nonsense_path,
+        ]
+    elif is_research150:
         research_id = "research150"
         evidence_ref = "research150_specials_invoice_delivery_logs_dual"
         nonsense_path = "zz-research150-no-such-route"

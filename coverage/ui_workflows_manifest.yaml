@@ -11128,276 +11128,393 @@
     {
       "api_row_id": "api.productPrices.get",
       "area": "product_prices",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.get",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.get (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "productPrice"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.list",
       "area": "product_prices",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.list",
-      "filters": {},
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.productPrices.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.list (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "productPrices[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.create",
       "area": "product_prices",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.create",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.create (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "productPrice"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates productPrice",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.update",
       "area": "product_prices",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.update",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.update (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "productPrice"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates productPrice",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.delete",
       "area": "product_prices",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.delete",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.delete (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes productPrice",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.bulk_save",
       "area": "product_prices",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.bulk_save",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.bulk_save; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.bulk_save",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.bulk_save",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.bulk_save (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "json_object_root"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.productPrices.bulk_delete",
       "area": "product_prices",
-      "cleanup": "unknown until the bulk contract is published by Billy official docs or live API scope is re-opened; external_contract_blocker active",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.productPrices.bulk_delete",
+      "evidence": "research162 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_soft_empty_productPrices true; candidate productPrices path classes soft-empty identical to nonsense (zz-r162-none); contrast products/products_import/invoices/clients/suppliers/uploads/daybooks/bank_recon/settings_vat real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.productPrices.bulk_delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* productPrices tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research162_product_prices_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.productPrices.bulk_delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.productPrices.bulk_delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.productPrices.bulk_delete (research162 dual-session: no nav label/href for productPrices; candidate path classes soft-empty SPA chrome-only body_len 127 h1_count 0 identical to nonsense paths; known list shells contrast with h1 Fakturaer/Produkter/Posteringer/Produkter/import shell/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Bankkonti/Afstemning/Momssatser; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "ids[]"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "products",
+          "products_import",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "bank_reconciliation",
+          "settings_vat",
+          "zz-r162-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research162_product_prices_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
       "response_fields": [],
-      "sensitivity": "unknown",
-      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof; blocked by external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

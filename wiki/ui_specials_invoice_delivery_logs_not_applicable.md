@@ -42,7 +42,8 @@ Exact full API ids only (never bare `api.special.`).
 
 Peer freezes: [[ui_invoice_reminders_not_applicable]],
 [[ui_contact_persons_not_applicable]],
-[[ui_geo_cities_not_applicable]].
+[[ui_geo_cities_not_applicable]],
+[[ui_product_prices_not_applicable]].
 
 ## Dual-session evidence (non-sensitive)
 
