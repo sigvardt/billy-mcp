@@ -30,6 +30,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
+    UiClientsDeleteOpenSuccess,
     UiClientsGetOpenSuccess,
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
@@ -642,6 +643,12 @@ class UiClientsUpdateOpenService(Protocol):
     """Injectable seam for the read-only clients update (Ret) form open observation."""
 
     async def ui_clients_update_open(self) -> UiClientsUpdateOpenSuccess | ToolError: ...
+
+
+class UiClientsDeleteOpenService(Protocol):
+    """Injectable seam for the read-only clients delete chrome (Mere) observation."""
+
+    async def ui_clients_delete_open(self) -> UiClientsDeleteOpenSuccess | ToolError: ...
 
 
 class UiSuppliersCreateOpenService(Protocol):
@@ -1633,6 +1640,107 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser clients update form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_clients_delete_open(self) -> UiClientsDeleteOpenSuccess | ToolError:
+        """Open client delete chrome (Mere → Slet kontakt) for the authenticated UI session.
+
+        Research167: open /:org_slug/clients, open non-header contact detail
+        (/contacts/:id/customer), open Mere, classify Slet kontakt visibility.
+        Never confirm Slet / permanent delete / Arkivér. Distinct from get/update/create.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_clients_delete_changed_error()
+
+            clients_url = f"https://mit.billy.dk/{slug}/clients"
+            await page.goto(clients_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_clients_delete_changed_error()
+                if _is_clients_new_soft_url(page.url):
+                    return _ui_clients_delete_changed_error()
+
+                if await _has_clients_delete_chrome_signature(page):
+                    flags = await _clients_delete_chrome_flags(page)
+                    return UiClientsDeleteOpenSuccess(
+                        detail_open=True,
+                        mere_open=flags["mere_open"],
+                        slet_kontakt_visible=flags["slet_kontakt_visible"],
+                        arkiver_kontakt_visible=flags["arkiver_kontakt_visible"],
+                        primary_slet_absent=flags["primary_slet_absent"],
+                        shell_markers_present=True,
+                    )
+
+                if _is_clients_detail_url(page.url) and await _has_clients_detail_signature(
+                    page, slug
+                ):
+                    # Capture primary chrome before Mere (Slet should be absent).
+                    pre = await _clients_delete_primary_flags(page)
+                    clicked_mere = await _click_clients_mere_action(page)
+                    if clicked_mere:
+                        await _await_page_settle(page)
+                        if await _has_clients_delete_chrome_signature(page):
+                            flags = await _clients_delete_chrome_flags(page)
+                            # Prefer pre-Mere primary observation for primary_slet_absent.
+                            return UiClientsDeleteOpenSuccess(
+                                detail_open=True,
+                                mere_open=True,
+                                slet_kontakt_visible=flags["slet_kontakt_visible"],
+                                arkiver_kontakt_visible=flags["arkiver_kontakt_visible"],
+                                primary_slet_absent=pre["primary_slet_absent"],
+                                shell_markers_present=True,
+                            )
+                        continue
+                    return _ui_clients_delete_changed_error()
+
+                if _is_clients_list_url(page.url) and await _has_clients_list_heading(page):
+                    opened = await _click_clients_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_clients_delete_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the clients delete chrome observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser clients delete chrome observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5361,6 +5469,88 @@ async def _has_clients_update_form_signature(page: LoginPage) -> bool:
         return False
 
 
+async def _clients_delete_primary_flags(page: LoginPage) -> dict[str, bool]:
+    """Primary detail chrome before Mere — Slet should not be a primary control."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:1500]
+    except Exception:
+        body = ""
+    # Primary chrome research167: Opret/Ret/Mere without Slet kontakt label.
+    slet_kontakt = bool(re.search(r"Slet kontakt", body, re.I))
+    # Standalone primary Slet button text without "Slet kontakt" menu wording.
+    standalone_slet = bool(re.search(r"\bSlet\b", body)) and not slet_kontakt
+    return {
+        "primary_slet_absent": not slet_kontakt and not standalone_slet,
+        "slet_kontakt_visible": slet_kontakt,
+    }
+
+
+async def _clients_delete_chrome_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII delete chrome flags after Mere (research167). Never confirms delete."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:1800]
+    except Exception:
+        body = ""
+    slet_kontakt = bool(re.search(r"Slet kontakt", body, re.I))
+    arkiver = bool(re.search(r"Arkiv[eé]r kontakt", body, re.I))
+    mere_label = bool(re.search(r"\bMere\b", body))
+    # Mere is open when delete/archive menu items are visible on detail path.
+    mere_open = slet_kontakt or arkiver
+    return {
+        "mere_open": mere_open and mere_label,
+        "slet_kontakt_visible": slet_kontakt,
+        "arkiver_kontakt_visible": arkiver,
+        # After Mere, primary chrome assessment is historical; default true when
+        # delete lives under Mere (Slet kontakt wording, not a lone primary Slet).
+        "primary_slet_absent": slet_kontakt,
+    }
+
+
+async def _has_clients_delete_chrome_signature(page: LoginPage) -> bool:
+    """Strict delete-chrome signature — detail path + Mere menu + Slet kontakt."""
+
+    try:
+        if _is_clients_new_soft_url(page.url):
+            return False
+        if not _is_clients_detail_url(page.url):
+            return False
+        flags = await _clients_delete_chrome_flags(page)
+        return bool(flags.get("mere_open") and flags.get("slet_kontakt_visible"))
+    except Exception:
+        return False
+
+
+async def _click_clients_mere_action(page: LoginPage) -> bool:
+    """Click Mere/More on contact detail without Slet confirm. Research167 delete open."""
+
+    live = cast(Any, page)
+    for selector in ("text=Mere", "text=More"):
+        try:
+            mere = live.locator(selector)
+            count = int(await mere.count())
+            for index in range(min(count, 6)):
+                el = mere.nth(index)
+                try:
+                    if await el.is_visible():
+                        txt = ""
+                        try:
+                            txt = (await el.inner_text() or "").strip()
+                        except Exception:
+                            txt = ""
+                        # Avoid menu items that embed "Mere" inside longer labels.
+                        if txt and not re.fullmatch(r"Mere|More", txt, re.I):
+                            continue
+                        await el.click()
+                        return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    return False
+
+
 async def _has_bank_accounts_list_signature(page: LoginPage) -> bool:
     """Verify the research105 bank accounts list heading and connect CTA without clicking."""
 
@@ -6941,6 +7131,15 @@ def _ui_clients_update_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy clients update form interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_clients_delete_changed_error() -> ToolError:
+    """Fail closed when the clients delete chrome no longer matches research167."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy clients delete chrome interface no longer matches the recorded signature.",
     )
 
 

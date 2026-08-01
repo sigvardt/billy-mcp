@@ -45,6 +45,8 @@ updated: 2026-08-01T20:08:46Z
 
 [[ui_clients_create_open_shell|ui_clients_create_open_shell]]: Read-only headless ui_clients_create_open contract for Billy clients create dialog form open only (research160).
 
+[[ui_clients_delete_open_shell|ui_clients_delete_open_shell]]: Read-only Billy UI tool that opens a client contact detail, opens Mere, and classifies Slet kontakt delete chrome without confirming deletion.
+
 [[ui_clients_get_open_shell|ui_clients_get_open_shell]]: Read-only headless ui_clients_get_open contract for Billy contact customer profile get/open only (research164).
 
 [[ui_clients_list_shell|ui_clients_list_shell]]: Read-only headless ui_clients_list contract for Billy clients list shell open only.

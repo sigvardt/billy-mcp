@@ -28,6 +28,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsListSuccess,
     UiClientsCreateOpenSuccess,
+    UiClientsDeleteOpenSuccess,
     UiClientsGetOpenSuccess,
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
@@ -9293,6 +9294,217 @@ def test_ui_clients_update_open_rejects_list_only(tmp_path: Path) -> None:
     )
 
     result = asyncio.run(runtime.ui_clients_update_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
+def _clients_delete_shell_controls(
+    page_holder: dict[str, FakeLoginPage],
+) -> dict[str, FakeLoginControl]:
+    def open_detail() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/contacts/contact-1/customer"
+        page.controls["body"] = FakeLoginControl(
+            text="Acme Client (Kunde) Opret Ret Mere Fakturaer Overblik Menu"
+        )
+        page.controls["body"].bind(page.events, "body")
+        page.controls["text=Mere"] = FakeLoginControl(text="Mere", on_click=open_mere)
+        page.controls["text=Mere"].bind(page.events, "text=Mere")
+        page.controls["text=Ret"] = FakeLoginControl(text="Ret")
+        page.controls["text=Ret"].bind(page.events, "text=Ret")
+
+    def open_mere() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/contacts/contact-1/customer"
+        page.controls["body"] = FakeLoginControl(
+            text=(
+                "Acme Client (Kunde) Opret Ret Mere Indbetaling Udbetaling "
+                "Kontoudtog Arkivér kontakt Slet kontakt Fakturaer Overblik Menu"
+            )
+        )
+        page.controls["body"].bind(page.events, "body")
+        page.controls["text=Mere"] = FakeLoginControl(text="Mere")
+        page.controls["text=Mere"].bind(page.events, "text=Mere")
+        page.controls["text=Slet kontakt"] = FakeLoginControl(text="Slet kontakt")
+        page.controls["text=Slet kontakt"].bind(page.events, "text=Slet kontakt")
+
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Kunder"),
+        "body": FakeLoginControl(text="Kunder Opret kontakt Mere Navn E-mail"),
+        "text=Opret kontakt": FakeLoginControl(text="Opret kontakt"),
+        "a[href*='/test-org-slug/contacts/'], a[href*='/test-org-slug/clients/']": FakeLoginControl(
+            count=0, visible=False
+        ),
+        "table tbody tr, [role='row']": FakeLoginControl(
+            text="Acme Client acme@example.invalid",
+            on_click=open_detail,
+        ),
+        "text=Mere": FakeLoginControl(count=0, visible=False),
+        "text=Ret": FakeLoginControl(count=0, visible=False),
+        "text=Slet kontakt": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+
+
+def test_ui_clients_delete_open_returns_success_for_mere_delete_chrome(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_clients_delete_shell_controls(page_holder),
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_clients_delete_open())
+
+    assert result == UiClientsDeleteOpenSuccess(
+        detail_open=True,
+        mere_open=True,
+        slet_kontakt_visible=True,
+        arkiver_kontakt_visible=True,
+        primary_slet_absent=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert any("click:text=Mere" in e for e in page.events)
+    assert not any("click:text=Slet kontakt" in e for e in page.events)
+
+
+def test_ui_clients_delete_open_rejects_detail_without_mere_slet(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+
+    def open_detail_no_mere() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/contacts/contact-1/customer"
+        page.controls["body"] = FakeLoginControl(
+            text="Acme Client (Kunde) Opret Ret Fakturaer Overblik Menu"
+        )
+        page.controls["body"].bind(page.events, "body")
+        page.controls["text=Mere"] = FakeLoginControl(count=0, visible=False)
+        page.controls["text=Mere"].bind(page.events, "text=Mere")
+        page.controls["text=Ret"] = FakeLoginControl(text="Ret")
+        page.controls["text=Ret"].bind(page.events, "text=Ret")
+
+    controls = {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Kunder"),
+        "body": FakeLoginControl(text="Kunder Opret kontakt"),
+        "text=Opret kontakt": FakeLoginControl(text="Opret kontakt"),
+        "a[href*='/test-org-slug/contacts/'], a[href*='/test-org-slug/clients/']": FakeLoginControl(
+            count=0, visible=False
+        ),
+        "table tbody tr, [role='row']": FakeLoginControl(
+            text="Acme Client",
+            on_click=open_detail_no_mere,
+        ),
+        "text=Mere": FakeLoginControl(count=0, visible=False),
+        "text=Ret": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_clients_delete_open())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert "clients delete" in result.message
+    assert page.closed
+
+
+def test_ui_clients_delete_open_rejects_list_only(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Kunder"),
+        "body": FakeLoginControl(text="Kunder Opret kontakt"),
+        "text=Opret kontakt": FakeLoginControl(text="Opret kontakt"),
+        "table tbody tr, [role='row']": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+    }
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_clients_delete_open())
 
     assert isinstance(result, ToolError)
     assert result.code is StableErrorCode.UI_CHANGED

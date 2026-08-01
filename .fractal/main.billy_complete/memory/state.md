@@ -6,16 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T19:05:00Z
+updated: 2026-08-01T21:26:11Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **66** after COMMIT 186.65 (ui clients get open + contacts egress) tip `73c8ebc` / product `66ac07a`.
-- live/vision **167**; implemented/contract **351**; complete **false**.
+- Continue mode iter **68** after COMMIT 186.67 (ui clients update open) tip `d642d3c` / product `a6dedab`.
+- live/vision **168**; implemented/contract **352**; complete **false**.
 - Not node finish (bulk external-contract red, annual red, residual UI parity open).
+
 
 ## SYNC (iter 66)
 
@@ -6936,3 +6937,169 @@ updated: 2026-08-01T19:05:00Z
 - Includes plan, live test, wiki shell, coverage, models/browser/server, inventory tests.
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 68)
+
+- Continue mode restart after iter67 COMMIT 186.67 ui_clients_update_open
+  (`a6dedab` product + `d642d3c` memory bookkeeping).
+- Unread inbox/feed: empty. Saved: empty.
+- Private 721ABC97 (iter67 COMMIT done) + 35383D13 (pre-COMMIT) reacted (+).
+- No running children. All historical children terminal.
+- No new parent directives this pass (prior scope: UI live only; API live out of
+  scope; grok-only still binding).
+- Tip `d642d3c` == origin/main.billy_complete (branch clean).
+- Coverage: implemented/contract **352**; live/vision **168**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red.
+- Last product 186.67: `ui_clients_update_open` (Ret edit form; maps
+  contacts.update observe-only). list/create/get tools unchanged; contacts.delete
+  residual red.
+- Residual priority for PREPARE→RESEARCH: re-probe products.get detail dual-open;
+  invoices/bills GET path_allow + get-open; special.invoice_email after durable
+  client+invoice path; contacts.delete chrome if dual; nested salesTaxRules only
+  with dual isolation; no bulk greening without official schema; no postings/
+  bankLines steal; no false-green NA.
+- Outbox + private posted. Ready PREPARE. Not finish.
+
+## PREPARE (iter 68)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 historical children; **0** ahead of tip.
+- Remote `origin/main.billy_complete.*` ahead of tip `d642d3c`: several historical remotes
+  (auth discovery wiki scaffolding, old wave products, ui_auth_status, etc.).
+- Remote-ahead product-file size check (src/tests/coverage/docs): **0** branches with
+  any product file materially larger on child than tip (tip browser 7102 vs
+  ui_auth_status 376; tip models 829 vs 69). Wiki-only remotes either already on tip
+  (`wave5t_ui_auth_discovery.md`, `wave5u_method_probe_contract.md`) or research noise.
+- **No child merges this iteration.** No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `d642d3c` / product 186.67 ui_clients_update_open; live/vision 168;
+  implemented/contract 352; complete false.
+- Ready RESEARCH residual dual-count/NA (prefer re-probe products.get detail after
+  egress; invoices/bills GET path_allow + get-open; special.invoice_email after
+  durable client+invoice; contacts.delete if dual; nested salesTaxRules only with
+  dual isolation; no bulk greening; no postings/bankLines steal; no false-green NA).
+  Not finish.
+
+## SYNC (iter 68 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private unread empty this pass (SYNC resume + PREPARE done already handled).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `d642d3c`.
+- Coverage: implemented/contract **352**; live/vision **168**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red.
+- Ready RESEARCH residual dual-count/NA (prefer products.get re-probe after 186.66
+  egress; invoices/bills GET path_allow + get-open; special.invoice_email after
+  durable client+invoice dual; contacts.delete chrome if dual; nested salesTaxRules
+  isolation only with dual; no weak NA; no postings/bankLines steal; no bulk greening).
+  Not finish.
+
+## RESEARCH (iter 68 / research167)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- contacts.delete: disposable seed dual; detail `/contacts/:id/customer`; Mere dual;
+  body after Mere contains **Slet kontakt** dual; primary Slet absent dual.
+  Confirm dialog not stable-automated → observe-only product (no permanent delete path).
+- products.get re-probe: seed dual true; detail_ready false dual (list stays).
+- invoices/bills: detail_ready false dual; path_allow still deferred (research166 GET block).
+- Cleanup: SPA X-Access-Token + context.request DELETE with organizationId;
+  markers R167C/R167P/R18667 removed; clients+products empty dual. api_token_used false.
+- Decision: **ACCEPT** ui_clients_delete_open (maps contacts.delete observe-only).
+  DEFER invoices/bills path_allow + products.get + invoice_email. REJECT bulk/annual green.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research167_focus_dual.json`, `tmp/research167_rest_dual.json`.
+- Cleanup: `tmp/research167_cleanup_report.json` (all_clean true).
+- Profiles purged. No coverage green. Ready PLAN 186.68.
+
+## SYNC (iter 68 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 3FBC104A (research167 done) + 091D2664 (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research167 brief present (`tmp/grok-research.md`); dual JSONs + cleanup all_clean.
+- Ready PLAN product handoff: ui_clients_delete_open via Mere→Slet kontakt dual
+  (maps contacts.delete observe-only; live/vision 168→~169; contract +1).
+  DEFER invoices/bills path_allow + products.get + invoice_email.
+  Not finish.
+
+## PLAN (iter 68 / 186.68)
+
+- Plan file
+  `plans/2026-08-01T20:54:46.485Z-186.68-ui_clients_delete_open.md`:
+  ui_clients_delete_open via Mere→Slet kontakt dual; dual-count api.contacts.delete
+  only; live/vision 168→169; implemented/contract 352→353; no egress change;
+  keep list/create/get/update tools; residual products.get + invoices/bills +
+  invoice_email + bulk/annual stay red; root-only Grok; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 68 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 1EDF325F (pre-PLAN) + 8B7EBFEE (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.68 + research167 brief present. Tip `d642d3c`.
+- Ready EXECUTE product ui_clients_delete_open (root; no children). Not finish.
+
+## EXECUTE (iter 68 / 186.68)
+
+- Producted research167 / plan 186.68: `ui_clients_delete_open` via Mere delete chrome
+  (maps api.contacts.delete).
+- Models + browser + server + unit/live tests + coverage generator dual-count
+  contacts.delete only.
+- Coverage regenerated: live/vision **169**; implemented/contract **353**;
+  UI rows 345; complete false; list/create/get/update tools unchanged.
+- lint.sh pass. offline test.sh **1620 passed**, 44 deselected.
+- Live dual `tests/live/test_ui_clients_delete_open.py` pass; vision record present
+  with purge_verified; residual products.get + invoices/bills + bulk/annual red.
+- Wiki: `ui_clients_delete_open_shell.md` + index.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 68 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private AE459BDD (EXECUTE done) + F6E2794E (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.68 uncommitted: ui_clients_delete_open; live/vision 169;
+  implemented/contract 353; offline 1620 pass; complete=false.
+- Ready for IR of product. Not finish.
+
+## IR (iter 68 / 186.68)
+
+- Product ui_clients_delete_open Mere chrome: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N3 non-blocking (primary_slet after-Mere
+  fallback; live seed reuse; untracked plan/wiki/live ride commit).
+- contacts.delete discovery+parity green; list+create+get+update tools unchanged;
+  contacts bulk residual red; products.get + invoice_email + bulk 92 + annual red;
+  complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 68 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F1BCB58D (IR ACCEPT) + E3C675AB (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.68 (no required product fixes; optional N1–N3 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## FIX-VERIFY (iter 68 / 186.68)
+
+- IR required fixes: none. Optional N1/N2/N3 no-op (left as-is).
+- lint.sh pass. test.sh offline 1620 passed / 44 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: contacts.delete parity green on ui_clients_delete_open;
+  list/create/get/update tools unchanged; contacts bulk residual red;
+  live/vision 169; implemented/contract 353; complete false; bulk 92
+  external-contract; annual red; products.get + invoice_email residual red.
+- Plan post-mortem filled. Ready COMMIT. Not node finish.
+
+## SYNC (iter 68 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B6562500 (FIX-VERIFY done) + EACF9299 reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1620 offline pass; IR ACCEPT). Ready COMMIT 186.68
+  ui clients delete open package. Not node finish (complete false).
+

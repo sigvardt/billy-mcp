@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 60 greened shells/parity + contacts.update Ret form (research166) = 61
+    # Prior 61 greened shells/parity + contacts.delete Mere chrome (research167) = 62
     # live/vision rows without GEO NA.
-    ui_shell_green = 61
+    ui_shell_green = 62
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -739,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 61 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 62 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 168
+    assert status["qualification"]["live_tested_rows"] == 169
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -767,6 +767,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.contacts.create",
         "ui.parity.contacts.get",
         "ui.parity.contacts.update",
+        "ui.parity.contacts.delete",
         "ui.discovery.bank_accounts",
         "ui.discovery.quotes",
         "ui.discovery.recurring_invoices",
@@ -830,6 +831,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.contacts.create": "ui_clients_create_open",
         "ui.parity.contacts.get": "ui_clients_get_open",
         "ui.parity.contacts.update": "ui_clients_update_open",
+        "ui.parity.contacts.delete": "ui_clients_delete_open",
         "ui.discovery.bank_accounts": "ui_bank_accounts_list",
         "ui.discovery.quotes": "ui_quotes_list",
         "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
@@ -896,7 +898,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 61
+    assert len(qualified) == 62
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -915,6 +917,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
             "shell_open_only",
             "form_open_only",
             "detail_open_only",
+            "delete_chrome_open_only",
             "soft_empty_shell_observed",
         }
     invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
@@ -1142,6 +1145,14 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert contacts_update_parity["parity_status"] == "form_open_only"
     assert "api.contacts.update" in contacts_update_parity["evidence"]
     assert "research166" in contacts_update_parity["evidence"]
+    contacts_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.contacts.delete"
+    )
+    assert contacts_delete_parity["api_row_id"] == "api.contacts.delete"
+    assert contacts_delete_parity["tool_name"] == "ui_clients_delete_open"
+    assert contacts_delete_parity["parity_status"] == "delete_chrome_open_only"
+    assert "api.contacts.delete" in contacts_delete_parity["evidence"]
+    assert "research167" in contacts_delete_parity["evidence"]
     clients_create_discovery = next(
         row for row in qualified if row["id"] == "ui.discovery.clients_create"
     )
@@ -1175,7 +1186,6 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",
-        "ui.parity.contacts.delete",
         "ui.parity.files.get",
         "ui.parity.files.list",
         "ui.parity.files.create",

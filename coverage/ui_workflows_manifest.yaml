@@ -6504,38 +6504,49 @@
     {
       "api_row_id": "api.contacts.delete",
       "area": "contacts",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness may create disposable contact then delete in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.delete",
+      "evidence": "research167 dual-session headless observation + ui_clients_delete_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Mere delete chrome open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_delete, Slet kontakt visible after Mere; never confirm delete; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, get overview ui_clients_get_open, and Ret form ui_clients_update_open); vision record tmp/vision-records/ui_clients_delete_open.json (client delete chrome frames, accept); maps api.contacts.delete to UI Mere delete chrome open only",
       "filters": [],
       "id": "ui.parity.contacts.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.contacts.delete",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Mere menu (read-only clients delete chrome open; never confirm Slet/Arkiv\u00e9r; primary Slet absent; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
+      "parity_status": "delete_chrome_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "mere_open",
+        "slet_kontakt_visible",
+        "arkiver_kontakt_visible",
+        "primary_slet_absent",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "deletes contact",
+      "side_effects": "none when open-only; product path never confirms delete",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_clients_delete_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_clients_delete_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

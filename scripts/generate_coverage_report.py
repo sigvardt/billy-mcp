@@ -109,6 +109,10 @@ UI_CLIENTS_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_CLIENTS_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_update_open.py"
 UI_CLIENTS_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_CLIENTS_UPDATE_OPEN_TOOL_NAME = "ui_clients_update_open"
+UI_CLIENTS_DELETE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_CLIENTS_DELETE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_clients_delete_open.py"
+UI_CLIENTS_DELETE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_CLIENTS_DELETE_OPEN_TOOL_NAME = "ui_clients_delete_open"
 UI_SUPPLIERS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_SUPPLIERS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_suppliers_create_open.py"
 UI_SUPPLIERS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1998,6 +2002,83 @@ def apply_ui_clients_update_open_shell_evidence(
     row["parity_status"] = "form_open_only"
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness may create disposable contact "
+        "then delete in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_clients_delete_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_delete: bool = False,
+) -> None:
+    """Mark clients delete chrome **open only** evidence (research167).
+
+    Empty-input tool; open /:org_slug/clients, open contact detail, open Mere,
+    classify Slet kontakt visibility. Never confirm Slet/Arkivér. Distinct from
+    get overview, Ret update form, and create dialog. When
+    ``parity_of_api_delete`` is true, dual-counts exact ``ui.parity.contacts.delete``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Mere menu "
+        "(read-only clients delete chrome open; never confirm Slet/Arkivér; "
+        "primary Slet absent; soft /clients/new not success)"
+    )
+    row["tool_name"] = UI_CLIENTS_DELETE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "mere_open",
+        "slet_kontakt_visible",
+        "arkiver_kontakt_visible",
+        "primary_slet_absent",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_delete:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_CLIENTS_DELETE_OPEN_MODEL_TEST_REFERENCE,
+        UI_CLIENTS_DELETE_OPEN_UNIT_TEST_REFERENCE,
+        UI_CLIENTS_DELETE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research167 dual-session headless observation + ui_clients_delete_open product; "
+        "scoped api.billysbilling.com path_allow for contacts data-plane (from research164); "
+        "Mere delete chrome open only (path class /:org_slug/contacts/:id/customer, "
+        "shell_kind=clients_delete, Slet kontakt visible after Mere; never confirm delete; "
+        "distinct from list shell ui_clients_list, create form_open ui_clients_create_open, "
+        "get overview ui_clients_get_open, and Ret form ui_clients_update_open); "
+        "vision record tmp/vision-records/ui_clients_delete_open.json "
+        "(client delete chrome frames, accept)"
+    )
+    if parity_of_api_delete:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.contacts.delete to UI Mere delete chrome open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "delete_chrome_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never confirms delete"
     row["cleanup"] = (
         "not_applicable for product path; live harness may create disposable contact "
         "then delete in reverse with fresh list read-back"
@@ -4739,6 +4820,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_clients_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.contacts.update":
             apply_ui_clients_update_open_shell_evidence(row, parity_of_api_update=True)
+        if api_row["id"] == "api.contacts.delete":
+            apply_ui_clients_delete_open_shell_evidence(row, parity_of_api_delete=True)
         if api_row["id"] == "api.bills.list":
             apply_ui_bills_list_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.transactions.list":

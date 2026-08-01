@@ -25,6 +25,8 @@ from billy_mcp.models import (
     UiBillsListSuccess,
     UiClientsCreateOpenInput,
     UiClientsCreateOpenSuccess,
+    UiClientsDeleteOpenInput,
+    UiClientsDeleteOpenSuccess,
     UiClientsGetOpenInput,
     UiClientsGetOpenSuccess,
     UiClientsListInput,
@@ -317,6 +319,24 @@ def test_ui_clients_update_open_models_are_empty_input_and_non_pii_success() -> 
     assert success.shell_kind == "clients_update"
     assert success.edit_form_open is True
     assert success.name_field_has_value is True
+
+
+def test_ui_clients_delete_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiClientsDeleteOpenInput().model_dump() == {}
+    success = UiClientsDeleteOpenSuccess(
+        detail_open=True,
+        mere_open=True,
+        slet_kontakt_visible=True,
+        arkiver_kontakt_visible=True,
+        primary_slet_absent=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/contacts/:id/customer"
+    assert success.shell_kind == "clients_delete"
+    assert success.slet_kontakt_visible is True
+    assert success.mere_open is True
+    properties = UiClientsDeleteOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
 
 
 def test_ui_suppliers_create_open_models_are_empty_input_and_non_pii_success() -> None:

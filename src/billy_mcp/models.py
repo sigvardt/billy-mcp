@@ -244,6 +244,31 @@ class UiClientsUpdateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiClientsDeleteOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only clients delete chrome open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiClientsDeleteOpenSuccess(BaseModel):
+    """Non-PII classification of delete chrome after Mere on a client detail.
+
+    Research167: open contacts/:id/customer, open Mere, assert Slet kontakt visible.
+    Never confirm Slet / permanent delete / Arkivér on the product path.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/contacts/:id/customer"] = "/:org_slug/contacts/:id/customer"
+    shell_kind: Literal["clients_delete"] = "clients_delete"
+    detail_open: bool
+    mere_open: bool
+    slet_kontakt_visible: bool
+    arkiver_kontakt_visible: bool
+    primary_slet_absent: bool
+    shell_markers_present: bool
+
+
 class UiSuppliersCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only suppliers create form open tool."""
 
