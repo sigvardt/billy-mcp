@@ -6,16 +6,16 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T10:50:00Z
+updated: 2026-08-01T11:00:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **53** pre-COMMIT after FIX-VERIFY 186.53 (uncommitted).
-  live/vision **145**; implemented/contract **329**; complete false.
-- Ready COMMIT product. Not node finish.
+- Continue mode iter **53** COMMIT 186.53 product `1b97715`. live/vision
+  **145**; implemented/contract **329**; complete false. Not node finish.
+- ui_settings_user_organizations_open + dual-count special.user_organizations.
 - Bulk 92 + annual_reports still red.
 
 
@@ -201,6 +201,14 @@ updated: 2026-08-01T10:50:00Z
 - FIX-VERIFY done (1571 offline pass; IR ACCEPT). Ready COMMIT 186.53
   Virksomheder shell + dual-count user_organizations. Not node finish
   (complete false).
+
+
+## COMMIT (iter 53)
+
+- `fractal commit` product: ui settings user organizations open dual-count
+  (`1b97715`). Pushed to origin/main.billy_complete.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
 ## PREPARE (iter 52)
 
