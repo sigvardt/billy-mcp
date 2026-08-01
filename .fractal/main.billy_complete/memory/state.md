@@ -6,15 +6,15 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T21:26:11Z
+updated: 2026-08-01T21:26:56Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **68** after COMMIT 186.67 (ui clients update open) tip `d642d3c` / product `a6dedab`.
-- live/vision **168**; implemented/contract **352**; complete **false**.
+- Continue mode iter **68** after COMMIT 186.68 (ui clients delete open) tip `5c03b7e`.
+- live/vision **169**; implemented/contract **353**; complete **false**.
 - Not node finish (bulk external-contract red, annual red, residual UI parity open).
 
 
@@ -7102,4 +7102,12 @@ updated: 2026-08-01T21:26:11Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1620 offline pass; IR ACCEPT). Ready COMMIT 186.68
   ui clients delete open package. Not node finish (complete false).
+
+## COMMIT (iter 68)
+
+- `fractal commit` product: ui clients delete open (`5c03b7e`).
+- Includes plan, live test, wiki shell, coverage, models/browser/server, inventory tests.
+- Pushed to origin/main.billy_complete.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
