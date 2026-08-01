@@ -57,6 +57,7 @@ from billy_mcp.models import (
     UiSettingsUserOrganizationsOpenSuccess,
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenSuccess,
+    UiSuppliersCreateOpenSuccess,
     UiSuppliersListSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
@@ -616,6 +617,12 @@ class UiClientsCreateOpenService(Protocol):
     """Injectable seam for the read-only clients create form open observation."""
 
     async def ui_clients_create_open(self) -> UiClientsCreateOpenSuccess | ToolError: ...
+
+
+class UiSuppliersCreateOpenService(Protocol):
+    """Injectable seam for the read-only suppliers create form open observation."""
+
+    async def ui_suppliers_create_open(self) -> UiSuppliersCreateOpenSuccess | ToolError: ...
 
 
 class UiBankAccountsListService(Protocol):
@@ -1730,6 +1737,97 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser suppliers list observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_suppliers_create_open(self) -> UiSuppliersCreateOpenSuccess | ToolError:
+        """Open the suppliers create form dialog for the current authenticated UI session only.
+
+        Research161: open /:org_slug/suppliers, click text CTA Opret kontakt, classify
+        dialog form fields (name / registrationNo / address-or-person). Form open only
+        — never Gem / Opret submit / Save / Create. Soft /suppliers/new is not success.
+        Distinct from list shell ui_suppliers_list and clients create (contacts.create
+        already dual-counted via clients).
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_suppliers_create_changed_error()
+
+            suppliers_url = f"https://mit.billy.dk/{slug}/suppliers"
+            await page.goto(suppliers_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_suppliers_create_changed_error()
+                if _is_suppliers_new_soft_url(page.url):
+                    return _ui_suppliers_create_changed_error()
+                if not _is_suppliers_list_url(page.url):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_suppliers_list_heading(page):
+                    await asyncio.sleep(0.2)
+                    continue
+                if not await _has_suppliers_create_form_signature(page):
+                    clicked = await _click_suppliers_create_cta(page)
+                    if not clicked:
+                        await asyncio.sleep(0.2)
+                        continue
+                    await _await_page_settle(page)
+                if _is_suppliers_new_soft_url(page.url):
+                    return _ui_suppliers_create_changed_error()
+                if _is_suppliers_list_url(page.url) and await _has_suppliers_create_form_signature(
+                    page
+                ):
+                    signature = await _suppliers_create_form_field_flags(page)
+                    return UiSuppliersCreateOpenSuccess(
+                        create_dialog_open=True,
+                        name_field_visible=signature["name_field_visible"],
+                        registration_no_field_present=signature["registration_no_field_present"],
+                        address_or_person_fields_present=signature[
+                            "address_or_person_fields_present"
+                        ],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_suppliers_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the suppliers create form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser suppliers create form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4823,6 +4921,103 @@ async def _has_suppliers_list_signature(page: LoginPage) -> bool:
         return False
 
 
+def _is_suppliers_new_soft_url(url: str) -> bool:
+    """Reject soft /:org_slug/suppliers/new as create-form success (research161)."""
+
+    try:
+        parsed = urlsplit(url)
+        if parsed.scheme not in {"http", "https"}:
+            return False
+        if parsed.hostname not in {"mit.billy.dk", "www.mit.billy.dk"}:
+            return False
+        path = (parsed.path or "").rstrip("/")
+        return bool(re.match(r"^/[^/]+/suppliers/new$", path))
+    except Exception:
+        return False
+
+
+async def _has_suppliers_list_heading(page: LoginPage) -> bool:
+    """True when suppliers list h1 Leverandører is visible."""
+
+    try:
+        heading = page.locator("h1")
+        if await heading.count() < 1 or not await heading.is_visible():
+            return False
+        return (await heading.inner_text()).strip() == _SUPPLIERS_LIST_HEADING
+    except Exception:
+        return False
+
+
+async def _click_suppliers_create_cta(page: LoginPage) -> bool:
+    """Observe-only click of research161 text CTA Opret kontakt. Never submits the form."""
+
+    try:
+        cta = page.locator(f"text={_SUPPLIERS_CREATE_CTA}")
+        if await cta.count() < 1:
+            return False
+        target = cta.first
+        if not await target.is_visible():
+            return False
+        await target.click()
+        return True
+    except Exception:
+        return False
+
+
+async def _suppliers_create_form_field_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII field presence flags for the suppliers create dialog (research161)."""
+
+    name_visible = False
+    registration_present = False
+    address_or_person = False
+    try:
+        name = page.locator("input[name='name']")
+        if await name.count() >= 1 and await name.first.is_visible():
+            name_visible = True
+    except Exception:
+        pass
+    try:
+        reg = page.locator("input[name='registrationNo']")
+        if await reg.count() >= 1:
+            registration_present = True
+    except Exception:
+        pass
+    for selector in (
+        "input[name='street']",
+        "input[name='person_email']",
+        "input[name='person_firstName']",
+        "input[name='person_lastName']",
+    ):
+        try:
+            field = page.locator(selector)
+            if await field.count() >= 1:
+                address_or_person = True
+                break
+        except Exception:
+            continue
+    return {
+        "name_field_visible": name_visible,
+        "registration_no_field_present": registration_present,
+        "address_or_person_fields_present": address_or_person,
+    }
+
+
+async def _has_suppliers_create_form_signature(page: LoginPage) -> bool:
+    """Verify research161 create dialog form signature without submitting."""
+
+    try:
+        if not await _has_suppliers_list_heading(page):
+            return False
+        flags = await _suppliers_create_form_field_flags(page)
+        return (
+            flags["name_field_visible"]
+            and flags["registration_no_field_present"]
+            and flags["address_or_person_fields_present"]
+        )
+    except Exception:
+        return False
+
+
 async def _has_bills_list_signature(page: LoginPage) -> bool:
     """Verify the research110 bills list heading and create CTA without clicking.
 
@@ -6164,6 +6359,15 @@ def _ui_suppliers_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy suppliers list interface no longer matches the recorded signature.",
+    )
+
+
+def _ui_suppliers_create_changed_error() -> ToolError:
+    """Fail closed when the suppliers create form no longer matches research161."""
+
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy suppliers create form interface no longer matches the recorded signature.",
     )
 
 

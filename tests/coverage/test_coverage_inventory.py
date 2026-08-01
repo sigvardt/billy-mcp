@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 54 greened shells/parity + clients_create discovery + contacts.create
-    # dual-count (research160) = 56 live/vision rows without GEO NA.
-    ui_shell_green = 56
+    # Prior 56 greened shells/parity + suppliers_create discovery (research161) = 57
+    # live/vision rows without GEO NA. contacts.create already dual-counted via clients.
+    ui_shell_green = 57
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -694,9 +694,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 56 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 57 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 156
+    assert status["qualification"]["live_tested_rows"] == 157
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 100
 
 
@@ -723,6 +723,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.recurring_invoices",
         "ui.discovery.product_import",
         "ui.discovery.suppliers",
+        "ui.discovery.suppliers_create",
         "ui.discovery.purchases",
         "ui.parity.bills.list",
         "ui.discovery.bills_create",
@@ -781,6 +782,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
         "ui.discovery.product_import": "ui_products_import",
         "ui.discovery.suppliers": "ui_suppliers_list",
+        "ui.discovery.suppliers_create": "ui_suppliers_create_open",
         "ui.discovery.purchases": "ui_bills_list",
         "ui.parity.bills.list": "ui_bills_list",
         "ui.discovery.bills_create": "ui_bills_create_open",
@@ -841,7 +843,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 56
+    assert len(qualified) == 57
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1077,6 +1079,14 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert clients_create_discovery["tool_name"] == "ui_clients_create_open"
     assert clients_create_discovery["api_row_id"] is None
+    suppliers_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.suppliers_create"
+    )
+    assert suppliers_create_discovery["tool_name"] == "ui_suppliers_create_open"
+    assert suppliers_create_discovery["api_row_id"] is None
+    assert suppliers_create_discovery.get("parity_status") == "form_open_only"
+    # contacts.create remains on clients create only (no suppliers re-count)
+    assert contacts_create_parity["tool_name"] == "ui_clients_create_open"
     files_upload_special_parity = next(
         row for row in qualified if row["id"] == "ui.parity.special.files_upload"
     )

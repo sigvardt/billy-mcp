@@ -79,6 +79,8 @@ from billy_mcp.models import (
     UiSettingsUsersOpenSuccess,
     UiSettingsVatOpenInput,
     UiSettingsVatOpenSuccess,
+    UiSuppliersCreateOpenInput,
+    UiSuppliersCreateOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
     UiTransactionsListInput,
@@ -263,6 +265,44 @@ def test_ui_clients_create_open_models_are_empty_input_and_non_pii_success() -> 
                 "path_class": "/:org_slug/clients",
                 "heading": "Kunder",
                 "shell_kind": "clients_create",
+                "create_dialog_open": True,
+                "name_field_visible": True,
+                "registration_no_field_present": True,
+                "address_or_person_fields_present": True,
+                "shell_markers_present": True,
+                "org_slug": "secret",
+            }
+        )
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+
+
+def test_ui_suppliers_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiSuppliersCreateOpenInput().model_dump() == {}
+    success = UiSuppliersCreateOpenSuccess(
+        create_dialog_open=True,
+        name_field_visible=True,
+        registration_no_field_present=True,
+        address_or_person_fields_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/suppliers"
+    assert success.heading == "Leverandører"
+    assert success.shell_kind == "suppliers_create"
+    properties = UiSuppliersCreateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+    try:
+        UiSuppliersCreateOpenInput.model_validate({"url": "https://untrusted.example"})
+        raise AssertionError("extra fields must be forbidden")
+    except Exception:
+        pass
+    try:
+        UiSuppliersCreateOpenSuccess.model_validate(
+            {
+                "path_class": "/:org_slug/suppliers",
+                "heading": "Leverandører",
+                "shell_kind": "suppliers_create",
                 "create_dialog_open": True,
                 "name_field_visible": True,
                 "registration_no_field_present": True,

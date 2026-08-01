@@ -195,6 +195,27 @@ class UiClientsCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiSuppliersCreateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only suppliers create form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiSuppliersCreateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy suppliers create form dialog."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/suppliers"] = "/:org_slug/suppliers"
+    heading: Literal["Leverandører"] = "Leverandører"
+    shell_kind: Literal["suppliers_create"] = "suppliers_create"
+    create_dialog_open: bool
+    name_field_visible: bool
+    registration_no_field_present: bool
+    address_or_person_fields_present: bool
+    shell_markers_present: bool
+
+
 class UiBankAccountsListInput(BaseModel):
     """Empty, strict input boundary for the read-only bank accounts list shell tool."""
 
