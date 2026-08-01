@@ -4934,11 +4934,12 @@ def build_browser_egress() -> dict[str, Any]:
                 "owner": "ui_auth",
                 "purpose": (
                     "Path-scoped browser XHR for headless login, shell settle, contacts UI, "
-                    "and products UI get/list/create-seed cleanup only"
+                    "products UI get/list/create-seed cleanup, and invoices/bills list "
+                    "data-plane GET only"
                 ),
                 "condition": (
-                    "browser auth/bootstrap paths plus scoped UI contacts and products "
-                    "data-planes (research164/165); never full API browse"
+                    "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, "
+                    "and bills data-planes (research164/165/168); never full API browse"
                 ),
                 "evidence": (
                     "research100 headless credentialed discovery: POST /v2/user/login "
@@ -4947,7 +4948,10 @@ def build_browser_egress() -> dict[str, Any]:
                     "research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts "
                     "and GET /v2/salesTaxRulesets for products list/detail and disposable seed "
                     "(was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); "
-                    "invoices/emails paths still denied"
+                    "research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers "
+                    "/summary) unblocked under TEMP path_allow for invoices/bills list settle "
+                    "(empty-org lists valid; get-open detail_ready still false; "
+                    "emails/write paths still denied)"
                 ),
                 "browser_path_allows": [
                     {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
@@ -4969,6 +4973,8 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["DELETE"], "path": "/v2/products"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/accounts"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/salesTaxRulesets"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/invoices"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/bills"},
                 ],
                 "test_references": [
                     TEST_REFERENCE,

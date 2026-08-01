@@ -41,3 +41,7 @@ Dual independent headless sessions prove DOM classification. Vision review
 covers list-surface frames only; durable record is non-sensitive with
 `purge_verified` after frame purge. Inventory rows for discovery and shell-only
 parity must not embed full API filter schemas while greened.
+
+## Browser data plane
+
+SPA list settle may call `GET /v2/invoices` or `GET /v2/bills` (and `/summary`) under scoped path_allow; see [[invoices_bills_data_plane_egress]]. Does not green get-open parity.

@@ -79,10 +79,15 @@ rows; business workflows still need their own dual-session and vision evidence.
 - Exact/prefix GET bootstrap set: `/v2/auth/`, `/v2/user`, `/v2/user/bootstrap`,
   `/oauth2/tokeninfo`, `/user/organizations`, `/user/umbrellas`,
   `/v2/organizations/`, `/organizations/`, `/e-invoicing/`
-- Canary unlisted paths (for example `/v2/invoices`) stay denied for the browser
+- Scoped data-plane prefixes (research164/165/168): contacts GET/POST/DELETE,
+  countries GET, products GET/POST/DELETE, accounts GET, salesTaxRulesets GET,
+  **invoices GET**, **bills GET** (prefix covers `/summary`)
+- Writes on invoices/bills and `POST …/emails` stay denied; unlisted API paths
+  stay denied for the browser
 
 This is **not** API live qualification. API inventory `live_tested` stays false
-with user-scoped out-of-scope policy.
+with user-scoped out-of-scope policy. Invoices/bills GET path_allow does **not**
+green get-open parity rows until dual detail_ready after disposable seed.
 
 ## Coverage honesty
 

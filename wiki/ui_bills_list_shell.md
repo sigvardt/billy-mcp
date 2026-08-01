@@ -54,3 +54,7 @@ Offline `api.bills.*` clear CRUD is contract-green separately; API
 ## Related
 
 - [[ui_bills_create_open_shell]]
+
+## Browser data plane
+
+SPA list settle may call `GET /v2/invoices` or `GET /v2/bills` (and `/summary`) under scoped path_allow; see [[invoices_bills_data_plane_egress]]. Does not green get-open parity.

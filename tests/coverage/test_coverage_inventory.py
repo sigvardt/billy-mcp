@@ -1304,6 +1304,23 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         rule.get("path") == "/v2/salesTaxRulesets" and "GET" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
+    assert any(
+        rule.get("path") == "/v2/invoices" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/bills" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    # research168: invoices/bills GET only — writes and invoice email stay denied
+    assert not any(
+        rule.get("path") == "/v2/invoices" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        rule.get("path") == "/v2/bills" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
     assert by_host["api.billy.dk"]["browser_action"] == "deny"
 
 
