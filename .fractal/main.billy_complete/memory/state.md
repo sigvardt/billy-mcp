@@ -6304,3 +6304,9 @@ updated: 2026-08-01T15:55:00Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1598 offline pass; IR ACCEPT). Ready COMMIT 186.63
   productPrices dual-NA package. Not node finish (complete false).
+
+## COMMIT (iter 63)
+
+- `fractal commit` product: ui product prices not applicable freeze (`acb7939`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
