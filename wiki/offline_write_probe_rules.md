@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-07-30T18:26:00Z
+updated: 2026-08-01T01:20:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -70,15 +70,39 @@ coverage green.
 | bulk-looking `PATCH /{res}` with empty plural array | **200** meta-only unauth (`success: true`) | **not a contract**; never ship bulk tools from this |
 | bulk delete `DELETE /{res}?ids[]=` | **200** meta-only on many open deletes; **405** where singular delete closed | shape hint; associations error text documents `ids[]` form |
 
-Probe refresh: 2026-07-30T20:18:53Z (research88 residual clear full matrix +
-bulk shape matrix + specials reconfirm; prior research83/82/81). HTTP docs ETag
-`wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934 still
+### Research136 bulk-save body shape (contacts archetype; products cross-check)
+
+Offline unauthenticated only. Official docs still list Supports “bulk save” /
+“bulk delete” without path examples or field maps. Inventory may store **shape
+hints** (`PUT /v2/{res}/bulk`, `json_object_root`, `DELETE …?ids[]=`) but rows
+stay `ambiguous_bulk` / empty tool / not implemented.
+
+| `PUT /{res}/bulk` body | Status | errorCode | Note |
+| --- | --- | --- | --- |
+| missing / null / string / `[]` / `[{}]` | **400** | `INVALID_REQUEST_BODY` | “JSON document with an **object as root**” |
+| `{}`, `{"contacts":[]}`, wrong plural, `{"contacts":[{}]}` | **401** | `AUTHENTICATION_REQUIRED` | any object root passes body parse offline; plural-key schema **unproven** |
+| empty-array no-op claim | — | — | **not** proven offline |
+
+| `DELETE /{res}` query | Status | errorCode | Note |
+| --- | --- | --- | --- |
+| empty / missing `ids[]` | **400** | `INVALID_DELETE_ID_ARRAY` | form text: ``DELETE /contacts?ids[]=123&ids[]=456`` |
+| synthetic non-empty `ids[]` | **200** | — | meta-only unauth — **not** effect or cleanup proof |
+
+Never ship bulk FastMCP tools from Supports flags or these shape hints alone.
+Scratch: `.fractal/main.billy_complete/tmp/write-probes-research136.json`,
+`write-probes-research136-body.json`. Fixture:
+`research136_bulk_save_body_matrix` in `src/billy_mcp/live_probe.py`.
+
+Probe refresh: 2026-08-01 (research136 bulk body matrix; prior research88
+residual clear full matrix + bulk shape matrix + specials reconfirm). HTTP docs
+ETag `wcw4x9hqvu3603`, MD5 `8b94b0135c91fd15fe54ea33e088a4be`, body 147934 still
 byte-identical. POST/PUT probes must send a JSON object body (`{}` minimum); a
 missing body or `Content-Type: application/json` with empty/non-object body
 yields **400** `INVALID_REQUEST_BODY` before auth and is not a method-closed
 signal. Empty bytes without Content-Type may still reach **401** — product
 always sends a JSON object. Scratch:
-`.fractal/main.billy_complete/tmp/write-probes-research88.json`.
+`.fractal/main.billy_complete/tmp/write-probes-research88.json` (residuals) and
+research136 bulk body probes above.
 
 ## Planning note
 

@@ -1151,46 +1151,75 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
 
 
 def bulk_rows(resource: str) -> list[dict[str, Any]]:
-    """Build the two deliberately unimplemented bulk mentions for a resource."""
+    """Build the two deliberately unimplemented bulk mentions for a resource.
+
+    Research136 freezes offline path/method *shape hints* only. Full request/
+    response contracts remain unresolved, so rows stay ``ambiguous_bulk`` with
+    empty tool names and no implemented/contract_tested green.
+    """
 
     area = snake_case(resource)
     route = f"/v2/{resource}"
-    return [
-        base_api_row(
-            row_id=f"api.{resource}.bulk_save",
-            area=area,
-            operation="bulk_save",
-            method_or_route=f"AMBIGUOUS Supports: bulk save {route}",
-            request_fields=[],
-            response_fields=[],
-            filters=[],
-            pagination=None,
-            side_effects=(
-                "unknown until method, body, partial failures, and limits are live-qualified"
-            ),
-            cleanup="unknown until the bulk contract is qualified on a non-production organisation",
-            tool_name="",
-            source_kind="ambiguous_bulk",
-            contract_status="ambiguous_bulk",
+    shape_evidence = (
+        f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; "
+        "research136 offline unauth shape freeze only (not a full bulk body/"
+        "response contract; not live-qualified)"
+    )
+    bulk_save = base_api_row(
+        row_id=f"api.{resource}.bulk_save",
+        area=area,
+        operation="bulk_save",
+        method_or_route=(
+            f"AMBIGUOUS Supports: bulk save {route}; offline shape PUT {route}/bulk "
+            "(research136 object-root only; not full body/response contract)"
         ),
-        base_api_row(
-            row_id=f"api.{resource}.bulk_delete",
-            area=area,
-            operation="bulk_delete",
-            method_or_route=f"AMBIGUOUS Supports: bulk delete {route}",
-            request_fields=[],
-            response_fields=[],
-            filters=[],
-            pagination=None,
-            side_effects=(
-                "unknown until method, identifiers, partial failures, and limits are live-qualified"
-            ),
-            cleanup="unknown until the bulk contract is qualified on a non-production organisation",
-            tool_name="",
-            source_kind="ambiguous_bulk",
-            contract_status="ambiguous_bulk",
+        request_fields=["json_object_root"],
+        response_fields=[],
+        filters=[],
+        pagination=None,
+        side_effects=(
+            "unknown until field schema, partial failures, empty-array semantics, "
+            "and limits are contracted; offline unauth only proves object-root body "
+            "parse then AUTHENTICATION_REQUIRED"
         ),
+        cleanup="unknown until the bulk contract is qualified on a non-production organisation",
+        tool_name="",
+        source_kind="ambiguous_bulk",
+        contract_status="ambiguous_bulk",
+    )
+    bulk_save["errors"] = [
+        *COMMON_ERRORS,
+        "INVALID_REQUEST_BODY",
     ]
+    bulk_save["evidence"] = shape_evidence
+    bulk_delete = base_api_row(
+        row_id=f"api.{resource}.bulk_delete",
+        area=area,
+        operation="bulk_delete",
+        method_or_route=(
+            f"AMBIGUOUS Supports: bulk delete {route}; offline shape DELETE "
+            f"{route}?ids[]= (research136 empty-ids fail-closed; not effect contract)"
+        ),
+        request_fields=["ids[]"],
+        response_fields=[],
+        filters=[],
+        pagination=None,
+        side_effects=(
+            "unknown until identifiers, partial failures, and limits are contracted; "
+            "empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id "
+            "200 meta-only is not effect proof"
+        ),
+        cleanup="unknown until the bulk contract is qualified on a non-production organisation",
+        tool_name="",
+        source_kind="ambiguous_bulk",
+        contract_status="ambiguous_bulk",
+    )
+    bulk_delete["errors"] = [
+        *COMMON_ERRORS,
+        "INVALID_DELETE_ID_ARRAY",
+    ]
+    bulk_delete["evidence"] = shape_evidence
+    return [bulk_save, bulk_delete]
 
 
 def special_rows() -> list[dict[str, Any]]:

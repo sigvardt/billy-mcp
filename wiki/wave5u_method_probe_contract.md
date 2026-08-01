@@ -12,7 +12,7 @@ sources:
   - tests/unit/test_live_probe.py
   - tests/live/test_live_probe.py
 created: 2026-07-30T21:25:30Z
-updated: 2026-07-31T00:12:00Z
+updated: 2026-08-01T01:20:00Z
 ---
 
 # Wave-5u safe method-observation contract
@@ -118,7 +118,7 @@ causes the universal gate to block before any URL is built.
 | residual create | `POST /R` | none | `{"S": {}}`; `application/json` | The documentation's ordinary create envelope establishes only syntax. It does not prove an empty object cannot create a default record. **BLOCK BEFORE NETWORK.** |
 | residual update | `PUT /R/:id` with `:id →` owner-verified absent identifier | none | `{"S": {}}`; `application/json` | The generic update convention says omitted properties are unchanged, but neither that rule nor an unverified absent identifier proves this precise request has no durable effect. **BLOCK BEFORE NETWORK.** |
 | residual singular delete | `DELETE /R/:id` with `:id →` owner-verified absent identifier | none | no body; no `Content-Type` | The public idempotent-delete rule describes a missing record response, not proof that this identifier is absent in the matched organisation or that cleanup is complete. **BLOCK BEFORE NETWORK.** |
-| bulk save | `PUT /R/bulk` | none | `{"P": []}`; `application/json` | research90's unauthenticated `401` probe supports neither the empty-array semantics nor a bulk response/partial-failure contract. The official page lists bulk support but no bulk wire body. **BLOCK BEFORE NETWORK.** |
+| bulk save | `PUT /R/bulk` | none | JSON **object** root required (`INVALID_REQUEST_BODY` for array/null/string/missing); object root reaches unauth `AUTHENTICATION_REQUIRED` (research136). Empty-array no-op, plural-key field schema, response, and partial failure remain unproven. Official page lists Supports bulk save only. **BLOCK BEFORE NETWORK.** |
 | bulk delete | `DELETE /R` | exactly `ids[]=` (one empty `ids[]` value) | no body; no `Content-Type` | The collection query form is only a shape hint. It does not prove that an empty list is a no-op rather than an error or a broad delete. **BLOCK BEFORE NETWORK.** |
 
 ### Bulk-delete form evidence (research95 unauth reconfirm)
@@ -194,3 +194,13 @@ from this page.
   persistent/disposable data path is introduced.
 - The required Grok research/review gate remains open. This named Codex Power
   fallback is supplemental research infrastructure only.
+
+## Research136 bulk-save body matrix (offline)
+
+Fail-closed fixture `research136_bulk_save_body_matrix` in
+`src/billy_mcp/live_probe.py` freezes unauthenticated bulk-save body classes
+only. It does **not** open real-method network paths, register tools, claim
+cleanup, or change coverage green state. Bulk delete empty-`ids[]` and
+synthetic meta-only 200 rules remain research95/96. All 92 bulk inventory rows
+stay `ambiguous_bulk` with empty tools.
+

@@ -13,12 +13,17 @@ from billy_mcp.live_probe import (
     API_BASE_URL,
     BULK_DELETE_EMPTY_ERROR_CODE,
     BULK_DELETE_QUERY_NAME,
+    BULK_SAVE_AUTH_ERROR_CODE,
+    BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
     BulkDeleteFormAssessment,
     BulkDeleteFormKind,
     BulkDeleteFormState,
     BulkDeleteRejectedBodyForm,
     BulkDeleteRejectedBodyFormKind,
     BulkDeleteWireClassification,
+    BulkSaveBodyAssessment,
+    BulkSaveBodyFormKind,
+    BulkSaveBodyState,
     CandidateKind,
     CandidateObservationState,
     CanonicalBulkDeleteForm,
@@ -43,6 +48,7 @@ from billy_mcp.live_probe import (
     research96_organization_path_ambiguity,
     research96_rejected_bulk_delete_body_forms,
     research96_residual_unauthenticated_outcomes,
+    research136_bulk_save_body_matrix,
 )
 
 
@@ -632,3 +638,68 @@ def test_cleanup_ledger_requires_tagged_safe_read_back_and_reverse_cleanup() -> 
     with pytest.raises(CleanupVerificationFailed):
         ledger.verify_cleanup(("parent", "child"), frozenset({"parent", "child"}))
     ledger.verify_cleanup(("child", "parent"), frozenset({"parent", "child"}))
+
+
+def test_research136_bulk_save_body_matrix_object_root_and_auth_gate() -> None:
+    """Non-object bodies validate; object roots only reach unauth auth gate."""
+
+    matrix = research136_bulk_save_body_matrix()
+    assert len(matrix) == 9
+    assert all(item.safe_no_op is False for item in matrix)
+    assert all(item.qualifies_live_wire_contract is False for item in matrix)
+    assert all(item.permits_real_method_network is False for item in matrix)
+    assert all(item.registers_tool is False for item in matrix)
+    assert all(item.claims_cleanup is False for item in matrix)
+    assert all(item.changes_coverage_state is False for item in matrix)
+
+    by_form = {item.form: item for item in matrix}
+    for form in (
+        BulkSaveBodyFormKind.MISSING_BODY,
+        BulkSaveBodyFormKind.NULL_BODY,
+        BulkSaveBodyFormKind.STRING_BODY,
+        BulkSaveBodyFormKind.ARRAY_EMPTY,
+        BulkSaveBodyFormKind.ARRAY_OBJECT,
+    ):
+        item = by_form[form]
+        assert item.unauthenticated_status_code == 400
+        assert item.error_code == BULK_SAVE_OBJECT_ROOT_ERROR_CODE
+        assert item.state is BulkSaveBodyState.VALIDATION_ERROR
+
+    for form in (
+        BulkSaveBodyFormKind.OBJECT_EMPTY,
+        BulkSaveBodyFormKind.OBJECT_PLURAL_EMPTY_ARRAY,
+        BulkSaveBodyFormKind.OBJECT_WRONG_PLURAL,
+        BulkSaveBodyFormKind.OBJECT_ONE_EMPTY,
+    ):
+        item = by_form[form]
+        assert item.unauthenticated_status_code == 401
+        assert item.error_code == BULK_SAVE_AUTH_ERROR_CODE
+        assert item.state is BulkSaveBodyState.AUTHENTICATION_GATED
+
+
+def test_research136_bulk_save_body_assessment_rejects_semantic_drift() -> None:
+    """Fixture validators keep object-root and non-object classes distinct."""
+
+    try:
+        BulkSaveBodyAssessment(
+            form=BulkSaveBodyFormKind.ARRAY_EMPTY,
+            unauthenticated_status_code=401,
+            error_code=BULK_SAVE_AUTH_ERROR_CODE,
+            state=BulkSaveBodyState.AUTHENTICATION_GATED,
+        )
+    except Exception as exc:  # pydantic ValidationError
+        assert "INVALID_REQUEST_BODY" in str(exc) or "non-object" in str(exc)
+    else:
+        raise AssertionError("expected validation failure for drifted array form")
+
+    try:
+        BulkSaveBodyAssessment(
+            form=BulkSaveBodyFormKind.OBJECT_EMPTY,
+            unauthenticated_status_code=400,
+            error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+            state=BulkSaveBodyState.VALIDATION_ERROR,
+        )
+    except Exception as exc:
+        assert "AUTHENTICATION_REQUIRED" in str(exc) or "object-root" in str(exc)
+    else:
+        raise AssertionError("expected validation failure for drifted object form")

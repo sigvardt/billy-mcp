@@ -2424,3 +2424,170 @@ updated: 2026-08-01T01:05:00Z
   with dual live and vision (`88a369e`).
 - Not node finish (complete false; bulk + annual_reports still red).
 
+
+
+## SYNC (iter 37, continue mode)
+
+- Continue after 186.36 dual-count transactions parity (tip `ae4f0fe` /
+  bookkeeping `03ad48b`). Branch clean vs `origin/main.billy_complete`.
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private DEC9A20C reacted (+): next after dual-count — more UI parity dual-counts
+  if shells exist, or bulk offline contracts, or re-observe annual only if org
+  changes; no invent `api_annual_*`; residual 29 writes stay blocked; not finish.
+- Coverage: complete false; implemented/contract 222/222; UI live/vision 38/38;
+  API live_tested false with out_of_scope_by_user; 92 bulk red; residual 405
+  writes not shippable; only discovery red: `ui.discovery.annual_reports`.
+- Dual-count greened so far: invoices/products/contacts/bills/transactions list.
+- Remaining dual-count candidates needing research freeze (do not invent maps):
+  `ui_vat_declarations_list`→`ui.parity.salesTaxReturns.list`?,
+  `ui_uploads_list`→`ui.parity.files.list`?,
+  `ui_settings_users_open`→`ui.parity.users.list`? (shell shape may fail),
+  debtor/creditor balances→contactBalance*?, suppliers/clients already share
+  contacts.list (clients greened). Quotes/recurring/bank_accounts are UI-only
+  list shells (no matching API list resource) — dual-count N/A without inventing.
+- Not finish. Ready PREPARE to pick next productable slice.
+
+
+## PREPARE (iter 37)
+
+- Parent `main`: already up to date (no merge).
+- Child merges: **none**. Ahead children are init/failed/review scaffolding, wiki-only
+  already on tip, or older product that would downgrade tip (e.g.
+  `ui_auth_status` child browser ~376 LOC vs tip ~5550 LOC). No running children.
+- Branch clean vs origin except local memory/state.md (this prepare note).
+- Tip: 186.36 dual-count `ui.parity.transactions.list` (`ae4f0fe`). Coverage
+  complete=false; live/vision 38; API contract 222; bulk 92 red; residual 29
+  write rows tool-named but not implemented (405/metadata blocked per
+  research96 + offline/offline_write_probe_rules.md); annual_reports still red
+  (Upsedasse dual research135).
+- Dual-count list path **exhausted for safe maps** this prepare:
+  - invoices/products/contacts/bills/transactions already dual-green.
+  - Wiki freezes ban invent maps: vat_declarations↛salesTaxReturns re-scope,
+    uploads/receipt_inbox↛files, debtor/creditor↛contactBalance*, bank_accounts
+    no API resource, quotes/recurring UI-only, suppliers is contacts isSupplier
+    (contacts.list already dual via clients).
+- Next RESEARCH freeze (primary): **bulk offline body-contract package** for
+  one official bulk_save/bulk_delete resource family — docs + offline evidence
+  only; keep red if body contract still ambiguous; no live API; no residual 405
+  ticketed tools.
+- Secondary research if bulk docs still empty: **UI parity not_applicable**
+  freeze for one no-UI API family (e.g. geo cities/countries) with dual-interface
+  evidence that no Billy screen exists — needed for completion mapping (0
+  not_applicable rows today).
+- Not annual product; no invent api_annual_*. Not finish.
+
+
+## SYNC pre-RESEARCH (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 710AD3C4 reacted (+): RESEARCH bulk offline body-contract first package
+  (else UI parity not_applicable for a no-UI API family).
+- Residual 29 writes stay blocked; annual red; dual-count list maps exhausted.
+- Ready RESEARCH freeze: bulk offline body contract (docs + offline only).
+
+
+## Research (iter 37)
+
+- research136 freeze: bulk offline body-contract (contacts archetype).
+- Docs fingerprint unchanged ETag `wcw4x9hqvu3603` MD5
+  `8b94b0135c91fd15fe54ea33e088a4be`.
+- Official page: bulk only as Supports flags (46 save + 46 delete); no `/bulk`
+  path, no bulk body/response examples; Conventions still 5 ops only.
+- Unauth probes: `PUT /{plural}/bulk` requires JSON object root (400
+  INVALID_REQUEST_BODY for array); object bodies → 401 AUTHENTICATION_REQUIRED;
+  `DELETE /{plural}?ids[]=` form from error text; empty ids → 400
+  INVALID_DELETE_ID_ARRAY; synthetic ids → 200 meta-only (not proof).
+- No coverage greened. No bulk tools. No API token. No browser.
+- Brief: `tmp/grok-research.md`.
+- Recommended PLAN: (A) durable bulk shape evidence package without greening,
+  or (B) secondary UI parity not_applicable for geo cities/countries.
+  Residual 29 + annual stay blocked. Not finish.
+
+
+## SYNC pre-PLAN (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- research136 brief present (bulk offline shape freeze; 92 stay red; no tools).
+- Frames none; coverage not greened.
+- Outbox pre-PLAN posted. Ready PLAN: bulk shape evidence package (A) or UI
+  not_applicable geo (B). Prefer A this iteration (research primary).
+
+
+## Plan (iter 37)
+
+- Plan: `plans/2026-08-01T01:18:17.996Z-186.37-bulk_shape_evidence_package.md`
+  — bulk offline shape evidence only (research136); wiki + bulk_rows hints +
+  live_probe research136 bulk_save matrix + unit/inventory tests; no bulk tools;
+  92 stay ambiguous_bulk red; no live API; no residual/annual product.
+- Ready for EXECUTE.
+
+
+## SYNC pre-EXECUTE (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private 35B484B8 reacted (+): EXECUTE bulk shape evidence package.
+- Plan 186.37 present (untracked until commit). Ready EXECUTE product.
+
+
+## Execute (iter 37)
+
+- Producted research136 bulk shape evidence package (no bulk tools, no green).
+- `live_probe.research136_bulk_save_body_matrix` + unit tests (object-root /
+  AUTHENTICATION_REQUIRED).
+- `bulk_rows()` shape hints under `AMBIGUOUS Supports:` prefix; request_fields
+  `json_object_root` / `ids[]`; errors INVALID_*; evidence research136.
+- Wiki: offline_write_probe_rules + wave5u_method_probe_contract updated.
+- Regenerated coverage; complete=false; bulk 92 red; live/vision 38.
+- Offline unit live_probe + coverage inventory: 32 passed.
+- Ready for REVIEW.
+
+
+## SYNC pre-REVIEW (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- EXECUTE bulk shape evidence package uncommitted on tip; complete=false;
+  live/vision 38; 92 bulk still red.
+- Outbox: EXECUTE complete announced. Ready for independent review of
+  research136 bulk shape evidence package (186.37).
+
+
+## Independent review (iter 37)
+
+- Product bulk shape evidence package: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1: rename synthetic request_fields label
+  clarity already covered by evidence text.
+- 92 bulk stay red; no tools; complete false. Overall completeness: **FAIL**
+  (expected). Proceed FIX-VERIFY (reconfirm) then COMMIT.
+
+
+## SYNC pre-FIX-VERIFY (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- Private BE56D663 reacted if unread; IR ACCEPT bulk shape (no required fixes).
+- Ready FIX-VERIFY reconfirm then COMMIT.
+
+
+## FIX-VERIFY (iter 37)
+
+- IR product ACCEPT; no required product fixes (optional N1 deferred).
+- lint.sh pass; test.sh offline **1563 passed**, 35 deselected.
+- check_coverage pass; bulk 92 red; complete false; live/vision 38.
+- Plan post-mortem filled. Wiki lint clean.
+- Ready for COMMIT.
+
+
+## SYNC pre-COMMIT (iter 37)
+
+- Unread inbox/feed: empty. Saved: empty. No running children.
+- FIX-VERIFY clean (1563 offline pass; IR ACCEPT). Ready COMMIT bulk shape
+  evidence package. Not node finish (complete false).
+
+
+## SYNC pre-COMMIT (iter 37) parent steer
+
+- Parent inbox B148CF36 (priority 7) replied + saved: after this package, do NOT
+  repeat evidence-only bulk iterations. Exhaust official docs/assets once for
+  exact bulk schemas; else one external-contract blocker then interface parity.
+  annual_reports: decide not_applicable vs exact unresolved requirement from
+  Upsedasse dual evidence. No invent/weaken.
+- Still commit 186.37 bulk shape package this step; steer applies after.

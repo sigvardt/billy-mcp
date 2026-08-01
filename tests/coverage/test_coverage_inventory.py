@@ -308,6 +308,32 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all(row["contract_status"] == "ambiguous_bulk" for row in bulk_rows)
     assert all(row["tool_name"] == "" for row in bulk_rows)
     assert all(row["implemented"] is False for row in bulk_rows)
+    assert all(row["contract_tested"] is False for row in bulk_rows)
+    assert all(row["live_tested"] is False for row in bulk_rows)
+
+    saves = [row for row in bulk_rows if row["operation"] == "bulk_save"]
+    deletes = [row for row in bulk_rows if row["operation"] == "bulk_delete"]
+    assert len(saves) == 46
+    assert len(deletes) == 46
+    assert all(row["request_fields"] == ["json_object_root"] for row in saves)
+    assert all(row["request_fields"] == ["ids[]"] for row in deletes)
+    assert all(row["method_or_route"].startswith("AMBIGUOUS Supports: bulk save") for row in saves)
+    assert all(
+        row["method_or_route"].startswith("AMBIGUOUS Supports: bulk delete") for row in deletes
+    )
+    assert all(
+        "offline shape PUT /v2/" in row["method_or_route"] and "/bulk" in row["method_or_route"]
+        for row in saves
+    )
+    assert all(
+        "offline shape DELETE /v2/" in row["method_or_route"] and "ids[]" in row["method_or_route"]
+        for row in deletes
+    )
+    assert all("INVALID_REQUEST_BODY" in row["errors"] for row in saves)
+    assert all("INVALID_DELETE_ID_ARRAY" in row["errors"] for row in deletes)
+    assert all("research136 offline unauth shape freeze" in row["evidence"] for row in bulk_rows)
+    # Shape hints must never look like a completed contract.
+    assert all(row["response_fields"] == [] for row in bulk_rows)
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:

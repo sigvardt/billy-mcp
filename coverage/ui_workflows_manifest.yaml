@@ -1716,10 +1716,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1748,10 +1750,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1950,10 +1954,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -1982,10 +1988,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2221,10 +2229,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2253,10 +2263,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2492,10 +2504,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2524,10 +2538,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2726,10 +2742,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2758,10 +2776,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -2997,10 +3017,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3029,10 +3051,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3268,10 +3292,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3300,10 +3326,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3539,10 +3567,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3571,10 +3601,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3810,10 +3842,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -3842,10 +3876,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4081,10 +4117,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4113,10 +4151,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4338,10 +4378,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4370,10 +4412,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4578,10 +4622,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4610,10 +4656,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4812,10 +4860,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -4844,10 +4894,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5046,10 +5098,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5078,10 +5132,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5317,10 +5373,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5349,10 +5407,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5574,10 +5634,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5606,10 +5668,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5808,10 +5872,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -5840,10 +5906,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6042,10 +6110,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6074,10 +6144,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6276,10 +6348,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6308,10 +6382,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6547,10 +6623,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6579,10 +6657,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6818,10 +6898,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -6850,10 +6932,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7089,10 +7173,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7121,10 +7207,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7392,10 +7480,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7424,10 +7514,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7595,10 +7687,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7627,10 +7721,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7829,10 +7925,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -7861,10 +7959,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8100,10 +8200,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8132,10 +8234,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8371,10 +8475,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8403,10 +8509,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8566,10 +8674,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8598,10 +8708,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8823,10 +8935,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -8855,10 +8969,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9057,10 +9173,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9089,10 +9207,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9290,10 +9410,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9322,10 +9444,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9524,10 +9648,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9556,10 +9682,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9795,10 +9923,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -9827,10 +9957,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10052,10 +10184,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10084,10 +10218,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10323,10 +10459,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10355,10 +10493,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10594,10 +10734,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10626,10 +10768,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10828,10 +10972,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -10860,10 +11006,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11025,10 +11173,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11057,10 +11207,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11296,10 +11448,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11328,10 +11482,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11567,10 +11723,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11599,10 +11757,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11807,10 +11967,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -11839,10 +12001,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12078,10 +12242,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12110,10 +12276,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12349,10 +12517,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12381,10 +12551,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12606,10 +12778,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12638,10 +12812,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12803,10 +12979,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -12835,10 +13013,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -13043,10 +13223,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
@@ -13075,10 +13257,12 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],

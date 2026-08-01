@@ -226,21 +226,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accountGroups.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accountGroups",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accountGroups; offline shape PUT /v2/accountGroups/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -257,21 +260,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accountGroups.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accountGroups",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accountGroups; offline shape DELETE /v2/accountGroups?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -458,21 +464,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accountNatures.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accountNatures",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accountNatures; offline shape PUT /v2/accountNatures/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -489,21 +498,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accountNatures.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accountNatures",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accountNatures; offline shape DELETE /v2/accountNatures?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -732,21 +744,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accounts.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/accounts; offline shape PUT /v2/accounts/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -763,21 +778,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.accounts.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/accounts; offline shape DELETE /v2/accounts?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1009,21 +1027,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.attachments.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/attachments",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/attachments; offline shape PUT /v2/attachments/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1040,21 +1061,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.attachments.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/attachments",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/attachments; offline shape DELETE /v2/attachments?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1241,21 +1265,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.balanceModifiers.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/balanceModifiers",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/balanceModifiers; offline shape PUT /v2/balanceModifiers/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1272,21 +1299,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.balanceModifiers.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/balanceModifiers",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/balanceModifiers; offline shape DELETE /v2/balanceModifiers?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1518,21 +1548,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLineMatches.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLineMatches",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLineMatches; offline shape PUT /v2/bankLineMatches/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1549,21 +1582,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLineMatches.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLineMatches",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLineMatches; offline shape DELETE /v2/bankLineMatches?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1795,21 +1831,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLines.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLines; offline shape PUT /v2/bankLines/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -1826,21 +1865,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLines.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLines; offline shape DELETE /v2/bankLines?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2072,21 +2114,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLineSubjectAssociations",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankLineSubjectAssociations; offline shape PUT /v2/bankLineSubjectAssociations/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2103,21 +2148,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLineSubjectAssociations",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankLineSubjectAssociations; offline shape DELETE /v2/bankLineSubjectAssociations?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2344,21 +2392,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankPayments.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankPayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bankPayments; offline shape PUT /v2/bankPayments/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2375,21 +2426,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bankPayments.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankPayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bankPayments; offline shape DELETE /v2/bankPayments?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2618,21 +2672,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.billLines.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/billLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/billLines; offline shape PUT /v2/billLines/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2649,21 +2706,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.billLines.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/billLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/billLines; offline shape DELETE /v2/billLines?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2951,21 +3011,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bills.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bills",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/bills; offline shape PUT /v2/bills/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -2982,21 +3045,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.bills.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bills",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/bills; offline shape DELETE /v2/bills?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3189,21 +3255,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.cities.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/cities",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/cities; offline shape PUT /v2/cities/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3220,21 +3289,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.cities.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/cities",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/cities; offline shape DELETE /v2/cities?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3425,21 +3497,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactBalancePayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactBalancePayments; offline shape PUT /v2/contactBalancePayments/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3456,21 +3531,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactBalancePayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactBalancePayments; offline shape DELETE /v2/contactBalancePayments?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3657,21 +3735,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactBalancePostings",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactBalancePostings; offline shape PUT /v2/contactBalancePostings/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3688,21 +3769,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactBalancePostings",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactBalancePostings; offline shape DELETE /v2/contactBalancePostings?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3931,21 +4015,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactPersons.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactPersons",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contactPersons; offline shape PUT /v2/contactPersons/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -3962,21 +4049,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contactPersons.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactPersons",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contactPersons; offline shape DELETE /v2/contactPersons?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4205,21 +4295,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contacts.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contacts",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/contacts; offline shape PUT /v2/contacts/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4236,21 +4329,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.contacts.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contacts",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/contacts; offline shape DELETE /v2/contacts?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4437,21 +4533,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.countryGroups.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/countryGroups",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/countryGroups; offline shape PUT /v2/countryGroups/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4468,21 +4567,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.countryGroups.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/countryGroups",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/countryGroups; offline shape DELETE /v2/countryGroups?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4669,21 +4771,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.countries.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/countries",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/countries; offline shape PUT /v2/countries/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4700,21 +4805,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.countries.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/countries",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/countries; offline shape DELETE /v2/countries?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4901,21 +5009,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.currencies.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/currencies",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/currencies; offline shape PUT /v2/currencies/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -4932,21 +5043,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.currencies.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/currencies",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/currencies; offline shape DELETE /v2/currencies?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5175,21 +5289,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookBalanceAccounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookBalanceAccounts; offline shape PUT /v2/daybookBalanceAccounts/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5206,21 +5323,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookBalanceAccounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookBalanceAccounts; offline shape DELETE /v2/daybookBalanceAccounts?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5449,21 +5569,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybooks.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybooks",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybooks; offline shape PUT /v2/daybooks/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5480,21 +5603,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybooks.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybooks",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybooks; offline shape DELETE /v2/daybooks?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5723,21 +5849,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookTransactionLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookTransactionLines; offline shape PUT /v2/daybookTransactionLines/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -5754,21 +5883,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookTransactionLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookTransactionLines; offline shape DELETE /v2/daybookTransactionLines?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6029,21 +6161,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookTransactions.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookTransactions",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/daybookTransactions; offline shape PUT /v2/daybookTransactions/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6060,21 +6195,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.daybookTransactions.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookTransactions",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/daybookTransactions; offline shape DELETE /v2/daybookTransactions?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6234,21 +6372,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.files.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/files",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/files; offline shape PUT /v2/files/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6265,21 +6406,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.files.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/files",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/files; offline shape DELETE /v2/files?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6470,21 +6614,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceLateFees",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceLateFees; offline shape PUT /v2/invoiceLateFees/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6501,21 +6648,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceLateFees",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceLateFees; offline shape DELETE /v2/invoiceLateFees?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6744,21 +6894,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceLines.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceLines; offline shape PUT /v2/invoiceLines/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -6775,21 +6928,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceLines.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceLines",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceLines; offline shape DELETE /v2/invoiceLines?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7012,21 +7168,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceReminderAssociations",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceReminderAssociations; offline shape PUT /v2/invoiceReminderAssociations/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7043,21 +7202,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceReminderAssociations",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceReminderAssociations; offline shape DELETE /v2/invoiceReminderAssociations?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7208,21 +7370,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceReminders.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceReminders",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoiceReminders; offline shape PUT /v2/invoiceReminders/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7239,21 +7404,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoiceReminders.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceReminders",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoiceReminders; offline shape DELETE /v2/invoiceReminders?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7571,21 +7739,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoices.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoices",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/invoices; offline shape PUT /v2/invoices/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7602,21 +7773,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.invoices.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoices",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/invoices; offline shape DELETE /v2/invoices?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7803,21 +7977,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.locales.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/locales",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/locales; offline shape PUT /v2/locales/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -7834,21 +8011,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.locales.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/locales",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/locales; offline shape DELETE /v2/locales?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8038,21 +8218,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.organizations.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/organizations",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/organizations; offline shape PUT /v2/organizations/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8069,21 +8252,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.organizations.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/organizations",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/organizations; offline shape DELETE /v2/organizations?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8270,21 +8456,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.postings.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/postings",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/postings; offline shape PUT /v2/postings/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8301,21 +8490,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.postings.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/postings",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/postings; offline shape DELETE /v2/postings?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8544,21 +8736,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.productPrices.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/productPrices",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/productPrices; offline shape PUT /v2/productPrices/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8575,21 +8770,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.productPrices.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/productPrices",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/productPrices; offline shape DELETE /v2/productPrices?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8818,21 +9016,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.products.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/products",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/products; offline shape PUT /v2/products/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -8849,21 +9050,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.products.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/products",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/products; offline shape DELETE /v2/products?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9095,21 +9299,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxAccounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxAccounts; offline shape PUT /v2/salesTaxAccounts/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9126,21 +9333,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxAccounts",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxAccounts; offline shape DELETE /v2/salesTaxAccounts?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9372,21 +9582,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxMetaFields",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxMetaFields; offline shape PUT /v2/salesTaxMetaFields/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9403,21 +9616,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxMetaFields",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxMetaFields; offline shape DELETE /v2/salesTaxMetaFields?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9608,21 +9824,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxPayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxPayments; offline shape PUT /v2/salesTaxPayments/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9639,21 +9858,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxPayments",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxPayments; offline shape DELETE /v2/salesTaxPayments?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9806,21 +10028,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxReturns",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxReturns; offline shape PUT /v2/salesTaxReturns/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -9837,21 +10062,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxReturns",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxReturns; offline shape DELETE /v2/salesTaxReturns?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10083,21 +10311,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxRules.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxRules",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxRules; offline shape PUT /v2/salesTaxRules/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10114,21 +10345,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxRules.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxRules",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxRules; offline shape DELETE /v2/salesTaxRules?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10360,21 +10594,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxRulesets",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/salesTaxRulesets; offline shape PUT /v2/salesTaxRulesets/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10391,21 +10628,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxRulesets",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/salesTaxRulesets; offline shape DELETE /v2/salesTaxRulesets?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10598,21 +10838,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.states.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/states",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/states; offline shape PUT /v2/states/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10629,21 +10872,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.states.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/states",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/states; offline shape DELETE /v2/states?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10872,21 +11118,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/taxRateDeductionComponents",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/taxRateDeductionComponents; offline shape PUT /v2/taxRateDeductionComponents/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -10903,21 +11152,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/taxRateDeductionComponents",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/taxRateDeductionComponents; offline shape DELETE /v2/taxRateDeductionComponents?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11146,21 +11398,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.taxRates.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/taxRates",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/taxRates; offline shape PUT /v2/taxRates/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11177,21 +11432,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.taxRates.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/taxRates",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/taxRates; offline shape DELETE /v2/taxRates?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11414,21 +11672,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.transactions.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/transactions",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/transactions; offline shape PUT /v2/transactions/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11445,21 +11706,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.transactions.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/transactions",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/transactions; offline shape DELETE /v2/transactions?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11612,21 +11876,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.users.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/users",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/users; offline shape PUT /v2/users/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11643,21 +11910,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.users.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/users",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/users; offline shape DELETE /v2/users?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11850,21 +12120,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.zipcodes.bulk_save",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/zipcodes",
+      "method_or_route": "AMBIGUOUS Supports: bulk save /v2/zipcodes; offline shape PUT /v2/zipcodes/bulk (research136 object-root only; not full body/response contract)",
       "operation": "bulk_save",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "json_object_root"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, body, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until field schema, partial failures, empty-array semantics, and limits are contracted; offline unauth only proves object-root body parse then AUTHENTICATION_REQUIRED",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
@@ -11881,21 +12154,24 @@
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
-        "OAUTH_INVALID_ACCESS_TOKEN"
+        "OAUTH_INVALID_ACCESS_TOKEN",
+        "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified)",
       "filters": [],
       "id": "api.zipcodes.bulk_delete",
       "implemented": false,
       "lane": "api",
       "live_tested": false,
-      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/zipcodes",
+      "method_or_route": "AMBIGUOUS Supports: bulk delete /v2/zipcodes; offline shape DELETE /v2/zipcodes?ids[]= (research136 empty-ids fail-closed; not effect contract)",
       "operation": "bulk_delete",
       "pagination": null,
-      "request_fields": [],
+      "request_fields": [
+        "ids[]"
+      ],
       "response_fields": [],
       "sensitivity": "unknown",
-      "side_effects": "unknown until method, identifiers, partial failures, and limits are live-qualified",
+      "side_effects": "unknown until identifiers, partial failures, and limits are contracted; empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id 200 meta-only is not effect proof",
       "source_kind": "ambiguous_bulk",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"

@@ -33,6 +33,8 @@ OBSERVATION_IDENTIFIER: Final = "__wave5t_observation_target__"
 DEFAULT_EVIDENCE_DIRECTORY: Final = Path.home() / ".local" / "state" / "billy-mcp" / "live-probe"
 BULK_DELETE_QUERY_NAME: Final[Literal["ids[]"]] = "ids[]"
 BULK_DELETE_EMPTY_ERROR_CODE: Final[Literal["INVALID_DELETE_ID_ARRAY"]] = "INVALID_DELETE_ID_ARRAY"
+BULK_SAVE_OBJECT_ROOT_ERROR_CODE: Final[Literal["INVALID_REQUEST_BODY"]] = "INVALID_REQUEST_BODY"
+BULK_SAVE_AUTH_ERROR_CODE: Final[Literal["AUTHENTICATION_REQUIRED"]] = "AUTHENTICATION_REQUIRED"
 
 
 class ProbeStatus(StrEnum):
@@ -113,6 +115,74 @@ class BulkDeleteFormAssessment(BaseModel):
         ):
             raise ValueError(
                 "empty bulk-delete forms are INVALID_DELETE_ID_ARRAY validation errors"
+            )
+        return self
+
+
+class BulkSaveBodyFormKind(StrEnum):
+    """Research136's observed unauthenticated bulk-save body forms."""
+
+    MISSING_BODY = "missing_body"
+    NULL_BODY = "null_body"
+    STRING_BODY = "string_body"
+    ARRAY_EMPTY = "array_empty"
+    ARRAY_OBJECT = "array_object"
+    OBJECT_EMPTY = "object_empty"
+    OBJECT_PLURAL_EMPTY_ARRAY = "object_plural_empty_array"
+    OBJECT_WRONG_PLURAL = "object_wrong_plural"
+    OBJECT_ONE_EMPTY = "object_one_empty"
+
+
+class BulkSaveBodyState(StrEnum):
+    """Observed bulk-save body outcomes that must never qualify a real method."""
+
+    VALIDATION_ERROR = "validation_error"
+    AUTHENTICATION_GATED = "authentication_gated"
+
+
+class BulkSaveBodyAssessment(BaseModel):
+    """Immutable research136 bulk-save body outcome; never a full wire contract."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True)
+
+    form: BulkSaveBodyFormKind
+    unauthenticated_status_code: Literal[400, 401]
+    error_code: Literal["INVALID_REQUEST_BODY", "AUTHENTICATION_REQUIRED"]
+    state: BulkSaveBodyState
+    safe_no_op: Literal[False] = False
+    qualifies_live_wire_contract: Literal[False] = False
+    permits_real_method_network: Literal[False] = False
+    registers_tool: Literal[False] = False
+    claims_cleanup: Literal[False] = False
+    changes_coverage_state: Literal[False] = False
+
+    @model_validator(mode="after")
+    def _enforce_research136_semantics(self) -> BulkSaveBodyAssessment:
+        """Object root reaches auth; non-object roots are INVALID_REQUEST_BODY only."""
+
+        object_forms = {
+            BulkSaveBodyFormKind.OBJECT_EMPTY,
+            BulkSaveBodyFormKind.OBJECT_PLURAL_EMPTY_ARRAY,
+            BulkSaveBodyFormKind.OBJECT_WRONG_PLURAL,
+            BulkSaveBodyFormKind.OBJECT_ONE_EMPTY,
+        }
+        if self.form in object_forms:
+            if (
+                self.unauthenticated_status_code != 401
+                or self.error_code != BULK_SAVE_AUTH_ERROR_CODE
+                or self.state is not BulkSaveBodyState.AUTHENTICATION_GATED
+            ):
+                raise ValueError(
+                    "object-root bulk-save bodies are AUTHENTICATION_REQUIRED at unauth gate"
+                )
+            return self
+        if (
+            self.unauthenticated_status_code != 400
+            or self.error_code != BULK_SAVE_OBJECT_ROOT_ERROR_CODE
+            or self.state is not BulkSaveBodyState.VALIDATION_ERROR
+        ):
+            raise ValueError(
+                "non-object bulk-save bodies are INVALID_REQUEST_BODY validation errors"
             )
         return self
 
@@ -668,6 +738,70 @@ _RESEARCH95_BULK_DELETE_FORM_MATRIX: Final[tuple[BulkDeleteFormAssessment, ...]]
         state=BulkDeleteFormState.METADATA_ONLY_UNQUALIFIED,
     ),
 )
+
+
+_RESEARCH136_BULK_SAVE_BODY_MATRIX: Final[tuple[BulkSaveBodyAssessment, ...]] = (
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.MISSING_BODY,
+        unauthenticated_status_code=400,
+        error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+        state=BulkSaveBodyState.VALIDATION_ERROR,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.NULL_BODY,
+        unauthenticated_status_code=400,
+        error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+        state=BulkSaveBodyState.VALIDATION_ERROR,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.STRING_BODY,
+        unauthenticated_status_code=400,
+        error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+        state=BulkSaveBodyState.VALIDATION_ERROR,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.ARRAY_EMPTY,
+        unauthenticated_status_code=400,
+        error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+        state=BulkSaveBodyState.VALIDATION_ERROR,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.ARRAY_OBJECT,
+        unauthenticated_status_code=400,
+        error_code=BULK_SAVE_OBJECT_ROOT_ERROR_CODE,
+        state=BulkSaveBodyState.VALIDATION_ERROR,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.OBJECT_EMPTY,
+        unauthenticated_status_code=401,
+        error_code=BULK_SAVE_AUTH_ERROR_CODE,
+        state=BulkSaveBodyState.AUTHENTICATION_GATED,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.OBJECT_PLURAL_EMPTY_ARRAY,
+        unauthenticated_status_code=401,
+        error_code=BULK_SAVE_AUTH_ERROR_CODE,
+        state=BulkSaveBodyState.AUTHENTICATION_GATED,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.OBJECT_WRONG_PLURAL,
+        unauthenticated_status_code=401,
+        error_code=BULK_SAVE_AUTH_ERROR_CODE,
+        state=BulkSaveBodyState.AUTHENTICATION_GATED,
+    ),
+    BulkSaveBodyAssessment(
+        form=BulkSaveBodyFormKind.OBJECT_ONE_EMPTY,
+        unauthenticated_status_code=401,
+        error_code=BULK_SAVE_AUTH_ERROR_CODE,
+        state=BulkSaveBodyState.AUTHENTICATION_GATED,
+    ),
+)
+
+
+def research136_bulk_save_body_matrix() -> tuple[BulkSaveBodyAssessment, ...]:
+    """Return the research136 bulk-save body matrix without creating a request path."""
+
+    return _RESEARCH136_BULK_SAVE_BODY_MATRIX
 
 
 def research95_bulk_delete_form_matrix() -> tuple[BulkDeleteFormAssessment, ...]:
