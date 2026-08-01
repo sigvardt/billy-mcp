@@ -6,21 +6,25 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T01:06:00Z
+updated: 2026-08-01T01:10:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 35 pre-COMMIT. Product `ui_settings_subscription_open`
-  FIX-VERIFY clean; ready commit. Coverage live/vision 37; complete false.
-- annual red. Not node finish.
+- Continue mode iter 35 COMMIT. Product tip settings_subscription 186.35
+  (`ui_settings_subscription_open`, `88a369e`). Coverage live/vision 37;
+  complete false.
+- Discovery still red (1): annual_reports (Upsedasse inaccessible freeze).
+- Next: remaining annual red or UI parity / bulk API offline work.
+  No invent api_settings_*/api_annual_*. Not node finish.
+- Review: product `ui_settings_subscription_open` **ACCEPT** (IR 186.35).
 
 ## Verification
 
 - Last product: `ui_settings_subscription_open` dual-session + vision purge_verified
-  (FIX-VERIFY N1; uncommitted pending COMMIT).
+  (FIX-VERIFY N1; tip `88a369e`).
 - Offline baseline product: 1561 passed non-live.
 - Live baseline: 37 UI discovery/parity rows green.
 
@@ -2297,4 +2301,10 @@ updated: 2026-08-01T01:06:00Z
 - Unread inbox/feed: empty. Saved: empty. No running children.
 - Private 8A511323 + 4F7E7FD4 reacted (+): ready COMMIT.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 35)
+
+- `fractal commit` product: ui settings subscription open empty abonnement panel
+  with dual live and vision (`88a369e`).
+- Not node finish (complete false; bulk + annual_reports still red).
 
