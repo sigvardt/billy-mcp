@@ -7418,3 +7418,11 @@ updated: 2026-08-01T22:25:00Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1624 offline pass; IR ACCEPT). Ready COMMIT 186.70
   ui invoices get open package. Not node finish (complete false).
+
+## COMMIT (iter 70)
+
+- `fractal commit` product: ui invoices get open (`f86a802`).
+- Includes path_allow invoices POST exact + DELETE, tool ui_invoices_get_open,
+  live dual test, vision record path, coverage dual-count, plan, wiki shell.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
