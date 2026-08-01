@@ -7584,3 +7584,9 @@ updated: 2026-08-01T22:56:54Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1628 offline pass; IR ACCEPT). Ready COMMIT 186.71
   ui bills get open package. Not node finish (complete false).
+
+## COMMIT (iter 71)
+
+- `fractal commit` product: ui bills get open (`e3fdfc5`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
