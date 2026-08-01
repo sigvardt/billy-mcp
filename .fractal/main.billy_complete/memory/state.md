@@ -6,16 +6,18 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-01T00:16:00Z
+updated: 2026-08-01T00:20:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter 34 SYNC pre-COMMIT. Uncommitted product
-  `ui_settings_beta_open`. Coverage live/vision 36; complete false.
-- FIX-VERIFY clean; commit product next. Not node finish.
+- Continue mode iter 34 COMMIT. Product tip settings_beta 186.34
+  (`ui_settings_beta_open`, `dfb5f9b`). Coverage live/vision 36; complete false.
+- Next: remaining settings_subscription (empty chrome red) or annual red.
+  No invent api_settings_*. Not node finish.
+- Review: product `ui_settings_beta_open` **ACCEPT** (IR 186.34).
 
 ## Verification
 
@@ -2159,4 +2161,9 @@ updated: 2026-08-01T00:16:00Z
 - Unread inbox/feed: empty. Saved: empty.
 - No running children.
 - FIX-VERIFY clean; commit product next.
+
+## COMMIT (iter 34)
+
+- `fractal commit` product: ui settings beta open betas panel with dual live and vision (`dfb5f9b`).
+- Not node finish (complete false; bulk + remaining UI still red).
 
