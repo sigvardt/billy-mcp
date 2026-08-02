@@ -9832,3 +9832,139 @@ updated: 2026-08-02T14:42:00Z
 - package research185 NA×4; coverage 286/470 complete false
 - not node finish
 
+
+
+## iter88 SYNC (2026-08-02T15:15:06Z)
+
+- inbox/feed unread empty; private iter87 notes reacted
+- saved open: 1E6AF3C9 STEER dual-session UI probes (creds at Desktop billy_login.txt; no commit/log)
+- no running children; branch clean HEAD d47bd95 (186.87 memory after 291376b product)
+- coverage complete=false; implemented/contract 470; live/vision 286
+- blocker: 92 API ambiguous_bulk red; UI product-plane bulk x58 discovery_required (UI_BULK_CHROME_DUAL_REQUIRED); annual_reports org_inaccessible
+- next: PREPARE dual bulk-chrome survey on 58 greened list shells; not node finish
+
+
+## iter88 PREPARE (2026-08-02T15:16:28Z)
+
+- Parent `main`: already up to date (fetch origin/main; merge no-op).
+- Child scan: many remote-ahead tips; almost all fractal-only init / failed-review scaffolding.
+- Product-path three-dot only: `ui_auth_status` (browser/models/server/tests) — **skip merge**. Tip already has evolved `auth_status` (integrate cf38b5c + later work); child tip would regress ~8k+ browser lines.
+- Wiki-only ahead: `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (pages on tip, tip equal/longer); `ui_auth_credentials_research_codex_fallback` research page only — skip (superseded auth product path; same as iters 51+).
+- Material larger-on-child unique src/tests: **0**. No child merges. No outbox integration note.
+- HEAD d47bd95; working tree only memory/state.md dirty from SYNC/PREPARE notes.
+- Next: PLAN dual bulk-chrome survey (STEER 1E6AF3C9). Not finish.
+
+
+## iter88 pre-RESEARCH SYNC (2026-08-02T15:16:54Z)
+
+- inbox/feed unread empty; private 4792A3F8 reacted
+- saved open: 1E6AF3C9 STEER dual-session UI probes (creds Desktop billy_login.txt; no commit/log; live API out of scope)
+- no running children; PREPARE already recorded no merges
+- HEAD d47bd95; memory dirty only; complete=false 470/286
+- next: RESEARCH dual bulk-chrome survey on 58 product-plane bulk discovery_required rows
+- not node finish
+
+
+## iter88 RESEARCH (2026-08-02T15:25:28Z)
+
+- Research188 dual bulk-chrome survey complete: `tmp/grok-research.md` replaced
+- Docs MD5/ETag unchanged (8b94b0135c91fd15fe54ea33e088a4be / wcw4x9hqvu3603); bulk Supports 46+46
+- Dual headless READY/READY; api_token_used false; no writes; profiles purged
+- Evidence: `tmp/research188_bulk_chrome_dual.json` + probe script
+- Judgments (29 resources): dual-absent real shell **20**; present **0**; no real shell **9**; disagree **0**
+- Strong NA candidates (non-empty shells): **15 resources / 30 UI bulk rows**
+- Hold empty-shell (contacts/invoices/bills + lines): 10 rows until disposable re-probe
+- Hold soft VAT/users seeds: 18 rows until tool-based dual (Momssatser/Brugere/vat)
+- Recommended PLAN/EXECUTE: `ui_product_plane_bulk_chrome_dual_na_strong` only; no API bulk green; complete stays false
+- No coverage greened in research
+
+
+## iter88 pre-PLAN SYNC (2026-08-02T15:27:04Z)
+
+- inbox/feed unread empty; private B0865806 reacted
+- saved open: 1E6AF3C9 (dual probes executed in research188; keep until strong NA package lands)
+- no running children
+- material: research188 dual bulk-chrome READY/READY; strong NA 30 rows recommended; empty 10 + soft 18 held
+- HEAD d47bd95; memory dirty; complete false
+- next: PLAN ui_product_plane_bulk_chrome_dual_na_strong
+- not node finish
+
+
+## iter88 PLAN (2026-08-02T15:29:45Z)
+
+- Plan: `plans/2026-08-02T15:27:27.751Z-186.88-ui_product_plane_bulk_chrome_dual_na_strong.md`
+- Slice: research188 strong dual-absent bulk chrome NA — exact 15 resources / 30 UI bulk rows
+- Target: live/vision 316, implemented/contract 500, complete false; remaining UI bulk honesty 28
+- Hold: empty-shell 10 + soft VAT/users 18; API bulk 92; residual 29; annual 1
+- Root-only; no children; no live API; not finish
+- Next: EXECUTE
+
+
+## iter88 pre-EXECUTE SYNC (2026-08-02T15:30:12Z)
+
+- inbox/feed unread empty; private 67B9C76E reacted
+- saved open: 1E6AF3C9 (dual probes done; keep until 186.88 package lands)
+- no running children
+- plan present: 186.88 ui_product_plane_bulk_chrome_dual_na_strong (untracked until COMMIT)
+- HEAD d47bd95; next EXECUTE research188 strong dual-NA 30 rows
+- not node finish
+
+
+## iter88 EXECUTE (2026-08-02T15:37:32Z)
+
+- Producted research188 strong dual-NA: 15 resources / 30 UI bulk rows
+- Generator: UI_BULK_CHROME_DUAL_NA_STRONG_*, apply after honesty; GEO_UI_NOT_APPLICABLE_ROW_COUNT 240
+- Coverage: live/vision 316, implemented/contract 500, complete false; remaining honesty 28
+- Tests: inventory 21 passed after bulk assert updates (research183/184/185/parity)
+- Wiki: ui_product_plane_bulk_chrome_dual_na_strong.md + honesty/offline/index
+- Not node finish; ready FIX-VERIFY / IR / COMMIT
+
+
+## iter88 pre-IR SYNC (2026-08-02T15:48:01Z)
+
+- inbox/feed unread empty; private D03485B7 reacted
+- saved open: 1E6AF3C9 (dual probes + strong NA producted; unsave after COMMIT 186.88)
+- no running children
+- uncommitted EXECUTE product ready for independent review
+- coverage: live/vision 316, implemented/contract 500, complete false
+- next: INDEPENDENT-REVIEW
+
+
+## iter88 INDEPENDENT-REVIEW (2026-08-02T15:49:09Z)
+
+- Verdict: **PASS (package)** research188 strong dual-NA 30 UI bulk rows; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; 30 NA + 28 honesty; dual READY/READY no API token; no bulk tools; counts 500/316 complete false; empty-shell/soft not greened; no secrets
+- Required fixes: **none**
+- Next: FIX-VERIFY / COMMIT 186.88; not node finish
+
+
+## iter88 pre-FIX-VERIFY SYNC (2026-08-02T15:49:37Z)
+
+- inbox/feed unread empty; private 85245519 reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.88)
+- no running children
+- IR PASS package (tmp/grok-review.md); no required fixes
+- uncommitted product still present; next FIX-VERIFY then COMMIT
+- complete=false unchanged
+
+
+## iter88 FIX-VERIFY (2026-08-02T16:00:48Z)
+
+- IR package PASS: no required package fixes; invariants reconfirmed (NA×30, honesty×28, 500/316, complete false)
+- Hygiene: pyright cast on evidence_code filter in inventory geo NA test
+- lint.sh pass; test.sh commit-mode 1669 passed
+- wiki lint clean (project + memory)
+- plan post-mortem appended on 186.88
+- Did not run ui-full/full (complete false)
+- Ready COMMIT 186.88; not node finish
+
+
+## iter88 pre-COMMIT SYNC (2026-08-02T16:01:13Z)
+
+- inbox/feed unread empty; private 067E0082 reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.88)
+- no running children
+- FIX-VERIFY clean; uncommitted product ready for fractal commit
+- coverage 500/316 complete false
+- next: COMMIT 186.88

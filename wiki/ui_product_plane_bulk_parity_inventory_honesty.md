@@ -10,7 +10,7 @@ sources:
   - wiki/residual_clear_method_closed_inventory_honesty.md
   - .fractal/main.billy_complete/tmp/grok-research.md
 created: 2026-08-02T15:00:00Z
-updated: 2026-08-02T15:00:00Z
+updated: 2026-08-02T15:35:00Z
 ---
 
 # UI product-plane bulk parity inventory honesty freeze
@@ -70,14 +70,15 @@ accounts, attachments, bankLineMatches, bankLineSubjectAssociations, bankLines, 
 | --- | ---: |
 | Bulk schema unspecified (`external_contract_blocker`) | 92 API |
 | Residual clear honesty (still red) | 29 API |
-| UI product-plane bulk chrome dual required (this freeze, still red) | 58 UI |
+| UI product-plane bulk chrome dual required (remaining honesty) | 28 UI |
+| UI product-plane bulk chrome dual NA strong (research188) | 30 UI |
 | annual_reports org inaccessible | 1 UI discovery |
 
-Green counts after this freeze: implemented/contract **470**, live/vision **286**, complete **false**.
+After research187 honesty alone: implemented/contract **470**, live/vision **286**. After research188 strong dual-NA: implemented/contract **500**, live/vision **316**, complete **false**.
 
 ## Unlock for UI bulk NA (follow-on)
 
-When browser credentials are available: dual headless bulk-chrome survey on greened list shells for the 29 resources. Promote **only** dual-absent multi-select/bulk-action rows to evidenced UI `not_applicable`. Still does not green API bulk 92.
+Research188 dual survey landed: **15 resources / 30 rows** promoted to UI `not_applicable` (see [[ui_product_plane_bulk_chrome_dual_na_strong]]). Remaining **28** honesty rows: empty-shell contacts/invoices/bills (+lines) and soft VAT/users seeds. Still does not green API bulk 92.
 
 ## Generator and tests
 

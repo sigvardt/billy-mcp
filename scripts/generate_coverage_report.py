@@ -161,7 +161,7 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    210  # prior 206 + research185 attachments.get/create/update/delete (4)
+    240  # prior 210 + research188 product-plane bulk chrome dual NA strong (30)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -1945,6 +1945,236 @@ def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) 
         row["contract_tested"] = False
         row["live_tested"] = False
         row["vision_verified"] = False
+
+
+# Research188 UI product-plane bulk chrome dual NA (strong subset only).
+# Dual-absent multi-select/bulk-action chrome on non-empty greened list shells.
+# Empty-shell and soft VAT/users families stay research187 honesty (discovery_required).
+UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE = "UI_BULK_CHROME_ABSENT_DUAL"
+UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES: frozenset[str] = frozenset(
+    {
+        "accounts",
+        "attachments",
+        "bankLineMatches",
+        "bankLineSubjectAssociations",
+        "bankLines",
+        "bankPayments",
+        "daybookBalanceAccounts",
+        "daybookTransactionLines",
+        "daybookTransactions",
+        "daybooks",
+        "files",
+        "organizations",
+        "postings",
+        "products",
+        "transactions",
+    }
+)
+UI_BULK_CHROME_DUAL_NA_STRONG_IDS: frozenset[str] = frozenset(
+    {
+        f"ui.parity.{resource}.{op}"
+        for resource in UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES
+        for op in ("bulk_save", "bulk_delete")
+    }
+)
+# resource -> greened list/open shell observed dual (research188)
+UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS: dict[str, dict[str, str]] = {
+    "accounts": {
+        "shell_id": "settings_accounting",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_accounting_open",
+    },
+    "attachments": {
+        "shell_id": "uploads_list",
+        "path_class": "/uploads",
+        "tool_ref": "ui_uploads_list",
+    },
+    "files": {
+        "shell_id": "uploads_list",
+        "path_class": "/uploads",
+        "tool_ref": "ui_uploads_list",
+    },
+    "bankLineMatches": {
+        "shell_id": "bank_accounts_list",
+        "path_class": "/bank-accounts",
+        "tool_ref": "ui_bank_accounts_list",
+    },
+    "bankLineSubjectAssociations": {
+        "shell_id": "bank_accounts_list",
+        "path_class": "/bank-accounts",
+        "tool_ref": "ui_bank_accounts_list",
+    },
+    "bankLines": {
+        "shell_id": "bank_accounts_list",
+        "path_class": "/bank-accounts",
+        "tool_ref": "ui_bank_accounts_list",
+    },
+    "bankPayments": {
+        "shell_id": "bank_accounts_list",
+        "path_class": "/bank-accounts",
+        "tool_ref": "ui_bank_accounts_list",
+    },
+    "daybookBalanceAccounts": {
+        "shell_id": "daybooks_open",
+        "path_class": "/daybooks/<id>",
+        "tool_ref": "ui_daybooks_open",
+    },
+    "daybookTransactionLines": {
+        "shell_id": "daybooks_open",
+        "path_class": "/daybooks/<id>",
+        "tool_ref": "ui_daybooks_open",
+    },
+    "daybookTransactions": {
+        "shell_id": "daybooks_open",
+        "path_class": "/daybooks/<id>",
+        "tool_ref": "ui_daybooks_open",
+    },
+    "daybooks": {
+        "shell_id": "daybooks_open",
+        "path_class": "/daybooks/<id>",
+        "tool_ref": "ui_daybooks_open",
+    },
+    "organizations": {
+        "shell_id": "settings_company",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_company_open",
+    },
+    "postings": {
+        "shell_id": "transactions_list",
+        "path_class": "/transactions",
+        "tool_ref": "ui_transactions_list",
+    },
+    "products": {
+        "shell_id": "products_list",
+        "path_class": "/products",
+        "tool_ref": "ui_products_list",
+    },
+    "transactions": {
+        "shell_id": "transactions_list",
+        "path_class": "/transactions",
+        "tool_ref": "ui_transactions_list",
+    },
+}
+
+
+def ui_bulk_chrome_absent_dual_qualification(resource: str, operation: str) -> dict[str, Any]:
+    """Machine-readable UI not_applicable for strong dual-absent bulk chrome rows."""
+
+    shell = UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS[resource]
+    linked_api = f"api.{resource}.{operation}"
+    return {
+        "kind": "ui_not_applicable",
+        "evidence_code": UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE,
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": (
+            "research188 dual independent ephemeral sessions: non-empty greened "
+            "list/open shell exposes no multi-select / bulk-action chrome for this "
+            "API bulk parity row; design §10.2 UI not_applicable accepted; no bulk "
+            "FastMCP tool; empty-list shells and soft VAT/users seeds excluded"
+        ),
+        "sessions": "dual_independent_ephemeral",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research188_bulk_chrome_dual",
+        "tools_allowed": False,
+        "empty_list_shell": False,
+        "linked_api_row_id": linked_api,
+        "shell_id": shell["shell_id"],
+        "path_class": shell["path_class"],
+        "tool_ref": shell["tool_ref"],
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+    }
+
+
+def apply_ui_product_plane_bulk_chrome_dual_na_strong(
+    workflows: list[dict[str, Any]],
+) -> None:
+    """Promote research188 strong dual-absent product-plane bulk rows to UI NA.
+
+    Exact 15 resources / 30 bulk_save+bulk_delete UI parity ids only. Runs after
+    research187 honesty so NA wins over discovery_required for this subset.
+    Held empty-shell and soft VAT/users honesty rows are not touched.
+    """
+
+    if len(UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES) != 15:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES must be exactly 15 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES)})"
+        )
+    if len(UI_BULK_CHROME_DUAL_NA_STRONG_IDS) != 30:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_STRONG_IDS must be exactly 30 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_STRONG_IDS)})"
+        )
+    if set(UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS) != UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES:
+        raise RuntimeError("shell map must cover exactly strong dual-NA resources")
+    if not UI_BULK_CHROME_DUAL_NA_STRONG_IDS.issubset(UI_PRODUCT_PLANE_BULK_HONESTY_IDS):
+        raise RuntimeError("strong dual-NA ids must be a subset of product-plane honesty ids")
+
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        if row_id not in UI_BULK_CHROME_DUAL_NA_STRONG_IDS:
+            continue
+        parts = row_id.split(".")
+        if len(parts) < 4:
+            continue
+        resource = parts[2]
+        operation = parts[3]
+        if resource not in UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES:
+            continue
+        if operation not in ("bulk_save", "bulk_delete"):
+            continue
+
+        shell = UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS[resource]
+        qual = ui_bulk_chrome_absent_dual_qualification(resource, operation)
+        linked_api = qual["linked_api_row_id"]
+        row["tool_name"] = ""
+        row["parity_status"] = "not_applicable"
+        row["discovered"] = True
+        row["implemented"] = True
+        row["contract_tested"] = True
+        row["live_tested"] = True
+        row["vision_verified"] = True
+        row["vision_evidence"] = None
+        row["sensitivity"] = "low"
+        row["side_effects"] = (
+            "none; UI bulk parity classified not_applicable — no bulk browser "
+            "workflow tool and no records may be created through a bulk UI tool"
+        )
+        row["cleanup"] = (
+            "not_applicable; no UI bulk tool and no disposable records for this parity row"
+        )
+        row["errors"] = [
+            "AUTH_INTERACTION_REQUIRED",
+            "UI_CHANGED",
+            UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE,
+        ]
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk bulk workflow for {linked_api} "
+            f"(research188 dual-session: shell {shell['shell_id']} path_class "
+            f"{shell['path_class']} non-empty greened list/open; dual_agree "
+            "multi-select/bulk-action chrome absent; empty_list_shell=false; "
+            f"evidence_code={UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+        row["qualification"] = dict(qual)
+        prior = str(row.get("evidence") or "").strip()
+        na_evidence = (
+            "research188 dual independent ephemeral browser sessions (no "
+            f"BILLY_API_TOKEN): dual_agree_bulk_chrome_absent true on "
+            f"{shell['shell_id']} ({shell['path_class']}; tool_ref="
+            f"{shell['tool_ref']}); no multi-select row chrome / bulk-action "
+            f"toolbar for {linked_api}; design §10.2 UI parity not_applicable "
+            f"accepted; evidence_code={UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE}; "
+            "no ui_* bulk tool; API bulk lane unchanged "
+            "(external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; "
+            "live_tested false out_of_scope_by_user); "
+            "evidence_ref=research188_bulk_chrome_dual; "
+            f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; empty_list_shell=false; "
+            "held empty-shell contacts/invoices/bills and soft VAT/users not in "
+            "this freeze"
+        )
+        row["evidence"] = f"{prior}; {na_evidence}" if prior else na_evidence
 
 
 def bulk_rows(resource: str) -> list[dict[str, Any]]:
@@ -7096,6 +7326,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         workflows.append(row)
 
     apply_ui_product_plane_bulk_parity_honesty(workflows)
+    apply_ui_product_plane_bulk_chrome_dual_na_strong(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
@@ -7336,8 +7567,9 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
             "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
             "UI live and vision qualification incomplete "
-            "(UI product-plane bulk ×58 discovery_required "
-            "UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)"
+            "(UI product-plane bulk remaining ×28 discovery_required "
+            "(empty-shell 10 + soft VAT/users 18) UI_BULK_CHROME_DUAL_REQUIRED; "
+            "annual_reports org_inaccessible)"
         )
     if any(
         not row.get("implemented") or not row.get("contract_tested")
