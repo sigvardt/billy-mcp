@@ -152,11 +152,17 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.salesTaxReturns.update",
     "api.files.list",
     "api.files.get",
+    "api.attachments.get",
+    "api.attachments.create",
+    "api.attachments.update",
+    "api.attachments.delete",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 206  # prior 204 + research184 files.list + files.get (2)
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
+    210  # prior 206 + research185 attachments.get/create/update/delete (4)
+)
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
     {"accountNatures", "balanceModifiers"}
@@ -291,7 +297,7 @@ GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS: frozenset[str] =
 # Keep greened parents exclusive: daybooks/daybookTransactions create, bank
 # accounts/recon, transactions list/create, settings VAT, vat-declarations list.
 # research184 dual-counts attachments.list + files.create on Bilag; NA files
-# list/get; attachments get/create/update/delete stay red. Bulk/annual stay red.
+# list/get; research185 NA attachments get/create/update/delete. Bulk/annual stay red.
 GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS: frozenset[str] = frozenset(
     {
         "api.daybookBalanceAccounts.get",
@@ -348,12 +354,25 @@ GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS: frozenset[str] = frozenset(
 )
 
 # research184: files.list + files.get only — soft /files empty dual; Bilag SPA
-# hits /v2/attachments not /v2/files (research184 dual). Do not NA attachments.*
-# (list dual-counted; get/create/update/delete stay red). Bulk stays red.
+# hits /v2/attachments not /v2/files (research184 dual). attachments.list dual-
+# counted; residual attachments NA closed by research185. Bulk stays red.
 GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS: frozenset[str] = frozenset(
     {
         "api.files.list",
         "api.files.get",
+    }
+)
+
+# research185: attachments get/create/update/delete only
+# (list dual-counted on Bilag research184; upload create is files.create dual-
+# count; bulk external-contract red; soft /attachments empty dual; Bilag no
+# Slet/Gem/tbody dual).
+GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS: frozenset[str] = frozenset(
+    {
+        "api.attachments.get",
+        "api.attachments.create",
+        "api.attachments.update",
+        "api.attachments.delete",
     }
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH183_FAMILY: dict[str, dict[str, str]] = {
@@ -3548,7 +3567,8 @@ def apply_ui_uploads_list_shell_evidence(
     - ``parity_of_api_files_create`` → ``api.files.create`` (research184;
       upload-surface open only; peer special.files_upload)
 
-    Does not green attachments.get/create/update/delete or files.list/get.
+    Does not dual-count attachments.get/create/update/delete onto Bilag (those
+    are research185 NA) or files.list/get (research184 NA).
     """
 
     parity_flags = (
@@ -3589,7 +3609,8 @@ def apply_ui_uploads_list_shell_evidence(
         "class ≥1 both sessions; never set files); list shell only (path class "
         "/:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); "
         "no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, "
-        "attachments.get/create/update/delete, files.list/get, invoice_email; "
+        "attachments residual closed by research185 NA, files.list/get research184 NA, "
+        "invoice_email; "
         "API list filters/sort/pagination UI not producted; vision record "
         "tmp/vision-records/ui_uploads_list.json (list surface frames, accept)"
     )
@@ -3603,8 +3624,8 @@ def apply_ui_uploads_list_shell_evidence(
         row["evidence"] = (
             f"{row['evidence']}; research184 dual-session: Bilag SPA resource hits "
             "/v2/attachments dual (files hits 0); soft /attachments empty dual; maps "
-            "api.attachments.list to UI Bilag list shell open only; does not green "
-            "attachments.get/create/update/delete"
+            "api.attachments.list to UI Bilag list shell open only; residual "
+            "get/create/update/delete are research185 NA (not dual-count)"
         )
     if parity_of_api_files_create:
         row["evidence"] = (
@@ -5550,6 +5571,8 @@ def geo_ui_not_applicable_api_row(api_row_id: str) -> bool:
         return True
     if api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS:
         return True
+    if api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS:
+        return True
     return any(api_row_id.startswith(prefix) for prefix in GEO_UI_NOT_APPLICABLE_API_PREFIXES)
 
 
@@ -5595,8 +5618,11 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     taxRateDeductionComponents non-bulk absent dual + transactions get/update/delete
     (list shell only; create deferred).
     research184: files.list + files.get only (soft /files empty dual; Bilag SPA hits
-    /v2/attachments not /v2/files; attachments.list dual-counted separately; attachments
-    get/create/update/delete stay red).
+    /v2/attachments not /v2/files; attachments.list dual-counted separately).
+    research185: attachments.get/create/update/delete dual absence (exact ids only —
+    list dual-counted on Bilag; upload surface already greened as files.create +
+    special.files_upload; soft /attachments empty; Bilag Slet/Gem/tbody/click 0 dual;
+    ban dual-count create onto Bilag upload).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -5627,6 +5653,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     )
     is_research183 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
     is_research184 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS
+    is_research185 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -5836,6 +5863,28 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         )
         contrast_controls = [
             "uploads",
+            "vouchers",
+            "files",
+            nonsense_path,
+        ]
+    elif is_research185:
+        research_id = "research185"
+        evidence_ref = "research185_attachments_get_create_update_delete_dual"
+        dual_agree_flag = "dual_agree_no_attachments_get_create_update_delete_surface"
+        family_label = "attachments.get+create+update+delete"
+        nonsense_path = "zz-r185-attachments-residual-none"
+        contrast_shells = (
+            "uploads_Bilag(list shell dual-count attachments.list; SPA attachments hits dual; "
+            "Slet/Gem/tbody/click 0 dual)/soft_attachments_empty/receipt_inbox_vouchers/"
+            "files_create_upload_surface"
+        )
+        list_heading_suffix = (
+            "/Bilag(list only; no get/update/delete chrome dual)/soft /attachments empty/"
+            "Bilagsindbakke/files.create upload open only"
+        )
+        contrast_controls = [
+            "uploads",
+            "attachments",
             "vouchers",
             "files",
             nonsense_path,
@@ -6350,6 +6399,19 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research185:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI dedicated workflow for {api_row_id} "
+            f"({research_id} dual-session: soft /attachments soft-empty dual; Bilag list "
+            "shell dual has SPA /v2/attachments hits but Slet/Gem/tbody/click candidates "
+            "0 dual (no get/update/delete chrome); Vedhæft join-form 0 dual; upload "
+            "surface already greened as files.create + special.files_upload — ban "
+            "dual-count as attachments.create; attachments.list stays dual-count on "
+            "ui_uploads_list; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research183:
         ban = {
             "daybookBalanceAccounts": (
@@ -6471,8 +6533,18 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "research184 dual: soft /files empty dual; Bilag SPA resource hits "
             "attachments dual and files 0 dual; attachments.list dual-counted on "
             "ui_uploads_list; files.create dual-counted as upload-surface open only; "
-            "files.list/get NA only — not attachments residual; bulk external-contract "
-            "red; annual Upsedasse red; "
+            "files.list/get NA only; residual attachments closed by research185; bulk "
+            "external-contract red; annual Upsedasse red; "
+        )
+    if is_research185:
+        levering_note = (
+            "research185 dual: soft /attachments empty dual; Bilag SPA attachments "
+            "hits dual files 0; Slet/Gem/tbody/click candidates 0 dual; no Vedhæft "
+            "join-form dual; upload already greened as files.create/"
+            "special.files_upload — ban dual-count attachments.create onto Bilag; "
+            "attachments.list stays tool-green dual-count; exact get/create/update/"
+            "delete ids only — not list/bulk; bulk external-contract red; annual "
+            "Upsedasse red; "
         )
     row["evidence"] = (
         f"{research_id} dual independent ephemeral browser sessions (no "

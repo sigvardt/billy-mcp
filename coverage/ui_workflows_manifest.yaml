@@ -605,7 +605,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments.get/create/update/delete, files.list/get, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept)",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments residual closed by research185 NA, files.list/get research184 NA, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept)",
       "filters": [],
       "id": "ui.discovery.uploads",
       "implemented": true,
@@ -2789,38 +2789,52 @@
     {
       "api_row_id": "api.attachments.get",
       "area": "attachments",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.get",
+      "evidence": "research185 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_attachments_get_create_update_delete_surface true; candidate attachments.get+create+update+delete path classes soft-empty identical to nonsense (zz-r185-attachments-residual-none); contrast uploads_Bilag(list shell dual-count attachments.list; SPA attachments hits dual; Slet/Gem/tbody/click 0 dual)/soft_attachments_empty/receipt_inbox_vouchers/files_create_upload_surface real shells with h1; research185 dual: soft /attachments empty dual; Bilag SPA attachments hits dual files 0; Slet/Gem/tbody/click candidates 0 dual; no Vedh\u00e6ft join-form dual; upload already greened as files.create/special.files_upload \u2014 ban dual-count attachments.create onto Bilag; attachments.list stays tool-green dual-count; exact get/create/update/delete ids only \u2014 not list/bulk; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.attachments.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* attachments.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research185_attachments_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.attachments.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.attachments.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.attachments.get (research185 dual-session: soft /attachments soft-empty dual; Bilag list shell dual has SPA /v2/attachments hits but Slet/Gem/tbody/click candidates 0 dual (no get/update/delete chrome); Vedh\u00e6ft join-form 0 dual; upload surface already greened as files.create + special.files_upload \u2014 ban dual-count as attachments.create; attachments.list stays dual-count on ui_uploads_list; contrast shells/Bilag(list only; no get/update/delete chrome dual)/soft /attachments empty/Bilagsindbakke/files.create upload open only; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "attachment"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "uploads",
+          "attachments",
+          "vouchers",
+          "files",
+          "zz-r185-attachments-residual-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research185_attachments_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -2836,7 +2850,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments.get/create/update/delete, files.list/get, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research184 dual-session: Bilag SPA resource hits /v2/attachments dual (files hits 0); soft /attachments empty dual; maps api.attachments.list to UI Bilag list shell open only; does not green attachments.get/create/update/delete",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments residual closed by research185 NA, files.list/get research184 NA, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research184 dual-session: Bilag SPA resource hits /v2/attachments dual (files hits 0); soft /attachments empty dual; maps api.attachments.list to UI Bilag list shell open only; residual get/create/update/delete are research185 NA (not dual-count)",
       "filters": [],
       "id": "ui.parity.attachments.list",
       "implemented": true,
@@ -2871,113 +2885,154 @@
     {
       "api_row_id": "api.attachments.create",
       "area": "attachments",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.create",
+      "evidence": "research185 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_attachments_get_create_update_delete_surface true; candidate attachments.get+create+update+delete path classes soft-empty identical to nonsense (zz-r185-attachments-residual-none); contrast uploads_Bilag(list shell dual-count attachments.list; SPA attachments hits dual; Slet/Gem/tbody/click 0 dual)/soft_attachments_empty/receipt_inbox_vouchers/files_create_upload_surface real shells with h1; research185 dual: soft /attachments empty dual; Bilag SPA attachments hits dual files 0; Slet/Gem/tbody/click candidates 0 dual; no Vedh\u00e6ft join-form dual; upload already greened as files.create/special.files_upload \u2014 ban dual-count attachments.create onto Bilag; attachments.list stays tool-green dual-count; exact get/create/update/delete ids only \u2014 not list/bulk; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.attachments.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* attachments.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research185_attachments_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.attachments.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.attachments.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.attachments.create (research185 dual-session: soft /attachments soft-empty dual; Bilag list shell dual has SPA /v2/attachments hits but Slet/Gem/tbody/click candidates 0 dual (no get/update/delete chrome); Vedh\u00e6ft join-form 0 dual; upload surface already greened as files.create + special.files_upload \u2014 ban dual-count as attachments.create; attachments.list stays dual-count on ui_uploads_list; contrast shells/Bilag(list only; no get/update/delete chrome dual)/soft /attachments empty/Bilagsindbakke/files.create upload open only; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "attachment"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates attachment",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "uploads",
+          "attachments",
+          "vouchers",
+          "files",
+          "zz-r185-attachments-residual-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research185_attachments_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.attachments.update",
       "area": "attachments",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.update",
+      "evidence": "research185 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_attachments_get_create_update_delete_surface true; candidate attachments.get+create+update+delete path classes soft-empty identical to nonsense (zz-r185-attachments-residual-none); contrast uploads_Bilag(list shell dual-count attachments.list; SPA attachments hits dual; Slet/Gem/tbody/click 0 dual)/soft_attachments_empty/receipt_inbox_vouchers/files_create_upload_surface real shells with h1; research185 dual: soft /attachments empty dual; Bilag SPA attachments hits dual files 0; Slet/Gem/tbody/click candidates 0 dual; no Vedh\u00e6ft join-form dual; upload already greened as files.create/special.files_upload \u2014 ban dual-count attachments.create onto Bilag; attachments.list stays tool-green dual-count; exact get/create/update/delete ids only \u2014 not list/bulk; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.attachments.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* attachments.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research185_attachments_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.attachments.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.attachments.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.attachments.update (research185 dual-session: soft /attachments soft-empty dual; Bilag list shell dual has SPA /v2/attachments hits but Slet/Gem/tbody/click candidates 0 dual (no get/update/delete chrome); Vedh\u00e6ft join-form 0 dual; upload surface already greened as files.create + special.files_upload \u2014 ban dual-count as attachments.create; attachments.list stays dual-count on ui_uploads_list; contrast shells/Bilag(list only; no get/update/delete chrome dual)/soft /attachments empty/Bilagsindbakke/files.create upload open only; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "attachment"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates attachment",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "uploads",
+          "attachments",
+          "vouchers",
+          "files",
+          "zz-r185-attachments-residual-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research185_attachments_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.attachments.delete",
       "area": "attachments",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.delete",
+      "evidence": "research185 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_attachments_get_create_update_delete_surface true; candidate attachments.get+create+update+delete path classes soft-empty identical to nonsense (zz-r185-attachments-residual-none); contrast uploads_Bilag(list shell dual-count attachments.list; SPA attachments hits dual; Slet/Gem/tbody/click 0 dual)/soft_attachments_empty/receipt_inbox_vouchers/files_create_upload_surface real shells with h1; research185 dual: soft /attachments empty dual; Bilag SPA attachments hits dual files 0; Slet/Gem/tbody/click candidates 0 dual; no Vedh\u00e6ft join-form dual; upload already greened as files.create/special.files_upload \u2014 ban dual-count attachments.create onto Bilag; attachments.list stays tool-green dual-count; exact get/create/update/delete ids only \u2014 not list/bulk; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.attachments.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* attachments.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research185_attachments_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.attachments.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.attachments.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.attachments.delete (research185 dual-session: soft /attachments soft-empty dual; Bilag list shell dual has SPA /v2/attachments hits but Slet/Gem/tbody/click candidates 0 dual (no get/update/delete chrome); Vedh\u00e6ft join-form 0 dual; upload surface already greened as files.create + special.files_upload \u2014 ban dual-count as attachments.create; attachments.list stays dual-count on ui_uploads_list; contrast shells/Bilag(list only; no get/update/delete chrome dual)/soft /attachments empty/Bilagsindbakke/files.create upload open only; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes attachment",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "uploads",
+          "attachments",
+          "vouchers",
+          "files",
+          "zz-r185-attachments-residual-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research185_attachments_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -9215,7 +9270,7 @@
         "UI_CHANGED",
         "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "research184 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_files_list_get_surface true; candidate files.list+get path classes soft-empty identical to nonsense (zz-r184-files-none); contrast uploads_Bilag(attachments inventory SPA dual; files hits 0)/receipt_inbox_vouchers/soft_files_empty real shells with h1; research184 dual: soft /files empty dual; Bilag SPA resource hits attachments dual and files 0 dual; attachments.list dual-counted on ui_uploads_list; files.create dual-counted as upload-surface open only; files.list/get NA only \u2014 not attachments residual; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.files.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* files.list+get tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research184_files_list_get_soft_empty_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "research184 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_files_list_get_surface true; candidate files.list+get path classes soft-empty identical to nonsense (zz-r184-files-none); contrast uploads_Bilag(attachments inventory SPA dual; files hits 0)/receipt_inbox_vouchers/soft_files_empty real shells with h1; research184 dual: soft /files empty dual; Bilag SPA resource hits attachments dual and files 0 dual; attachments.list dual-counted on ui_uploads_list; files.create dual-counted as upload-surface open only; files.list/get NA only; residual attachments closed by research185; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.files.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* files.list+get tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research184_files_list_get_soft_empty_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.files.get",
       "implemented": true,
@@ -9265,7 +9320,7 @@
         "UI_CHANGED",
         "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "research184 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_files_list_get_surface true; candidate files.list+get path classes soft-empty identical to nonsense (zz-r184-files-none); contrast uploads_Bilag(attachments inventory SPA dual; files hits 0)/receipt_inbox_vouchers/soft_files_empty real shells with h1; research184 dual: soft /files empty dual; Bilag SPA resource hits attachments dual and files 0 dual; attachments.list dual-counted on ui_uploads_list; files.create dual-counted as upload-surface open only; files.list/get NA only \u2014 not attachments residual; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.files.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* files.list+get tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research184_files_list_get_soft_empty_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "research184 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_files_list_get_surface true; candidate files.list+get path classes soft-empty identical to nonsense (zz-r184-files-none); contrast uploads_Bilag(attachments inventory SPA dual; files hits 0)/receipt_inbox_vouchers/soft_files_empty real shells with h1; research184 dual: soft /files empty dual; Bilag SPA resource hits attachments dual and files 0 dual; attachments.list dual-counted on ui_uploads_list; files.create dual-counted as upload-surface open only; files.list/get NA only; residual attachments closed by research185; bulk external-contract red; annual Upsedasse red; design \u00a710.2 UI parity not_applicable accepted for api.files.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* files.list+get tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research184_files_list_get_soft_empty_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.files.list",
       "implemented": true,
@@ -9317,7 +9372,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments.get/create/update/delete, files.list/get, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research184 dual-session: maps api.files.create to UI Bilag upload-surface open only (peer special.files_upload; never set input[type=file] / never submit); soft /files empty dual is not list/get",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments residual closed by research185 NA, files.list/get research184 NA, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research184 dual-session: maps api.files.create to UI Bilag upload-surface open only (peer special.files_upload; never set input[type=file] / never submit); soft /files empty dual is not list/get",
       "filters": [],
       "id": "ui.parity.files.create",
       "implemented": true,
@@ -16272,7 +16327,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments.get/create/update/delete, files.list/get, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research155 dual-session reconfirm; maps api.special.files_upload (POST /v2/files binary upload surface) to UI Bilag upload-surface open only",
+      "evidence": "research113 dual-session headless observation + ui_uploads_list product; research155 dual reconfirm file_input_present (input[type=file] count class \u22651 both sessions; never set files); list shell only (path class /:org_slug/uploads, h1 Bilag, CTA Upload filer present, no file pick); no invent api_uploads_*/api_bilag_*; does not green receipt_inbox, attachments residual closed by research185 NA, files.list/get research184 NA, invoice_email; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_uploads_list.json (list surface frames, accept); research155 dual-session reconfirm; maps api.special.files_upload (POST /v2/files binary upload surface) to UI Bilag upload-surface open only",
       "filters": [],
       "id": "ui.parity.special.files_upload",
       "implemented": true,

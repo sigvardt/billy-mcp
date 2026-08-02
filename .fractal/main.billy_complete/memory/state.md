@@ -9493,3 +9493,116 @@ updated: 2026-08-02T13:35:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
+## iter85 SYNC (2026-08-02T13:23:30Z)
+
+- inbox empty, feed empty, saved empty
+- private reacted: F6EBA661, C73F5403 (iter84 COMMIT 186.84)
+- no running children; all historical terminal
+- branch clean: df93af7 on origin/main.billy_complete
+- coverage/status.json: complete=false; implemented/contract 466; live/vision 282; api_ambiguous_bulk 92; blocker unchanged (bulk freeze + annual_reports + residual UI)
+- outbox: iter85 SYNC clean posted
+- next step in loop: PREPARE (not finish)
+
+## iter85 PREPARE (2026-08-02T13:24:32Z)
+
+- parent `main`: already up to date (fetch+merge)
+- children ahead of mainline: many (mostly init/scaffold, failed reviews, memory-only)
+- only product delta candidate: `ui_auth_status` (src+tests) — **do not merge**; already integrated via `cf38b5c` and evolved on mainline (`auth_status` present)
+- wiki-only deltas on research children (`wave5t_ui_auth_discovery`, `wave5u_probe_contract_codex_fallback`, `ui_auth_credentials_research_codex_fallback`) — pages already present or intentionally left as child-local research; skip merge this iter (no material unintegrated product)
+- no child merges this PREPARE
+- no running children; trajectory: all historical terminal
+- branch: still clean product-wise except memory state.md dirty from SYNC
+
+## iter85 pre-RESEARCH SYNC (2026-08-02T13:25:12Z)
+
+- inbox/feed empty; saved empty
+- private reacted: 75272785, A7725CF8
+- PREPARE already done this iter: parent up to date; no child merges
+- no running children
+- worktree dirty: only memory/state.md
+- HEAD df93af7; coverage complete=false unchanged
+- next: RESEARCH
+
+## iter85 RESEARCH (2026-08-02T13:30:20Z)
+
+- Official docs re-fetched: MD5 `8b94b0135c91fd15fe54ea33e088a4be` / ETag `wcw4x9hqvu3603` **unchanged**
+- Dual probe research185 (observe-only): Bilag attachments hits=14 dual, files=0; soft /attachments empty dual; Slet/Gem/tbody/click candidates 0 dual; annual Upsedasse dual; profiles purged; no API token
+- Residual non-bulk UI after 186.84: attachments.get/create/update/delete (4) + annual + bulk UI parity
+- **Recommended slice:** NA exact 4 attachments residual ops with `GEO_UI_NO_EQUIVALENT_WORKFLOW` (peer products/accounts freezes); target live/vision 286, contract 470, GEO NA 210; complete false
+- Bans: bulk green, annual green, dual-count upload as attachments.create, invent delete without Slet dual
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (research185)
+- Dual: `tmp/research185_focus_dual.json`
+- No coverage greened in research
+
+## iter85 pre-PLAN SYNC (2026-08-02T13:30:52Z)
+
+- inbox/feed empty; saved empty; private reacted A77375B0
+- no running children
+- RESEARCH185 brief ready; recommended PLAN: NA attachments.get/create/update/delete exact 4
+- HEAD still df93af7; coverage complete=false until EXECUTE/COMMIT
+- next: PLAN
+
+## iter85 PLAN (2026-08-02T13:32:10Z)
+
+- Plan: `plans/2026-08-02T13:31:12.975Z-186.85-ui_attachments_get_create_update_delete_na.md`
+- Slice: research185 NA exact `api.attachments.{get,create,update,delete}` only
+- Target: GEO NA 210, live/vision 286, contract 470, complete false
+- Root-only; no children; no live API; not finish
+- Peer: research176 products residual NA / research184 files NA + attachments.list dual-count
+
+## iter85 pre-EXECUTE SYNC (2026-08-02T13:32:35Z)
+
+- inbox/feed empty; saved empty; private reacted 1249DD72
+- no running children
+- plan present: 186.85 ui_attachments_get_create_update_delete_na (untracked until COMMIT)
+- HEAD df93af7; next EXECUTE research185 NA package
+
+## iter85 EXECUTE (2026-08-02T13:45:59Z)
+
+- Producted research185 NA: api.attachments.get/create/update/delete exact 4
+- Generator: RESEARCH185_IDS, ROW_COUNT 210, prefixes, evidence branches
+- Inventory tests + dedicated test_research185_*; counts 286 live/vision, 470 implemented/contract
+- Wiki: ui_attachments_get_create_update_delete_not_applicable.md + index + uploads/files cross-links
+- Regenerated coverage; complete=false; bulk+annual still red
+- pytest commit-mode: 1666 passed; inventory 18 passed; wiki lint clean
+- Not node finish; ready FIX-VERIFY / IR / COMMIT
+
+## iter85 pre-IR SYNC (2026-08-02T13:46:26Z)
+
+- inbox/feed empty; saved empty; private reacted B239E296
+- no running children
+- uncommitted EXECUTE product ready for independent review
+- coverage: live/vision 286, implemented/contract 470, complete false
+- next: INDEPENDENT-REVIEW
+
+## iter85 INDEPENDENT-REVIEW (2026-08-02T13:47:44Z)
+
+- Verdict: **PASS (package)** research185 NA attachments residual 4; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; four NA rows accepted dual evidence; list dual-count preserved; no dual-count create onto Bilag; bulk/annual red; counts 210/286/470; no production tool/schema change; no secrets
+- Non-blocking: dual probe BrowserRuntime.stop AttributeError after observations
+- Next: FIX-VERIFY / COMMIT 186.85; not node finish
+
+## iter85 pre-FIX-VERIFY SYNC (2026-08-02T13:48:17Z)
+
+- inbox/feed empty; saved empty; private reacted 6330B404
+- IR PASS package (tmp/grok-review.md); no required fixes
+- uncommitted product still present; next FIX-VERIFY then COMMIT
+- complete=false unchanged
+
+## iter85 FIX-VERIFY (2026-08-02T13:58:53Z)
+
+- IR package PASS: no required fixes; invariants reconfirmed (NA×4, list dual-count, counts 210/286/470, complete false)
+- lint.sh pass; test.sh commit-mode 1666 passed
+- wiki lint clean; plan post-mortem appended on 186.85
+- Did not run ui-full/full (complete false)
+- Ready COMMIT 186.85; not node finish
+
+## iter85 pre-COMMIT SYNC (2026-08-02T13:59:21Z)
+
+- inbox/feed empty; saved empty; private reacted C090D32F
+- no running children
+- FIX-VERIFY clean; uncommitted product ready for fractal commit
+- coverage 286/470 complete false
+- next: COMMIT 186.85
+

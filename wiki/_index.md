@@ -41,6 +41,8 @@ updated: 2026-08-02T12:14:49Z
 
 [[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports; not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.
 
+[[ui_attachments_get_create_update_delete_not_applicable|ui_attachments_get_create_update_delete_not_applicable]]: Dual-session research185 freeze — no equivalent mit.billy.dk get-detail, join-form create, update-form, or delete-chrome workflow for residual attachments ops; list stays dual-count green on Bilag; exact NA for get/create/update/delete only.
+
 [[ui_bank_accounts_list_shell|ui_bank_accounts_list_shell]]: Read-only headless ui_bank_accounts_list contract for Billy bank accounts list shell open only.
 
 [[ui_bank_reconciliation_open_shell|ui_bank_reconciliation_open_shell]]: Read-only headless ui_bank_reconciliation_open contract for Billy Afstemning shell open only.

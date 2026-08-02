@@ -36,7 +36,7 @@ Evidence code: `GEO_UI_NO_EQUIVALENT_WORKFLOW`.
 
 ## Explicit non-claims
 
-- Does not green attachments residual get/create/update/delete.
+- Residual attachments get/create/update/delete closed separately by [[ui_attachments_get_create_update_delete_not_applicable]] (research185).
 - Does not green files bulk ops.
 - Does not green annual_reports.
 - API `live_tested` remains false with `out_of_scope_by_user`.

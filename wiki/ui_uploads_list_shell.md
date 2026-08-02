@@ -73,3 +73,7 @@ non-sensitive with `purge_verified` after frame purge.
 Related offline API families (`files` CRUD, special binary upload execute,
 `attachments`) remain contract-tested separately where producted; API
 `live_tested` remains false under user-scoped qualification.
+
+## Residual attachments ops (research185)
+
+`attachments.get` / `create` / `update` / `delete` are **not** dual-counted onto this shell. They are NA under [[ui_attachments_get_create_update_delete_not_applicable]] (research185 dual: no Slet/Gem/tbody/click candidates; soft `/attachments` empty; upload path remains files.create / special.files_upload only).
