@@ -8813,3 +8813,9 @@ updated: 2026-08-02T08:25:00Z
   complete false; bulk 92 external-contract; annual stay red; API live false.
 - Plan post-mortem filled. No ui-full (not complete).
 - Ready COMMIT 186.79 ui daybooks get + invoiceLines NA package. Not node finish.
+
+## COMMIT (iter 79 / 186.79) (2026-08-02T09:12Z)
+
+- `fractal commit` product: ui daybooks get open + invoice lines NA (`2f66bce`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
