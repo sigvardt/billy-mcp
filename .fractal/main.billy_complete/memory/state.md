@@ -10328,3 +10328,132 @@ updated: 2026-08-02T14:42:00Z
 - complete false 528/344; walls bulk92 residual29 annual1
 - not node finish
 
+
+
+## iter92 SYNC (2026-08-02T18:24:13Z)
+
+- inbox/feed unread empty; private 3C5CEE87 + 1CDB666F reacted
+- saved empty; no running children
+- HEAD fadbd27 (186.91) clean and synced with origin
+- coverage complete false 528 implemented/contract, 344 live/vision
+- walls: API bulk 92, residual 29, annual_reports 1 (A1 Upsedasse stay red)
+- outbox: posted post-186.91 status
+- next: PREPARE / RESEARCH-PLAN for remaining walls; not node finish
+
+
+## iter92 PREPARE (2026-08-02T18:24:13Z)
+
+- parent `main`: Already up to date (0 commits)
+- children scan: 95 empty-ahead, 58 fractal/init-only, 3 wiki-only, 1 product-path
+- SKIP merge `ui_auth_status`: product already on mainline (auth_status evolved; HEAD browser.py 9572 vs child 376 lines); three-dot would regress
+- SKIP wiki-only: wave5t_ui_auth_discovery + wave5u_method_probe_contract already on mainline; credentials research wiki superseded by wiki/auth_credentials_* pages
+- SKIP all remaining: init/scaffold/failed-review branches only
+- no merge commits; no material integration outbox
+- no running children; trajectory: all terminal (completed/exited/killed/stopped)
+- next: PLAN/RESEARCH walls (bulk92 residual29 annual1); not node finish
+
+
+## iter92 SYNC pre-RESEARCH (2026-08-02T18:27:00Z)
+
+- inbox/feed unread empty; private 2F9D441A + E368B5BD reacted
+- saved empty; no running children
+- PREPARE already recorded: no parent/child merges
+- HEAD fadbd27 complete false 528/344 walls bulk92 residual29 annual1
+- outbox: pre-RESEARCH status
+- next: RESEARCH; not node finish
+
+
+## iter92 RESEARCH 192 (2026-08-02T18:29:00Z)
+
+- Official docs MD5/ETag **unchanged** (`8b94b013…` / `wcw4x9hqvu3603`; 147934 bytes)
+- Unauth residual/bulk reconfirm matches research186/191 (405/401/200 meta / INVALID_DELETE_ID_ARRAY + object-root bulk)
+- OpenAPI probes still 404; bulk schema still absent; webhook still 0
+- UI red only annual_reports (A1 Upsedasse; no browser re-probe this pass)
+- Product-plane UI bulk honesty 0; residual+bulk tools 0
+- Recommend: 186.92 walls_reconfirm_research192_hygiene (evidence cite only; no tools; complete false)
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`
+- not node finish
+
+
+## iter92 SYNC pre-PLAN (2026-08-02T18:30:00Z)
+
+- inbox/feed empty; private 33ED587A reacted; saved empty; no running children
+- RESEARCH192 brief ready; recommend 186.92 evidence hygiene only
+- next: PLAN; not node finish
+
+
+## iter92 PLAN (2026-08-02T18:31:00Z)
+
+- Plan: 186.92 walls_reconfirm_research192_hygiene
+- Tracks: A bulk92 reconfirm_ref research192; B residual29 evidence_ref append; C annual optional prose only; D generate+wiki
+- Root-only; no children; no tools; no greening; complete false 528/344
+- Next: EXECUTE
+
+
+## iter92 SYNC pre-EXECUTE (2026-08-02T18:32:00Z)
+
+- inbox/feed empty; private F5F2B95C + 03AA5C24 reacted; saved empty; no children
+- plan 186.92 ready; next EXECUTE hygiene
+- not node finish
+
+
+## iter92 EXECUTE (2026-08-02T18:45:00Z)
+
+- 186.92 hygiene: bulk reconfirm_ref research192; residual evidence_ref +research192; annual research192 walls note
+- Counts unchanged 528/344 complete false; no tools
+- lint pass; inventory 23; commit-mode 1671 passed
+- wiki residual + annual updated; lint clean
+- Next: IR / FIX-VERIFY / COMMIT; not node finish
+
+
+## iter92 SYNC pre-IR (2026-08-02T18:50:00Z)
+
+- Parent STEER **2BB6AF34** (pri 8): stop repeated wall-hygiene loops after current commit; only new offline contract evidence or concrete implementation next; else report blockers and stop churn; no live API
+- ACK replied + saved 2BB6AF34
+- inbox otherwise empty; feed empty; private 6467E804 reacted
+- uncommitted 186.92 hygiene package ready for IR/COMMIT
+- after COMMIT 186.92: **no** research193-style reconfirm cite packages without new evidence
+- walls: bulk92 residual29 annual1; complete false
+- next: INDEPENDENT-REVIEW; not node finish
+
+
+## iter92 INDEPENDENT-REVIEW (2026-08-02T18:55:00Z)
+
+- Verdict: **PASS (package)** 186.92 research192 hygiene; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; bulk92 reconfirm research192 stay red; residual29 chain +research192 stay red; annual A1 dual still research191; 528/344 complete false; no src tools; no secrets
+- Required fixes: **none**
+- STEER 2BB6AF34: after COMMIT stop wall-hygiene loops
+- Next: FIX-VERIFY / COMMIT; not node finish
+
+
+## iter92 SYNC pre-FIX-VERIFY (2026-08-02T18:56:00Z)
+
+- inbox/feed empty; private 8427FA9E reacted; saved STEER 2BB6AF34 still open until post-COMMIT policy settled
+- IR PASS package; required fixes none; uncommitted 186.92 ready
+- next: FIX-VERIFY then COMMIT; not node finish
+
+
+## iter92 FIX-VERIFY (2026-08-02T19:10:00Z)
+
+- IR PASS; required fixes none
+- invariants OK; lint pass; inventory 23; commit-mode 1671 pass
+- wiki lint clean (project + memory)
+- complete false 528/344; not full/ui-full
+- Ready COMMIT 186.92; STEER: no post-commit hygiene loops
+- not node finish
+
+
+## iter92 SYNC pre-COMMIT (2026-08-02T19:11:00Z)
+
+- inbox/feed empty; private 420432AA reacted; saved STEER 2BB6AF34 (unsave after COMMIT)
+- FIX-VERIFY clean; uncommitted hygiene package ready
+- next: COMMIT; not node finish
+
+
+## iter92 COMMIT (2026-08-02T19:12:00Z)
+
+- fractal commit 186.92: research192 walls hygiene (bulk reconfirm_ref + residual evidence_ref; annual walls note)
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 2BB6AF34: post-commit stop wall-hygiene loops; report blockers
+- not node finish

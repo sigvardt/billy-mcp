@@ -1650,6 +1650,11 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
     return rows
 
 
+RESIDUAL_EVIDENCE_REF_CHAIN = (
+    "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm"
+)
+
+
 def bulk_external_contract_qualification() -> dict[str, Any]:
     """Machine-readable external-contract freeze for ambiguous bulk rows.
 
@@ -1665,7 +1670,7 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
         "docs_md5": DOCS_MD5,
         "asset_sweep": "research137",
         "offline_shape": "research136",
-        "reconfirm_ref": "research191_unauth_reconfirm",
+        "reconfirm_ref": "research192_unauth_reconfirm",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
     }
@@ -1731,7 +1736,7 @@ def method_closed_offline_qualification() -> dict[str, Any]:
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
+        "evidence_ref": RESIDUAL_EVIDENCE_REF_CHAIN,
         "fixture_ref": "research96_residual_unauth",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1746,7 +1751,7 @@ def readonly_field_map_qualification() -> dict[str, Any]:
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
+        "evidence_ref": RESIDUAL_EVIDENCE_REF_CHAIN,
         "unauth_status": 401,
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1761,7 +1766,7 @@ def meta_delete_unqualified_qualification() -> dict[str, Any]:
         "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
+        "evidence_ref": RESIDUAL_EVIDENCE_REF_CHAIN,
         "unauth_status": 200,
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1792,7 +1797,7 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
                 f"(405) overrides Supports for offline tools; "
                 f"blocker_code={method_closed_q['blocker_code']}; "
                 f"tools_allowed=false; live_api=out_of_scope_by_user; "
-                "research96 residual fixture parity; research191 unauth reconfirm"
+                "research96 residual fixture parity; research191/research192 unauth reconfirm"
             ).lstrip("; ")
         elif row_id in RESIDUAL_READONLY_MAP_IDS:
             row["qualification"] = dict(readonly_q)
@@ -1802,7 +1807,7 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
                 "effectively readonly (no non-readonly create/update field map); "
                 f"blocker_code={readonly_q['blocker_code']}; tools_allowed=false; "
                 "do not freeze ticketed tools from Supports alone; "
-                "research191 unauth reconfirm"
+                "research191/research192 unauth reconfirm"
             ).lstrip("; ")
         elif row_id in RESIDUAL_META_DELETE_IDS:
             row["qualification"] = dict(meta_delete_q)
@@ -1810,7 +1815,7 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
                 f"{row.get('evidence', '')}; research186 unauth DELETE missing-id "
                 "returns 200 meta-only (not cleanup proof, not live qualification); "
                 f"blocker_code={meta_delete_q['blocker_code']}; tools_allowed=false; "
-                "research191 unauth reconfirm"
+                "research191/research192 unauth reconfirm"
             ).lstrip("; ")
         # Hard honesty: residual must stay red and toolless.
         row["implemented"] = False
@@ -2597,7 +2602,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; "
         "research136 offline unauth shape freeze only (not a full bulk body/"
         "response contract; not live-qualified); research137 official docs "
-        "and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger "
+        "and research191/research192 reconfirm; versioned-asset exhaust (OpenAPI/swagger "
         "probes 404; page chunk "
         "Supports-only; no bulk body/response schema) → external_contract_blocker "
         f"{qualification['blocker_code']}; live_api=out_of_scope_by_user; no bulk tools"
@@ -6417,6 +6422,9 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     sessions READY/READY, path /:org_slug/annual_reports both, h1 Upsedasse!
     both, error_upsedasse true both, productable_shell false; tmp
     research191_annual_dual.json. No writes; no API token; profiles purged.
+
+    research192 (2026-08-02): docs/API residual+bulk walls reconfirmed offline;
+    no new annual dual (same-day A1 still binding; no browser re-probe).
     """
 
     row["method_or_route"] = (
@@ -6435,7 +6443,8 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
         "research121/122/135 dual-session headless observation + research137 "
         "decision + research191 dual reconfirm (READY/READY; path "
         "/:org_slug/annual_reports; h1 Upsedasse! both; error_upsedasse true "
-        "both; productable_shell false; tmp/research191_annual_dual.json): "
+        "both; productable_shell false; tmp/research191_annual_dual.json) + "
+        "research192 walls reconfirm without new dual: "
         "path class /:org_slug/annual_reports dual-renders h1 Upsedasse! with "
         "CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; "
         "nav label Årsrapporter present so not_applicable is rejected (design: "

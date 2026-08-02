@@ -9,7 +9,7 @@ sources:
   - .fractal/main.billy_complete/tmp/discovery122/summary_dual_saft.json
   - .fractal/main.billy_complete/tmp/research191_annual_dual.json
 created: 2026-08-01T01:45:00Z
-updated: 2026-08-02T17:40:00Z
+updated: 2026-08-02T18:35:00Z
 ---
 
 # Annual reports route inaccessible on dedicated test organisation
@@ -80,3 +80,7 @@ assertions, independent second-interface read-back, and vision review.
 - [[ui_exports_open_shell]]
 - [[ui_vat_declarations_list_shell]]
 - [[residual_clear_method_closed_inventory_honesty]]
+
+## research192 note (2026-08-02)
+
+Docs/API residual and bulk walls reconfirmed offline (research192). No new annual dual this pass (same-day research191 A1 Upsedasse still binding). Annual row stays red; dual evidence_ref remains `research191_annual_dual`.

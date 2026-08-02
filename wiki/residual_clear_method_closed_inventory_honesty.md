@@ -11,7 +11,7 @@ sources:
   - .fractal/main.billy_complete/tmp/research186_residual_unauth.json
   - src/billy_mcp/live_probe.py
 created: 2026-08-02T14:20:00Z
-updated: 2026-08-02T17:40:00Z
+updated: 2026-08-02T18:35:00Z
 ---
 
 # Residual clear method-closed inventory honesty freeze
@@ -79,3 +79,10 @@ Green counts after this freeze: implemented/contract **470**, live/vision **286*
 
 - `scripts/generate_coverage_report.py`: `apply_residual_clear_honesty`, frozensets, qualification builders
 - `tests/coverage/test_coverage_inventory.py`: `test_residual_clear_honesty_rows_are_toolless_and_qualified`
+
+## research192 unauth reconfirm (2026-08-02)
+
+Offline docs fingerprint unchanged (MD5 `8b94b0135c91fd15fe54ea33e088a4be`, ETag `wcw4x9hqvu3603`).
+Unauth residual matrix reconfirmed on locked base only (no token): method-closed **405**, transactions create/update **401**, meta deletes **200** meta-only.
+Inventory `evidence_ref` chain now ends with `research192_unauth_reconfirm`. Still `tools_allowed=false`; not greening; not product ACCEPT; complete stays false.
+Scratch: `.fractal/main.billy_complete/tmp/research192_unauth_reconfirm.json` (owner-only).

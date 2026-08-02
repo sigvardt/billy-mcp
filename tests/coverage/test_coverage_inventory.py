@@ -341,7 +341,8 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all("research136 offline unauth shape freeze" in row["evidence"] for row in bulk_rows)
     assert all(
         "research137 official docs" in row["evidence"]
-        and "research191 reconfirm" in row["evidence"]
+        and "research191" in row["evidence"]
+        and "research192" in row["evidence"]
         and "versioned-asset exhaust" in row["evidence"]
         for row in bulk_rows
     )
@@ -355,7 +356,7 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all(row["qualification"]["live_api"] == "out_of_scope_by_user" for row in bulk_rows)
     assert all(row["qualification"]["tools_allowed"] is False for row in bulk_rows)
     assert all(
-        row["qualification"]["reconfirm_ref"] == "research191_unauth_reconfirm" for row in bulk_rows
+        row["qualification"]["reconfirm_ref"] == "research192_unauth_reconfirm" for row in bulk_rows
     )
     # Shape hints must never look like a completed contract.
     assert all(row["response_fields"] == [] for row in bulk_rows)
@@ -390,7 +391,9 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["live_api"] == "out_of_scope_by_user"
         assert "research186" in row["evidence"]
         assert "research191" in row["evidence"]
+        assert "research192" in row["evidence"]
         assert "research191_unauth_reconfirm" in row["qualification"]["evidence_ref"]
+        assert "research192_unauth_reconfirm" in row["qualification"]["evidence_ref"]
 
     for row_id in method_closed:
         row = by_id[row_id]
@@ -779,6 +782,7 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     assert "not_applicable is rejected" in annual["evidence"]
     assert "Upsedasse" in annual["evidence"]
     assert "research191" in annual["evidence"]
+    assert "research192" in annual["evidence"]
     assert "/:org_slug/annual_reports" in annual["method_or_route"]
     assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["errors"]
     qual = annual["qualification"]
