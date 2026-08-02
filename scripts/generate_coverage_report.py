@@ -93,6 +93,10 @@ UI_INVOICES_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_INVOICES_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_update_open.py"
 UI_INVOICES_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_INVOICES_UPDATE_OPEN_TOOL_NAME = "ui_invoices_update_open"
+UI_INVOICES_DELETE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INVOICES_DELETE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_delete_open.py"
+UI_INVOICES_DELETE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INVOICES_DELETE_OPEN_TOOL_NAME = "ui_invoices_delete_open"
 UI_BILLS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BILLS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_create_open.py"
 UI_BILLS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -2409,6 +2413,83 @@ def apply_ui_clients_update_open_shell_evidence(
     row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = (
         "not_applicable for product path; live harness may create disposable contact "
+        "then delete in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_invoices_delete_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_delete: bool = False,
+) -> None:
+    """Mark invoices delete chrome **open only** evidence (research175).
+
+    Empty-input tool; open /:org_slug/invoices/:id/edit, open Mere, classify
+    exact Slet text (primary Slet button absent). Never confirm Slet/Send/Gem.
+    Distinct from get/update freezes on the same path. When
+    ``parity_of_api_delete`` is true, dual-counts exact ``ui.parity.invoices.delete``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/invoices/:id/edit + Mere menu "
+        "(read-only invoices delete chrome open; never confirm Slet; "
+        "primary Slet button absent; soft /invoices/new not success)"
+    )
+    row["tool_name"] = UI_INVOICES_DELETE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "edit_open",
+        "mere_open",
+        "slet_text_visible",
+        "dupliker_visible",
+        "primary_slet_absent",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_delete:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INVOICES_DELETE_OPEN_MODEL_TEST_REFERENCE,
+        UI_INVOICES_DELETE_OPEN_UNIT_TEST_REFERENCE,
+        UI_INVOICES_DELETE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research175 dual-session headless observation + ui_invoices_delete_open product; "
+        "scoped api.billysbilling.com path_allow for invoices data-plane; "
+        "Mere delete chrome open only (path class /:org_slug/invoices/:id/edit, "
+        "shell_kind=invoices_delete, Slet text visible after Mere; never confirm delete; "
+        "distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, "
+        "get ui_invoices_get_open, and form_open ui_invoices_update_open); "
+        "vision record tmp/vision-records/ui_invoices_delete_open.json "
+        "(invoice delete chrome frames, accept)"
+    )
+    if parity_of_api_delete:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.invoices.delete to UI Mere delete chrome open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "delete_chrome_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never confirms delete"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness may create disposable invoice "
         "then delete in reverse with fresh list read-back"
     )
     row["errors"] = [
@@ -5215,6 +5296,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_invoices_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.invoices.update":
             apply_ui_invoices_update_open_shell_evidence(row, parity_of_api_update=True)
+        if api_row["id"] == "api.invoices.delete":
+            apply_ui_invoices_delete_open_shell_evidence(row, parity_of_api_delete=True)
         if api_row["id"] == "api.bills.get":
             apply_ui_bills_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.update":

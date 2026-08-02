@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 66 greened shells/parity + invoices.update form open (research174) = 67
+    # Prior 67 greened shells/parity + invoices.delete Mere chrome (research175) = 68
     # live/vision rows without GEO NA.
-    ui_shell_green = 67
+    ui_shell_green = 68
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -739,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 67 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 68 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 174
+    assert status["qualification"]["live_tested_rows"] == 175
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -759,6 +759,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create",
         "ui.parity.invoices.get",
         "ui.parity.invoices.update",
+        "ui.parity.invoices.delete",
         "ui.parity.bills.get",
         "ui.parity.bills.update",
         "ui.parity.bills.delete",
@@ -828,6 +829,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create": "ui_invoices_create_open",
         "ui.parity.invoices.get": "ui_invoices_get_open",
         "ui.parity.invoices.update": "ui_invoices_update_open",
+        "ui.parity.invoices.delete": "ui_invoices_delete_open",
         "ui.parity.bills.get": "ui_bills_get_open",
         "ui.parity.bills.update": "ui_bills_update_open",
         "ui.parity.bills.delete": "ui_bills_delete_open",
@@ -908,7 +910,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 67
+    assert len(qualified) == 68
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1136,11 +1138,23 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert invoices_update_parity["api_row_id"] == "api.invoices.update"
     assert invoices_update_parity["tool_name"] == "ui_invoices_update_open"
+
     assert invoices_update_parity["parity_status"] == "form_open_only"
     assert invoices_update_parity["live_tested"] is True
     assert invoices_update_parity["vision_verified"] is True
     assert "research174" in invoices_update_parity["evidence"]
     assert "api.invoices.update" in invoices_update_parity["evidence"]
+
+    invoices_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.invoices.delete"
+    )
+    assert invoices_delete_parity["api_row_id"] == "api.invoices.delete"
+    assert invoices_delete_parity["tool_name"] == "ui_invoices_delete_open"
+    assert invoices_delete_parity["parity_status"] == "delete_chrome_open_only"
+    assert invoices_delete_parity["live_tested"] is True
+    assert invoices_delete_parity["vision_verified"] is True
+    assert "research175" in invoices_delete_parity["evidence"]
+    assert "api.invoices.delete" in invoices_delete_parity["evidence"]
 
     bills_get_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.get")
     assert bills_get_parity["api_row_id"] == "api.bills.get"
@@ -1238,7 +1252,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert uploads_discovery["api_row_id"] is None
     assert "file_input_present" in uploads_discovery["response_fields"]
     for red_id in (
-        "ui.parity.invoices.delete",
+        # ui.parity.invoices.delete greened by ui_invoices_delete_open (186.75)
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
         "ui.parity.special.invoice_email",

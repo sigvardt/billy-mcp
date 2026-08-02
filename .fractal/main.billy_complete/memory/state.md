@@ -6,18 +6,172 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T03:15:00Z
+updated: 2026-08-02T02:40:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **74** COMMIT done for 186.74 ui_invoices_update_open (`1c3cd0f`).
-- live/vision **174**; implemented/contract **358**; complete **false**.
-- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
-- Residual UI: products.get / products update-delete / invoices.delete / special.invoice_email; bulk/annual red.
+- Continue mode iter **75** COMMIT in progress for 186.75 ui_invoices_delete_open.
+- live/vision **175**; implemented/contract **359**; complete **false**.
 - Not node finish.
+
+
+## SYNC (iter 75 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 15006CA1 (FIX-VERIFY done) + BB925F89 (pre-FIX-VERIFY) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean; product + plan + live test + wiki ready to commit.
+- Ready COMMIT 186.75 ui_invoices_delete_open. Not finish.
+
+
+## FIX-VERIFY (iter 75 / 186.75)
+
+- IR required fixes: none. Optional N1 live assert message “update”→“delete” applied; N2 no-op.
+- lint.sh pass. test.sh offline 1642 passed / 50 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: invoices.delete discovery/parity green on `ui_invoices_delete_open`;
+  list+create+get+update tools unchanged; residual products.* + invoice_email red;
+  live/vision 175; implemented/contract 359; complete false;
+  bulk 92 external-contract; annual stay red; API live false (out_of_scope_by_user).
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.75 ui invoices delete open package. Not node finish.
+
+
+## SYNC (iter 75 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CE4BA6C7 (IR ACCEPT) + ECC3134A (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.75 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+
+## INDEPENDENT-REVIEW (iter 75 / 186.75)
+
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Product **ACCEPT** (ui_invoices_delete_open → ui.parity.invoices.delete delete_chrome_open_only).
+- Overall completeness **FAIL** expected (bulk 92, annual, residual UI).
+- Docs etag/md5 unchanged; API invoices.delete live_tested false; dual-count only delete;
+  egress unchanged; vision accept+purge; offline 1642; live dual pass.
+- Optional nits N1 assert message wording / N2 capture Mere chrome — non-blocking.
+- Ready FIX-VERIFY (no required code fixes) then COMMIT. Not finish.
+
+
+## SYNC (iter 75 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C9B29808 (EXECUTE done) + 29C8BF31 (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.75 uncommitted: ui_invoices_delete_open; live/vision 175;
+  implemented/contract 359; offline 1642 pass; complete=false.
+- Ready for IR of product. Not finish.
+
+
+## EXECUTE (iter 75 / 186.75)
+
+- Implemented `ui_invoices_delete_open`: models, browser (edit + Mere + Slet text;
+  primary Slet button absent; never confirm), server, coverage generator dual-count
+  invoices.delete only, unit + inventory, live dual test, wiki shell. No egress change.
+- Live dual `tests/live/test_ui_invoices_delete_open.py` **pass**; vision record
+  purge_verified.
+- Coverage status: implemented/contract **359**; live/vision **175**; complete false.
+- lint.sh pass; offline BILLY_TEST_MODE=commit **1642 passed** / 50 deselected.
+- Ready REVIEW / FIX-VERIFY. Not finish.
+
+
+## SYNC (iter 75 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0F5817D1 (PLAN done) + B78ED479 (pre-PLAN) reacted (+).
+- No running children. No parent directives.
+- Plan 186.75 + research175 brief present. Tip `2712ce7`.
+- Ready EXECUTE product ui_invoices_delete_open (root; no children). Not finish.
+
+
+## PLAN (iter 75 / 186.75)
+
+- Plan file
+  `plans/2026-08-02T01:54:11.935Z-186.75-ui_invoices_delete_open.md`:
+  ui_invoices_delete_open delete_chrome_open_only maps invoices.delete
+  (research175); dual-count invoices.delete only; path
+  `/:org_slug/invoices/:id/edit`; Mere→Slet text observe-only; no egress change;
+  live/vision 174→175; implemented/contract 358→359; root-only Grok;
+  DEFER products.get + invoice_email; complete false.
+- Ready EXECUTE.
+
+
+## SYNC (iter 75 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 551A794F (research175 done) + 06F00179 (pre-RESEARCH SYNC) reacted (+).
+- No running children. No parent directives.
+- research175 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: ui_invoices_delete_open delete_chrome_open_only maps
+  invoices.delete (186.75; live/vision 174→175). DEFER products.get + invoice_email.
+  Not finish.
+
+
+## RESEARCH (iter 75 / research175)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+product+invoice; cleanup all_clean dual; api_token_used false; profiles purged.
+- **ACCEPT** product `ui_invoices_delete_open` (delete_chrome_open_only maps invoices.delete): path dual
+  `/:org_slug/invoices/:id/edit`; Mere open dual; text Slet+Duplikér dual; primary Slet button 0 dual;
+  never confirm. Peer pattern `ui_clients_delete_open` (not bills primary-Slet confirm).
+- products.get soft routes marker false inputs 0 dual; list_click stays list — REJECT greening.
+- invoice_email soft paths inputs 0 — DEFER. bulk/annual reject.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research175_focus_dual.json`.
+- Ready PLAN 186.75. Not finish.
+
+
+## SYNC (iter 75 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CFCCC13A (SYNC done) + 9BD314CD (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `2712ce7`.
+- Coverage: implemented/contract 358; live/vision 174; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer invoices.delete Mere→Slet if
+  dual product-safe; products.get only if detail dual-stable; special.invoice_email
+  if durable form; no bulk greening; no weak NA; no annual green without access).
+  Not finish.
+
+
+## PREPARE (iter 75)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 historical children; none with local ahead commits; none running.
+- Remote-ahead children reviewed → **skip all merges**:
+  - `ui_auth_status` (SRC): tip browser/models/server much larger (341803/32463/49175 vs child 12953/2136/8947); product already live.
+  - `shared_foundation` / wave1–wave5 product stubs: tip equal or larger on every product file; three-dot looks ahead vs ancient base only.
+  - `wave5g_sales_tax_product` / `wave5d_invoice_writes`: product files equal or tip larger; coverage generator tip much larger.
+  - wiki-only remote-ahead: `ui_auth_credentials_research_codex_fallback` optional research page missing on tip — skip (superseded auth research already on root product path). `wave5t`/`wave5u` wiki tip equal or longer (1-byte noise only).
+  - Remaining remote-ahead: fractal-only / failed-review scaffolding or older wave product already integrated.
+  - Material larger-on-child non-fractal product files: **0** (except optional research wiki skipped).
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only. Tip `2712ce7` / product `1c3cd0f` ui invoices update open.
+- Ready RESEARCH residual dual-count/NA (prefer invoices.delete Mere→Slet if dual product-safe; products.get only if detail dual-stable; special.invoice_email if durable form; no bulk greening; no weak NA; no annual green without access). Not finish.
+
+
+## SYNC (iter 75)
+
+- Continue mode restart after iter74 COMMIT (`1c3cd0f` ui invoices update open; bookkeeping `2712ce7`).
+- Unread inbox/feed: empty. Saved: empty.
+- Private 90B95107 (iter74 COMMIT done) + AE5269E8 (pre-COMMIT SYNC) reacted (+).
+- No running children. All historical children terminal (completed/exited/killed/stopped).
+- No parent directives.
+- Tip `2712ce7` == origin/main.billy_complete (branch clean).
+- Coverage: implemented/contract **358**; live/vision **174**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open
+  (invoices.delete, products.get/update/delete, special.invoice_email, many discovery_required).
+- Last product: 186.74 ui invoices update open (live/vision 173→174; contract 357→358).
+- Outbox: iter75 SYNC resume. Ready PREPARE. Not finish.
 
 
 ## SYNC (iter 74)

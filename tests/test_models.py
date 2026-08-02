@@ -49,6 +49,7 @@ from billy_mcp.models import (
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenInput,
     UiInvoicesCreateOpenSuccess,
+    UiInvoicesDeleteOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
     UiProductsCreateOpenInput,
@@ -248,6 +249,25 @@ def test_ui_invoices_update_open_models_are_empty_input_and_non_pii_success() ->
     assert success.shell_kind == "invoices_update"
     properties = UiInvoicesUpdateOpenSuccess.model_json_schema().get("properties", {})
     assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+
+
+def test_ui_invoices_delete_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiInvoicesDeleteOpenInput
+
+    UiInvoicesDeleteOpenInput()
+    success = UiInvoicesDeleteOpenSuccess(
+        edit_open=True,
+        mere_open=True,
+        slet_text_visible=True,
+        dupliker_visible=True,
+        primary_slet_absent=True,
+        shell_markers_present=True,
+    )
+    assert success.shell_kind == "invoices_delete"
+    assert success.path_class == "/:org_slug/invoices/:id/edit"
+    properties = UiInvoicesDeleteOpenSuccess.model_json_schema().get("properties", {})
+    assert "org_slug" not in properties
+    assert "url" not in properties
 
 
 def test_ui_bills_get_open_models_are_empty_input_and_non_pii_success() -> None:

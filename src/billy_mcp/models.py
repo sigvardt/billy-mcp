@@ -171,6 +171,32 @@ class UiInvoicesUpdateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiInvoicesDeleteOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only invoices delete chrome open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInvoicesDeleteOpenSuccess(BaseModel):
+    """Non-PII classification of delete chrome after Mere on an invoice edit form.
+
+    Research175: open /:org_slug/invoices/:id/edit, open Mere, assert exact Slet
+    text visible (primary Slet button absent). Never confirm Slet / Send / Gem.
+    Distinct from get/update form freezes on the same path class.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/invoices/:id/edit"] = "/:org_slug/invoices/:id/edit"
+    shell_kind: Literal["invoices_delete"] = "invoices_delete"
+    edit_open: bool
+    mere_open: bool
+    slet_text_visible: bool
+    dupliker_visible: bool
+    primary_slet_absent: bool
+    shell_markers_present: bool
+
+
 class UiBillsCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only bill create form open tool."""
 

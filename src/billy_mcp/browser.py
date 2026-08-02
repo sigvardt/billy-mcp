@@ -45,6 +45,7 @@ from billy_mcp.models import (
     UiIntegrationsOpenSuccess,
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenSuccess,
+    UiInvoicesDeleteOpenSuccess,
     UiInvoicesGetOpenSuccess,
     UiInvoicesListSuccess,
     UiInvoicesUpdateOpenSuccess,
@@ -650,6 +651,12 @@ class UiInvoicesUpdateOpenService(Protocol):
     """Injectable seam for the read-only invoices edit form open observation."""
 
     async def ui_invoices_update_open(self) -> UiInvoicesUpdateOpenSuccess | ToolError: ...
+
+
+class UiInvoicesDeleteOpenService(Protocol):
+    """Injectable seam for the read-only invoices delete chrome (Mere) observation."""
+
+    async def ui_invoices_delete_open(self) -> UiInvoicesDeleteOpenSuccess | ToolError: ...
 
 
 class UiBillsGetOpenService(Protocol):
@@ -1395,6 +1402,111 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser invoices detail observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_invoices_delete_open(self) -> UiInvoicesDeleteOpenSuccess | ToolError:
+        """Open invoice delete chrome for the authenticated UI session only.
+
+        Research175: path-scoped invoices GET/POST/DELETE unlock list rows and
+        disposable seed. Open first non-header invoice edit surface at path class
+        /:org_slug/invoices/:id/edit. Assert primary Slet button absent; open Mere;
+        classify exact Slet text (+ Duplikér). Never click Slet / confirm / Gem /
+        Godkend og send / Send. Soft /invoices/new is not success. Distinct from
+        get/update freezes on the same path class (clients-delete Mere pattern).
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_invoices_delete_changed_error()
+
+            invoices_url = f"https://mit.billy.dk/{slug}/invoices"
+            await page.goto(invoices_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_invoices_delete_changed_error()
+                if _is_invoices_create_url(page.url):
+                    return _ui_invoices_delete_changed_error()
+
+                if await _has_invoices_delete_chrome_signature(page):
+                    flags = await _invoices_delete_chrome_flags(page)
+                    primary = await _invoices_delete_primary_flags(page)
+                    return UiInvoicesDeleteOpenSuccess(
+                        edit_open=True,
+                        mere_open=flags["mere_open"],
+                        slet_text_visible=flags["slet_text_visible"],
+                        dupliker_visible=flags["dupliker_visible"],
+                        primary_slet_absent=primary["primary_slet_absent"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_invoices_edit_url(page.url):
+                    primary = await _invoices_delete_primary_flags(page)
+                    if not primary.get("primary_slet_absent"):
+                        return _ui_invoices_delete_changed_error()
+                    if not primary.get("mere_present"):
+                        return _ui_invoices_delete_changed_error()
+                    clicked_mere = await _click_invoices_mere_action(page)
+                    if clicked_mere:
+                        await _await_page_settle(page)
+                        if await _has_invoices_delete_chrome_signature(page):
+                            flags = await _invoices_delete_chrome_flags(page)
+                            return UiInvoicesDeleteOpenSuccess(
+                                edit_open=True,
+                                mere_open=True,
+                                slet_text_visible=flags["slet_text_visible"],
+                                dupliker_visible=flags["dupliker_visible"],
+                                primary_slet_absent=True,
+                                shell_markers_present=await _has_shell_nav_markers(page),
+                            )
+                        continue
+                    return _ui_invoices_delete_changed_error()
+
+                if _is_invoices_list_url(page.url) and await _has_invoices_list_signature(page):
+                    opened = await _click_invoices_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_invoices_delete_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the invoices delete chrome observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser invoices delete chrome observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5862,6 +5974,105 @@ async def _has_invoices_update_form_signature(page: LoginPage, slug: str) -> boo
         return False
 
 
+async def _count_role_button_exact(page: LoginPage, label: str) -> int:
+    """Count role=button only (avoid text= menu items matching Slet after Mere)."""
+
+    live = cast(Any, page)
+    get_by_role = getattr(live, "get_by_role", None)
+    if callable(get_by_role):
+        try:
+            exact = cast(
+                Any, get_by_role("button", name=re.compile(rf"^{re.escape(label)}$", re.I))
+            )
+            return int(await exact.count())
+        except Exception:
+            return 0
+    # Unit fakes without get_by_role: do not treat text= menu labels as buttons.
+    try:
+        return int(await live.locator(f"button:text-is('{label}')").count())
+    except Exception:
+        return 0
+
+
+async def _invoices_delete_primary_flags(page: LoginPage) -> dict[str, bool]:
+    """Primary edit chrome before Mere — Slet should not be a primary button."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:1800]
+    except Exception:
+        body = ""
+    slet_btn_n = await _count_role_button_exact(page, "Slet")
+    mere_btn_n = await _count_labeled_buttons(page, "Mere")
+    mere_text = bool(re.search(r"\bMere\b", body))
+    return {
+        "primary_slet_absent": slet_btn_n == 0,
+        "mere_present": mere_btn_n >= 1 or mere_text,
+    }
+
+
+async def _invoices_delete_chrome_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII delete chrome flags after Mere (research175). Never confirms delete."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:2000]
+    except Exception:
+        body = ""
+    # Exact menu text after Mere (not role=button Slet; research175 dual).
+    slet_text = bool(re.search(r"(?<![A-Za-zÆØÅæøå])Slet(?![A-Za-zÆØÅæøå])", body))
+    dupliker = bool(re.search(r"Duplik[eé]r", body, re.I))
+    mere_label = bool(re.search(r"\bMere\b", body))
+    # Mere menu is open when delete/duplicate items appear with Mere chrome.
+    mere_open = mere_label and slet_text and (dupliker or "Udskriv" in body)
+    return {
+        "mere_open": mere_open,
+        "slet_text_visible": slet_text,
+        "dupliker_visible": dupliker,
+        "primary_slet_absent": (await _count_role_button_exact(page, "Slet")) == 0,
+    }
+
+
+async def _has_invoices_delete_chrome_signature(page: LoginPage) -> bool:
+    """Strict delete-chrome signature — edit path + Mere menu + Slet text."""
+
+    try:
+        if _is_invoices_create_url(page.url):
+            return False
+        if not _is_invoices_edit_url(page.url):
+            return False
+        flags = await _invoices_delete_chrome_flags(page)
+        return bool(flags.get("mere_open") and flags.get("slet_text_visible"))
+    except Exception:
+        return False
+
+
+async def _click_invoices_mere_action(page: LoginPage) -> bool:
+    """Click Mere/More on invoice edit without Slet confirm. Research175 delete open."""
+
+    live = cast(Any, page)
+    for selector in ("text=Mere", "text=More"):
+        try:
+            mere = live.locator(selector)
+            count = int(await mere.count())
+            for index in range(min(count, 6)):
+                el = mere.nth(index)
+                try:
+                    if await el.is_visible():
+                        txt = ""
+                        try:
+                            txt = (await el.inner_text() or "").strip()
+                        except Exception:
+                            txt = ""
+                        if txt and not re.fullmatch(r"Mere|More", txt, re.I):
+                            continue
+                        await el.click()
+                        return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    return False
+
+
 async def _bills_detail_flags(page: LoginPage) -> dict[str, bool]:
     """Non-PII bill read-detail flags (research170)."""
 
@@ -8320,6 +8531,16 @@ def _ui_invoices_get_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices detail surface did not match the recorded get-open contract.",
+    )
+
+
+def _ui_invoices_delete_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message=(
+            "Browser invoices delete chrome observation could not match "
+            "the expected Mere menu surface."
+        ),
     )
 
 

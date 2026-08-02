@@ -83,6 +83,7 @@ from billy_mcp.browser import (
     UiIntegrationsOpenService,
     UiInventoryOpenService,
     UiInvoicesCreateOpenService,
+    UiInvoicesDeleteOpenService,
     UiInvoicesGetOpenService,
     UiInvoicesListService,
     UiInvoicesUpdateOpenService,
@@ -169,6 +170,8 @@ from billy_mcp.models import (
     UiInventoryOpenSuccess,
     UiInvoicesCreateOpenInput,
     UiInvoicesCreateOpenSuccess,
+    UiInvoicesDeleteOpenInput,
+    UiInvoicesDeleteOpenSuccess,
     UiInvoicesGetOpenInput,
     UiInvoicesGetOpenSuccess,
     UiInvoicesListInput,
@@ -233,6 +236,7 @@ def create_server(
     ui_invoices_create_open_service: UiInvoicesCreateOpenService | None = None,
     ui_invoices_get_open_service: UiInvoicesGetOpenService | None = None,
     ui_invoices_update_open_service: UiInvoicesUpdateOpenService | None = None,
+    ui_invoices_delete_open_service: UiInvoicesDeleteOpenService | None = None,
     ui_products_list_service: UiProductsListService | None = None,
     ui_products_create_open_service: UiProductsCreateOpenService | None = None,
     ui_clients_list_service: UiClientsListService | None = None,
@@ -295,6 +299,7 @@ def create_server(
     invoices_create_open_service = ui_invoices_create_open_service or browser
     invoices_get_open_service = ui_invoices_get_open_service or browser
     invoices_update_open_service = ui_invoices_update_open_service or browser
+    invoices_delete_open_service = ui_invoices_delete_open_service or browser
     products_list_service = ui_products_list_service or browser
     products_create_open_service = ui_products_create_open_service or browser
     clients_list_service = ui_clients_list_service or browser
@@ -401,6 +406,12 @@ def create_server(
 
         UiInvoicesUpdateOpenInput()
         return await invoices_update_open_service.ui_invoices_update_open()
+
+    async def ui_invoices_delete_open() -> UiInvoicesDeleteOpenSuccess | ToolError:
+        """Observe authenticated Billy invoice delete chrome (Mere) without confirming."""
+
+        UiInvoicesDeleteOpenInput()
+        return await invoices_delete_open_service.ui_invoices_delete_open()
 
     async def ui_products_list() -> UiProductsListSuccess | ToolError:
         """Observe the authenticated Billy products list shell without writes."""
@@ -710,6 +721,13 @@ def create_server(
             "(read-only form open; never Gem/Gem som kladde/Godkend/Send/Slet submit)."
         ),
     )(ui_invoices_update_open)
+    server.tool(
+        name="ui_invoices_delete_open",
+        description=(
+            "Open a Billy invoice delete chrome for the authenticated session "
+            "(read-only Mere menu with Slet text visible; never confirm delete)."
+        ),
+    )(ui_invoices_delete_open)
     server.tool(
         name="ui_products_list",
         description=(

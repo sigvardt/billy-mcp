@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T01:32:23Z
+updated: 2026-08-02T02:00:22Z
 ---
 
 # billy_mcp
@@ -88,6 +88,8 @@ updated: 2026-08-02T01:32:23Z
 [[ui_invoice_reminders_not_applicable|ui_invoice_reminders_not_applicable]]: Dual-session research149 freeze — no equivalent mit.billy.dk workflow for invoiceReminders API parity; soft-empty path matches nonsense; invoices/Fakturaer shell is invoices only; NA accepted.
 
 [[ui_invoices_create_open_shell|ui_invoices_create_open_shell]]: Read-only headless ui_invoices_create_open contract for Billy invoice create form open only (research153).
+
+[[ui_invoices_delete_open_shell|ui_invoices_delete_open_shell]]: Read-only Billy UI tool that opens a draft invoice edit surface, opens Mere, and classifies Slet delete chrome without confirming deletion.
 
 [[ui_invoices_get_open_shell|ui_invoices_get_open_shell]]: Read-only headless ui_invoices_get_open contract for Billy invoice draft detail/edit get/open only (research169).
 
