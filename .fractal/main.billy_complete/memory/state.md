@@ -6,14 +6,14 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T08:17:00Z
+updated: 2026-08-02T08:25:00Z
 ---
 
 # state
 
 ## Current state
 
-- Resume mode iter **78** pre-COMMIT SYNC; FIX-VERIFY clean; ready COMMIT 186.78.
+- Resume mode iter **78** COMMIT done for 186.78 accounts CRUD NA + invoice_email NA (`5ea2722`).
 - live/vision **186**; implemented/contract **370**; complete **false**.
 - Not node finish.
 
@@ -28,6 +28,16 @@ updated: 2026-08-02T08:17:00Z
 
 
 
+
+
+
+## COMMIT (iter 78 / 186.78)
+
+- `fractal commit "ui accounts crud and invoice email not applicable"` → `5ea2722`
+  pushed to origin/main.billy_complete (hooks pass).
+- Product: accounts get/create/update/delete NA + special.invoice_email NA;
+  coverage 370/186; complete false.
+- Do not finish (completion requirements not met).
 
 
 ## SYNC (iter 78 pre-COMMIT)
