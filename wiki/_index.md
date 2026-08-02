@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-01T21:44:34Z
+updated: 2026-08-02T00:02:06Z
 ---
 
 # billy_mcp
@@ -46,6 +46,8 @@ updated: 2026-08-01T21:44:34Z
 [[ui_bills_get_open_shell|ui_bills_get_open_shell]]: Read-only bill detail get-open shell (maps api.bills.get).
 
 [[ui_bills_list_shell|ui_bills_list_shell]]: Read-only headless ui_bills_list contract for Billy bills (purchases / Køb) list shell open only.
+
+[[ui_bills_update_open_shell|ui_bills_update_open_shell]]: Read-only bill edit form open shell (maps api.bills.update).
 
 [[ui_clients_create_open_shell|ui_clients_create_open_shell]]: Read-only headless ui_clients_create_open contract for Billy clients create dialog form open only (research160).
 

@@ -189,6 +189,31 @@ class UiBillsGetOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBillsUpdateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only bill edit form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBillsUpdateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy bill edit/update form.
+
+    Research172: path class /:org_slug/bills/:id/edit only (Ret regning form).
+    Distinct from get detail_open on /:org_slug/bills/:id. Never submit.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bills/:id/edit"] = "/:org_slug/bills/:id/edit"
+    shell_kind: Literal["bills_update"] = "bills_update"
+    form_open: bool
+    ret_regning_chrome_present: bool
+    opdater_present: bool
+    leverandor_or_dates_chrome_present: bool
+    inputs_present: bool
+    shell_markers_present: bool
+
+
 class UiProductsListInput(BaseModel):
     """Empty, strict input boundary for the read-only products list shell tool."""
 

@@ -97,6 +97,10 @@ UI_BILLS_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BILLS_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_get_open.py"
 UI_BILLS_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_BILLS_GET_OPEN_TOOL_NAME = "ui_bills_get_open"
+UI_BILLS_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_BILLS_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_update_open.py"
+UI_BILLS_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_BILLS_UPDATE_OPEN_TOOL_NAME = "ui_bills_update_open"
 UI_PRODUCTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_list.py"
 UI_PRODUCTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1754,6 +1758,83 @@ def apply_ui_bills_get_open_shell_evidence(
     row["vision_verified"] = True
     row["vision_evidence"] = None
     row["parity_status"] = "detail_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable contact+"
+        "bill then deletes in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_bills_update_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_update: bool = False,
+) -> None:
+    """Mark bills edit form **open only** evidence (research172).
+
+    Empty-input tool; open /:org_slug/bills, open first non-header bill edit
+    form at path class /:org_slug/bills/:id/edit. Never Opdater/Godkend/Slet/
+    Træk/Upload/Registrer betaling submit. Distinct from get detail_open_only
+    on /:org_slug/bills/:id. When ``parity_of_api_update`` is true, dual-counts
+    exact ``ui.parity.bills.update``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/bills + first non-header bill edit form "
+        "(read-only bills update form open; never Opdater/Godkend/Slet/Træk submit; "
+        "/bills/new and read /bills/:id not success)"
+    )
+    row["tool_name"] = UI_BILLS_UPDATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "form_open",
+        "ret_regning_chrome_present",
+        "opdater_present",
+        "leverandor_or_dates_chrome_present",
+        "inputs_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_update:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_BILLS_UPDATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_BILLS_UPDATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_BILLS_UPDATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research172 dual-session headless observation + ui_bills_update_open product; "
+        "committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and "
+        "GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+"
+        "description+amount, no paymentDate; emails still denied); form open only "
+        "(path class /:org_slug/bills/:id/edit, shell_kind=bills_update, Ret regning/"
+        "Opdater/Leverandør/Bilagsdato chrome; never write submit; distinct from list "
+        "shell ui_bills_list, create form_open ui_bills_create_open, and get detail "
+        "ui_bills_get_open); vision record tmp/vision-records/ui_bills_update_open.json "
+        "(bill edit form frames, accept)"
+    )
+    if parity_of_api_update:
+        row["evidence"] = f"{row['evidence']}; maps api.bills.update to UI edit form open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
     row["cleanup"] = (
@@ -4970,6 +5051,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_invoices_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.get":
             apply_ui_bills_get_open_shell_evidence(row, parity_of_api_get=True)
+        if api_row["id"] == "api.bills.update":
+            apply_ui_bills_update_open_shell_evidence(row, parity_of_api_update=True)
         if api_row["id"] == "api.bills.create":
             apply_ui_bills_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.products.list":
@@ -5162,6 +5245,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_SUPPLIERS_LIST_LIVE_TEST_REFERENCE,
                     UI_BILLS_LIST_LIVE_TEST_REFERENCE,
                     UI_BILLS_GET_OPEN_LIVE_TEST_REFERENCE,
+                    UI_BILLS_UPDATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_DEBTOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
                     UI_CREDITOR_BALANCES_LIST_LIVE_TEST_REFERENCE,
                     UI_UPLOADS_LIST_LIVE_TEST_REFERENCE,

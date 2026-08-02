@@ -4815,39 +4815,49 @@
     {
       "api_row_id": "api.bills.update",
       "area": "bills",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable contact+bill then deletes in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.update",
+      "evidence": "research172 dual-session headless observation + ui_bills_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); form open only (path class /:org_slug/bills/:id/edit, shell_kind=bills_update, Ret regning/Opdater/Leverand\u00f8r/Bilagsdato chrome; never write submit; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, and get detail ui_bills_get_open); vision record tmp/vision-records/ui_bills_update_open.json (bill edit form frames, accept); maps api.bills.update to UI edit form open only",
       "filters": [],
       "id": "ui.parity.bills.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.bills.update",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/bills + first non-header bill edit form (read-only bills update form open; never Opdater/Godkend/Slet/Tr\u00e6k submit; /bills/new and read /bills/:id not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "bill"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "form_open",
+        "ret_regning_chrome_present",
+        "opdater_present",
+        "leverandor_or_dates_chrome_present",
+        "inputs_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "updates bill",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_bills_update_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_bills_update_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

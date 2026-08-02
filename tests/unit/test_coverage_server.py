@@ -19,6 +19,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsGetOpenSuccess,
     UiBillsListSuccess,
+    UiBillsUpdateOpenSuccess,
     UiClientsCreateOpenSuccess,
     UiClientsDeleteOpenSuccess,
     UiClientsGetOpenSuccess,
@@ -474,6 +475,22 @@ class FakeUiBillsGetOpenService:
             kladde_or_state_chrome_present=True,
             supplier_chrome_present=True,
             amount_or_line_chrome_present=True,
+            shell_markers_present=True,
+        )
+
+
+class FakeUiBillsUpdateOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_bills_update_open(self) -> UiBillsUpdateOpenSuccess:
+        self.calls += 1
+        return UiBillsUpdateOpenSuccess(
+            form_open=True,
+            ret_regning_chrome_present=True,
+            opdater_present=True,
+            leverandor_or_dates_chrome_present=True,
+            inputs_present=True,
             shell_markers_present=True,
         )
 
@@ -1064,6 +1081,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_invoices_get_open",
         "ui_bills_create_open",
         "ui_bills_get_open",
+        "ui_bills_update_open",
         "ui_products_list",
         "ui_clients_list",
         "ui_clients_create_open",

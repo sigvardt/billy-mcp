@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 63 greened shells/parity + bills.get open (research170) = 64
+    # Prior 64 greened shells/parity + bills.update form open (research172) = 65
     # live/vision rows without GEO NA.
-    ui_shell_green = 64
+    ui_shell_green = 65
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -739,9 +739,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 64 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 65 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 171
+    assert status["qualification"]["live_tested_rows"] == 172
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
 
 
@@ -759,6 +759,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create",
         "ui.parity.invoices.get",
         "ui.parity.bills.get",
+        "ui.parity.bills.update",
         "ui.discovery.products",
         "ui.parity.products.list",
         "ui.discovery.products_create",
@@ -825,6 +826,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.create": "ui_invoices_create_open",
         "ui.parity.invoices.get": "ui_invoices_get_open",
         "ui.parity.bills.get": "ui_bills_get_open",
+        "ui.parity.bills.update": "ui_bills_update_open",
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
         "ui.discovery.products_create": "ui_products_create_open",
@@ -902,7 +904,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 64
+    assert len(qualified) == 65
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1134,6 +1136,15 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "research170" in bills_get_parity["evidence"]
     assert "api.bills.get" in bills_get_parity["evidence"]
 
+    bills_update_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.update")
+    assert bills_update_parity["api_row_id"] == "api.bills.update"
+    assert bills_update_parity["tool_name"] == "ui_bills_update_open"
+    assert bills_update_parity["parity_status"] == "form_open_only"
+    assert bills_update_parity["live_tested"] is True
+    assert bills_update_parity["vision_verified"] is True
+    assert "research172" in bills_update_parity["evidence"]
+    assert "api.bills.update" in bills_update_parity["evidence"]
+
     bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
     assert bills_create_parity["api_row_id"] == "api.bills.create"
     assert bills_create_parity["tool_name"] == "ui_bills_create_open"
@@ -1213,7 +1224,6 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.files.create",
         "ui.parity.attachments.get",
         "ui.parity.attachments.list",
-        "ui.parity.bills.update",
         "ui.parity.bills.delete",
         "ui.parity.bills.bulk_save",
         "ui.parity.bills.bulk_delete",

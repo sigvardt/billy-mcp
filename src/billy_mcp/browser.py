@@ -30,6 +30,7 @@ from billy_mcp.models import (
     UiBillsCreateOpenSuccess,
     UiBillsGetOpenSuccess,
     UiBillsListSuccess,
+    UiBillsUpdateOpenSuccess,
     UiClientsCreateOpenSuccess,
     UiClientsDeleteOpenSuccess,
     UiClientsGetOpenSuccess,
@@ -153,6 +154,9 @@ _BILLS_EDIT_PATH = re.compile(r"^/[^/]+/bills/(?!new$)[^/]+/edit$")
 _BILLS_GET_STATE_MARKERS = ("Kladde", "Godkendt", "Annulleret", "Draft")
 _BILLS_GET_SUPPLIER_MARKERS = ("Leverandør", "Køb fra", "Ret køb", "Supplier")
 _BILLS_GET_AMOUNT_MARKERS = ("Restbeløb", "Beløb", "Beskrivelse", "Linje", "Amount")
+_BILLS_UPDATE_RET_MARKERS = ("Ret regning", "Ret køb", "Ret kob")
+_BILLS_UPDATE_FIELD_MARKERS = ("Leverandør", "Leverandor", "Bilagsdato", "Forfaldsdato")
+_BILLS_UPDATE_ACTION_MARKERS = ("Opdater",)
 # Research111: debtor balances list shell (receivables); no /v2/debtorbalance API resource.
 _DEBTOR_BALANCES_LIST_PATH = re.compile(r"^/[^/]+/debtorbalance$")
 _DEBTOR_BALANCES_LIST_HEADING = "Tilgodehavender"
@@ -635,6 +639,12 @@ class UiBillsGetOpenService(Protocol):
     """Injectable seam for the read-only bills detail get-open observation."""
 
     async def ui_bills_get_open(self) -> UiBillsGetOpenSuccess | ToolError: ...
+
+
+class UiBillsUpdateOpenService(Protocol):
+    """Injectable seam for the read-only bills edit form open observation."""
+
+    async def ui_bills_update_open(self) -> UiBillsUpdateOpenSuccess | ToolError: ...
 
 
 class UiProductsListService(Protocol):
@@ -2541,6 +2551,97 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser bills detail observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_bills_update_open(self) -> UiBillsUpdateOpenSuccess | ToolError:
+        """Open a bill edit form for the authenticated UI session only.
+
+        Research172: path-scoped bills GET/POST/DELETE + taxRates GET unlocks list
+        rows and disposable seed. Open first non-header bill edit surface at path
+        class /:org_slug/bills/:id/edit. Read detail may appear first; soft-navigate
+        to /edit. Never Opdater/Godkend/Slet/Træk/Upload/Registrer betaling submit.
+        Soft /bills/new is not success. Distinct from get-open read path.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bills_update_changed_error()
+
+            bills_url = f"https://mit.billy.dk/{slug}/bills"
+            await page.goto(bills_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bills_update_changed_error()
+                if _is_bills_create_url(page.url):
+                    return _ui_bills_update_changed_error()
+
+                # research172: prefer edit path; soft-nav from read detail.
+                if _is_bills_detail_url(page.url):
+                    edit_url = _bills_read_url_to_edit_url(page.url)
+                    if edit_url is not None:
+                        await page.goto(edit_url, wait_until="domcontentloaded")
+                        await _await_page_settle(page)
+                        continue
+
+                if await _has_bills_update_form_signature(page, slug):
+                    flags = await _bills_update_form_flags(page)
+                    return UiBillsUpdateOpenSuccess(
+                        form_open=True,
+                        ret_regning_chrome_present=flags["ret_regning_chrome_present"],
+                        opdater_present=flags["opdater_present"],
+                        leverandor_or_dates_chrome_present=flags[
+                            "leverandor_or_dates_chrome_present"
+                        ],
+                        inputs_present=flags["inputs_present"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_bills_list_url(page.url) and await _has_bills_list_signature(page):
+                    opened = await _click_bills_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_bills_update_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the bills update form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bills update form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -4551,6 +4652,19 @@ def _bills_edit_url_to_read_url(url: str) -> str | None:
     return f"https://mit.billy.dk{read_path}"
 
 
+def _bills_read_url_to_edit_url(url: str) -> str | None:
+    """Map /bills/:id → /bills/:id/edit for research172 update form path."""
+
+    try:
+        parsed = urlsplit(url)
+    except ValueError:
+        return None
+    path = (parsed.path or "").rstrip("/")
+    if not _BILLS_DETAIL_PATH.match(path):
+        return None
+    return f"https://mit.billy.dk{path}/edit"
+
+
 def _is_products_list_url(url: str) -> bool:
     """Accept mit.billy.dk /:org_slug/products, including Billy list query params."""
 
@@ -5492,6 +5606,59 @@ async def _has_bills_detail_signature(page: LoginPage, slug: str) -> bool:
         if flags.get("supplier_chrome_present") and flags.get("amount_or_line_chrome_present"):
             return True
         return False
+    except Exception:
+        return False
+
+
+async def _bills_update_form_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII bill edit-form flags (research172)."""
+
+    flags = {
+        "ret_regning_chrome_present": False,
+        "opdater_present": False,
+        "leverandor_or_dates_chrome_present": False,
+        "inputs_present": False,
+    }
+    try:
+        body_text = ""
+        try:
+            body_text = (await page.locator("body").inner_text())[:2500]
+        except Exception:
+            body_text = ""
+        flags["ret_regning_chrome_present"] = any(m in body_text for m in _BILLS_UPDATE_RET_MARKERS)
+        flags["opdater_present"] = any(m in body_text for m in _BILLS_UPDATE_ACTION_MARKERS)
+        flags["leverandor_or_dates_chrome_present"] = any(
+            m in body_text for m in _BILLS_UPDATE_FIELD_MARKERS
+        )
+        try:
+            n_inputs = await page.locator("input:visible, textarea:visible, select:visible").count()
+        except Exception:
+            try:
+                n_inputs = await page.locator("input, textarea, select").count()
+            except Exception:
+                n_inputs = 0
+        flags["inputs_present"] = n_inputs >= 2
+    except Exception:
+        pass
+    return flags
+
+
+async def _has_bills_update_form_signature(page: LoginPage, slug: str) -> bool:
+    """Strict bill edit form signature — /bills/:id/edit with update chrome (research172)."""
+
+    del slug
+    try:
+        if not _is_bills_edit_url(page.url):
+            return False
+        flags = await _bills_update_form_flags(page)
+        if flags.get("ret_regning_chrome_present") and flags.get("opdater_present"):
+            return True
+        if flags.get("opdater_present") and flags.get("leverandor_or_dates_chrome_present"):
+            return True
+        if flags.get("ret_regning_chrome_present") and flags.get("inputs_present"):
+            return True
+        hits = sum(1 for v in flags.values() if v)
+        return hits >= 3
     except Exception:
         return False
 
@@ -7666,6 +7833,13 @@ def _ui_bills_get_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy bills detail surface did not match the recorded get-open contract.",
+    )
+
+
+def _ui_bills_update_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy bills edit form surface did not match the recorded update-open contract.",
     )
 
 

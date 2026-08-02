@@ -247,6 +247,24 @@ def test_ui_bills_get_open_models_are_empty_input_and_non_pii_success() -> None:
     assert success.shell_kind == "bills_get"
 
 
+def test_ui_bills_update_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiBillsUpdateOpenInput, UiBillsUpdateOpenSuccess
+
+    UiBillsUpdateOpenInput()
+    success = UiBillsUpdateOpenSuccess(
+        form_open=True,
+        ret_regning_chrome_present=True,
+        opdater_present=True,
+        leverandor_or_dates_chrome_present=True,
+        inputs_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/bills/:id/edit"
+    assert success.shell_kind == "bills_update"
+    properties = UiBillsUpdateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+
+
 def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> None:
     assert UiBillsCreateOpenInput().model_dump() == {}
     success = UiBillsCreateOpenSuccess(
