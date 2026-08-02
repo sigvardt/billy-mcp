@@ -10762,3 +10762,48 @@ updated: 2026-08-02T14:42:00Z
 - sha a940718 (verify via git log); product tree unchanged
 - complete false; walls bulk92 residual29 annual1
 - STEER 8612433E; not node finish
+
+
+## iter97 PLAN (2026-08-02)
+
+- Plan: `plans/2026-08-02T20:38:58.739Z-186.97-research197_hold_external_walls.md`
+- Slice: **HOLD** product no-op under STEER 8612433E (research197 authority)
+- No children; no wiki/src/coverage greening; not finish
+- EXECUTE next: confirm empty product diff + invariants 528/344 complete false
+
+
+## iter97 EXECUTE 186.97 (2026-08-02)
+
+- HOLD product no-op honored vs HEAD 52888f9
+- empty product tree (src/coverage/wiki/tests)
+- complete false 528/344; walls bulk92 residual29 annual1
+- docs lock MD5 8b94b013… ETag wcw4x9hqvu3603 unchanged
+- STEER 8612433E; not finish
+
+
+## iter97 INDEPENDENT-REVIEW (2026-08-02)
+
+- Verdict: **PASS (package)** 186.97 research197 HOLD; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Required fixes: **none**
+- STEER honored; product tree clean; docs MD5/ETag match; walls bulk92 residual29 annual1; 528/344 complete false
+- next: FIX-VERIFY / COMMIT under HOLD; not node finish
+
+
+## iter97 FIX-VERIFY (2026-08-02)
+
+- IR package fixes: none; product tree still clean vs 52888f9
+- wiki lint both stores: clean
+- lint.sh: pass
+- test.sh: 1671 passed, 54 deselected
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 8612433E; not finish; no full/ui-full suite
+- Ready COMMIT 186.97 HOLD (memory+plan); not node finish
+
+
+## iter97 COMMIT (2026-08-02)
+
+- research197 HOLD: docs fingerprint unchanged; no offline unlock
+- package: plan + memory only (no src/coverage/wiki product)
+- IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E honored
+- complete false; walls bulk92 residual29 annual1; not node finish
