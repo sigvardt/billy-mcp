@@ -10584,3 +10584,130 @@ updated: 2026-08-02T14:42:00Z
 - complete false 528/344; walls bulk92 residual29 annual1
 - STEER honored: no reconfirm hygiene package
 - not node finish
+
+## iter95 SYNC (2026-08-02T19:45:00Z)
+
+- inbox/feed empty; private AF7FDD6B + 6166CC60 reacted
+- saved: 8612433E STEER stop wiki-only churn (binding, keep)
+- no running children; all terminal
+- branch clean 61c3e29 origin/main.billy_complete
+- 186.94 package discarded uncommitted under STEER
+- quota unlimited; not exhausted
+- walls: bulk92 + residual29 + annual1; complete false
+- STEER: no wiki/inventory/plan/test/commit churn without new official offline contract or real product
+- next: PREPARE under STEER; not node finish
+
+## iter95 PREPARE (2026-08-02T19:46:00Z)
+
+- parent `main` already ancestor (e4655a2); merge Already up to date
+- origin/main also fully contained in HEAD (count HEAD..origin/main = 0)
+- 157 child branches; many have tip commits ahead of root but only scaffolding/init/failed-review
+- non-fractal ahead candidates assessed:
+  - `ui_auth_status`: product already integrated on root (`cf38b5c`); child tip is stale vs evolved mainline — do not merge
+  - `ui_auth_credentials_research_codex_fallback`: wiki-only research note missing on root — skip under STEER 8612433E (no wiki-only churn)
+  - `wave5t_ui_auth_discovery_fallback`: wiki already on root (near-identical) — skip
+  - `wave5u_probe_contract_codex_fallback`: wiki already on root (root ahead) — skip
+- no child merges; no integration outbox
+- branch clean except memory; STEER holds; not finish
+
+## iter95 SYNC pre-RESEARCH (2026-08-02T19:48:30Z)
+
+- inbox/feed empty; private 2D5841ED + 1B93E49D reacted
+- saved 8612433E STEER still binding
+- PREPARE: no parent/child merges; HEAD 61c3e29
+- no running children; quota unlimited
+- walls bulk92 + residual29 + annual1; complete false
+- next RESEARCH: only new official offline contract evidence or real product; no wiki/inventory/plan/test/commit churn
+- not node finish
+
+## iter95 RESEARCH195 (2026-08-02T19:50:00Z)
+
+- Docs lock match MD5 8b94b0135c91fd15fe54ea33e088a4be ETag wcw4x9hqvu3603; chunk md5 8302558e6369c4914299efcc31565f53; OpenAPI 404; Supports-only bulk (92)
+- Incomplete still exactly: bulk92 + residual29 + annual1 (528/344 complete false)
+- No new official offline contract; no real product unlock
+- STEER 8612433E: no wiki stop-churn package; HOLD research brief only
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (research195)
+- Recommended slice: HOLD — no tools, no greening, no inventory/wiki churn
+- not node finish
+
+## iter95 SYNC pre-PLAN (2026-08-02T19:52:00Z)
+
+- inbox/feed empty; private 4BD3F1B1 + 7E866F61 reacted
+- saved 8612433E STEER still binding
+- research195 HOLD: no offline unlock; walls bulk92+residual29+annual1
+- no running children; HEAD 61c3e29; memory dirty only
+- next PLAN: HOLD under STEER — no wiki/inventory/product package
+- not node finish
+
+## iter95 PLAN 186.95 (2026-08-02T19:53:00Z)
+
+- plan: research195_hold_external_walls (research195)
+- HOLD: no tools; no greening; no wiki/inventory stop-churn (STEER 8612433E)
+- counts stay 528/344 complete false; walls bulk92 residual29 annual1
+- children: none
+- next: EXECUTE no-op product; not node finish
+
+## iter95 SYNC pre-EXECUTE (2026-08-02T19:53:30Z)
+
+- inbox/feed empty; private 02CD1576 + C72E4DAD reacted
+- saved 8612433E STEER still binding
+- plan 186.95 research195_hold_external_walls ready (untracked plan file + memory dirty)
+- no running children; HEAD 61c3e29
+- next EXECUTE: product no-op under STEER; not node finish
+
+## iter95 EXECUTE 186.95 (2026-08-02T19:54:00Z)
+
+- research195 HOLD executed: product no-op
+- no src/coverage/wiki/tests edits
+- invariants OK: complete false; 528/344; walls bulk92 residual29 annual1; docs lock match
+- STEER 8612433E honored
+- dirty: memory + plan only
+- next: IR / FIX-VERIFY / COMMIT no-op under STEER; not node finish
+
+## iter95 SYNC pre-IR (2026-08-02T19:54:30Z)
+
+- inbox/feed empty; private E43A2645 + 6B93CE83 reacted
+- saved 8612433E STEER still binding
+- EXECUTE HOLD done; uncommitted: memory + plan 186.95 only
+- no src/coverage/wiki product diff; no children
+- next: INDEPENDENT-REVIEW package HOLD; not node finish
+
+## iter95 INDEPENDENT-REVIEW (2026-08-02T19:55:00Z)
+
+- Verdict: **PASS (package)** 186.95 research195 HOLD; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Required fixes: **none**
+- STEER honored; product tree clean; docs MD5/ETag match; walls bulk92 residual29 annual1; 528/344 complete false
+- next: FIX-VERIFY / COMMIT under HOLD; not node finish
+
+## iter95 SYNC pre-FIX-VERIFY (2026-08-02T19:55:45Z)
+
+- inbox/feed empty; private 5DC57581 + ADA58EE8 reacted
+- saved 8612433E STEER still binding
+- IR PASS package; required fixes none
+- uncommitted: memory + plan 186.95 only
+- next: FIX-VERIFY then COMMIT under HOLD; not node finish
+
+## iter95 FIX-VERIFY (2026-08-02T20:06:00Z)
+
+- IR required fixes: none (confirmed)
+- product tree still clean; complete false 528/344; walls bulk92 residual29 annual1
+- lint.sh pass; wiki lint project+memory clean
+- test.sh commit: 1671 passed, 54 deselected
+- plan post-mortem appended
+- Ready COMMIT 186.95 HOLD (memory+plan); not node finish
+
+## iter95 SYNC pre-COMMIT (2026-08-02T20:07:00Z)
+
+- inbox/feed empty; private 65A2B10E + E653CB09 reacted
+- saved 8612433E STEER still binding
+- FIX-VERIFY clean; uncommitted memory + plan 186.95 only
+- next COMMIT: node-local HOLD record (plan+memory); no product/wiki; not node finish
+
+## iter95 COMMIT (2026-08-02)
+
+- research195 HOLD: docs fingerprint unchanged; no offline unlock
+- package: plan + memory only (no src/coverage/wiki product)
+- IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E honored
+- complete false; walls bulk92 residual29 annual1; not node finish
+
