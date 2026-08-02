@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 72 greened shells/parity + daybookTransactions create chrome (research181) = 73
+    # Prior 73 greened shells/parity + transactions create chrome (research182) = 74
     # live/vision rows without GEO NA.
-    ui_shell_green = 73
+    ui_shell_green = 74
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -478,6 +478,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS:
             assert "research181" in row["method_or_route"]
             assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS:
+            assert "research182" in row["method_or_route"]
+            assert "research182" in qual["evidence_ref"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
             assert "research179" in qual["evidence_ref"]
             assert "research179" in row["evidence"]
@@ -948,10 +951,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 73 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 222
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 149
+    assert status["qualification"]["live_tested_rows"] == 228
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 154
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -1008,6 +1011,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.daybooks.create",
         "ui.discovery.transactions",
         "ui.parity.transactions.list",
+        "ui.parity.transactions.create",
         "ui.discovery.reports",
         "ui.discovery.vat_declarations",
         "ui.parity.salesTaxReturns.list",
@@ -1083,6 +1087,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.daybooks.create": "ui_daybooks_open",
         "ui.discovery.transactions": "ui_transactions_list",
         "ui.parity.transactions.list": "ui_transactions_list",
+        "ui.parity.transactions.create": "ui_transactions_create_open",
         "ui.discovery.reports": "ui_reports_open",
         "ui.discovery.vat_declarations": "ui_vat_declarations_list",
         "ui.parity.salesTaxReturns.list": "ui_vat_declarations_list",
@@ -1129,7 +1134,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 73
+    assert len(qualified) == 74
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]

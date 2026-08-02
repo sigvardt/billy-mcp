@@ -759,6 +759,30 @@ class UiDaybookTransactionsCreateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiTransactionsCreateOpenInput(BaseModel):
+    """Empty, strict input for transactions create chrome open (research182)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiTransactionsCreateOpenSuccess(BaseModel):
+    """Non-PII classification of transactions.create chrome on Posteringer list.
+
+    Research182: open /:org_slug/transactions; observe Posteringer + Ny postering.
+    Never click Gem / Bogfør / Opret submit / void / Slet. Distinct from list tool
+    mapping (list only) and already-NA get/update/delete. Soft /transactions/new
+    title shell is not success alone.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/transactions"] = "/:org_slug/transactions"
+    shell_kind: Literal["transactions_create"] = "transactions_create"
+    list_open: bool
+    create_cta_visible: bool
+    shell_markers_present: bool
+
+
 class UiTransactionsListInput(BaseModel):
     """Empty, strict input for the read-only transactions (Posteringer) list shell tool."""
 

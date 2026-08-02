@@ -69,6 +69,7 @@ from billy_mcp.models import (
     UiSettingsVatOpenSuccess,
     UiSuppliersCreateOpenSuccess,
     UiSuppliersListSuccess,
+    UiTransactionsCreateOpenSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
     UiVatDeclarationsListSuccess,
@@ -5285,6 +5286,96 @@ def test_ui_daybook_transactions_create_open_returns_ui_changed_when_list_empty(
         org_identity_path=identity_path,
     )
     result = asyncio.run(runtime.ui_daybook_transactions_create_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
+
+
+def test_ui_transactions_create_open_returns_auth_required_on_login_page(
+    tmp_path: Path,
+) -> None:
+    page = FakeLoginPage()
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+    result = asyncio.run(runtime.ui_transactions_create_open())
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.AUTH_REQUIRED
+    assert page.closed
+
+
+def test_ui_transactions_create_open_returns_success_for_create_chrome(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_transactions_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_transactions_create_open())
+
+    assert result == UiTransactionsCreateOpenSuccess(
+        list_open=True,
+        create_cta_visible=True,
+        shell_markers_present=True,
+    )
+    assert any("/transactions" in url for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert "fill:" not in " ".join(page.events)
+    assert not any("click:text=Ny postering" in e for e in page.events)
+    assert page.closed
+
+
+def test_ui_transactions_create_open_returns_ui_changed_when_cta_missing(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _transactions_shell_controls()
+    controls["text=Ny postering"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_transactions_create_open())
     assert isinstance(result, ToolError)
     assert result.code == StableErrorCode.UI_CHANGED
 

@@ -61,6 +61,7 @@ from billy_mcp.models import (
     UiSettingsVatOpenSuccess,
     UiSuppliersCreateOpenSuccess,
     UiSuppliersListSuccess,
+    UiTransactionsCreateOpenSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
     UiVatDeclarationsListSuccess,
@@ -819,6 +820,19 @@ class FakeUiDaybookTransactionsCreateOpenService:
         )
 
 
+class FakeUiTransactionsCreateOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_transactions_create_open(self) -> UiTransactionsCreateOpenSuccess:
+        self.calls += 1
+        return UiTransactionsCreateOpenSuccess(
+            list_open=True,
+            create_cta_visible=True,
+            shell_markers_present=True,
+        )
+
+
 class FakeUiDaybooksGetOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -1205,6 +1219,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_daybooks_get_open",
         "ui_daybooks_delete_open",
         "ui_daybook_transactions_create_open",
+        "ui_transactions_create_open",
         "ui_daybooks_open",
         "ui_transactions_list",
         "ui_reports_open",
@@ -2063,6 +2078,31 @@ def test_ui_daybook_transactions_create_open_registration_has_empty_input_and_ty
         }
     }
     assert daybooks.calls == 1
+
+
+def test_ui_transactions_create_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    service = FakeUiTransactionsCreateOpenService()
+    server = create_server(tmp_path, ui_transactions_create_open_service=service)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}[
+        "ui_transactions_create_open"
+    ]
+
+    assert tool.parameters["properties"] == {}
+    result = asyncio.run(server.call_tool("ui_transactions_create_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/transactions",
+            "shell_kind": "transactions_create",
+            "list_open": True,
+            "create_cta_visible": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert service.calls == 1
 
 
 def test_ui_daybooks_get_open_registration_has_empty_input_and_typed_output(

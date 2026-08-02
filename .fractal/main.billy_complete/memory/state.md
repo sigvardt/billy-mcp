@@ -6,29 +6,154 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T08:25:00Z
+updated: 2026-08-02T12:20:00Z
 ---
 
 # state
 
 ## Current state
 
-- Resume mode iter **78** COMMIT done for 186.78 accounts CRUD NA + invoice_email NA (`5ea2722`).
-- live/vision **186**; implemented/contract **370**; complete **false**.
-- Not node finish.
+- Iter **82** pre-COMMIT after FIX-VERIFY clean for 186.82.
+- live/vision **228**; implemented/contract **412**; GEO NA **154**; complete **false**.
+- Ready COMMIT. Not node finish.
+
+## SYNC (iter 82 start) (2026-08-02T10:56Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F58BD639 (iter81 pre-COMMIT) reacted (+). Private F80F8AEE written.
+- Outbox 21ACE28E: 186.81 landed; entering PREPARE.
+- No running children. No parent directives.
+- Tip `1be7c01`. Coverage live/vision 222; implemented/contract 406; GEO NA 149; complete false.
+- Blockers unchanged: bulk 92 external-contract; annual_reports; residual UI.
+- Ready PREPARE next residual package. Not finish.
+
+## PREPARE (iter 82) (2026-08-02T10:57Z)
+
+- Parent `main`: fetch + merge **Already up to date** (0 commits ahead of us).
+- Child branches: many historical leaves still list commits not on first-parent
+  mainline; review found **no merge-ready product**.
+  - `ui_auth_status` product (Jul 30) already present on tip (`auth_status`
+    tools/models/browser); three-dot diff is stale vs newer mainline files —
+    do **not** merge (would fight tip).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback`
+    wiki already on mainline; remaining diffs are `.fractal/` scaffolding.
+  - `ui_auth_credentials_research_codex_fallback` wiki is Codex-fallback planning
+    superseded by Grok `wiki/auth_credentials_pre_submit_research.md` — skip.
+  - Other children: init-only, failed PREPARE/RESEARCH/IR, or killed reviews —
+    experiments, not merge candidates.
+- No `--no-ff` child merges this iteration. No integration outbox (no material merge).
+- Trajectory: all listed children terminal (completed/exited/killed/stopped); none running.
+- Dirty: memory/state.md only (SYNC + PREPARE). Tip still `1be7c01`.
+- Ready PLAN / RESEARCH next residual package. Not finish.
 
 
+## SYNC (iter 82 pre-RESEARCH) (2026-08-02T10:59Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F80F8AEE + EEB4A4B0 reacted (+). Private note for pre-RESEARCH written.
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `1be7c01`.
+- Coverage live/vision 222; implemented/contract 406; GEO NA 149; complete false.
+- Ready RESEARCH next residual UI package. Not finish.
 
 
+## RESEARCH (iter 82 / research182) (2026-08-02T11:15Z)
+
+- Docs fingerprint unchanged (md5 8b94b013… etag wcw4x9hqvu3603).
+- Dual probe `tmp/research182_focus_dual.json` pass; cleanup dual; api_token false; profiles purged.
+- Prefer product: **ui_transactions_create_open** (Ny postering create_chrome_open_only).
+- NA ready dual: daybookTransactionLines get/list/create/update/delete (5) embedded-only.
+- Soft /transactions/new title shell only (0 inputs) — do not claim form_open_only field matrix.
+- Brief: `tmp/grok-research.md`. Ready PLAN 186.82. Not finish.
 
 
+## SYNC (iter 82 pre-PLAN) (2026-08-02T11:20Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 3B32933D + B8D4FF24 reacted (+). Outbox posted (RESEARCH182 package).
+- No running children. No parent directives.
+- RESEARCH182 ready: ui_transactions_create_open + daybookTransactionLines×5 NA.
+- Entering PLAN 186.82. Not finish.
 
 
+## PLAN (iter 82 / 186.82) (2026-08-02T11:22Z)
+
+- Plan file
+  `plans/2026-08-02T11:08:27.486Z-186.82-ui_transactions_create_and_daybook_transaction_lines_na.md`:
+  product `ui_transactions_create_open` (create_chrome_open_only → transactions.create)
+  + NA daybookTransactionLines get/list/create/update/delete (5) research182 dual.
+- Root-only Grok. No children. Target ~223 live/vision, ~412 implemented/contract,
+  GEO NA 154; complete false.
+- Ready EXECUTE.
 
 
+## SYNC (iter 82 pre-EXECUTE) (2026-08-02T11:25Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private C65152D9 + AEFB402E reacted (+). Outbox: entering EXECUTE 186.82.
+- No running children. No parent directives.
+- PLAN 186.82 ready. Entering EXECUTE.
+- complete false; tip `1be7c01`.
 
 
+## EXECUTE (iter 82 / 186.82) (2026-08-02T11:45Z)
 
+- Producted research182 / plan 186.82:
+  - `ui_transactions_create_open` create_chrome_open_only maps transactions.create
+  - NA: daybookTransactionLines g/l/c/u/d (5) research182 dual embedded-only
+- Live dual `test_ui_transactions_create_open` **pass**; vision purge_verified true.
+- lint.sh pass. offline test.sh **1663 passed** / 54 deselected.
+- Coverage: live/vision **228**; implemented/contract **412**; GEO NA **154**; complete false.
+- Ready for REVIEW. Not finish.
+
+
+## SYNC (iter 82 pre-IR) (2026-08-02T11:50Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B9DEFF5A + EE3062AB reacted (+). Outbox: EXECUTE done entering IR.
+- No running children. No parent directives.
+- EXECUTE 186.82 uncommitted product ready for INDEPENDENT-REVIEW.
+- complete false; live/vision 228; implemented/contract 412; GEO NA 154.
+
+
+## IR (iter 82 / 186.82) (2026-08-02T11:55Z)
+
+- Product ui_transactions_create_open + DTL NA×5: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1 vision workflow_ref; N2 live test name.
+- Counts 228/412/154 complete false; bulk not greened; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+
+## SYNC (iter 82 pre-FIX-VERIFY) (2026-08-02T11:58Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F6BAA5E9 + EC906F52 reacted (+). Outbox: IR ACCEPT entering FIX-VERIFY.
+- No running children. No parent directives.
+- IR ACCEPT package; no required fixes. Entering FIX-VERIFY.
+- complete false; live/vision 228; implemented/contract 412; GEO NA 154.
+
+
+## FIX-VERIFY (iter 82 / 186.82) (2026-08-02T12:15Z)
+
+- IR required fixes: none. Optional N1/N2 applied (vision workflow_ref + live
+  test rename for create chrome).
+- lint.sh pass. test.sh offline **1663 passed** / 54 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: transactions.create green on `ui_transactions_create_open`;
+  DTL×5 NA research182; bulk not greened; live/vision 228; implemented/contract
+  412; GEO NA 154; complete false; annual stay red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.82 ui transactions create + DTL NA. Not node finish.
+
+
+## SYNC (iter 82 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 399FE728 + 3E9E840B reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1663 offline pass; IR ACCEPT). Ready COMMIT 186.82
+  ui transactions create open + DTL NA package. Not node finish
+  (complete false).
 
 
 ## COMMIT (iter 78 / 186.78)

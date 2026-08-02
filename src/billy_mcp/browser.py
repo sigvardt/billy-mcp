@@ -72,6 +72,7 @@ from billy_mcp.models import (
     UiSettingsVatOpenSuccess,
     UiSuppliersCreateOpenSuccess,
     UiSuppliersListSuccess,
+    UiTransactionsCreateOpenSuccess,
     UiTransactionsListSuccess,
     UiUploadsListSuccess,
     UiVatDeclarationsListSuccess,
@@ -831,6 +832,14 @@ class UiDaybookTransactionsCreateOpenService(Protocol):
     async def ui_daybook_transactions_create_open(
         self,
     ) -> UiDaybookTransactionsCreateOpenSuccess | ToolError: ...
+
+
+class UiTransactionsCreateOpenService(Protocol):
+    """Bounded transactions.create chrome open workflow."""
+
+    async def ui_transactions_create_open(
+        self,
+    ) -> UiTransactionsCreateOpenSuccess | ToolError: ...
 
 
 class UiTransactionsListService(Protocol):
@@ -3790,6 +3799,81 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_transactions_create_open(
+        self,
+    ) -> UiTransactionsCreateOpenSuccess | ToolError:
+        """Open transactions create chrome for the authenticated UI session only.
+
+        Research182: open /:org_slug/transactions and classify create chrome markers
+        (Posteringer heading + Ny postering CTA). Never click Gem / Bogfør / Opret
+        submit / void / Slet. Soft /transactions/new title shell is not success.
+        Distinct from ui_transactions_list (list mapping only). Maps only
+        transactions.create.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_transactions_create_changed_error()
+
+            transactions_url = f"https://mit.billy.dk/{slug}/transactions"
+            await page.goto(transactions_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(30):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_transactions_create_changed_error()
+                if _is_transactions_list_url(
+                    page.url
+                ) and await _has_transactions_create_chrome_signature(page):
+                    flags = await _transactions_create_chrome_flags(page)
+                    return UiTransactionsCreateOpenSuccess(
+                        list_open=True,
+                        create_cta_visible=flags["create_cta_visible"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_transactions_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the transactions create chrome observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser transactions create chrome observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError:
         """Open the transactions (Posteringer) list shell for the authenticated UI session only."""
 
@@ -5959,6 +6043,60 @@ async def _has_daybook_transactions_create_chrome_signature(page: LoginPage) -> 
             return False
         flags = await _daybook_transactions_create_chrome_flags(page)
         return bool(flags.get("line_add_chrome_visible") and flags.get("empty_postering_state"))
+    except Exception:
+        return False
+
+
+def _ui_transactions_create_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy transactions create chrome could not be classified.",
+    )
+
+
+async def _transactions_create_chrome_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII create chrome flags on Posteringer list (research182). Never clicks Ny postering."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:2200]
+    except Exception:
+        body = ""
+    heading_ok = False
+    try:
+        heading = page.locator("h1")
+        if await heading.count() >= 1:
+            first = heading.first
+            if await first.is_visible():
+                heading_ok = (await first.inner_text()).strip() == _TRANSACTIONS_LIST_HEADING
+    except Exception:
+        heading_ok = False
+    if not heading_ok:
+        heading_ok = bool(re.search(rf"\b{re.escape(_TRANSACTIONS_LIST_HEADING)}\b", body))
+    cta = False
+    try:
+        create_action = page.locator(f"text={_TRANSACTIONS_CREATE_CTA}")
+        if await create_action.count() >= 1:
+            cta = await create_action.first.is_visible()
+    except Exception:
+        cta = False
+    if not cta:
+        cta = bool(re.search(re.escape(_TRANSACTIONS_CREATE_CTA), body)) or (
+            await _count_labeled_buttons(page, _TRANSACTIONS_CREATE_CTA) >= 1
+        )
+    return {
+        "list_heading_visible": bool(heading_ok),
+        "create_cta_visible": bool(cta),
+    }
+
+
+async def _has_transactions_create_chrome_signature(page: LoginPage) -> bool:
+    """Strict create-chrome signature — list path + Posteringer + Ny postering."""
+
+    try:
+        if not _is_transactions_list_url(page.url):
+            return False
+        flags = await _transactions_create_chrome_flags(page)
+        return bool(flags.get("list_heading_visible") and flags.get("create_cta_visible"))
     except Exception:
         return False
 

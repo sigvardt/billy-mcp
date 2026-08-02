@@ -95,12 +95,17 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.transactions.get",
     "api.transactions.update",
     "api.transactions.delete",
+    "api.daybookTransactionLines.get",
+    "api.daybookTransactionLines.list",
+    "api.daybookTransactionLines.create",
+    "api.daybookTransactionLines.update",
+    "api.daybookTransactionLines.delete",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    149  # prior 129 + research181: dtx g/l/u/d(4)+taxRates4+rulesets4+deduction5+tx g/u/d(3)=20
+    154  # prior 149 + research182: daybookTransactionLines g/l/c/u/d(5)=5
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -179,7 +184,8 @@ GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS: frozenset[str] = frozenset(
 # + taxRates get/create/update/delete (list stays tool-green on ui_settings_vat_open)
 # + salesTaxRulesets get/create/update/delete (list stays tool-green on same VAT shell)
 # + taxRateDeductionComponents get/list/create/update/delete (no dedicated surface)
-# + transactions get/update/delete (list stays tool-green; create deferred).
+# + transactions get/update/delete (list stays tool-green; create producted research182).
+# research182: daybookTransactionLines get/list/create/update/delete (embedded-only).
 GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS: frozenset[str] = frozenset(
     {
         "api.daybookTransactions.get",
@@ -218,6 +224,16 @@ GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS: frozenset[str] = frozenset(
         "api.transactions.get",
         "api.transactions.update",
         "api.transactions.delete",
+    }
+)
+
+GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS: frozenset[str] = frozenset(
+    {
+        "api.daybookTransactionLines.get",
+        "api.daybookTransactionLines.list",
+        "api.daybookTransactionLines.create",
+        "api.daybookTransactionLines.update",
+        "api.daybookTransactionLines.delete",
     }
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
@@ -357,6 +373,11 @@ UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE = (
 )
 UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_TOOL_NAME = "ui_daybook_transactions_create_open"
+
+UI_TRANSACTIONS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_transactions_create_open.py"
+UI_TRANSACTIONS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_TRANSACTIONS_CREATE_OPEN_TOOL_NAME = "ui_transactions_create_open"
 UI_TRANSACTIONS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_transactions_list.py"
 UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -3901,6 +3922,78 @@ def apply_ui_daybook_transactions_create_open_shell_evidence(
     ]
 
 
+def apply_ui_transactions_create_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_create: bool = False,
+) -> None:
+    """Mark transactions **create chrome open only** evidence (research182).
+
+    Empty-input tool; open /:org_slug/transactions; classify Posteringer + Ny postering.
+    Never click Gem/Bogfør/Opret submit/void/Slet. Soft /transactions/new title shell
+    is not success alone. When ``parity_of_api_create`` is true, dual-counts exact
+    ``ui.parity.transactions.create``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/transactions "
+        "(read-only transactions create chrome open; "
+        "Posteringer + Ny postering; never submit/post/void/delete; "
+        "soft /transactions/new title shell not success alone)"
+    )
+    row["tool_name"] = UI_TRANSACTIONS_CREATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "list_open",
+        "create_cta_visible",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_create:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_TRANSACTIONS_CREATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_TRANSACTIONS_CREATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research182 dual-session headless observation + ui_transactions_create_open "
+        "product; open /:org_slug/transactions create chrome open only "
+        "(shell_kind=transactions_create, Posteringer + Ny postering dual; never "
+        "Gem/Bogfør/Opret submit; soft /transactions/new title shell inputs_n 0 dual "
+        "not form_open_only; distinct from ui_transactions_list list mapping and "
+        "already-NA get/update/delete; no dual-count onto postings.*); vision record "
+        "tmp/vision-records/ui_transactions_create_open.json "
+        "(transactions create chrome frames, accept)"
+    )
+    if parity_of_api_create:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.transactions.create to UI create chrome open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "create_chrome_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never posts or voids transactions"
+    row["cleanup"] = "not_applicable for product path; no disposable transaction seed required"
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def apply_ui_transactions_list_shell_evidence(
     row: dict[str, Any],
     *,
@@ -5311,6 +5404,9 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS
     )
     is_research181_transactions = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS
+    is_research182_dtl = (
+        api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS
+    )
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -5461,6 +5557,26 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "daybooks/new",
             nonsense_path,
         ]
+    elif is_research182_dtl:
+        research_id = "research182"
+        evidence_ref = "research182_daybook_transaction_lines_embedded_only_dual"
+        nonsense_path = "zz-r182-dtl-none"
+        dual_agree_flag = "dual_agree_no_dedicated_daybookTransactionLines_surface"
+        family_label = "daybookTransactionLines.get+list+create+update+delete"
+        contrast_shells = (
+            "daybooks_id(embedded Tilføj only; create greened as "
+            "ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices"
+        )
+        list_heading_suffix = (
+            "/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer"
+        )
+        contrast_controls = [
+            "daybooks/id",
+            "daybooks/new",
+            "transactions",
+            "invoices",
+            nonsense_path,
+        ]
     elif is_research181_transactions:
         research_id = "research181"
         evidence_ref = "research181_transactions_get_update_delete_absent_dual"
@@ -5468,7 +5584,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         dual_agree_flag = "dual_agree_no_transactions_get_update_delete_surface"
         family_label = "transactions.get+update+delete"
         contrast_shells = (
-            "transactions_list(list shell only; Ny postering create deferred)/"
+            "transactions_list(list shell; create producted ui_transactions_create_open)/"
             "daybooks/invoices/clients"
         )
         list_heading_suffix = "/Posteringer(list only)/daybooks editor/Fakturaer/Kunder"
@@ -5948,6 +6064,18 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research182_dtl:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI dedicated workflow for {api_row_id} "
+            f"({research_id} dual-session: dedicated /daybook-transaction-lines paths "
+            "soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id "
+            "already greened as ui_daybook_transactions_create_open for "
+            "daybookTransactions.create only; no dual-count steal onto lines.* or "
+            "daybooks.*; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research181_transactions:
         row["method_or_route"] = (
             f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
@@ -6267,6 +6395,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_daybooks_delete_open_shell_evidence(row, parity_of_api_delete=True)
         if api_row["id"] == "api.daybookTransactions.create":
             apply_ui_daybook_transactions_create_open_shell_evidence(row, parity_of_api_create=True)
+        if api_row["id"] == "api.transactions.create":
+            apply_ui_transactions_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.daybooks.list":
             apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.create":
@@ -6328,6 +6458,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_DELETE_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+                    UI_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
@@ -6444,6 +6575,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_DELETE_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+                    UI_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,

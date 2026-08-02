@@ -8260,208 +8260,256 @@
     {
       "api_row_id": "api.daybookTransactionLines.get",
       "area": "daybook_transaction_lines",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.get",
+      "evidence": "research182 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactionLines_surface true; candidate daybookTransactionLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r182-dtl-none); contrast daybooks_id(embedded Tilf\u00f8j only; create greened as ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactionLines.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactionLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research182_daybook_transaction_lines_embedded_only_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactionLines.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactionLines.get (research182 dual-session: dedicated /daybook-transaction-lines paths soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id already greened as ui_daybook_transactions_create_open for daybookTransactions.create only; no dual-count steal onto lines.* or daybooks.*; contrast shells/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "daybookTransactionLine"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "zz-r182-dtl-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research182_daybook_transaction_lines_embedded_only_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactionLines.list",
       "area": "daybook_transaction_lines",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.list",
-      "filters": {},
+      "evidence": "research182 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactionLines_surface true; candidate daybookTransactionLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r182-dtl-none); contrast daybooks_id(embedded Tilf\u00f8j only; create greened as ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactionLines.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactionLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research182_daybook_transaction_lines_embedded_only_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.daybookTransactionLines.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactionLines.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactionLines.list (research182 dual-session: dedicated /daybook-transaction-lines paths soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id already greened as ui_daybook_transactions_create_open for daybookTransactions.create only; no dual-count steal onto lines.* or daybooks.*; contrast shells/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "zz-r182-dtl-none"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research182_daybook_transaction_lines_embedded_only_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "daybookTransactionLines[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactionLines.create",
       "area": "daybook_transaction_lines",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.create",
+      "evidence": "research182 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactionLines_surface true; candidate daybookTransactionLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r182-dtl-none); contrast daybooks_id(embedded Tilf\u00f8j only; create greened as ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactionLines.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactionLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research182_daybook_transaction_lines_embedded_only_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactionLines.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactionLines.create (research182 dual-session: dedicated /daybook-transaction-lines paths soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id already greened as ui_daybook_transactions_create_open for daybookTransactions.create only; no dual-count steal onto lines.* or daybooks.*; contrast shells/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "daybookTransactionLine"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates daybookTransactionLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "zz-r182-dtl-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research182_daybook_transaction_lines_embedded_only_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactionLines.update",
       "area": "daybook_transaction_lines",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.update",
+      "evidence": "research182 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactionLines_surface true; candidate daybookTransactionLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r182-dtl-none); contrast daybooks_id(embedded Tilf\u00f8j only; create greened as ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactionLines.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactionLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research182_daybook_transaction_lines_embedded_only_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactionLines.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactionLines.update (research182 dual-session: dedicated /daybook-transaction-lines paths soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id already greened as ui_daybook_transactions_create_open for daybookTransactions.create only; no dual-count steal onto lines.* or daybooks.*; contrast shells/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "daybookTransactionLine"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates daybookTransactionLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "zz-r182-dtl-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research182_daybook_transaction_lines_embedded_only_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactionLines.delete",
       "area": "daybook_transaction_lines",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.delete",
+      "evidence": "research182 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactionLines_surface true; candidate daybookTransactionLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r182-dtl-none); contrast daybooks_id(embedded Tilf\u00f8j only; create greened as ui_daybook_transactions_create_open)/daybooks/new/transactions/invoices real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactionLines.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactionLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research182_daybook_transaction_lines_embedded_only_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactionLines.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactionLines.delete (research182 dual-session: dedicated /daybook-transaction-lines paths soft-empty body_len 138 dual; line chrome lives embedded on daybooks/:id already greened as ui_daybook_transactions_create_open for daybookTransactions.create only; no dual-count steal onto lines.* or daybooks.*; contrast shells/daybooks id(embedded line chrome dual)/daybooks/new/Posteringer/Fakturaer; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes daybookTransactionLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "zz-r182-dtl-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research182_daybook_transaction_lines_embedded_only_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14773,7 +14821,7 @@
         "UI_CHANGED",
         "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell; create producted ui_transactions_create_open)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.get",
       "implemented": true,
@@ -14860,38 +14908,46 @@
     {
       "api_row_id": "api.transactions.create",
       "area": "transactions",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; no disposable transaction seed required",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.create",
+      "evidence": "research182 dual-session headless observation + ui_transactions_create_open product; open /:org_slug/transactions create chrome open only (shell_kind=transactions_create, Posteringer + Ny postering dual; never Gem/Bogf\u00f8r/Opret submit; soft /transactions/new title shell inputs_n 0 dual not form_open_only; distinct from ui_transactions_list list mapping and already-NA get/update/delete; no dual-count onto postings.*); vision record tmp/vision-records/ui_transactions_create_open.json (transactions create chrome frames, accept); maps api.transactions.create to UI create chrome open only",
       "filters": [],
       "id": "ui.parity.transactions.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.transactions.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/transactions (read-only transactions create chrome open; Posteringer + Ny postering; never submit/post/void/delete; soft /transactions/new title shell not success alone)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "transaction"
-      ],
+      "parity_status": "create_chrome_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "list_open",
+        "create_cta_visible",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates transaction",
+      "side_effects": "none when open-only; product path never posts or voids transactions",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_transactions_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_transactions_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14905,7 +14961,7 @@
         "UI_CHANGED",
         "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell; create producted ui_transactions_create_open)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.update",
       "implemented": true,
@@ -14956,7 +15012,7 @@
         "UI_CHANGED",
         "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell; create producted ui_transactions_create_open)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.delete",
       "implemented": true,

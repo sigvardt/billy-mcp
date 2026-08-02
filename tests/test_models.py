@@ -98,6 +98,8 @@ from billy_mcp.models import (
     UiSuppliersCreateOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiTransactionsCreateOpenInput,
+    UiTransactionsCreateOpenSuccess,
     UiTransactionsListInput,
     UiTransactionsListSuccess,
     UiUploadsListInput,
@@ -1118,6 +1120,31 @@ def test_ui_daybook_transactions_create_open_models_are_empty_input_and_non_pii_
                 "detail_open": True,
                 "line_add_chrome_visible": True,
                 "empty_postering_state": True,
+                "shell_markers_present": True,
+                "org_slug": "leak",
+            }
+        )
+
+
+def test_ui_transactions_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiTransactionsCreateOpenInput().model_dump() == {}
+    success = UiTransactionsCreateOpenSuccess(
+        list_open=True,
+        create_cta_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/transactions"
+    assert success.shell_kind == "transactions_create"
+    dumped = success.model_dump()
+    assert "id" not in dumped
+    assert dumped["create_cta_visible"] is True
+    with pytest.raises(ValidationError):
+        UiTransactionsCreateOpenInput.model_validate({"org_slug": "x"})
+    with pytest.raises(ValidationError):
+        UiTransactionsCreateOpenSuccess.model_validate(
+            {
+                "list_open": True,
+                "create_cta_visible": True,
                 "shell_markers_present": True,
                 "org_slug": "leak",
             }

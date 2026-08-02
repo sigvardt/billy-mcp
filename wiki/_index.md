@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T09:48:46Z
+updated: 2026-08-02T11:28:11Z
 ---
 
 # billy_mcp
@@ -20,6 +20,8 @@ updated: 2026-08-02T09:48:46Z
 [[credentialed_session_discovery_protocol|credentialed_session_discovery_protocol]]: Grok-frozen, headless-only protocol for observing Billy's first non-production post-login state before naming a new auth or UI workflow.
 
 [[credentialed_session_discovery_protocol_independent_review|credentialed_session_discovery_protocol_independent_review]]: Independent Grok review99 of research99 and the documentation-only credentialed session discovery protocol; accepts research and wiki freeze only; completeness remains failed.
+
+[[daybook_transaction_lines_not_applicable_research182|daybook_transaction_lines_not_applicable_research182]]: Dual-session freeze that dedicated daybookTransactionLines workflows are absent; lines remain embedded on daybook detail only.
 
 [[invoices_bills_data_plane_egress|invoices_bills_data_plane_egress]]: Scoped browser path_allow for Billy SPA invoices and bills list GET (research168).
 

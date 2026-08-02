@@ -110,6 +110,7 @@ from billy_mcp.browser import (
     UiSettingsVatOpenService,
     UiSuppliersCreateOpenService,
     UiSuppliersListService,
+    UiTransactionsCreateOpenService,
     UiTransactionsListService,
     UiUploadsListService,
     UiVatDeclarationsListService,
@@ -227,6 +228,8 @@ from billy_mcp.models import (
     UiSuppliersCreateOpenSuccess,
     UiSuppliersListInput,
     UiSuppliersListSuccess,
+    UiTransactionsCreateOpenInput,
+    UiTransactionsCreateOpenSuccess,
     UiTransactionsListInput,
     UiTransactionsListSuccess,
     UiUploadsListInput,
@@ -275,6 +278,7 @@ def create_server(
     ui_daybooks_delete_open_service: UiDaybooksDeleteOpenService | None = None,
     ui_daybook_transactions_create_open_service: UiDaybookTransactionsCreateOpenService
     | None = None,
+    ui_transactions_create_open_service: UiTransactionsCreateOpenService | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
@@ -343,6 +347,7 @@ def create_server(
     daybook_transactions_create_open_service = (
         ui_daybook_transactions_create_open_service or browser
     )
+    transactions_create_open_service = ui_transactions_create_open_service or browser
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
@@ -600,6 +605,12 @@ def create_server(
 
         UiDaybookTransactionsCreateOpenInput()
         return await daybook_transactions_create_open_service.ui_daybook_transactions_create_open()
+
+    async def ui_transactions_create_open() -> UiTransactionsCreateOpenSuccess | ToolError:
+        """Observe Posteringer create chrome only (research182). Never submits."""
+
+        UiTransactionsCreateOpenInput()
+        return await transactions_create_open_service.ui_transactions_create_open()
 
     async def ui_transactions_list() -> UiTransactionsListSuccess | ToolError:
         """Observe the authenticated Billy Posteringer list shell without create actions."""
@@ -962,6 +973,15 @@ def create_server(
             "add lines, post, delete, or change daybooks)."
         ),
     )(ui_daybook_transactions_create_open)
+
+    server.tool(
+        name="ui_transactions_create_open",
+        description=(
+            "Open Billy Posteringer list and classify transactions.create chrome "
+            "(Posteringer + Ny postering) without submitting."
+        ),
+    )(ui_transactions_create_open)
+
     server.tool(
         name="ui_daybooks_open",
         description=(
