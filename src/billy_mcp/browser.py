@@ -28,6 +28,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenSuccess,
+    UiBillsDeleteOpenSuccess,
     UiBillsGetOpenSuccess,
     UiBillsListSuccess,
     UiBillsUpdateOpenSuccess,
@@ -645,6 +646,12 @@ class UiBillsUpdateOpenService(Protocol):
     """Injectable seam for the read-only bills edit form open observation."""
 
     async def ui_bills_update_open(self) -> UiBillsUpdateOpenSuccess | ToolError: ...
+
+
+class UiBillsDeleteOpenService(Protocol):
+    """Injectable seam for the read-only bills delete chrome open observation."""
+
+    async def ui_bills_delete_open(self) -> UiBillsDeleteOpenSuccess | ToolError: ...
 
 
 class UiProductsListService(Protocol):
@@ -2642,6 +2649,122 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser bills update form observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_bills_delete_open(self) -> UiBillsDeleteOpenSuccess | ToolError:
+        """Open bill delete chrome for the authenticated UI session only.
+
+        Research173: path-scoped bills GET/POST/DELETE + taxRates GET unlock list
+        rows and disposable seed. Open first non-header bill edit surface at path
+        class /:org_slug/bills/:id/edit. Assert primary Slet; click Slet once to
+        open confirm (Slet≥2 + Annuller); dismiss with Annuller only. Never second
+        Slet / permanent delete / Opdater / Godkend. Soft /bills/new and read detail
+        alone (no Slet) are not success. Distinct from update form_open.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_bills_delete_changed_error()
+
+            bills_url = f"https://mit.billy.dk/{slug}/bills"
+            await page.goto(bills_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_bills_delete_changed_error()
+                if _is_bills_create_url(page.url):
+                    return _ui_bills_delete_changed_error()
+
+                # Prefer edit path; soft-nav from read detail (Slet absent on read).
+                if _is_bills_detail_url(page.url):
+                    edit_url = _bills_read_url_to_edit_url(page.url)
+                    if edit_url is not None:
+                        await page.goto(edit_url, wait_until="domcontentloaded")
+                        await _await_page_settle(page)
+                        continue
+
+                if await _has_bills_delete_primary_signature(page, slug):
+                    primary = await _bills_delete_primary_flags(page)
+                    if not primary.get("slet_present"):
+                        return _ui_bills_delete_changed_error()
+
+                    clicked = await _click_bills_primary_slet(page)
+                    if not clicked:
+                        return _ui_bills_delete_changed_error()
+                    await _await_page_settle(page)
+
+                    confirm = await _bills_delete_confirm_flags(page)
+                    if not (
+                        confirm.get("confirm_open")
+                        and confirm.get("annuller_present")
+                        and confirm.get("slet_present")
+                    ):
+                        # Dismiss any partial overlay; fail closed without permanent delete.
+                        await _dismiss_bills_delete_confirm(page)
+                        return _ui_bills_delete_changed_error()
+
+                    dismissed = await _dismiss_bills_delete_confirm(page)
+                    if not dismissed:
+                        return _ui_bills_delete_changed_error()
+                    await _await_page_settle(page)
+
+                    if not _is_bills_edit_url(page.url):
+                        return _ui_bills_delete_changed_error()
+
+                    return UiBillsDeleteOpenSuccess(
+                        edit_open=True,
+                        slet_present=True,
+                        confirm_open=True,
+                        annuller_present=True,
+                        confirm_dismissed=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_bills_list_url(page.url) and await _has_bills_list_signature(page):
+                    opened = await _click_bills_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_bills_delete_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the bills delete chrome observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser bills delete chrome observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5663,6 +5786,185 @@ async def _has_bills_update_form_signature(page: LoginPage, slug: str) -> bool:
         return False
 
 
+async def _count_labeled_buttons(page: LoginPage, label: str) -> int:
+    """Count visible controls matching a Danish action label (role=button or text=)."""
+
+    live = cast(Any, page)
+    get_by_role = getattr(live, "get_by_role", None)
+    if callable(get_by_role):
+        try:
+            exact = cast(
+                Any, get_by_role("button", name=re.compile(rf"^{re.escape(label)}$", re.I))
+            )
+            n_exact = int(await exact.count())
+            if n_exact > 0:
+                return n_exact
+            loose = cast(Any, get_by_role("button", name=re.compile(label, re.I)))
+            n_loose = int(await loose.count())
+            if n_loose > 0:
+                return n_loose
+        except Exception:
+            pass
+    try:
+        return int(await live.locator(f"text={label}").count())
+    except Exception:
+        return 0
+
+
+async def _bills_delete_primary_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII primary bill edit delete-chrome flags before confirm (research173)."""
+
+    flags = {
+        "ret_regning_chrome_present": False,
+        "slet_present": False,
+    }
+    try:
+        body_text = ""
+        try:
+            body_text = (await page.locator("body").inner_text())[:2500]
+        except Exception:
+            body_text = ""
+        flags["ret_regning_chrome_present"] = any(m in body_text for m in _BILLS_UPDATE_RET_MARKERS)
+        slet_n = await _count_labeled_buttons(page, "Slet")
+        flags["slet_present"] = slet_n >= 1 or (
+            "Slet" in body_text and _is_bills_edit_url(page.url)
+        )
+        if slet_n >= 1:
+            flags["slet_present"] = True
+    except Exception:
+        pass
+    return flags
+
+
+async def _has_bills_delete_primary_signature(page: LoginPage, slug: str) -> bool:
+    """Edit path with primary Slet chrome present (research173)."""
+
+    del slug
+    try:
+        if not _is_bills_edit_url(page.url):
+            return False
+        flags = await _bills_delete_primary_flags(page)
+        if flags.get("slet_present") and flags.get("ret_regning_chrome_present"):
+            return True
+        return bool(flags.get("slet_present") and await _count_labeled_buttons(page, "Slet") >= 1)
+    except Exception:
+        return False
+
+
+async def _bills_delete_confirm_flags(page: LoginPage) -> dict[str, bool]:
+    """Confirm overlay flags after primary Slet (research173: Slet≥2 + Annuller)."""
+
+    flags = {
+        "slet_present": False,
+        "annuller_present": False,
+        "confirm_open": False,
+    }
+    try:
+        slet_n = await _count_labeled_buttons(page, "Slet")
+        annuller_n = await _count_labeled_buttons(page, "Annuller")
+        if annuller_n == 0:
+            annuller_n = await _count_labeled_buttons(page, "Cancel")
+        flags["slet_present"] = slet_n >= 1
+        flags["annuller_present"] = annuller_n >= 1
+        # research173 dual: confirm raises Slet button count to 2 with Annuller=1
+        flags["confirm_open"] = annuller_n >= 1 and slet_n >= 2
+        if not flags["confirm_open"] and annuller_n >= 1 and slet_n >= 1:
+            # Accept Annuller + Slet as confirm chrome if role counting under-counts.
+            body_text = ""
+            try:
+                body_text = (await page.locator("body").inner_text())[:2500]
+            except Exception:
+                body_text = ""
+            flags["confirm_open"] = "Annuller" in body_text or "annuller" in body_text.lower()
+    except Exception:
+        pass
+    return flags
+
+
+async def _click_bills_primary_slet(page: LoginPage) -> bool:
+    """Click primary Slet once to open confirm. Never clicks the confirm Slet."""
+
+    live = cast(Any, page)
+    for selector in ("text=Slet",):
+        try:
+            slet = live.locator(selector)
+            count = int(await slet.count())
+            for index in range(min(count, 4)):
+                el = slet.nth(index)
+                try:
+                    if not await el.is_visible():
+                        continue
+                    txt = ""
+                    try:
+                        txt = (await el.inner_text() or "").strip()
+                    except Exception:
+                        txt = ""
+                    if txt and not re.fullmatch(r"Slet", txt, re.I):
+                        continue
+                    await el.click()
+                    return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    get_by_role = getattr(live, "get_by_role", None)
+    if callable(get_by_role):
+        try:
+            btn = cast(Any, get_by_role("button", name=re.compile(r"^Slet$", re.I))).first
+            if await btn.count() > 0 and await btn.is_visible():
+                await btn.click()
+                return True
+        except Exception:
+            pass
+    return False
+
+
+async def _dismiss_bills_delete_confirm(page: LoginPage) -> bool:
+    """Dismiss delete confirm with Annuller (or Escape). Never confirm second Slet."""
+
+    live = cast(Any, page)
+    for label in ("Annuller", "Cancel", "Nej", "Luk"):
+        try:
+            btn = live.locator(f"text={label}")
+            count = int(await btn.count())
+            for index in range(min(count, 4)):
+                el = btn.nth(index)
+                try:
+                    if not await el.is_visible():
+                        continue
+                    txt = ""
+                    try:
+                        txt = (await el.inner_text() or "").strip()
+                    except Exception:
+                        txt = ""
+                    if txt and not re.fullmatch(rf"{label}", txt, re.I):
+                        continue
+                    await el.click()
+                    return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    get_by_role = getattr(live, "get_by_role", None)
+    if callable(get_by_role):
+        for label in ("Annuller", "Cancel", "Nej", "Luk"):
+            try:
+                btn = cast(Any, get_by_role("button", name=re.compile(rf"^{label}$", re.I))).first
+                if await btn.count() > 0 and await btn.is_visible():
+                    await btn.click()
+                    return True
+            except Exception:
+                continue
+    keyboard = getattr(live, "keyboard", None)
+    if keyboard is not None:
+        try:
+            await keyboard.press("Escape")
+            return True
+        except Exception:
+            pass
+    return False
+
+
 async def _click_bills_detail_candidate(page: LoginPage, slug: str) -> bool:
     """Click first non-header bill list row or href to open detail/edit."""
 
@@ -7840,6 +8142,15 @@ def _ui_bills_update_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy bills edit form surface did not match the recorded update-open contract.",
+    )
+
+
+def _ui_bills_delete_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message=(
+            "Billy bills delete chrome surface did not match the recorded delete-open contract."
+        ),
     )
 
 

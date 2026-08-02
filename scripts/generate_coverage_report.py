@@ -101,6 +101,10 @@ UI_BILLS_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BILLS_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_update_open.py"
 UI_BILLS_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_BILLS_UPDATE_OPEN_TOOL_NAME = "ui_bills_update_open"
+UI_BILLS_DELETE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_BILLS_DELETE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_delete_open.py"
+UI_BILLS_DELETE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_BILLS_DELETE_OPEN_TOOL_NAME = "ui_bills_delete_open"
 UI_PRODUCTS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_PRODUCTS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_products_list.py"
 UI_PRODUCTS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1837,6 +1841,85 @@ def apply_ui_bills_update_open_shell_evidence(
     row["parity_status"] = "form_open_only"
     row["sensitivity"] = "medium"
     row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable contact+"
+        "bill then deletes in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_bills_delete_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_delete: bool = False,
+) -> None:
+    """Mark bills delete chrome **open only** evidence (research173).
+
+    Empty-input tool; open /:org_slug/bills, open first non-header bill edit at
+    path class /:org_slug/bills/:id/edit; primary Slet present; click Slet once
+    for confirm (Slet≥2 + Annuller); dismiss Annuller only. Never permanent
+    delete / second Slet / Opdater / Godkend. Distinct from update form_open and
+    get detail_open. When ``parity_of_api_delete`` is true, dual-counts exact
+    ``ui.parity.bills.delete``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/bills + first non-header bill edit delete chrome "
+        "(read-only: Slet confirm open + Annuller dismiss; never permanent delete; "
+        "/bills/new and read /bills/:id without Slet not success)"
+    )
+    row["tool_name"] = UI_BILLS_DELETE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "edit_open",
+        "slet_present",
+        "confirm_open",
+        "annuller_present",
+        "confirm_dismissed",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_delete:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_BILLS_DELETE_OPEN_MODEL_TEST_REFERENCE,
+        UI_BILLS_DELETE_OPEN_UNIT_TEST_REFERENCE,
+        UI_BILLS_DELETE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research173 dual-session headless observation + ui_bills_delete_open product; "
+        "committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and "
+        "GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+"
+        "description+amount, no paymentDate; emails still denied); delete chrome only "
+        "(path class /:org_slug/bills/:id/edit, shell_kind=bills_delete, primary Slet, "
+        "confirm Slet≥2+Annuller, Annuller dismiss; never permanent delete; distinct "
+        "from list shell ui_bills_list, create form_open ui_bills_create_open, get "
+        "detail ui_bills_get_open, and update form_open ui_bills_update_open); vision "
+        "record tmp/vision-records/ui_bills_delete_open.json (bill delete chrome "
+        "frames, accept)"
+    )
+    if parity_of_api_delete:
+        row["evidence"] = f"{row['evidence']}; maps api.bills.delete to UI delete chrome open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "delete_chrome_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never confirms delete"
     row["cleanup"] = (
         "not_applicable for product path; live harness creates disposable contact+"
         "bill then deletes in reverse with fresh list read-back"
@@ -5053,6 +5136,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_bills_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.update":
             apply_ui_bills_update_open_shell_evidence(row, parity_of_api_update=True)
+        if api_row["id"] == "api.bills.delete":
+            apply_ui_bills_delete_open_shell_evidence(row, parity_of_api_delete=True)
         if api_row["id"] == "api.bills.create":
             apply_ui_bills_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.products.list":

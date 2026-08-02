@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T00:02:06Z
+updated: 2026-08-02T00:41:19Z
 ---
 
 # billy_mcp
@@ -42,6 +42,8 @@ updated: 2026-08-02T00:02:06Z
 [[ui_bank_reconciliation_open_shell|ui_bank_reconciliation_open_shell]]: Read-only headless ui_bank_reconciliation_open contract for Billy Afstemning shell open only.
 
 [[ui_bills_create_open_shell|ui_bills_create_open_shell]]: Read-only headless ui_bills_create_open contract for Billy bill create form open only (research154).
+
+[[ui_bills_delete_open_shell|ui_bills_delete_open_shell]]: Read-only bill delete chrome open shell (maps api.bills.delete).
 
 [[ui_bills_get_open_shell|ui_bills_get_open_shell]]: Read-only bill detail get-open shell (maps api.bills.get).
 

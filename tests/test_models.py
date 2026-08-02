@@ -265,6 +265,24 @@ def test_ui_bills_update_open_models_are_empty_input_and_non_pii_success() -> No
     assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
 
 
+def test_ui_bills_delete_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiBillsDeleteOpenInput, UiBillsDeleteOpenSuccess
+
+    UiBillsDeleteOpenInput()
+    success = UiBillsDeleteOpenSuccess(
+        edit_open=True,
+        slet_present=True,
+        confirm_open=True,
+        annuller_present=True,
+        confirm_dismissed=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/bills/:id/edit"
+    assert success.shell_kind == "bills_delete"
+    properties = UiBillsDeleteOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+
+
 def test_ui_bills_create_open_models_are_empty_input_and_non_pii_success() -> None:
     assert UiBillsCreateOpenInput().model_dump() == {}
     success = UiBillsCreateOpenSuccess(

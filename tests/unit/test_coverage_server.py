@@ -17,6 +17,7 @@ from billy_mcp.models import (
     UiBankAccountsListSuccess,
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenSuccess,
+    UiBillsDeleteOpenSuccess,
     UiBillsGetOpenSuccess,
     UiBillsListSuccess,
     UiBillsUpdateOpenSuccess,
@@ -491,6 +492,22 @@ class FakeUiBillsUpdateOpenService:
             opdater_present=True,
             leverandor_or_dates_chrome_present=True,
             inputs_present=True,
+            shell_markers_present=True,
+        )
+
+
+class FakeUiBillsDeleteOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_bills_delete_open(self) -> UiBillsDeleteOpenSuccess:
+        self.calls += 1
+        return UiBillsDeleteOpenSuccess(
+            edit_open=True,
+            slet_present=True,
+            confirm_open=True,
+            annuller_present=True,
+            confirm_dismissed=True,
             shell_markers_present=True,
         )
 
@@ -1082,6 +1099,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_bills_create_open",
         "ui_bills_get_open",
         "ui_bills_update_open",
+        "ui_bills_delete_open",
         "ui_products_list",
         "ui_clients_list",
         "ui_clients_create_open",

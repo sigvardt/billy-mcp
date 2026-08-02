@@ -214,6 +214,32 @@ class UiBillsUpdateOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiBillsDeleteOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only bill delete chrome open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiBillsDeleteOpenSuccess(BaseModel):
+    """Non-PII classification of bill delete chrome on the edit surface.
+
+    Research173: path class /:org_slug/bills/:id/edit; primary Slet present;
+    open confirm (Slet≥2 + Annuller) then Annuller dismiss only. Never permanent
+    delete. Distinct from update form_open (Opdater family) and get detail_open.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/bills/:id/edit"] = "/:org_slug/bills/:id/edit"
+    shell_kind: Literal["bills_delete"] = "bills_delete"
+    edit_open: bool
+    slet_present: bool
+    confirm_open: bool
+    annuller_present: bool
+    confirm_dismissed: bool
+    shell_markers_present: bool
+
+
 class UiProductsListInput(BaseModel):
     """Empty, strict input boundary for the read-only products list shell tool."""
 

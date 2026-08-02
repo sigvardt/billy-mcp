@@ -66,6 +66,7 @@ from billy_mcp.browser import (
     UiBankAccountsListService,
     UiBankReconciliationOpenService,
     UiBillsCreateOpenService,
+    UiBillsDeleteOpenService,
     UiBillsGetOpenService,
     UiBillsListService,
     UiBillsUpdateOpenService,
@@ -133,6 +134,8 @@ from billy_mcp.models import (
     UiBankReconciliationOpenSuccess,
     UiBillsCreateOpenInput,
     UiBillsCreateOpenSuccess,
+    UiBillsDeleteOpenInput,
+    UiBillsDeleteOpenSuccess,
     UiBillsGetOpenInput,
     UiBillsGetOpenSuccess,
     UiBillsListInput,
@@ -243,6 +246,7 @@ def create_server(
     ui_bills_create_open_service: UiBillsCreateOpenService | None = None,
     ui_bills_get_open_service: UiBillsGetOpenService | None = None,
     ui_bills_update_open_service: UiBillsUpdateOpenService | None = None,
+    ui_bills_delete_open_service: UiBillsDeleteOpenService | None = None,
     ui_debtor_balances_list_service: UiDebtorBalancesListService | None = None,
     ui_creditor_balances_list_service: UiCreditorBalancesListService | None = None,
     ui_uploads_list_service: UiUploadsListService | None = None,
@@ -303,6 +307,7 @@ def create_server(
     bills_create_open_service = ui_bills_create_open_service or browser
     bills_get_open_service = ui_bills_get_open_service or browser
     bills_update_open_service = ui_bills_update_open_service or browser
+    bills_delete_open_service = ui_bills_delete_open_service or browser
     debtor_balances_list_service = ui_debtor_balances_list_service or browser
     creditor_balances_list_service = ui_creditor_balances_list_service or browser
     uploads_list_service = ui_uploads_list_service or browser
@@ -487,6 +492,12 @@ def create_server(
 
         UiBillsUpdateOpenInput()
         return await bills_update_open_service.ui_bills_update_open()
+
+    async def ui_bills_delete_open() -> UiBillsDeleteOpenSuccess | ToolError:
+        """Observe bill delete chrome (Slet confirm open + Annuller) without deleting."""
+
+        UiBillsDeleteOpenInput()
+        return await bills_delete_open_service.ui_bills_delete_open()
 
     async def ui_debtor_balances_list() -> UiDebtorBalancesListSuccess | ToolError:
         """Observe the authenticated Billy debtor balances list shell without writes."""
@@ -800,6 +811,13 @@ def create_server(
             "(read-only form open; never submit, approve, update, or delete)."
         ),
     )(ui_bills_update_open)
+    server.tool(
+        name="ui_bills_delete_open",
+        description=(
+            "Open Billy bill delete chrome for the authenticated session "
+            "(read-only: open Slet confirm and dismiss with Annuller; never permanent delete)."
+        ),
+    )(ui_bills_delete_open)
     server.tool(
         name="ui_debtor_balances_list",
         description=(

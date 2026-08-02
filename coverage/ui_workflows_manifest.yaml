@@ -4863,38 +4863,49 @@
     {
       "api_row_id": "api.bills.delete",
       "area": "bills",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable contact+bill then deletes in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.delete",
+      "evidence": "research173 dual-session headless observation + ui_bills_delete_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); delete chrome only (path class /:org_slug/bills/:id/edit, shell_kind=bills_delete, primary Slet, confirm Slet\u22652+Annuller, Annuller dismiss; never permanent delete; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, get detail ui_bills_get_open, and update form_open ui_bills_update_open); vision record tmp/vision-records/ui_bills_delete_open.json (bill delete chrome frames, accept); maps api.bills.delete to UI delete chrome open only",
       "filters": [],
       "id": "ui.parity.bills.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.bills.delete",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/bills + first non-header bill edit delete chrome (read-only: Slet confirm open + Annuller dismiss; never permanent delete; /bills/new and read /bills/:id without Slet not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
+      "parity_status": "delete_chrome_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "edit_open",
+        "slet_present",
+        "confirm_open",
+        "annuller_present",
+        "confirm_dismissed",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "deletes bill",
+      "side_effects": "none when open-only; product path never confirms delete",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_bills_delete_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_bills_delete_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
