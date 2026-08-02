@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 70 greened shells/parity + daybooks.get detail open (research179) = 71
+    # Prior 71 greened shells/parity + daybooks.delete Mere chrome (research180) = 72
     # live/vision rows without GEO NA.
-    ui_shell_green = 71
+    ui_shell_green = 72
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -457,6 +457,12 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
             assert "research139" in qual["evidence_ref"]
             assert "research139" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_DAYBOOKS_UPDATE_IDS:
+            assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_BILL_LINE_IDS:
+            assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS:
+            assert "research180" in row["method_or_route"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
             assert "research179" in qual["evidence_ref"]
             assert "research179" in row["evidence"]
@@ -903,10 +909,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 71 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 72 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 192
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 121
+    assert status["qualification"]["live_tested_rows"] == 201
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 129
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -957,6 +963,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.financing",
         "ui.discovery.daybooks",
         "ui.parity.daybooks.get",
+        "ui.parity.daybooks.delete",
         "ui.parity.daybooks.list",
         "ui.parity.daybooks.create",
         "ui.discovery.transactions",
@@ -1030,6 +1037,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.financing": "ui_financing_open",
         "ui.discovery.daybooks": "ui_daybooks_open",
         "ui.parity.daybooks.get": "ui_daybooks_get_open",
+        "ui.parity.daybooks.delete": "ui_daybooks_delete_open",
         "ui.parity.daybooks.list": "ui_daybooks_open",
         "ui.parity.daybooks.create": "ui_daybooks_open",
         "ui.discovery.transactions": "ui_transactions_list",
@@ -1080,7 +1088,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 71
+    assert len(qualified) == 72
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1144,9 +1152,15 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api.users.list" in users_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in users_parity["evidence"]
     assert "research141" in users_parity["evidence"]
-    for red_id in (
+    for na_id in (
         "ui.parity.users.get",
         "ui.parity.users.update",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research180" in na_row["method_or_route"]
+    for red_id in (
         "ui.parity.users.bulk_save",
         "ui.parity.users.bulk_delete",
     ):
@@ -1285,9 +1299,22 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     daybooks_discovery = next(row for row in qualified if row["id"] == "ui.discovery.daybooks")
     assert daybooks_discovery["tool_name"] == "ui_daybooks_open"
     assert daybooks_discovery["api_row_id"] is None
+    daybooks_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.daybooks.delete"
+    )
+    assert daybooks_delete_parity["api_row_id"] == "api.daybooks.delete"
+    assert daybooks_delete_parity["tool_name"] == "ui_daybooks_delete_open"
+    assert daybooks_delete_parity["parity_status"] == "delete_chrome_open_only"
+    assert "api.daybooks.delete" in daybooks_delete_parity["evidence"]
+    assert "research180" in daybooks_delete_parity["evidence"]
+    # update is NA (research180); bulk remain discovery_required / external-contract red
+    daybooks_update_na = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.daybooks.update"
+    )
+    assert daybooks_update_na["parity_status"] == "not_applicable"
+    assert daybooks_update_na["live_tested"] is True
+    assert "research180" in daybooks_update_na["method_or_route"]
     for red_id in (
-        "ui.parity.daybooks.update",
-        "ui.parity.daybooks.delete",
         "ui.parity.daybooks.bulk_save",
         "ui.parity.daybooks.bulk_delete",
     ):

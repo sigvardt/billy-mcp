@@ -76,6 +76,7 @@ from billy_mcp.browser import (
     UiClientsListService,
     UiClientsUpdateOpenService,
     UiCreditorBalancesListService,
+    UiDaybooksDeleteOpenService,
     UiDaybooksGetOpenService,
     UiDaybooksOpenService,
     UiDebtorBalancesListService,
@@ -157,6 +158,8 @@ from billy_mcp.models import (
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksDeleteOpenInput,
+    UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenInput,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
@@ -266,6 +269,7 @@ def create_server(
     ui_financing_open_service: UiFinancingOpenService | None = None,
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
     ui_daybooks_get_open_service: UiDaybooksGetOpenService | None = None,
+    ui_daybooks_delete_open_service: UiDaybooksDeleteOpenService | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
@@ -330,6 +334,7 @@ def create_server(
     financing_open_service = ui_financing_open_service or browser
     daybooks_open_service = ui_daybooks_open_service or browser
     daybooks_get_open_service = ui_daybooks_get_open_service or browser
+    daybooks_delete_open_service = ui_daybooks_delete_open_service or browser
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
@@ -573,6 +578,12 @@ def create_server(
 
         UiDaybooksGetOpenInput()
         return await daybooks_get_open_service.ui_daybooks_get_open()
+
+    async def ui_daybooks_delete_open() -> UiDaybooksDeleteOpenSuccess | ToolError:
+        """Observe daybook Mere delete chrome without confirming Slet."""
+
+        UiDaybooksDeleteOpenInput()
+        return await daybooks_delete_open_service.ui_daybooks_delete_open()
 
     async def ui_transactions_list() -> UiTransactionsListSuccess | ToolError:
         """Observe the authenticated Billy Posteringer list shell without create actions."""
@@ -918,6 +929,14 @@ def create_server(
             "add lines, post, or delete)."
         ),
     )(ui_daybooks_get_open)
+    server.tool(
+        name="ui_daybooks_delete_open",
+        description=(
+            "Open Billy daybook (Kassekladde) Mere delete chrome for the authenticated "
+            "session (read-only path and menu classification; opens Mere and classifies "
+            "Slet text only; does not confirm delete, post, or change daybooks)."
+        ),
+    )(ui_daybooks_delete_open)
     server.tool(
         name="ui_daybooks_open",
         description=(

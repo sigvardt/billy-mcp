@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T08:42:47Z
+updated: 2026-08-02T09:48:46Z
 ---
 
 # billy_mcp
@@ -72,6 +72,8 @@ updated: 2026-08-02T08:42:47Z
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
 
 [[ui_currencies_locales_not_applicable|ui_currencies_locales_not_applicable]]: Dual-session research139 freeze — no equivalent mit.billy.dk workflow for currencies/locales API parity; soft-empty paths match nonsense; NA accepted.
+
+[[ui_daybooks_delete_open_shell|ui_daybooks_delete_open_shell]]: Read-only daybook Mere delete chrome open (maps api.daybooks.delete); research180 dual Mere menu Slet with export CSV/XLS/Importér.
 
 [[ui_daybooks_get_open_shell|ui_daybooks_get_open_shell]]: Read-only daybook detail get-open UI tool (research179); path /:org_slug/daybooks/:id.
 

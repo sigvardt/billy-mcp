@@ -8819,3 +8819,134 @@ updated: 2026-08-02T08:25:00Z
 - `fractal commit` product: ui daybooks get open + invoice lines NA (`2f66bce`).
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
+
+## SYNC (iter 80) (2026-08-02T09:12Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 6C64C03F (iter79 SYNC pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- Tip has 186.79 product (`2f66bce`) + bookkeeping. Coverage: live/vision 192;
+  implemented/contract 376; complete false.
+- Blockers: bulk 92 external-contract; annual_reports org_inaccessible;
+  residual UI parity (daybooks update/delete, billLines, users residual).
+- Ready PREPARE. Not node finish.
+
+## PREPARE (iter 80) (2026-08-02T09:13Z)
+
+- Parent `main`: already up to date (fetch + merge no-op).
+- Children with commits ahead of tip: 62. All terminal (completed/exited/killed/stopped).
+- Product code delta only on `ui_auth_status` (browser/models/server/tests). Older
+  parallel auth_status already live and evolved on tip; browser tip ~9016 lines vs
+  child ~376. Two-dot merge would regress. **Skip.**
+- Remaining 61 children: fractal/wiki init, skills scaffold, or research-only;
+  no product paths to merge.
+- No merge commits this PREPARE. No outbox integration note (no material
+  integration).
+- Ready RESEARCH.
+
+## SYNC (iter 80 pre-RESEARCH) (2026-08-02T09:15Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 9DB1F958 + 7E15FD99 reacted (+).
+- No running children. No parent directives.
+- PREPARE complete: no merges. Ready RESEARCH residual UI.
+- complete false; live/vision 192; implemented/contract 376.
+
+## RESEARCH (iter 80 / research180) (2026-08-02T09:21Z)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+product+invoice+daybook+**bill** (fixed accountId+taxRateId+description+amount); cleanup dual; api_token_used false; profiles purged.
+- **ACCEPT product** `ui_daybooks_delete_open`: Mere→menu body Slet dual on `/:org_slug/daybooks/:id`.
+- **ACCEPT NA** daybooks.update (no Gem/Opdater/name form dual; soft edit/update empty).
+- **ACCEPT NA** billLines get/list/create/update/delete (5; embedded on bill edit; dedicated absent).
+- **ACCEPT NA** users.get + users.update (2; Brugere panel only dual; no detail form).
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`. Dual: `tmp/research180_focus_dual.json`.
+- Prefer slice: delete product + NA package (192→201 / 376→385) or A-only smaller.
+- Ready PLAN 186.80. Not finish.
+
+## SYNC (iter 80 pre-PLAN) (2026-08-02T09:23Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 5C83BE35 + A40C215E reacted (+).
+- No running children. No parent directives.
+- RESEARCH180 ACCEPT package ready PLAN 186.80.
+- complete false; baseline live/vision 192; implemented/contract 376.
+
+## PLAN (iter 80 / 186.80) (2026-08-02T09:23Z)
+
+- Plan file
+  `plans/2026-08-02T09:23:20.888Z-186.80-ui_daybooks_delete_and_residual_na.md`:
+  ui_daybooks_delete_open mere_slet delete_chrome maps daybooks.delete
+  (research180) + daybooks.update NA + billLines get/list/create/update/delete
+  NA (5) + users.get/update NA (2); path `/:org_slug/daybooks/:id`; no bulk NA;
+  live/vision 192→201; implemented/contract 376→385; GEO NA 121→129;
+  root-only Grok; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 80 pre-EXECUTE) (2026-08-02T09:24Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DADDD2FC + E9C3FE92 reacted (+).
+- No running children. No parent directives.
+- PLAN 186.80 ready. Entering EXECUTE.
+- complete false; baseline live/vision 192; implemented/contract 376.
+
+## EXECUTE (iter 80 / 186.80) (2026-08-02T09:49Z)
+
+- Producted research180 / plan 186.80:
+  - `ui_daybooks_delete_open` Mere delete_chrome_open_only maps daybooks.delete
+  - daybooks.update NA; billLines get/list/create/update/delete NA (5);
+    users.get + users.update NA (2)
+- Browser iterates SPA daybook ids (prefer later) until Mere→Slet classifies;
+  system journals may omit Slet.
+- Live dual `test_ui_daybooks_delete_open` **pass**; vision accept + purge verified.
+- lint.sh pass; offline test.sh **1653 passed** / 52 deselected.
+- Coverage: live/vision **201**; implemented/contract **385**; GEO NA **129**;
+  complete false.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 80 pre-IR) (2026-08-02T09:50Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private E5FF6C0E + 52EEA81F reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.80 done. Entering INDEPENDENT-REVIEW.
+- complete false; live/vision 201; implemented/contract 385; GEO NA 129.
+
+## IR (iter 80 / 186.80) (2026-08-02T09:52Z)
+
+- Product ui_daybooks_delete_open + residual NA package: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1 egress live-ref hygiene; N2 SPA toast.
+- Counts 201/385/129 complete false; bulk not NA; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 80 pre-FIX-VERIFY) (2026-08-02T09:54Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4C29A82F + EE8B00D2 reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT package; no required fixes. Entering FIX-VERIFY.
+- complete false; live/vision 201; implemented/contract 385.
+
+## FIX-VERIFY (iter 80 / 186.80) (2026-08-02T10:05Z)
+
+- IR required fixes: none. Optional N1 applied (egress live ref for
+  \`ui_daybooks_delete_open\`); N2 SPA toast deferred.
+- lint.sh pass. test.sh offline **1653 passed** / 52 deselected.
+- wiki lint: wiki + memory clean (or only advisory).
+- check_coverage: daybooks.delete green on \`ui_daybooks_delete_open\`;
+  daybooks.update + billLines5 + users get/update NA exact; bulk not NA;
+  live/vision 201; implemented/contract 385; complete false; bulk 92
+  external-contract; annual stay red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.80 ui daybooks delete + residual NA package. Not node finish.
+
+## SYNC (iter 80 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0E0385AC + CB7522C0 reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1653 offline pass; IR ACCEPT). Ready COMMIT 186.80
+  ui daybooks delete + residual NA package. Not node finish (complete false).
+

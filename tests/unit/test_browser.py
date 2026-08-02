@@ -35,6 +35,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
@@ -5074,6 +5075,120 @@ def test_ui_daybooks_get_open_returns_ui_changed_when_list_empty(tmp_path: Path)
         org_identity_path=identity_path,
     )
     result = asyncio.run(runtime.ui_daybooks_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
+
+
+def _daybooks_delete_shell_controls(
+    page_holder: dict[str, FakeLoginPage],
+) -> dict[str, FakeLoginControl]:
+    def open_mere() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/daybooks/daybookTestId01"
+        page.controls["body"] = FakeLoginControl(
+            text=(
+                "Opret ny kassekladde Tilføj kassekladdelinje Ingen postering valgt Mere "
+                "Eksportér som .CSV Eksportér som .XLS Importér Slet Overblik Menu Bogføring"
+            )
+        )
+        page.controls["body"].bind(page.events, "body")
+        page.controls["text=Mere"] = FakeLoginControl(text="Mere")
+        page.controls["text=Mere"].bind(page.events, "text=Mere")
+        page.controls["text=Slet"] = FakeLoginControl(text="Slet")
+        page.controls["text=Slet"].bind(page.events, "text=Slet")
+
+    base = _daybooks_editor_shell_controls()
+    base["body"] = FakeLoginControl(
+        text=(
+            "Opret ny kassekladde Tilføj kassekladdelinje Ingen postering valgt Mere "
+            "Overblik Menu Bogføring"
+        )
+    )
+    base["text=Mere"] = FakeLoginControl(text="Mere", on_click=open_mere)
+    return base
+
+
+def test_ui_daybooks_delete_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage(final_url="https://mit.billy.dk/login")
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+    result = asyncio.run(runtime.ui_daybooks_delete_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.AUTH_REQUIRED
+
+
+def test_ui_daybooks_delete_open_returns_success_for_mere_delete_chrome(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_delete_shell_controls(page_holder),
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page, daybook_ids=["daybookTestId01"])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_daybooks_delete_open())
+
+    assert result == UiDaybooksDeleteOpenSuccess(
+        detail_open=True,
+        mere_open=True,
+        slet_text_visible=True,
+        export_menu_visible=True,
+        primary_slet_absent=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert any("click:text=Mere" in e for e in page.events)
+    assert not any("click:text=Slet" in e for e in page.events)
+
+
+def test_ui_daybooks_delete_open_returns_ui_changed_when_list_empty(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_editor_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page, daybook_ids=[])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_daybooks_delete_open())
     assert isinstance(result, ToolError)
     assert result.code == StableErrorCode.UI_CHANGED
 

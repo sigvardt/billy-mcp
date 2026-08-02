@@ -38,6 +38,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
@@ -815,6 +816,12 @@ class UiDaybooksGetOpenService(Protocol):
     """Injectable seam for the read-only daybook detail get-open observation."""
 
     async def ui_daybooks_get_open(self) -> UiDaybooksGetOpenSuccess | ToolError: ...
+
+
+class UiDaybooksDeleteOpenService(Protocol):
+    """Injectable seam for the read-only daybook delete chrome open observation."""
+
+    async def ui_daybooks_delete_open(self) -> UiDaybooksDeleteOpenSuccess | ToolError: ...
 
 
 class UiTransactionsListService(Protocol):
@@ -3556,6 +3563,123 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_daybooks_delete_open(self) -> UiDaybooksDeleteOpenSuccess | ToolError:
+        """Open daybook delete chrome for the authenticated UI session only.
+
+        Research180: SPA list under committed egress unlocks daybook ids. Open a
+        daybook at path class /:org_slug/daybooks/:id, open Mere, classify Slet
+        text in menu (export CSV/XLS/Importér + Slet). Primary Slet button
+        absent. Prefer daybooks that expose Slet (system journals may omit it).
+        Never confirm Slet / Gem / Bogfør / Tilføj. Distinct from get open and
+        list+create on /daybooks/new.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_daybooks_delete_changed_error()
+
+            daybooks_new_url = f"https://mit.billy.dk/{slug}/daybooks/new"
+            capture = _DaybookSpaCapture()
+            capture.attach(page)
+            await page.goto(daybooks_new_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_error_shell_markers(page):
+                return _ui_daybooks_delete_changed_error()
+            if _is_daybooks_bare_url(page.url):
+                return _ui_daybooks_delete_changed_error()
+
+            daybook_ids = await _resolve_daybook_ids(context, page, capture, org_slug=slug)
+            if not daybook_ids:
+                return _ui_daybooks_delete_changed_error()
+
+            for daybook_id in daybook_ids[:12]:
+                get_url = f"https://mit.billy.dk/{slug}/daybooks/{daybook_id}"
+                await page.goto(get_url, wait_until="domcontentloaded")
+                await _await_page_settle(page)
+
+                for _ in range(20):
+                    if await _has_known_login_page(page):
+                        return _auth_required_error()
+                    if await _has_interaction_challenge(page):
+                        return ToolError(
+                            code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                            message="Browser authentication requires a non-automatable challenge.",
+                        )
+                    if await _has_error_shell_markers(page):
+                        break
+                    if _is_daybooks_bare_url(page.url) or _is_daybooks_editor_url(page.url):
+                        break
+
+                    if await _has_daybooks_delete_chrome_signature(page):
+                        flags = await _daybooks_delete_chrome_flags(page)
+                        primary = await _daybooks_delete_primary_flags(page)
+                        return UiDaybooksDeleteOpenSuccess(
+                            detail_open=True,
+                            mere_open=flags["mere_open"],
+                            slet_text_visible=flags["slet_text_visible"],
+                            export_menu_visible=flags["export_menu_visible"],
+                            primary_slet_absent=primary["primary_slet_absent"],
+                            shell_markers_present=await _has_shell_nav_markers(page),
+                        )
+
+                    if _is_daybooks_get_url(page.url) and await _has_daybooks_editor_signature(
+                        page
+                    ):
+                        primary = await _daybooks_delete_primary_flags(page)
+                        if not primary.get("primary_slet_absent"):
+                            break
+                        if not primary.get("mere_present"):
+                            break
+                        clicked_mere = await _click_daybooks_mere_action(page)
+                        if clicked_mere:
+                            await _await_page_settle(page)
+                            if await _has_daybooks_delete_chrome_signature(page):
+                                flags = await _daybooks_delete_chrome_flags(page)
+                                return UiDaybooksDeleteOpenSuccess(
+                                    detail_open=True,
+                                    mere_open=True,
+                                    slet_text_visible=flags["slet_text_visible"],
+                                    export_menu_visible=flags["export_menu_visible"],
+                                    primary_slet_absent=True,
+                                    shell_markers_present=await _has_shell_nav_markers(page),
+                                )
+                        break
+                    await asyncio.sleep(0.15)
+            return _ui_daybooks_delete_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the daybooks delete chrome observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser daybooks delete chrome observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError:
         """Open the transactions (Posteringer) list shell for the authenticated UI session only."""
 
@@ -5578,6 +5702,49 @@ async def _resolve_first_daybook_id(
     return str(daybook_id_obj)
 
 
+async def _resolve_daybook_ids(
+    context: Any, page: LoginPage, capture: _DaybookSpaCapture, *, org_slug: str | None = None
+) -> list[str]:
+    """List daybook ids via SPA under egress (prefer later rows first)."""
+
+    if not capture.token:
+        try:
+            await cast(Any, page).wait_for_timeout(1500)
+        except Exception:
+            await asyncio.sleep(1.5)
+    if not capture.token:
+        return []
+    org_id = capture.org_id
+    if not org_id:
+        org_id = await _resolve_organization_id_for_slug(context, capture.token, org_slug)
+    if not org_id:
+        return []
+    headers: dict[str, str] = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Access-Token": capture.token,
+    }
+    url = f"https://api.billysbilling.com/v2/daybooks?organizationId={org_id}&pageSize=50"
+    try:
+        response: Any = await context.request.get(url, headers=headers)
+        payload: object = await response.json()
+    except Exception:
+        return []
+    if not isinstance(payload, dict):
+        return []
+    rows_obj: object = cast(dict[str, object], payload).get("daybooks")
+    if not isinstance(rows_obj, list):
+        return []
+    ids: list[str] = []
+    for row_obj in cast(list[object], rows_obj):
+        if not isinstance(row_obj, dict):
+            continue
+        daybook_id_obj: object = cast(dict[str, object], row_obj).get("id")
+        if isinstance(daybook_id_obj, (str, int)):
+            ids.append(str(daybook_id_obj))
+    return list(reversed(ids))
+
+
 async def _resolve_organization_id_for_slug(
     context: Any, token: str, org_slug: str | None
 ) -> str | None:
@@ -5626,6 +5793,96 @@ def _ui_daybooks_get_changed_error() -> ToolError:
         code=StableErrorCode.UI_CHANGED,
         message="Billy daybooks get surface could not be classified.",
     )
+
+
+def _ui_daybooks_delete_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy daybooks delete chrome could not be classified.",
+    )
+
+
+async def _daybooks_delete_primary_flags(page: LoginPage) -> dict[str, bool]:
+    """Primary id-path chrome before Mere — Slet should not be a primary button."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:1800]
+    except Exception:
+        body = ""
+    slet_btn_n = await _count_role_button_exact(page, "Slet")
+    mere_btn_n = await _count_labeled_buttons(page, "Mere")
+    mere_text = bool(re.search(r"\bMere\b", body))
+    return {
+        "primary_slet_absent": slet_btn_n == 0,
+        "mere_present": mere_btn_n >= 1 or mere_text,
+    }
+
+
+async def _daybooks_delete_chrome_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII delete chrome flags after Mere (research180). Never confirms delete."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:2200]
+    except Exception:
+        body = ""
+    slet_text = bool(re.search(r"(?<![A-Za-zÆØÅæøå])Slet(?![A-Za-zÆØÅæøå])", body))
+    export_menu = bool(
+        re.search(r"Eksport[eé]r", body, re.I)
+        or re.search(r"\.CSV", body, re.I)
+        or re.search(r"\.XLS", body, re.I)
+        or re.search(r"Import[eé]r", body, re.I)
+    )
+    mere_label = bool(re.search(r"\bMere\b", body))
+    mere_open = mere_label and slet_text and export_menu
+    return {
+        "mere_open": mere_open,
+        "slet_text_visible": slet_text,
+        "export_menu_visible": export_menu,
+        "primary_slet_absent": (await _count_role_button_exact(page, "Slet")) == 0,
+    }
+
+
+async def _has_daybooks_delete_chrome_signature(page: LoginPage) -> bool:
+    """Strict delete-chrome signature — daybook id path + Mere menu + Slet text."""
+
+    try:
+        if _is_daybooks_editor_url(page.url) or _is_daybooks_bare_url(page.url):
+            return False
+        if not _is_daybooks_get_url(page.url):
+            return False
+        flags = await _daybooks_delete_chrome_flags(page)
+        return bool(flags.get("mere_open") and flags.get("slet_text_visible"))
+    except Exception:
+        return False
+
+
+async def _click_daybooks_mere_action(page: LoginPage) -> bool:
+    """Click Mere/More on daybook id surface without Slet confirm. Research180."""
+
+    live = cast(Any, page)
+    for selector in ("text=Mere", "text=More"):
+        try:
+            mere = live.locator(selector)
+            count = int(await mere.count())
+            for index in range(min(count, 6)):
+                el = mere.nth(index)
+                try:
+                    if not await el.is_visible():
+                        continue
+                    await el.click(timeout=2500)
+                    return True
+                except Exception:
+                    continue
+        except Exception:
+            continue
+    try:
+        mere_btn = live.get_by_role("button", name="Mere", exact=True)
+        if int(await mere_btn.count()) >= 1:
+            await mere_btn.first.click(timeout=2500)
+            return True
+    except Exception:
+        pass
+    return False
 
 
 def _is_transactions_list_url(url: str) -> bool:

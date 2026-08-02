@@ -27,6 +27,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
@@ -787,6 +788,22 @@ class FakeUiDaybooksOpenService:
         return UiDaybooksOpenSuccess(editor_markers_present=True, shell_markers_present=True)
 
 
+class FakeUiDaybooksDeleteOpenService:
+    def __init__(self) -> None:
+        self.calls = 0
+
+    async def ui_daybooks_delete_open(self) -> UiDaybooksDeleteOpenSuccess:
+        self.calls += 1
+        return UiDaybooksDeleteOpenSuccess(
+            detail_open=True,
+            mere_open=True,
+            slet_text_visible=True,
+            export_menu_visible=True,
+            primary_slet_absent=True,
+            shell_markers_present=True,
+        )
+
+
 class FakeUiDaybooksGetOpenService:
     def __init__(self) -> None:
         self.calls = 0
@@ -1171,6 +1188,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_bank_reconciliation_open",
         "ui_financing_open",
         "ui_daybooks_get_open",
+        "ui_daybooks_delete_open",
         "ui_daybooks_open",
         "ui_transactions_list",
         "ui_reports_open",
@@ -1977,6 +1995,32 @@ def test_ui_bank_reconciliation_open_registration_has_empty_input_and_typed_outp
         }
     }
     assert recon.calls == 1
+
+
+def test_ui_daybooks_delete_open_registration_has_empty_input_and_typed_output(
+    tmp_path: Path,
+) -> None:
+    write_coverage_fixture(tmp_path)
+    daybooks = FakeUiDaybooksDeleteOpenService()
+    server = create_server(tmp_path, ui_daybooks_delete_open_service=daybooks)
+    tool = {item.name: item for item in asyncio.run(server.list_tools())}["ui_daybooks_delete_open"]
+
+    assert tool.parameters["properties"] == {}
+    result = asyncio.run(server.call_tool("ui_daybooks_delete_open", {}))
+
+    assert result.structured_content == {
+        "result": {
+            "path_class": "/:org_slug/daybooks/:id",
+            "shell_kind": "daybooks_delete",
+            "detail_open": True,
+            "mere_open": True,
+            "slet_text_visible": True,
+            "export_menu_visible": True,
+            "primary_slet_absent": True,
+            "shell_markers_present": True,
+        }
+    }
+    assert daybooks.calls == 1
 
 
 def test_ui_daybooks_get_open_registration_has_empty_input_and_typed_output(

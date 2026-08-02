@@ -709,6 +709,32 @@ class UiDaybooksGetOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiDaybooksDeleteOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only daybooks delete chrome open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiDaybooksDeleteOpenSuccess(BaseModel):
+    """Non-PII classification of delete chrome after Mere on a daybook id surface.
+
+    Research180: open /:org_slug/daybooks/:id, open Mere, assert Slet text in menu
+    body (export CSV/XLS/Importér + Slet). Primary Slet button absent. Never
+    confirm Slet. Distinct from get open and list+create on /daybooks/new.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/daybooks/:id"] = "/:org_slug/daybooks/:id"
+    shell_kind: Literal["daybooks_delete"] = "daybooks_delete"
+    detail_open: bool
+    mere_open: bool
+    slet_text_visible: bool
+    export_menu_visible: bool
+    primary_slet_absent: bool
+    shell_markers_present: bool
+
+
 class UiTransactionsListInput(BaseModel):
     """Empty, strict input for the read-only transactions (Posteringer) list shell tool."""
 

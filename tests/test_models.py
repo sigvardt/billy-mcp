@@ -35,6 +35,8 @@ from billy_mcp.models import (
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksDeleteOpenInput,
+    UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenInput,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
@@ -1058,6 +1060,37 @@ def test_ui_daybooks_get_open_models_are_empty_input_and_non_pii_success() -> No
                 "editor_markers_present": True,
                 "shell_markers_present": True,
                 "path_class": "/:org_slug/daybooks/new",
+            }
+        )
+
+
+def test_ui_daybooks_delete_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiDaybooksDeleteOpenInput().model_dump() == {}
+    success = UiDaybooksDeleteOpenSuccess(
+        detail_open=True,
+        mere_open=True,
+        slet_text_visible=True,
+        export_menu_visible=True,
+        primary_slet_absent=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/daybooks/:id"
+    assert success.shell_kind == "daybooks_delete"
+    dumped = success.model_dump()
+    assert "id" not in dumped
+    assert dumped["detail_open"] is True
+    with pytest.raises(ValidationError):
+        UiDaybooksDeleteOpenInput.model_validate({"daybook_id": "x"})
+    with pytest.raises(ValidationError):
+        UiDaybooksDeleteOpenSuccess.model_validate(
+            {
+                "detail_open": True,
+                "mere_open": True,
+                "slet_text_visible": True,
+                "export_menu_visible": True,
+                "primary_slet_absent": True,
+                "shell_markers_present": True,
+                "org_slug": "leak",
             }
         )
 
