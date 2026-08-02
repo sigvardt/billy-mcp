@@ -6,15 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T03:10:00Z
+updated: 2026-08-02T03:15:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **74** COMMIT in progress for 186.74 ui_invoices_update_open.
+- Continue mode iter **74** COMMIT done for 186.74 ui_invoices_update_open (`1c3cd0f`).
 - live/vision **174**; implemented/contract **358**; complete **false**.
+- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
+- Residual UI: products.get / products update-delete / invoices.delete / special.invoice_email; bulk/annual red.
 - Not node finish.
 
 
@@ -39,8 +41,9 @@ updated: 2026-08-02T03:10:00Z
 
 ## COMMIT (iter 74 / 186.74)
 
-- `fractal commit "ui invoices update open"` for product 186.74.
-- Coverage 358/174; complete false. Do not finish.
+- `fractal commit "ui invoices update open"` → `1c3cd0f` pushed to origin/main.billy_complete.
+- Product: ui_invoices_update_open; coverage 358/174; complete false.
+- Do not finish (completion requirements not met).
 
 
 ## SYNC (iter 74 pre-COMMIT)
