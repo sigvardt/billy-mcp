@@ -13,9 +13,16 @@ updated: 2026-08-02T14:42:00Z
 
 ## Current state
 
-- Iter **87** pre-COMMIT SYNC: FIX-VERIFY clean; parent STEER dual bulk-chrome with creds path; COMMIT 186.87 honesty then dual next.
+- Iter **87** COMMIT 186.87 landed (`291376b`) UI product-plane bulk honesty. Next dual bulk-chrome (STEER 1E6AF3C9).
 - live/vision **286**; implemented/contract **470**; complete **false**.
-- Saved radio: 1E6AF3C9 (parent STEER credentials). Not node finish.
+- Saved radio: 1E6AF3C9. Not node finish.
+
+## COMMIT (iter 87 / 186.87)
+
+- fractal commit: `291376b` main.billy_complete: iteration 186.87 (ui product-plane bulk parity inventory honesty)
+- Package: 58 UI bulk discovery_required quals; no greening; counts 286/470 complete false
+- Parent STEER dual bulk-chrome still open (saved 1E6AF3C9) for next iteration
+- Not node finish
 
 ## SYNC (iter 87 pre-COMMIT) (2026-08-02T15:28Z)
 
