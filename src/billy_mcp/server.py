@@ -76,6 +76,7 @@ from billy_mcp.browser import (
     UiClientsListService,
     UiClientsUpdateOpenService,
     UiCreditorBalancesListService,
+    UiDaybooksGetOpenService,
     UiDaybooksOpenService,
     UiDebtorBalancesListService,
     UiExportsOpenService,
@@ -156,6 +157,8 @@ from billy_mcp.models import (
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksGetOpenInput,
+    UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
@@ -262,6 +265,7 @@ def create_server(
     ui_bank_reconciliation_open_service: UiBankReconciliationOpenService | None = None,
     ui_financing_open_service: UiFinancingOpenService | None = None,
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
+    ui_daybooks_get_open_service: UiDaybooksGetOpenService | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
@@ -325,6 +329,7 @@ def create_server(
     bank_reconciliation_open_service = ui_bank_reconciliation_open_service or browser
     financing_open_service = ui_financing_open_service or browser
     daybooks_open_service = ui_daybooks_open_service or browser
+    daybooks_get_open_service = ui_daybooks_get_open_service or browser
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
@@ -562,6 +567,12 @@ def create_server(
 
         UiDaybooksOpenInput()
         return await daybooks_open_service.ui_daybooks_open()
+
+    async def ui_daybooks_get_open() -> UiDaybooksGetOpenSuccess | ToolError:
+        """Observe an existing Billy daybook detail editor without create/post/delete actions."""
+
+        UiDaybooksGetOpenInput()
+        return await daybooks_get_open_service.ui_daybooks_get_open()
 
     async def ui_transactions_list() -> UiTransactionsListSuccess | ToolError:
         """Observe the authenticated Billy Posteringer list shell without create actions."""
@@ -899,6 +910,14 @@ def create_server(
             "loan or submit partner financing)."
         ),
     )(ui_financing_open)
+    server.tool(
+        name="ui_daybooks_get_open",
+        description=(
+            "Open an existing Billy daybook (Kassekladde) detail editor for the authenticated "
+            "session (read-only path and marker classification; does not create daybooks, "
+            "add lines, post, or delete)."
+        ),
+    )(ui_daybooks_get_open)
     server.tool(
         name="ui_daybooks_open",
         description=(

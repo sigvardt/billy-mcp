@@ -62,12 +62,17 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.special.invoice_delivery",
     "api.special.invoice_logs",
     "api.special.invoice_email",
+    "api.invoiceLines.get",
+    "api.invoiceLines.list",
+    "api.invoiceLines.create",
+    "api.invoiceLines.update",
+    "api.invoiceLines.delete",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    116  # prior 111 + research178 accounts get/create/update/delete (4) + special.invoice_email (1)
+    121  # prior 116 + research179 invoiceLines get/list/create/update/delete (5)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -112,6 +117,17 @@ GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS: frozenset[str] = frozenset(
 # research178: special.invoice_email compose absence (exact special id).
 GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS: frozenset[str] = frozenset(
     {"api.special.invoice_email"}
+)
+# research179: invoiceLines get/list/create/update/delete only
+# (dedicated UI absent dual; embedded on invoices.update only; bulk external-contract red).
+GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS: frozenset[str] = frozenset(
+    {
+        "api.invoiceLines.get",
+        "api.invoiceLines.list",
+        "api.invoiceLines.create",
+        "api.invoiceLines.update",
+        "api.invoiceLines.delete",
+    }
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
@@ -236,6 +252,10 @@ UI_DAYBOOKS_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_daybooks_open.py"
 UI_DAYBOOKS_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_DAYBOOKS_OPEN_TOOL_NAME = "ui_daybooks_open"
+UI_DAYBOOKS_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_daybooks_get_open.py"
+UI_DAYBOOKS_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_DAYBOOKS_GET_OPEN_TOOL_NAME = "ui_daybooks_get_open"
 UI_TRANSACTIONS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_transactions_list.py"
 UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -3554,6 +3574,77 @@ def apply_ui_daybooks_open_shell_evidence(
     ]
 
 
+def apply_ui_daybooks_get_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_get: bool = False,
+) -> None:
+    """Mark daybooks **detail get open** evidence (research179).
+
+    Empty-input tool; path /:org_slug/daybooks/:id; editor markers dual.
+    Never create/add-line/post/delete. Distinct from list+create on /daybooks/new.
+    When ``parity_of_api_get`` is true, dual-counts exact ``ui.parity.daybooks.get``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/daybooks/:id (read-only daybook get/open; "
+        "SPA list under committed egress; never Opret/Tilføj/Bogfør/Slet; "
+        "bare /daybooks and /daybooks/new not success)"
+    )
+    row["tool_name"] = UI_DAYBOOKS_GET_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "editor_markers_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_get:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_DAYBOOKS_GET_OPEN_MODEL_TEST_REFERENCE,
+        UI_DAYBOOKS_GET_OPEN_UNIT_TEST_REFERENCE,
+        UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research179 dual-session headless observation + ui_daybooks_get_open product; "
+        "scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/daybooks "
+        "(GET list; POST/DELETE disposable seed/cleanup in live harness); "
+        "detail open only (path class /:org_slug/daybooks/:id, shell_kind=daybooks_get, "
+        "editor markers Opret ny kassekladde / Tilføj kassekladdelinje / Ingen postering valgt; "
+        "never Opret/Tilføj/Bogfør/Slet; distinct from list+create ui_daybooks_open on "
+        "/daybooks/new); vision record tmp/vision-records/ui_daybooks_get_open.json "
+        "(daybook get frames, accept)"
+    )
+    if parity_of_api_get:
+        row["evidence"] = f"{row['evidence']}; maps api.daybooks.get to UI detail get/open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "detail_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable daybook "
+        "then deletes with fresh read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def apply_ui_transactions_list_shell_evidence(
     row: dict[str, Any],
     *,
@@ -4928,6 +5019,9 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     exact ids only — list stays tool-green on settings accounting; no create CTA /
     Ret / Mere→Slet dual) + special.invoice_email dual absence (soft email/send/
     delivery empty; Godkend og send on edit rejected as non-compose).
+    research179: invoiceLines get/list/create/update/delete dual absence of dedicated
+    UI (exact ids only — lines embedded on invoice edit dual; soft /invoiceLines paths
+    not a line inventory; no dual-count onto invoices.update; bulk external-contract).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -4940,6 +5034,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
     is_research178_accounts = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS
     is_research178_email = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS
+    is_research179_invoice_lines = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -4951,7 +5046,30 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research178_accounts:
+    if is_research179_invoice_lines:
+        research_id = "research179"
+        evidence_ref = "research179_invoice_lines_dedicated_absent_dual"
+        nonsense_path = "zz-r179-invoice-lines-none"
+        dual_agree_flag = "dual_agree_no_dedicated_invoiceLines_surface"
+        family_label = "invoiceLines.get+list+create+update+delete"
+        contrast_shells = (
+            "invoices_edit(embedded lines only)/invoices_list/invoices_create/"
+            "clients/products/uploads/daybooks"
+        )
+        list_heading_suffix = (
+            "/Faktura edit(line fields dual embedded)/Fakturaer/"
+            "Kunder/Produkter/Bilag/daybooks editor"
+        )
+        contrast_controls = [
+            "invoices",
+            "invoices_edit",
+            "clients",
+            "products",
+            "uploads",
+            "daybooks/new",
+            nonsense_path,
+        ]
+    elif is_research178_accounts:
         research_id = "research178"
         evidence_ref = "research178_accounts_get_create_update_delete_dual"
         nonsense_path = "zz-r178-none"
@@ -5313,6 +5431,17 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research179_invoice_lines:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI dedicated workflow for {api_row_id} "
+            f"({research_id} dual-session: soft /invoiceLines|/invoice-lines|"
+            "/invoices/:id/lines not a line inventory dual; invoice edit path dual "
+            "embeds line fields (inputs_n 9) already mapped to invoices.update; "
+            "no dual-count steal of line ops onto parent update tool; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research178_email:
         row["method_or_route"] = (
             f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
@@ -5342,6 +5471,12 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "dual-count on ui_settings_company_open); create CTAs "
             "Opret/Ny/Tilføj virksomhed 0 dual; exact organizations.create id "
             "only — not list/get/update/bulk; "
+        )
+    if is_research179_invoice_lines:
+        levering_note = (
+            "research179 dual: dedicated invoiceLines routes absent; lines only "
+            "embedded on invoice edit (already invoices.update); exact five ops; "
+            "not bulk_*; "
         )
     if is_research176:
         levering_note = (
@@ -5609,6 +5744,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.organizations.update":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_update=True)
+        if api_row["id"] == "api.daybooks.get":
+            apply_ui_daybooks_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.daybooks.list":
             apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.create":
@@ -5667,6 +5804,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                     UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
@@ -5722,7 +5860,9 @@ def build_browser_egress() -> dict[str, Any]:
                     "/v2/invoices for disposable draft seed/cleanup and invoice detail get-open "
                     "at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, "
                     "prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill "
-                    "seed and bill detail get-open at /:org_slug/bills/:id (emails still denied)"
+                    "seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); "
+                    "research179 dual: GET/POST/DELETE /v2/daybooks for daybook "
+                    "get-open SPA list and disposable seed/cleanup"
                 ),
                 "browser_path_allows": [
                     {"match": "exact", "methods": ["POST"], "path": "/v2/user/login"},
@@ -5751,6 +5891,9 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "exact", "methods": ["POST"], "path": "/v2/bills"},
                     {"match": "prefix", "methods": ["DELETE"], "path": "/v2/bills"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/taxRates"},
+                    {"match": "prefix", "methods": ["GET"], "path": "/v2/daybooks"},
+                    {"match": "exact", "methods": ["POST"], "path": "/v2/daybooks"},
+                    {"match": "prefix", "methods": ["DELETE"], "path": "/v2/daybooks"},
                 ],
                 "test_references": [
                     TEST_REFERENCE,
@@ -5775,6 +5918,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_BANK_RECONCILIATION_OPEN_LIVE_TEST_REFERENCE,
                     UI_FINANCING_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
+                    UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,

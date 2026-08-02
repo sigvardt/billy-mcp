@@ -7906,38 +7906,46 @@
     {
       "api_row_id": "api.daybooks.get",
       "area": "daybooks",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable daybook then deletes with fresh read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.get",
+      "evidence": "research179 dual-session headless observation + ui_daybooks_get_open product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/daybooks (GET list; POST/DELETE disposable seed/cleanup in live harness); detail open only (path class /:org_slug/daybooks/:id, shell_kind=daybooks_get, editor markers Opret ny kassekladde / Tilf\u00f8j kassekladdelinje / Ingen postering valgt; never Opret/Tilf\u00f8j/Bogf\u00f8r/Slet; distinct from list+create ui_daybooks_open on /daybooks/new); vision record tmp/vision-records/ui_daybooks_get_open.json (daybook get frames, accept); maps api.daybooks.get to UI detail get/open only",
       "filters": [],
       "id": "ui.parity.daybooks.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybooks.get",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/daybooks/:id (read-only daybook get/open; SPA list under committed egress; never Opret/Tilf\u00f8j/Bogf\u00f8r/Slet; bare /daybooks and /daybooks/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
+      "parity_status": "detail_open_only",
+      "request_fields": [],
       "response_fields": [
-        "daybook"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "editor_markers_present",
+        "shell_markers_present"
       ],
-      "sensitivity": "low",
-      "side_effects": "none",
+      "sensitivity": "medium",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_daybooks_get_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_daybooks_get_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -9305,208 +9313,266 @@
     {
       "api_row_id": "api.invoiceLines.get",
       "area": "invoice_lines",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.get",
+      "evidence": "research179 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_invoiceLines_surface true; candidate invoiceLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r179-invoice-lines-none); contrast invoices_edit(embedded lines only)/invoices_list/invoices_create/clients/products/uploads/daybooks real shells with h1; research179 dual: dedicated invoiceLines routes absent; lines only embedded on invoice edit (already invoices.update); exact five ops; not bulk_*; design \u00a710.2 UI parity not_applicable accepted for api.invoiceLines.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* invoiceLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research179_invoice_lines_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.invoiceLines.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoiceLines.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.invoiceLines.get (research179 dual-session: soft /invoiceLines|/invoice-lines|/invoices/:id/lines not a line inventory dual; invoice edit path dual embeds line fields (inputs_n 9) already mapped to invoices.update; no dual-count steal of line ops onto parent update tool; contrast shells/Faktura edit(line fields dual embedded)/Fakturaer/Kunder/Produkter/Bilag/daybooks editor; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "invoiceLine"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "clients",
+          "products",
+          "uploads",
+          "daybooks/new",
+          "zz-r179-invoice-lines-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research179_invoice_lines_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.invoiceLines.list",
       "area": "invoice_lines",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.list",
-      "filters": {},
+      "evidence": "research179 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_invoiceLines_surface true; candidate invoiceLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r179-invoice-lines-none); contrast invoices_edit(embedded lines only)/invoices_list/invoices_create/clients/products/uploads/daybooks real shells with h1; research179 dual: dedicated invoiceLines routes absent; lines only embedded on invoice edit (already invoices.update); exact five ops; not bulk_*; design \u00a710.2 UI parity not_applicable accepted for api.invoiceLines.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* invoiceLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research179_invoice_lines_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.invoiceLines.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoiceLines.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.invoiceLines.list (research179 dual-session: soft /invoiceLines|/invoice-lines|/invoices/:id/lines not a line inventory dual; invoice edit path dual embeds line fields (inputs_n 9) already mapped to invoices.update; no dual-count steal of line ops onto parent update tool; contrast shells/Faktura edit(line fields dual embedded)/Fakturaer/Kunder/Produkter/Bilag/daybooks editor; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "clients",
+          "products",
+          "uploads",
+          "daybooks/new",
+          "zz-r179-invoice-lines-none"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research179_invoice_lines_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "invoiceLines[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.invoiceLines.create",
       "area": "invoice_lines",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.create",
+      "evidence": "research179 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_invoiceLines_surface true; candidate invoiceLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r179-invoice-lines-none); contrast invoices_edit(embedded lines only)/invoices_list/invoices_create/clients/products/uploads/daybooks real shells with h1; research179 dual: dedicated invoiceLines routes absent; lines only embedded on invoice edit (already invoices.update); exact five ops; not bulk_*; design \u00a710.2 UI parity not_applicable accepted for api.invoiceLines.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* invoiceLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research179_invoice_lines_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.invoiceLines.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoiceLines.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.invoiceLines.create (research179 dual-session: soft /invoiceLines|/invoice-lines|/invoices/:id/lines not a line inventory dual; invoice edit path dual embeds line fields (inputs_n 9) already mapped to invoices.update; no dual-count steal of line ops onto parent update tool; contrast shells/Faktura edit(line fields dual embedded)/Fakturaer/Kunder/Produkter/Bilag/daybooks editor; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "invoiceLine"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates invoiceLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "clients",
+          "products",
+          "uploads",
+          "daybooks/new",
+          "zz-r179-invoice-lines-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research179_invoice_lines_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.invoiceLines.update",
       "area": "invoice_lines",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.update",
+      "evidence": "research179 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_invoiceLines_surface true; candidate invoiceLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r179-invoice-lines-none); contrast invoices_edit(embedded lines only)/invoices_list/invoices_create/clients/products/uploads/daybooks real shells with h1; research179 dual: dedicated invoiceLines routes absent; lines only embedded on invoice edit (already invoices.update); exact five ops; not bulk_*; design \u00a710.2 UI parity not_applicable accepted for api.invoiceLines.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* invoiceLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research179_invoice_lines_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.invoiceLines.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoiceLines.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.invoiceLines.update (research179 dual-session: soft /invoiceLines|/invoice-lines|/invoices/:id/lines not a line inventory dual; invoice edit path dual embeds line fields (inputs_n 9) already mapped to invoices.update; no dual-count steal of line ops onto parent update tool; contrast shells/Faktura edit(line fields dual embedded)/Fakturaer/Kunder/Produkter/Bilag/daybooks editor; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "invoiceLine"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates invoiceLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "clients",
+          "products",
+          "uploads",
+          "daybooks/new",
+          "zz-r179-invoice-lines-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research179_invoice_lines_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.invoiceLines.delete",
       "area": "invoice_lines",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.delete",
+      "evidence": "research179 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_invoiceLines_surface true; candidate invoiceLines.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r179-invoice-lines-none); contrast invoices_edit(embedded lines only)/invoices_list/invoices_create/clients/products/uploads/daybooks real shells with h1; research179 dual: dedicated invoiceLines routes absent; lines only embedded on invoice edit (already invoices.update); exact five ops; not bulk_*; design \u00a710.2 UI parity not_applicable accepted for api.invoiceLines.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* invoiceLines.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research179_invoice_lines_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.invoiceLines.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoiceLines.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.invoiceLines.delete (research179 dual-session: soft /invoiceLines|/invoice-lines|/invoices/:id/lines not a line inventory dual; invoice edit path dual embeds line fields (inputs_n 9) already mapped to invoices.update; no dual-count steal of line ops onto parent update tool; contrast shells/Faktura edit(line fields dual embedded)/Fakturaer/Kunder/Produkter/Bilag/daybooks editor; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes invoiceLine",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "clients",
+          "products",
+          "uploads",
+          "daybooks/new",
+          "zz-r179-invoice-lines-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research179_invoice_lines_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

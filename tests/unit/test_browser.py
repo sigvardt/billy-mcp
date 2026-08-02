@@ -35,6 +35,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiExportsOpenSuccess,
@@ -236,11 +237,68 @@ class FakeLoginPage:
         del state, timeout
         self.events.append("wait_for_load_state")
 
+    async def wait_for_timeout(self, timeout: float) -> None:
+        del timeout
+        self.events.append("wait_for_timeout")
+
+    def on(self, event: str, handler: object) -> None:
+        self.events.append(f"on:{event}")
+        if event != "request" or not callable(handler):
+            return
+
+        class _SyntheticRequest:
+            url = "https://api.billysbilling.com/v2/user"
+            headers = {
+                "x-access-token": "test-token",
+                "x-organizationid": "orgTestId01",
+            }
+
+        handler(_SyntheticRequest())
+
+
+class _FakeApiResponse:
+    def __init__(self, payload: object) -> None:
+        self._payload = payload
+        self.status = 200
+
+    async def json(self) -> object:
+        return self._payload
+
+
+class _FakeApiRequest:
+    def __init__(self, *, daybook_ids: list[str] | None = None) -> None:
+        self.daybook_ids = ["daybookTestId01"] if daybook_ids is None else list(daybook_ids)
+        self.calls: list[str] = []
+
+    async def get(self, url: str, headers: dict[str, str] | None = None) -> _FakeApiResponse:
+        del headers
+        self.calls.append(url)
+        if "/user/organizations" in url:
+            return _FakeApiResponse(
+                {
+                    "data": [
+                        {
+                            "organizationId": "orgTestId01",
+                            "url": "test-org-slug",
+                            "name": "Test Org",
+                        }
+                    ]
+                }
+            )
+        rows = [{"id": i} for i in self.daybook_ids]
+        return _FakeApiResponse({"daybooks": rows})
+
 
 class FakeLoginContext(FakeContext):
-    def __init__(self, page: FakeLoginPage) -> None:
+    def __init__(
+        self,
+        page: FakeLoginPage,
+        *,
+        daybook_ids: list[str] | None = None,
+    ) -> None:
         super().__init__()
         self.page = page
+        self.request = _FakeApiRequest(daybook_ids=daybook_ids)
 
     async def new_page(self) -> FakeLoginPage:
         return self.page
@@ -376,6 +434,10 @@ def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
     assert policy.allows("https://api.billysbilling.com/v2/bills", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/bills/abc", "DELETE")
     assert policy.allows("https://api.billysbilling.com/v2/taxRates", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/daybooks", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/daybooks/abc", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/daybooks", "POST")
+    assert policy.allows("https://api.billysbilling.com/v2/daybooks/abc", "DELETE")
     assert not policy.allows("https://api.billysbilling.com/v2/invoices/x/emails", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices/abc", "DELETE")
@@ -4905,6 +4967,115 @@ def _integrations_soft_empty_controls() -> dict[str, FakeLoginControl]:
         "text=Upsedasse": FakeLoginControl(count=0, visible=False),
         "text=Log ind igen": FakeLoginControl(count=0, visible=False),
     }
+
+
+def test_ui_daybooks_get_open_returns_auth_required_on_login_page(tmp_path: Path) -> None:
+    page = FakeLoginPage(final_url="https://mit.billy.dk/login")
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+    result = asyncio.run(runtime.ui_daybooks_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.AUTH_REQUIRED
+
+
+def test_ui_daybooks_get_open_returns_success_for_id_path(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_editor_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page, daybook_ids=["daybookTestId01"])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_daybooks_get_open())
+
+    assert result == UiDaybooksGetOpenSuccess(
+        detail_open=True,
+        editor_markers_present=True,
+        shell_markers_present=True,
+    )
+    assert any("/daybooks/daybookTestId01" in url for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert "fill:" not in " ".join(page.events)
+    assert page.closed
+
+
+def test_ui_daybooks_get_open_rejects_new_path_as_success(tmp_path: Path) -> None:
+    """SPA returns id but if navigation stays on /new, fail closed."""
+
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_editor_shell_controls(),
+        follow_goto=False,  # stay off get path
+    )
+    context = FakeLoginContext(page, daybook_ids=["daybookTestId01"])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_daybooks_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
+
+
+def test_ui_daybooks_get_open_returns_ui_changed_when_list_empty(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_editor_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page, daybook_ids=[])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_daybooks_get_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
 
 
 def test_ui_transactions_list_returns_auth_required_on_login_page(tmp_path: Path) -> None:

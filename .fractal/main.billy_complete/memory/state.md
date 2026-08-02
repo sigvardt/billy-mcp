@@ -8752,3 +8752,64 @@ updated: 2026-08-02T08:25:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
+## iter79 PREPARE (2026-08-02T08:18Z)
+
+- Parent `main`: already up to date.
+- Children with commits ahead of tip: 62. All terminal (completed/exited/killed/stopped).
+- Product code delta only on `ui_auth_status` (browser/models/server/tests). Older parallel `auth_status` already live and evolved on tip; two-dot merge would regress ~8k+ lines of browser and drop later live tests. **Skip.**
+- Remaining 61 children: fractal/wiki init or research scaffold only; no product paths to merge.
+- No merge commits this PREPARE. No outbox integration note (no material integration).
+
+## RESEARCH (iter 79 / research179) (2026-08-02T08:29Z)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+product+invoice+daybook; bill seed 400 (text attr); cleanup dual; api_token_used false; profiles purged.
+- **ACCEPT** product `ui_daybooks_get_open` (detail_open_only maps daybooks.get): path dual `/:org_slug/daybooks/:id` + editor chrome dual.
+- **ACCEPT NA** invoiceLines get/list/create/update/delete (dedicated absent dual; embedded on invoice edit only).
+- DEFER daybooks update (false dual) + delete (Slet text only; Mere→Slet not body-proven).
+- DEFER billLines (seed fail) + users residual (panel markers weak).
+- Reconfirm accounts CRUD NA + invoice_email NA still dual.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`. Dual: `tmp/research179_focus_dual.json`.
+- Ready PLAN 186.79. Not finish.
+
+## PLAN (iter 79 / 186.79) (2026-08-02T08:31Z)
+
+- Plan file
+  `plans/2026-08-02T08:30:42.545Z-186.79-ui_daybooks_get_and_invoice_lines_na.md`:
+  ui_daybooks_get_open detail_open_only maps daybooks.get (research179) +
+  invoiceLines get/list/create/update/delete NA (5); path `/:org_slug/daybooks/:id`;
+  no egress change; live/vision 186→192; implemented/contract 370→376;
+  GEO NA 116→121; root-only Grok; DEFER daybooks update/delete + billLines +
+  users residual; complete false.
+- Ready EXECUTE.
+
+## EXECUTE (iter 79 / 186.79) (2026-08-02T08:58Z)
+
+- Producted research179 / plan 186.79:
+  - `ui_daybooks_get_open` detail_open_only maps daybooks.get (`/:org_slug/daybooks/:id`)
+  - invoiceLines get/list/create/update/delete NA (5; research179 dedicated absent)
+- Egress: GET/POST/DELETE `/v2/daybooks` + org resolve via `/user/organizations` Bearer
+- Models, browser, server, generator, unit + live dual + vision record, wiki
+- lint.sh pass; offline test.sh **1648 passed** / 51 deselected; live daybooks get dual **pass**
+- Coverage: live/vision **192**; implemented/contract **376**; GEO NA **121**; complete false
+- Ready for REVIEW. Not finish.
+
+## IR (iter 79 / 186.79) (2026-08-02T09:00Z)
+
+- Product ui_daybooks_get_open + invoiceLines NA5: **ACCEPT** (`tmp/grok-review.md`).
+- No required product fixes. Optional N1–N2 non-blocking (delete text dual vs body proof; harness org id).
+- daybooks.get green; list+create unchanged; update/delete + bulk residual red;
+  invoiceLines five NA exact ids; bulk not NA; complete false; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## FIX-VERIFY (iter 79 / 186.79) (2026-08-02T09:11Z)
+
+- IR required fixes: none. Optional N1–N2 deferred (documented in plan post-mortem).
+- lint.sh pass. test.sh offline **1648 passed** / 51 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: daybooks.get discovery/parity green on `ui_daybooks_get_open`;
+  list+create tools unchanged; invoiceLines five NA exact; bulk not NA;
+  daybooks update/delete residual red; live/vision 192; implemented/contract 376;
+  complete false; bulk 92 external-contract; annual stay red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.79 ui daybooks get + invoiceLines NA package. Not node finish.

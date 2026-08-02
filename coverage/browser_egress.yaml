@@ -28,6 +28,7 @@
         "tests/live/test_ui_bank_reconciliation_open.py",
         "tests/live/test_ui_financing_open.py",
         "tests/live/test_ui_daybooks_open.py",
+        "tests/live/test_ui_daybooks_get_open.py",
         "tests/live/test_ui_transactions_list.py",
         "tests/live/test_ui_reports_open.py",
         "tests/live/test_ui_vat_declarations_list.py",
@@ -244,10 +245,31 @@
             "GET"
           ],
           "path": "/v2/taxRates"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/daybooks"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/daybooks"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/daybooks"
         }
       ],
       "condition": "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, and bills data-planes (research164/165/168/169/170); never full API browse",
-      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill seed and bill detail get-open at /:org_slug/bills/:id (emails still denied)",
+      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); research179 dual: GET/POST/DELETE /v2/daybooks for daybook get-open SPA list and disposable seed/cleanup",
       "host": "api.billysbilling.com",
       "owner": "ui_auth",
       "purpose": "Path-scoped browser XHR for headless login, shell settle, contacts UI, products UI, invoices list/get seed+cleanup, and bills list/get seed+cleanup data-plane",
@@ -274,6 +296,7 @@
         "tests/live/test_ui_bank_reconciliation_open.py",
         "tests/live/test_ui_financing_open.py",
         "tests/live/test_ui_daybooks_open.py",
+        "tests/live/test_ui_daybooks_get_open.py",
         "tests/live/test_ui_transactions_list.py",
         "tests/live/test_ui_reports_open.py",
         "tests/live/test_ui_vat_declarations_list.py",

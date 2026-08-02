@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T07:45:00Z
+updated: 2026-08-02T08:42:47Z
 ---
 
 # billy_mcp
@@ -73,6 +73,8 @@ updated: 2026-08-02T07:45:00Z
 
 [[ui_currencies_locales_not_applicable|ui_currencies_locales_not_applicable]]: Dual-session research139 freeze — no equivalent mit.billy.dk workflow for currencies/locales API parity; soft-empty paths match nonsense; NA accepted.
 
+[[ui_daybooks_get_open_shell|ui_daybooks_get_open_shell]]: Read-only daybook detail get-open UI tool (research179); path /:org_slug/daybooks/:id.
+
 [[ui_daybooks_open_shell|ui_daybooks_open_shell]]: Read-only Billy daybook editor (Kassekladde) shell contract; dual-counts api.daybooks.list (research156) and api.daybooks.create (research157).
 
 [[ui_debtor_balances_list_shell|ui_debtor_balances_list_shell]]: Read-only headless ui_debtor_balances_list contract for Billy debtor balances (Tilgodehavender) list shell open only.
@@ -86,6 +88,8 @@ updated: 2026-08-02T07:45:00Z
 [[ui_integrations_open_shell|ui_integrations_open_shell]]: Read-only Billy integrations soft-empty shell classification (research124 freeze).
 
 [[ui_inventory_open_shell|ui_inventory_open_shell]]: Read-only Billy Lagermodul inventory shell open (research125 freeze).
+
+[[ui_invoice_lines_not_applicable|ui_invoice_lines_not_applicable]]: UI parity not_applicable for invoiceLines get/list/create/update/delete (research179).
 
 [[ui_invoice_reminders_not_applicable|ui_invoice_reminders_not_applicable]]: Dual-session research149 freeze — no equivalent mit.billy.dk workflow for invoiceReminders API parity; soft-empty path matches nonsense; invoices/Fakturaer shell is invoices only; NA accepted.
 

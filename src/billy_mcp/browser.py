@@ -38,6 +38,7 @@ from billy_mcp.models import (
     UiClientsListSuccess,
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListSuccess,
+    UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiExportsOpenSuccess,
@@ -389,6 +390,7 @@ _FINANCING_APPLY_CTA = "Få et uforpligtende tilbud"
 # Never click Opret ny kassekladde / Tilføj kassekladdelinje / Bogfør / Ny postering.
 _DAYBOOKS_EDITOR_PATH = re.compile(r"^/[^/]+/daybooks/new$")
 _DAYBOOKS_BARE_PATH = re.compile(r"^/[^/]+/daybooks$")
+_DAYBOOKS_GET_PATH = re.compile(r"^/[^/]+/daybooks/(?!new$)[^/]+$")
 _DAYBOOKS_EDITOR_MARKERS = (
     "Opret ny kassekladde",
     "Tilføj kassekladdelinje",
@@ -807,6 +809,12 @@ class UiDaybooksOpenService(Protocol):
     """Injectable seam for the read-only daybook (Kassekladde) editor shell open."""
 
     async def ui_daybooks_open(self) -> UiDaybooksOpenSuccess | ToolError: ...
+
+
+class UiDaybooksGetOpenService(Protocol):
+    """Injectable seam for the read-only daybook detail get-open observation."""
+
+    async def ui_daybooks_get_open(self) -> UiDaybooksGetOpenSuccess | ToolError: ...
 
 
 class UiTransactionsListService(Protocol):
@@ -3461,6 +3469,93 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_daybooks_get_open(self) -> UiDaybooksGetOpenSuccess | ToolError:
+        """Open an existing daybook editor surface for the authenticated UI session only.
+
+        Research179: SPA list/get under committed egress unlocks daybook ids. Open
+        first daybook at path class /:org_slug/daybooks/:id with editor markers.
+        Distinct from list+create on /daybooks/new. Never Opret/Tilføj/Bogfør/Slet.
+        Bare /daybooks Upsedasse is not success.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_daybooks_get_changed_error()
+
+            daybooks_new_url = f"https://mit.billy.dk/{slug}/daybooks/new"
+            capture = _DaybookSpaCapture()
+            capture.attach(page)
+            await page.goto(daybooks_new_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_error_shell_markers(page):
+                return _ui_daybooks_get_changed_error()
+            if _is_daybooks_bare_url(page.url):
+                return _ui_daybooks_get_changed_error()
+
+            daybook_id = await _resolve_first_daybook_id(context, page, capture, org_slug=slug)
+            if not daybook_id:
+                return _ui_daybooks_get_changed_error()
+
+            get_url = f"https://mit.billy.dk/{slug}/daybooks/{daybook_id}"
+            await page.goto(get_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(40):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_daybooks_get_changed_error()
+                if _is_daybooks_bare_url(page.url) or _is_daybooks_editor_url(page.url):
+                    return _ui_daybooks_get_changed_error()
+                if _is_daybooks_get_url(page.url) and await _has_daybooks_editor_signature(page):
+                    if _is_transactions_list_url(page.url):
+                        return _ui_daybooks_get_changed_error()
+                    return UiDaybooksGetOpenSuccess(
+                        detail_open=True,
+                        editor_markers_present=True,
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+                await asyncio.sleep(0.2)
+            return _ui_daybooks_get_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the daybooks get observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser daybooks get observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError:
         """Open the transactions (Posteringer) list shell for the authenticated UI session only."""
 
@@ -5379,6 +5474,157 @@ def _is_daybooks_bare_url(url: str) -> bool:
         and parsed.username is None
         and parsed.password is None
         and bool(_DAYBOOKS_BARE_PATH.match(parsed.path or ""))
+    )
+
+
+def _is_daybooks_get_url(url: str) -> bool:
+    """Return True when the URL is an existing daybook id path (research179)."""
+
+    try:
+        parsed = urlsplit(url)
+        port = parsed.port
+    except ValueError:
+        return False
+    return (
+        parsed.scheme == "https"
+        and parsed.hostname == "mit.billy.dk"
+        and port in {None, 443}
+        and parsed.username is None
+        and parsed.password is None
+        and bool(_DAYBOOKS_GET_PATH.match(parsed.path or ""))
+    )
+
+
+class _DaybookSpaCapture:
+    """Capture SPA access token and organisation id from allowlisted API traffic."""
+
+    def __init__(self) -> None:
+        self.token: str | None = None
+        self.org_id: str | None = None
+
+    def attach(self, page: LoginPage) -> None:
+        def on_req(req: Any) -> None:  # pyright: ignore[reportUnknownParameterType]
+            try:
+                url = str(req.url)
+            except Exception:
+                return
+            if "api.billysbilling.com" not in url:
+                return
+            try:
+                headers = {str(k).lower(): str(v) for k, v in dict(req.headers).items()}
+            except Exception:
+                headers = {}
+            tok = headers.get("x-access-token") or headers.get("x-token")
+            if tok and not self.token:
+                self.token = tok
+            org = headers.get("x-organizationid") or headers.get("x-organization-id")
+            if org and not self.org_id:
+                self.org_id = org
+
+        cast(Any, page).on("request", on_req)
+
+
+async def _resolve_first_daybook_id(
+    context: Any, page: LoginPage, capture: _DaybookSpaCapture, *, org_slug: str | None = None
+) -> str | None:
+    """List daybooks via SPA under egress; return first id or None."""
+
+    try:
+        if _is_daybooks_get_url(page.url):
+            path = urlsplit(page.url).path or ""
+            parts = [part for part in path.split("/") if part]
+            if len(parts) >= 2 and parts[-2] == "daybooks" and parts[-1] != "new":
+                return parts[-1]
+    except Exception:
+        pass
+
+    if not capture.token:
+        try:
+            await cast(Any, page).wait_for_timeout(1500)
+        except Exception:
+            await asyncio.sleep(1.5)
+
+    if not capture.token:
+        return None
+
+    org_id = capture.org_id
+    if not org_id:
+        org_id = await _resolve_organization_id_for_slug(context, capture.token, org_slug)
+    if not org_id:
+        return None
+
+    headers: dict[str, str] = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "X-Access-Token": capture.token,
+    }
+    url = f"https://api.billysbilling.com/v2/daybooks?organizationId={org_id}&pageSize=50"
+    try:
+        response: Any = await context.request.get(url, headers=headers)
+        payload: object = await response.json()
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    rows_obj: object = cast(dict[str, object], payload).get("daybooks")
+    if not isinstance(rows_obj, list) or len(cast(list[object], rows_obj)) < 1:
+        return None
+    first_obj: object = cast(list[object], rows_obj)[0]
+    if not isinstance(first_obj, dict):
+        return None
+    daybook_id_obj: object = cast(dict[str, object], first_obj).get("id")
+    if not isinstance(daybook_id_obj, (str, int)):
+        return None
+    return str(daybook_id_obj)
+
+
+async def _resolve_organization_id_for_slug(
+    context: Any, token: str, org_slug: str | None
+) -> str | None:
+    """Resolve Billy organisation id via allowlisted /user/organizations."""
+
+    headers = {
+        "Accept": "application/json",
+        "Authorization": f"Bearer {token}",
+    }
+    try:
+        response: Any = await context.request.get(
+            "https://api.billysbilling.com/user/organizations",
+            headers=headers,
+        )
+        payload: object = await response.json()
+    except Exception:
+        return None
+    if not isinstance(payload, dict):
+        return None
+    rows_obj: object = cast(dict[str, object], payload).get("data")
+    if not isinstance(rows_obj, list) or not rows_obj:
+        return None
+    rows = cast(list[object], rows_obj)
+    chosen: dict[str, object] | None = None
+    if org_slug:
+        for row_obj in rows:
+            if not isinstance(row_obj, dict):
+                continue
+            row = cast(dict[str, object], row_obj)
+            if str(row.get("url") or "") == org_slug:
+                chosen = row
+                break
+    if chosen is None:
+        first = rows[0]
+        if not isinstance(first, dict):
+            return None
+        chosen = cast(dict[str, object], first)
+    org_id_obj: object = chosen.get("organizationId")
+    if not isinstance(org_id_obj, str) or not org_id_obj:
+        return None
+    return org_id_obj
+
+
+def _ui_daybooks_get_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy daybooks get surface could not be classified.",
     )
 
 

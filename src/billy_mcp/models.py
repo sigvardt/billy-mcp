@@ -687,6 +687,28 @@ class UiDaybooksOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiDaybooksGetOpenInput(BaseModel):
+    """Empty, strict input for the read-only daybook detail get-open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiDaybooksGetOpenSuccess(BaseModel):
+    """Non-PII classification of an existing daybook editor surface (research179).
+
+    Path class /:org_slug/daybooks/:id only. Distinct from list+create on /daybooks/new.
+    Never Opret/Tilføj/Bogfør/Slet submit.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/daybooks/:id"] = "/:org_slug/daybooks/:id"
+    shell_kind: Literal["daybooks_get"] = "daybooks_get"
+    detail_open: bool
+    editor_markers_present: bool
+    shell_markers_present: bool
+
+
 class UiTransactionsListInput(BaseModel):
     """Empty, strict input for the read-only transactions (Posteringer) list shell tool."""
 

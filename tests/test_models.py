@@ -35,6 +35,8 @@ from billy_mcp.models import (
     UiClientsUpdateOpenSuccess,
     UiCreditorBalancesListInput,
     UiCreditorBalancesListSuccess,
+    UiDaybooksGetOpenInput,
+    UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
     UiDaybooksOpenSuccess,
     UiDebtorBalancesListInput,
@@ -1033,6 +1035,31 @@ def test_ui_daybooks_open_models_are_empty_input_and_non_pii_success() -> None:
         raise AssertionError("expected validation error")
     except Exception:
         pass
+
+
+def test_ui_daybooks_get_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiDaybooksGetOpenInput().model_dump() == {}
+    success = UiDaybooksGetOpenSuccess(
+        detail_open=True,
+        editor_markers_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/daybooks/:id"
+    assert success.shell_kind == "daybooks_get"
+    dumped = success.model_dump()
+    assert "id" not in dumped
+    assert dumped["detail_open"] is True
+    with pytest.raises(ValidationError):
+        UiDaybooksGetOpenInput.model_validate({"daybook_id": "x"})
+    with pytest.raises(ValidationError):
+        UiDaybooksGetOpenSuccess.model_validate(
+            {
+                "detail_open": True,
+                "editor_markers_present": True,
+                "shell_markers_present": True,
+                "path_class": "/:org_slug/daybooks/new",
+            }
+        )
 
 
 def test_ui_bills_list_models_are_empty_input_and_non_pii_success() -> None:
