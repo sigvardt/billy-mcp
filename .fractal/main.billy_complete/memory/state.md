@@ -6,16 +6,139 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T11:45:00Z
+updated: 2026-08-02T13:35:00Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **83** COMMIT 186.83 residual soft-empty NA×50 package.
-- live/vision **278**; implemented/contract **462**; GEO NA **204**; complete **false**.
-- Not node finish.
+- Iter **84** COMMIT 186.84 dual-count/NA package.
+- live/vision **282**; implemented/contract **466**; GEO NA **206**; complete **false**.
+- Product: dual-count attachments.list + files.create on ui_uploads_list; NA files.list/get.
+- Residual still open: attachments get/create/update/delete, annual, bulk 92.
+- No running children. Not node finish.
+
+## COMMIT (iter 84 / 186.84)
+
+- fractal commit product: attachments.list + files.create dual-count on Bilag;
+  files.list/get NA research184.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  attachments residual open).
+
+## SYNC (iter 84 pre-COMMIT) (2026-08-02T13:32Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 97F6ADDE + 120104DC reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1665 offline pass; IR ACCEPT). Ready COMMIT 186.84
+  dual-count/NA package. Not node finish (complete false).
+
+## FIX-VERIFY (iter 84 / 186.84) (2026-08-02T13:30Z)
+
+- IR required fixes: none. Optional N1 applied (tmp dual prefer_slice label).
+- lint.sh pass. test.sh offline **1665 passed** / 54 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage via lint: 282 live/vision, 466 implemented/contract, GEO NA 206;
+  complete false; bulk/annual red; attachments residual red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.84 dual-count/NA package. Not node finish.
+
+## SYNC (iter 84 pre-FIX-VERIFY) (2026-08-02T13:16Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 51DD7ED1 + 899146AF reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT package; no required fixes. Entering FIX-VERIFY.
+- complete false; live/vision 282; implemented/contract 466; GEO NA 206.
+
+## IR (iter 84 / 186.84) (2026-08-02T13:15Z)
+
+- Package dual-count/NA research184: **ACCEPT** (`tmp/grok-review.md`).
+- Docs fingerprint live match; dual SPA attachments hits / files 0 dual; dual-count bans hold.
+- Residual attachments get/create/update/delete red; bulk/annual not greened; API live false.
+- Required fixes: none. Optional N1 research prefer_slice naming only.
+- Counts 282/466/206 complete false. Overall completeness **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 84 pre-IR) (2026-08-02T13:10Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 095B9CE3 + 1852B444 reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.84 uncommitted product ready for INDEPENDENT-REVIEW.
+- complete false; live/vision 282; implemented/contract 466; GEO NA 206.
+
+## EXECUTE (iter 84 / 186.84) (2026-08-02T13:05Z)
+
+- Generator: dual-count flags on `apply_ui_uploads_list_shell_evidence`
+  (attachments.list, files.create); research184 NA ids files.list/get; ROW_COUNT 206.
+- Inventory tests + arithmetic (ui_shell_green 76).
+- Wiki: `ui_uploads_list_shell.md` + `ui_files_list_get_not_applicable_research184.md`.
+- Regenerated coverage: 282 live/vision, 466 implemented/contract, complete false.
+- lint.sh pass; offline test.sh **1665 passed** / 54 deselected.
+- Ready INDEPENDENT-REVIEW. Not finish.
+
+## SYNC (iter 84 pre-EXECUTE) (2026-08-02T12:49Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4E6B717F + 57931849 reacted (+).
+- No running children. No parent directives.
+- PLAN 186.84 ready. Entering EXECUTE dual-count/NA package.
+- complete false 278/462/204. Not finish.
+
+## PLAN (iter 84 / 186.84) (2026-08-02T12:48Z)
+
+- `plans/*-186.84-attachments_list_dualcount_files_create_and_files_list_get_na.md`
+- Root-only; no children; no new tool; generator dual-count flags + NA×2 files list/get.
+- Target ~282 live/vision, ~466 implemented/contract, GEO NA 206; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 84 pre-PLAN) (2026-08-02T12:46Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B1D1F993 + 36693539 reacted (+).
+- No running children. No parent directives.
+- RESEARCH184 dual ready (Bilag=attachments inventory; files soft NA candidates).
+- Next: PLAN 186.84 dual-count/NA package. Not finish.
+
+## RESEARCH (iter 84 / research184) (2026-08-02T12:45Z)
+
+- Docs fingerprint live match (etag wcw4x9hqvu3603 / md5 8b94b013… unchanged).
+- Dual probe `tmp/research184_focus_dual.json` pass; no disposable writes; profiles purged; api_token false.
+- Bilag `/uploads` SPA hits **attachments×14 dual**, **files×0 dual**; soft `/attachments|/files|/filer` empty dual.
+- Prefer slice: dual-count `attachments.list` + `files.create` → `ui_uploads_list`; NA `files.list` + `files.get`.
+- DEFER attachments get/create/update/delete; bulk; annual. Ban pure-NA of attachments while Bilag is attachment inventory.
+- Brief: `tmp/grok-research.md`. Ready PLAN. Not finish.
+
+## SYNC (iter 84 pre-RESEARCH) (2026-08-02T12:33Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 6FE1DEE1 + 4104E9D4 reacted (+).
+- No running children. No parent directives.
+- PREPARE: parent up to date; no child product merges (auth/wiki tips superseded).
+- Tip 3794a8c; memory dirty only. complete false 278/462/204.
+- Next: RESEARCH next residual product. Not finish.
+
+## PREPARE (iter 84) (2026-08-02T12:31Z)
+
+- Parent `main`: already up to date (no commits to merge).
+- Children with commits ahead of tip: many, almost all init/review/fractal-only.
+- Non-fractal three-dot product deltas (4 branches), all **skip**:
+  - `ui_auth_status` (SRC): tip browser/models/server much larger; `auth_status` live on tip.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): only-child Codex fallback page superseded by `wiki/auth_credentials_pre_submit_research.md`; tip `_index.md` larger.
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` (WIKI): tip equal or longer; no larger_on_child product files.
+- No `--no-ff` merges. No outbox integration announce (no material merge).
+- Branch still clean vs origin except memory (this PREPARE note). Not finish.
+
+## SYNC (iter 84 pre-PREPARE) (2026-08-02T12:30Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0DEB69D2 + A0DF8C7B (iter83 COMMIT/SYNC) read.
+- No running children. No parent directives.
+- Tip: 3794a8c (186.83 residual soft-empty NA×50). Branch clean vs origin.
+- complete false; live/vision 278; implemented/contract 462; GEO NA 204.
+- Next: PREPARE next residual product (not bulk green, not finish).
 
 ## COMMIT (iter 83 / 186.83)
 

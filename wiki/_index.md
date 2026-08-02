@@ -85,6 +85,8 @@ updated: 2026-08-02T12:14:49Z
 
 [[ui_exports_open_shell|ui_exports_open_shell]]: Read-only Billy exports (Eksportér data) hub shell contract (research121 freeze).
 
+[[ui_files_list_get_not_applicable_research184|ui_files_list_get_not_applicable_research184]]: Dual-session research184 freeze — api.files.list and api.files.get have no dedicated mit.billy.dk workflow; Bilag is attachments inventory not files list.
+
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
 [[ui_geo_cities_not_applicable|ui_geo_cities_not_applicable]]: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted. Currencies/locales: see ui_currencies_locales_not_applicable (research139).
@@ -165,7 +167,7 @@ updated: 2026-08-02T12:14:49Z
 
 [[ui_transactions_list_shell|ui_transactions_list_shell]]: Read-only Billy transactions (Posteringer) list shell contract; dual-counts discovery and api.transactions.list parity.
 
-[[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list contract for Billy Bilag list plus special files upload surface open only.
+[[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list Bilag shell; dual-counts special.files_upload, attachments.list, and files.create open only.
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
 

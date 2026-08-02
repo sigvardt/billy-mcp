@@ -174,9 +174,8 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 73 greened shells/parity + transactions create chrome (research182) = 74
-    # live/vision rows without GEO NA.
-    ui_shell_green = 74
+    # Prior 74 greened shells/parity + research184 attachments.list + files.create dual-count.
+    ui_shell_green = 76
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -484,6 +483,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS:
             assert "research183" in row["method_or_route"]
             assert "research183" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS:
+            assert "research184" in row["method_or_route"]
+            assert "research184" in qual["evidence_ref"]
+            assert "research184" in row["evidence"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
             assert "research179" in qual["evidence_ref"]
             assert "research179" in row["evidence"]
@@ -864,28 +867,41 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     ]
     assert len(reminder_assoc) == 7
     assert all(row["parity_status"] == "not_applicable" for row in reminder_assoc)
-    # attachments stays red this slice (Bilag greened → reject pure NA)
+    # research184: attachments.list dual-counted on Bilag; residual attachments
+    # get/create/update/delete stay red (not pure-NA of whole family).
     attachments = [
         row
         for row in ui_manifest["workflows"]
         if str(row.get("api_row_id") or "").startswith("api.attachments.")
     ]
     assert attachments
-    assert all(row.get("parity_status") != "not_applicable" for row in attachments)
-    assert all(row.get("live_tested") is not True for row in attachments)
-    # productPrices NA green is asserted above (research162 package).
-    # files stay red (Bilag greened → reject pure NA). research183 freezes
-    # bank*/daybookBalanceAccounts/postings/salesTaxRules non-bulk as NA;
-    # bulk ops stay external-contract red. taxRates/salesTaxRulesets list
-    # dual-counted; residual non-list NA (research181).
+    attach_by_id = {str(row.get("api_row_id")): row for row in attachments}
+    assert attach_by_id["api.attachments.list"]["tool_name"] == "ui_uploads_list"
+    assert attach_by_id["api.attachments.list"]["live_tested"] is True
+    assert attach_by_id["api.attachments.list"]["parity_status"] == "list_shell_open_only"
+    for residual in (
+        "api.attachments.get",
+        "api.attachments.create",
+        "api.attachments.update",
+        "api.attachments.delete",
+    ):
+        assert attach_by_id[residual].get("parity_status") != "not_applicable"
+        assert attach_by_id[residual].get("live_tested") is not True
+    # research184: files.create dual-count; files.list/get NA; bulk stay red.
     files_rows = [
         row
         for row in ui_manifest["workflows"]
         if str(row.get("api_row_id") or "").startswith("api.files.")
     ]
     assert files_rows
-    assert all(row.get("parity_status") != "not_applicable" for row in files_rows)
-    assert all(row.get("live_tested") is not True for row in files_rows)
+    files_by_id = {str(row.get("api_row_id")): row for row in files_rows}
+    assert files_by_id["api.files.create"]["tool_name"] == "ui_uploads_list"
+    assert files_by_id["api.files.create"]["live_tested"] is True
+    assert files_by_id["api.files.create"]["parity_status"] == "create_chrome_open_only"
+    for na_id in ("api.files.list", "api.files.get"):
+        assert files_by_id[na_id]["parity_status"] == "not_applicable"
+        assert files_by_id[na_id]["live_tested"] is True
+        assert files_by_id[na_id]["tool_name"] == ""
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
@@ -969,12 +985,13 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row.get("live_tested") is True for row in rulesets_residual)
     assert all("research181" in (row.get("method_or_route") or "") for row in rulesets_residual)
     assert status["complete"] is False
-    assert (
-        status["qualification"]["live_tested_rows"]
-        == 74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    # 74 baseline tool/dual-count greens + GEO NA rows + research184 dual-counts
+    # (attachments.list + files.create) beyond pure NA.
+    assert status["qualification"]["live_tested_rows"] == (
+        74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT + 2
     )
-    assert status["qualification"]["live_tested_rows"] == 278
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 204
+    assert status["qualification"]["live_tested_rows"] == 282
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 206
 
 
 def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
@@ -983,7 +1000,7 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     _, ui_manifest, _, status, _ = documents()
     expected = generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
     assert len(expected) == 50
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 204
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 206
 
     rows = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in expected]
     assert len(rows) == 50
@@ -1031,18 +1048,91 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     assert len(bulk_rows) == len(bulk_ids)
     assert all(row.get("parity_status") != "not_applicable" for row in bulk_rows)
 
-    # attachments/files/annual not accepted NA by this freeze
-    for row_id in (
-        "ui.parity.attachments.list",
-        "ui.parity.files.list",
-        "ui.discovery.annual_reports",
-    ):
-        row = workflows[row_id]
-        assert row.get("parity_status") != "not_applicable"
+    # research183 itself does not pure-NA attachments.list (research184 dual-counts)
+    # or annual; files.list is research184 NA (separate freeze).
+    assert workflows["ui.parity.attachments.list"]["parity_status"] != "not_applicable"
+    assert workflows["ui.discovery.annual_reports"]["parity_status"] != "not_applicable"
+    assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 278
-    assert status["qualification"]["vision_verified_rows"] == 278
+    assert status["qualification"]["live_tested_rows"] == 282
+    assert status["qualification"]["vision_verified_rows"] == 282
+
+
+def test_research184_attachments_list_files_create_dualcount_and_files_list_get_na() -> None:
+    """research184: Bilag dual-count attachments.list + files.create; NA files list/get."""
+
+    _, ui_manifest, _, status, _ = documents()
+    expected_na = generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS
+    assert expected_na == frozenset({"api.files.list", "api.files.get"})
+    assert len(expected_na) == 2
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 206
+
+    workflows = {row["id"]: row for row in ui_manifest["workflows"]}
+
+    attach_list = workflows["ui.parity.attachments.list"]
+    assert attach_list["tool_name"] == "ui_uploads_list"
+    assert attach_list["api_row_id"] == "api.attachments.list"
+    assert attach_list["parity_status"] == "list_shell_open_only"
+    assert attach_list["discovered"] is True
+    assert attach_list["implemented"] is True
+    assert attach_list["contract_tested"] is True
+    assert attach_list["live_tested"] is True
+    assert attach_list["vision_verified"] is True
+    assert "research184" in (attach_list.get("evidence") or "")
+
+    files_create = workflows["ui.parity.files.create"]
+    assert files_create["tool_name"] == "ui_uploads_list"
+    assert files_create["api_row_id"] == "api.files.create"
+    assert files_create["parity_status"] == "create_chrome_open_only"
+    assert files_create["live_tested"] is True
+    assert files_create["vision_verified"] is True
+    assert "research184" in (files_create.get("evidence") or "")
+
+    for row_id, api_id in (
+        ("ui.parity.files.list", "api.files.list"),
+        ("ui.parity.files.get", "api.files.get"),
+    ):
+        row = workflows[row_id]
+        assert row["api_row_id"] == api_id
+        assert row["parity_status"] == "not_applicable"
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        qual: dict[str, Any] = dict(row.get("qualification") or {})
+        assert qual.get("not_applicable_decision") == "accepted"
+        assert "research184" in str(qual.get("evidence_ref") or "")
+        assert "research184" in (row.get("method_or_route") or "")
+
+    # Residual attachments ops stay red; special.files_upload still dual-counted
+    for residual in (
+        "ui.parity.attachments.get",
+        "ui.parity.attachments.create",
+        "ui.parity.attachments.update",
+        "ui.parity.attachments.delete",
+    ):
+        row = workflows[residual]
+        assert row.get("parity_status") != "not_applicable"
+        assert row.get("live_tested") is not True
+    assert workflows["ui.parity.special.files_upload"]["tool_name"] == "ui_uploads_list"
+    assert workflows["ui.parity.special.files_upload"]["live_tested"] is True
+    # receipt inbox stays distinct (no dual-count steal)
+    assert workflows["ui.discovery.receipt_inbox"]["tool_name"] == "ui_receipt_inbox_list"
+    assert workflows["ui.discovery.receipt_inbox"]["api_row_id"] is None
+
+    # bulk stay red
+    for bulk_id in ("ui.parity.attachments.bulk_save", "ui.parity.files.bulk_save"):
+        assert workflows[bulk_id].get("parity_status") != "not_applicable"
+        assert workflows[bulk_id].get("live_tested") is not True
+
+    assert status["complete"] is False
+    assert status["qualification"]["live_tested_rows"] == 282
+    assert status["qualification"]["vision_verified_rows"] == 282
+    assert status["qualification"]["implemented_rows"] == 466
+    assert status["qualification"]["contract_tested_rows"] == 466
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -1088,6 +1178,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.creditor_balances",
         "ui.discovery.uploads",
         "ui.parity.special.files_upload",
+        "ui.parity.attachments.list",
+        "ui.parity.files.create",
         "ui.discovery.receipt_inbox",
         "ui.discovery.bank_reconciliation",
         "ui.discovery.financing",
@@ -1164,6 +1256,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.creditor_balances": "ui_creditor_balances_list",
         "ui.discovery.uploads": "ui_uploads_list",
         "ui.parity.special.files_upload": "ui_uploads_list",
+        "ui.parity.attachments.list": "ui_uploads_list",
+        "ui.parity.files.create": "ui_uploads_list",
         "ui.discovery.receipt_inbox": "ui_receipt_inbox_list",
         "ui.discovery.bank_reconciliation": "ui_bank_reconciliation_open",
         "ui.discovery.financing": "ui_financing_open",
@@ -1222,7 +1316,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 74
+    assert len(qualified) == 76
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1677,11 +1771,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         # ui.parity.invoices.delete greened by ui_invoices_delete_open (186.75)
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
-        "ui.parity.files.get",
-        "ui.parity.files.list",
-        "ui.parity.files.create",
+        # files.get/list/create and attachments.list producted by research184
         "ui.parity.attachments.get",
-        "ui.parity.attachments.list",
         "ui.parity.bills.bulk_save",
         "ui.parity.bills.bulk_delete",
     ):
