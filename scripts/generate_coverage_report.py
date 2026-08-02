@@ -75,12 +75,32 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.billLines.delete",
     "api.users.get",
     "api.users.update",
+    "api.daybookTransactions.get",
+    "api.daybookTransactions.list",
+    "api.daybookTransactions.update",
+    "api.daybookTransactions.delete",
+    "api.taxRates.get",
+    "api.taxRates.create",
+    "api.taxRates.update",
+    "api.taxRates.delete",
+    "api.salesTaxRulesets.get",
+    "api.salesTaxRulesets.create",
+    "api.salesTaxRulesets.update",
+    "api.salesTaxRulesets.delete",
+    "api.taxRateDeductionComponents.get",
+    "api.taxRateDeductionComponents.list",
+    "api.taxRateDeductionComponents.create",
+    "api.taxRateDeductionComponents.update",
+    "api.taxRateDeductionComponents.delete",
+    "api.transactions.get",
+    "api.transactions.update",
+    "api.transactions.delete",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    129  # prior 121 + research180 daybooks.update(1) + billLines5 + users.get/update(2)
+    149  # prior 129 + research181: dtx g/l/u/d(4)+taxRates4+rulesets4+deduction5+tx g/u/d(3)=20
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -153,6 +173,52 @@ GEO_UI_NOT_APPLICABLE_RESEARCH180_BILL_LINE_IDS: frozenset[str] = frozenset(
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS: frozenset[str] = frozenset(
     {"api.users.get", "api.users.update"}
+)
+# research181: daybookTransactions get/list/update/delete dedicated absent dual
+# (create producted as ui_daybook_transactions_create_open; bulk external-contract red)
+# + taxRates get/create/update/delete (list stays tool-green on ui_settings_vat_open)
+# + salesTaxRulesets get/create/update/delete (list stays tool-green on same VAT shell)
+# + taxRateDeductionComponents get/list/create/update/delete (no dedicated surface)
+# + transactions get/update/delete (list stays tool-green; create deferred).
+GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS: frozenset[str] = frozenset(
+    {
+        "api.daybookTransactions.get",
+        "api.daybookTransactions.list",
+        "api.daybookTransactions.update",
+        "api.daybookTransactions.delete",
+    }
+)
+GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_IDS: frozenset[str] = frozenset(
+    {
+        "api.taxRates.get",
+        "api.taxRates.create",
+        "api.taxRates.update",
+        "api.taxRates.delete",
+    }
+)
+GEO_UI_NOT_APPLICABLE_RESEARCH181_SALES_TAX_RULESET_IDS: frozenset[str] = frozenset(
+    {
+        "api.salesTaxRulesets.get",
+        "api.salesTaxRulesets.create",
+        "api.salesTaxRulesets.update",
+        "api.salesTaxRulesets.delete",
+    }
+)
+GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS: frozenset[str] = frozenset(
+    {
+        "api.taxRateDeductionComponents.get",
+        "api.taxRateDeductionComponents.list",
+        "api.taxRateDeductionComponents.create",
+        "api.taxRateDeductionComponents.update",
+        "api.taxRateDeductionComponents.delete",
+    }
+)
+GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS: frozenset[str] = frozenset(
+    {
+        "api.transactions.get",
+        "api.transactions.update",
+        "api.transactions.delete",
+    }
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
@@ -285,6 +351,12 @@ UI_DAYBOOKS_DELETE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_DAYBOOKS_DELETE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_daybooks_delete_open.py"
 UI_DAYBOOKS_DELETE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_DAYBOOKS_DELETE_OPEN_TOOL_NAME = "ui_daybooks_delete_open"
+UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE = (
+    "tests/live/test_ui_daybook_transactions_create_open.py"
+)
+UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_TOOL_NAME = "ui_daybook_transactions_create_open"
 UI_TRANSACTIONS_LIST_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE = "tests/live/test_ui_transactions_list.py"
 UI_TRANSACTIONS_LIST_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -3751,6 +3823,84 @@ def apply_ui_daybooks_delete_open_shell_evidence(
     ]
 
 
+def apply_ui_daybook_transactions_create_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_create: bool = False,
+) -> None:
+    """Mark daybookTransactions **create chrome open only** evidence (research181).
+
+    Empty-input tool; open /:org_slug/daybooks/:id; classify Tilføj kassekladdelinje
+    + Ingen postering valgt. Never click Tilføj/Bogfør/Slet confirm. Distinct from
+    get open and Mere delete chrome. When ``parity_of_api_create`` is true, dual-counts
+    exact ``ui.parity.daybookTransactions.create``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/daybooks/:id "
+        "(read-only daybookTransactions create chrome open; "
+        "Tilføj kassekladdelinje + Ingen postering valgt; never add line/post/delete; "
+        "/daybooks/new and bare /daybooks not success)"
+    )
+    row["tool_name"] = UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "line_add_chrome_visible",
+        "empty_postering_state",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_create:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research181 dual-session headless observation + ui_daybook_transactions_create_open "
+        "product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/daybooks "
+        "(GET list; POST/DELETE disposable seed/cleanup in live harness); "
+        "create chrome open only (path class /:org_slug/daybooks/:id, "
+        "shell_kind=daybook_transactions_create, Tilføj kassekladdelinje + "
+        "Ingen postering valgt dual; never click Tilføj/Bogfør; distinct from "
+        "list+create ui_daybooks_open on /daybooks/new, get ui_daybooks_get_open, "
+        "and delete ui_daybooks_delete_open Mere chrome); vision record "
+        "tmp/vision-records/ui_daybook_transactions_create_open.json "
+        "(daybook create chrome frames, accept)"
+    )
+    if parity_of_api_create:
+        row["evidence"] = (
+            f"{row['evidence']}; maps api.daybookTransactions.create to UI create chrome open only"
+        )
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "create_chrome_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never adds lines or posts"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable daybook "
+        "then deletes with fresh read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
 def apply_ui_transactions_list_shell_evidence(
     row: dict[str, Any],
     *,
@@ -5131,6 +5281,11 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     research180: daybooks.update form absent dual (Mere-only id chrome; soft edit/update
     empty) + billLines get/list/create/update/delete dedicated absent dual (embedded on
     bill edit) + users.get/update dual absence (Brugere list panel only; no detail form).
+    research181: daybookTransactions get/list/update/delete dedicated absent dual
+    (create producted separately) + taxRates get/create/update/delete (list shell only)
+    + salesTaxRulesets get/create/update/delete (list shell only) +
+    taxRateDeductionComponents non-bulk absent dual + transactions get/update/delete
+    (list shell only; create deferred).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -5149,6 +5304,13 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     )
     is_research180_bill_lines = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH180_BILL_LINE_IDS
     is_research180_users = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS
+    is_research181_daybook_tx = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS
+    is_research181_tax_rates = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_IDS
+    is_research181_rulesets = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_SALES_TAX_RULESET_IDS
+    is_research181_deduction = (
+        api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS
+    )
+    is_research181_transactions = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -5216,6 +5378,103 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "settings_users",
             "settings_company",
             "settings_accounting",
+            "invoices",
+            "clients",
+            nonsense_path,
+        ]
+    elif is_research181_daybook_tx:
+        research_id = "research181"
+        evidence_ref = "research181_daybook_transactions_dedicated_absent_dual"
+        nonsense_path = "zz-r181-daybook-tx-none"
+        dual_agree_flag = "dual_agree_no_dedicated_daybookTransactions_surface"
+        family_label = "daybookTransactions.get+list+update+delete"
+        contrast_shells = (
+            "daybooks_id(create chrome only for create product)/daybooks_new/"
+            "transactions_list/invoices/clients"
+        )
+        list_heading_suffix = (
+            "/daybooks/:id(create chrome product only)/daybooks/new/Posteringer/Fakturaer/Kunder"
+        )
+        contrast_controls = [
+            "daybooks/id",
+            "daybooks/new",
+            "transactions",
+            "invoices",
+            "clients",
+            nonsense_path,
+        ]
+    elif is_research181_tax_rates:
+        research_id = "research181"
+        evidence_ref = "research181_tax_rates_get_create_update_delete_absent_dual"
+        nonsense_path = "zz-r181-tax-rates-none"
+        dual_agree_flag = "dual_agree_no_taxRates_get_create_update_delete_surface"
+        family_label = "taxRates.get+create+update+delete"
+        contrast_shells = (
+            "settings_vat(list shell only)/settings_company/settings_accounting/invoices/clients"
+        )
+        list_heading_suffix = (
+            "/Indstillinger Momssatser(list only)/Virksomhed/Regnskab/Fakturaer/Kunder"
+        )
+        contrast_controls = [
+            "settings_vat",
+            "settings_company",
+            "settings_accounting",
+            "invoices",
+            "clients",
+            nonsense_path,
+        ]
+    elif is_research181_rulesets:
+        research_id = "research181"
+        evidence_ref = "research181_sales_tax_rulesets_non_list_absent_dual"
+        nonsense_path = "zz-r181-rulesets-none"
+        dual_agree_flag = "dual_agree_no_salesTaxRulesets_get_create_update_delete_surface"
+        family_label = "salesTaxRulesets.get+create+update+delete"
+        contrast_shells = (
+            "settings_vat(list shell Regelsæt text only)/settings_company/invoices/clients/daybooks"
+        )
+        list_heading_suffix = (
+            "/Indstillinger Momssatser Regelsæt(list only)/Virksomhed/Fakturaer/Kunder"
+        )
+        contrast_controls = [
+            "settings_vat",
+            "settings_company",
+            "invoices",
+            "clients",
+            "daybooks/new",
+            nonsense_path,
+        ]
+    elif is_research181_deduction:
+        research_id = "research181"
+        evidence_ref = "research181_tax_rate_deduction_components_absent_dual"
+        nonsense_path = "zz-r181-deduction-none"
+        dual_agree_flag = "dual_agree_no_taxRateDeductionComponents_surface"
+        family_label = "taxRateDeductionComponents.get+list+create+update+delete"
+        contrast_shells = "settings_vat(list only)/settings_accounting/invoices/clients/daybooks"
+        list_heading_suffix = (
+            "/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks"
+        )
+        contrast_controls = [
+            "settings_vat",
+            "settings_accounting",
+            "invoices",
+            "clients",
+            "daybooks/new",
+            nonsense_path,
+        ]
+    elif is_research181_transactions:
+        research_id = "research181"
+        evidence_ref = "research181_transactions_get_update_delete_absent_dual"
+        nonsense_path = "zz-r181-tx-detail-none"
+        dual_agree_flag = "dual_agree_no_transactions_get_update_delete_surface"
+        family_label = "transactions.get+update+delete"
+        contrast_shells = (
+            "transactions_list(list shell only; Ny postering create deferred)/"
+            "daybooks/invoices/clients"
+        )
+        list_heading_suffix = "/Posteringer(list only)/daybooks editor/Fakturaer/Kunder"
+        contrast_controls = [
+            "transactions",
+            "daybooks/new",
             "invoices",
             "clients",
             nonsense_path,
@@ -5647,6 +5906,59 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research181_daybook_tx:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI dedicated workflow for {api_row_id} "
+            f"({research_id} dual-session: dedicated /daybook-transactions paths "
+            "soft-empty body_len 138 dual; seeded dtx id routes not detail forms dual; "
+            "create chrome lives on daybooks/:id producted separately as "
+            "ui_daybook_transactions_create_open; no dual-count steal onto daybooks.* "
+            "or create product; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+    if is_research181_tax_rates:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: settings Momssatser panel dual is list shell "
+            "only; Opret/Ret/Gem/Slet chrome 0 dual; soft /tax-rates/:id inputs 0 dual; "
+            "taxRates.list stays tool-green on ui_settings_vat_open; no dual-count steal; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+    if is_research181_rulesets:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: settings Momssatser Regelsæt list shell dual; "
+            "dedicated soft ruleset routes body_len 138 dual; get/create/update/delete "
+            "chrome 0 dual; salesTaxRulesets.list stays tool-green on "
+            "ui_settings_vat_open; no dual-count steal; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+    if is_research181_deduction:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: no nav/dedicated path dual; soft-empty SPA "
+            "chrome class dual; no form chrome dual; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+    if is_research181_transactions:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: Posteringer list shell dual ready; "
+            "id/detail Ret/Gem/Slet form 0 dual; transactions.list stays tool-green on "
+            "ui_transactions_list; transactions.create deferred (Ny postering); "
+            "no dual-count steal; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research178_email:
         row["method_or_route"] = (
             f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
@@ -5953,6 +6265,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_daybooks_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.daybooks.delete":
             apply_ui_daybooks_delete_open_shell_evidence(row, parity_of_api_delete=True)
+        if api_row["id"] == "api.daybookTransactions.create":
+            apply_ui_daybook_transactions_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.daybooks.list":
             apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.create":
@@ -6013,6 +6327,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_DELETE_OPEN_LIVE_TEST_REFERENCE,
+                    UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,
@@ -6128,6 +6443,7 @@ def build_browser_egress() -> dict[str, Any]:
                     UI_DAYBOOKS_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_GET_OPEN_LIVE_TEST_REFERENCE,
                     UI_DAYBOOKS_DELETE_OPEN_LIVE_TEST_REFERENCE,
+                    UI_DAYBOOK_TRANSACTIONS_CREATE_OPEN_LIVE_TEST_REFERENCE,
                     UI_TRANSACTIONS_LIST_LIVE_TEST_REFERENCE,
                     UI_REPORTS_OPEN_LIVE_TEST_REFERENCE,
                     UI_VAT_DECLARATIONS_LIST_LIVE_TEST_REFERENCE,

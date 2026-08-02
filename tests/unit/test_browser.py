@@ -38,6 +38,7 @@ from billy_mcp.models import (
     UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
+    UiDaybookTransactionsCreateOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
@@ -5189,6 +5190,101 @@ def test_ui_daybooks_delete_open_returns_ui_changed_when_list_empty(tmp_path: Pa
         org_identity_path=identity_path,
     )
     result = asyncio.run(runtime.ui_daybooks_delete_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
+
+
+def test_ui_daybook_transactions_create_open_returns_auth_required_on_login_page(
+    tmp_path: Path,
+) -> None:
+    page = FakeLoginPage(final_url="https://mit.billy.dk/login")
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+    )
+    result = asyncio.run(runtime.ui_daybook_transactions_create_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.AUTH_REQUIRED
+
+
+def test_ui_daybook_transactions_create_open_returns_success_for_create_chrome(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _daybooks_editor_shell_controls()
+    controls["body"] = FakeLoginControl(
+        text=(
+            "Opret ny kassekladde Tilføj kassekladdelinje Ingen postering valgt "
+            "Overblik Menu Bogføring"
+        )
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page, daybook_ids=["daybookTestId01"])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_daybook_transactions_create_open())
+
+    assert result == UiDaybookTransactionsCreateOpenSuccess(
+        detail_open=True,
+        line_add_chrome_visible=True,
+        empty_postering_state=True,
+        shell_markers_present=True,
+    )
+    assert any("/daybooks/daybookTestId01" in url for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert "fill:" not in " ".join(page.events)
+    assert not any("click:text=Tilføj kassekladdelinje" in e for e in page.events)
+    assert page.closed
+
+
+def test_ui_daybook_transactions_create_open_returns_ui_changed_when_list_empty(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_daybooks_editor_shell_controls(),
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page, daybook_ids=[])
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_daybook_transactions_create_open())
     assert isinstance(result, ToolError)
     assert result.code == StableErrorCode.UI_CHANGED
 

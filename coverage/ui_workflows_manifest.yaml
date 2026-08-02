@@ -8535,240 +8535,255 @@
     {
       "api_row_id": "api.daybookTransactions.get",
       "area": "daybook_transactions",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.get",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactions_surface true; candidate daybookTransactions.get+list+update+delete path classes soft-empty identical to nonsense (zz-r181-daybook-tx-none); contrast daybooks_id(create chrome only for create product)/daybooks_new/transactions_list/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactions.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactions.get+list+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_daybook_transactions_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactions.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactions.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactions.get (research181 dual-session: dedicated /daybook-transactions paths soft-empty body_len 138 dual; seeded dtx id routes not detail forms dual; create chrome lives on daybooks/:id producted separately as ui_daybook_transactions_create_open; no dual-count steal onto daybooks.* or create product; contrast shells/daybooks/:id(create chrome product only)/daybooks/new/Posteringer/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "daybookTransaction"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "clients",
+          "zz-r181-daybook-tx-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_daybook_transactions_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactions.list",
       "area": "daybook_transactions",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.list",
-      "filters": {
-        "apiType": "string",
-        "daybookId": "string",
-        "maxEntryDate": "date",
-        "minEntryDate": "date",
-        "organizationId": "string",
-        "q": [
-          "description",
-          "extendedDescription",
-          "voucherNo"
-        ],
-        "sortDirection": [
-          "ASC",
-          "DESC"
-        ],
-        "sortProperty": [
-          "priority",
-          "entryDate",
-          "createdTime"
-        ],
-        "state": [
-          "draft",
-          "approved",
-          "voided"
-        ]
-      },
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactions_surface true; candidate daybookTransactions.get+list+update+delete path classes soft-empty identical to nonsense (zz-r181-daybook-tx-none); contrast daybooks_id(create chrome only for create product)/daybooks_new/transactions_list/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactions.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactions.get+list+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_daybook_transactions_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.daybookTransactions.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactions.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactions.list (research181 dual-session: dedicated /daybook-transactions paths soft-empty body_len 138 dual; seeded dtx id routes not detail forms dual; create chrome lives on daybooks/:id producted separately as ui_daybook_transactions_create_open; no dual-count steal onto daybooks.* or create product; contrast shells/daybooks/:id(create chrome product only)/daybooks/new/Posteringer/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "clients",
+          "zz-r181-daybook-tx-none"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_daybook_transactions_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection",
-        "organizationId",
-        "daybookId",
-        "apiType",
-        "state",
-        "minEntryDate",
-        "maxEntryDate",
-        "q"
-      ],
-      "response_fields": [
-        "daybookTransactions[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactions.create",
       "area": "daybook_transactions",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable daybook then deletes with fresh read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.create",
+      "evidence": "research181 dual-session headless observation + ui_daybook_transactions_create_open product; scoped api.billysbilling.com path_allow for GET/POST/DELETE /v2/daybooks (GET list; POST/DELETE disposable seed/cleanup in live harness); create chrome open only (path class /:org_slug/daybooks/:id, shell_kind=daybook_transactions_create, Tilf\u00f8j kassekladdelinje + Ingen postering valgt dual; never click Tilf\u00f8j/Bogf\u00f8r; distinct from list+create ui_daybooks_open on /daybooks/new, get ui_daybooks_get_open, and delete ui_daybooks_delete_open Mere chrome); vision record tmp/vision-records/ui_daybook_transactions_create_open.json (daybook create chrome frames, accept); maps api.daybookTransactions.create to UI create chrome open only",
       "filters": [],
       "id": "ui.parity.daybookTransactions.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactions.create",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/daybooks/:id (read-only daybookTransactions create chrome open; Tilf\u00f8j kassekladdelinje + Ingen postering valgt; never add line/post/delete; /daybooks/new and bare /daybooks not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "daybookTransaction"
-      ],
+      "parity_status": "create_chrome_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "detail_open",
+        "line_add_chrome_visible",
+        "empty_postering_state",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "creates daybookTransaction",
+      "side_effects": "none when open-only; product path never adds lines or posts",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_daybook_transactions_create_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_daybook_transactions_create_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactions.update",
       "area": "daybook_transactions",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.update",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactions_surface true; candidate daybookTransactions.get+list+update+delete path classes soft-empty identical to nonsense (zz-r181-daybook-tx-none); contrast daybooks_id(create chrome only for create product)/daybooks_new/transactions_list/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactions.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactions.get+list+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_daybook_transactions_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactions.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactions.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactions.update (research181 dual-session: dedicated /daybook-transactions paths soft-empty body_len 138 dual; seeded dtx id routes not detail forms dual; create chrome lives on daybooks/:id producted separately as ui_daybook_transactions_create_open; no dual-count steal onto daybooks.* or create product; contrast shells/daybooks/:id(create chrome product only)/daybooks/new/Posteringer/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "daybookTransaction"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates daybookTransaction",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "clients",
+          "zz-r181-daybook-tx-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_daybook_transactions_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.daybookTransactions.delete",
       "area": "daybook_transactions",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.delete",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_dedicated_daybookTransactions_surface true; candidate daybookTransactions.get+list+update+delete path classes soft-empty identical to nonsense (zz-r181-daybook-tx-none); contrast daybooks_id(create chrome only for create product)/daybooks_new/transactions_list/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.daybookTransactions.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* daybookTransactions.get+list+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_daybook_transactions_dedicated_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.daybookTransactions.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.daybookTransactions.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI dedicated workflow for api.daybookTransactions.delete (research181 dual-session: dedicated /daybook-transactions paths soft-empty body_len 138 dual; seeded dtx id routes not detail forms dual; create chrome lives on daybooks/:id producted separately as ui_daybook_transactions_create_open; no dual-count steal onto daybooks.* or create product; contrast shells/daybooks/:id(create chrome product only)/daybooks/new/Posteringer/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes daybookTransaction",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "daybooks/id",
+          "daybooks/new",
+          "transactions",
+          "invoices",
+          "clients",
+          "zz-r181-daybook-tx-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_daybook_transactions_dedicated_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -13482,38 +13497,53 @@
     {
       "api_row_id": "api.salesTaxRulesets.get",
       "area": "sales_tax_rulesets",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.get",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_salesTaxRulesets_get_create_update_delete_surface true; candidate salesTaxRulesets.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-rulesets-none); contrast settings_vat(list shell Regels\u00e6t text only)/settings_company/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.salesTaxRulesets.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* salesTaxRulesets.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_sales_tax_rulesets_non_list_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.salesTaxRulesets.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.salesTaxRulesets.get (research181 dual-session: settings Momssatser Regels\u00e6t list shell dual; dedicated soft ruleset routes body_len 138 dual; get/create/update/delete chrome 0 dual; salesTaxRulesets.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser Regels\u00e6t(list only)/Virksomhed/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "salesTaxRuleset"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-rulesets-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_sales_tax_rulesets_non_list_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -13563,113 +13593,157 @@
     {
       "api_row_id": "api.salesTaxRulesets.create",
       "area": "sales_tax_rulesets",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.create",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_salesTaxRulesets_get_create_update_delete_surface true; candidate salesTaxRulesets.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-rulesets-none); contrast settings_vat(list shell Regels\u00e6t text only)/settings_company/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.salesTaxRulesets.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* salesTaxRulesets.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_sales_tax_rulesets_non_list_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.salesTaxRulesets.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.salesTaxRulesets.create (research181 dual-session: settings Momssatser Regels\u00e6t list shell dual; dedicated soft ruleset routes body_len 138 dual; get/create/update/delete chrome 0 dual; salesTaxRulesets.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser Regels\u00e6t(list only)/Virksomhed/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "salesTaxRuleset"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates salesTaxRuleset",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-rulesets-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_sales_tax_rulesets_non_list_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.salesTaxRulesets.update",
       "area": "sales_tax_rulesets",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.update",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_salesTaxRulesets_get_create_update_delete_surface true; candidate salesTaxRulesets.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-rulesets-none); contrast settings_vat(list shell Regels\u00e6t text only)/settings_company/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.salesTaxRulesets.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* salesTaxRulesets.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_sales_tax_rulesets_non_list_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.salesTaxRulesets.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.salesTaxRulesets.update (research181 dual-session: settings Momssatser Regels\u00e6t list shell dual; dedicated soft ruleset routes body_len 138 dual; get/create/update/delete chrome 0 dual; salesTaxRulesets.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser Regels\u00e6t(list only)/Virksomhed/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "salesTaxRuleset"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates salesTaxRuleset",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-rulesets-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_sales_tax_rulesets_non_list_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.salesTaxRulesets.delete",
       "area": "sales_tax_rulesets",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.delete",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_salesTaxRulesets_get_create_update_delete_surface true; candidate salesTaxRulesets.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-rulesets-none); contrast settings_vat(list shell Regels\u00e6t text only)/settings_company/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.salesTaxRulesets.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* salesTaxRulesets.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_sales_tax_rulesets_non_list_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.salesTaxRulesets.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.salesTaxRulesets.delete (research181 dual-session: settings Momssatser Regels\u00e6t list shell dual; dedicated soft ruleset routes body_len 138 dual; get/create/update/delete chrome 0 dual; salesTaxRulesets.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser Regels\u00e6t(list only)/Virksomhed/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes salesTaxRuleset",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-rulesets-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_sales_tax_rulesets_non_list_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14043,208 +14117,261 @@
     {
       "api_row_id": "api.taxRateDeductionComponents.get",
       "area": "tax_rate_deduction_components",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.get",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRateDeductionComponents_surface true; candidate taxRateDeductionComponents.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r181-deduction-none); contrast settings_vat(list only)/settings_accounting/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRateDeductionComponents.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRateDeductionComponents.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rate_deduction_components_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRateDeductionComponents.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRateDeductionComponents.get (research181 dual-session: no nav/dedicated path dual; soft-empty SPA chrome class dual; no form chrome dual; contrast shells/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "taxRateDeductionComponent"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-deduction-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rate_deduction_components_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRateDeductionComponents.list",
       "area": "tax_rate_deduction_components",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.list",
-      "filters": {},
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRateDeductionComponents_surface true; candidate taxRateDeductionComponents.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r181-deduction-none); contrast settings_vat(list only)/settings_accounting/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRateDeductionComponents.list; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRateDeductionComponents.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rate_deduction_components_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.list",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRateDeductionComponents.list",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRateDeductionComponents.list (research181 dual-session: no nav/dedicated path dual; soft-empty SPA chrome class dual; no form chrome dual; contrast shells/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
-      "pagination": {
-        "page_size_default": 1000,
-        "page_size_maximum": 1000,
-        "parameters": [
-          "page",
-          "pageSize"
+      "pagination": null,
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-deduction-none"
         ],
-        "response_fields": [
-          "meta.paging.page",
-          "meta.paging.pageCount",
-          "meta.paging.pageSize",
-          "meta.paging.total",
-          "meta.paging.firstUrl",
-          "meta.paging.previousUrl",
-          "meta.paging.nextUrl",
-          "meta.paging.lastUrl"
-        ]
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rate_deduction_components_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
       },
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "page",
-        "pageSize",
-        "include",
-        "sortProperty",
-        "sortDirection"
-      ],
-      "response_fields": [
-        "taxRateDeductionComponents[]",
-        "meta.paging"
-      ],
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRateDeductionComponents.create",
       "area": "tax_rate_deduction_components",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.create",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRateDeductionComponents_surface true; candidate taxRateDeductionComponents.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r181-deduction-none); contrast settings_vat(list only)/settings_accounting/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRateDeductionComponents.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRateDeductionComponents.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rate_deduction_components_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRateDeductionComponents.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRateDeductionComponents.create (research181 dual-session: no nav/dedicated path dual; soft-empty SPA chrome class dual; no form chrome dual; contrast shells/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "taxRateDeductionComponent"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates taxRateDeductionComponent",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-deduction-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rate_deduction_components_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRateDeductionComponents.update",
       "area": "tax_rate_deduction_components",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.update",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRateDeductionComponents_surface true; candidate taxRateDeductionComponents.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r181-deduction-none); contrast settings_vat(list only)/settings_accounting/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRateDeductionComponents.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRateDeductionComponents.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rate_deduction_components_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRateDeductionComponents.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRateDeductionComponents.update (research181 dual-session: no nav/dedicated path dual; soft-empty SPA chrome class dual; no form chrome dual; contrast shells/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "taxRateDeductionComponent"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates taxRateDeductionComponent",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-deduction-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rate_deduction_components_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRateDeductionComponents.delete",
       "area": "tax_rate_deduction_components",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.delete",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRateDeductionComponents_surface true; candidate taxRateDeductionComponents.get+list+create+update+delete path classes soft-empty identical to nonsense (zz-r181-deduction-none); contrast settings_vat(list only)/settings_accounting/invoices/clients/daybooks real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRateDeductionComponents.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRateDeductionComponents.get+list+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rate_deduction_components_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRateDeductionComponents.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRateDeductionComponents.delete (research181 dual-session: no nav/dedicated path dual; soft-empty SPA chrome class dual; no form chrome dual; contrast shells/Indstillinger Momssatser(list only)/Regnskab/Fakturaer/Kunder/daybooks; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes taxRateDeductionComponent",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "daybooks/new",
+          "zz-r181-deduction-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rate_deduction_components_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14318,38 +14445,53 @@
     {
       "api_row_id": "api.taxRates.get",
       "area": "tax_rates",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.get",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRates_get_create_update_delete_surface true; candidate taxRates.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-tax-rates-none); contrast settings_vat(list shell only)/settings_company/settings_accounting/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRates.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRates.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rates_get_create_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRates.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRates.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRates.get (research181 dual-session: settings Momssatser panel dual is list shell only; Opret/Ret/Gem/Slet chrome 0 dual; soft /tax-rates/:id inputs 0 dual; taxRates.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser(list only)/Virksomhed/Regnskab/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "taxRate"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "zz-r181-tax-rates-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rates_get_create_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14399,113 +14541,157 @@
     {
       "api_row_id": "api.taxRates.create",
       "area": "tax_rates",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.create",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRates_get_create_update_delete_surface true; candidate taxRates.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-tax-rates-none); contrast settings_vat(list shell only)/settings_company/settings_accounting/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRates.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRates.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rates_get_create_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRates.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRates.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRates.create (research181 dual-session: settings Momssatser panel dual is list shell only; Opret/Ret/Gem/Slet chrome 0 dual; soft /tax-rates/:id inputs 0 dual; taxRates.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser(list only)/Virksomhed/Regnskab/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "taxRate"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates taxRate",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "zz-r181-tax-rates-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rates_get_create_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRates.update",
       "area": "tax_rates",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.update",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRates_get_create_update_delete_surface true; candidate taxRates.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-tax-rates-none); contrast settings_vat(list shell only)/settings_company/settings_accounting/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRates.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRates.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rates_get_create_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRates.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRates.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRates.update (research181 dual-session: settings Momssatser panel dual is list shell only; Opret/Ret/Gem/Slet chrome 0 dual; soft /tax-rates/:id inputs 0 dual; taxRates.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser(list only)/Virksomhed/Regnskab/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "taxRate"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates taxRate",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "zz-r181-tax-rates-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rates_get_create_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.taxRates.delete",
       "area": "tax_rates",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.delete",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_taxRates_get_create_update_delete_surface true; candidate taxRates.get+create+update+delete path classes soft-empty identical to nonsense (zz-r181-tax-rates-none); contrast settings_vat(list shell only)/settings_company/settings_accounting/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.taxRates.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* taxRates.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_tax_rates_get_create_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.taxRates.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.taxRates.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.taxRates.delete (research181 dual-session: settings Momssatser panel dual is list shell only; Opret/Ret/Gem/Slet chrome 0 dual; soft /tax-rates/:id inputs 0 dual; taxRates.list stays tool-green on ui_settings_vat_open; no dual-count steal; contrast shells/Indstillinger Momssatser(list only)/Virksomhed/Regnskab/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes taxRate",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_vat",
+          "settings_company",
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "zz-r181-tax-rates-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_tax_rates_get_create_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14579,38 +14765,52 @@
     {
       "api_row_id": "api.transactions.get",
       "area": "transactions",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.get",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.transactions.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.transactions.get (research181 dual-session: Posteringer list shell dual ready; id/detail Ret/Gem/Slet form 0 dual; transactions.list stays tool-green on ui_transactions_list; transactions.create deferred (Ny postering); no dual-count steal; contrast shells/Posteringer(list only)/daybooks editor/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "transaction"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "transactions",
+          "daybooks/new",
+          "invoices",
+          "clients",
+          "zz-r181-tx-detail-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_transactions_get_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -14697,76 +14897,103 @@
     {
       "api_row_id": "api.transactions.update",
       "area": "transactions",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.update",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.transactions.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.transactions.update (research181 dual-session: Posteringer list shell dual ready; id/detail Ret/Gem/Slet form 0 dual; transactions.list stays tool-green on ui_transactions_list; transactions.create deferred (Ny postering); no dual-count steal; contrast shells/Posteringer(list only)/daybooks editor/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "transaction"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates transaction",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "transactions",
+          "daybooks/new",
+          "invoices",
+          "clients",
+          "zz-r181-tx-detail-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_transactions_get_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.transactions.delete",
       "area": "transactions",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.delete",
+      "evidence": "research181 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_transactions_get_update_delete_surface true; candidate transactions.get+update+delete path classes soft-empty identical to nonsense (zz-r181-tx-detail-none); contrast transactions_list(list shell only; Ny postering create deferred)/daybooks/invoices/clients real shells with h1; design \u00a710.2 UI parity not_applicable accepted for api.transactions.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* transactions.get+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research181_transactions_get_update_delete_absent_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.transactions.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.transactions.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.transactions.delete (research181 dual-session: Posteringer list shell dual ready; id/detail Ret/Gem/Slet form 0 dual; transactions.list stays tool-green on ui_transactions_list; transactions.create deferred (Ny postering); no dual-count steal; contrast shells/Posteringer(list only)/daybooks editor/Fakturaer/Kunder; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes transaction",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "transactions",
+          "daybooks/new",
+          "invoices",
+          "clients",
+          "zz-r181-tx-detail-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research181_transactions_get_update_delete_absent_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

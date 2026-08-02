@@ -41,6 +41,7 @@ from billy_mcp.models import (
     UiDaybooksDeleteOpenSuccess,
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenSuccess,
+    UiDaybookTransactionsCreateOpenSuccess,
     UiDebtorBalancesListSuccess,
     UiExportsOpenSuccess,
     UiFinancingOpenSuccess,
@@ -822,6 +823,14 @@ class UiDaybooksDeleteOpenService(Protocol):
     """Injectable seam for the read-only daybook delete chrome open observation."""
 
     async def ui_daybooks_delete_open(self) -> UiDaybooksDeleteOpenSuccess | ToolError: ...
+
+
+class UiDaybookTransactionsCreateOpenService(Protocol):
+    """Bounded daybookTransactions create chrome open workflow."""
+
+    async def ui_daybook_transactions_create_open(
+        self,
+    ) -> UiDaybookTransactionsCreateOpenSuccess | ToolError: ...
 
 
 class UiTransactionsListService(Protocol):
@@ -3680,6 +3689,107 @@ class BrowserRuntime:
                 except Exception:
                     pass
 
+    async def ui_daybook_transactions_create_open(
+        self,
+    ) -> UiDaybookTransactionsCreateOpenSuccess | ToolError:
+        """Open daybookTransactions create chrome for the authenticated UI session only.
+
+        Research181: SPA list under committed egress unlocks daybook ids. Open a
+        daybook at path class /:org_slug/daybooks/:id and classify create chrome
+        markers (Tilføj kassekladdelinje + Ingen postering valgt). Never click
+        Tilføj / Bogfør / confirm Slet. Distinct from get open, Mere delete chrome,
+        and list+create on /daybooks/new. Maps only daybookTransactions.create.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_daybook_transactions_create_changed_error()
+
+            daybooks_new_url = f"https://mit.billy.dk/{slug}/daybooks/new"
+            capture = _DaybookSpaCapture()
+            capture.attach(page)
+            await page.goto(daybooks_new_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_error_shell_markers(page):
+                return _ui_daybook_transactions_create_changed_error()
+            if _is_daybooks_bare_url(page.url):
+                return _ui_daybook_transactions_create_changed_error()
+
+            daybook_ids = await _resolve_daybook_ids(context, page, capture, org_slug=slug)
+            if not daybook_ids:
+                return _ui_daybook_transactions_create_changed_error()
+
+            for daybook_id in daybook_ids[:12]:
+                get_url = f"https://mit.billy.dk/{slug}/daybooks/{daybook_id}"
+                await page.goto(get_url, wait_until="domcontentloaded")
+                await _await_page_settle(page)
+
+                for _ in range(40):
+                    if await _has_known_login_page(page):
+                        return _auth_required_error()
+                    if await _has_interaction_challenge(page):
+                        return ToolError(
+                            code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                            message="Browser authentication requires a non-automatable challenge.",
+                        )
+                    if await _has_error_shell_markers(page):
+                        break
+                    if _is_daybooks_bare_url(page.url) or _is_daybooks_editor_url(page.url):
+                        break
+
+                    if _is_daybooks_get_url(
+                        page.url
+                    ) and await _has_daybook_transactions_create_chrome_signature(page):
+                        if _is_transactions_list_url(page.url):
+                            return _ui_daybook_transactions_create_changed_error()
+                        flags = await _daybook_transactions_create_chrome_flags(page)
+                        return UiDaybookTransactionsCreateOpenSuccess(
+                            detail_open=True,
+                            line_add_chrome_visible=flags["line_add_chrome_visible"],
+                            empty_postering_state=flags["empty_postering_state"],
+                            shell_markers_present=await _has_shell_nav_markers(page),
+                        )
+                    await asyncio.sleep(0.15)
+            return _ui_daybook_transactions_create_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message=(
+                    "Browser egress policy prevented the daybook transactions "
+                    "create chrome observation."
+                ),
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message=(
+                    "Browser daybook transactions create chrome observation could not be completed."
+                ),
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
     async def ui_transactions_list(self) -> UiTransactionsListSuccess | ToolError:
         """Open the transactions (Posteringer) list shell for the authenticated UI session only."""
 
@@ -5800,6 +5910,57 @@ def _ui_daybooks_delete_changed_error() -> ToolError:
         code=StableErrorCode.UI_CHANGED,
         message="Billy daybooks delete chrome could not be classified.",
     )
+
+
+def _ui_daybook_transactions_create_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy daybook transactions create chrome could not be classified.",
+    )
+
+
+async def _daybook_transactions_create_chrome_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII create chrome flags on daybook id surface (research181). Never clicks Tilføj."""
+
+    try:
+        body = re.sub(r"\s+", " ", await page.locator("body").inner_text())[:2200]
+    except Exception:
+        body = ""
+    line_add = bool(re.search(r"Tilføj kassekladdelinje", body)) or (
+        await _count_labeled_buttons(page, "Tilføj kassekladdelinje") >= 1
+    )
+    # text-only fallback for marker visibility
+    if not line_add:
+        try:
+            control = page.locator("text=Tilføj kassekladdelinje")
+            line_add = await control.count() >= 1 and await control.first.is_visible()
+        except Exception:
+            line_add = False
+    empty_state = bool(re.search(r"Ingen postering valgt", body))
+    if not empty_state:
+        try:
+            control = page.locator("text=Ingen postering valgt")
+            empty_state = await control.count() >= 1 and await control.first.is_visible()
+        except Exception:
+            empty_state = False
+    return {
+        "line_add_chrome_visible": bool(line_add),
+        "empty_postering_state": bool(empty_state),
+    }
+
+
+async def _has_daybook_transactions_create_chrome_signature(page: LoginPage) -> bool:
+    """Strict create-chrome signature — daybook id path + line-add + empty postering."""
+
+    try:
+        if _is_daybooks_editor_url(page.url) or _is_daybooks_bare_url(page.url):
+            return False
+        if not _is_daybooks_get_url(page.url):
+            return False
+        flags = await _daybook_transactions_create_chrome_flags(page)
+        return bool(flags.get("line_add_chrome_visible") and flags.get("empty_postering_state"))
+    except Exception:
+        return False
 
 
 async def _daybooks_delete_primary_flags(page: LoginPage) -> dict[str, bool]:

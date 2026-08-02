@@ -41,6 +41,8 @@ from billy_mcp.models import (
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
     UiDaybooksOpenSuccess,
+    UiDaybookTransactionsCreateOpenInput,
+    UiDaybookTransactionsCreateOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiExportsOpenInput,
@@ -1089,6 +1091,33 @@ def test_ui_daybooks_delete_open_models_are_empty_input_and_non_pii_success() ->
                 "slet_text_visible": True,
                 "export_menu_visible": True,
                 "primary_slet_absent": True,
+                "shell_markers_present": True,
+                "org_slug": "leak",
+            }
+        )
+
+
+def test_ui_daybook_transactions_create_open_models_are_empty_input_and_non_pii_success() -> None:
+    assert UiDaybookTransactionsCreateOpenInput().model_dump() == {}
+    success = UiDaybookTransactionsCreateOpenSuccess(
+        detail_open=True,
+        line_add_chrome_visible=True,
+        empty_postering_state=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/daybooks/:id"
+    assert success.shell_kind == "daybook_transactions_create"
+    dumped = success.model_dump()
+    assert "id" not in dumped
+    assert dumped["line_add_chrome_visible"] is True
+    with pytest.raises(ValidationError):
+        UiDaybookTransactionsCreateOpenInput.model_validate({"daybook_id": "x"})
+    with pytest.raises(ValidationError):
+        UiDaybookTransactionsCreateOpenSuccess.model_validate(
+            {
+                "detail_open": True,
+                "line_add_chrome_visible": True,
+                "empty_postering_state": True,
                 "shell_markers_present": True,
                 "org_slug": "leak",
             }

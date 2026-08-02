@@ -79,6 +79,7 @@ from billy_mcp.browser import (
     UiDaybooksDeleteOpenService,
     UiDaybooksGetOpenService,
     UiDaybooksOpenService,
+    UiDaybookTransactionsCreateOpenService,
     UiDebtorBalancesListService,
     UiExportsOpenService,
     UiFinancingOpenService,
@@ -164,6 +165,8 @@ from billy_mcp.models import (
     UiDaybooksGetOpenSuccess,
     UiDaybooksOpenInput,
     UiDaybooksOpenSuccess,
+    UiDaybookTransactionsCreateOpenInput,
+    UiDaybookTransactionsCreateOpenSuccess,
     UiDebtorBalancesListInput,
     UiDebtorBalancesListSuccess,
     UiExportsOpenInput,
@@ -270,6 +273,8 @@ def create_server(
     ui_daybooks_open_service: UiDaybooksOpenService | None = None,
     ui_daybooks_get_open_service: UiDaybooksGetOpenService | None = None,
     ui_daybooks_delete_open_service: UiDaybooksDeleteOpenService | None = None,
+    ui_daybook_transactions_create_open_service: UiDaybookTransactionsCreateOpenService
+    | None = None,
     ui_transactions_list_service: UiTransactionsListService | None = None,
     ui_reports_open_service: UiReportsOpenService | None = None,
     ui_vat_declarations_list_service: UiVatDeclarationsListService | None = None,
@@ -335,6 +340,9 @@ def create_server(
     daybooks_open_service = ui_daybooks_open_service or browser
     daybooks_get_open_service = ui_daybooks_get_open_service or browser
     daybooks_delete_open_service = ui_daybooks_delete_open_service or browser
+    daybook_transactions_create_open_service = (
+        ui_daybook_transactions_create_open_service or browser
+    )
     transactions_list_service = ui_transactions_list_service or browser
     reports_open_service = ui_reports_open_service or browser
     vat_declarations_list_service = ui_vat_declarations_list_service or browser
@@ -584,6 +592,14 @@ def create_server(
 
         UiDaybooksDeleteOpenInput()
         return await daybooks_delete_open_service.ui_daybooks_delete_open()
+
+    async def ui_daybook_transactions_create_open() -> (
+        UiDaybookTransactionsCreateOpenSuccess | ToolError
+    ):
+        """Observe daybookTransactions create chrome without adding lines or posting."""
+
+        UiDaybookTransactionsCreateOpenInput()
+        return await daybook_transactions_create_open_service.ui_daybook_transactions_create_open()
 
     async def ui_transactions_list() -> UiTransactionsListSuccess | ToolError:
         """Observe the authenticated Billy Posteringer list shell without create actions."""
@@ -937,6 +953,15 @@ def create_server(
             "Slet text only; does not confirm delete, post, or change daybooks)."
         ),
     )(ui_daybooks_delete_open)
+    server.tool(
+        name="ui_daybook_transactions_create_open",
+        description=(
+            "Open Billy daybookTransactions create chrome on a daybook detail surface "
+            "for the authenticated session (read-only path and marker classification; "
+            "observes Tilføj kassekladdelinje and empty postering state only; does not "
+            "add lines, post, delete, or change daybooks)."
+        ),
+    )(ui_daybook_transactions_create_open)
     server.tool(
         name="ui_daybooks_open",
         description=(

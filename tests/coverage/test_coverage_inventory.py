@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 71 greened shells/parity + daybooks.delete Mere chrome (research180) = 72
+    # Prior 72 greened shells/parity + daybookTransactions create chrome (research181) = 73
     # live/vision rows without GEO NA.
-    ui_shell_green = 72
+    ui_shell_green = 73
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -463,6 +463,21 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
             assert "research180" in row["method_or_route"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS:
             assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_SALES_TAX_RULESET_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
             assert "research179" in qual["evidence_ref"]
             assert "research179" in row["evidence"]
@@ -855,8 +870,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     # productPrices NA green is asserted above (research162 package).
     # related-shell families must stay red (research144/147 rejected pure NA).
     # taxRates.list dual-counted to Momssatser shell (research158); residual
-    # taxRates ops stay red below. salesTaxRulesets.list dual-counted (research159);
-    # residual salesTaxRulesets ops stay red below.
+    # taxRates get/create/update/delete NA (research181). salesTaxRulesets.list
+    # dual-counted (research159); residual non-list NA (research181).
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
@@ -880,39 +895,63 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         if str(row.get("api_row_id") or "").startswith("api.taxRates.")
     ]
     assert tax_rates_rows
-    assert all(row.get("parity_status") != "not_applicable" for row in tax_rates_rows)
     tax_rates_list = [row for row in tax_rates_rows if row.get("api_row_id") == "api.taxRates.list"]
     tax_rates_residual = [
-        row for row in tax_rates_rows if row.get("api_row_id") != "api.taxRates.list"
+        row
+        for row in tax_rates_rows
+        if row.get("api_row_id")
+        in {
+            "api.taxRates.get",
+            "api.taxRates.create",
+            "api.taxRates.update",
+            "api.taxRates.delete",
+        }
     ]
     assert len(tax_rates_list) == 1
     assert tax_rates_list[0].get("live_tested") is True
     assert tax_rates_list[0].get("tool_name") == "ui_settings_vat_open"
-    assert all(row.get("live_tested") is not True for row in tax_rates_residual)
+    assert len(tax_rates_residual) == 4
+    assert all(row.get("parity_status") == "not_applicable" for row in tax_rates_residual)
+    assert all(row.get("live_tested") is True for row in tax_rates_residual)
+    assert all("research181" in (row.get("method_or_route") or "") for row in tax_rates_residual)
+    # bulk taxRates remain red
+    tax_rates_bulk = [row for row in tax_rates_rows if "bulk" in str(row.get("api_row_id") or "")]
+    assert tax_rates_bulk
+    assert all(row.get("parity_status") != "not_applicable" for row in tax_rates_bulk)
     rulesets_rows = [
         row
         for row in ui_manifest["workflows"]
         if str(row.get("api_row_id") or "").startswith("api.salesTaxRulesets.")
     ]
     assert rulesets_rows
-    assert all(row.get("parity_status") != "not_applicable" for row in rulesets_rows)
     rulesets_list = [
         row for row in rulesets_rows if row.get("api_row_id") == "api.salesTaxRulesets.list"
     ]
     rulesets_residual = [
-        row for row in rulesets_rows if row.get("api_row_id") != "api.salesTaxRulesets.list"
+        row
+        for row in rulesets_rows
+        if row.get("api_row_id")
+        in {
+            "api.salesTaxRulesets.get",
+            "api.salesTaxRulesets.create",
+            "api.salesTaxRulesets.update",
+            "api.salesTaxRulesets.delete",
+        }
     ]
     assert len(rulesets_list) == 1
     assert rulesets_list[0].get("live_tested") is True
     assert rulesets_list[0].get("tool_name") == "ui_settings_vat_open"
-    assert all(row.get("live_tested") is not True for row in rulesets_residual)
+    assert len(rulesets_residual) == 4
+    assert all(row.get("parity_status") == "not_applicable" for row in rulesets_residual)
+    assert all(row.get("live_tested") is True for row in rulesets_residual)
+    assert all("research181" in (row.get("method_or_route") or "") for row in rulesets_residual)
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 72 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 73 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 201
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 129
+    assert status["qualification"]["live_tested_rows"] == 222
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 149
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -964,6 +1003,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.daybooks",
         "ui.parity.daybooks.get",
         "ui.parity.daybooks.delete",
+        "ui.parity.daybookTransactions.create",
         "ui.parity.daybooks.list",
         "ui.parity.daybooks.create",
         "ui.discovery.transactions",
@@ -1038,6 +1078,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.daybooks": "ui_daybooks_open",
         "ui.parity.daybooks.get": "ui_daybooks_get_open",
         "ui.parity.daybooks.delete": "ui_daybooks_delete_open",
+        "ui.parity.daybookTransactions.create": "ui_daybook_transactions_create_open",
         "ui.parity.daybooks.list": "ui_daybooks_open",
         "ui.parity.daybooks.create": "ui_daybooks_open",
         "ui.discovery.transactions": "ui_transactions_list",
@@ -1088,7 +1129,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 72
+    assert len(qualified) == 73
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1108,6 +1149,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
             "form_open_only",
             "detail_open_only",
             "delete_chrome_open_only",
+            "create_chrome_open_only",
             "soft_empty_shell_observed",
         }
     invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
@@ -1201,11 +1243,17 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api.taxRates.list" in tax_rates_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in tax_rates_parity["evidence"]
     assert "research158" in tax_rates_parity["evidence"]
-    for red_id in (
+    for na_id in (
         "ui.parity.taxRates.get",
         "ui.parity.taxRates.create",
         "ui.parity.taxRates.update",
         "ui.parity.taxRates.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
+    for red_id in (
         "ui.parity.taxRates.bulk_save",
         "ui.parity.taxRates.bulk_delete",
     ):
@@ -1223,11 +1271,17 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "filters/sort/pagination UI not producted" in rulesets_parity["evidence"]
     assert "research159" in rulesets_parity["evidence"]
     assert "Regelsæt" in rulesets_parity["evidence"] or "rulesets" in rulesets_parity["evidence"]
-    for red_id in (
+    for na_id in (
         "ui.parity.salesTaxRulesets.get",
         "ui.parity.salesTaxRulesets.create",
         "ui.parity.salesTaxRulesets.update",
         "ui.parity.salesTaxRulesets.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
+    for red_id in (
         "ui.parity.salesTaxRulesets.bulk_save",
         "ui.parity.salesTaxRulesets.bulk_delete",
     ):
@@ -1307,6 +1361,40 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert daybooks_delete_parity["parity_status"] == "delete_chrome_open_only"
     assert "api.daybooks.delete" in daybooks_delete_parity["evidence"]
     assert "research180" in daybooks_delete_parity["evidence"]
+    dtx_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.daybookTransactions.create"
+    )
+    assert dtx_create_parity["api_row_id"] == "api.daybookTransactions.create"
+    assert dtx_create_parity["tool_name"] == "ui_daybook_transactions_create_open"
+    assert dtx_create_parity["parity_status"] == "create_chrome_open_only"
+    assert "api.daybookTransactions.create" in dtx_create_parity["evidence"]
+    assert "research181" in dtx_create_parity["evidence"]
+    for na_id in (
+        "ui.parity.daybookTransactions.get",
+        "ui.parity.daybookTransactions.list",
+        "ui.parity.daybookTransactions.update",
+        "ui.parity.daybookTransactions.delete",
+        "ui.parity.taxRates.get",
+        "ui.parity.taxRates.create",
+        "ui.parity.taxRates.update",
+        "ui.parity.taxRates.delete",
+        "ui.parity.salesTaxRulesets.get",
+        "ui.parity.salesTaxRulesets.create",
+        "ui.parity.salesTaxRulesets.update",
+        "ui.parity.salesTaxRulesets.delete",
+        "ui.parity.taxRateDeductionComponents.get",
+        "ui.parity.taxRateDeductionComponents.list",
+        "ui.parity.taxRateDeductionComponents.create",
+        "ui.parity.taxRateDeductionComponents.update",
+        "ui.parity.taxRateDeductionComponents.delete",
+        "ui.parity.transactions.get",
+        "ui.parity.transactions.update",
+        "ui.parity.transactions.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
     # update is NA (research180); bulk remain discovery_required / external-contract red
     daybooks_update_na = next(
         row for row in geo_na_rows if row["id"] == "ui.parity.daybooks.update"

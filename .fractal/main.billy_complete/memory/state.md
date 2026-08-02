@@ -8956,3 +8956,151 @@ updated: 2026-08-02T08:25:00Z
 - Not node finish (complete false; bulk external-contract red, annual red,
   residual UI parity open).
 
+## SYNC (iter 81 pre-PREPARE) (2026-08-02T10:07Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 878B15B3 (iter80 pre-COMMIT) reacted (+).
+- No running children. No parent directives.
+- COMMIT 186.80 on tip: d59dc3d ui daybooks delete open + residual NA;
+  bookkeeping b7f492b. Branch clean vs origin/main.billy_complete.
+- Coverage: live/vision 201; implemented/contract 385; GEO NA 129;
+  complete false. Residual: bulk 92 external-contract, annual red,
+  remaining UI parity.
+- Outbox: iter81 SYNC progress post.
+- Ready PREPARE. Not node finish.
+
+## PREPARE (iter 81) (2026-08-02T10:08Z)
+
+- Parent `main`: already up to date (HEAD..main = 0; ours 752 commits ahead).
+- Child branches: 157 listed; 0 with commits ahead of main.billy_complete.
+- No parent merge commit. No child merges. No outbox integration note.
+- Tip clean product: b7f492b / d59dc3d (186.80). Working tree: memory only
+  (SYNC+PREPARE bookkeeping).
+- Coverage status.json complete false; residual bulk/annual/UI parity.
+- Ready RESEARCH.
+
+## SYNC (iter 81 pre-RESEARCH) (2026-08-02T10:10Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8D8A8A6E + C91230DB reacted (+).
+- No running children. No parent directives.
+- PREPARE no-op confirmed. Ready RESEARCH residual UI.
+- complete false; live/vision 201; implemented/contract 385; GEO NA 129.
+
+## RESEARCH (iter 81 / research181) (2026-08-02T10:18Z)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+daybook+daybookTransaction; cleanup dual DELETE 200;
+  api_token_used false; profiles purged.
+- **ACCEPT product** `ui_daybook_transactions_create_open`: daybook detail
+  `/:org_slug/daybooks/:id` dual shows Tilføj kassekladdelinje + Ingen postering
+  valgt; dedicated dtx routes soft-empty.
+- **ACCEPT NA** taxRates get/create/update/delete (4); salesTaxRulesets
+  get/create/update/delete (4); taxRateDeductionComponents×5;
+  transactions get/update/delete (3).
+- **Product-ready add-on** transactions.create via Ny postering (optional).
+- **DEFER** salesTaxReturns get/update (primary 502; not dual).
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+  Dual: `tmp/research181_focus_dual.json`.
+- Prefer slice: daybook tx create chrome + NA package (201→~218+).
+- Ready PLAN 186.81. Not finish.
+
+## SYNC (iter 81 pre-PLAN) (2026-08-02T10:21Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 5C29FA59 + 44B6BE89 reacted (+).
+- No running children. No parent directives.
+- RESEARCH181 ACCEPT package ready PLAN 186.81.
+- complete false; baseline live/vision 201; implemented/contract 385; GEO NA 129.
+
+## PLAN (iter 81 / 186.81) (2026-08-02T10:22Z)
+
+- Plan file
+  `plans/2026-08-02T10:22:00.260Z-186.81-ui_daybook_transactions_create_and_residual_na.md`:
+  ui_daybook_transactions_create_open create_chrome maps
+  daybookTransactions.create (research181) + daybookTransactions g/l/u/d NA
+  (4) + taxRates g/c/u/d NA (4) + salesTaxRulesets g/c/u/d NA (4) +
+  taxRateDeductionComponents×5 NA + transactions g/u/d NA (3); path
+  `/:org_slug/daybooks/:id`; no bulk NA; defer transactions.create product +
+  salesTaxReturns get/update + daybookTransactionLines.
+- Target live/vision 201→222; implemented/contract 385→406; GEO NA 129→149;
+  root-only Grok; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 81 pre-EXECUTE) (2026-08-02T10:23Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F01D0C39 reacted (+).
+- No running children. No parent directives.
+- PLAN 186.81 ready. Entering EXECUTE.
+- complete false; baseline live/vision 201; implemented/contract 385; GEO NA 129.
+
+## EXECUTE (iter 81 / 186.81) (2026-08-02T10:45Z)
+
+- Producted research181 / plan 186.81:
+  - `ui_daybook_transactions_create_open` create_chrome_open_only maps
+    daybookTransactions.create
+  - NA: daybookTransactions g/l/u/d (4); taxRates g/c/u/d (4);
+    salesTaxRulesets g/c/u/d (4); taxRateDeductionComponents×5;
+    transactions g/u/d (3)
+- Live dual `test_ui_daybook_transactions_create_open` **pass**; vision accept +
+  purge verified.
+- lint.sh pass; offline test.sh **1658 passed** / 53 deselected.
+- Coverage: live/vision **222**; implemented/contract **406**; GEO NA **149**;
+  complete false.
+- Ready for REVIEW. Not finish.
+
+## SYNC (iter 81 pre-IR) (2026-08-02T10:46Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4722BCB3 reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.81 done. Entering INDEPENDENT-REVIEW.
+- complete false; live/vision 222; implemented/contract 406; GEO NA 149.
+
+## IR (iter 81 / 186.81) (2026-08-02T10:48Z)
+
+- Product ui_daybook_transactions_create_open + residual NA package: **ACCEPT**
+  (`tmp/grok-review.md`).
+- No required product fixes. Optional N1 egress live-ref hygiene; N2 defer
+  transactions.create product + daybookTransactionLines.
+- Counts 222/406/149 complete false; bulk not NA; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 81 pre-FIX-VERIFY) (2026-08-02T10:49Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private AFAA2920 reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT package; no required fixes. Entering FIX-VERIFY.
+- complete false; live/vision 222; implemented/contract 406; GEO NA 149.
+
+## FIX-VERIFY (iter 81 / 186.81) (2026-08-02T11:00Z)
+
+- IR required fixes: none. Optional N1 applied (egress live ref for
+  `ui_daybook_transactions_create_open` in build_browser_egress; regenerated).
+- Live assert message copy-paste hygiene fixed.
+- lint.sh pass. test.sh offline **1658 passed** / 53 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: daybookTransactions.create green on
+  `ui_daybook_transactions_create_open`; NA package 20 research181 exact;
+  bulk not NA; live/vision 222; implemented/contract 406; GEO NA 149;
+  complete false; bulk 92 external-contract; annual stay red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.81 ui daybook transactions create + residual NA. Not node finish.
+
+## SYNC (iter 81 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2210A4D7 reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean (1658 offline pass; IR ACCEPT). Ready COMMIT 186.81
+  ui daybook transactions create + residual NA package. Not node finish
+  (complete false).
+
+## COMMIT (iter 81 / 186.81)
+
+- fractal commit product: ui daybook transactions create open + residual NA.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+

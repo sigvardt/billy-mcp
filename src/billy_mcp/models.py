@@ -735,6 +735,30 @@ class UiDaybooksDeleteOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiDaybookTransactionsCreateOpenInput(BaseModel):
+    """Empty, strict input for daybook transaction create chrome open (research181)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiDaybookTransactionsCreateOpenSuccess(BaseModel):
+    """Non-PII classification of daybookTransactions create chrome on daybook detail.
+
+    Research181: open /:org_slug/daybooks/:id; observe Tilføj kassekladdelinje and
+    Ingen postering valgt. Never click Tilføj / Bogfør / Slet confirm. Distinct from
+    daybooks get/delete chrome tools and list+create on /daybooks/new.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/daybooks/:id"] = "/:org_slug/daybooks/:id"
+    shell_kind: Literal["daybook_transactions_create"] = "daybook_transactions_create"
+    detail_open: bool
+    line_add_chrome_visible: bool
+    empty_postering_state: bool
+    shell_markers_present: bool
+
+
 class UiTransactionsListInput(BaseModel):
     """Empty, strict input for the read-only transactions (Posteringer) list shell tool."""
 
