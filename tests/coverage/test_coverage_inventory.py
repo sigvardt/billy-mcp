@@ -417,7 +417,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES:
+        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS:
+            assert "research176" in qual["evidence_ref"]
+            assert "research176" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES:
             assert "research162" in qual["evidence_ref"]
             assert "research162" in row["evidence"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS:
@@ -614,15 +617,36 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert len(products_create_discovery) == 1
     assert products_create_discovery[0]["tool_name"] == "ui_products_create_open"
     assert products_create_discovery[0]["live_tested"] is True
-    # residual products.get/update/delete stay red
-    for residual_id in (
-        "ui.parity.products.get",
-        "ui.parity.products.update",
-        "ui.parity.products.delete",
+    # research176 products.get/update/delete NA freeze (exact ids; not list/create/bulk)
+    products_gud = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
+    ]
+    assert len(products_gud) == 3
+    assert all(row["parity_status"] == "not_applicable" for row in products_gud)
+    assert all(row["implemented"] is True for row in products_gud)
+    assert all(row["live_tested"] is True for row in products_gud)
+    assert all(row["vision_verified"] is True for row in products_gud)
+    assert all(row["tool_name"] == "" for row in products_gud)
+    assert all("research176" in (row.get("evidence") or "") for row in products_gud)
+    for residual_id, api_id in (
+        ("ui.parity.products.get", "api.products.get"),
+        ("ui.parity.products.update", "api.products.update"),
+        ("ui.parity.products.delete", "api.products.delete"),
     ):
         residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
-        assert residual.get("live_tested") is not True
-        assert residual.get("parity_status") == "discovery_required"
+        assert residual.get("api_row_id") == api_id
+        assert residual.get("parity_status") == "not_applicable"
+        assert residual.get("live_tested") is True
+    # products bulk UI parity stays non-NA (external-contract / discovery — not this freeze)
+    for bulk_api in ("api.products.bulk_save", "api.products.bulk_delete"):
+        bulk_rows = [
+            row for row in ui_manifest["workflows"] if str(row.get("api_row_id") or "") == bulk_api
+        ]
+        assert len(bulk_rows) == 1
+        assert bulk_rows[0].get("parity_status") != "not_applicable"
     # special.user_get dual-counted to settings Profil (research151); not NA
     user_get_parity = [
         row
@@ -741,8 +765,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 68 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 175
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 107
+    assert status["qualification"]["live_tested_rows"] == 178
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 110
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:

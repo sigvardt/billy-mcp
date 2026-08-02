@@ -6,19 +6,168 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T02:45:00Z
+updated: 2026-08-02T04:00:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **75** COMMIT done for 186.75 ui_invoices_delete_open (`5321c93`; bookkeeping `1cb1727`).
-- live/vision **175**; implemented/contract **359**; complete **false**.
-- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
-- Residual UI: products.get / products update-delete / special.invoice_email; bulk/annual red.
-- Not node finish.
+- Continue mode iter **76** pre-COMMIT SYNC: FIX-VERIFY clean; product ready COMMIT 186.76.
+- live/vision **178**; contract **362**; complete **false**.
+- Parent P8 disk: root **1.2 GiB** free; billy tmp already on ssd_1; no safe billy-owned root reclaim; saxo /tmp multi-GB left untouched. Route TMPDIR to ssd_1 for COMMIT hooks. No live browser until headroom improves.
+- Not finish.
 
+
+## SYNC (iter 76 pre-COMMIT)
+
+- Inbox: D64B44AC P8 root disk headroom (1.2 GiB) — replied; saved.
+- Feed: empty. Private 57B58B83 (FIX-VERIFY done) + F32A76C2 reacted (+).
+- Disk: root 1.2 GiB free; ssd_1 1.7 TiB free. Node tmp 38M on ssd_1 already.
+  Billy-owned root reclaim ~0. /tmp saxo-* multi-GB not touched (unrelated).
+  COMMIT product offline NA freeze; set TMPDIR under worktree tmp for hooks.
+- No running children. No other parent directives.
+- FIX-VERIFY clean (1642 offline; IR ACCEPT; N1 applied). Ready COMMIT 186.76
+  products get/update/delete NA package. Not finish (complete false).
+
+## FIX-VERIFY (iter 76 / 186.76)
+
+- IR required fixes: none. Optional N1 method_or_route research176 wording applied;
+  N2 no-op (tmp dual remains owner-only).
+- lint.sh pass. test.sh offline 1642 passed / 50 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: products.get/update/delete NA accepted research176; list+create
+  tools unchanged; bulk_* not NA; invoice_email residual red; live/vision 178;
+  implemented/contract 362; complete false; bulk 92 external-contract; annual
+  stay red; API live false (out_of_scope_by_user).
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.76 products get/update/delete NA package. Not node finish.
+
+## SYNC (iter 76 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CAFB7381 (IR ACCEPT) + 111ED452 (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT 186.76 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+## INDEPENDENT-REVIEW (iter 76 / 186.76)
+
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Product **ACCEPT** (NA freeze products.get+update+delete research176 exact ids).
+- Overall completeness **FAIL** expected (bulk 92, annual, residual UI).
+- Docs etag/md5 unchanged; API products live_tested false; list/create not stolen;
+  bulk not NA; invoice_email residual red; vision null peer NA; offline 1642; lint pass.
+- Optional nits N1 method_or_route body_len wording / N2 tmp dual — non-blocking.
+- Ready FIX-VERIFY (no required code fixes) then COMMIT. Not finish.
+
+## SYNC (iter 76 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2E747AFE (EXECUTE done) + FF5E85C6 (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- EXECUTE 186.76 uncommitted: products get/update/delete NA; live/vision 178;
+  implemented/contract 362; offline 1642 pass; complete=false.
+- Ready for IR of product. Not finish.
+
+## EXECUTE (iter 76 / 186.76)
+
+- Producted research176 / plan 186.76: NA freeze exact `api.products.get` +
+  `update` + `delete` (GEO_UI_NOT_APPLICABLE_ROW_COUNT 107→110).
+- Generator research176 branch + exact ids; inventory tests; wiki
+  `ui_products_get_update_delete_not_applicable.md`; coverage regenerated.
+- list/create dual-count tools unchanged; bulk not NA; no new UI tools; no egress.
+- Coverage status: implemented/contract **362**; live/vision **178**; complete false.
+- lint.sh pass; offline BILLY_TEST_MODE=commit **1642 passed** / 50 deselected.
+- Ready REVIEW / FIX-VERIFY. Not finish.
+
+## SYNC (iter 76 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 5E9B12B6 (pre-PLAN) + EC90AF29 (PLAN done) reacted (+).
+- No running children. No parent directives.
+- Plan 186.76 + research176 brief present. Tip `fdb3824`.
+- Ready EXECUTE product NA freeze products.get+update+delete (root; no children). Not finish.
+
+## PLAN (iter 76 / 186.76)
+
+- Plan file
+  `plans/2026-08-02T02:42:51.196Z-186.76-ui_products_get_update_delete_not_applicable.md`:
+  NA freeze exact `api.products.get` + `update` + `delete` (research176 dual absence);
+  GEO_UI_NOT_APPLICABLE_ROW_COUNT 107→110; live/vision 175→178; contract 359→362;
+  keep list/create tools; no bulk NA; no new UI tools; root-only Grok; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 76 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 0D58BC87 (research176 done) + 1EC14AED (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research176 brief present (`tmp/grok-research.md`); dual JSON present; cleanup dual.
+- Ready PLAN product handoff: NA freeze products.get + products.update + products.delete
+  (186.76; live/vision 175→178 if generator counts NA like productPrices). DEFER invoice_email.
+  Not finish.
+
+## RESEARCH (iter 76 / research176)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+product+invoice; cleanup all_clean dual; api_token_used false; profiles purged.
+- products soft detail/edit/overview chrome-only dual; list marker dual but click stays list; Mere = Export/Import only (Slet 0); inventory create form dual (already greened create).
+- Strong get/update/delete ready **false dual**. Weak list-only false-green **true dual**.
+- invoice_email soft /email /send inputs 0 dual — DEFER.
+- **ACCEPT** NA freeze `products.get` + `products.update` + `products.delete` (research176 dual absence; peer productPrices NA). No new ui_products_* tools. Not bulk.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research176_focus_dual.json`.
+- Ready PLAN 186.76. Not finish.
+
+## SYNC (iter 76 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4893D3D3 (SYNC resume) + 74CF8C0B (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `fdb3824`.
+- Coverage: implemented/contract 359; live/vision 175; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer products.get only if detail
+  dual-stable; products update/delete if dual after seed; special.invoice_email
+  if durable dual holds; no bulk greening; no weak NA; no annual green without access).
+  Not finish.
+
+## PREPARE (iter 76)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: historical children; none mid-iteration product; none running.
+- Local/remote ahead of tip `fdb3824` reviewed → **skip all merges**:
+  - `ui_auth_status` (SRC): tip browser/models/server much larger (351378/33371/50002 vs child 12953/2136/8947); product already live on tip.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional research page only on child — skip (superseded auth research already on root product path).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` (WIKI): tip equal or longer; index-only / minor wiki churn; tip src much larger.
+  - `wave5j_bank_line_product` and freeze/review stubs: non-fractal empty or fractal-only; tip already has product.
+  - Remaining remote-ahead: fractal-only / failed-review scaffolding or older wave product already integrated.
+  - Material larger-on-child non-fractal product files (src/tests/coverage): **0**.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `fdb3824` / product `5321c93` ui invoices delete open. Ready RESEARCH residual dual-count/NA
+  (prefer products.get only if detail dual-stable; products update/delete if dual after seed;
+  special.invoice_email if durable dual holds; no bulk greening; no weak NA; no annual green without access).
+  Not finish.
+
+## SYNC (iter 76)
+
+- Continue mode restart after iter75 COMMIT (`5321c93` ui invoices delete open; bookkeeping `1cb1727`/`fdb3824`).
+- Unread inbox/feed: empty. Saved: empty.
+- Private 8B813026 (iter75 COMMIT done) + 91E29B30 (pre-COMMIT SYNC) reacted (+).
+- No running children. All historical children terminal (completed/exited/killed/stopped).
+- No parent directives.
+- Tip `fdb3824` == origin/main.billy_complete (branch clean).
+- Coverage: implemented/contract **359**; live/vision **175**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open
+  (products.get/update/delete, special.invoice_email, many discovery_required).
+- Last product: 186.75 ui invoices delete open (live/vision 174→175; contract 358→359).
+- Next product candidates (research, not greened): products.get only if detail dual-stable;
+  products update/delete if dual after seed; special.invoice_email if durable form dual;
+  no bulk greening without official schema; no weak NA; no annual green without access.
+- Outbox: iter76 SYNC resume. Ready PREPARE. Not finish.
 
 ## COMMIT (iter 75 / 186.75)
 

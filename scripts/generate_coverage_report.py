@@ -51,13 +51,18 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.invoiceReminders.",
     "api.locales.",
     "api.productPrices.",
+    "api.products.get",
+    "api.products.update",
+    "api.products.delete",
     "api.special.invoice_delivery",
     "api.special.invoice_logs",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
-GEO_UI_NOT_APPLICABLE_ROW_COUNT = 107  # prior 100 + research162 productPrices 7 ops
+GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
+    110  # prior 107 + research176 products get/update/delete (exact; not list/create/bulk)
+)
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
     {"accountNatures", "balanceModifiers"}
@@ -73,6 +78,15 @@ GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES: frozenset[str] = frozenset({"produc
 # Exact full API special row ids (resource segment is "special" for all specials).
 GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS: frozenset[str] = frozenset(
     {"api.special.invoice_delivery", "api.special.invoice_logs"}
+)
+# research176: products get/update/delete only
+# (list/create stay tool-green; bulk external-contract red).
+GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS: frozenset[str] = frozenset(
+    {
+        "api.products.get",
+        "api.products.update",
+        "api.products.delete",
+    }
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
@@ -4834,6 +4848,9 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     workflow; invoices shell lacks e-invoice/log markers).
     research162: productPrices residual soft-empty dual (dedicated freeze;
     products/Produkter shell is products only — not a productPrices workflow).
+    research176: products.get/update/delete dual absence (dedicated freeze; exact
+    ids only — list/create stay tool-green; soft detail chrome-only; list Mere is
+    Export/Import only; inventory create is create-only; no dual-count steal).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -4844,6 +4861,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
     is_research150 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
     is_research149 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES
@@ -4853,7 +4871,32 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research162:
+    if is_research176:
+        research_id = "research176"
+        evidence_ref = "research176_products_get_update_delete_dual"
+        nonsense_path = "zz-r176-none"
+        dual_agree_flag = "dual_agree_no_products_get_update_delete_surface"
+        family_label = "products.get+update+delete"
+        contrast_shells = (
+            "products_list/products_create(inventory Opret produkt)/invoices/"
+            "clients/suppliers/uploads/daybooks/bank_recon"
+        )
+        list_heading_suffix = (
+            "/Produkter(list only)/Lagermodul create form/Fakturaer/Kunder/"
+            "Leverandører/Bilag/daybooks editor/Bankkonti"
+        )
+        contrast_controls = [
+            "products",
+            "products_create",
+            "invoices",
+            "clients",
+            "suppliers",
+            "uploads",
+            "daybooks/new",
+            "bank_reconciliation",
+            nonsense_path,
+        ]
+    elif is_research162:
         research_id = "research162"
         evidence_ref = "research162_product_prices_dual"
         nonsense_path = "zz-r162-none"
@@ -5086,6 +5129,18 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
         "not_applicable accepted)"
     )
+
+    if is_research176:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: soft /products/:id|/edit|/overview "
+            "chrome-only marker false inputs_n 0; list click stays list "
+            "(false-green risk); list Mere Eksportér/Importér only Slet 0 dual; "
+            "inventory Opret produkt is create-only already greened; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     row["tool_name"] = ""
     row["request_fields"] = []
     row["response_fields"] = []
@@ -5098,6 +5153,14 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "settings/invoicing dual body_len 1494 shows Levering af faktura pr. "
             "e-mail (email settings only; e_invoice/GLN markers dual false) — "
             "blocks special.invoice_email pure NA only, not delivery/logs; "
+        )
+    if is_research176:
+        levering_note = (
+            "research176 dual: soft /products/:id|/edit|/overview chrome-only "
+            "(marker false, inputs_n 0); list marker true but click stays list "
+            "(false-green risk); list Mere Eksportér/Importér only (Slet 0 dual); "
+            "inventory Opret produkt is create-only (already greened); "
+            "exact get/update/delete ids only — not list/create/bulk; "
         )
     row["evidence"] = (
         f"{research_id} dual independent ephemeral browser sessions (no "
