@@ -6,16 +6,50 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T14:42:00Z
+updated: 2026-08-02T20:58:00Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **87** COMMIT 186.87 landed (`291376b`) UI product-plane bulk honesty. Next dual bulk-chrome (STEER 1E6AF3C9).
-- live/vision **286**; implemented/contract **470**; complete **false**.
-- Saved radio: 1E6AF3C9. Not node finish.
+- Iter **98** RESEARCH198 **HOLD**. HEAD `2f16fdd`. Docs lock unchanged. No product unlock.
+- complete **false**. Counts: implemented/contract **528**; live/vision **344**. Walls: bulk **92**, residual **29**, annual_reports **1**.
+- Brief: `tmp/grok-research.md`. Fingerprint: `tmp/research198-fingerprint.json`.
+- Saved radio: **8612433E** STEER still open. No running children. Not node finish.
+
+## RESEARCH (iter 98 / research198)
+
+- Official https://www.billy.dk/api/ MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603` bytes 147934 — **match** inventory lock (same as research193–197).
+- api-docs chunk md5 `8302558e6369c4914299efcc31565f53` unchanged; bulk save×46 + bulk delete×46 Supports-only; 0 bulk schema / ids[] / openapi / webhook.
+- OpenAPI/Swagger probes still **404**.
+- No browser, no unauth re-probe, no greening, no wiki (STEER).
+- Verdict: **HOLD product no-op** for PLAN/EXECUTE. Unlock still external (docs bulk schema, residual offline/live-scope, annual org).
+
+## SYNC (iter 98 pre-RESEARCH)
+
+- Inbox/feed unread: empty.
+- Private 616E6EBD read (prior hold note).
+- Saved 8612433E kept open (STEER binding).
+- PREPARE decision recorded: 0 mergeable product among 62 tips.
+- Outbox: pre-RESEARCH HOLD. Private note for RESEARCH: only new official offline evidence for external walls; no wiki churn.
+
+## PREPARE (iter 98)
+
+- Parent merge `main`: already up to date.
+- 157 child branches; 62 have commits not in mainline.
+- Product-code child: only `ui_auth_status` (3c, 6 files). Already on HEAD in evolved form; three-dot add is stale; two-dot would regress thousands of lines; merge-tree conflicts on browser/models/server. **Skip**.
+- Wiki-only children (3): ui_auth_credentials_research_codex_fallback, wave5t_ui_auth_discovery_fallback, wave5u_probe_contract_codex_fallback. STEER blocks wiki churn; not product. **Skip**.
+- Remaining 58: fractal/node scaffolding or review leaves only. **Skip**.
+- No material integration. No outbox announce. No running children.
+
+## SYNC (iter 98) (2026-08-02T20:53Z)
+
+- Inbox unread: empty. Feed unread: empty.
+- Private A59EB4F2 read: COMMIT 186.97 HOLD plan+memory; STEER holds.
+- Saved 8612433E kept open (STEER still binding).
+- Outbox FA914252: SYNC i98 HOLD. Private 616E6EBD.
+- Proceed PREPARE only if real product or new official offline contract evidence; otherwise leave branch clean.
 
 ## COMMIT (iter 87 / 186.87)
 
