@@ -9,7 +9,7 @@ sources:
   - .fractal/main.billy_complete/tmp/discovery122/summary_dual_saft.json
   - .fractal/main.billy_complete/tmp/research191_annual_dual.json
 created: 2026-08-01T01:45:00Z
-updated: 2026-08-02T18:35:00Z
+updated: 2026-08-02T19:10:00Z
 ---
 
 # Annual reports route inaccessible on dedicated test organisation
@@ -84,3 +84,16 @@ assertions, independent second-interface read-back, and vision review.
 ## research192 note (2026-08-02)
 
 Docs/API residual and bulk walls reconfirmed offline (research192). No new annual dual this pass (same-day research191 A1 Upsedasse still binding). Annual row stays red; dual evidence_ref remains `research191_annual_dual`.
+
+## research193 stop-churn (2026-08-02)
+
+No annual dual re-probe this pass (parent STEER: report blockers; no wall-hygiene churn without a new shell).
+
+| Field | Value |
+| --- | --- |
+| Dual evidence | still research191 + discovery122 (A1 Upsedasse) |
+| `evidence_ref` | `research191_annual_dual` (**unchanged**) |
+| Row | stays red; `parity_status=discovery_required`; `not_applicable` still rejected |
+| Tools | none |
+
+Unlock remains a non-Upsedasse `/:org_slug/annual_reports` shell on a dedicated non-production organisation (or Billy platform fix), then open/list dual + vision.

@@ -10465,3 +10465,115 @@ updated: 2026-08-02T14:42:00Z
 - complete false 528/344; walls bulk92 residual29 annual1
 - STEER 2BB6AF34 unsaved; no further citation-only wall hygiene without new evidence
 - not node finish
+
+## iter93 SYNC (2026-08-02T18:59:00Z)
+
+- inbox empty; feed empty; private F620866D + B2CFD249 reacted; saved empty
+- no running children (all terminal)
+- branch clean origin/main.billy_complete @33e3f4e (186.92 auto after 88e2e3a hygiene)
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 2BB6AF34 still in force: no citation-only wall-hygiene reconfirm packages
+- outbox 6A5102CF posted; private 47C1FA44 note
+- next: RESEARCH only with new offline contract evidence or concrete implementation; else report blockers without reconfirm cite loops
+- not node finish
+
+## iter93 PREPARE (2026-08-02T19:00:30Z)
+
+- parent `main`: fetch+merge Already up to date
+- child branches: 157 listed; 62 ahead of mainline by commit count
+- product audit: missing-on-main non-fractal files = 1
+  - `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` on research leaf — **skip merge** (superseded by `wiki/auth_credentials_pre_submit_research.md`; Codex fallback not Grok authority)
+- larger-on-child existing product files: **0**
+- SKIP merge `ui_auth_status`: three-dot still shows src/tests; product already on mainline (`auth_status`); child tip would regress browser (~9k lines mainline vs small child)
+- SKIP wave5t/wave5u wiki children: pages already on HEAD (byte-near identical)
+- remaining ahead tips: init-only, failed PREPARE/IR, killed experiments, fractal scaffolding — not merge targets
+- no running children; no merge commits; no material integration outbox
+- working tree dirty: memory/state.md only (SYNC+PREPARE bookkeeping)
+- not node finish
+
+## iter93 SYNC pre-RESEARCH (2026-08-02T19:01:30Z)
+
+- inbox/feed empty; private 47C1FA44 + 60C60228 reacted; saved empty
+- no running children
+- PREPARE already done this iter: parent up to date; no child merges
+- HEAD 33e3f4e; dirty memory/state.md only
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 2BB6AF34 still in force: no citation-only wall-hygiene reconfirm packages
+- outbox pre-RESEARCH posted
+- next: RESEARCH — only if new offline contract evidence or concrete implementation path; else report external blockers without reconfirm cite loops
+- not node finish
+
+## iter93 RESEARCH193 (2026-08-02T19:05:00Z)
+
+- Docs lock match MD5 8b94b0135c91fd15fe54ea33e088a4be ETag wcw4x9hqvu3603; OpenAPI 404; api-docs chunk Supports-only (92 bulk)
+- Incomplete still exactly: bulk92 + residual29 + annual1 (528/344 complete false)
+- No new offline product unlock; STEER: no reconfirm hygiene package
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md` (research193)
+- Recommended slice: blocker report / stop-churn only; no tools; no greening; no evidence_ref bumps
+- not node finish
+
+## iter93 SYNC pre-PLAN (2026-08-02T19:06:30Z)
+
+- inbox/feed empty; private A5FA7CE4 reacted; saved empty; no running children
+- RESEARCH193 brief ready; no new offline unlock; STEER holds
+- complete false 528/344; walls bulk92 residual29 annual1
+- next: PLAN blocker report / stop-churn only
+- not node finish
+
+## iter93 PLAN 186.93 (2026-08-02T19:07:30Z)
+
+- plan: walls_stop_churn_blocker_report (research193)
+- root-only wiki blocker status; no tools; no greening; no reconfirm hygiene
+- counts stay 528/344 complete false
+- next: EXECUTE; not node finish
+
+## iter93 SYNC pre-EXECUTE (2026-08-02T19:08:30Z)
+
+- inbox/feed empty; private 28C25B12 reacted; saved empty; no running children
+- plan 186.93 ready; research193 authority
+- next: EXECUTE wiki blocker notes only; STEER no reconfirm hygiene
+- complete false 528/344; not node finish
+
+## iter93 EXECUTE 186.93 (2026-08-02T19:12:00Z)
+
+- research193 stop-churn: wiki notes on residual honesty, annual inaccessible, offline_write_probe_rules
+- no tools; no greening; no evidence_ref / reconfirm_ref bumps; no unauth re-probe; no src/coverage changes
+- invariants: complete false; 528/344; walls bulk92 residual29 annual1
+- wiki lint clean
+- next: IR / FIX-VERIFY / COMMIT; not node finish
+
+## iter93 SYNC pre-IR (2026-08-02T19:14:00Z)
+
+- inbox/feed empty; private F56A404D reacted; saved empty; no running children
+- uncommitted: 3 wiki stop-churn notes + plan 186.93 + memory
+- no src/coverage changes; complete false 528/344
+- next: INDEPENDENT-REVIEW package; not node finish
+
+## iter93 INDEPENDENT-REVIEW (2026-08-02T19:16:00Z)
+
+- Verdict: **PASS (package)** 186.93 research193 stop-churn; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Required fixes: **none**
+- STEER honored; counts 528/344 complete false; walls bulk92 residual29 annual1
+- next: FIX-VERIFY / COMMIT; not node finish
+
+## iter93 SYNC pre-FIX-VERIFY (2026-08-02T19:17:30Z)
+
+- inbox/feed empty; private 5C600DFC reacted; saved empty; no running children
+- IR PASS package; required fixes none; uncommitted wiki package ready
+- next: FIX-VERIFY then COMMIT; not node finish
+
+## iter93 FIX-VERIFY (2026-08-02T19:30:00Z)
+
+- IR required fixes: none (confirmed)
+- invariants OK: complete false 528/344; walls bulk92 residual29 annual1; no research193 evidence_ref bump
+- lint.sh pass; wiki lint project+memory clean
+- commit-mode test.sh: 1671 passed, 54 deselected
+- plan post-mortem appended
+- Ready COMMIT 186.93; not node finish
+
+## iter93 SYNC pre-COMMIT (2026-08-02T19:32:00Z)
+
+- inbox/feed empty; private 246B6703 reacted; saved empty; no running children
+- FIX-VERIFY clean; uncommitted wiki stop-churn + plan ready
+- next: COMMIT; not node finish

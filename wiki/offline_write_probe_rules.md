@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-02T14:20:00Z
+updated: 2026-08-02T19:10:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -166,3 +166,15 @@ The 29 residual clear Supports write rows that stay red after offline product wa
 Product-plane UI bulk: research187 honesty left 58 rows discovery_required; research188 dual bulk-chrome promoted 30 strong non-empty-shell rows to UI not_applicable (see [[ui_product_plane_bulk_chrome_dual_na_strong]]); 28 remain discovery_required (empty-shell + soft VAT/users). No bulk tools; API bulk 92 still external-contract red.
 
 Related UI bulk inventory freezes: [[ui_product_plane_bulk_chrome_dual_na_soft_tool]], [[ui_product_plane_bulk_chrome_dual_na_strong]].
+
+## research193 stop-churn (2026-08-02)
+
+Docs lock re-check only (MD5 `8b94b0135c91fd15fe54ea33e088a4be`, ETag `wcw4x9hqvu3603`, body 147934). OpenAPI still 404. api-docs chunk still Supports-only for bulk. No unauth residual/bulk reconfirm package (STEER after research192).
+
+There is still **no** further offline write product slice under fail-closed rules. Next real unlocks are external only:
+
+1. Official bulk request/response/error schema (or OpenAPI), then offline bulk freeze + tools.
+2. User expands scope to live non-production API qualification for residual/bulk authenticated probes.
+3. Non-Upsedasse annual-reports shell for the sole remaining UI red row (see [[ui_annual_reports_inaccessible]]).
+
+Do not treat citation-only reconfirm commits as product progress. Residual honesty: [[residual_clear_method_closed_inventory_honesty]].

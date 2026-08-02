@@ -11,7 +11,7 @@ sources:
   - .fractal/main.billy_complete/tmp/research186_residual_unauth.json
   - src/billy_mcp/live_probe.py
 created: 2026-08-02T14:20:00Z
-updated: 2026-08-02T18:35:00Z
+updated: 2026-08-02T19:10:00Z
 ---
 
 # Residual clear method-closed inventory honesty freeze
@@ -86,3 +86,29 @@ Offline docs fingerprint unchanged (MD5 `8b94b0135c91fd15fe54ea33e088a4be`, ETag
 Unauth residual matrix reconfirmed on locked base only (no token): method-closed **405**, transactions create/update **401**, meta deletes **200** meta-only.
 Inventory `evidence_ref` chain now ends with `research192_unauth_reconfirm`. Still `tools_allowed=false`; not greening; not product ACCEPT; complete stays false.
 Scratch: `.fractal/main.billy_complete/tmp/research192_unauth_reconfirm.json` (owner-only).
+
+## research193 stop-churn (2026-08-02)
+
+Official docs fingerprint re-checked only (no residual unauth matrix this pass; parent STEER stops citation-only reconfirm packages after research192):
+
+| Signal | Result |
+| --- | --- |
+| Docs MD5 / ETag / bytes | `8b94b0135c91fd15fe54ea33e088a4be` / `wcw4x9hqvu3603` / 147934 — **match lock** |
+| OpenAPI/Swagger paths on billy.dk | all **404** |
+| api-docs page chunk | Supports-line bulk wording only; no bulk body schema |
+| Unauth residual re-probe | **not run** (no new contract finding expected; no `evidence_ref` bump) |
+
+Residual **29** stay red and toolless (`tools_allowed=false`). Inventory `evidence_ref` remains ending at `research192_unauth_reconfirm`. Not greening; not product ACCEPT; complete stays false.
+
+### Current external walls (counts after product-plane UI bulk honesty closed)
+
+| Blocker | Rows |
+| --- | ---: |
+| Bulk schema unspecified | 92 API |
+| Residual clear honesty (this freeze) | 29 API |
+| annual_reports org inaccessible | 1 UI discovery |
+| Product-plane UI bulk parity | **0** open (dual-NA freezes closed) |
+
+Generated coverage snapshot at research193: implemented/contract **528**, live/vision **344**, complete **false**.
+
+Unlock residual tools only when official docs correct the method map or authenticated non-production write proof is in scope (live API remains `out_of_scope_by_user`).
