@@ -13,7 +13,7 @@ updated: 2026-08-02T02:45:00Z
 
 ## Current state
 
-- Continue mode iter **75** COMMIT done for 186.75 ui_invoices_delete_open (`5321c93`).
+- Continue mode iter **75** COMMIT done for 186.75 ui_invoices_delete_open (`5321c93`; bookkeeping `1cb1727`).
 - live/vision **175**; implemented/contract **359**; complete **false**.
 - API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
 - Residual UI: products.get / products update-delete / special.invoice_email; bulk/annual red.
@@ -24,6 +24,7 @@ updated: 2026-08-02T02:45:00Z
 
 - `fractal commit "ui invoices delete open"` → `5321c93` pushed to origin/main.billy_complete.
 - Product: ui_invoices_delete_open; coverage 359/175; complete false.
+- Bookkeeping: `1cb1727`.
 - Do not finish (completion requirements not met).
 
 
