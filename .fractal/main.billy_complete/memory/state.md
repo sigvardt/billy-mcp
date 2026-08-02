@@ -10754,3 +10754,11 @@ updated: 2026-08-02T14:42:00Z
 - test.sh: 1671 passed, 54 deselected
 - complete false 528/344; walls bulk92 residual29 annual1
 - STEER 8612433E; not finish; no full/ui-full suite
+
+
+## iter96 COMMIT (2026-08-02)
+
+- fractal commit 186.96: research196 hold external walls record
+- sha a940718 (verify via git log); product tree unchanged
+- complete false; walls bulk92 residual29 annual1
+- STEER 8612433E; not node finish
