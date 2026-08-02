@@ -232,6 +232,24 @@ def test_ui_invoices_get_open_models_are_empty_input_and_non_pii_success() -> No
     assert "path_class" in dumped
 
 
+def test_ui_invoices_update_open_models_are_empty_input_and_non_pii_success() -> None:
+    from billy_mcp.models import UiInvoicesUpdateOpenInput, UiInvoicesUpdateOpenSuccess
+
+    UiInvoicesUpdateOpenInput()
+    success = UiInvoicesUpdateOpenSuccess(
+        form_open=True,
+        gem_kladde_or_save_chrome_present=True,
+        date_or_payment_terms_chrome_present=True,
+        contact_or_customer_chrome_present=True,
+        inputs_present=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/invoices/:id/edit"
+    assert success.shell_kind == "invoices_update"
+    properties = UiInvoicesUpdateOpenSuccess.model_json_schema().get("properties", {})
+    assert not ({"email", "password", "totp", "cookie", "token", "org_slug"} & set(properties))
+
+
 def test_ui_bills_get_open_models_are_empty_input_and_non_pii_success() -> None:
     from billy_mcp.models import UiBillsGetOpenInput, UiBillsGetOpenSuccess
 

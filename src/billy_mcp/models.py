@@ -145,6 +145,32 @@ class UiInvoicesGetOpenSuccess(BaseModel):
     shell_markers_present: bool
 
 
+class UiInvoicesUpdateOpenInput(BaseModel):
+    """Empty, strict input boundary for the read-only invoice edit form open tool."""
+
+    model_config = ConfigDict(extra="forbid")
+
+
+class UiInvoicesUpdateOpenSuccess(BaseModel):
+    """Non-PII classification of the observed Billy invoice edit/update form.
+
+    Research174: path class /:org_slug/invoices/:id/edit only (draft form).
+    Distinct from get detail_open_only (requires Gem som kladde / multi-label
+    form freeze + inputs≥3). Never submit Gem/Godkend/Send/Slet.
+    """
+
+    model_config = ConfigDict(extra="forbid")
+
+    path_class: Literal["/:org_slug/invoices/:id/edit"] = "/:org_slug/invoices/:id/edit"
+    shell_kind: Literal["invoices_update"] = "invoices_update"
+    form_open: bool
+    gem_kladde_or_save_chrome_present: bool
+    date_or_payment_terms_chrome_present: bool
+    contact_or_customer_chrome_present: bool
+    inputs_present: bool
+    shell_markers_present: bool
+
+
 class UiBillsCreateOpenInput(BaseModel):
     """Empty, strict input boundary for the read-only bill create form open tool."""
 

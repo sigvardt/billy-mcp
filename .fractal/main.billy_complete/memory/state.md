@@ -6,18 +6,180 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T01:10:00Z
+updated: 2026-08-02T03:10:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **73** COMMIT done for 186.73 ui_bills_delete_open (`023a077`).
-- live/vision **173**; implemented/contract **357**; complete **false**.
-- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
-- Residual UI: products.get / products update-delete / invoices update-delete / special.invoice_email; bulk/annual red.
+- Continue mode iter **74** COMMIT in progress for 186.74 ui_invoices_update_open.
+- live/vision **174**; implemented/contract **358**; complete **false**.
 - Not node finish.
+
+
+## SYNC (iter 74)
+
+- Continue mode restart after iter73 COMMIT (`023a077` ui bills delete open; bookkeeping `ee5685c`).
+- Unread inbox/feed: empty. Saved: empty.
+- Private 07509048 (iter73 COMMIT done) + E6DB30BF (pre-COMMIT SYNC) reacted (+).
+- No running children. All historical children terminal (completed/exited/killed/stopped).
+- No parent directives.
+- Tip `ee5685c` == origin/main.billy_complete (branch clean).
+- Coverage: implemented/contract **357**; live/vision **173**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open.
+- Next product candidates (research, not greened): products.get only if detail
+  surface dual-stable; invoices update-delete only if dual holds; special.invoice_email
+  if durable dual holds; no bulk greening without official schema; no weak NA;
+  no postings/bankLines steal.
+- Last product: 186.73 ui bills delete open (live/vision 172→173).
+- Outbox: iter74 SYNC resume. Ready PREPARE. Not finish.
+
+
+## COMMIT (iter 74 / 186.74)
+
+- `fractal commit "ui invoices update open"` for product 186.74.
+- Coverage 358/174; complete false. Do not finish.
+
+
+## SYNC (iter 74 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 9E0EFFAE (FIX-VERIFY done) + 12FCE4C0 (pre-FIX-VERIFY) reacted (+).
+- No running children. No parent directives.
+- FIX-VERIFY clean; product + plan + live test + wiki ready to commit.
+- Ready COMMIT 186.74 ui_invoices_update_open. Not finish.
+
+
+## FIX-VERIFY (iter 74 / 186.74)
+
+- IR ACCEPT: no required fixes. Optional N1/N2 not applied (non-blocking).
+- lint.sh pass; wiki lint wiki + memory clean; coverage complete false (358/174).
+- Offline BILLY_TEST_MODE=commit **1638 passed** / 49 deselected.
+- Plan post-mortem appended. Ready COMMIT. Not finish.
+
+
+## SYNC (iter 74 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DEDFA47D (IR ACCEPT) + F96492ED (pre-IR) reacted (+).
+- No running children. No parent directives.
+- IR ACCEPT no required fixes (optional N1-N2). Product uncommitted.
+- Ready FIX-VERIFY then COMMIT. Not finish.
+
+
+## INDEPENDENT-REVIEW (iter 74 / 186.74)
+
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Product **ACCEPT** (ui_invoices_update_open → ui.parity.invoices.update form_open_only).
+- Overall completeness **FAIL** expected (bulk 92, annual, residual UI).
+- Docs etag/md5 unchanged; API invoices.update live_tested false; no dual-count steal;
+  egress unchanged; vision accept+purge; offline 1638; live dual pass.
+- Optional nits N1 workflow_ref naming / N2 seed body align — non-blocking.
+- Ready FIX-VERIFY (no required code fixes) then COMMIT. Not finish.
+
+
+## SYNC (iter 74 pre-IR)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private EB416647 (EXECUTE done) + 7DD84CCA (pre-EXECUTE) reacted (+).
+- No running children. No parent directives.
+- Product uncommitted on tip base `ee5685c`: ui_invoices_update_open + coverage 358/174.
+- Vision accept + purge_verified. Ready INDEPENDENT-REVIEW. Not finish.
+
+
+## EXECUTE (iter 74 / 186.74)
+
+- Implemented `ui_invoices_update_open`: models, browser (edit form freeze Gem som
+  kladde + Fakturanr/Dato/Betalingsfrist + inputs≥3), server, coverage generator
+  dual-count `ui.parity.invoices.update` / `api.invoices.update`, unit+inventory,
+  live dual test, wiki shell. No egress change.
+- Live dual `tests/live/test_ui_invoices_update_open.py` **pass**; vision record
+  purge_verified.
+- Coverage status: implemented/contract **358**; live/vision **174**; complete false.
+- lint.sh pass; offline BILLY_TEST_MODE=commit **1638 passed** / 49 deselected.
+- Ready REVIEW / FIX-VERIFY. Not finish.
+
+
+## SYNC (iter 74 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private AC03977F (PLAN done) + 58997064 (pre-PLAN) reacted (+).
+- No running children. No parent directives.
+- Plan 186.74 + research174 brief present. Tip `ee5685c`.
+- Ready EXECUTE product ui_invoices_update_open (root; no children). Not finish.
+
+
+## PLAN (iter 74 / 186.74)
+
+- Plan file
+  `plans/2026-08-02T01:16:23.885Z-186.74-ui_invoices_update_open.md`:
+  `ui_invoices_update_open` (maps invoices.update; path freeze
+  `/:org_slug/invoices/:id/edit`; form_open_only: Gem som kladde + Fakturanr/
+  Dato/Betalingsfrist + inputs≥3; never Gem/Send/Slet; assertion split vs get);
+  no egress change; live/vision 173→174; implemented/contract 357→358;
+  root-only Grok; no children; residual invoices.delete/products.get/email +
+  bulk/annual stay red; complete false.
+- Ready EXECUTE.
+
+
+## SYNC (iter 74 pre-PLAN)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2DEC00F7 (research174) + 4B1A1F87 (pre-RESEARCH) reacted (+).
+- No running children. No parent directives.
+- research174 brief present (`tmp/grok-research.md`); dual JSON present.
+- Ready PLAN product handoff: `ui_invoices_update_open` (maps invoices.update;
+  live/vision 173→~174). DEFER invoices.delete/products.get/email; bulk/annual
+  stay red. No egress change. Not finish.
+
+
+## RESEARCH (iter 74 / research174)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed product+invoice+contact **200 dual**; cleanup all_clean dual; profiles purged; api_token_used false.
+- products.get: soft /:id|/edit|/overview still nav chrome only dual; list_click stays on list (false detail_ready). **REJECT**.
+- invoices.update: edit path dual; inputs 9 dual; Gem som kladde + Fakturanr/Dato/Betalingsfrist dual. **ACCEPT** `ui_invoices_update_open` (maps invoices.update; live/vision 173→~174).
+- invoices.delete: Mere open dual; Slet text dual; Slet button 0 dual. **DEFER**.
+- special.invoice_email: soft /email|/send empty dual. **DEFER**.
+- No egress change. No coverage green in research.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`. Dual: `tmp/research174_focus_dual.json`.
+- Ready PLAN 186.74.
+
+
+## SYNC (iter 74 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private BA872405 (iter74 SYNC) + A41698EE (PREPARE done) reacted (+).
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `ee5685c`.
+- Coverage: implemented/contract 357; live/vision 173; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer products.get if detail surface
+  dual-stable; invoices update-delete only if dual holds; special.invoice_email
+  if durable dual holds; no weak NA; no postings/bankLines steal; no bulk greening).
+  Not finish.
+
+
+## PREPARE (iter 74)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local children ahead of tip `ee5685c`: 62 historical; none mid-iteration product; none running.
+- Reviewed three-dot product/wiki material → **skip all merges**:
+  - `ui_auth_status` (SRC): three-dot touches browser/models/server/tests but tip files larger (product already live on tip).
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback` (WIKI): tip equal or longer; index-only / minor wiki; larger_on_child=0.
+  - `ui_auth_credentials_research_codex_fallback` (WIKI): optional
+    `ui_auth_credentials_login_organization_research_codex_fallback.md` — skip
+    (superseded auth research already on root product path; same as iters 51-73).
+  - `wave5j_bank_line_product` and remaining remote-ahead: fractal-only / failed-review scaffolding or older wave product already integrated; productish three-dot 0 or tip larger.
+  - Material larger-on-child non-fractal files unique to tip path: **0** (only optional wiki research page above).
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `ee5685c` / product `023a077` ui bills delete open. Ready RESEARCH residual dual-count/NA
+  (prefer products.get if detail surface dual-stable; invoices update-delete only if dual holds;
+  special.invoice_email if durable dual holds; no bulk greening; no weak NA;
+  no postings/bankLines steal). Not finish.
 
 
 ## COMMIT (iter 73 / 186.73)

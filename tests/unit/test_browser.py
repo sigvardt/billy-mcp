@@ -44,6 +44,7 @@ from billy_mcp.models import (
     UiInvoicesCreateOpenSuccess,
     UiInvoicesGetOpenSuccess,
     UiInvoicesListSuccess,
+    UiInvoicesUpdateOpenSuccess,
     UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -9917,6 +9918,154 @@ def test_ui_invoices_get_open_returns_success_for_detail(tmp_path: Path) -> None
     assert "test-org-slug" not in str(result.model_dump())
     assert page.closed
     assert not any("click:text=Gem" in e for e in page.events)
+
+
+def _invoices_update_shell_controls(
+    page_holder: dict[str, FakeLoginPage],
+) -> dict[str, FakeLoginControl]:
+    def open_edit() -> None:
+        page = page_holder["page"]
+        page.url = "https://mit.billy.dk/test-org-slug/invoices/inv-1/edit"
+        updates = {
+            "body": FakeLoginControl(
+                text=(
+                    "Rediger fakturakladde Godkend og send Vis preview Gem som kladde "
+                    "Mere Kunde Fakturanr. Dato Betalingsfrist Valuta Produkt Beskrivelse "
+                    "Antal Enhedspris Tilføj linje Overblik Menu"
+                )
+            ),
+            (
+                "input[name='entryDate'], input[name='entry_date'], input[type='date']"
+            ): FakeLoginControl(count=1, visible=True),
+            (
+                "input[name='contactId'], input[name='contact'], [data-cy*='contact' i]"
+            ): FakeLoginControl(count=1, visible=True),
+            "text=Gem som kladde": FakeLoginControl(text="Gem som kladde", count=1, visible=True),
+            "text=Godkend og send": FakeLoginControl(text="Godkend og send", count=1, visible=True),
+            "text=Fakturanr.": FakeLoginControl(text="Fakturanr."),
+            "text=Dato": FakeLoginControl(text="Dato"),
+            "text=Betalingsfrist": FakeLoginControl(text="Betalingsfrist"),
+            "text=Kunde": FakeLoginControl(text="Kunde"),
+            "text=Beskrivelse": FakeLoginControl(text="Beskrivelse"),
+            "text=Tilføj linje": FakeLoginControl(text="Tilføj linje"),
+            "textarea": FakeLoginControl(count=1, visible=True),
+            "text=Overblik": FakeLoginControl(text="Overblik"),
+            "text=Menu": FakeLoginControl(text="Menu"),
+            "input, textarea, select": FakeLoginControl(count=9, visible=True),
+            "input:visible, textarea:visible, select:visible": FakeLoginControl(
+                count=9, visible=True
+            ),
+        }
+        for sel, control in updates.items():
+            page.controls[sel] = control
+            control.bind(page.events, sel)
+
+    return {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Fakturaer"),
+        "body": FakeLoginControl(text="Fakturaer Opret faktura Mere 1 Kladde TMP-INVOICE"),
+        "text=Opret faktura": FakeLoginControl(text="Opret faktura"),
+        "a[href*='/test-org-slug/invoices/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row'], tr": FakeLoginControl(
+            text="1 2026-08-01 TMP-INVOICE 10 DKK Kladde",
+            on_click=open_edit,
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+
+
+def test_ui_invoices_update_open_returns_success_for_edit_form(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    page_holder: dict[str, FakeLoginPage] = {}
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=_invoices_update_shell_controls(page_holder),
+        follow_goto=True,
+    )
+    page_holder["page"] = page
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_invoices_update_open())
+
+    assert result == UiInvoicesUpdateOpenSuccess(
+        form_open=True,
+        gem_kladde_or_save_chrome_present=True,
+        date_or_payment_terms_chrome_present=True,
+        contact_or_customer_chrome_present=True,
+        inputs_present=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+    assert not any("click:text=Gem" in e for e in page.events)
+    assert not any("click:text=Godkend" in e for e in page.events)
+    assert not any("click:text=Slet" in e for e in page.events)
+
+
+def test_ui_invoices_update_open_returns_ui_changed_when_empty_list(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = {
+        "input[type='email'][name='email']": FakeLoginControl(count=0, visible=False),
+        "input[type='password'][name='password']": FakeLoginControl(count=0, visible=False),
+        "input[type='checkbox'][name='remember']": FakeLoginControl(count=0, visible=False),
+        "button[data-cy='login-button']": FakeLoginControl(count=0, visible=False),
+        "h1": FakeLoginControl(text="Fakturaer"),
+        "body": FakeLoginControl(text="Fakturaer Ingen fakturaer Opret faktura"),
+        "text=Opret faktura": FakeLoginControl(text="Opret faktura"),
+        "a[href*='/test-org-slug/invoices/']": FakeLoginControl(count=0, visible=False),
+        "table tbody tr, [data-cy='table-item'], [role='row']": FakeLoginControl(
+            count=0, visible=False
+        ),
+        "text=Upsedasse!": FakeLoginControl(count=0, visible=False),
+        "text=Upsedasse": FakeLoginControl(count=0, visible=False),
+        "text=Log ind igen": FakeLoginControl(count=0, visible=False),
+        "text=Overblik": FakeLoginControl(text="Overblik"),
+        "text=Menu": FakeLoginControl(text="Menu"),
+    }
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+    result = asyncio.run(runtime.ui_invoices_update_open())
+    assert isinstance(result, ToolError)
+    assert result.code == StableErrorCode.UI_CHANGED
 
 
 def test_ui_invoices_get_open_returns_ui_changed_when_empty_list(tmp_path: Path) -> None:

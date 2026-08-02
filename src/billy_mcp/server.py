@@ -85,6 +85,7 @@ from billy_mcp.browser import (
     UiInvoicesCreateOpenService,
     UiInvoicesGetOpenService,
     UiInvoicesListService,
+    UiInvoicesUpdateOpenService,
     UiProductsCreateOpenService,
     UiProductsImportService,
     UiProductsListService,
@@ -172,6 +173,8 @@ from billy_mcp.models import (
     UiInvoicesGetOpenSuccess,
     UiInvoicesListInput,
     UiInvoicesListSuccess,
+    UiInvoicesUpdateOpenInput,
+    UiInvoicesUpdateOpenSuccess,
     UiProductsCreateOpenInput,
     UiProductsCreateOpenSuccess,
     UiProductsImportInput,
@@ -229,6 +232,7 @@ def create_server(
     ui_invoices_list_service: UiInvoicesListService | None = None,
     ui_invoices_create_open_service: UiInvoicesCreateOpenService | None = None,
     ui_invoices_get_open_service: UiInvoicesGetOpenService | None = None,
+    ui_invoices_update_open_service: UiInvoicesUpdateOpenService | None = None,
     ui_products_list_service: UiProductsListService | None = None,
     ui_products_create_open_service: UiProductsCreateOpenService | None = None,
     ui_clients_list_service: UiClientsListService | None = None,
@@ -290,6 +294,7 @@ def create_server(
     invoices_list_service = ui_invoices_list_service or browser
     invoices_create_open_service = ui_invoices_create_open_service or browser
     invoices_get_open_service = ui_invoices_get_open_service or browser
+    invoices_update_open_service = ui_invoices_update_open_service or browser
     products_list_service = ui_products_list_service or browser
     products_create_open_service = ui_products_create_open_service or browser
     clients_list_service = ui_clients_list_service or browser
@@ -390,6 +395,12 @@ def create_server(
 
         UiInvoicesGetOpenInput()
         return await invoices_get_open_service.ui_invoices_get_open()
+
+    async def ui_invoices_update_open() -> UiInvoicesUpdateOpenSuccess | ToolError:
+        """Observe an authenticated Billy invoice edit form without submitting."""
+
+        UiInvoicesUpdateOpenInput()
+        return await invoices_update_open_service.ui_invoices_update_open()
 
     async def ui_products_list() -> UiProductsListSuccess | ToolError:
         """Observe the authenticated Billy products list shell without writes."""
@@ -692,6 +703,13 @@ def create_server(
             "(read-only get/open; never submit, send, approve, or delete)."
         ),
     )(ui_invoices_get_open)
+    server.tool(
+        name="ui_invoices_update_open",
+        description=(
+            "Open a Billy invoice draft edit form for the authenticated session "
+            "(read-only form open; never Gem/Gem som kladde/Godkend/Send/Slet submit)."
+        ),
+    )(ui_invoices_update_open)
     server.tool(
         name="ui_products_list",
         description=(

@@ -10335,39 +10335,49 @@
     {
       "api_row_id": "api.invoices.update",
       "area": "invoices",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable for product path; live harness creates disposable contact+product+invoice then deletes in reverse with fresh list read-back",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.update",
+      "evidence": "research174 dual-session headless observation + ui_invoices_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices and products/contacts seed (disposable draft invoice; emails still denied); form open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_update, Gem som kladde + Fakturanr/Dato/Betalingsfrist chrome + inputs\u22653; never write submit; distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, and get detail_open ui_invoices_get_open); vision record tmp/vision-records/ui_invoices_update_open.json (invoice edit form frames, accept); maps api.invoices.update to UI edit form open only",
       "filters": [],
       "id": "ui.parity.invoices.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.invoices.update",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/invoices + first non-header invoice edit form (read-only invoices update form open; never Gem/Gem som kladde/Godkend/Send/Slet submit; /invoices/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "invoice"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "shell_kind",
+        "form_open",
+        "gem_kladde_or_save_chrome_present",
+        "date_or_payment_terms_chrome_present",
+        "contact_or_customer_chrome_present",
+        "inputs_present",
+        "shell_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "updates invoice",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_update_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_invoices_update_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

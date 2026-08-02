@@ -47,6 +47,7 @@ from billy_mcp.models import (
     UiInvoicesCreateOpenSuccess,
     UiInvoicesGetOpenSuccess,
     UiInvoicesListSuccess,
+    UiInvoicesUpdateOpenSuccess,
     UiProductsCreateOpenSuccess,
     UiProductsImportSuccess,
     UiProductsListSuccess,
@@ -107,6 +108,15 @@ _INVOICES_CREATE_DRAFT_SAVE_CHROME = "Gem som kladde"
 _INVOICES_CREATE_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse")
 _INVOICES_EDIT_PATH = re.compile(r"^/[^/]+/invoices/(?!new$)[^/]+/edit$")
 _INVOICES_GET_LINE_CHROME_MARKERS = ("Tilføj linje", "Beskrivelse", "Antal", "Pris")
+# Research174: update form freeze — stronger than get detail_open_only.
+_INVOICES_UPDATE_SAVE_MARKERS = ("Gem som kladde", "Godkend og send", "Godkend")
+_INVOICES_UPDATE_FIELD_MARKERS = (
+    "Fakturanr",
+    "Betalingsfrist",
+    "Valuta",
+    "Priser er",
+    "Design",
+)
 _PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
 _PRODUCTS_LIST_HEADING = "Produkter"
 _PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
@@ -634,6 +644,12 @@ class UiInvoicesGetOpenService(Protocol):
     """Injectable seam for the read-only invoices detail get-open observation."""
 
     async def ui_invoices_get_open(self) -> UiInvoicesGetOpenSuccess | ToolError: ...
+
+
+class UiInvoicesUpdateOpenService(Protocol):
+    """Injectable seam for the read-only invoices edit form open observation."""
+
+    async def ui_invoices_update_open(self) -> UiInvoicesUpdateOpenSuccess | ToolError: ...
 
 
 class UiBillsGetOpenService(Protocol):
@@ -1379,6 +1395,94 @@ class BrowserRuntime:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Browser invoices detail observation could not be completed.",
+            )
+        finally:
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
+
+    async def ui_invoices_update_open(self) -> UiInvoicesUpdateOpenSuccess | ToolError:
+        """Open an invoice edit form for the authenticated UI session only.
+
+        Research174: path-scoped invoices GET/POST/DELETE unlock list rows and
+        disposable seed. Open first non-header invoice edit surface at path class
+        /:org_slug/invoices/:id/edit. Assert form freeze (Gem som kladde family +
+        Fakturanr/Dato/Betalingsfrist + inputs≥3). Never Gem/Gem som kladde/
+        Godkend og send/Send/Slet/Mere→Slet submit. Soft /invoices/new is not
+        success. Distinct from get detail_open_only on the same path class.
+        """
+
+        page: LoginPage | None = None
+        try:
+            context = await self.start()
+            page = await context.new_page()
+            await page.goto(_BILLY_APP_ROOT_URL, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            if await _has_known_login_page(page):
+                return _auth_required_error()
+            if await _has_interaction_challenge(page):
+                return ToolError(
+                    code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                    message="Browser authentication requires a non-automatable challenge.",
+                )
+
+            slug = _resolve_org_slug(page.url, self._org_identity_path)
+            if slug is None:
+                return _ui_invoices_update_changed_error()
+
+            invoices_url = f"https://mit.billy.dk/{slug}/invoices"
+            await page.goto(invoices_url, wait_until="domcontentloaded")
+            await _await_page_settle(page)
+
+            for _ in range(50):
+                if await _has_known_login_page(page):
+                    return _auth_required_error()
+                if await _has_interaction_challenge(page):
+                    return ToolError(
+                        code=StableErrorCode.AUTH_INTERACTION_REQUIRED,
+                        message="Browser authentication requires a non-automatable challenge.",
+                    )
+                if await _has_error_shell_markers(page):
+                    return _ui_invoices_update_changed_error()
+                if _is_invoices_create_url(page.url):
+                    return _ui_invoices_update_changed_error()
+
+                if await _has_invoices_update_form_signature(page, slug):
+                    flags = await _invoices_update_form_flags(page)
+                    return UiInvoicesUpdateOpenSuccess(
+                        form_open=True,
+                        gem_kladde_or_save_chrome_present=flags[
+                            "gem_kladde_or_save_chrome_present"
+                        ],
+                        date_or_payment_terms_chrome_present=flags[
+                            "date_or_payment_terms_chrome_present"
+                        ],
+                        contact_or_customer_chrome_present=flags[
+                            "contact_or_customer_chrome_present"
+                        ],
+                        inputs_present=flags["inputs_present"],
+                        shell_markers_present=await _has_shell_nav_markers(page),
+                    )
+
+                if _is_invoices_list_url(page.url) and await _has_invoices_list_signature(page):
+                    opened = await _click_invoices_detail_candidate(page, slug)
+                    if opened:
+                        await _await_page_settle(page)
+                        continue
+                await asyncio.sleep(0.25)
+            return _ui_invoices_update_changed_error()
+        except BrowserEgressPolicyLoadError:
+            return ToolError(
+                code=StableErrorCode.EGRESS_DENIED,
+                message="Browser egress policy prevented the invoices update form observation.",
+            )
+        except Exception:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Browser invoices update form observation could not be completed.",
             )
         finally:
             if page is not None:
@@ -5670,6 +5774,94 @@ async def _has_invoices_detail_signature(page: LoginPage, slug: str) -> bool:
         return False
 
 
+async def _invoices_update_form_flags(page: LoginPage) -> dict[str, bool]:
+    """Non-PII invoice edit-form flags (research174). Stronger than get detail."""
+
+    flags = {
+        "gem_kladde_or_save_chrome_present": False,
+        "date_or_payment_terms_chrome_present": False,
+        "contact_or_customer_chrome_present": False,
+        "inputs_present": False,
+    }
+    try:
+        body_text = ""
+        try:
+            body_text = (await page.locator("body").inner_text())[:2500]
+        except Exception:
+            body_text = ""
+        flags["gem_kladde_or_save_chrome_present"] = any(
+            m in body_text for m in _INVOICES_UPDATE_SAVE_MARKERS
+        )
+        # Prefer explicit draft save chrome when counting buttons.
+        if not flags["gem_kladde_or_save_chrome_present"]:
+            try:
+                n = await _count_labeled_buttons(page, "Gem som kladde")
+                if n >= 1:
+                    flags["gem_kladde_or_save_chrome_present"] = True
+            except Exception:
+                pass
+        date_ok = any(
+            m in body_text
+            for m in ("Dato", "Betalingsfrist", "entryDate", "entry_date", "Fakturanr")
+        )
+        if not date_ok:
+            try:
+                entry = page.locator(
+                    "input[name='entryDate'], input[name='entry_date'], input[type='date']"
+                )
+                date_ok = await entry.count() >= 1
+            except Exception:
+                date_ok = False
+        if not date_ok:
+            date_ok = any(m in body_text for m in _INVOICES_UPDATE_FIELD_MARKERS)
+        flags["date_or_payment_terms_chrome_present"] = date_ok
+        contact_ok = bool(re.search(r"Kunde|Customer|Kontakt", body_text, re.I))
+        if not contact_ok:
+            try:
+                contact_css = page.locator(
+                    "input[name='contactId'], input[name='contact'], [data-cy*='contact' i]"
+                )
+                contact_ok = await contact_css.count() >= 1
+            except Exception:
+                contact_ok = False
+        flags["contact_or_customer_chrome_present"] = contact_ok
+        try:
+            n_inputs = await page.locator("input:visible, textarea:visible, select:visible").count()
+        except Exception:
+            try:
+                n_inputs = await page.locator("input, textarea, select").count()
+            except Exception:
+                n_inputs = 0
+        flags["inputs_present"] = n_inputs >= 3
+    except Exception:
+        pass
+    return flags
+
+
+async def _has_invoices_update_form_signature(page: LoginPage, slug: str) -> bool:
+    """Strict invoice edit form signature — update freeze (research174).
+
+    Requires Gem som kladde / save chrome + form inputs; distinct from get
+    detail_open_only which only needs entry_date/contact/line chrome.
+    """
+
+    del slug
+    try:
+        if not _is_invoices_edit_url(page.url):
+            return False
+        flags = await _invoices_update_form_flags(page)
+        if flags.get("gem_kladde_or_save_chrome_present") and flags.get("inputs_present"):
+            return True
+        if flags.get("gem_kladde_or_save_chrome_present") and flags.get(
+            "date_or_payment_terms_chrome_present"
+        ):
+            return True
+        hits = sum(1 for v in flags.values() if v)
+        return hits >= 3 and bool(flags.get("gem_kladde_or_save_chrome_present"))
+    except Exception:
+        return False
+
+
 async def _bills_detail_flags(page: LoginPage) -> dict[str, bool]:
     """Non-PII bill read-detail flags (research170)."""
 
@@ -8128,6 +8320,15 @@ def _ui_invoices_get_changed_error() -> ToolError:
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoices detail surface did not match the recorded get-open contract.",
+    )
+
+
+def _ui_invoices_update_changed_error() -> ToolError:
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message=(
+            "Billy invoices edit form surface did not match the recorded update-open contract."
+        ),
     )
 
 

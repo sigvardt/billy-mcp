@@ -89,6 +89,10 @@ UI_INVOICES_GET_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_INVOICES_GET_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_get_open.py"
 UI_INVOICES_GET_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
 UI_INVOICES_GET_OPEN_TOOL_NAME = "ui_invoices_get_open"
+UI_INVOICES_UPDATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
+UI_INVOICES_UPDATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_invoices_update_open.py"
+UI_INVOICES_UPDATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
+UI_INVOICES_UPDATE_OPEN_TOOL_NAME = "ui_invoices_update_open"
 UI_BILLS_CREATE_OPEN_UNIT_TEST_REFERENCE = "tests/unit/test_browser.py"
 UI_BILLS_CREATE_OPEN_LIVE_TEST_REFERENCE = "tests/live/test_ui_bills_create_open.py"
 UI_BILLS_CREATE_OPEN_MODEL_TEST_REFERENCE = "tests/test_models.py"
@@ -1767,6 +1771,83 @@ def apply_ui_bills_get_open_shell_evidence(
     row["cleanup"] = (
         "not_applicable for product path; live harness creates disposable contact+"
         "bill then deletes in reverse with fresh list read-back"
+    )
+    row["errors"] = [
+        "AUTH_REQUIRED",
+        "AUTH_INTERACTION_REQUIRED",
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR",
+    ]
+
+
+def apply_ui_invoices_update_open_shell_evidence(
+    row: dict[str, Any],
+    *,
+    parity_of_api_update: bool = False,
+) -> None:
+    """Mark invoices edit form **open only** evidence (research174).
+
+    Empty-input tool; open /:org_slug/invoices, open first non-header invoice
+    edit form at path class /:org_slug/invoices/:id/edit. Never Gem/Gem som
+    kladde/Godkend og send/Send/Slet submit. Distinct from get detail_open_only
+    on the same path (update requires Gem som kladde + multi-label form freeze).
+    When ``parity_of_api_update`` is true, dual-counts exact
+    ``ui.parity.invoices.update``.
+    """
+
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/invoices + first non-header invoice edit form "
+        "(read-only invoices update form open; never Gem/Gem som kladde/Godkend/"
+        "Send/Slet submit; /invoices/new not success)"
+    )
+    row["tool_name"] = UI_INVOICES_UPDATE_OPEN_TOOL_NAME
+    row["request_fields"] = []
+    row["response_fields"] = [
+        "path_class",
+        "shell_kind",
+        "form_open",
+        "gem_kladde_or_save_chrome_present",
+        "date_or_payment_terms_chrome_present",
+        "contact_or_customer_chrome_present",
+        "inputs_present",
+        "shell_markers_present",
+    ]
+    row["filters"] = []
+    row["pagination"] = None
+    if not parity_of_api_update:
+        row["api_row_id"] = None
+    row["test_references"] = [
+        TEST_REFERENCE,
+        UI_INVOICES_UPDATE_OPEN_MODEL_TEST_REFERENCE,
+        UI_INVOICES_UPDATE_OPEN_UNIT_TEST_REFERENCE,
+        UI_INVOICES_UPDATE_OPEN_LIVE_TEST_REFERENCE,
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ]
+    row["evidence"] = (
+        "research174 dual-session headless observation + ui_invoices_update_open product; "
+        "committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices and "
+        "products/contacts seed (disposable draft invoice; emails still denied); form open "
+        "only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_update, Gem som "
+        "kladde + Fakturanr/Dato/Betalingsfrist chrome + inputs≥3; never write submit; "
+        "distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, "
+        "and get detail_open ui_invoices_get_open); vision record "
+        "tmp/vision-records/ui_invoices_update_open.json (invoice edit form frames, accept)"
+    )
+    if parity_of_api_update:
+        row["evidence"] = f"{row['evidence']}; maps api.invoices.update to UI edit form open only"
+    row["discovered"] = True
+    row["implemented"] = True
+    row["contract_tested"] = True
+    row["live_tested"] = True
+    row["vision_verified"] = True
+    row["vision_evidence"] = None
+    row["parity_status"] = "form_open_only"
+    row["sensitivity"] = "medium"
+    row["side_effects"] = "none when open-only; product path never submits"
+    row["cleanup"] = (
+        "not_applicable for product path; live harness creates disposable contact+"
+        "product+invoice then deletes in reverse with fresh list read-back"
     )
     row["errors"] = [
         "AUTH_REQUIRED",
@@ -5132,6 +5213,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_invoices_create_open_shell_evidence(row, parity_of_api_create=True)
         if api_row["id"] == "api.invoices.get":
             apply_ui_invoices_get_open_shell_evidence(row, parity_of_api_get=True)
+        if api_row["id"] == "api.invoices.update":
+            apply_ui_invoices_update_open_shell_evidence(row, parity_of_api_update=True)
         if api_row["id"] == "api.bills.get":
             apply_ui_bills_get_open_shell_evidence(row, parity_of_api_get=True)
         if api_row["id"] == "api.bills.update":
