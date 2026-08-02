@@ -6,19 +6,28 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T05:10:00Z
+updated: 2026-08-02T05:15:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **77** COMMIT in progress for 186.77 org get/update dual-count + create NA (365/181).
-- live/vision **178**; implemented/contract **362**; complete **false**.
+- Continue mode iter **77** COMMIT done for 186.77 org get/update dual-count + create NA (`be38fca`).
+- live/vision **181**; implemented/contract **365**; complete **false**.
 - API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
-- Residual UI open ~167 (bulk-named ~58 + clear parity discovery + special.invoice_email + annual).
-- Disk: root ~1.3 GiB free; ssd_1 1.7 TiB. TMPDIR = node tmp on ssd_1 worktree. Saved P8 disk alert kept.
-- No running children. Not node finish.
+- Residual UI: accounts CRUD NA ready; special.invoice_email NA ready; many discovery_required; bulk/annual red.
+- Not node finish.
+
+## COMMIT (iter 77 / 186.77)
+
+- `fractal commit "ui organizations get update dual-count create na"` → `be38fca`
+  pushed to origin/main.billy_complete (hooks pass).
+- Product: org get+update dual-count on ui_settings_company_open; create NA;
+  coverage 365/181; complete false.
+- Do not finish (completion requirements not met).
+
+
 
 
 ## SYNC (iter 77)
