@@ -413,7 +413,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.accountNatures.create",
       "implemented": false,
@@ -422,6 +422,16 @@
       "method_or_route": "POST /v2/accountNatures",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "accountNature"
       ],
@@ -435,7 +445,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_account_natures_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -449,7 +459,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.accountNatures.update",
       "implemented": false,
@@ -458,6 +468,16 @@
       "method_or_route": "PUT /v2/accountNatures/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "accountNature"
@@ -472,7 +492,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_account_natures_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -1274,7 +1294,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.balanceModifiers.create",
       "implemented": false,
@@ -1283,6 +1303,16 @@
       "method_or_route": "POST /v2/balanceModifiers",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "balanceModifier"
       ],
@@ -1296,7 +1326,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_balance_modifiers_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -1310,7 +1340,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.balanceModifiers.update",
       "implemented": false,
@@ -1319,6 +1349,16 @@
       "method_or_route": "PUT /v2/balanceModifiers/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "balanceModifier"
@@ -1333,7 +1373,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_balance_modifiers_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -2518,7 +2558,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.bankPayments.delete",
       "implemented": false,
@@ -2527,6 +2567,16 @@
       "method_or_route": "DELETE /v2/bankPayments/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id"
       ],
@@ -2540,7 +2590,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_bank_payments_delete_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -3404,7 +3454,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.cities.create",
       "implemented": false,
@@ -3413,6 +3463,16 @@
       "method_or_route": "POST /v2/cities",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "city"
       ],
@@ -3426,7 +3486,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_cities_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -3440,7 +3500,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.cities.update",
       "implemented": false,
@@ -3449,6 +3509,16 @@
       "method_or_route": "PUT /v2/cities/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "city"
@@ -3463,7 +3533,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_cities_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -3924,7 +3994,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.contactBalancePostings.create",
       "implemented": false,
@@ -3933,6 +4003,16 @@
       "method_or_route": "POST /v2/contactBalancePostings",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "contactBalancePosting"
       ],
@@ -3946,7 +4026,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_contact_balance_postings_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -3960,7 +4040,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.contactBalancePostings.update",
       "implemented": false,
@@ -3969,6 +4049,16 @@
       "method_or_route": "PUT /v2/contactBalancePostings/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "contactBalancePosting"
@@ -3983,7 +4073,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_contact_balance_postings_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -4782,7 +4872,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.countryGroups.create",
       "implemented": false,
@@ -4791,6 +4881,16 @@
       "method_or_route": "POST /v2/countryGroups",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "countryGroup"
       ],
@@ -4804,7 +4904,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_country_groups_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -4818,7 +4918,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.countryGroups.update",
       "implemented": false,
@@ -4827,6 +4927,16 @@
       "method_or_route": "PUT /v2/countryGroups/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "countryGroup"
@@ -4841,7 +4951,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_country_groups_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -5040,7 +5150,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.countries.create",
       "implemented": false,
@@ -5049,6 +5159,16 @@
       "method_or_route": "POST /v2/countries",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "country"
       ],
@@ -5062,7 +5182,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_countries_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -5076,7 +5196,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.countries.update",
       "implemented": false,
@@ -5085,6 +5205,16 @@
       "method_or_route": "PUT /v2/countries/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "country"
@@ -5099,7 +5229,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_countries_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -5298,7 +5428,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.currencies.create",
       "implemented": false,
@@ -5307,6 +5437,16 @@
       "method_or_route": "POST /v2/currencies",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "currency"
       ],
@@ -5320,7 +5460,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_currencies_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -5334,7 +5474,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.currencies.update",
       "implemented": false,
@@ -5343,6 +5483,16 @@
       "method_or_route": "PUT /v2/currencies/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "currency"
@@ -5357,7 +5507,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_currencies_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -7581,7 +7731,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.invoiceReminderAssociations.create",
       "implemented": false,
@@ -7590,6 +7740,16 @@
       "method_or_route": "POST /v2/invoiceReminderAssociations",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "invoiceReminderAssociation"
       ],
@@ -7603,7 +7763,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_invoice_reminder_associations_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -7617,7 +7777,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.invoiceReminderAssociations.update",
       "implemented": false,
@@ -7626,6 +7786,16 @@
       "method_or_route": "PUT /v2/invoiceReminderAssociations/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "invoiceReminderAssociation"
@@ -7640,7 +7810,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_invoice_reminder_associations_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -7654,7 +7824,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false",
       "filters": [],
       "id": "api.invoiceReminderAssociations.delete",
       "implemented": false,
@@ -7663,6 +7833,16 @@
       "method_or_route": "DELETE /v2/invoiceReminderAssociations/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "kind": "meta_delete_unqualified",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false,
+        "unauth_status": 200
+      },
       "request_fields": [
         "id"
       ],
@@ -7676,7 +7856,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_invoice_reminder_associations_delete_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -8486,7 +8666,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.locales.create",
       "implemented": false,
@@ -8495,6 +8675,16 @@
       "method_or_route": "POST /v2/locales",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "locale"
       ],
@@ -8508,7 +8698,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_locales_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -8522,7 +8712,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.locales.update",
       "implemented": false,
@@ -8531,6 +8721,16 @@
       "method_or_route": "PUT /v2/locales/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "locale"
@@ -8545,7 +8745,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_locales_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -9005,7 +9205,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.postings.create",
       "implemented": false,
@@ -9014,6 +9214,16 @@
       "method_or_route": "POST /v2/postings",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "posting"
       ],
@@ -9027,7 +9237,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_postings_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -9041,7 +9251,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.postings.update",
       "implemented": false,
@@ -9050,6 +9260,16 @@
       "method_or_route": "PUT /v2/postings/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "posting"
@@ -9064,7 +9284,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_postings_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -11567,7 +11787,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.states.create",
       "implemented": false,
@@ -11576,6 +11796,16 @@
       "method_or_route": "POST /v2/states",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "state"
       ],
@@ -11589,7 +11819,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_states_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -11603,7 +11833,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.states.update",
       "implemented": false,
@@ -11612,6 +11842,16 @@
       "method_or_route": "PUT /v2/states/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "state"
@@ -11626,7 +11866,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_states_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -12425,7 +12665,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone",
       "filters": [],
       "id": "api.transactions.create",
       "implemented": false,
@@ -12434,6 +12674,16 @@
       "method_or_route": "POST /v2/transactions",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "READONLY_PROPERTY_TABLE",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "kind": "readonly_field_map_insufficient",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false,
+        "unauth_status": 401
+      },
       "request_fields": [
         "transaction"
       ],
@@ -12447,7 +12697,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_transactions_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -12461,7 +12711,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone",
       "filters": [],
       "id": "api.transactions.update",
       "implemented": false,
@@ -12470,6 +12720,16 @@
       "method_or_route": "PUT /v2/transactions/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "READONLY_PROPERTY_TABLE",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "kind": "readonly_field_map_insufficient",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false,
+        "unauth_status": 401
+      },
       "request_fields": [
         "id",
         "transaction"
@@ -12484,7 +12744,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_transactions_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -12498,7 +12758,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false",
       "filters": [],
       "id": "api.transactions.delete",
       "implemented": false,
@@ -12507,6 +12767,16 @@
       "method_or_route": "DELETE /v2/transactions/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "kind": "meta_delete_unqualified",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false,
+        "unauth_status": 200
+      },
       "request_fields": [
         "id"
       ],
@@ -12520,7 +12790,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_transactions_delete_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -12949,7 +13219,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.zipcodes.create",
       "implemented": false,
@@ -12958,6 +13228,16 @@
       "method_or_route": "POST /v2/zipcodes",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "zipcode"
       ],
@@ -12971,7 +13251,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_zipcodes_create_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -12985,7 +13265,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
       "filters": [],
       "id": "api.zipcodes.update",
       "implemented": false,
@@ -12994,6 +13274,16 @@
       "method_or_route": "PUT /v2/zipcodes/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "kind": "method_closed_offline",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": false
+      },
       "request_fields": [
         "id",
         "zipcode"
@@ -13008,7 +13298,7 @@
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
-      "tool_name": "api_zipcodes_update_preview",
+      "tool_name": "",
       "vision_evidence": null,
       "vision_verified": null
     },

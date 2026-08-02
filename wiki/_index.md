@@ -29,6 +29,8 @@ updated: 2026-08-02T12:14:49Z
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
+[[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Research186 inventory honesty for 29 residual clear API write rows — empty tool names and method-gate qualifications; not product ACCEPT, not greening, not completeness.
+
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 
 [[ui_account_groups_not_applicable|ui_account_groups_not_applicable]]: Dual-session research143 freeze — no equivalent mit.billy.dk workflow for accountGroups API parity; soft-empty paths match nonsense; NA accepted.

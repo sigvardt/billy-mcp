@@ -356,6 +356,59 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all(row["response_fields"] == [] for row in bulk_rows)
 
 
+def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
+    """Research186: residual clear writes must not plan non-existent preview tools."""
+
+    api_manifest, _, _, status, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    method_closed = sorted(generator.RESIDUAL_METHOD_CLOSED_IDS)
+    readonly_map = sorted(generator.RESIDUAL_READONLY_MAP_IDS)
+    meta_delete = sorted(generator.RESIDUAL_META_DELETE_IDS)
+    residual = sorted(generator.RESIDUAL_CLEAR_HONESTY_IDS)
+
+    assert len(method_closed) == 25
+    assert len(readonly_map) == 2
+    assert len(meta_delete) == 2
+    assert len(residual) == 29
+    assert set(method_closed) | set(readonly_map) | set(meta_delete) == set(residual)
+
+    for row_id in residual:
+        row = by_id[row_id]
+        assert row["source_kind"] == "clear"
+        assert row["tool_name"] == ""
+        assert row["implemented"] is False
+        assert row["contract_tested"] is False
+        assert row["live_tested"] is False
+        assert isinstance(row.get("qualification"), dict)
+        assert row["qualification"]["tools_allowed"] is False
+        assert row["qualification"]["live_api"] == "out_of_scope_by_user"
+        assert "research186" in row["evidence"]
+
+    for row_id in method_closed:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "method_closed_offline"
+        assert row["qualification"]["blocker_code"] == "METHOD_NOT_ALLOWED_UNAUTH"
+        assert "METHOD_NOT_ALLOWED" in row["evidence"]
+
+    for row_id in readonly_map:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "readonly_field_map_insufficient"
+        assert row["qualification"]["blocker_code"] == "READONLY_PROPERTY_TABLE"
+
+    for row_id in meta_delete:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "meta_delete_unqualified"
+        assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
+
+    # Honesty freeze does not change green counts or complete.
+    assert status["qualification"]["implemented_rows"] == 470
+    assert status["qualification"]["contract_tested_rows"] == 470
+    assert status["qualification"]["live_tested_rows"] == 286
+    assert status["qualification"]["vision_verified_rows"] == 286
+    assert status["complete"] is False
+
+
 def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     """Dual Upsedasse keeps annual_reports red; not_applicable is rejected."""
 

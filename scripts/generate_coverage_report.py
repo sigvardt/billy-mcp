@@ -1670,6 +1670,151 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
     }
 
 
+# Research186 residual clear honesty: Supports write rows that must not plan tools.
+# Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES (reconfirmed 2026-08-02).
+RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
+    {
+        "api.accountNatures.create",
+        "api.accountNatures.update",
+        "api.balanceModifiers.create",
+        "api.balanceModifiers.update",
+        "api.bankPayments.delete",
+        "api.cities.create",
+        "api.cities.update",
+        "api.contactBalancePostings.create",
+        "api.contactBalancePostings.update",
+        "api.countryGroups.create",
+        "api.countryGroups.update",
+        "api.countries.create",
+        "api.countries.update",
+        "api.currencies.create",
+        "api.currencies.update",
+        "api.invoiceReminderAssociations.create",
+        "api.invoiceReminderAssociations.update",
+        "api.locales.create",
+        "api.locales.update",
+        "api.postings.create",
+        "api.postings.update",
+        "api.states.create",
+        "api.states.update",
+        "api.zipcodes.create",
+        "api.zipcodes.update",
+    }
+)
+RESIDUAL_READONLY_MAP_IDS: frozenset[str] = frozenset(
+    {
+        "api.transactions.create",
+        "api.transactions.update",
+    }
+)
+RESIDUAL_META_DELETE_IDS: frozenset[str] = frozenset(
+    {
+        "api.transactions.delete",
+        "api.invoiceReminderAssociations.delete",
+    }
+)
+RESIDUAL_CLEAR_HONESTY_IDS: frozenset[str] = (
+    RESIDUAL_METHOD_CLOSED_IDS | RESIDUAL_READONLY_MAP_IDS | RESIDUAL_META_DELETE_IDS
+)
+
+
+def method_closed_offline_qualification() -> dict[str, Any]:
+    """Machine-readable freeze for unauth METHOD_NOT_ALLOWED residual clear writes.
+
+    Research186 / research96: Supports optimism is overridden by unauth 405.
+    Not greening and not a tool plan (offline_write_probe_rules rule 3).
+    """
+
+    return {
+        "kind": "method_closed_offline",
+        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research186_residual_unauth",
+        "fixture_ref": "research96_residual_unauth",
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": False,
+    }
+
+
+def readonly_field_map_qualification() -> dict[str, Any]:
+    """Freeze for auth-gated writes whose docs property table lacks writable fields."""
+
+    return {
+        "kind": "readonly_field_map_insufficient",
+        "blocker_code": "READONLY_PROPERTY_TABLE",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research186_residual_unauth",
+        "unauth_status": 401,
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": False,
+    }
+
+
+def meta_delete_unqualified_qualification() -> dict[str, Any]:
+    """Freeze for unauth 200 meta-only deletes without cleanup proof."""
+
+    return {
+        "kind": "meta_delete_unqualified",
+        "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research186_residual_unauth",
+        "unauth_status": 200,
+        "live_api": "out_of_scope_by_user",
+        "tools_allowed": False,
+    }
+
+
+def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
+    """Clear false planned tool names and attach residual honesty qualifications.
+
+    Inventory honesty only (research186). Keeps residual clear rows red and
+    source_kind=clear. Never marks implemented/contract_tested.
+    """
+
+    method_closed_q = method_closed_offline_qualification()
+    readonly_q = readonly_field_map_qualification()
+    meta_delete_q = meta_delete_unqualified_qualification()
+    for row in operations:
+        row_id = str(row.get("id", ""))
+        if row_id not in RESIDUAL_CLEAR_HONESTY_IDS:
+            continue
+        if row.get("source_kind") != "clear":
+            continue
+        row["tool_name"] = ""
+        if row_id in RESIDUAL_METHOD_CLOSED_IDS:
+            row["qualification"] = dict(method_closed_q)
+            row["evidence"] = (
+                f"{row.get('evidence', '')}; research186 unauth METHOD_NOT_ALLOWED "
+                f"(405) overrides Supports for offline tools; "
+                f"blocker_code={method_closed_q['blocker_code']}; "
+                f"tools_allowed=false; live_api=out_of_scope_by_user; "
+                "research96 residual fixture parity"
+            ).lstrip("; ")
+        elif row_id in RESIDUAL_READONLY_MAP_IDS:
+            row["qualification"] = dict(readonly_q)
+            row["evidence"] = (
+                f"{row.get('evidence', '')}; research186 unauth AUTHENTICATION_REQUIRED "
+                "(401) opens method at auth gate but official property table is "
+                "effectively readonly (no non-readonly create/update field map); "
+                f"blocker_code={readonly_q['blocker_code']}; tools_allowed=false; "
+                "do not freeze ticketed tools from Supports alone"
+            ).lstrip("; ")
+        elif row_id in RESIDUAL_META_DELETE_IDS:
+            row["qualification"] = dict(meta_delete_q)
+            row["evidence"] = (
+                f"{row.get('evidence', '')}; research186 unauth DELETE missing-id "
+                "returns 200 meta-only (not cleanup proof, not live qualification); "
+                f"blocker_code={meta_delete_q['blocker_code']}; tools_allowed=false"
+            ).lstrip("; ")
+        # Hard honesty: residual must stay red and toolless.
+        row["implemented"] = False
+        row["contract_tested"] = False
+        row["live_tested"] = False
+
+
 def bulk_rows(resource: str) -> list[dict[str, Any]]:
     """Build the two deliberately unimplemented bulk mentions for a resource.
 
@@ -1874,6 +2019,7 @@ def build_api_manifest() -> dict[str, Any]:
         operations.extend(standard_rows(resource, create, update, delete))
         operations.extend(bulk_rows(resource))
     operations.extend(special_rows())
+    apply_residual_clear_honesty(operations)
     return {
         "manifest": "billy_api_v2_phase_0",
         "schema_version": 1,

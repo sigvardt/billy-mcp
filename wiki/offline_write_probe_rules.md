@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-01T01:45:00Z
+updated: 2026-08-02T14:20:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -157,3 +157,7 @@ remaining clear not-impl set is **29** rows. Unauth probes against
 
 Do not offline-green residual clear from Supports flags alone. Full probe body:
 `.fractal/main.billy_complete/tmp/write-probes-research83.json`.
+
+## Residual clear inventory honesty (research186)
+
+The 29 residual clear Supports write rows that stay red after offline product waves carry machine-readable qualifications and empty `tool_name` values in the generated API inventory (see [[residual_clear_method_closed_inventory_honesty]]). This is inventory honesty only: it does not green rows, ship tools, or resolve bulk or annual_reports blockers.

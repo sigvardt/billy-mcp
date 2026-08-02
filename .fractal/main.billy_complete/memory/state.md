@@ -6,18 +6,139 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T13:35:00Z
+updated: 2026-08-02T14:00:14Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **84** COMMIT 186.84 dual-count/NA package.
-- live/vision **282**; implemented/contract **466**; GEO NA **206**; complete **false**.
-- Product: dual-count attachments.list + files.create on ui_uploads_list; NA files.list/get.
-- Residual still open: attachments get/create/update/delete, annual, bulk 92.
-- No running children. Not node finish.
+- Iter **86** COMMIT 186.86 residual clear method-closed inventory honesty.
+- live/vision **286**; implemented/contract **470**; complete **false**.
+- Residual 29 empty tool_name + qualifications; no tools; no greening.
+- Bulk 92 + UI bulk 58 + annual still red. Not node finish.
+
+
+
+
+
+
+
+
+
+
+## COMMIT (iter 86 / 186.86)
+
+- fractal commit: residual clear method-closed inventory honesty (research186).
+- Not node finish (complete false; bulk external-contract red, annual red, residual clear red by design).
+
+## SYNC (iter 86 pre-COMMIT) (2026-08-02T14:42Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 841A3234 + 0834254B reacted (+).
+- No children. No parent directives.
+- FIX-VERIFY clean (1667 offline pass; IR ACCEPT). Ready COMMIT 186.86 honesty freeze. Not finish.
+
+## FIX-VERIFY (iter 86 / 186.86) (2026-08-02T14:40Z)
+
+- IR required fixes: none. Optional N1 = commit untracked wiki/plan; N2 status wording deferred.
+- lint.sh pass (wiki + memory clean; coverage inventory 305/345; policy pass).
+- test.sh offline **1667 passed** / 54 deselected.
+- Residual 29 still toolless+qualified red; bulk/annual red; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.86 honesty freeze package. Not node finish.
+
+## SYNC (iter 86 pre-FIX-VERIFY) (2026-08-02T14:32Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 83269800 + 23FDF36D reacted (+).
+- Outbox: IR ACCEPT package; complete false.
+- No children. No parent directives. Proceed FIX-VERIFY.
+
+## IR (iter 86 / 186.86) (2026-08-02T14:30Z)
+
+- Package residual clear honesty: **ACCEPT** (`tmp/grok-review.md`).
+- Docs fingerprint live match; residual sets equal research96 fixture 25/2/2.
+- No greening; no residual tools registered; bulk/annual red.
+- Required fixes: none. Optional N1 commit untracked wiki/plan; N2 status wording.
+- Counts 286/470 complete false. Overall completeness **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT. Not finish.
+
+## SYNC (iter 86 pre-IR) (2026-08-02T14:26Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DFBCFDA7 + 2E22DCC5 reacted (+).
+- Outbox: EXECUTE 186.86 honesty freeze landed; 286/470 complete false.
+- No children. No parent directives. Proceed INDEPENDENT-REVIEW.
+
+## EXECUTE (iter 86 / 186.86) (2026-08-02T14:25Z)
+
+- Generator: `apply_residual_clear_honesty` + frozensets + three qualification builders.
+- Regenerated coverage: residual 29 toolless + qualified; counts 470/286 complete false.
+- Tests: inventory honesty unit test; offline suite 1667 passed.
+- Wiki: `residual_clear_method_closed_inventory_honesty.md` + offline_write_probe_rules note + _index.
+- No tools shipped. No greening. Ready REVIEW/IR.
+
+## SYNC (iter 86 pre-EXECUTE) (2026-08-02T14:13Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2D1115E6 + F737B3C3 reacted (+).
+- No parent directives. No running children.
+- PLAN 186.86 ready. Proceed EXECUTE. No new outbox (plan operational only).
+
+## PLAN (iter 86 / 186.86) (2026-08-02T14:12Z)
+
+- Plan file: residual_clear_method_closed_inventory_honesty (research186).
+- Root-only generator + inventory tests + wiki honesty page.
+- Target math unchanged 286/470 complete false.
+- No children. Proceed EXECUTE.
+
+## SYNC (iter 86 pre-PLAN) (2026-08-02T14:12Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4EE56C68 + CDF23942 reacted (+).
+- Outbox: RESEARCH186 method-closed honesty decision; 286/470 complete false.
+- No running children. No parent directives. Proceed PLAN.
+
+## RESEARCH (iter 86 / research186) (2026-08-02T14:10Z)
+
+- Docs MD5/ETag unchanged (`8b94b0135c91fd15fe54ea33e088a4be` / `wcw4x9hqvu3603`).
+- Unauth residual 29: 25×405, 2×401 (transactions C/U), 2×200 meta delete. No gate drift vs research96.
+- Annual dual Upsedasse reconfirmed via research185 same-day dual (no new dual; creds unset).
+- Recommended slice: `residual_clear_method_closed_inventory_honesty` — clear false tool_name placeholders; qualification blocks; **no greening**, no tools, no bulk/annual green.
+- Complete remains false. Proceed PLAN.
+
+## SYNC (iter 86 pre-RESEARCH) (2026-08-02T14:04Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private DC4E4DFC + F28B8F16 reacted (+).
+- No running children. No parent directives.
+- PREPARE: parent up to date; no child merges.
+- No new outbox (no material progress since 186.85 report). Proceed RESEARCH residual.
+
+## PREPARE (iter 86) (2026-08-02T14:03Z)
+
+- Parent `main`: already up to date.
+- Children with tip commits ahead of mainline: init-only, failed review scaffolding, or stale product.
+- `ui_auth_status` product already integrated (cf38b5c); three-dot diff is older create_server shape — do not merge.
+- wave5t/wave5u wiki pages already on mainline; main equal or newer (wave5u has research95/136 appends).
+- Credentials fallback wiki superseded by `auth_credentials_pre_submit_research.md`.
+- No child merge. No integration outbox (nothing material). No running children.
+
+## SYNC (iter 86 pre-PREPARE) (2026-08-02T14:00Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private F95CBAFA + AB8597B0 reacted (+).
+- Outbox 5933EEFE: 186.85 landed; 286/470 complete false.
+- Private DC4E4DFC: SYNC clean; proceed PREPARE residual.
+- No running children. No parent directives.
+- Ready PREPARE residual work (bulk/annual/UI). Not node finish.
+
+## COMMIT (iter 85 / 186.85)
+
+- fractal commit: attachments residual get/create/update/delete NA research185.
+- live/vision 286; implemented/contract 470; complete false.
+- Not node finish (bulk external-contract red, annual red, residual UI parity).
 
 ## COMMIT (iter 84 / 186.84)
 
