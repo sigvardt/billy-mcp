@@ -2461,38 +2461,55 @@
     {
       "api_row_id": "api.accounts.get",
       "area": "accounts",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.get",
+      "evidence": "research178 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_accounts_get_create_update_delete_surface true; candidate accounts.get+create+update+delete path classes soft-empty identical to nonsense (zz-r178-none); contrast settings_accounting(list shell only)/invoices/clients/suppliers/uploads/daybooks/products real shells with h1; research178 dual: settings accounting Regnskab/Kontoplan panel dual (accounts.list shell only on ui_settings_accounting_open); create CTAs Tilf\u00f8j/Opret/Ny konto 0 dual; Ret/row get-update absent; Mere\u2192Slet konto absent; exact get/create/update/delete ids only \u2014 not list/bulk; design \u00a710.2 UI parity not_applicable accepted for api.accounts.get; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accounts.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research178_accounts_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accounts.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accounts.get",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accounts.get (research178 dual-session: settings accounting Regnskab/Kontoplan panel dual is list shell only; Tilf\u00f8j/Opret/Ny konto create CTAs 0 dual; Ret/row get-update absent dual; Mere\u2192Slet konto absent dual; soft /accounts routes rewrite only; contrast shells/Indstillinger Regnskab Kontoplan(list only)/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
-      "response_fields": [
-        "account"
-      ],
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "products",
+          "zz-r178-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research178_accounts_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
       "sensitivity": "low",
-      "side_effects": "none",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -2542,113 +2559,163 @@
     {
       "api_row_id": "api.accounts.create",
       "area": "accounts",
-      "cleanup": "delete dedicated test resource",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.create",
+      "evidence": "research178 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_accounts_get_create_update_delete_surface true; candidate accounts.get+create+update+delete path classes soft-empty identical to nonsense (zz-r178-none); contrast settings_accounting(list shell only)/invoices/clients/suppliers/uploads/daybooks/products real shells with h1; research178 dual: settings accounting Regnskab/Kontoplan panel dual (accounts.list shell only on ui_settings_accounting_open); create CTAs Tilf\u00f8j/Opret/Ny konto 0 dual; Ret/row get-update absent; Mere\u2192Slet konto absent; exact get/create/update/delete ids only \u2014 not list/bulk; design \u00a710.2 UI parity not_applicable accepted for api.accounts.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accounts.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research178_accounts_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accounts.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accounts.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accounts.create (research178 dual-session: settings accounting Regnskab/Kontoplan panel dual is list shell only; Tilf\u00f8j/Opret/Ny konto create CTAs 0 dual; Ret/row get-update absent dual; Mere\u2192Slet konto absent dual; soft /accounts routes rewrite only; contrast shells/Indstillinger Regnskab Kontoplan(list only)/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "account"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates account",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "products",
+          "zz-r178-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research178_accounts_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accounts.update",
       "area": "accounts",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.update",
+      "evidence": "research178 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_accounts_get_create_update_delete_surface true; candidate accounts.get+create+update+delete path classes soft-empty identical to nonsense (zz-r178-none); contrast settings_accounting(list shell only)/invoices/clients/suppliers/uploads/daybooks/products real shells with h1; research178 dual: settings accounting Regnskab/Kontoplan panel dual (accounts.list shell only on ui_settings_accounting_open); create CTAs Tilf\u00f8j/Opret/Ny konto 0 dual; Ret/row get-update absent; Mere\u2192Slet konto absent; exact get/create/update/delete ids only \u2014 not list/bulk; design \u00a710.2 UI parity not_applicable accepted for api.accounts.update; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accounts.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research178_accounts_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accounts.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accounts.update",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accounts.update (research178 dual-session: settings accounting Regnskab/Kontoplan panel dual is list shell only; Tilf\u00f8j/Opret/Ny konto create CTAs 0 dual; Ret/row get-update absent dual; Mere\u2192Slet konto absent dual; soft /accounts routes rewrite only; contrast shells/Indstillinger Regnskab Kontoplan(list only)/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "account"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "updates account",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "products",
+          "zz-r178-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research178_accounts_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.accounts.delete",
       "area": "accounts",
-      "cleanup": "not_recoverable; use disposable test data",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.delete",
+      "evidence": "research178 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_accounts_get_create_update_delete_surface true; candidate accounts.get+create+update+delete path classes soft-empty identical to nonsense (zz-r178-none); contrast settings_accounting(list shell only)/invoices/clients/suppliers/uploads/daybooks/products real shells with h1; research178 dual: settings accounting Regnskab/Kontoplan panel dual (accounts.list shell only on ui_settings_accounting_open); create CTAs Tilf\u00f8j/Opret/Ny konto 0 dual; Ret/row get-update absent; Mere\u2192Slet konto absent; exact get/create/update/delete ids only \u2014 not list/bulk; design \u00a710.2 UI parity not_applicable accepted for api.accounts.delete; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* accounts.get+create+update+delete tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research178_accounts_get_create_update_delete_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.accounts.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.accounts.delete",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.accounts.delete (research178 dual-session: settings accounting Regnskab/Kontoplan panel dual is list shell only; Tilf\u00f8j/Opret/Ny konto create CTAs 0 dual; Ret/row get-update absent dual; Mere\u2192Slet konto absent dual; soft /accounts routes rewrite only; contrast shells/Indstillinger Regnskab Kontoplan(list only)/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id"
-      ],
-      "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "deletes account",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_accounting",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "products",
+          "zz-r178-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research178_accounts_get_create_update_delete_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -15162,41 +15229,54 @@
     {
       "api_row_id": "api.special.invoice_email",
       "area": "invoices",
-      "cleanup": "not_reversible; use a dedicated non-production destination",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.special.invoice_email",
+      "evidence": "research178 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_invoice_email_compose_surface true; candidate special.invoice_email path classes soft-empty identical to nonsense (zz-r178-email-none); contrast invoices_edit(Godkend og send contrast only)/invoices_list/settings_invoicing/uploads/clients/products real shells with h1; research178 dual: soft /invoices/:id/email|/send|/delivery empty (inputs_n 0, Send 0); edit surface Godkend og send 1 dual rejected as non-compose irreversible approve-send; exact special.invoice_email id only \u2014 not invoice CRUD tools; design \u00a710.2 UI parity not_applicable accepted for api.special.invoice_email; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* special.invoice_email tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research178_special_invoice_email_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.special.invoice_email",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.special.invoice_email",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.special.invoice_email (research178 dual-session: soft /invoices/:id/email|/send|/delivery inputs_n 0 Send 0 dual; invoice edit Godkend og send present dual but rejected as irreversible approve-send not email compose; contrast shells/Faktura edit(Godkend og send not compose)/Fakturaer/Indstillinger Levering email string/Bilag/Kunder/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "invoiceId",
-        "email.contactPersonId",
-        "email.emailBody",
-        "email.emailSubject",
-        "email.copyToUserId?"
-      ],
-      "response_fields": [
-        "changed_records[]"
-      ],
-      "sensitivity": "high",
-      "side_effects": "high: sends external email",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "invoices",
+          "invoices_edit",
+          "settings_invoicing",
+          "uploads",
+          "clients",
+          "products",
+          "zz-r178-email-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research178_special_invoice_email_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

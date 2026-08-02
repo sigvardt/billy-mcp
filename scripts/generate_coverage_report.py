@@ -55,14 +55,19 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.products.update",
     "api.products.delete",
     "api.organizations.create",
+    "api.accounts.get",
+    "api.accounts.create",
+    "api.accounts.update",
+    "api.accounts.delete",
     "api.special.invoice_delivery",
     "api.special.invoice_logs",
+    "api.special.invoice_email",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    111  # prior 110 + research177 organizations.create (exact; not list/get/update/bulk)
+    116  # prior 111 + research178 accounts get/create/update/delete (4) + special.invoice_email (1)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -93,6 +98,20 @@ GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS: frozenset[str] = frozenset(
 # (list/get/update dual-count on ui_settings_company_open; bulk external-contract red).
 GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS: frozenset[str] = frozenset(
     {"api.organizations.create"}
+)
+# research178: accounts get/create/update/delete only
+# (list stays tool-green on ui_settings_accounting_open; bulk external-contract red).
+GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS: frozenset[str] = frozenset(
+    {
+        "api.accounts.get",
+        "api.accounts.create",
+        "api.accounts.update",
+        "api.accounts.delete",
+    }
+)
+# research178: special.invoice_email compose absence (exact special id).
+GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS: frozenset[str] = frozenset(
+    {"api.special.invoice_email"}
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
@@ -4905,6 +4924,10 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     Export/Import only; inventory create is create-only; no dual-count steal).
     research177: organizations.create dual absence (dedicated freeze; exact id
     only — list/get/update dual-count on ui_settings_company_open; create CTA 0 dual).
+    research178: accounts.get/create/update/delete dual absence (dedicated freeze;
+    exact ids only — list stays tool-green on settings accounting; no create CTA /
+    Ret / Mere→Slet dual) + special.invoice_email dual absence (soft email/send/
+    delivery empty; Godkend og send on edit rejected as non-compose).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -4915,6 +4938,8 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research178_accounts = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS
+    is_research178_email = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -4926,7 +4951,54 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research177:
+    if is_research178_accounts:
+        research_id = "research178"
+        evidence_ref = "research178_accounts_get_create_update_delete_dual"
+        nonsense_path = "zz-r178-none"
+        dual_agree_flag = "dual_agree_no_accounts_get_create_update_delete_surface"
+        family_label = "accounts.get+create+update+delete"
+        contrast_shells = (
+            "settings_accounting(list shell only)/invoices/clients/suppliers/"
+            "uploads/daybooks/products"
+        )
+        list_heading_suffix = (
+            "/Indstillinger Regnskab Kontoplan(list only)/Fakturaer/Kunder/"
+            "Leverandører/Bilag/daybooks editor/Produkter"
+        )
+        contrast_controls = [
+            "settings_accounting",
+            "invoices",
+            "clients",
+            "suppliers",
+            "uploads",
+            "daybooks/new",
+            "products",
+            nonsense_path,
+        ]
+    elif is_research178_email:
+        research_id = "research178"
+        evidence_ref = "research178_special_invoice_email_dual"
+        nonsense_path = "zz-r178-email-none"
+        dual_agree_flag = "dual_agree_no_invoice_email_compose_surface"
+        family_label = "special.invoice_email"
+        contrast_shells = (
+            "invoices_edit(Godkend og send contrast only)/invoices_list/"
+            "settings_invoicing/uploads/clients/products"
+        )
+        list_heading_suffix = (
+            "/Faktura edit(Godkend og send not compose)/Fakturaer/"
+            "Indstillinger Levering email string/Bilag/Kunder/Produkter"
+        )
+        contrast_controls = [
+            "invoices",
+            "invoices_edit",
+            "settings_invoicing",
+            "uploads",
+            "clients",
+            "products",
+            nonsense_path,
+        ]
+    elif is_research177:
         research_id = "research177"
         evidence_ref = "research177_organizations_create_dual"
         nonsense_path = "zz-r177-none"
@@ -5230,6 +5302,27 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research178_accounts:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: settings accounting Regnskab/Kontoplan "
+            "panel dual is list shell only; Tilføj/Opret/Ny konto create CTAs 0 dual; "
+            "Ret/row get-update absent dual; Mere→Slet konto absent dual; "
+            "soft /accounts routes rewrite only; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+    if is_research178_email:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: soft /invoices/:id/email|/send|/delivery "
+            "inputs_n 0 Send 0 dual; invoice edit Godkend og send present dual but "
+            "rejected as irreversible approve-send not email compose; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     row["tool_name"] = ""
     row["request_fields"] = []
     row["response_fields"] = []
@@ -5257,6 +5350,21 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "(false-green risk); list Mere Eksportér/Importér only (Slet 0 dual); "
             "inventory Opret produkt is create-only (already greened); "
             "exact get/update/delete ids only — not list/create/bulk; "
+        )
+    if is_research178_accounts:
+        levering_note = (
+            "research178 dual: settings accounting Regnskab/Kontoplan panel dual "
+            "(accounts.list shell only on ui_settings_accounting_open); "
+            "create CTAs Tilføj/Opret/Ny konto 0 dual; Ret/row get-update absent; "
+            "Mere→Slet konto absent; exact get/create/update/delete ids only — "
+            "not list/bulk; "
+        )
+    if is_research178_email:
+        levering_note = (
+            "research178 dual: soft /invoices/:id/email|/send|/delivery empty "
+            "(inputs_n 0, Send 0); edit surface Godkend og send 1 dual rejected as "
+            "non-compose irreversible approve-send; exact special.invoice_email id "
+            "only — not invoice CRUD tools; "
         )
     row["evidence"] = (
         f"{research_id} dual independent ephemeral browser sessions (no "

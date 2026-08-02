@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T03:29:32Z
+updated: 2026-08-02T07:45:00Z
 ---
 
 # billy_mcp
@@ -32,6 +32,8 @@ updated: 2026-08-02T03:29:32Z
 [[ui_account_groups_not_applicable|ui_account_groups_not_applicable]]: Dual-session research143 freeze — no equivalent mit.billy.dk workflow for accountGroups API parity; soft-empty paths match nonsense; NA accepted.
 
 [[ui_account_natures_balance_modifiers_not_applicable|ui_account_natures_balance_modifiers_not_applicable]]: Dual-session research142 freeze — no equivalent mit.billy.dk workflow for accountNatures/balanceModifiers API parity; soft-empty paths match nonsense; NA accepted.
+
+[[ui_accounts_get_create_update_delete_not_applicable|ui_accounts_get_create_update_delete_not_applicable]]: Dual-session research178 freeze — no equivalent mit.billy.dk get/create/update/delete chrome for chart accounts; list stays tool-green on settings accounting; exact NA for get/create/update/delete only.
 
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
@@ -142,6 +144,8 @@ updated: 2026-08-02T03:29:32Z
 [[ui_settings_users_open_shell|ui_settings_users_open_shell]]: Read-only Billy Indstillinger Brugere (org users) settings panel open; dual-counts users.list.
 
 [[ui_settings_vat_open_shell|ui_settings_vat_open_shell]]: Read-only Billy Indstillinger Momssatser (VAT) settings panel; dual-counts api.taxRates.list (research158) and api.salesTaxRulesets.list (research159).
+
+[[ui_special_invoice_email_not_applicable|ui_special_invoice_email_not_applicable]]: Dual-session research178 freeze — no durable mit.billy.dk invoice email compose form; soft email/send/delivery empty; Godkend og send rejected as non-compose; exact NA for api.special.invoice_email only.
 
 [[ui_specials_invoice_delivery_logs_not_applicable|ui_specials_invoice_delivery_logs_not_applicable]]: Dual-session research150 freeze — no equivalent mit.billy.dk workflow for special invoice_delivery and invoice_logs API parity; soft-empty path matches nonsense; settings Levering is email-only; NA accepted for those two specials only.
 

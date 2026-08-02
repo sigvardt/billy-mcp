@@ -6,18 +6,183 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T05:15:00Z
+updated: 2026-08-02T08:17:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **77** COMMIT done for 186.77 org get/update dual-count + create NA (`be38fca`).
-- live/vision **181**; implemented/contract **365**; complete **false**.
-- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
-- Residual UI: accounts CRUD NA ready; special.invoice_email NA ready; many discovery_required; bulk/annual red.
+- Resume mode iter **78** pre-COMMIT SYNC; FIX-VERIFY clean; ready COMMIT 186.78.
+- live/vision **186**; implemented/contract **370**; complete **false**.
 - Not node finish.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## SYNC (iter 78 pre-COMMIT)
+
+- Unread inbox/feed: empty. Private 5A88BEF5 + D52A2821 (FIX-VERIFY done) reacted (+).
+- Saved: empty. No running children. No parent directives.
+- FIX-VERIFY clean; product + plan + wiki ready to commit.
+- Ready COMMIT 186.78 accounts CRUD NA + special.invoice_email NA. Not finish.
+
+
+## FIX-VERIFY (iter 78 / 186.78)
+
+- IR required fixes: none. Optional N1/N2 deferred (wiki package at commit; wording cosmetic).
+- lint.sh pass. test.sh offline 1642 passed / 50 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: accounts get/create/update/delete + special.invoice_email NA research178;
+  accounts.list shell_open_only unchanged; bulk non-NA; live/vision 186;
+  implemented/contract 370; complete false; bulk 92 external-contract; annual stay red;
+  API live false (out_of_scope_by_user).
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.78 accounts CRUD NA + special.invoice_email NA package.
+  Not node finish.
+
+
+## SYNC (iter 78 pre-FIX-VERIFY)
+
+- Unread inbox/feed: empty. Private 8A3B864C + D95A8508 (IR ACCEPT) reacted (+).
+- Saved: empty. No running children. No parent directives.
+- IR ACCEPT 186.78 (no required product fixes; optional N1–N2 deferred).
+- Ready FIX-VERIFY reconfirm then COMMIT. Not finish.
+
+
+## INDEPENDENT-REVIEW (iter 78 / 186.78)
+
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Product **ACCEPT** (accounts get/create/update/delete NA + special.invoice_email NA research178 exact ids).
+- Overall completeness **FAIL** expected (bulk 92, annual, residual UI).
+- Docs etag/md5 unchanged; list shell_open_only unchanged; bulk not greened;
+  Godkend-og-send rejected as email compose; API live false; offline 1642.
+- Optional nits N1 wiki untracked until commit / N2 generic NA reason wording — non-blocking.
+- Ready FIX-VERIFY (no required code fixes) then COMMIT. Not finish.
+
+
+## SYNC (iter 78 pre-IR)
+
+- Inbox 6BF156D0 P8: disk clearance confirmed (~200 GiB free); low-space pause lifted.
+  Reacted + replied; TMPDIR remains on ssd_1 worktree by preference.
+- Unread feed: empty. Private 6A5470C1 + CAF653CF (EXECUTE done) reacted (+).
+- Saved: empty. No running children.
+- EXECUTE 186.78 uncommitted: accounts CRUD NA + special.invoice_email NA;
+  coverage 370/186; offline 1642; complete=false.
+- Ready for IR of product. Not finish.
+
+
+## EXECUTE (iter 78 / 186.78)
+
+- Producted research178 / plan 186.78: NA freeze accounts.get+create+update+delete
+  + special.invoice_email (exact ids; research178 dual).
+- Generator frozensets + PREFIXES + GEO count 111→116; evidence branches;
+  inventory tests; wiki NA pages + index; coverage regenerated.
+- accounts.list shell_open_only unchanged; invoice tools unchanged; bulk stay red;
+  no new tools; no egress change.
+- lint.sh pass. offline BILLY_TEST_MODE=commit **1642 passed** / 50 deselected.
+- Coverage: implemented/contract **370**; live/vision **186**; complete false.
+- Ready REVIEW / FIX-VERIFY. Not finish.
+
+
+## SYNC (iter 78 pre-EXECUTE)
+
+- Unread inbox/feed: empty. Private 73E12EB7 + 07E367F6 (PLAN done) reacted (+).
+- Saved: empty. No running children. No parent directives.
+- Plan 186.78 + research178 brief present. Tip `49f4cc7`.
+- Ready EXECUTE product accounts CRUD NA + special.invoice_email NA (root; no children). Not finish.
+
+
+## PLAN (iter 78 / 186.78)
+
+- Plan file
+  `plans/2026-08-02T07:38:41.945Z-186.78-ui_accounts_crud_and_invoice_email_not_applicable.md`:
+  NA freeze accounts.get+create+update+delete + special.invoice_email (research178);
+  GEO NA count 111→116; live/vision 181→186; contract 365→370; root-only Grok;
+  keep accounts.list shell; no bulk; no new tools; complete false.
+- Ready EXECUTE.
+
+
+## SYNC (iter 78 pre-PLAN)
+
+- Unread inbox/feed: empty. Private 0288595F + C35A9A09 (research178 done) reacted (+).
+- Saved: empty. No running children. No parent directives.
+- research178 brief + dual JSON present. ACCEPT: accounts get/create/update/delete NA +
+  special.invoice_email NA. Ready PLAN 186.78. Not finish.
+
+
+## RESEARCH (iter 78 / research178)
+
+- Official docs etag/md5 unchanged (`8b94b013…` / wcw4x9hqvu3603).
+- Dual SPA seed true: contact+product+invoice; cleanup all_clean dual; api_token_used false; profiles purged.
+- **ACCEPT** NA freeze accounts.get+create+update+delete (list stays shell_open_only on ui_settings_accounting_open).
+- **ACCEPT** NA freeze special.invoice_email (soft email/send empty; Godkend-only rejected).
+- DEFER daybooks residual (weak); users residual; invoiceLines embedded.
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`.
+- Dual: `tmp/research178_focus_dual.json`.
+- Ready PLAN 186.78. Not finish.
+
+
+## SYNC (iter 78 pre-RESEARCH)
+
+- Unread inbox/feed: empty. Private 13DF6768 (SYNC resume) + A81AF371 (PREPARE done) reacted (+).
+- Saved: empty.
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `49f4cc7` / product `be38fca`.
+- Dirty: memory/state.md only.
+- Coverage: implemented/contract 365; live/vision 181; complete false;
+  API live_tested false (out_of_scope_by_user).
+- Ready RESEARCH residual dual-count/NA (prefer accounts CRUD NA + special.invoice_email NA
+  if dual holds; next open shell if dual; no bulk greening; no weak NA; no annual green without access).
+  Not finish.
+
+
+## PREPARE (iter 78)
+
+- Parent `main`: fetch + merge **Already up to date**.
+- Local `git branch --list 'main.billy_complete.*'`: 157 historical; none with commits ahead of tip (local refs stale vs remotes).
+- Remote-ahead scan: 75 refs with commits ahead of `49f4cc7`; material larger-on-child non-fractal: **1**
+  only `wiki/ui_auth_credentials_login_organization_research_codex_fallback.md` on
+  `ui_auth_credentials_research_codex_fallback` — **skip** (superseded auth research already on root product path).
+- `ui_auth_status` SRC on remote: tip browser/models/server much larger than child — skip (product already live on tip).
+- wave5t/wave5u wiki: tip equal or longer / index-only — skip.
+- Remaining remote-ahead: fractal-only or failed-review scaffolding / older wave product already integrated.
+- No child merges this iteration. No integration outbox.
+- Dirty: memory/state.md only (SYNC + PREPARE notes).
+- Tip `49f4cc7` / product `be38fca`. Ready RESEARCH residual dual-count/NA
+  (prefer accounts CRUD NA + special.invoice_email NA if dual holds; next open shell if dual;
+  DEFER bulk greening; no annual green without access; no weak NA).
+  Not finish.
+
+
+## SYNC (iter 78)
+
+- First pass (pre-pause): continue after iter77 COMMIT (`be38fca` / `49f4cc7`); inbox/feed empty;
+  private FA26ACAD + 596F4110 reacted; outbox 9C82D888; private C7FE50AB; ready PREPARE.
+- Resume after pause (2026-08-02T07:28Z): inbox/feed empty; private C7FE50AB reacted (+).
+- Saved D64B44AC unsaved — root free recovered ~5.7 GiB (was ~340 MiB). Keep TMPDIR on ssd_1 for browser/temp-heavy work; no saxo /tmp touch.
+- Dirty worktree: only memory/state.md (this SYNC). No product mid-flight.
+- No running children. No parent directives. Tip `49f4cc7` == origin/main.billy_complete.
+- Coverage: implemented/contract **365**; live/vision **181**; complete **false**;
+  API live_tested false (`out_of_scope_by_user`); bulk 92 external-contract red;
+  annual_reports org_inaccessible red; residual UI parity open
+  (accounts.get/create/update/delete NA ready per research177; special.invoice_email NA ready;
+  many discovery_required clear + bulk-named parity rows).
+- Last product: 186.77 org get+update dual-count + create NA (live/vision 178→181; contract 362→365).
+- Next: PREPARE then RESEARCH residual dual-count/NA (prefer accounts CRUD NA + special.invoice_email NA
+  if dual holds; next open shell if dual; DEFER bulk greening; no annual green without access).
+- Outbox resume-after-pause posted. Ready PREPARE. Not finish.
+
 
 ## COMMIT (iter 77 / 186.77)
 

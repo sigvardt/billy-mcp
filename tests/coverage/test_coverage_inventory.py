@@ -417,7 +417,13 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS:
+        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS:
+            assert "research178" in qual["evidence_ref"]
+            assert "research178" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS:
+            assert "research178" in qual["evidence_ref"]
+            assert "research178" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS:
             assert "research177" in qual["evidence_ref"]
             assert "research177" in row["evidence"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS:
@@ -691,15 +697,66 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert files_upload_parity[0]["tool_name"] == "ui_uploads_list"
     assert files_upload_parity[0]["live_tested"] is True
     assert "research155" in (files_upload_parity[0].get("evidence") or "")
-    # sibling special invoice_email stays red (not greened by accidental special prefix)
-    invoice_email_sibling = [
+    # research178 special.invoice_email NA freeze (exact special id; not invoice CRUD tools)
+    invoice_email_na = [
         row
         for row in ui_manifest["workflows"]
-        if str(row.get("api_row_id") or "") == "api.special.invoice_email"
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS
     ]
-    assert len(invoice_email_sibling) == 1
-    assert invoice_email_sibling[0].get("parity_status") != "not_applicable"
-    assert invoice_email_sibling[0].get("live_tested") is not True
+    assert len(invoice_email_na) == 1
+    assert invoice_email_na[0]["parity_status"] == "not_applicable"
+    assert invoice_email_na[0]["implemented"] is True
+    assert invoice_email_na[0]["live_tested"] is True
+    assert invoice_email_na[0]["vision_verified"] is True
+    assert invoice_email_na[0]["tool_name"] == ""
+    assert "research178" in (invoice_email_na[0].get("evidence") or "")
+    residual_email = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.parity.special.invoice_email"
+    )
+    assert residual_email.get("api_row_id") == "api.special.invoice_email"
+    assert residual_email.get("parity_status") == "not_applicable"
+    assert residual_email.get("live_tested") is True
+    # research178 accounts get/create/update/delete NA freeze (exact ids; not list/bulk)
+    accounts_gud = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS
+    ]
+    assert len(accounts_gud) == 4
+    assert all(row["parity_status"] == "not_applicable" for row in accounts_gud)
+    assert all(row["implemented"] is True for row in accounts_gud)
+    assert all(row["live_tested"] is True for row in accounts_gud)
+    assert all(row["vision_verified"] is True for row in accounts_gud)
+    assert all(row["tool_name"] == "" for row in accounts_gud)
+    assert all("research178" in (row.get("evidence") or "") for row in accounts_gud)
+    for residual_id, api_id in (
+        ("ui.parity.accounts.get", "api.accounts.get"),
+        ("ui.parity.accounts.create", "api.accounts.create"),
+        ("ui.parity.accounts.update", "api.accounts.update"),
+        ("ui.parity.accounts.delete", "api.accounts.delete"),
+    ):
+        residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
+        assert residual.get("api_row_id") == api_id
+        assert residual.get("parity_status") == "not_applicable"
+        assert residual.get("live_tested") is True
+    # accounts.list stays tool-green shell (not stolen by residual NA)
+    accounts_list = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.accounts.list"
+    ]
+    assert len(accounts_list) == 1
+    assert accounts_list[0]["parity_status"] == "shell_open_only"
+    assert accounts_list[0]["tool_name"] == "ui_settings_accounting_open"
+    assert accounts_list[0]["live_tested"] is True
+    for bulk_api in ("api.accounts.bulk_save", "api.accounts.bulk_delete"):
+        bulk_rows = [
+            row for row in ui_manifest["workflows"] if str(row.get("api_row_id") or "") == bulk_api
+        ]
+        assert len(bulk_rows) == 1
+        assert bulk_rows[0].get("parity_status") != "not_applicable"
     # special.user_organizations dual-counted to Virksomheder shell (research152)
     user_orgs_parity = [
         row
@@ -787,8 +844,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 70 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 181
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 111
+    assert status["qualification"]["live_tested_rows"] == 186
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 116
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -1041,11 +1098,18 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api.accounts.list" in accounts_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in accounts_parity["evidence"]
     assert "research145" in accounts_parity["evidence"]
-    for red_id in (
+    # research178: accounts get/create/update/delete NA in geo_na; bulk stays red remaining
+    for na_id in (
         "ui.parity.accounts.get",
         "ui.parity.accounts.create",
         "ui.parity.accounts.update",
         "ui.parity.accounts.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research178" in (na_row.get("evidence") or "")
+    for red_id in (
         "ui.parity.accounts.bulk_save",
         "ui.parity.accounts.bulk_delete",
     ):
@@ -1320,11 +1384,17 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert uploads_discovery["tool_name"] == "ui_uploads_list"
     assert uploads_discovery["api_row_id"] is None
     assert "file_input_present" in uploads_discovery["response_fields"]
+    # research178: special.invoice_email NA in geo_na (not remaining red)
+    invoice_email_na = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.special.invoice_email"
+    )
+    assert invoice_email_na["parity_status"] == "not_applicable"
+    assert invoice_email_na["live_tested"] is True
+    assert "research178" in (invoice_email_na.get("evidence") or "")
     for red_id in (
         # ui.parity.invoices.delete greened by ui_invoices_delete_open (186.75)
         "ui.parity.invoices.bulk_save",
         "ui.parity.invoices.bulk_delete",
-        "ui.parity.special.invoice_email",
         "ui.parity.files.get",
         "ui.parity.files.list",
         "ui.parity.files.create",
