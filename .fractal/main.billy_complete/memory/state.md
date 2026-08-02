@@ -6,18 +6,25 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T04:00:00Z
+updated: 2026-08-02T04:05:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue mode iter **76** pre-COMMIT SYNC: FIX-VERIFY clean; product ready COMMIT 186.76.
-- live/vision **178**; contract **362**; complete **false**.
-- Parent P8 disk: root **1.2 GiB** free; billy tmp already on ssd_1; no safe billy-owned root reclaim; saxo /tmp multi-GB left untouched. Route TMPDIR to ssd_1 for COMMIT hooks. No live browser until headroom improves.
-- Not finish.
+- Continue mode iter **76** COMMIT done for 186.76 products get/update/delete NA (`78e6d71`).
+- live/vision **178**; implemented/contract **362**; complete **false**.
+- API live_tested false (`out_of_scope_by_user`); bulk **92** external-contract red; annual_reports org_inaccessible red.
+- Residual UI: special.invoice_email; many discovery_required; bulk/annual red.
+- Not node finish.
 
+
+## COMMIT (iter 76 / 186.76)
+
+- `fractal commit "ui products get update delete not applicable"` → `78e6d71` pushed to origin/main.billy_complete.
+- Product: NA freeze products.get+update+delete; coverage 362/178; complete false.
+- Do not finish (completion requirements not met).
 
 ## SYNC (iter 76 pre-COMMIT)
 
