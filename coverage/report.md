@@ -13,4 +13,4 @@ This generated inventory is currently incomplete. It freezes the official-doc sn
 
 Complete: `false`
 
-Blocker: External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (annual_reports org_inaccessible; residual UI parity open)
+Blocker: External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (UI product-plane bulk ×58 discovery_required UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)

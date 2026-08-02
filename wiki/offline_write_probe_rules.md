@@ -161,3 +161,6 @@ Do not offline-green residual clear from Supports flags alone. Full probe body:
 ## Residual clear inventory honesty (research186)
 
 The 29 residual clear Supports write rows that stay red after offline product waves carry machine-readable qualifications and empty `tool_name` values in the generated API inventory (see [[residual_clear_method_closed_inventory_honesty]]). This is inventory honesty only: it does not green rows, ship tools, or resolve bulk or annual_reports blockers.
+
+
+The 58 product-plane UI bulk parity rows carry machine-readable `ui_bulk_parity_discovery_required` qualifications (see [[ui_product_plane_bulk_parity_inventory_honesty]]). This is inventory honesty only: discovery_required stays; not_applicable is deferred until dual bulk-chrome evidence; no greening and no bulk tools.

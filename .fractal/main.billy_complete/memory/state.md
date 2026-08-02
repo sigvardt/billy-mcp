@@ -6,26 +6,118 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T14:00:14Z
+updated: 2026-08-02T14:42:00Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **86** COMMIT 186.86 residual clear method-closed inventory honesty.
+- Iter **87** pre-COMMIT SYNC: FIX-VERIFY clean; parent STEER dual bulk-chrome with creds path; COMMIT 186.87 honesty then dual next.
 - live/vision **286**; implemented/contract **470**; complete **false**.
-- Residual 29 empty tool_name + qualifications; no tools; no greening.
-- Bulk 92 + UI bulk 58 + annual still red. Not node finish.
+- Saved radio: 1E6AF3C9 (parent STEER credentials). Not node finish.
 
+## SYNC (iter 87 pre-COMMIT) (2026-08-02T15:28Z)
 
+- Inbox: **1E6AF3C9** parent STEER P7 — interface credentials at `/Users/user/Desktop/billy_login.txt` for headless dual UI only; no commit/expose; live API out of scope; revisit 58 UI bulk with dual probe before settling honesty as final.
+- ACK reply sent; message **saved**. File exists (do not read into memory/logs).
+- Feed empty. Private 539D6413 + 7F181AAF reacted.
+- No running children.
+- Decision: COMMIT 186.87 inventory honesty freeze as planned (no greening). Dual bulk-chrome survey for the 58 rows is the **next** product slice after commit (creds now available). Honesty is interim inventory structure, not completeness.
+- Outbox: pre-COMMIT + STEER ACK. Proceed COMMIT. Not finish.
 
+## FIX-VERIFY (iter 87 / 186.87) (2026-08-02T15:25Z)
 
+- IR required fixes: none. Optional N1 = commit untracked wiki/plan at COMMIT.
+- Invariants reconfirmed: 58 UI bulk discovery_required + UI_BULK_CHROME_DUAL_REQUIRED; geo NA intact; complete false; 470/286.
+- lint.sh pass (wiki + memory clean; coverage inventory 305/345; policy pass).
+- test.sh offline **1668 passed** / 54 deselected.
+- Plan post-mortem filled. No ui-full/full (complete false).
+- Ready COMMIT 186.87 honesty freeze. Not node finish.
 
+## SYNC (iter 87 pre-FIX-VERIFY) (2026-08-02T15:16Z)
 
+- Unread inbox/feed: empty. Saved: empty.
+- Private 229614CB + 61A3E8BD reacted (+).
+- No running children. No parent directives.
+- Outbox: IR pass; proceed FIX-VERIFY then COMMIT. Not finish.
 
+## IR (iter 87 / 186.87) (2026-08-02T15:15Z)
 
+- Package UI product-plane bulk honesty: **ACCEPT** (`tmp/grok-review.md`).
+- Docs fingerprint live match; 58 rows discovery_required + UI_BULK_CHROME_DUAL_REQUIRED; 0 greens; geo NA bulk untouched; residual/API bulk red.
+- Required fixes: none. Optional N1 commit untracked wiki/plan.
+- Counts 286/470 complete false. Overall completeness **FAIL** (expected).
+- Proceed FIX-VERIFY then COMMIT. Not finish.
 
+## SYNC (iter 87 pre-IR) (2026-08-02T15:12Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 75F88F7D + 896FFE2F reacted (+).
+- No running children. No parent directives.
+- Outbox: pre-IR; uncommitted product ready for review. Proceed IR. Not finish.
+
+## EXECUTE (iter 87 / 186.87) (2026-08-02T15:10Z)
+
+- Generator: `UI_PRODUCT_PLANE_BULK_RESOURCES` (29) + `UI_PRODUCT_PLANE_BULK_HONESTY_IDS` (58) + `ui_bulk_parity_discovery_required_qualification` + `apply_ui_product_plane_bulk_parity_honesty`.
+- Wired at end of `build_ui_manifest`; `qualification_blocker` text names product-plane bulk ×58.
+- Regenerated coverage: 58 rows qualified discovery_required; counts 470/286 complete false.
+- Test: `test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified`; suite 1668 passed.
+- Wiki: `ui_product_plane_bulk_parity_inventory_honesty.md` + residual/offline cross-links + _index.
+- No tools; no greening; no bulk NA. Ready REVIEW/IR. Not finish.
+
+## SYNC (iter 87 pre-EXECUTE) (2026-08-02T14:56Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private E708F7D4 + 65CF4A65 reacted (+).
+- No running children. No parent directives.
+- Outbox: PLAN 186.87 ready; proceed EXECUTE. Not finish.
+
+## PLAN (iter 87 / 186.87) (2026-08-02T14:55Z)
+
+- Plan: `plans/2026-08-02T14:44:55.196Z-186.87-ui_product_plane_bulk_parity_inventory_honesty.md`
+- Slice: research187 UI product-plane bulk ×58 inventory honesty only
+- Generator frozenset + qualification builder + apply; unit test; wiki honesty page; optional blocker string
+- Target math unchanged 286/470 complete false
+- Root-only Grok; no dual browser; no bulk tools; not finish
+
+## SYNC (iter 87 pre-PLAN) (2026-08-02T14:52Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private CC968F49 + 3694C63A reacted (+).
+- No running children. No parent directives.
+- RESEARCH187 decision already outboxed. No new outbox (no material delta). Proceed PLAN. Not finish.
+
+## RESEARCH (iter 87 / research187) (2026-08-02T14:50Z)
+
+- Docs MD5/ETag unchanged (`8b94b0135c91fd15fe54ea33e088a4be` / `wcw4x9hqvu3603`); byte-identical to research186.
+- Unauth residual 29 reconfirm: 25×405 / 2×401 / 2×200 — no gate drift vs research96/186.
+- Residual honesty already landed (186.86); do not re-plan residual tools.
+- Open walls: API bulk 92, residual clear 29 (red by design), UI product-plane bulk **58** (no qualification yet), annual_reports ×1.
+- Browser/API creds all UNSET — dual bulk-chrome deferred.
+- Recommended package: `ui_product_plane_bulk_parity_inventory_honesty` — qualify 58 UI bulk rows discovery_required + tools_allowed=false; no NA; no greening; counts stay 286/470 complete false.
+- Brief: `tmp/grok-research.md`. Proceed PLAN. Not finish.
+
+## SYNC (iter 87 pre-RESEARCH) (2026-08-02T14:44Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 4EB9B32A + E21EDC4D reacted (+).
+- No running children. No parent directives.
+- PREPARE already clean this iter. Outbox: pre-RESEARCH SYNC. Proceed RESEARCH. Not finish.
+
+## PREPARE (iter 87) (2026-08-02T14:43Z)
+
+- Parent `main` and `origin/main` already ancestors of `main.billy_complete` (merge already up to date).
+- 157 child branches; zero with `main.billy_complete..<child>` commits. No child merges.
+- No integration outbox (nothing material). Proceed RESEARCH. Not finish.
+
+## SYNC (iter 87) (2026-08-02T14:42Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private B7EABD99 + A21B73C5 reacted (+).
+- No running children. No parent directives.
+- HEAD d1ca96a; coverage 286/470 complete false; phase_1 offline.
+- Outbox: iter87 SYNC post-186.86. Proceed PREPARE. Not finish.
 
 ## COMMIT (iter 86 / 186.86)
 

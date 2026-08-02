@@ -1815,6 +1815,138 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
         row["live_tested"] = False
 
 
+# Research187 UI product-plane bulk parity honesty: incomplete bulk UI rows that
+# still need dual bulk-chrome evidence (design §10.2). Not NA, not greening.
+UI_PRODUCT_PLANE_BULK_RESOURCES: frozenset[str] = frozenset(
+    {
+        "accounts",
+        "attachments",
+        "bankLineMatches",
+        "bankLineSubjectAssociations",
+        "bankLines",
+        "bankPayments",
+        "billLines",
+        "bills",
+        "contacts",
+        "daybookBalanceAccounts",
+        "daybookTransactionLines",
+        "daybookTransactions",
+        "daybooks",
+        "files",
+        "invoiceLines",
+        "invoices",
+        "organizations",
+        "postings",
+        "products",
+        "salesTaxAccounts",
+        "salesTaxMetaFields",
+        "salesTaxPayments",
+        "salesTaxReturns",
+        "salesTaxRules",
+        "salesTaxRulesets",
+        "taxRateDeductionComponents",
+        "taxRates",
+        "transactions",
+        "users",
+    }
+)
+UI_PRODUCT_PLANE_BULK_HONESTY_IDS: frozenset[str] = frozenset(
+    {
+        f"ui.parity.{resource}.{op}"
+        for resource in UI_PRODUCT_PLANE_BULK_RESOURCES
+        for op in ("bulk_save", "bulk_delete")
+    }
+)
+
+
+def ui_bulk_parity_discovery_required_qualification(
+    resource: str, operation: str
+) -> dict[str, Any]:
+    """Machine-readable freeze for product-plane UI bulk parity discovery_required rows.
+
+    Research187: dual bulk-chrome survey required before UI bulk NA or product.
+    Linked to API bulk external-contract blocker. Not greening and not NA.
+    """
+
+    linked_api = f"api.{resource}.{operation}"
+    return {
+        "kind": "ui_bulk_parity_discovery_required",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "tools_allowed": False,
+        "docs_md5": DOCS_MD5,
+        "docs_etag": DOCS_ETAG,
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "linked_api_row_id": linked_api,
+        "evidence_ref": "research187",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": (
+            "Design §10.2 requires dual-session evidence that Billy exposes no "
+            "equivalent bulk workflow (multi-select / bulk-action chrome) before "
+            "UI bulk not_applicable. Inferring NA from API external_contract_blocker "
+            "alone is forbidden. Browser credential refs were unset in research187; "
+            "dual bulk-chrome not run."
+        ),
+    }
+
+
+def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
+    """Attach discovery_required qualifications to product-plane UI bulk parity rows.
+
+    Inventory honesty only (research187). Keeps the 58 rows red and
+    parity_status=discovery_required. Never marks implemented/live/vision.
+    Skips rows already not_applicable (geo/reference dual freezes).
+    """
+
+    if len(UI_PRODUCT_PLANE_BULK_HONESTY_IDS) != 58:
+        raise RuntimeError(
+            "UI_PRODUCT_PLANE_BULK_HONESTY_IDS must be exactly 58 "
+            f"(got {len(UI_PRODUCT_PLANE_BULK_HONESTY_IDS)})"
+        )
+    if len(UI_PRODUCT_PLANE_BULK_RESOURCES) != 29:
+        raise RuntimeError(
+            "UI_PRODUCT_PLANE_BULK_RESOURCES must be exactly 29 "
+            f"(got {len(UI_PRODUCT_PLANE_BULK_RESOURCES)})"
+        )
+
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        if row_id not in UI_PRODUCT_PLANE_BULK_HONESTY_IDS:
+            continue
+        if row.get("parity_status") == "not_applicable":
+            # Geo/reference dual freezes win; product-plane set should not overlap.
+            continue
+        # ui.parity.<resource>.bulk_save|bulk_delete
+        parts = row_id.split(".")
+        if len(parts) < 4:
+            continue
+        resource = parts[2]
+        operation = parts[3]
+        if resource not in UI_PRODUCT_PLANE_BULK_RESOURCES:
+            continue
+        if operation not in ("bulk_save", "bulk_delete"):
+            continue
+
+        qual = ui_bulk_parity_discovery_required_qualification(resource, operation)
+        row["tool_name"] = ""
+        row["parity_status"] = "discovery_required"
+        row["qualification"] = dict(qual)
+        prior = str(row.get("evidence") or "").strip()
+        honesty = (
+            "research187 UI product-plane bulk parity inventory honesty: "
+            f"blocker_code={qual['blocker_code']}; tools_allowed=false; "
+            f"api_bulk_blocker={qual['api_bulk_blocker']}; "
+            f"linked_api_row_id={qual['linked_api_row_id']}; "
+            "dual bulk-chrome required before not_applicable or product; "
+            "not greening"
+        )
+        row["evidence"] = f"{prior}; {honesty}" if prior else honesty
+        row["discovered"] = False
+        row["implemented"] = False
+        row["contract_tested"] = False
+        row["live_tested"] = False
+        row["vision_verified"] = False
+
+
 def bulk_rows(resource: str) -> list[dict[str, Any]]:
     """Build the two deliberately unimplemented bulk mentions for a resource.
 
@@ -6963,6 +7095,8 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             apply_ui_geo_reference_not_applicable_evidence(row)
         workflows.append(row)
 
+    apply_ui_product_plane_bulk_parity_honesty(workflows)
+
     return {
         "manifest": "billy_ui_workflows_phase_0",
         "schema_version": 1,
@@ -7202,7 +7336,8 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
             "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
             "UI live and vision qualification incomplete "
-            "(annual_reports org_inaccessible; residual UI parity open)"
+            "(UI product-plane bulk ×58 discovery_required "
+            "UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)"
         )
     if any(
         not row.get("implemented") or not row.get("contract_tested")

@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T12:14:49Z
+updated: 2026-08-02T14:48:51Z
 ---
 
 # billy_mcp
@@ -118,6 +118,8 @@ updated: 2026-08-02T12:14:49Z
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
 
 [[ui_organizations_create_not_applicable|ui_organizations_create_not_applicable]]: UI parity not_applicable freeze for api.organizations.create (research177 dual absence of org-create CTA).
+
+[[ui_product_plane_bulk_parity_inventory_honesty|ui_product_plane_bulk_parity_inventory_honesty]]: Research187 inventory honesty for 58 product-plane UI bulk parity rows — discovery_required qualifications and empty tools; not product ACCEPT, not not_applicable, not greening, not completeness.
 
 [[ui_product_prices_not_applicable|ui_product_prices_not_applicable]]: Dual-session research162 freeze — no equivalent mit.billy.dk workflow for productPrices API parity; soft-empty path matches nonsense; products/Produkter shell is products only; NA accepted for productPrices only.
 

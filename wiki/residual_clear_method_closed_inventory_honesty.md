@@ -68,7 +68,8 @@ Supports create/update (or bankPayments singular delete) is overridden by unauth
 
 | Blocker | Rows |
 | --- | --- |
-| Bulk schema unspecified (`external_contract_blocker`) | 92 API + 58 UI bulk parity |
+| Bulk schema unspecified (`external_contract_blocker`) | 92 API |
+| UI product-plane bulk discovery_required ([[ui_product_plane_bulk_parity_inventory_honesty]]) | 58 UI |
 | Residual clear honesty (this freeze, still red) | 29 API |
 | annual_reports org inaccessible | 1 UI discovery |
 

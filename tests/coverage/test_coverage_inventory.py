@@ -409,6 +409,61 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
     assert status["complete"] is False
 
 
+def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() -> None:
+    """Research187: product-plane UI bulk stays discovery_required with structured quals."""
+
+    _, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+
+    resources = sorted(generator.UI_PRODUCT_PLANE_BULK_RESOURCES)
+    honesty_ids = sorted(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+
+    assert len(resources) == 29
+    assert len(honesty_ids) == 58
+    assert honesty_ids == sorted(
+        f"ui.parity.{resource}.{op}"
+        for resource in resources
+        for op in ("bulk_save", "bulk_delete")
+    )
+
+    for row_id in honesty_ids:
+        row = by_id[row_id]
+        assert row["tool_name"] == ""
+        assert row["discovered"] is False
+        assert row["implemented"] is False
+        assert row["contract_tested"] is False
+        assert row["live_tested"] is False
+        assert row["vision_verified"] is False
+        assert row["parity_status"] == "discovery_required"
+        assert row["parity_status"] != "not_applicable"
+        qual = row["qualification"]
+        assert isinstance(qual, dict)
+        assert qual["kind"] == "ui_bulk_parity_discovery_required"
+        assert qual["blocker_code"] == "UI_BULK_CHROME_DUAL_REQUIRED"
+        assert qual["tools_allowed"] is False
+        assert qual["api_bulk_blocker"] == "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
+        assert qual["evidence_ref"] == "research187"
+        assert qual["not_applicable_decision"] == "deferred"
+        resource, operation = row_id.split(".")[2], row_id.split(".")[3]
+        assert qual["linked_api_row_id"] == f"api.{resource}.{operation}"
+        assert "research187" in row["evidence"]
+        assert "UI_BULK_CHROME_DUAL_REQUIRED" in row["evidence"]
+
+    # Geo/reference UI bulk already NA must not be force-redded by this freeze.
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    # Honesty freeze does not change green counts or complete.
+    assert status["qualification"]["implemented_rows"] == 470
+    assert status["qualification"]["contract_tested_rows"] == 470
+    assert status["qualification"]["live_tested_rows"] == 286
+    assert status["qualification"]["vision_verified_rows"] == 286
+    assert status["complete"] is False
+    assert "UI product-plane bulk ×58" in status["qualification"]["blocker"]
+    assert "UI_BULK_CHROME_DUAL_REQUIRED" in status["qualification"]["blocker"]
+
+
 def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     """Dual Upsedasse keeps annual_reports red; not_applicable is rejected."""
 

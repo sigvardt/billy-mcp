@@ -2728,7 +2728,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.accounts.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.accounts.bulk_save",
       "implemented": false,
@@ -2738,6 +2738,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.accounts.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -2762,7 +2774,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.accounts.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.accounts.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.accounts.bulk_delete",
       "implemented": false,
@@ -2772,6 +2784,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.accounts.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -3045,7 +3069,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.attachments.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.attachments.bulk_save",
       "implemented": false,
@@ -3055,6 +3079,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.attachments.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -3079,7 +3115,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.attachments.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.attachments.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.attachments.bulk_delete",
       "implemented": false,
@@ -3089,6 +3125,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.attachments.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -3689,7 +3737,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineMatches.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineMatches.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLineMatches.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLineMatches.bulk_save",
       "implemented": false,
@@ -3699,6 +3747,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLineMatches.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -3723,7 +3783,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineMatches.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineMatches.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLineMatches.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLineMatches.bulk_delete",
       "implemented": false,
@@ -3733,6 +3793,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLineMatches.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -4027,7 +4099,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLines.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLines.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLines.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLines.bulk_save",
       "implemented": false,
@@ -4037,6 +4109,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLines.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -4061,7 +4145,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLines.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLines.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLines.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLines.bulk_delete",
       "implemented": false,
@@ -4071,6 +4155,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLines.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -4365,7 +4461,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineSubjectAssociations.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineSubjectAssociations.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLineSubjectAssociations.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLineSubjectAssociations.bulk_save",
       "implemented": false,
@@ -4375,6 +4471,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLineSubjectAssociations.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -4399,7 +4507,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineSubjectAssociations.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankLineSubjectAssociations.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankLineSubjectAssociations.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankLineSubjectAssociations.bulk_delete",
       "implemented": false,
@@ -4409,6 +4517,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankLineSubjectAssociations.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -4703,7 +4823,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankPayments.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankPayments.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankPayments.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankPayments.bulk_save",
       "implemented": false,
@@ -4713,6 +4833,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankPayments.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -4737,7 +4869,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankPayments.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bankPayments.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bankPayments.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bankPayments.bulk_delete",
       "implemented": false,
@@ -4747,6 +4879,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bankPayments.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -5031,7 +5175,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.billLines.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.billLines.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.billLines.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.billLines.bulk_save",
       "implemented": false,
@@ -5041,6 +5185,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.billLines.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -5065,7 +5221,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.billLines.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.billLines.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.billLines.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.billLines.bulk_delete",
       "implemented": false,
@@ -5075,6 +5231,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.billLines.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -5332,7 +5500,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bills.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bills.bulk_save",
       "implemented": false,
@@ -5342,6 +5510,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bills.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -5366,7 +5546,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.bills.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.bills.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.bills.bulk_delete",
       "implemented": false,
@@ -5376,6 +5556,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.bills.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -7005,7 +7197,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.contacts.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.contacts.bulk_save",
       "implemented": false,
@@ -7015,6 +7207,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.contacts.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -7039,7 +7243,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.contacts.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.contacts.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.contacts.bulk_delete",
       "implemented": false,
@@ -7049,6 +7253,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.contacts.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -8255,7 +8471,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookBalanceAccounts.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookBalanceAccounts.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookBalanceAccounts.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookBalanceAccounts.bulk_save",
       "implemented": false,
@@ -8265,6 +8481,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookBalanceAccounts.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -8289,7 +8517,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookBalanceAccounts.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookBalanceAccounts.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookBalanceAccounts.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookBalanceAccounts.bulk_delete",
       "implemented": false,
@@ -8299,6 +8527,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookBalanceAccounts.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -8556,7 +8796,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybooks.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybooks.bulk_save",
       "implemented": false,
@@ -8566,6 +8806,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybooks.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -8590,7 +8842,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybooks.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybooks.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybooks.bulk_delete",
       "implemented": false,
@@ -8600,6 +8852,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybooks.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -8879,7 +9143,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookTransactionLines.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.bulk_save",
       "implemented": false,
@@ -8889,6 +9153,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookTransactionLines.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -8913,7 +9189,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactionLines.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookTransactionLines.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookTransactionLines.bulk_delete",
       "implemented": false,
@@ -8923,6 +9199,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookTransactionLines.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -9201,7 +9489,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookTransactions.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookTransactions.bulk_save",
       "implemented": false,
@@ -9211,6 +9499,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookTransactions.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -9235,7 +9535,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.daybookTransactions.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.daybookTransactions.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.daybookTransactions.bulk_delete",
       "implemented": false,
@@ -9245,6 +9545,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.daybookTransactions.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -9414,7 +9726,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.files.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.files.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.files.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.files.bulk_save",
       "implemented": false,
@@ -9424,6 +9736,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.files.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -9448,7 +9772,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.files.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.files.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.files.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.files.bulk_delete",
       "implemented": false,
@@ -9458,6 +9782,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.files.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -10089,7 +10425,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.invoiceLines.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.invoiceLines.bulk_save",
       "implemented": false,
@@ -10099,6 +10435,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.invoiceLines.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -10123,7 +10471,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoiceLines.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.invoiceLines.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.invoiceLines.bulk_delete",
       "implemented": false,
@@ -10133,6 +10481,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.invoiceLines.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -11075,7 +11435,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.invoices.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.invoices.bulk_save",
       "implemented": false,
@@ -11085,6 +11445,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.invoices.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -11109,7 +11481,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.invoices.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.invoices.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.invoices.bulk_delete",
       "implemented": false,
@@ -11119,6 +11491,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.invoices.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -11641,7 +12025,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.organizations.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.organizations.bulk_save",
       "implemented": false,
@@ -11651,6 +12035,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.organizations.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -11675,7 +12071,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.organizations.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.organizations.bulk_delete",
       "implemented": false,
@@ -11685,6 +12081,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.organizations.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -11925,7 +12333,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.postings.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.postings.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.postings.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.postings.bulk_save",
       "implemented": false,
@@ -11935,6 +12343,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.postings.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -11959,7 +12379,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.postings.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.postings.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.postings.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.postings.bulk_delete",
       "implemented": false,
@@ -11969,6 +12389,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.postings.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -12643,7 +13075,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.products.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.products.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.products.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.products.bulk_save",
       "implemented": false,
@@ -12653,6 +13085,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.products.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -12677,7 +13121,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.products.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.products.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.products.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.products.bulk_delete",
       "implemented": false,
@@ -12687,6 +13131,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.products.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -12981,7 +13437,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxAccounts.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxAccounts.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxAccounts.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxAccounts.bulk_save",
       "implemented": false,
@@ -12991,6 +13447,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxAccounts.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -13015,7 +13483,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxAccounts.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxAccounts.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxAccounts.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxAccounts.bulk_delete",
       "implemented": false,
@@ -13025,6 +13493,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxAccounts.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -13319,7 +13799,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxMetaFields.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxMetaFields.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxMetaFields.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxMetaFields.bulk_save",
       "implemented": false,
@@ -13329,6 +13809,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxMetaFields.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -13353,7 +13845,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxMetaFields.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxMetaFields.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxMetaFields.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxMetaFields.bulk_delete",
       "implemented": false,
@@ -13363,6 +13855,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxMetaFields.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -13603,7 +14107,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxPayments.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxPayments.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxPayments.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxPayments.bulk_save",
       "implemented": false,
@@ -13613,6 +14117,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxPayments.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -13637,7 +14153,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxPayments.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxPayments.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxPayments.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxPayments.bulk_delete",
       "implemented": false,
@@ -13647,6 +14163,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxPayments.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -13823,7 +14351,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxReturns.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxReturns.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxReturns.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxReturns.bulk_save",
       "implemented": false,
@@ -13833,6 +14361,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxReturns.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -13857,7 +14397,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxReturns.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxReturns.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxReturns.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxReturns.bulk_delete",
       "implemented": false,
@@ -13867,6 +14407,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxReturns.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -14161,7 +14713,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRules.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRules.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxRules.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxRules.bulk_save",
       "implemented": false,
@@ -14171,6 +14723,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxRules.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -14195,7 +14759,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRules.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRules.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxRules.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxRules.bulk_delete",
       "implemented": false,
@@ -14205,6 +14769,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxRules.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -14481,7 +15057,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxRulesets.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.bulk_save",
       "implemented": false,
@@ -14491,6 +15067,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxRulesets.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -14515,7 +15103,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.salesTaxRulesets.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.salesTaxRulesets.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.salesTaxRulesets.bulk_delete",
       "implemented": false,
@@ -14525,6 +15113,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.salesTaxRulesets.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -15109,7 +15709,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.taxRateDeductionComponents.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.bulk_save",
       "implemented": false,
@@ -15119,6 +15719,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.taxRateDeductionComponents.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -15143,7 +15755,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRateDeductionComponents.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.taxRateDeductionComponents.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.taxRateDeductionComponents.bulk_delete",
       "implemented": false,
@@ -15153,6 +15765,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.taxRateDeductionComponents.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -15429,7 +16053,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.taxRates.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.taxRates.bulk_save",
       "implemented": false,
@@ -15439,6 +16063,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.taxRates.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -15463,7 +16099,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.taxRates.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.taxRates.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.taxRates.bulk_delete",
       "implemented": false,
@@ -15473,6 +16109,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.taxRates.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -15739,7 +16387,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.transactions.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.transactions.bulk_save",
       "implemented": false,
@@ -15749,6 +16397,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.transactions.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -15773,7 +16433,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.transactions.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.transactions.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.transactions.bulk_delete",
       "implemented": false,
@@ -15783,6 +16443,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.transactions.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
@@ -15956,7 +16628,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.users.bulk_save",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.users.bulk_save; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.users.bulk_save; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.users.bulk_save",
       "implemented": false,
@@ -15966,6 +16638,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.users.bulk_save",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "json_object_root"
       ],
@@ -15990,7 +16674,7 @@
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.users.bulk_delete",
+      "evidence": "API parity required by approved design \u00a710.2; mapped from api.users.bulk_delete; research187 UI product-plane bulk parity inventory honesty: blocker_code=UI_BULK_CHROME_DUAL_REQUIRED; tools_allowed=false; api_bulk_blocker=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; linked_api_row_id=api.users.bulk_delete; dual bulk-chrome required before not_applicable or product; not greening",
       "filters": [],
       "id": "ui.parity.users.bulk_delete",
       "implemented": false,
@@ -16000,6 +16684,18 @@
       "operation": "api_parity",
       "pagination": null,
       "parity_status": "discovery_required",
+      "qualification": {
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": "UI_BULK_CHROME_DUAL_REQUIRED",
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_ref": "research187",
+        "kind": "ui_bulk_parity_discovery_required",
+        "linked_api_row_id": "api.users.bulk_delete",
+        "not_applicable_decision": "deferred",
+        "not_applicable_reason": "Design \u00a710.2 requires dual-session evidence that Billy exposes no equivalent bulk workflow (multi-select / bulk-action chrome) before UI bulk not_applicable. Inferring NA from API external_contract_blocker alone is forbidden. Browser credential refs were unset in research187; dual bulk-chrome not run.",
+        "tools_allowed": false
+      },
       "request_fields": [
         "ids[]"
       ],
