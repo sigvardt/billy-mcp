@@ -1,10 +1,12 @@
 """Live dual-session qualification for read-only ui_settings_company_open.
 
 Indstillinger company (Virksomhed) shell at /:org_slug/settings (research126).
+Dual-counts organizations.list (research146) plus get/update form open
+(research177). organizations.create is UI not_applicable (research177).
 
 Requires opaque browser credential references. Never uses BILLY_API_TOKEN.
 Independent second-interface read-back is a second ephemeral profile login.
-Never clicks Gem ændringer / Tilføj ejer / upload / Opret* (research126 freeze).
+Never clicks Gem ændringer / Tilføj ejer / upload / Opret* (research126/177 freeze).
 """
 
 from __future__ import annotations
@@ -121,7 +123,10 @@ async def _capture_settings_company_frame(
         assert "Navn og adresse" in body
         assert "Kontaktinformation" in body
         assert "Upsedasse" not in body
-        # Observe Gem text may exist; never click.
+        # research177 update dual-count: Gem ændringer present; never click.
+        assert "Gem ændringer" in body
+        gem_n = await live_page.get_by_role("button", name="Gem ændringer", exact=True).count()
+        assert gem_n >= 1
         await live_page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
     finally:
@@ -195,6 +200,8 @@ async def test_dual_profiles_open_settings_company_shell() -> None:
                 "session_a_settings_company_frame",
                 "session_b_settings_company_frame",
                 "settings_company_path_settings",
+                "research177_organizations_get_detail_open_only",
+                "research177_organizations_update_form_open_only",
             ],
             second_interface_ref="fresh_profile_b_full_login",
             reviewer_verdict="accept",

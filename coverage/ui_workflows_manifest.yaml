@@ -1353,7 +1353,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations get/create/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept)",
+      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept)",
       "filters": [],
       "id": "ui.discovery.settings_company",
       "implemented": true,
@@ -10811,38 +10811,45 @@
     {
       "api_row_id": "api.organizations.get",
       "area": "organizations",
-      "cleanup": "not_applicable",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.get",
+      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research177 dual-session reconfirm; maps api.organizations.get to UI settings company identity form open only (detail_open_only; Navn/CVR/Adresse family dual; never Gem)",
       "filters": [],
       "id": "ui.parity.organizations.get",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.organizations.get",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/Virksomhed identity form open only; Navn/CVR/Adresse family; never click Gem/Tilf\u00f8j ejer/upload)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "include"
-      ],
+      "parity_status": "detail_open_only",
+      "request_fields": [],
       "response_fields": [
-        "organization"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "company_panel_markers_present"
       ],
       "sensitivity": "low",
       "side_effects": "none",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_settings_company_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -10858,7 +10865,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations get/create/update/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research146 dual-session reconfirm; maps api.organizations.list to UI settings company/Virksomhed shell open only",
+      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research146 dual-session reconfirm; maps api.organizations.list to UI settings company/Virksomhed shell open only",
       "filters": [],
       "id": "ui.parity.organizations.list",
       "implemented": true,
@@ -10892,75 +10899,99 @@
     {
       "api_row_id": "api.organizations.create",
       "area": "organizations",
-      "cleanup": "live non-production cleanup strategy unqualified; singular DELETE is unsupported",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; no UI tool and no disposable records for this parity row",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "GEO_UI_NO_EQUIVALENT_WORKFLOW"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.create",
+      "evidence": "research177 dual independent ephemeral browser sessions (no BILLY_API_TOKEN): dual_agree_no_organizations_create_surface true; candidate organizations.create path classes soft-empty identical to nonsense (zz-r177-none); contrast settings_company(list/get/update dual-count)/invoices/clients/suppliers/uploads/daybooks/products real shells with h1; research177 dual: company panel dual present (list/get/update dual-count on ui_settings_company_open); create CTAs Opret/Ny/Tilf\u00f8j virksomhed 0 dual; exact organizations.create id only \u2014 not list/get/update/bulk; design \u00a710.2 UI parity not_applicable accepted for api.organizations.create; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; no ui_* organizations.create tool; API lane unchanged (reads offline-green, live_tested false out_of_scope_by_user; bulk external-contract red); evidence_ref=research177_organizations_create_dual; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be",
       "filters": [],
       "id": "ui.parity.organizations.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.organizations.create",
+      "live_tested": true,
+      "method_or_route": "no equivalent mit.billy.dk UI workflow for api.organizations.create (research177 dual-session: company/Virksomhed panel dual present for list/get/update dual-count; Opret/Ny/Tilf\u00f8j virksomhed create CTAs 0 dual; multi-org create workflow absent; contrast shells/Indstillinger Virksomhed (list+get+update dual-count)/Fakturaer/Kunder/Leverand\u00f8rer/Bilag/daybooks editor/Produkter; evidence_code=GEO_UI_NO_EQUIVALENT_WORKFLOW; not_applicable accepted)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "organization"
-      ],
-      "response_fields": [
-        "organizations[]"
-      ],
-      "sensitivity": "medium",
-      "side_effects": "creates organization",
+      "parity_status": "not_applicable",
+      "qualification": {
+        "contrast_controls": [
+          "settings_company",
+          "invoices",
+          "clients",
+          "suppliers",
+          "uploads",
+          "daybooks/new",
+          "products",
+          "zz-r177-none"
+        ],
+        "deferred_families": [],
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "evidence_code": "GEO_UI_NO_EQUIVALENT_WORKFLOW",
+        "evidence_ref": "research177_organizations_create_dual",
+        "kind": "ui_not_applicable",
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": "dual-session evidence shows Billy exposes no equivalent UI workflow for this geo/reference API capability on the dedicated non-production organisation (nav absence + soft-empty == nonsense)",
+        "sessions": "dual_independent_ephemeral"
+      },
+      "request_fields": [],
+      "response_fields": [],
+      "sensitivity": "low",
+      "side_effects": "none; UI parity classified not_applicable \u2014 no browser workflow tool and no records may be created through a geo/reference UI tool",
       "test_references": [
         "tests/coverage/test_coverage_inventory.py"
       ],
       "tool_name": "",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
       "api_row_id": "api.organizations.update",
       "area": "organizations",
-      "cleanup": "restore prior test state",
-      "contract_tested": false,
-      "discovered": false,
+      "cleanup": "not_applicable; read-only observation creates no records",
+      "contract_tested": true,
+      "discovered": true,
       "errors": [
+        "AUTH_REQUIRED",
         "AUTH_INTERACTION_REQUIRED",
-        "UI_CHANGED"
+        "UI_CHANGED",
+        "EGRESS_DENIED",
+        "BILLY_ERROR"
       ],
-      "evidence": "API parity required by approved design \u00a710.2; mapped from api.organizations.update",
+      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research177 dual-session reconfirm; maps api.organizations.update to UI settings company update form open only (form_open_only; Gem \u00e6ndringer dual present; never submits)",
       "filters": [],
       "id": "ui.parity.organizations.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
-      "method_or_route": "PARITY DISCOVERY REQUIRED for api.organizations.update",
+      "live_tested": true,
+      "method_or_route": "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/Virksomhed update form open only; Gem \u00e6ndringer present; never click Gem/Tilf\u00f8j ejer/upload)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "discovery_required",
-      "request_fields": [
-        "id",
-        "organization"
-      ],
+      "parity_status": "form_open_only",
+      "request_fields": [],
       "response_fields": [
-        "changed_records[]",
-        "meta.deletedRecords"
+        "path_class",
+        "heading",
+        "shell_kind",
+        "company_panel_markers_present"
       ],
       "sensitivity": "medium",
-      "side_effects": "updates organization",
+      "side_effects": "none when open-only; product path never submits",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/test_models.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "ui_settings_company_open",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

@@ -174,9 +174,9 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
-    # Prior 67 greened shells/parity + invoices.delete Mere chrome (research175) = 68
-    # live/vision rows without GEO NA.
-    ui_shell_green = 68
+    # Prior 68 greened shells/parity + organizations.get/update dual-count
+    # (research177) = 70 live/vision rows without GEO NA.
+    ui_shell_green = 70
     assert status["qualification"]["implemented_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
@@ -417,7 +417,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert qual["not_applicable_decision"] == "accepted"
         assert qual["sessions"] == "dual_independent_ephemeral"
         resource = api_id.split(".", 2)[1]
-        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS:
+        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS:
+            assert "research177" in qual["evidence_ref"]
+            assert "research177" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS:
             assert "research176" in qual["evidence_ref"]
             assert "research176" in row["evidence"]
         elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES:
@@ -647,6 +650,25 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         ]
         assert len(bulk_rows) == 1
         assert bulk_rows[0].get("parity_status") != "not_applicable"
+    # research177 organizations.create NA freeze (exact id; not list/get/update/bulk)
+    org_create_na = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
+    ]
+    assert len(org_create_na) == 1
+    assert org_create_na[0]["parity_status"] == "not_applicable"
+    assert org_create_na[0]["implemented"] is True
+    assert org_create_na[0]["live_tested"] is True
+    assert org_create_na[0]["tool_name"] == ""
+    assert "research177" in (org_create_na[0].get("evidence") or "")
+    residual_create = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.parity.organizations.create"
+    )
+    assert residual_create.get("api_row_id") == "api.organizations.create"
+    assert residual_create.get("parity_status") == "not_applicable"
+    assert residual_create.get("live_tested") is True
     # special.user_get dual-counted to settings Profil (research151); not NA
     user_get_parity = [
         row
@@ -763,10 +785,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["complete"] is False
     assert (
         status["qualification"]["live_tested_rows"]
-        == 68 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        == 70 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 178
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 110
+    assert status["qualification"]["live_tested_rows"] == 181
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 111
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -830,6 +852,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.inventory",
         "ui.discovery.settings_company",
         "ui.parity.organizations.list",
+        "ui.parity.organizations.get",
+        "ui.parity.organizations.update",
         "ui.discovery.settings_accounting",
         "ui.parity.accounts.list",
         "ui.discovery.settings_invoicing",
@@ -900,6 +924,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.inventory": "ui_inventory_open",
         "ui.discovery.settings_company": "ui_settings_company_open",
         "ui.parity.organizations.list": "ui_settings_company_open",
+        "ui.parity.organizations.get": "ui_settings_company_open",
+        "ui.parity.organizations.update": "ui_settings_company_open",
         "ui.discovery.settings_accounting": "ui_settings_accounting_open",
         "ui.parity.accounts.list": "ui_settings_accounting_open",
         "ui.discovery.settings_invoicing": "ui_settings_invoicing_open",
@@ -934,7 +960,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert all(row["vision_evidence"] is None for row in workflows)
     assert all(row["parity_status"] != "not_applicable" for row in remaining)
     assert all(row["parity_status"] != "not_applicable" for row in qualified)
-    assert len(qualified) == 68
+    assert len(qualified) == 70
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
@@ -1077,10 +1103,29 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api.organizations.list" in organizations_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in organizations_parity["evidence"]
     assert "research146" in organizations_parity["evidence"]
+    organizations_get = next(row for row in qualified if row["id"] == "ui.parity.organizations.get")
+    assert organizations_get["api_row_id"] == "api.organizations.get"
+    assert organizations_get["tool_name"] == "ui_settings_company_open"
+    assert organizations_get["parity_status"] == "detail_open_only"
+    assert "api.organizations.get" in organizations_get["evidence"]
+    assert "research177" in organizations_get["evidence"]
+    organizations_update = next(
+        row for row in qualified if row["id"] == "ui.parity.organizations.update"
+    )
+    assert organizations_update["api_row_id"] == "api.organizations.update"
+    assert organizations_update["tool_name"] == "ui_settings_company_open"
+    assert organizations_update["parity_status"] == "form_open_only"
+    assert "api.organizations.update" in organizations_update["evidence"]
+    assert "research177" in organizations_update["evidence"]
+    assert organizations_update["sensitivity"] == "medium"
+    # create is NA (geo_na_ids), not remaining discovery_required
+    org_create_row = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.organizations.create"
+    )
+    assert org_create_row["api_row_id"] == "api.organizations.create"
+    assert org_create_row["parity_status"] == "not_applicable"
+    assert "research177" in (org_create_row.get("evidence") or "")
     for red_id in (
-        "ui.parity.organizations.get",
-        "ui.parity.organizations.create",
-        "ui.parity.organizations.update",
         "ui.parity.organizations.bulk_save",
         "ui.parity.organizations.bulk_delete",
     ):

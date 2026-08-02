@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T02:45:32Z
+updated: 2026-08-02T03:29:32Z
 ---
 
 # billy_mcp
@@ -101,6 +101,8 @@ updated: 2026-08-02T02:45:32Z
 
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
 
+[[ui_organizations_create_not_applicable|ui_organizations_create_not_applicable]]: UI parity not_applicable freeze for api.organizations.create (research177 dual absence of org-create CTA).
+
 [[ui_product_prices_not_applicable|ui_product_prices_not_applicable]]: Dual-session research162 freeze — no equivalent mit.billy.dk workflow for productPrices API parity; soft-empty path matches nonsense; products/Produkter shell is products only; NA accepted for productPrices only.
 
 [[ui_products_create_open_shell|ui_products_create_open_shell]]: Read-only headless ui_products_create_open contract for Billy product create form open only (research163).
@@ -127,7 +129,7 @@ updated: 2026-08-02T02:45:32Z
 
 [[ui_settings_beta_open_shell|ui_settings_beta_open_shell]]: Read-only Billy Indstillinger Betas (Tidlig adgang) settings panel open (research133 freeze).
 
-[[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell open (research126); dual-counts api.organizations.list (research146).
+[[ui_settings_company_open_shell|ui_settings_company_open_shell]]: Read-only Billy Indstillinger company settings shell; dual-counts organizations.list (research146) plus get/update (research177); create is NA.
 
 [[ui_settings_invoicing_open_shell|ui_settings_invoicing_open_shell]]: Read-only Billy Indstillinger Faktura (invoicing) settings panel open (research128 freeze).
 

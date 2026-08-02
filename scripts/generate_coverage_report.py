@@ -54,6 +54,7 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.products.get",
     "api.products.update",
     "api.products.delete",
+    "api.organizations.create",
     "api.special.invoice_delivery",
     "api.special.invoice_logs",
     "api.states.",
@@ -61,7 +62,7 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    110  # prior 107 + research176 products get/update/delete (exact; not list/create/bulk)
+    111  # prior 110 + research177 organizations.create (exact; not list/get/update/bulk)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -87,6 +88,11 @@ GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS: frozenset[str] = frozenset(
         "api.products.update",
         "api.products.delete",
     }
+)
+# research177: organizations.create only
+# (list/get/update dual-count on ui_settings_company_open; bulk external-contract red).
+GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS: frozenset[str] = frozenset(
+    {"api.organizations.create"}
 )
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
@@ -4017,21 +4023,46 @@ def apply_ui_settings_company_open_shell_evidence(
     row: dict[str, Any],
     *,
     parity_of_api_list: bool = False,
+    parity_of_api_get: bool = False,
+    parity_of_api_update: bool = False,
 ) -> None:
     """Mark Indstillinger company settings shell open evidence (research126).
 
     Empty-input tool; path /:org_slug/settings; h1 Indstillinger; company panel
     markers Navn og adresse + Kontaktinformation. Soft nested aliases rejected.
     Never click Gem / Tilføj ejer / upload. No invent api_settings_*. Does not
-    green other settings_* or annual_reports or organizations get/create/update/
-    bulk UI parity. When ``parity_of_api_list`` is true, dual-counts
+    green other settings_* or annual_reports or organizations create/bulk UI
+    parity. When ``parity_of_api_list`` is true, dual-counts
     ``ui.parity.organizations.list`` for ``api.organizations.list`` (research146).
+    When ``parity_of_api_get`` is true, dual-counts ``ui.parity.organizations.get``
+    (research177, detail_open_only). When ``parity_of_api_update`` is true,
+    dual-counts ``ui.parity.organizations.update`` (research177, form_open_only).
+    Flags are mutually exclusive per call.
     """
 
-    row["method_or_route"] = (
-        "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/"
-        "Virksomhed panel open only; never click Gem/Tilføj ejer/upload)"
+    flag_count = sum(
+        1 for flag in (parity_of_api_list, parity_of_api_get, parity_of_api_update) if flag
     )
+    if flag_count > 1:
+        raise ValueError("organizations dual-count flags are mutually exclusive")
+
+    if parity_of_api_get:
+        row["method_or_route"] = (
+            "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/"
+            "Virksomhed identity form open only; Navn/CVR/Adresse family; never "
+            "click Gem/Tilføj ejer/upload)"
+        )
+    elif parity_of_api_update:
+        row["method_or_route"] = (
+            "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/"
+            "Virksomhed update form open only; Gem ændringer present; never click "
+            "Gem/Tilføj ejer/upload)"
+        )
+    else:
+        row["method_or_route"] = (
+            "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/"
+            "Virksomhed panel open only; never click Gem/Tilføj ejer/upload)"
+        )
     row["tool_name"] = UI_SETTINGS_COMPANY_OPEN_TOOL_NAME
     row["request_fields"] = []
     row["response_fields"] = [
@@ -4042,7 +4073,7 @@ def apply_ui_settings_company_open_shell_evidence(
     ]
     row["filters"] = []
     row["pagination"] = None
-    if not parity_of_api_list:
+    if not parity_of_api_list and not parity_of_api_get and not parity_of_api_update:
         row["api_row_id"] = None
     row["test_references"] = [
         TEST_REFERENCE,
@@ -4056,8 +4087,8 @@ def apply_ui_settings_company_open_shell_evidence(
         "product; shell open only (path class /:org_slug/settings, h1 Indstillinger, "
         "shell_kind=settings_company, company panel markers); soft aliases rejected; "
         "no invent api_settings_*; never click Gem/Tilføj ejer; does not green other "
-        "settings_* or annual_reports or organizations get/create/update/bulk UI "
-        "parity; API list filters/sort/pagination UI not producted; "
+        "settings_* or annual_reports or organizations create/bulk UI parity; "
+        "API list filters/sort/pagination UI not producted; "
         "vision record tmp/vision-records/ui_settings_company_open.json "
         "(Indstillinger company frames, accept)"
     )
@@ -4066,15 +4097,36 @@ def apply_ui_settings_company_open_shell_evidence(
             f"{row['evidence']}; research146 dual-session reconfirm; "
             "maps api.organizations.list to UI settings company/Virksomhed shell open only"
         )
+    if parity_of_api_get:
+        row["evidence"] = (
+            f"{row['evidence']}; research177 dual-session reconfirm; "
+            "maps api.organizations.get to UI settings company identity form open only "
+            "(detail_open_only; Navn/CVR/Adresse family dual; never Gem)"
+        )
+    if parity_of_api_update:
+        row["evidence"] = (
+            f"{row['evidence']}; research177 dual-session reconfirm; "
+            "maps api.organizations.update to UI settings company update form open only "
+            "(form_open_only; Gem ændringer dual present; never submits)"
+        )
     row["discovered"] = True
     row["implemented"] = True
     row["contract_tested"] = True
     row["live_tested"] = True
     row["vision_verified"] = True
     row["vision_evidence"] = None
-    row["parity_status"] = "shell_open_only"
-    row["sensitivity"] = "low"
-    row["side_effects"] = "none"
+    if parity_of_api_get:
+        row["parity_status"] = "detail_open_only"
+        row["sensitivity"] = "low"
+        row["side_effects"] = "none"
+    elif parity_of_api_update:
+        row["parity_status"] = "form_open_only"
+        row["sensitivity"] = "medium"
+        row["side_effects"] = "none when open-only; product path never submits"
+    else:
+        row["parity_status"] = "shell_open_only"
+        row["sensitivity"] = "low"
+        row["side_effects"] = "none"
     row["cleanup"] = "not_applicable; read-only observation creates no records"
     row["errors"] = [
         "AUTH_REQUIRED",
@@ -4851,6 +4903,8 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     research176: products.get/update/delete dual absence (dedicated freeze; exact
     ids only — list/create stay tool-green; soft detail chrome-only; list Mere is
     Export/Import only; inventory create is create-only; no dual-count steal).
+    research177: organizations.create dual absence (dedicated freeze; exact id
+    only — list/get/update dual-count on ui_settings_company_open; create CTA 0 dual).
     All: two independent ephemeral READY sessions found no matching UI workflow;
     candidate path classes render soft-empty SPA chrome only (body_len 127,
     h1_count 0) identical to nonsense paths, while known shells expose real
@@ -4861,6 +4915,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
 
     api_row_id = str(row.get("api_row_id") or "")
     resource = api_row_id.split(".", 2)[1] if api_row_id.startswith("api.") else "geo"
+    is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
     is_research150 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
@@ -4871,7 +4926,31 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research143 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES
     is_research142 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES
     is_research139 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES
-    if is_research176:
+    if is_research177:
+        research_id = "research177"
+        evidence_ref = "research177_organizations_create_dual"
+        nonsense_path = "zz-r177-none"
+        dual_agree_flag = "dual_agree_no_organizations_create_surface"
+        family_label = "organizations.create"
+        contrast_shells = (
+            "settings_company(list/get/update dual-count)/invoices/clients/"
+            "suppliers/uploads/daybooks/products"
+        )
+        list_heading_suffix = (
+            "/Indstillinger Virksomhed (list+get+update dual-count)/Fakturaer/"
+            "Kunder/Leverandører/Bilag/daybooks editor/Produkter"
+        )
+        contrast_controls = [
+            "settings_company",
+            "invoices",
+            "clients",
+            "suppliers",
+            "uploads",
+            "daybooks/new",
+            "products",
+            nonsense_path,
+        ]
+    elif is_research176:
         research_id = "research176"
         evidence_ref = "research176_products_get_update_delete_dual"
         nonsense_path = "zz-r176-none"
@@ -5130,6 +5209,16 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
         "not_applicable accepted)"
     )
 
+    if is_research177:
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
+            f"({research_id} dual-session: company/Virksomhed panel dual present "
+            "for list/get/update dual-count; Opret/Ny/Tilføj virksomhed create "
+            "CTAs 0 dual; multi-org create workflow absent; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research176:
         row["method_or_route"] = (
             f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
@@ -5153,6 +5242,13 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "settings/invoicing dual body_len 1494 shows Levering af faktura pr. "
             "e-mail (email settings only; e_invoice/GLN markers dual false) — "
             "blocks special.invoice_email pure NA only, not delivery/logs; "
+        )
+    if is_research177:
+        levering_note = (
+            "research177 dual: company panel dual present (list/get/update "
+            "dual-count on ui_settings_company_open); create CTAs "
+            "Opret/Ny/Tilføj virksomhed 0 dual; exact organizations.create id "
+            "only — not list/get/update/bulk; "
         )
     if is_research176:
         levering_note = (
@@ -5401,6 +5497,10 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
             )
         if api_row["id"] == "api.organizations.list":
             apply_ui_settings_company_open_shell_evidence(row, parity_of_api_list=True)
+        if api_row["id"] == "api.organizations.get":
+            apply_ui_settings_company_open_shell_evidence(row, parity_of_api_get=True)
+        if api_row["id"] == "api.organizations.update":
+            apply_ui_settings_company_open_shell_evidence(row, parity_of_api_update=True)
         if api_row["id"] == "api.daybooks.list":
             apply_ui_daybooks_open_shell_evidence(row, parity_of_api_list=True)
         if api_row["id"] == "api.daybooks.create":
