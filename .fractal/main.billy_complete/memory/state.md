@@ -8950,3 +8950,9 @@ updated: 2026-08-02T08:25:00Z
 - FIX-VERIFY clean (1653 offline pass; IR ACCEPT). Ready COMMIT 186.80
   ui daybooks delete + residual NA package. Not node finish (complete false).
 
+## COMMIT (iter 80 / 186.80) (2026-08-02T10:06Z)
+
+- \`fractal commit\` product: ui daybooks delete open + residual NA (\`d59dc3d\`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
+
