@@ -6,16 +6,16 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T12:20:00Z
+updated: 2026-08-02T12:25:00Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **82** pre-COMMIT after FIX-VERIFY clean for 186.82.
+- Iter **82** COMMIT done for 186.82: `ui_transactions_create_open` + DTL×5 NA.
 - live/vision **228**; implemented/contract **412**; GEO NA **154**; complete **false**.
-- Ready COMMIT. Not node finish.
+- Not node finish.
 
 ## SYNC (iter 82 start) (2026-08-02T10:56Z)
 
@@ -154,6 +154,14 @@ updated: 2026-08-02T12:20:00Z
 - FIX-VERIFY clean (1663 offline pass; IR ACCEPT). Ready COMMIT 186.82
   ui transactions create open + DTL NA package. Not node finish
   (complete false).
+
+
+## COMMIT (iter 82 / 186.82)
+
+- fractal commit product: ui transactions create open + daybook transaction lines NA.
+- Tip after commit on origin path via fractal push (hooks pass).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
 
 ## COMMIT (iter 78 / 186.78)
