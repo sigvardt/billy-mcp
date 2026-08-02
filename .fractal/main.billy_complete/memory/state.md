@@ -10123,3 +10123,138 @@ updated: 2026-08-02T14:42:00Z
 - package 9 resources / 18 UI bulk rows; coverage 518/334 complete false
 - remaining UI bulk honesty 10 empty-shell; API bulk 92; residual 29; annual 1
 - not node finish
+
+
+## iter90 SYNC (2026-08-02T16:46:30Z)
+
+- inbox/feed unread empty; private 07178A8A/B5ED763C reacted
+- saved open: 1E6AF3C9 (dual STEER; keep until empty-shell 10 dual closed)
+- no running children
+- HEAD 4ded41b (COMMIT 186.89 soft dual-NA 18 UI bulk rows)
+- coverage: implemented/contract 518, live/vision 334, complete false
+- remaining: empty-shell 10 dual; API bulk 92; residual; annual_reports 1
+- next: PREPARE
+- not node finish
+
+
+## iter90 PREPARE (2026-08-02T16:47:00Z)
+
+- parent `main`: merge Already up to date (main behind node; origin/main also contained)
+- children: many historical branches show commits ahead only via init/fail scaffolding or already-integrated product
+- skipped merge: ui_auth_status product already on HEAD (`auth_status`); wave5t/wave5u wiki pages already on HEAD; src/tests empty for upload/bank-line residual children; review/init leaves not merge targets
+- unique child wiki only: `ui_auth_credentials_login_organization_research_codex_fallback.md` on research leaf — not merged (stale base; superseding auth research already on HEAD)
+- no material integration; no outbox announce
+- no running children to steer
+- next: PLAN empty-shell ×10 dual UI bulk honesty
+
+
+## iter90 pre-RESEARCH SYNC (2026-08-02T16:48:00Z)
+
+- inbox/feed unread empty; private F4F83623 reacted
+- saved open: 1E6AF3C9 (dual STEER; empty-shell 10 remain)
+- no running children
+- PREPARE done: no merges
+- HEAD 4ded41b; coverage 518/334 complete false
+- next: RESEARCH empty-shell dual (contacts, invoices, invoiceLines, bills, billLines)
+- not node finish
+
+
+## iter90 RESEARCH 190 (2026-08-02T17:00:00Z)
+
+- Dual empty-shell probe READY/READY; docs MD5/ETag unchanged
+- Judgment: bulk_chrome_absent_dual_empty_list_shell ×5 resources (10 UI bulk rows)
+- Paths: /clients/empty, /invoices/empty, /bills/empty; real h1 + empty-state copy; no bulk chrome
+- List tools UI_CHANGED on empty (product drift; not bulk chrome; out of this slice)
+- No writes; no coverage green; profiles purged
+- Recommend EXECUTE: ui_product_plane_bulk_chrome_dual_na_empty_list → 528/344 complete false
+- Evidence: tmp/grok-research.md + research190_empty_shell_dual.json
+- not node finish
+
+
+## iter90 pre-PLAN SYNC (2026-08-02T17:05:00Z)
+
+- inbox/feed unread empty; private E20B61BE reacted
+- saved open: 1E6AF3C9 (unsave after empty-list dual-NA package lands)
+- no running children
+- RESEARCH190 done: empty-shell dual-absent ×10; recommend empty_list NA package
+- next: PLAN then EXECUTE
+- not node finish
+
+
+## iter90 PLAN (2026-08-02T16:56:00Z)
+
+- Plan: 186.90 ui_product_plane_bulk_chrome_dual_na_empty_list
+- Product research190 empty-list dual-NA: 5 resources / 10 UI bulk rows
+- Target coverage 528/344 complete false; product-plane UI bulk honesty → 0
+- Root-only; no children; no bulk tools; no live API; not finish
+- Next: EXECUTE
+
+
+## iter90 pre-EXECUTE SYNC (2026-08-02T16:57:00Z)
+
+- inbox/feed unread empty; private 82D6D668 reacted
+- saved open: 1E6AF3C9 (unsave after empty-list package commit)
+- no running children
+- plan present: 186.90 ui_product_plane_bulk_chrome_dual_na_empty_list
+- next: EXECUTE
+- not node finish
+
+
+## iter90 EXECUTE (2026-08-02T17:20:00Z)
+
+- Producted research190 empty-list dual-NA: 5 resources / 10 UI bulk rows
+- Generator: UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_*, apply after soft dual-NA; GEO_UI_NOT_APPLICABLE_ROW_COUNT 268
+- Coverage: live/vision 344, implemented/contract 528, complete false; product-plane UI bulk honesty 0
+- Tests: inventory 23 + commit-mode 1671 passed; lint passed
+- Wiki: ui_product_plane_bulk_chrome_dual_na_empty_list.md + honesty/strong/soft/index
+- Not node finish; ready FIX-VERIFY / IR / COMMIT
+
+
+## iter90 pre-IR SYNC (2026-08-02T17:25:00Z)
+
+- inbox/feed unread empty; private D5124203 reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.90)
+- no running children
+- uncommitted EXECUTE product ready for independent review
+- coverage: live/vision 344, implemented/contract 528, complete false
+- next: INDEPENDENT-REVIEW
+- not node finish
+
+
+## iter90 INDEPENDENT-REVIEW (2026-08-02T17:30:00Z)
+
+- Verdict: **PASS (package)** research190 empty-list dual-NA 10 UI bulk rows; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; 10 empty NA + 0 product-plane bulk honesty; dual READY/READY no API token; no bulk tools; counts 528/344 complete false; no secrets
+- Required fixes: **none**
+- Next: FIX-VERIFY / COMMIT 186.90; not node finish
+
+
+## iter90 pre-FIX-VERIFY SYNC (2026-08-02T17:32:00Z)
+
+- inbox/feed unread empty; private 72A0DD07 reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.90)
+- no running children
+- IR PASS package (tmp/grok-review.md); no required fixes
+- uncommitted product still present; next FIX-VERIFY then COMMIT
+- complete=false unchanged
+
+
+## iter90 FIX-VERIFY (2026-08-02T17:45:00Z)
+
+- IR package PASS: no required package fixes; invariants reconfirmed (empty NA×10, honesty product-plane 0, 528/344, complete false)
+- lint.sh pass; test.sh commit-mode 1671 passed
+- wiki lint clean (project + memory)
+- plan post-mortem appended on 186.90
+- Did not run ui-full/full (complete false)
+- Ready COMMIT 186.90; not node finish
+
+
+## iter90 pre-COMMIT SYNC (2026-08-02T17:50:00Z)
+
+- inbox/feed unread empty; private 370E4212 reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.90 — dual STEER closed once package lands)
+- no running children
+- FIX-VERIFY clean; uncommitted product ready for fractal commit
+- coverage 528/344 complete false
+- next: COMMIT 186.90

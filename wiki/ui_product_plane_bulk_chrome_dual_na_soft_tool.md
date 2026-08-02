@@ -63,9 +63,9 @@ Bare SPA seeds `/settings/vat`, `/settings/users`, `/vat-returns` remain soft-em
 
 | Subset | Resources | Why |
 | --- | --- | --- |
-| Empty-shell dual-absent | contacts, invoices, invoiceLines, bills, billLines | Dual still on `/…/empty`; greened create tools are open-only |
+| Empty-shell dual-absent | contacts, invoices, invoiceLines, bills, billLines | **Promoted by research190** empty-list dual-NA ([[ui_product_plane_bulk_chrome_dual_na_empty_list]]) |
 
-10 UI bulk honesty rows remain `UI_BULK_CHROME_DUAL_REQUIRED` (see [[ui_product_plane_bulk_parity_inventory_honesty]]). Strong dual-NA ×30 remains separate ([[ui_product_plane_bulk_chrome_dual_na_strong]]).
+Product-plane UI bulk honesty remaining after empty-list package: **0**. Strong dual-NA ×30 remains separate ([[ui_product_plane_bulk_chrome_dual_na_strong]]).
 
 ## Completeness walls still open
 
@@ -73,10 +73,10 @@ Bare SPA seeds `/settings/vat`, `/settings/users`, `/vat-returns` remain soft-em
 | --- | ---: |
 | API bulk schema unspecified | 92 |
 | Residual clear honesty | 29 |
-| UI product-plane bulk remaining honesty | 10 |
+| UI product-plane bulk remaining honesty | 0 |
 | annual_reports org inaccessible | 1 |
 
-Green counts after this freeze: implemented/contract **518**, live/vision **334**, complete **false**.
+Green counts after soft freeze alone: implemented/contract **518**, live/vision **334**. After empty-list package: **528** / **344**. complete **false**.
 
 ## Generator and tests
 

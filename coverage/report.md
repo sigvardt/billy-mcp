@@ -1,6 +1,6 @@
 # Phase 1 offline API read-and-write coverage status
 
-This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 518/518; UI live/vision rows: 334/334. API live_tested remains false under out_of_scope_by_user (not live-verified).
+This generated inventory is currently incomplete. It freezes the official-doc snapshot with row-level implementation and contract-test evidence. Implemented/contract rows: 528/528; UI live/vision rows: 344/344. API live_tested remains false under out_of_scope_by_user (not live-verified).
 
 | Source | Count |
 | --- | ---: |
@@ -13,4 +13,4 @@ This generated inventory is currently incomplete. It freezes the official-doc sn
 
 Complete: `false`
 
-Blocker: External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (UI product-plane bulk remaining ×10 discovery_required (empty-shell 10) UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)
+Blocker: External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (annual_reports org_inaccessible; product-plane UI bulk honesty closed via dual-NA strong+soft+empty-list freezes)

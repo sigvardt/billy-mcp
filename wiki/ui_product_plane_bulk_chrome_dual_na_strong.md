@@ -66,7 +66,7 @@ accounts, attachments, bankLineMatches, bankLineSubjectAssociations, bankLines, 
 | Empty-shell dual-absent | contacts, invoices, invoiceLines, bills, billLines | Dual landed on `/…/empty`; bulk chrome may appear when rows exist |
 | Soft path seeds | salesTax*, taxRates*, taxRateDeductionComponents, users | Soft SPA seeds soft-empty; need tool-based dual |
 
-Research189 promoted soft tool dual-absent ×18 to NA ([[ui_product_plane_bulk_chrome_dual_na_soft_tool]]). Empty-shell ×10 remain `UI_BULK_CHROME_DUAL_REQUIRED` (see [[ui_product_plane_bulk_parity_inventory_honesty]]).
+Research189 promoted soft tool dual-absent ×18 to NA ([[ui_product_plane_bulk_chrome_dual_na_soft_tool]]). Research190 promoted empty-list dual-absent ×10 to NA ([[ui_product_plane_bulk_chrome_dual_na_empty_list]]). Product-plane UI bulk honesty remaining: **0**.
 
 ## Completeness walls still open (after research189 soft package)
 
@@ -74,10 +74,10 @@ Research189 promoted soft tool dual-absent ×18 to NA ([[ui_product_plane_bulk_c
 | --- | ---: |
 | API bulk schema unspecified | 92 |
 | Residual clear honesty | 29 |
-| UI product-plane bulk remaining honesty | 10 |
+| UI product-plane bulk remaining honesty | 0 |
 | annual_reports org inaccessible | 1 |
 
-Green counts after strong freeze alone: implemented/contract **500**, live/vision **316**. After soft package: **518** / **334**. `complete` stays **false**.
+Green counts after strong freeze alone: implemented/contract **500**, live/vision **316**. After soft package: **518** / **334**. After empty-list package: **528** / **344**. `complete` stays **false**.
 
 ## Generator and tests
 

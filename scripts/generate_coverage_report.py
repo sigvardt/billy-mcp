@@ -161,7 +161,7 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    258  # prior 240 + research189 product-plane bulk chrome dual NA soft tool (18)
+    268  # prior 258 + research190 product-plane bulk chrome dual NA empty list (10)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -2387,6 +2387,192 @@ def apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(
             f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; empty_list_shell=false; "
             "tool_panel=true; held empty-shell contacts/invoices/bills not in "
             "this freeze"
+        )
+        row["evidence"] = f"{prior}; {na_evidence}" if prior else na_evidence
+
+
+# Research190 UI product-plane bulk chrome dual NA (empty-list shell subset).
+# Dual-absent multi-select/bulk-action chrome on real greened empty list shells
+# (/clients/empty, /invoices/empty, /bills/empty). Completes product-plane bulk
+# honesty freezes after research188 strong + research189 soft tool packages.
+UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE = "UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST"
+UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES: frozenset[str] = frozenset(
+    {
+        "contacts",
+        "invoices",
+        "invoiceLines",
+        "bills",
+        "billLines",
+    }
+)
+UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS: frozenset[str] = frozenset(
+    {
+        f"ui.parity.{resource}.{op}"
+        for resource in UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES
+        for op in ("bulk_save", "bulk_delete")
+    }
+)
+# resource -> greened empty list shell observed dual (research190)
+UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS: dict[str, dict[str, str]] = {
+    "contacts": {
+        "shell_id": "clients_list",
+        "path_class": "/clients/empty",
+        "tool_ref": "ui_clients_list",
+    },
+    "invoices": {
+        "shell_id": "invoices_list",
+        "path_class": "/invoices/empty",
+        "tool_ref": "ui_invoices_list",
+    },
+    "invoiceLines": {
+        "shell_id": "invoices_list",
+        "path_class": "/invoices/empty",
+        "tool_ref": "ui_invoices_list",
+    },
+    "bills": {
+        "shell_id": "bills_list",
+        "path_class": "/bills/empty",
+        "tool_ref": "ui_bills_list",
+    },
+    "billLines": {
+        "shell_id": "bills_list",
+        "path_class": "/bills/empty",
+        "tool_ref": "ui_bills_list",
+    },
+}
+
+
+def ui_bulk_chrome_absent_dual_empty_list_qualification(
+    resource: str, operation: str
+) -> dict[str, Any]:
+    """Machine-readable UI not_applicable for empty-list dual-absent bulk rows."""
+
+    shell = UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS[resource]
+    linked_api = f"api.{resource}.{operation}"
+    return {
+        "kind": "ui_not_applicable",
+        "evidence_code": UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE,
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": (
+            "research190 dual independent ephemeral sessions: greened empty "
+            "list shells land on /…/empty with real h1 empty-state copy and no "
+            "multi-select / bulk-action chrome for this API bulk parity row; "
+            "design §10.2 UI not_applicable accepted; no bulk FastMCP tool; "
+            "distinct from soft-empty nonsense control"
+        ),
+        "sessions": "dual_independent_ephemeral",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research190_empty_shell_dual",
+        "tools_allowed": False,
+        "empty_list_shell": True,
+        "tool_panel": False,
+        "linked_api_row_id": linked_api,
+        "shell_id": shell["shell_id"],
+        "path_class": shell["path_class"],
+        "tool_ref": shell["tool_ref"],
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+    }
+
+
+def apply_ui_product_plane_bulk_chrome_dual_na_empty_list(
+    workflows: list[dict[str, Any]],
+) -> None:
+    """Promote research190 empty-list dual-absent product-plane bulk rows to UI NA.
+
+    Exact 5 resources / 10 bulk_save+bulk_delete UI parity ids only. Runs after
+    research187 honesty, research188 strong, and research189 soft dual-NA so NA
+    wins over discovery_required for this subset.
+    """
+
+    if len(UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES) != 5:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES must be exactly 5 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES)})"
+        )
+    if len(UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS) != 10:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS must be exactly 10 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS)})"
+        )
+    if set(UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS) != UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES:
+        raise RuntimeError("shell map must cover exactly empty-list dual-NA resources")
+    if not UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS.issubset(UI_PRODUCT_PLANE_BULK_HONESTY_IDS):
+        raise RuntimeError("empty-list dual-NA ids must be a subset of product-plane honesty ids")
+    if UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES & UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES:
+        raise RuntimeError("empty-list dual-NA resources must not overlap strong dual-NA resources")
+    if UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES & UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES:
+        raise RuntimeError("empty-list dual-NA resources must not overlap soft dual-NA resources")
+    if UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS & UI_BULK_CHROME_DUAL_NA_STRONG_IDS:
+        raise RuntimeError("empty-list dual-NA ids must not overlap strong dual-NA ids")
+    if UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS & UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS:
+        raise RuntimeError("empty-list dual-NA ids must not overlap soft dual-NA ids")
+
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        if row_id not in UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS:
+            continue
+        parts = row_id.split(".")
+        if len(parts) < 4:
+            continue
+        resource = parts[2]
+        operation = parts[3]
+        if resource not in UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES:
+            continue
+        if operation not in ("bulk_save", "bulk_delete"):
+            continue
+
+        shell = UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS[resource]
+        qual = ui_bulk_chrome_absent_dual_empty_list_qualification(resource, operation)
+        linked_api = qual["linked_api_row_id"]
+        row["tool_name"] = ""
+        row["parity_status"] = "not_applicable"
+        row["discovered"] = True
+        row["implemented"] = True
+        row["contract_tested"] = True
+        row["live_tested"] = True
+        row["vision_verified"] = True
+        row["vision_evidence"] = None
+        row["sensitivity"] = "low"
+        row["side_effects"] = (
+            "none; UI bulk parity classified not_applicable — no bulk browser "
+            "workflow tool and no records may be created through a bulk UI tool"
+        )
+        row["cleanup"] = (
+            "not_applicable; no UI bulk tool and no disposable records for this parity row"
+        )
+        row["errors"] = [
+            "AUTH_INTERACTION_REQUIRED",
+            "UI_CHANGED",
+            UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE,
+        ]
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk bulk workflow for {linked_api} "
+            f"(research190 dual-session: empty list shell {shell['shell_id']} "
+            f"tool_ref={shell['tool_ref']} path_class {shell['path_class']}; "
+            "dual_agree multi-select/bulk-action chrome absent; "
+            "empty_list_shell=true; tool_panel=false; "
+            f"evidence_code={UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+        row["qualification"] = dict(qual)
+        prior = str(row.get("evidence") or "").strip()
+        na_evidence = (
+            "research190 dual independent ephemeral browser sessions (no "
+            f"BILLY_API_TOKEN): dual READY/READY; empty list shell "
+            f"{shell['shell_id']} path_class {shell['path_class']} "
+            f"(tool_ref={shell['tool_ref']}); real h1 empty-state copy distinct "
+            "from nonsense soft-empty control; dual_agree_bulk_chrome_absent "
+            f"true (tables/rows/checkboxes 0); no bulk-action chrome for "
+            f"{linked_api}; design §10.2 UI parity not_applicable accepted; "
+            f"evidence_code={UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE}; "
+            "no ui_* bulk tool; API bulk lane unchanged "
+            "(external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; "
+            "live_tested false out_of_scope_by_user); "
+            "evidence_ref=research190_empty_shell_dual; "
+            f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; empty_list_shell=true; "
+            "tool_panel=false; completes product-plane bulk honesty freezes "
+            "(strong+soft+empty-list)"
         )
         row["evidence"] = f"{prior}; {na_evidence}" if prior else na_evidence
 
@@ -7542,6 +7728,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_product_plane_bulk_parity_honesty(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_strong(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(workflows)
+    apply_ui_product_plane_bulk_chrome_dual_na_empty_list(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
@@ -7782,9 +7969,8 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
             "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
             "UI live and vision qualification incomplete "
-            "(UI product-plane bulk remaining ×10 discovery_required "
-            "(empty-shell 10) UI_BULK_CHROME_DUAL_REQUIRED; "
-            "annual_reports org_inaccessible)"
+            "(annual_reports org_inaccessible; product-plane UI bulk honesty "
+            "closed via dual-NA strong+soft+empty-list freezes)"
         )
     if any(
         not row.get("implemented") or not row.get("contract_tested")

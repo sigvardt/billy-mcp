@@ -119,6 +119,8 @@ updated: 2026-08-02T16:20:54Z
 
 [[ui_organizations_create_not_applicable|ui_organizations_create_not_applicable]]: UI parity not_applicable freeze for api.organizations.create (research177 dual absence of org-create CTA).
 
+[[ui_product_plane_bulk_chrome_dual_na_empty_list|ui_product_plane_bulk_chrome_dual_na_empty_list]]: Research190 dual-absent multi-select bulk chrome on real greened empty list shells — 5 resources / 10 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.
+
 [[ui_product_plane_bulk_chrome_dual_na_soft_tool|ui_product_plane_bulk_chrome_dual_na_soft_tool]]: Research189 dual-absent multi-select bulk chrome on real greened tool panels — 9 resources / 18 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.
 
 [[ui_product_plane_bulk_chrome_dual_na_strong|ui_product_plane_bulk_chrome_dual_na_strong]]: Research188 dual-absent multi-select bulk chrome on non-empty greened list shells — 15 resources / 30 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.

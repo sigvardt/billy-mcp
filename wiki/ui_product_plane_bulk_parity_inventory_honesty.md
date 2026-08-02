@@ -70,7 +70,7 @@ accounts, attachments, bankLineMatches, bankLineSubjectAssociations, bankLines, 
 | --- | ---: |
 | Bulk schema unspecified (`external_contract_blocker`) | 92 API |
 | Residual clear honesty (still red) | 29 API |
-| UI product-plane bulk chrome dual required (remaining honesty) | 28 UI |
+| UI product-plane bulk honesty remaining (after strong+soft+empty-list dual-NA) | 0 UI |
 | UI product-plane bulk chrome dual NA strong (research188) | 30 UI |
 | annual_reports org inaccessible | 1 UI discovery |
 
@@ -87,4 +87,4 @@ Research188 dual survey landed: **15 resources / 30 rows** promoted to UI `not_a
 
 ## Research189 soft tool dual-NA lift
 
-Research189 dual tool-panel evidence promoted soft VAT/users product-plane bulk rows (9 resources / 18 UI bulk ids) to `not_applicable` via [[ui_product_plane_bulk_chrome_dual_na_soft_tool]]. Empty-shell contacts/invoices/bills(+lines) ×10 remain discovery_required honesty.
+Research189 dual tool-panel evidence promoted soft VAT/users product-plane bulk rows (9 resources / 18 UI bulk ids) to `not_applicable` via [[ui_product_plane_bulk_chrome_dual_na_soft_tool]]. Research190 empty-list dual evidence promoted contacts/invoices/bills(+lines) ×10 to `not_applicable` via [[ui_product_plane_bulk_chrome_dual_na_empty_list]]. Product-plane UI bulk honesty remaining: **0**.
