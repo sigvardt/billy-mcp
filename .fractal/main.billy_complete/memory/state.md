@@ -6,16 +6,149 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T12:25:00Z
+updated: 2026-08-02T11:45:00Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **82** COMMIT done for 186.82: `ui_transactions_create_open` + DTL×5 NA.
-- live/vision **228**; implemented/contract **412**; GEO NA **154**; complete **false**.
+- Iter **83** COMMIT 186.83 residual soft-empty NA×50 package.
+- live/vision **278**; implemented/contract **462**; GEO NA **204**; complete **false**.
 - Not node finish.
+
+## COMMIT (iter 83 / 186.83)
+
+- fractal commit product: residual soft-empty NA×50 research183 freeze.
+- Not node finish (complete false; bulk external-contract red, annual red,
+  attachments/files residual open).
+
+## SYNC (iter 83 pre-COMMIT)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 59ACF756 reacted (+). Private + outbox pre-COMMIT written.
+- No running children. No parent directives.
+- FIX-VERIFY clean (1664 offline pass; IR ACCEPT). Ready COMMIT 186.83
+  residual soft-empty NA×50 package. Not node finish (complete false).
+
+## FIX-VERIFY (iter 83 / 186.83) (2026-08-02T13:15Z)
+
+- IR required fixes: none. Optional N1 deferred (probe-only).
+- lint.sh pass. test.sh offline **1664 passed** / 54 deselected.
+- wiki lint: wiki + memory clean.
+- check_coverage: 50 research183 NA green; bulk not greened; annual red;
+  attachments/files residual open; live/vision 278; implemented/contract 462;
+  GEO NA 204; complete false; API live false.
+- Plan post-mortem filled. No ui-full (not complete).
+- Ready COMMIT 186.83 residual soft-empty NA package. Not node finish.
+
+## SYNC (iter 83 pre-FIX-VERIFY) (2026-08-02T12:58Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 1CEB07AD reacted (+). Private + outbox pre-FIX-VERIFY written.
+- No running children. No parent directives.
+- IR ACCEPT package; no required fixes. Entering FIX-VERIFY.
+- complete false; live/vision 278; implemented/contract 462; GEO NA 204.
+
+## IR (iter 83 / 186.83) (2026-08-02T12:55Z)
+
+- Product residual NA×50 soft-empty freeze: **ACCEPT**.
+- Docs fingerprint live match; dual evidence dual; dual-count bans hold; bulk/annual/
+  attachments/files not greened; API live_tested all false.
+- Required fixes: none. Optional N1 probe Upsedasse soft-empty quirk only.
+- Counts 278/462/204 complete false; bulk not greened; API live false.
+- Overall completeness: **FAIL** (expected). Proceed FIX-VERIFY then COMMIT.
+
+## SYNC (iter 83 pre-IR) (2026-08-02T12:50Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 64333A18 reacted (+). Private + outbox pre-IR written.
+- No running children. No parent directives.
+- EXECUTE 186.83 uncommitted product ready for INDEPENDENT-REVIEW.
+- complete false; live/vision 278; implemented/contract 462; GEO NA 204.
+
+## EXECUTE (iter 83 / 186.83) (2026-08-02T12:40Z)
+
+- Generator: RESEARCH183 exact 50 ids in GEO prefixes + frozenset/family map;
+  ROW_COUNT 154→204; apply_ui_geo evidence + dual-count bans.
+- Inventory tests: research183 block; updated related-shell + salesTaxReturns
+  residual assertions.
+- Wiki: `ui_residual_soft_empty_not_applicable_research183.md` + index.
+- Regenerated coverage: 278 live/vision, 462 implemented/contract, complete false.
+- No product tool; bulk/annual/attachments/files unchanged.
+- lint.sh pass; test.sh offline 1664 passed / 54 deselected.
+- Ready INDEPENDENT-REVIEW. Not finish.
+
+## SYNC (iter 83 pre-EXECUTE) (2026-08-02T12:12Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 2D103FDF reacted (+). Private + outbox pre-EXECUTE written.
+- No running children. No parent directives.
+- PLAN 186.83 residual_na_soft_empty_families ready (NA×50, no product).
+- Entering EXECUTE. Not finish.
+
+## PLAN (iter 83 / 186.83) (2026-08-02T12:10Z)
+
+- Plan file
+  `plans/2026-08-02T11:58:56.076Z-186.83-residual_na_soft_empty_families.md`:
+  pure NA freeze research183 — 50 exact non-bulk ids (daybookBalanceAccounts,
+  bankLines/Payments/Matches/SubjectAssociations, postings, salesTaxAccounts/
+  Rules/MetaFields/Payments, salesTaxReturns get/update).
+- Root-only Grok. No children. No product tool. Dual-count bans on greened parents.
+- Target live/vision **278**, implemented/contract **462**, GEO NA **204**; complete false.
+- Ready EXECUTE.
+
+## SYNC (iter 83 pre-PLAN) (2026-08-02T12:05Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 7E657AA8 reacted (+). Private + outbox pre-PLAN written.
+- No running children. No parent directives.
+- RESEARCH183 ready: NA×50 soft-empty residual package; no product.
+- Entering PLAN 186.83. Not finish.
+
+## RESEARCH (iter 83 / research183) (2026-08-02T12:00Z)
+
+- Docs fingerprint unchanged (md5 8b94b013… etag wcw4x9hqvu3603).
+- Dual probe `tmp/research183_focus_dual.json` pass; daybook seed+cleanup dual; api_token false; profiles purged.
+- Prefer package: **NA×50** soft-empty residual families (daybookBalanceAccounts, bank*, postings, salesTax* non-list residuals, salesTaxReturns get/update).
+- DEFER attachments/files (Bilag dual-count); annual Upsedasse red; bulk 92 external-contract.
+- No dual product chrome this pass.
+- Brief: `tmp/grok-research.md`. Ready PLAN 186.83. Not finish.
+
+## SYNC (iter 83 pre-RESEARCH) (2026-08-02T11:46Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private 129180CE reacted (+). Private + outbox pre-RESEARCH written.
+- No running children. No parent directives.
+- PREPARE already no-op: parent up to date; no child merges. Tip `3b976fb`.
+- Coverage live/vision 228; implemented/contract 412; GEO NA 154; complete false.
+- Ready RESEARCH next residual UI package. Not finish.
+
+## SYNC (iter 83 start) (2026-08-02T11:43Z)
+
+- Unread inbox/feed: empty. Saved: empty.
+- Private notes from iter82 COMMIT reacted/read. Private 129180CE + outbox F2ACD0E2 written.
+- No running children. No parent directives.
+- Tip `3b976fb`. Coverage live/vision 228; implemented/contract 412; complete false.
+- Blockers unchanged: bulk 92 external-contract; annual_reports; residual UI.
+- Ready PREPARE. Not finish.
+
+## PREPARE (iter 83) (2026-08-02T11:45Z)
+
+- Parent `main`: fetch + merge **Already up to date** (ancestor of HEAD; 0 commits ahead).
+- `origin/main` also ancestor of HEAD.
+- Child branches: 62 still list commits not on first-parent mainline; **no merge-ready product**.
+  - `ui_auth_status`: auth_status already live and evolved on tip; two-dot merge would
+    regress ~43k lines of src/tests. **Skip.**
+  - `wave5t_ui_auth_discovery_fallback` / `wave5u_probe_contract_codex_fallback`:
+    wiki pages already on tip; merge would delete later wiki. **Skip.**
+  - `ui_auth_credentials_research_codex_fallback`: Codex-fallback wiki superseded by
+    `wiki/auth_credentials_pre_submit_research.md`. **Skip.**
+  - Remaining 58: fractal-only init/failed/killed review scaffolding. **Skip.**
+- No `--no-ff` child merges. No integration outbox (no material merge).
+- Trajectory: all listed children terminal (completed/exited/killed/stopped); none running.
+- Dirty: memory/state.md only (SYNC + PREPARE). Tip still `3b976fb`.
+- Ready RESEARCH next residual package. Not finish.
 
 ## SYNC (iter 82 start) (2026-08-02T10:56Z)
 

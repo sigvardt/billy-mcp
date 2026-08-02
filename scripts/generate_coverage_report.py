@@ -100,12 +100,62 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
     "api.daybookTransactionLines.create",
     "api.daybookTransactionLines.update",
     "api.daybookTransactionLines.delete",
+    "api.daybookBalanceAccounts.get",
+    "api.daybookBalanceAccounts.list",
+    "api.daybookBalanceAccounts.create",
+    "api.daybookBalanceAccounts.update",
+    "api.daybookBalanceAccounts.delete",
+    "api.bankLines.get",
+    "api.bankLines.list",
+    "api.bankLines.create",
+    "api.bankLines.update",
+    "api.bankLines.delete",
+    "api.bankPayments.get",
+    "api.bankPayments.list",
+    "api.bankPayments.create",
+    "api.bankPayments.update",
+    "api.bankPayments.delete",
+    "api.bankLineMatches.get",
+    "api.bankLineMatches.list",
+    "api.bankLineMatches.create",
+    "api.bankLineMatches.update",
+    "api.bankLineMatches.delete",
+    "api.bankLineSubjectAssociations.get",
+    "api.bankLineSubjectAssociations.list",
+    "api.bankLineSubjectAssociations.create",
+    "api.bankLineSubjectAssociations.update",
+    "api.bankLineSubjectAssociations.delete",
+    "api.postings.get",
+    "api.postings.list",
+    "api.postings.create",
+    "api.postings.update",
+    "api.salesTaxAccounts.get",
+    "api.salesTaxAccounts.list",
+    "api.salesTaxAccounts.create",
+    "api.salesTaxAccounts.update",
+    "api.salesTaxAccounts.delete",
+    "api.salesTaxRules.get",
+    "api.salesTaxRules.list",
+    "api.salesTaxRules.create",
+    "api.salesTaxRules.update",
+    "api.salesTaxRules.delete",
+    "api.salesTaxMetaFields.get",
+    "api.salesTaxMetaFields.list",
+    "api.salesTaxMetaFields.create",
+    "api.salesTaxMetaFields.update",
+    "api.salesTaxMetaFields.delete",
+    "api.salesTaxPayments.get",
+    "api.salesTaxPayments.list",
+    "api.salesTaxPayments.create",
+    "api.salesTaxPayments.update",
+    "api.salesTaxReturns.get",
+    "api.salesTaxReturns.update",
     "api.states.",
     "api.zipcodes.",
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    154  # prior 149 + research182: daybookTransactionLines g/l/c/u/d(5)=5
+    204  # prior 154 + research183 residual soft-empty NA families (50)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -236,6 +286,122 @@ GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS: frozenset[str] =
         "api.daybookTransactionLines.delete",
     }
 )
+
+# research183: residual soft-empty dual NA freeze (exact non-bulk ids only).
+# Keep greened parents exclusive: daybooks/daybookTransactions create, bank
+# accounts/recon, transactions list/create, settings VAT, vat-declarations list.
+# Attachments/files dual-count and annual remain deferred/red. Bulk stays red.
+GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS: frozenset[str] = frozenset(
+    {
+        "api.daybookBalanceAccounts.get",
+        "api.daybookBalanceAccounts.list",
+        "api.daybookBalanceAccounts.create",
+        "api.daybookBalanceAccounts.update",
+        "api.daybookBalanceAccounts.delete",
+        "api.bankLines.get",
+        "api.bankLines.list",
+        "api.bankLines.create",
+        "api.bankLines.update",
+        "api.bankLines.delete",
+        "api.bankPayments.get",
+        "api.bankPayments.list",
+        "api.bankPayments.create",
+        "api.bankPayments.update",
+        "api.bankPayments.delete",
+        "api.bankLineMatches.get",
+        "api.bankLineMatches.list",
+        "api.bankLineMatches.create",
+        "api.bankLineMatches.update",
+        "api.bankLineMatches.delete",
+        "api.bankLineSubjectAssociations.get",
+        "api.bankLineSubjectAssociations.list",
+        "api.bankLineSubjectAssociations.create",
+        "api.bankLineSubjectAssociations.update",
+        "api.bankLineSubjectAssociations.delete",
+        "api.postings.get",
+        "api.postings.list",
+        "api.postings.create",
+        "api.postings.update",
+        "api.salesTaxAccounts.get",
+        "api.salesTaxAccounts.list",
+        "api.salesTaxAccounts.create",
+        "api.salesTaxAccounts.update",
+        "api.salesTaxAccounts.delete",
+        "api.salesTaxRules.get",
+        "api.salesTaxRules.list",
+        "api.salesTaxRules.create",
+        "api.salesTaxRules.update",
+        "api.salesTaxRules.delete",
+        "api.salesTaxMetaFields.get",
+        "api.salesTaxMetaFields.list",
+        "api.salesTaxMetaFields.create",
+        "api.salesTaxMetaFields.update",
+        "api.salesTaxMetaFields.delete",
+        "api.salesTaxPayments.get",
+        "api.salesTaxPayments.list",
+        "api.salesTaxPayments.create",
+        "api.salesTaxPayments.update",
+        "api.salesTaxReturns.get",
+        "api.salesTaxReturns.update",
+    }
+)
+GEO_UI_NOT_APPLICABLE_RESEARCH183_FAMILY: dict[str, dict[str, str]] = {
+    "daybookBalanceAccounts": {
+        "evidence_ref": "research183_daybook_balance_accounts_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_daybookBalanceAccounts_surface",
+        "family_label": "daybookBalanceAccounts.get+list+create+update+delete",
+    },
+    "bankLines": {
+        "evidence_ref": "research183_bank_lines_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_bankLines_surface",
+        "family_label": "bankLines.get+list+create+update+delete",
+    },
+    "bankPayments": {
+        "evidence_ref": "research183_bank_payments_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_bankPayments_surface",
+        "family_label": "bankPayments.get+list+create+update+delete",
+    },
+    "bankLineMatches": {
+        "evidence_ref": "research183_bank_line_matches_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_bankLineMatches_surface",
+        "family_label": "bankLineMatches.get+list+create+update+delete",
+    },
+    "bankLineSubjectAssociations": {
+        "evidence_ref": "research183_bank_line_subject_associations_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_bankLineSubjectAssociations_surface",
+        "family_label": "bankLineSubjectAssociations.get+list+create+update+delete",
+    },
+    "postings": {
+        "evidence_ref": "research183_postings_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_postings_surface",
+        "family_label": "postings.get+list+create+update",
+    },
+    "salesTaxAccounts": {
+        "evidence_ref": "research183_sales_tax_accounts_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_salesTaxAccounts_surface",
+        "family_label": "salesTaxAccounts.get+list+create+update+delete",
+    },
+    "salesTaxRules": {
+        "evidence_ref": "research183_sales_tax_rules_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_salesTaxRules_surface",
+        "family_label": "salesTaxRules.get+list+create+update+delete",
+    },
+    "salesTaxMetaFields": {
+        "evidence_ref": "research183_sales_tax_meta_fields_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_salesTaxMetaFields_surface",
+        "family_label": "salesTaxMetaFields.get+list+create+update+delete",
+    },
+    "salesTaxPayments": {
+        "evidence_ref": "research183_sales_tax_payments_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_dedicated_salesTaxPayments_surface",
+        "family_label": "salesTaxPayments.get+list+create+update",
+    },
+    "salesTaxReturns": {
+        "evidence_ref": "research183_sales_tax_returns_get_update_soft_empty_dual",
+        "dual_agree_flag": "dual_agree_no_salesTaxReturns_get_update_form_surface",
+        "family_label": "salesTaxReturns.get+update",
+    },
+}
 CURRENT_COVERAGE_PHASE = "phase_1_offline_api_reads_and_writes"
 TEST_REFERENCE = "tests/coverage/test_coverage_inventory.py"
 SERVER_REGISTRY_TEST_REFERENCE = "tests/unit/test_coverage_server.py"
@@ -5335,6 +5501,8 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
 def geo_ui_not_applicable_api_row(api_row_id: str) -> bool:
     """Return whether dual-session research freezes this API row as UI NA."""
 
+    if api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS:
+        return True
     return any(api_row_id.startswith(prefix) for prefix in GEO_UI_NOT_APPLICABLE_API_PREFIXES)
 
 
@@ -5407,6 +5575,7 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
     is_research182_dtl = (
         api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS
     )
+    is_research183 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
     is_research177 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
     is_research176 = api_row_id in GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
     is_research162 = resource in GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES
@@ -5575,6 +5744,30 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "daybooks/new",
             "transactions",
             "invoices",
+            nonsense_path,
+        ]
+    elif is_research183:
+        research_id = "research183"
+        fam = GEO_UI_NOT_APPLICABLE_RESEARCH183_FAMILY.get(resource, {})
+        evidence_ref = fam.get("evidence_ref", "research183_residual_soft_empty_dual")
+        dual_agree_flag = fam.get("dual_agree_flag", "dual_agree_soft_empty_residual_family")
+        family_label = fam.get("family_label", resource)
+        nonsense_path = "zz-r183-none"
+        contrast_shells = (
+            "daybooks_id/transactions_list_create/bank_accounts/bank_recon/"
+            "settings_vat/vat_declarations/uploads(Bilag dual-count deferred)"
+        )
+        list_heading_suffix = (
+            "/daybooks editor/Posteringer/Bankkonti/Afstemning/Momssatser/Momsangivelser/Bilag"
+        )
+        contrast_controls = [
+            "daybooks/id",
+            "transactions",
+            "bank_accounts",
+            "bank_reconciliation",
+            "settings_vat",
+            "vat-declarations",
+            "uploads",
             nonsense_path,
         ]
     elif is_research181_transactions:
@@ -6076,6 +6269,44 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
             "not_applicable accepted)"
         )
+    if is_research183:
+        ban = {
+            "daybookBalanceAccounts": (
+                "no dual-count onto ui_daybooks_* or ui_daybook_transactions_create_open"
+            ),
+            "bankLines": (
+                "no dual-count onto ui_bank_accounts_list or ui_bank_reconciliation_open"
+            ),
+            "bankPayments": (
+                "no dual-count onto ui_bank_accounts_list or ui_bank_reconciliation_open"
+            ),
+            "bankLineMatches": (
+                "no dual-count onto ui_bank_accounts_list or ui_bank_reconciliation_open"
+            ),
+            "bankLineSubjectAssociations": (
+                "no dual-count onto ui_bank_accounts_list or ui_bank_reconciliation_open"
+            ),
+            "postings": (
+                "no dual-count onto ui_transactions_list or "
+                "ui_transactions_create_open (Posteringer is transactions)"
+            ),
+            "salesTaxAccounts": "no dual-count onto ui_settings_vat_open",
+            "salesTaxRules": "no dual-count onto ui_settings_vat_open",
+            "salesTaxMetaFields": "no dual-count onto ui_settings_vat_open",
+            "salesTaxPayments": "no dual-count onto ui_vat_declarations_list",
+            "salesTaxReturns": (
+                "list stays tool-green on ui_vat_declarations_list; detail soft "
+                "inputs_n 0 dual — no get/update product"
+            ),
+        }.get(resource, "no dual-count steal onto greened parent shells")
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk UI dedicated workflow for {api_row_id} "
+            f"({research_id} dual-session: dedicated soft routes soft-empty body_len "
+            f"138 dual; {ban}; "
+            f"contrast shells{list_heading_suffix}; "
+            f"evidence_code={GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
     if is_research181_transactions:
         row["method_or_route"] = (
             f"no equivalent mit.billy.dk UI workflow for {api_row_id} "
@@ -6145,6 +6376,14 @@ def apply_ui_geo_reference_not_applicable_evidence(row: dict[str, Any]) -> None:
             "(inputs_n 0, Send 0); edit surface Godkend og send 1 dual rejected as "
             "non-compose irreversible approve-send; exact special.invoice_email id "
             "only — not invoice CRUD tools; "
+        )
+    if is_research183:
+        levering_note = (
+            "research183 dual: soft-empty SPA chrome body_len 138 dual for exact "
+            "non-bulk residual ids; greened parents stay exclusive (daybooks/"
+            "transactions/bank accounts+recon/settings VAT/vat list); attachments/"
+            "files Bilag dual-count deferred; annual Upsedasse red; bulk external-"
+            "contract red; "
         )
     row["evidence"] = (
         f"{research_id} dual independent ephemeral browser sessions (no "

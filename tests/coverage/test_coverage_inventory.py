@@ -481,6 +481,9 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS:
             assert "research182" in row["method_or_route"]
             assert "research182" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS:
+            assert "research183" in row["method_or_route"]
+            assert "research183" in qual["evidence_ref"]
         elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
             assert "research179" in qual["evidence_ref"]
             assert "research179" in row["evidence"]
@@ -871,18 +874,29 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row.get("parity_status") != "not_applicable" for row in attachments)
     assert all(row.get("live_tested") is not True for row in attachments)
     # productPrices NA green is asserted above (research162 package).
-    # related-shell families must stay red (research144/147 rejected pure NA).
-    # taxRates.list dual-counted to Momssatser shell (research158); residual
-    # taxRates get/create/update/delete NA (research181). salesTaxRulesets.list
-    # dual-counted (research159); residual non-list NA (research181).
+    # files stay red (Bilag greened → reject pure NA). research183 freezes
+    # bank*/daybookBalanceAccounts/postings/salesTaxRules non-bulk as NA;
+    # bulk ops stay external-contract red. taxRates/salesTaxRulesets list
+    # dual-counted; residual non-list NA (research181).
+    files_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.files.")
+    ]
+    assert files_rows
+    assert all(row.get("parity_status") != "not_applicable" for row in files_rows)
+    assert all(row.get("live_tested") is not True for row in files_rows)
     for prefix in (
         "api.bankLineMatches.",
         "api.bankLineSubjectAssociations.",
         "api.bankPayments.",
+        "api.bankLines.",
         "api.daybookBalanceAccounts.",
         "api.postings.",
         "api.salesTaxRules.",
-        "api.files.",
+        "api.salesTaxAccounts.",
+        "api.salesTaxMetaFields.",
+        "api.salesTaxPayments.",
     ):
         related = [
             row
@@ -890,8 +904,14 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
             if str(row.get("api_row_id") or "").startswith(prefix)
         ]
         assert related, prefix
-        assert all(row.get("parity_status") != "not_applicable" for row in related)
-        assert all(row.get("live_tested") is not True for row in related)
+        non_bulk = [row for row in related if "bulk" not in str(row.get("api_row_id") or "")]
+        bulk = [row for row in related if "bulk" in str(row.get("api_row_id") or "")]
+        assert non_bulk
+        assert all(row.get("parity_status") == "not_applicable" for row in non_bulk)
+        assert all(row.get("live_tested") is True for row in non_bulk)
+        assert all("research183" in (row.get("method_or_route") or "") for row in non_bulk)
+        if bulk:
+            assert all(row.get("parity_status") != "not_applicable" for row in bulk)
     tax_rates_rows = [
         row
         for row in ui_manifest["workflows"]
@@ -953,8 +973,76 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         status["qualification"]["live_tested_rows"]
         == 74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     )
-    assert status["qualification"]["live_tested_rows"] == 228
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 154
+    assert status["qualification"]["live_tested_rows"] == 278
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 204
+
+
+def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
+    """research183: 50 residual soft-empty dual NA rows; greened parents exclusive."""
+
+    _, ui_manifest, _, status, _ = documents()
+    expected = generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
+    assert len(expected) == 50
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 204
+
+    rows = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in expected]
+    assert len(rows) == 50
+    for row in rows:
+        assert row["parity_status"] == "not_applicable"
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["tool_name"] == ""
+        assert row.get("vision_evidence") is None
+        qual: dict[str, Any] = dict(row.get("qualification") or {})
+        assert qual.get("kind") == "ui_not_applicable"
+        assert qual.get("not_applicable_decision") == "accepted"
+        assert qual.get("sessions") == "dual_independent_ephemeral"
+        assert "research183" in str(qual.get("evidence_ref") or "")
+        assert "research183" in (row.get("method_or_route") or "")
+        assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in (row.get("evidence") or "")
+
+    # Dual-count bans: greened parents remain tool-green / non-NA
+    workflows = {row["id"]: row for row in ui_manifest["workflows"]}
+    assert workflows["ui.parity.salesTaxReturns.list"]["parity_status"] != "not_applicable"
+    assert workflows["ui.parity.salesTaxReturns.list"]["tool_name"] == "ui_vat_declarations_list"
+    assert workflows["ui.parity.transactions.list"]["tool_name"] == "ui_transactions_list"
+    assert workflows["ui.parity.transactions.create"]["tool_name"] == "ui_transactions_create_open"
+    assert workflows["ui.discovery.bank_accounts"]["tool_name"] == "ui_bank_accounts_list"
+    assert (
+        workflows["ui.discovery.bank_reconciliation"]["tool_name"] == "ui_bank_reconciliation_open"
+    )
+    assert workflows["ui.parity.daybookTransactions.create"]["tool_name"] == (
+        "ui_daybook_transactions_create_open"
+    )
+
+    # Bulk of frozen families stay red (not NA)
+    bulk_ids = [
+        "api.bankLines.bulk_save",
+        "api.bankLines.bulk_delete",
+        "api.postings.bulk_save",
+        "api.postings.bulk_delete",
+        "api.salesTaxAccounts.bulk_save",
+        "api.daybookBalanceAccounts.bulk_delete",
+    ]
+    bulk_rows = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in bulk_ids]
+    assert len(bulk_rows) == len(bulk_ids)
+    assert all(row.get("parity_status") != "not_applicable" for row in bulk_rows)
+
+    # attachments/files/annual not accepted NA by this freeze
+    for row_id in (
+        "ui.parity.attachments.list",
+        "ui.parity.files.list",
+        "ui.discovery.annual_reports",
+    ):
+        row = workflows[row_id]
+        assert row.get("parity_status") != "not_applicable"
+
+    assert status["complete"] is False
+    assert status["qualification"]["live_tested_rows"] == 278
+    assert status["qualification"]["vision_verified_rows"] == 278
 
 
 def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
@@ -1182,9 +1270,15 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api.salesTaxReturns.list" in sales_tax_returns_parity["evidence"]
     assert "filters/sort/pagination UI not producted" in sales_tax_returns_parity["evidence"]
     assert "research140" in sales_tax_returns_parity["evidence"]
-    for red_id in (
+    for na_id in (
         "ui.parity.salesTaxReturns.get",
         "ui.parity.salesTaxReturns.update",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research183" in na_row["method_or_route"]
+    for red_id in (
         "ui.parity.salesTaxReturns.bulk_save",
         "ui.parity.salesTaxReturns.bulk_delete",
     ):

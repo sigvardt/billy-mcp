@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T11:28:11Z
+updated: 2026-08-02T12:14:49Z
 ---
 
 # billy_mcp
@@ -130,6 +130,8 @@ updated: 2026-08-02T11:28:11Z
 [[ui_recurring_invoices_list_shell|ui_recurring_invoices_list_shell]]: Read-only headless ui_recurring_invoices_list contract for Billy Abonnementer list shell open only.
 
 [[ui_reports_open_shell|ui_reports_open_shell]]: Read-only Billy reports (Rapporter) hub shell contract (research119 freeze).
+
+[[ui_residual_soft_empty_not_applicable_research183|ui_residual_soft_empty_not_applicable_research183]]: Dual-session research183 freeze — 50 non-bulk residual API ops have no dedicated mit.billy.dk workflow; soft routes empty dual; greened parents stay exclusive.
 
 [[ui_saft_exports_open_shell|ui_saft_exports_open_shell]]: Read-only Billy SAF-T CTA observe shell on exports hub (research122 freeze).
 
