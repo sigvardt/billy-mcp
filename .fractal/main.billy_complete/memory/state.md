@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T00:25:29Z
+updated: 2026-08-02T00:25:57Z
 ---
 
 # state
@@ -7739,4 +7739,10 @@ updated: 2026-08-02T00:25:29Z
 - No running children. No parent directives.
 - FIX-VERIFY clean (1631 offline pass; IR ACCEPT). Ready COMMIT 186.72
   ui bills update open package. Not node finish (complete false).
+
+## COMMIT (iter 72)
+
+- `fractal commit` product: ui bills update open (`57155c6`).
+- Not node finish (complete false; bulk external-contract red, annual red,
+  residual UI parity open).
 
