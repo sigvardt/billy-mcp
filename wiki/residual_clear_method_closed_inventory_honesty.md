@@ -11,7 +11,7 @@ sources:
   - .fractal/main.billy_complete/tmp/research186_residual_unauth.json
   - src/billy_mcp/live_probe.py
 created: 2026-08-02T14:20:00Z
-updated: 2026-08-02T14:20:00Z
+updated: 2026-08-02T17:40:00Z
 ---
 
 # Residual clear method-closed inventory honesty freeze
@@ -40,7 +40,7 @@ Locked base `https://api.billysbilling.com/v2`, no token:
 | HTTP **401** `AUTHENTICATION_REQUIRED` on transactions create/update | 2 | `readonly_field_map_insufficient` | `READONLY_PROPERTY_TABLE` |
 | HTTP **200** meta-only on two singular deletes | 2 | `meta_delete_unqualified` | `META_DELETE_NOT_CLEANUP_PROOF` |
 
-Parity with `live_probe._RESEARCH96_RESIDUAL_OUTCOMES`. Live API qualification remains `out_of_scope_by_user`.
+Parity with `live_probe._RESEARCH96_RESIDUAL_OUTCOMES`. research191 unauth reconfirm (2026-08-02) matched the same 405/401/meta-200 classes (`tmp/research191_unauth_reconfirm.json`). Live API qualification remains `out_of_scope_by_user`.
 
 ## Inventory rules applied
 

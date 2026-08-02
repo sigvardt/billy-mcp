@@ -1665,6 +1665,7 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
         "docs_md5": DOCS_MD5,
         "asset_sweep": "research137",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
     }
@@ -1730,7 +1731,7 @@ def method_closed_offline_qualification() -> dict[str, Any]:
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1745,7 +1746,7 @@ def readonly_field_map_qualification() -> dict[str, Any]:
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "unauth_status": 401,
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1760,7 +1761,7 @@ def meta_delete_unqualified_qualification() -> dict[str, Any]:
         "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "unauth_status": 200,
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
@@ -1791,7 +1792,7 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
                 f"(405) overrides Supports for offline tools; "
                 f"blocker_code={method_closed_q['blocker_code']}; "
                 f"tools_allowed=false; live_api=out_of_scope_by_user; "
-                "research96 residual fixture parity"
+                "research96 residual fixture parity; research191 unauth reconfirm"
             ).lstrip("; ")
         elif row_id in RESIDUAL_READONLY_MAP_IDS:
             row["qualification"] = dict(readonly_q)
@@ -1800,14 +1801,16 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
                 "(401) opens method at auth gate but official property table is "
                 "effectively readonly (no non-readonly create/update field map); "
                 f"blocker_code={readonly_q['blocker_code']}; tools_allowed=false; "
-                "do not freeze ticketed tools from Supports alone"
+                "do not freeze ticketed tools from Supports alone; "
+                "research191 unauth reconfirm"
             ).lstrip("; ")
         elif row_id in RESIDUAL_META_DELETE_IDS:
             row["qualification"] = dict(meta_delete_q)
             row["evidence"] = (
                 f"{row.get('evidence', '')}; research186 unauth DELETE missing-id "
                 "returns 200 meta-only (not cleanup proof, not live qualification); "
-                f"blocker_code={meta_delete_q['blocker_code']}; tools_allowed=false"
+                f"blocker_code={meta_delete_q['blocker_code']}; tools_allowed=false; "
+                "research191 unauth reconfirm"
             ).lstrip("; ")
         # Hard honesty: residual must stay red and toolless.
         row["implemented"] = False
@@ -2593,8 +2596,9 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
     shape_evidence = (
         f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; "
         "research136 offline unauth shape freeze only (not a full bulk body/"
-        "response contract; not live-qualified); research137 official docs and "
-        "versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk "
+        "response contract; not live-qualified); research137 official docs "
+        "and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger "
+        "probes 404; page chunk "
         "Supports-only; no bulk body/response schema) → external_contract_blocker "
         f"{qualification['blocker_code']}; live_api=out_of_scope_by_user; no bulk tools"
     )
@@ -6400,7 +6404,7 @@ def apply_ui_settings_subscription_open_shell_evidence(row: dict[str, Any]) -> N
 
 
 def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
-    """Record dual-session Upsedasse freeze for annual_reports (research137).
+    """Record dual-session Upsedasse freeze for annual_reports (research137 + research191).
 
     Nav label Årsrapporter and path class /:org_slug/annual_reports exist, so
     honest UI not_applicable is rejected (design: NA only when no equivalent UI
@@ -6408,6 +6412,11 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     companies hint — not a plan gate and not a productable shell. Stay red:
     no tool, no live/vision green. Unlock requires a non-production org (or
     Billy platform fix) where annual_reports is non-Upsedasse.
+
+    research191 EXECUTE reconfirm (2026-08-02): dual independent ephemeral
+    sessions READY/READY, path /:org_slug/annual_reports both, h1 Upsedasse!
+    both, error_upsedasse true both, productable_shell false; tmp
+    research191_annual_dual.json. No writes; no API token; profiles purged.
     """
 
     row["method_or_route"] = (
@@ -6424,11 +6433,13 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     row["test_references"] = [TEST_REFERENCE]
     row["evidence"] = (
         "research121/122/135 dual-session headless observation + research137 "
-        "decision: path class /:org_slug/annual_reports dual-renders h1 "
-        "Upsedasse! (error_upsedasse true both sessions) with CVR companies "
-        "hint (# - url: /cvr/dk/companies/#) and recovery CTAs; nav label "
-        "Årsrapporter present so not_applicable is rejected (design: NA only "
-        "when Billy exposes no equivalent UI workflow); "
+        "decision + research191 dual reconfirm (READY/READY; path "
+        "/:org_slug/annual_reports; h1 Upsedasse! both; error_upsedasse true "
+        "both; productable_shell false; tmp/research191_annual_dual.json): "
+        "path class /:org_slug/annual_reports dual-renders h1 Upsedasse! with "
+        "CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; "
+        "nav label Årsrapporter present so not_applicable is rejected (design: "
+        "NA only when Billy exposes no equivalent UI workflow); "
         "blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a "
         "non-production organisation (or Billy platform fix) where "
         "annual_reports is non-Upsedasse so a typed ui_* shell can be dual-"
@@ -6468,7 +6479,11 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
             "mit.billy.dk/:org_slug/annual_reports dual-session renders a "
             "non-Upsedasse annual-reports shell"
         ),
-        "evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+        "evidence_ref": "research191_annual_dual",
+        "prior_evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+        "reconfirm_date": "2026-08-02",
+        "dual_login": "READY/READY",
+        "dual_judgment": "A1_UPSEDASSE_STAY_RED",
     }
 
 

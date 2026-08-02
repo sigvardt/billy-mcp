@@ -229,7 +229,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accountGroups.bulk_save",
       "implemented": false,
@@ -246,6 +246,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -273,7 +274,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accountGroups.bulk_delete",
       "implemented": false,
@@ -290,6 +291,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -413,7 +415,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.accountNatures.create",
       "implemented": false,
@@ -426,7 +428,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -459,7 +461,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.accountNatures.update",
       "implemented": false,
@@ -472,7 +474,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -507,7 +509,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accountNatures.bulk_save",
       "implemented": false,
@@ -524,6 +526,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -551,7 +554,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accountNatures.bulk_delete",
       "implemented": false,
@@ -568,6 +571,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -807,7 +811,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accounts.bulk_save",
       "implemented": false,
@@ -824,6 +828,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -851,7 +856,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.accounts.bulk_delete",
       "implemented": false,
@@ -868,6 +873,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1110,7 +1116,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.attachments.bulk_save",
       "implemented": false,
@@ -1127,6 +1133,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1154,7 +1161,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.attachments.bulk_delete",
       "implemented": false,
@@ -1171,6 +1178,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1294,7 +1302,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.balanceModifiers.create",
       "implemented": false,
@@ -1307,7 +1315,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -1340,7 +1348,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.balanceModifiers.update",
       "implemented": false,
@@ -1353,7 +1361,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -1388,7 +1396,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.balanceModifiers.bulk_save",
       "implemented": false,
@@ -1405,6 +1413,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1432,7 +1441,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.balanceModifiers.bulk_delete",
       "implemented": false,
@@ -1449,6 +1458,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1691,7 +1701,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLineMatches.bulk_save",
       "implemented": false,
@@ -1708,6 +1718,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1735,7 +1746,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLineMatches.bulk_delete",
       "implemented": false,
@@ -1752,6 +1763,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -1994,7 +2006,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLines.bulk_save",
       "implemented": false,
@@ -2011,6 +2023,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2038,7 +2051,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLines.bulk_delete",
       "implemented": false,
@@ -2055,6 +2068,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2297,7 +2311,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_save",
       "implemented": false,
@@ -2314,6 +2328,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2341,7 +2356,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankLineSubjectAssociations.bulk_delete",
       "implemented": false,
@@ -2358,6 +2373,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2558,7 +2574,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.bankPayments.delete",
       "implemented": false,
@@ -2571,7 +2587,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -2605,7 +2621,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankPayments.bulk_save",
       "implemented": false,
@@ -2622,6 +2638,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2649,7 +2666,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bankPayments.bulk_delete",
       "implemented": false,
@@ -2666,6 +2683,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2905,7 +2923,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.billLines.bulk_save",
       "implemented": false,
@@ -2922,6 +2940,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -2949,7 +2968,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.billLines.bulk_delete",
       "implemented": false,
@@ -2966,6 +2985,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3264,7 +3284,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bills.bulk_save",
       "implemented": false,
@@ -3281,6 +3301,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3308,7 +3329,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.bills.bulk_delete",
       "implemented": false,
@@ -3325,6 +3346,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3454,7 +3476,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.cities.create",
       "implemented": false,
@@ -3467,7 +3489,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -3500,7 +3522,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.cities.update",
       "implemented": false,
@@ -3513,7 +3535,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -3548,7 +3570,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.cities.bulk_save",
       "implemented": false,
@@ -3565,6 +3587,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3592,7 +3615,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.cities.bulk_delete",
       "implemented": false,
@@ -3609,6 +3632,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3810,7 +3834,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_save",
       "implemented": false,
@@ -3827,6 +3851,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3854,7 +3879,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactBalancePayments.bulk_delete",
       "implemented": false,
@@ -3871,6 +3896,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -3994,7 +4020,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.contactBalancePostings.create",
       "implemented": false,
@@ -4007,7 +4033,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -4040,7 +4066,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.contactBalancePostings.update",
       "implemented": false,
@@ -4053,7 +4079,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -4088,7 +4114,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_save",
       "implemented": false,
@@ -4105,6 +4131,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4132,7 +4159,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactBalancePostings.bulk_delete",
       "implemented": false,
@@ -4149,6 +4176,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4388,7 +4416,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactPersons.bulk_save",
       "implemented": false,
@@ -4405,6 +4433,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4432,7 +4461,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contactPersons.bulk_delete",
       "implemented": false,
@@ -4449,6 +4478,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4688,7 +4718,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contacts.bulk_save",
       "implemented": false,
@@ -4705,6 +4735,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4732,7 +4763,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.contacts.bulk_delete",
       "implemented": false,
@@ -4749,6 +4780,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -4872,7 +4904,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.countryGroups.create",
       "implemented": false,
@@ -4885,7 +4917,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -4918,7 +4950,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.countryGroups.update",
       "implemented": false,
@@ -4931,7 +4963,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -4966,7 +4998,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.countryGroups.bulk_save",
       "implemented": false,
@@ -4983,6 +5015,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5010,7 +5043,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.countryGroups.bulk_delete",
       "implemented": false,
@@ -5027,6 +5060,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5150,7 +5184,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.countries.create",
       "implemented": false,
@@ -5163,7 +5197,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -5196,7 +5230,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.countries.update",
       "implemented": false,
@@ -5209,7 +5243,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -5244,7 +5278,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.countries.bulk_save",
       "implemented": false,
@@ -5261,6 +5295,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5288,7 +5323,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.countries.bulk_delete",
       "implemented": false,
@@ -5305,6 +5340,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5428,7 +5464,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.currencies.create",
       "implemented": false,
@@ -5441,7 +5477,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -5474,7 +5510,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.currencies.update",
       "implemented": false,
@@ -5487,7 +5523,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -5522,7 +5558,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.currencies.bulk_save",
       "implemented": false,
@@ -5539,6 +5575,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5566,7 +5603,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.currencies.bulk_delete",
       "implemented": false,
@@ -5583,6 +5620,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5822,7 +5860,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_save",
       "implemented": false,
@@ -5839,6 +5877,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -5866,7 +5905,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookBalanceAccounts.bulk_delete",
       "implemented": false,
@@ -5883,6 +5922,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6122,7 +6162,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybooks.bulk_save",
       "implemented": false,
@@ -6139,6 +6179,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6166,7 +6207,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybooks.bulk_delete",
       "implemented": false,
@@ -6183,6 +6224,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6422,7 +6464,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_save",
       "implemented": false,
@@ -6439,6 +6481,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6466,7 +6509,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookTransactionLines.bulk_delete",
       "implemented": false,
@@ -6483,6 +6526,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6754,7 +6798,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookTransactions.bulk_save",
       "implemented": false,
@@ -6771,6 +6815,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6798,7 +6843,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.daybookTransactions.bulk_delete",
       "implemented": false,
@@ -6815,6 +6860,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -6985,7 +7031,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.files.bulk_save",
       "implemented": false,
@@ -7002,6 +7048,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7029,7 +7076,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.files.bulk_delete",
       "implemented": false,
@@ -7046,6 +7093,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7247,7 +7295,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_save",
       "implemented": false,
@@ -7264,6 +7312,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7291,7 +7340,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceLateFees.bulk_delete",
       "implemented": false,
@@ -7308,6 +7357,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7547,7 +7597,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceLines.bulk_save",
       "implemented": false,
@@ -7564,6 +7614,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7591,7 +7642,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceLines.bulk_delete",
       "implemented": false,
@@ -7608,6 +7659,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7731,7 +7783,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.invoiceReminderAssociations.create",
       "implemented": false,
@@ -7744,7 +7796,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -7777,7 +7829,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.invoiceReminderAssociations.update",
       "implemented": false,
@@ -7790,7 +7842,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -7824,7 +7876,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false; research191 unauth reconfirm",
       "filters": [],
       "id": "api.invoiceReminderAssociations.delete",
       "implemented": false,
@@ -7837,7 +7889,7 @@
         "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "kind": "meta_delete_unqualified",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false,
@@ -7871,7 +7923,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_save",
       "implemented": false,
@@ -7888,6 +7940,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -7915,7 +7968,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceReminderAssociations.bulk_delete",
       "implemented": false,
@@ -7932,6 +7985,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8093,7 +8147,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceReminders.bulk_save",
       "implemented": false,
@@ -8110,6 +8164,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8137,7 +8192,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoiceReminders.bulk_delete",
       "implemented": false,
@@ -8154,6 +8209,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8482,7 +8538,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoices.bulk_save",
       "implemented": false,
@@ -8499,6 +8555,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8526,7 +8583,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.invoices.bulk_delete",
       "implemented": false,
@@ -8543,6 +8600,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8666,7 +8724,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.locales.create",
       "implemented": false,
@@ -8679,7 +8737,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -8712,7 +8770,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.locales.update",
       "implemented": false,
@@ -8725,7 +8783,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -8760,7 +8818,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.locales.bulk_save",
       "implemented": false,
@@ -8777,6 +8835,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -8804,7 +8863,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.locales.bulk_delete",
       "implemented": false,
@@ -8821,6 +8880,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9021,7 +9081,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.organizations.bulk_save",
       "implemented": false,
@@ -9038,6 +9098,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9065,7 +9126,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.organizations.bulk_delete",
       "implemented": false,
@@ -9082,6 +9143,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9205,7 +9267,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.postings.create",
       "implemented": false,
@@ -9218,7 +9280,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -9251,7 +9313,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.postings.update",
       "implemented": false,
@@ -9264,7 +9326,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -9299,7 +9361,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.postings.bulk_save",
       "implemented": false,
@@ -9316,6 +9378,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9343,7 +9406,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.postings.bulk_delete",
       "implemented": false,
@@ -9360,6 +9423,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9599,7 +9663,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.productPrices.bulk_save",
       "implemented": false,
@@ -9616,6 +9680,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9643,7 +9708,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.productPrices.bulk_delete",
       "implemented": false,
@@ -9660,6 +9725,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9899,7 +9965,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.products.bulk_save",
       "implemented": false,
@@ -9916,6 +9982,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -9943,7 +10010,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.products.bulk_delete",
       "implemented": false,
@@ -9960,6 +10027,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10202,7 +10270,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_save",
       "implemented": false,
@@ -10219,6 +10287,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10246,7 +10315,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxAccounts.bulk_delete",
       "implemented": false,
@@ -10263,6 +10332,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10505,7 +10575,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_save",
       "implemented": false,
@@ -10522,6 +10592,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10549,7 +10620,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxMetaFields.bulk_delete",
       "implemented": false,
@@ -10566,6 +10637,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10767,7 +10839,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_save",
       "implemented": false,
@@ -10784,6 +10856,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10811,7 +10884,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxPayments.bulk_delete",
       "implemented": false,
@@ -10828,6 +10901,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -10991,7 +11065,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_save",
       "implemented": false,
@@ -11008,6 +11082,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11035,7 +11110,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxReturns.bulk_delete",
       "implemented": false,
@@ -11052,6 +11127,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11294,7 +11370,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxRules.bulk_save",
       "implemented": false,
@@ -11311,6 +11387,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11338,7 +11415,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxRules.bulk_delete",
       "implemented": false,
@@ -11355,6 +11432,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11597,7 +11675,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_save",
       "implemented": false,
@@ -11614,6 +11692,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11641,7 +11720,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.salesTaxRulesets.bulk_delete",
       "implemented": false,
@@ -11658,6 +11737,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11787,7 +11867,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.states.create",
       "implemented": false,
@@ -11800,7 +11880,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -11833,7 +11913,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.states.update",
       "implemented": false,
@@ -11846,7 +11926,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -11881,7 +11961,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.states.bulk_save",
       "implemented": false,
@@ -11898,6 +11978,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -11925,7 +12006,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.states.bulk_delete",
       "implemented": false,
@@ -11942,6 +12023,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12181,7 +12263,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_save",
       "implemented": false,
@@ -12198,6 +12280,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12225,7 +12308,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.taxRateDeductionComponents.bulk_delete",
       "implemented": false,
@@ -12242,6 +12325,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12481,7 +12565,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.taxRates.bulk_save",
       "implemented": false,
@@ -12498,6 +12582,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12525,7 +12610,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.taxRates.bulk_delete",
       "implemented": false,
@@ -12542,6 +12627,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12665,7 +12751,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191 unauth reconfirm",
       "filters": [],
       "id": "api.transactions.create",
       "implemented": false,
@@ -12678,7 +12764,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false,
@@ -12711,7 +12797,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191 unauth reconfirm",
       "filters": [],
       "id": "api.transactions.update",
       "implemented": false,
@@ -12724,7 +12810,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false,
@@ -12758,7 +12844,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false; research191 unauth reconfirm",
       "filters": [],
       "id": "api.transactions.delete",
       "implemented": false,
@@ -12771,7 +12857,7 @@
         "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "kind": "meta_delete_unqualified",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false,
@@ -12805,7 +12891,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.transactions.bulk_save",
       "implemented": false,
@@ -12822,6 +12908,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -12849,7 +12936,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.transactions.bulk_delete",
       "implemented": false,
@@ -12866,6 +12953,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -13029,7 +13117,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.users.bulk_save",
       "implemented": false,
@@ -13046,6 +13134,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -13073,7 +13162,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.users.bulk_delete",
       "implemented": false,
@@ -13090,6 +13179,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -13219,7 +13309,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.zipcodes.create",
       "implemented": false,
@@ -13232,7 +13322,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -13265,7 +13355,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191 unauth reconfirm",
       "filters": [],
       "id": "api.zipcodes.update",
       "implemented": false,
@@ -13278,7 +13368,7 @@
         "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "wcw4x9hqvu3603",
         "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
-        "evidence_ref": "research186_residual_unauth",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm",
         "fixture_ref": "research96_residual_unauth",
         "kind": "method_closed_offline",
         "live_api": "out_of_scope_by_user",
@@ -13313,7 +13403,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_REQUEST_BODY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.zipcodes.bulk_save",
       "implemented": false,
@@ -13330,6 +13420,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [
@@ -13357,7 +13448,7 @@
         "OAUTH_INVALID_ACCESS_TOKEN",
         "INVALID_DELETE_ID_ARRAY"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag wcw4x9hqvu3603; MD5 8b94b0135c91fd15fe54ea33e088a4be; research136 offline unauth shape freeze only (not a full bulk body/response contract; not live-qualified); research137 official docs and research191 reconfirm; versioned-asset exhaust (OpenAPI/swagger probes 404; page chunk Supports-only; no bulk body/response schema) \u2192 external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; live_api=out_of_scope_by_user; no bulk tools",
       "filters": [],
       "id": "api.zipcodes.bulk_delete",
       "implemented": false,
@@ -13374,6 +13465,7 @@
         "kind": "external_contract_blocker",
         "live_api": "out_of_scope_by_user",
         "offline_shape": "research136",
+        "reconfirm_ref": "research191_unauth_reconfirm",
         "tools_allowed": false
       },
       "request_fields": [

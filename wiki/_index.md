@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T16:20:54Z
+updated: 2026-08-02T17:38:44Z
 ---
 
 # billy_mcp
@@ -41,7 +41,7 @@ updated: 2026-08-02T16:20:54Z
 
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
-[[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports; not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.
+[[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports (research122 + research191 reconfirm); not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.
 
 [[ui_attachments_get_create_update_delete_not_applicable|ui_attachments_get_create_update_delete_not_applicable]]: Dual-session research185 freeze — no equivalent mit.billy.dk get-detail, join-form create, update-form, or delete-chrome workflow for residual attachments ops; list stays dual-count green on Bilag; exact NA for get/create/update/delete only.
 

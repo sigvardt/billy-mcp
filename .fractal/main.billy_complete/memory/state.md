@@ -10267,3 +10267,64 @@ updated: 2026-08-02T14:42:00Z
 - product-plane UI bulk honesty 0; remaining walls: API bulk 92, residual 29, annual 1
 - STEER 1E6AF3C9 unsaved after dual freezes complete
 - not node finish
+
+## iter91 RESEARCH 191 (2026-08-02T17:30:00Z)
+
+- Official docs MD5/ETag **unchanged** (`8b94b013…` / `wcw4x9hqvu3603`)
+- Unauth residual/bulk reconfirm matches research186/136 (405/401/200 meta / INVALID_DELETE_ID_ARRAY)
+- OpenAPI probes still 404; bulk schema still absent
+- UI red only annual_reports; product-plane bulk honesty 0 after 186.90
+- Recommend: annual dual reconfirm if browser creds, else walls_reconfirm_no_product; no residual/bulk tools; complete stays false
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`
+- not node finish
+
+## iter91 PLAN (2026-08-02T17:33:00Z)
+
+- Plan: 186.91 walls_reconfirm_annual_dual_gate
+- Track A: dual annual_reports gate (product only if non-Upsedasse)
+- Track B: optional residual/bulk evidence_ref research191 hygiene (stay red)
+- Keyring browser-primary/secondary present; wire via BILLY_BROWSER_*_REFERENCE
+- Root-only; no children; no residual/bulk tools; complete false
+- Next: EXECUTE
+
+## iter91 pre-EXECUTE SYNC (2026-08-02T17:34:00Z)
+
+- Parent STEER B56DC391 (pri 8): interface creds at Desktop billy_login.txt for annual dual only; no live API/expose/commit; Grok only
+- Saved B56DC391; replied ACK
+- Plan 186.91 ready; next EXECUTE Track A dual annual
+- complete false 528/344
+
+## iter91 EXECUTE (2026-08-02T17:50:00Z)
+
+- Dual annual_reports: A1_UPSEDASSE_STAY_RED (READY/READY both; h1 Upsedasse!; productable false)
+- STEER B56DC391: used Desktop billy_login.txt → keyring browser-primary/secondary only for dual UI; no live API; not committed
+- Product: inventory evidence only (annual research191_annual_dual; residual+bulk research191 reconfirm citations)
+- Counts unchanged 528/344 complete false
+- lint + commit-mode 1671 passed
+- Next: IR / FIX-VERIFY / COMMIT 186.91
+- not node finish
+
+## iter91 INDEPENDENT-REVIEW (2026-08-02T18:05:00Z)
+
+- Verdict: **PASS (package)** 186.91 A1 annual dual reconfirm + residual hygiene; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; dual READY/READY Upsedasse; annual stay red discovery_required; residual/bulk tools empty; 528/344 complete false; no secrets in diff; no src product
+- Required fixes: **none** (optional bulk evidence research191 cite later)
+- Next: FIX-VERIFY / COMMIT; not node finish
+
+## iter91 FIX-VERIFY (2026-08-02T18:20:00Z)
+
+- IR PASS; required fixes none
+- Optional bulk research191 evidence cite landed; still red 92
+- lint pass; inventory 23; commit-mode 1671 pass
+- wiki lint clean (project + memory)
+- complete false 528/344; not ui-full
+- Ready COMMIT 186.91
+- not node finish
+
+## iter91 COMMIT (2026-08-02T18:25:00Z)
+
+- fractal commit 186.91: annual dual A1 stay-red (research191) + residual/bulk research191 walls hygiene
+- complete false 528/344; walls bulk92 residual29 annual1
+- not node finish
+

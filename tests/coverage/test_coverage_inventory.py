@@ -340,7 +340,9 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     assert all("INVALID_DELETE_ID_ARRAY" in row["errors"] for row in deletes)
     assert all("research136 offline unauth shape freeze" in row["evidence"] for row in bulk_rows)
     assert all(
-        "research137 official docs and versioned-asset exhaust" in row["evidence"]
+        "research137 official docs" in row["evidence"]
+        and "research191 reconfirm" in row["evidence"]
+        and "versioned-asset exhaust" in row["evidence"]
         for row in bulk_rows
     )
     assert all("BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in row["evidence"] for row in bulk_rows)
@@ -352,6 +354,9 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
     )
     assert all(row["qualification"]["live_api"] == "out_of_scope_by_user" for row in bulk_rows)
     assert all(row["qualification"]["tools_allowed"] is False for row in bulk_rows)
+    assert all(
+        row["qualification"]["reconfirm_ref"] == "research191_unauth_reconfirm" for row in bulk_rows
+    )
     # Shape hints must never look like a completed contract.
     assert all(row["response_fields"] == [] for row in bulk_rows)
 
@@ -384,6 +389,8 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["tools_allowed"] is False
         assert row["qualification"]["live_api"] == "out_of_scope_by_user"
         assert "research186" in row["evidence"]
+        assert "research191" in row["evidence"]
+        assert "research191_unauth_reconfirm" in row["qualification"]["evidence_ref"]
 
     for row_id in method_closed:
         row = by_id[row_id]
@@ -771,12 +778,15 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["evidence"]
     assert "not_applicable is rejected" in annual["evidence"]
     assert "Upsedasse" in annual["evidence"]
+    assert "research191" in annual["evidence"]
     assert "/:org_slug/annual_reports" in annual["method_or_route"]
     assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["errors"]
     qual = annual["qualification"]
     assert qual["kind"] == "org_inaccessible"
     assert qual["blocker_code"] == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
     assert qual["not_applicable_decision"] == "rejected"
+    assert qual.get("evidence_ref") == "research191_annual_dual"
+    assert qual.get("dual_judgment") == "A1_UPSEDASSE_STAY_RED"
     assert "non-Upsedasse" in qual["unlock_requirement"]
     assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in status["qualification"]["blocker"]
     assert "external-contract" in status["qualification"]["blocker"].lower() or (

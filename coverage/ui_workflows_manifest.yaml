@@ -1089,7 +1089,7 @@
         "UI_CHANGED",
         "ANNUAL_REPORTS_ORG_INACCESSIBLE"
       ],
-      "evidence": "research121/122/135 dual-session headless observation + research137 decision: path class /:org_slug/annual_reports dual-renders h1 Upsedasse! (error_upsedasse true both sessions) with CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; nav label \u00c5rsrapporter present so not_applicable is rejected (design: NA only when Billy exposes no equivalent UI workflow); blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a non-production organisation (or Billy platform fix) where annual_reports is non-Upsedasse so a typed ui_* shell can be dual-session qualified; no invent api_annual_*; no tool; stay red",
+      "evidence": "research121/122/135 dual-session headless observation + research137 decision + research191 dual reconfirm (READY/READY; path /:org_slug/annual_reports; h1 Upsedasse! both; error_upsedasse true both; productable_shell false; tmp/research191_annual_dual.json): path class /:org_slug/annual_reports dual-renders h1 Upsedasse! with CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; nav label \u00c5rsrapporter present so not_applicable is rejected (design: NA only when Billy exposes no equivalent UI workflow); blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a non-production organisation (or Billy platform fix) where annual_reports is non-Upsedasse so a typed ui_* shell can be dual-session qualified; no invent api_annual_*; no tool; stay red",
       "filters": [],
       "id": "ui.discovery.annual_reports",
       "implemented": false,
@@ -1101,10 +1101,14 @@
       "parity_status": "discovery_required",
       "qualification": {
         "blocker_code": "ANNUAL_REPORTS_ORG_INACCESSIBLE",
-        "evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+        "dual_judgment": "A1_UPSEDASSE_STAY_RED",
+        "dual_login": "READY/READY",
+        "evidence_ref": "research191_annual_dual",
         "kind": "org_inaccessible",
         "not_applicable_decision": "rejected",
         "not_applicable_reason": "nav \u00c5rsrapporter and route family exist; Upsedasse is accessibility failure for this test org, not absence of UI workflow",
+        "prior_evidence_ref": "discovery122_summary_dual_saft.annual_reports",
+        "reconfirm_date": "2026-08-02",
         "unlock_requirement": "Non-production Billy organisation (or Billy platform fix) where mit.billy.dk/:org_slug/annual_reports dual-session renders a non-Upsedasse annual-reports shell"
       },
       "request_fields": [],
