@@ -10711,3 +10711,46 @@ updated: 2026-08-02T14:42:00Z
 - IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E honored
 - complete false; walls bulk92 residual29 annual1; not node finish
 
+
+
+## iter96 RESEARCH (2026-08-02)
+
+- Research196: official docs re-lock only. MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603` chunk `8302558e6369c4914299efcc31565f53` **unchanged**.
+- OpenAPI/swagger probes still 404. Bulk still Supports-only (46+46); no bulk body/response schema.
+- Incomplete still exactly: bulk92 + residual29 + annual1 (528/344 complete false).
+- No browser; no live API; no greening; no product slice.
+- Recommended: **HOLD** brief-only under STEER 8612433E. Brief: `tmp/grok-research.md`.
+- Not finish.
+
+
+## iter96 PLAN (2026-08-02)
+
+- Plan: `plans/2026-08-02T20:13:31.683Z-186.96-research196_hold_external_walls.md`
+- Slice: **HOLD** product no-op under STEER 8612433E (research196 authority)
+- No children; no wiki/src/coverage greening; not finish
+- EXECUTE next: confirm empty product diff + invariants 528/344 complete false
+
+
+## iter96 EXECUTE (2026-08-02)
+
+- HOLD product no-op honored vs HEAD a9c2061
+- empty product tree (src/coverage/wiki/tests)
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 8612433E; not finish
+
+
+## iter96 INDEPENDENT-REVIEW (2026-08-02)
+
+- Verdict: **PASS (package)** 186.96 research196 HOLD; **node complete FAIL** (expected)
+- Report: tmp/grok-review.md; package fixes none
+- complete false 528/344; walls bulk92 residual29 annual1
+
+
+## iter96 FIX-VERIFY (2026-08-02)
+
+- IR package fixes: none; product tree still clean vs a9c2061
+- wiki lint both stores: clean
+- lint.sh: pass
+- test.sh: 1671 passed, 54 deselected
+- complete false 528/344; walls bulk92 residual29 annual1
+- STEER 8612433E; not finish; no full/ui-full suite
