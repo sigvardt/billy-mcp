@@ -9976,3 +9976,150 @@ updated: 2026-08-02T14:42:00Z
 - package research188 strong dual-NA ×30; coverage 500/316 complete false
 - remaining UI bulk honesty 28 (empty-shell 10 + soft VAT/users 18); API bulk 92; residual 29; annual 1
 - not node finish
+
+
+## iter89 SYNC (2026-08-02T16:04:26Z)
+
+- inbox/feed unread empty; private 09D8B4CC/9883C114 reacted
+- outbox 6C57C29D: 186.88 landed; dual follow-on next
+- saved open: 1E6AF3C9 (30 dual-NA producted in 186.88; 28 UI bulk honesty remain)
+- no running children
+- HEAD 9f695e8 / 7851014 package; complete=false 500/316
+- remaining: empty-shell 10 + soft VAT/users 18 dual; API bulk 92; residual 29; annual 1
+- next: PREPARE then empty-shell/soft dual follow-on RESEARCH
+- not node finish
+
+
+## iter89 PREPARE (2026-08-02T16:05:00Z)
+
+- parent `main`: merge Already up to date (no commits in main.billy_complete..main)
+- children: many historical branches still list ahead commits; none are merge-ready product
+  - ui_auth_status: three-dot still shows src/tests; already integrated via cf38b5c; mainline evolved past child tip — skip
+  - wave5t/wave5u wiki-only deltas: pages already on mainline; three-dot is stale merge-base artifact — skip
+  - ui_auth_credentials_research_codex_fallback: research-only Codex fallback wiki superseded by auth_credentials_pre_submit_* product pages — skip
+  - remaining ahead tips: init-only, failed PREPARE/IR, or killed experiments — skip
+- no running children; no merge commits; no outbox integration note
+- HEAD 9f695e8; memory dirty only; complete=false 500/316
+- next: RESEARCH empty-shell/soft dual follow-on (remaining 28 UI bulk honesty)
+- not node finish
+
+
+## iter89 pre-RESEARCH SYNC (2026-08-02T16:06:00Z)
+
+- inbox/feed unread empty; private 75FFDA97 reacted
+- saved open: 1E6AF3C9 (28 dual honesty remain after 186.88)
+- no running children; PREPARE no merges
+- HEAD 9f695e8; complete=false 500/316
+- next: RESEARCH empty-shell/soft dual follow-on
+- not node finish
+
+
+## iter89 RESEARCH (2026-08-02T16:12:00Z)
+
+- Research189 dual follow-on complete: `tmp/grok-research.md` replaced
+- Docs MD5/ETag unchanged (8b94b0135c91fd15fe54ea33e088a4be / wcw4x9hqvu3603); bulk Supports 46+46
+- Dual headless READY/READY; api_token_used false; no writes; profiles purged
+- Evidence: `tmp/research189_bulk_followon_dual.json` + probe
+- Soft tool dual-absent real panels: **9 resources / 18 UI bulk rows** (recommended primary NA package)
+- Empty-shell dual-absent empty paths: **5 resources / 10 rows** (optional empty-list package / IR)
+- No bulk_chrome_present; no session disagree
+- Recommended PLAN/EXECUTE: `ui_product_plane_bulk_chrome_dual_na_soft_tool` only first; empty-list optional
+- No coverage greened in research; complete stays false
+
+
+## iter89 pre-PLAN SYNC (2026-08-02T16:14:00Z)
+
+- inbox/feed unread empty; private 7D62FB04/48311BE1 reacted
+- saved open: 1E6AF3C9 (dual STEER; soft 18 ready, empty 10 remain after package)
+- no running children
+- research189 landed (tmp/grok-research.md + research189 dual JSON); coverage not greened
+- HEAD 9f695e8; complete=false 500/316
+- next: PLAN ui_product_plane_bulk_chrome_dual_na_soft_tool
+- not node finish
+
+## iter89 PLAN (2026-08-02T16:15:00Z)
+
+- Plan: `.fractal/main.billy_complete/plans/2026-08-02T16:15:03.816Z-186.89-ui_product_plane_bulk_chrome_dual_na_soft_tool.md`
+- Slice: research189 soft tool dual-absent bulk chrome NA — exact 9 resources / 18 UI bulk rows
+- Target: live/vision 334, implemented/contract 518, complete false; remaining UI bulk honesty 10 empty-shell
+- Hold: empty-shell 10; API bulk 92; residual 29; annual 1; research188 strong 30 unchanged
+- Root-only; no children; no live API; not finish
+- Next: EXECUTE
+
+
+## iter89 pre-EXECUTE SYNC (2026-08-02T16:16:00Z)
+
+- inbox/feed unread empty; private 9AF58841/AA2BD5FB reacted
+- saved open: 1E6AF3C9
+- no running children
+- plan present: 186.89 ui_product_plane_bulk_chrome_dual_na_soft_tool (untracked until COMMIT)
+- HEAD 9f695e8; next EXECUTE research189 soft dual-NA 18 rows
+- not node finish
+
+
+## iter89 EXECUTE (2026-08-02T16:30:00Z)
+
+- Producted research189 soft dual-NA: 9 resources / 18 UI bulk rows
+- Generator: UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_*, apply after strong dual-NA; GEO_UI_NOT_APPLICABLE_ROW_COUNT 258
+- Coverage: live/vision 334, implemented/contract 518, complete false; remaining honesty 10 empty-shell
+- Tests: inventory 22 + commit-mode 1670 passed
+- Wiki: ui_product_plane_bulk_chrome_dual_na_soft_tool.md + honesty/strong/index
+- Not node finish; ready FIX-VERIFY / IR / COMMIT
+
+
+## iter89 pre-IR SYNC (2026-08-02T16:32:00Z)
+
+- inbox/feed unread empty; private 56AA66D6/0719F053 reacted
+- saved open: 1E6AF3C9
+- no running children
+- uncommitted EXECUTE product ready for independent review
+- coverage: live/vision 334, implemented/contract 518, complete false
+- next: INDEPENDENT-REVIEW
+- not node finish
+
+
+## iter89 INDEPENDENT-REVIEW (2026-08-02T16:35:00Z)
+
+- Verdict: **PASS (package)** research189 soft dual-NA 18 UI bulk rows; **node complete FAIL** (expected)
+- Report: `.fractal/main.billy_complete/tmp/grok-review.md`
+- Checks: docs MD5/ETag match; 18 soft NA + 10 empty honesty; dual READY/READY no API token; no bulk tools; counts 518/334 complete false; empty-shell not greened; no secrets
+- Required fixes: **none**
+- Next: FIX-VERIFY / COMMIT 186.89; not node finish
+
+
+## iter89 pre-FIX-VERIFY SYNC (2026-08-02T16:34:00Z)
+
+- inbox/feed unread empty; private B697ACE0/7BC2DA3C reacted
+- saved open: 1E6AF3C9
+- no running children
+- IR PASS package (tmp/grok-review.md); no required fixes
+- uncommitted product still present; next FIX-VERIFY then COMMIT
+- complete=false unchanged
+
+
+## iter89 FIX-VERIFY (2026-08-02T16:45:00Z)
+
+- IR package PASS: no required package fixes; invariants reconfirmed (soft NA×18, honesty empty×10, 518/334, complete false)
+- lint.sh pass; test.sh commit-mode 1670 passed
+- wiki lint clean (project + memory)
+- plan post-mortem appended on 186.89
+- Did not run ui-full/full (complete false)
+- Ready COMMIT 186.89; not node finish
+
+
+## iter89 pre-COMMIT SYNC (2026-08-02T16:45:00Z)
+
+- inbox/feed unread empty; private 2D6F8084/3B865F4C reacted
+- saved open: 1E6AF3C9 (unsave after COMMIT 186.89 only if dual STEER fully closed — empty 10 remain so keep open)
+- no running children
+- FIX-VERIFY clean; uncommitted product ready for fractal commit
+- coverage 518/334 complete false
+- next: COMMIT 186.89
+
+
+## iter89 COMMIT (2026-08-02T16:46:00Z)
+
+- fractal commit landing: soft tool dual-NA package (research189)
+- package 9 resources / 18 UI bulk rows; coverage 518/334 complete false
+- remaining UI bulk honesty 10 empty-shell; API bulk 92; residual 29; annual 1
+- not node finish

@@ -402,10 +402,10 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
 
     # Honesty freeze does not change green counts or complete.
-    assert status["qualification"]["implemented_rows"] == 500
-    assert status["qualification"]["contract_tested_rows"] == 500
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
     assert status["complete"] is False
 
 
@@ -427,9 +427,11 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
     )
 
     strong_ids = set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
-    remaining_honesty = sorted(set(honesty_ids) - strong_ids)
+    soft_ids = set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    remaining_honesty = sorted(set(honesty_ids) - strong_ids - soft_ids)
     assert len(strong_ids) == 30
-    assert len(remaining_honesty) == 28
+    assert len(soft_ids) == 18
+    assert len(remaining_honesty) == 10
 
     for row_id in remaining_honesty:
         row = by_id[row_id]
@@ -462,15 +464,23 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
             generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
         )
 
+    for row_id in sorted(soft_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+
     # Geo/reference UI bulk already NA must not be force-redded by honesty freeze.
     geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 500
-    assert status["qualification"]["contract_tested_rows"] == 500
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
     assert status["complete"] is False
     assert "UI product-plane bulk remaining" in status["qualification"]["blocker"]
     assert "UI_BULK_CHROME_DUAL_REQUIRED" in status["qualification"]["blocker"]
@@ -485,13 +495,16 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
 
     strong_resources = sorted(generator.UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES)
     strong_ids = sorted(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    soft_ids = set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
     honesty_ids = set(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
-    remaining_honesty = sorted(honesty_ids - set(strong_ids))
+    remaining_after_strong = sorted(honesty_ids - set(strong_ids))
+    remaining_honesty = sorted(honesty_ids - set(strong_ids) - soft_ids)
 
     assert len(strong_resources) == 15
     assert len(strong_ids) == 30
     assert set(strong_ids).issubset(honesty_ids)
-    assert len(remaining_honesty) == 28
+    assert len(remaining_after_strong) == 28
+    assert len(remaining_honesty) == 10
     assert set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS) == set(strong_resources)
 
     held = {
@@ -554,17 +567,118 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
         assert row["qualification"]["kind"] == "ui_bulk_parity_discovery_required"
         assert row["qualification"]["blocker_code"] == "UI_BULK_CHROME_DUAL_REQUIRED"
 
+    for row_id in sorted(soft_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+
     geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 500
-    assert status["qualification"]["contract_tested_rows"] == 500
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
     assert status["complete"] is False
     assert "UI product-plane bulk remaining" in status["qualification"]["blocker"]
     assert "UI_BULK_CHROME_DUAL_REQUIRED" in status["qualification"]["blocker"]
+    assert "×10" in status["qualification"]["blocker"]
+
+
+def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
+    """Research189: soft tool dual-absent product-plane bulk UI rows are not_applicable."""
+
+    api_manifest, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+    api_by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    soft_resources = sorted(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES)
+    soft_ids = sorted(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    strong_ids = set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    honesty_ids = set(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+    remaining_honesty = sorted(honesty_ids - strong_ids - set(soft_ids))
+
+    assert len(soft_resources) == 9
+    assert len(soft_ids) == 18
+    assert set(soft_ids).issubset(honesty_ids)
+    assert not (set(soft_ids) & strong_ids)
+    assert len(remaining_honesty) == 10
+    assert set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS) == set(soft_resources)
+
+    empty_held = {
+        "contacts",
+        "invoices",
+        "invoiceLines",
+        "bills",
+        "billLines",
+    }
+    assert not (set(soft_resources) & empty_held)
+    assert not (set(soft_resources) & set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES))
+
+    for row_id in soft_ids:
+        row = by_id[row_id]
+        resource, operation = row_id.split(".")[2], row_id.split(".")[3]
+        panel = generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS[resource]
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["parity_status"] == "not_applicable"
+        qual = row["qualification"]
+        assert isinstance(qual, dict)
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        assert qual["evidence_ref"] == "research189_bulk_followon_dual"
+        assert qual["tools_allowed"] is False
+        assert qual["empty_list_shell"] is False
+        assert qual["tool_panel"] is True
+        assert qual["linked_api_row_id"] == f"api.{resource}.{operation}"
+        assert qual["shell_id"] == panel["shell_id"]
+        assert qual["path_class"] == panel["path_class"]
+        assert qual["tool_ref"] == panel["tool_ref"]
+        assert "research189" in row["evidence"]
+        assert "UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL" in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+
+        api_row = api_by_id[f"api.{resource}.{operation}"]
+        assert api_row["tool_name"] == ""
+        assert api_row.get("implemented") is False
+        assert api_row.get("contract_tested") is False
+        assert api_row.get("live_tested") is False
+
+    for row_id in remaining_honesty:
+        row = by_id[row_id]
+        assert row["parity_status"] == "discovery_required"
+        assert row["tool_name"] == ""
+        assert row["live_tested"] is False
+        assert row["qualification"]["kind"] == "ui_bulk_parity_discovery_required"
+        assert row["qualification"]["blocker_code"] == "UI_BULK_CHROME_DUAL_REQUIRED"
+        resource = row_id.split(".")[2]
+        assert resource in empty_held
+
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
+    assert status["complete"] is False
+    assert "UI product-plane bulk remaining" in status["qualification"]["blocker"]
+    assert "UI_BULK_CHROME_DUAL_REQUIRED" in status["qualification"]["blocker"]
+    assert "×10" in status["qualification"]["blocker"]
 
 
 def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
@@ -625,10 +739,17 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         for row in na_rows
         if _evidence_code(row) == generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
     ]
-    # GEO_UI_NOT_APPLICABLE_ROW_COUNT includes research188 strong bulk dual-NA (+30).
+    soft_bulk_chrome_na_rows = [
+        row
+        for row in na_rows
+        if _evidence_code(row) == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+    ]
+    # GEO_UI_NOT_APPLICABLE_ROW_COUNT includes research188 strong bulk dual-NA (+30)
+    # and research189 soft tool bulk dual-NA (+18).
     assert len(na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     assert len(bulk_chrome_na_rows) == 30
-    assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT - 30
+    assert len(soft_bulk_chrome_na_rows) == 18
+    assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT - 30 - 18
     expected_prefixes = generator.GEO_UI_NOT_APPLICABLE_API_PREFIXES
     for row in geo_na_rows:
         api_id = row["api_row_id"]
@@ -1189,7 +1310,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         assert all("research183" in (row.get("method_or_route") or "") for row in non_bulk)
         if bulk:
             # research188: bank*/postings/daybookBalance bulk are strong dual-NA;
-            # salesTax* bulk remain discovery_required honesty.
+            # research189: salesTax* bulk are soft tool dual-NA.
             if prefix.startswith(
                 (
                     "api.bankLineMatches.",
@@ -1198,6 +1319,10 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
                     "api.bankLines.",
                     "api.daybookBalanceAccounts.",
                     "api.postings.",
+                    "api.salesTaxRules.",
+                    "api.salesTaxAccounts.",
+                    "api.salesTaxMetaFields.",
+                    "api.salesTaxPayments.",
                 )
             ):
                 assert all(row.get("parity_status") == "not_applicable" for row in bulk)
@@ -1229,10 +1354,16 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row.get("parity_status") == "not_applicable" for row in tax_rates_residual)
     assert all(row.get("live_tested") is True for row in tax_rates_residual)
     assert all("research181" in (row.get("method_or_route") or "") for row in tax_rates_residual)
-    # bulk taxRates remain red
+    # bulk taxRates soft tool dual-NA (research189)
     tax_rates_bulk = [row for row in tax_rates_rows if "bulk" in str(row.get("api_row_id") or "")]
     assert tax_rates_bulk
-    assert all(row.get("parity_status") != "not_applicable" for row in tax_rates_bulk)
+    assert all(row.get("parity_status") == "not_applicable" for row in tax_rates_bulk)
+    assert all(row.get("live_tested") is True for row in tax_rates_bulk)
+    assert all(
+        row["qualification"]["evidence_code"]
+        == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        for row in tax_rates_bulk
+    )
     rulesets_rows = [
         row
         for row in ui_manifest["workflows"]
@@ -1266,8 +1397,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert status["qualification"]["live_tested_rows"] == (
         74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT + 2
     )
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 240
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 258
 
 
 def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
@@ -1276,7 +1407,7 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     _, ui_manifest, _, status, _ = documents()
     expected = generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
     assert len(expected) == 50
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 240
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 258
 
     rows = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in expected]
     assert len(rows) == 50
@@ -1311,16 +1442,29 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
         "ui_daybook_transactions_create_open"
     )
 
-    # Held soft/empty bulk stay discovery_required; strong dual-NA bulk are NA (research188).
-    held_bulk_ids = [
-        "api.salesTaxAccounts.bulk_save",
-        "api.salesTaxAccounts.bulk_delete",
+    # Empty-shell bulk stay discovery_required; soft tool dual-NA bulk are NA (research189).
+    held_empty_bulk_ids = [
         "api.contacts.bulk_save",
         "api.invoices.bulk_delete",
     ]
-    held_bulk = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in held_bulk_ids]
-    assert len(held_bulk) == len(held_bulk_ids)
-    assert all(row.get("parity_status") == "discovery_required" for row in held_bulk)
+    held_empty_bulk = [
+        row for row in ui_manifest["workflows"] if row.get("api_row_id") in held_empty_bulk_ids
+    ]
+    assert len(held_empty_bulk) == len(held_empty_bulk_ids)
+    assert all(row.get("parity_status") == "discovery_required" for row in held_empty_bulk)
+    soft_bulk_ids = [
+        "api.salesTaxAccounts.bulk_save",
+        "api.salesTaxAccounts.bulk_delete",
+        "api.users.bulk_save",
+    ]
+    soft_bulk = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in soft_bulk_ids]
+    assert len(soft_bulk) == len(soft_bulk_ids)
+    assert all(row.get("parity_status") == "not_applicable" for row in soft_bulk)
+    assert all(
+        row["qualification"]["evidence_code"]
+        == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        for row in soft_bulk
+    )
     strong_bulk_ids = [
         "api.bankLines.bulk_save",
         "api.postings.bulk_save",
@@ -1339,8 +1483,8 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
 
 
 def test_research184_attachments_list_files_create_dualcount_and_files_list_get_na() -> None:
@@ -1350,7 +1494,7 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
     expected_na = generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS
     assert expected_na == frozenset({"api.files.list", "api.files.get"})
     assert len(expected_na) == 2
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 240
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 258
 
     workflows = {row["id"]: row for row in ui_manifest["workflows"]}
 
@@ -1417,10 +1561,10 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
         )
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
-    assert status["qualification"]["implemented_rows"] == 500
-    assert status["qualification"]["contract_tested_rows"] == 500
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
 
 
 def test_research185_attachments_get_create_update_delete_na() -> None:
@@ -1437,7 +1581,7 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
         }
     )
     assert len(expected) == 4
-    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 240
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 258
 
     workflows = {row["id"]: row for row in ui_manifest["workflows"]}
     for row_id, api_id in (
@@ -1492,10 +1636,10 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
     assert workflows["ui.discovery.annual_reports"]["live_tested"] is not True
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 316
-    assert status["qualification"]["vision_verified_rows"] == 316
-    assert status["qualification"]["implemented_rows"] == 500
-    assert status["qualification"]["contract_tested_rows"] == 500
+    assert status["qualification"]["live_tested_rows"] == 334
+    assert status["qualification"]["vision_verified_rows"] == 334
+    assert status["qualification"]["implemented_rows"] == 518
+    assert status["qualification"]["contract_tested_rows"] == 518
     assert status["qualification"]["live_tested_rows"] == (
         74 + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT + 2
     )
@@ -1738,14 +1882,16 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         assert na_row["parity_status"] == "not_applicable"
         assert na_row["live_tested"] is True
         assert "research183" in na_row["method_or_route"]
-    for red_id in (
+    for na_bulk_id in (
         "ui.parity.salesTaxReturns.bulk_save",
         "ui.parity.salesTaxReturns.bulk_delete",
     ):
-        red_row = next(row for row in remaining if row["id"] == red_id)
-        assert red_row["discovered"] is False
-        assert red_row["live_tested"] is False
-        assert red_row["parity_status"] == "discovery_required"
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
     users_parity = next(row for row in qualified if row["id"] == "ui.parity.users.list")
     assert users_parity["api_row_id"] == "api.users.list"
     assert users_parity["tool_name"] == "ui_settings_users_open"
@@ -1761,14 +1907,16 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         assert na_row["parity_status"] == "not_applicable"
         assert na_row["live_tested"] is True
         assert "research180" in na_row["method_or_route"]
-    for red_id in (
+    for na_bulk_id in (
         "ui.parity.users.bulk_save",
         "ui.parity.users.bulk_delete",
     ):
-        red_row = next(row for row in remaining if row["id"] == red_id)
-        assert red_row["discovered"] is False
-        assert red_row["live_tested"] is False
-        assert red_row["parity_status"] == "discovery_required"
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
     accounts_parity = next(row for row in qualified if row["id"] == "ui.parity.accounts.list")
     assert accounts_parity["api_row_id"] == "api.accounts.list"
     assert accounts_parity["tool_name"] == "ui_settings_accounting_open"
@@ -1814,14 +1962,16 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         assert na_row["parity_status"] == "not_applicable"
         assert na_row["live_tested"] is True
         assert "research181" in na_row["method_or_route"]
-    for red_id in (
+    for na_bulk_id in (
         "ui.parity.taxRates.bulk_save",
         "ui.parity.taxRates.bulk_delete",
     ):
-        red_row = next(row for row in remaining if row["id"] == red_id)
-        assert red_row["discovered"] is False
-        assert red_row["live_tested"] is False
-        assert red_row["parity_status"] == "discovery_required"
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
     rulesets_parity = next(
         row for row in qualified if row["id"] == "ui.parity.salesTaxRulesets.list"
     )
@@ -1842,14 +1992,16 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         assert na_row["parity_status"] == "not_applicable"
         assert na_row["live_tested"] is True
         assert "research181" in na_row["method_or_route"]
-    for red_id in (
+    for na_bulk_id in (
         "ui.parity.salesTaxRulesets.bulk_save",
         "ui.parity.salesTaxRulesets.bulk_delete",
     ):
-        red_row = next(row for row in remaining if row["id"] == red_id)
-        assert red_row["discovered"] is False
-        assert red_row["live_tested"] is False
-        assert red_row["parity_status"] == "discovery_required"
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
     organizations_parity = next(
         row for row in qualified if row["id"] == "ui.parity.organizations.list"
     )

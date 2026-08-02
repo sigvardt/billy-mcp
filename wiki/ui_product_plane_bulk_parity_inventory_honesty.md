@@ -84,3 +84,7 @@ Research188 dual survey landed: **15 resources / 30 rows** promoted to UI `not_a
 
 - `scripts/generate_coverage_report.py`: `apply_ui_product_plane_bulk_parity_honesty`, frozensets, qualification builder
 - `tests/coverage/test_coverage_inventory.py`: `test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified`
+
+## Research189 soft tool dual-NA lift
+
+Research189 dual tool-panel evidence promoted soft VAT/users product-plane bulk rows (9 resources / 18 UI bulk ids) to `not_applicable` via [[ui_product_plane_bulk_chrome_dual_na_soft_tool]]. Empty-shell contacts/invoices/bills(+lines) ×10 remain discovery_required honesty.

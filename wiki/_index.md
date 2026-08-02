@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T15:37:23Z
+updated: 2026-08-02T16:20:54Z
 ---
 
 # billy_mcp
@@ -118,6 +118,8 @@ updated: 2026-08-02T15:37:23Z
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
 
 [[ui_organizations_create_not_applicable|ui_organizations_create_not_applicable]]: UI parity not_applicable freeze for api.organizations.create (research177 dual absence of org-create CTA).
+
+[[ui_product_plane_bulk_chrome_dual_na_soft_tool|ui_product_plane_bulk_chrome_dual_na_soft_tool]]: Research189 dual-absent multi-select bulk chrome on real greened tool panels — 9 resources / 18 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.
 
 [[ui_product_plane_bulk_chrome_dual_na_strong|ui_product_plane_bulk_chrome_dual_na_strong]]: Research188 dual-absent multi-select bulk chrome on non-empty greened list shells — 15 resources / 30 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.
 

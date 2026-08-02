@@ -164,3 +164,5 @@ The 29 residual clear Supports write rows that stay red after offline product wa
 
 
 Product-plane UI bulk: research187 honesty left 58 rows discovery_required; research188 dual bulk-chrome promoted 30 strong non-empty-shell rows to UI not_applicable (see [[ui_product_plane_bulk_chrome_dual_na_strong]]); 28 remain discovery_required (empty-shell + soft VAT/users). No bulk tools; API bulk 92 still external-contract red.
+
+Related UI bulk inventory freezes: [[ui_product_plane_bulk_chrome_dual_na_soft_tool]], [[ui_product_plane_bulk_chrome_dual_na_strong]].

@@ -6,11 +6,11 @@
   },
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
-    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (UI product-plane bulk remaining \u00d728 discovery_required (empty-shell 10 + soft VAT/users 18) UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)",
-    "contract_tested_rows": 500,
-    "implemented_rows": 500,
-    "live_tested_rows": 316,
-    "vision_verified_rows": 316
+    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (UI product-plane bulk remaining \u00d710 discovery_required (empty-shell 10) UI_BULK_CHROME_DUAL_REQUIRED; annual_reports org_inaccessible)",
+    "contract_tested_rows": 518,
+    "implemented_rows": 518,
+    "live_tested_rows": 334,
+    "vision_verified_rows": 334
   },
   "schema_version": 1,
   "source_counts": {

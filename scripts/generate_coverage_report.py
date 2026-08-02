@@ -161,7 +161,7 @@ GEO_UI_NOT_APPLICABLE_API_PREFIXES: tuple[str, ...] = (
 )
 GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE = "GEO_UI_NO_EQUIVALENT_WORKFLOW"
 GEO_UI_NOT_APPLICABLE_ROW_COUNT = (
-    240  # prior 210 + research188 product-plane bulk chrome dual NA strong (30)
+    258  # prior 240 + research189 product-plane bulk chrome dual NA soft tool (18)
 )
 GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES: frozenset[str] = frozenset({"currencies", "locales"})
 GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES: frozenset[str] = frozenset(
@@ -1949,7 +1949,8 @@ def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) 
 
 # Research188 UI product-plane bulk chrome dual NA (strong subset only).
 # Dual-absent multi-select/bulk-action chrome on non-empty greened list shells.
-# Empty-shell and soft VAT/users families stay research187 honesty (discovery_required).
+# Empty-shell family stays research187 honesty; soft VAT/users handled by
+# research189 soft tool package.
 UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE = "UI_BULK_CHROME_ABSENT_DUAL"
 UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES: frozenset[str] = frozenset(
     {
@@ -2093,7 +2094,7 @@ def apply_ui_product_plane_bulk_chrome_dual_na_strong(
 
     Exact 15 resources / 30 bulk_save+bulk_delete UI parity ids only. Runs after
     research187 honesty so NA wins over discovery_required for this subset.
-    Held empty-shell and soft VAT/users honesty rows are not touched.
+    Held empty-shell honesty rows are not touched (soft VAT/users handled by soft-tool package).
     """
 
     if len(UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES) != 15:
@@ -2171,7 +2172,220 @@ def apply_ui_product_plane_bulk_chrome_dual_na_strong(
             "live_tested false out_of_scope_by_user); "
             "evidence_ref=research188_bulk_chrome_dual; "
             f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; empty_list_shell=false; "
-            "held empty-shell contacts/invoices/bills and soft VAT/users not in "
+            "held empty-shell contacts/invoices/bills not in this freeze; soft "
+            "VAT/users promoted separately by research189 soft tool package"
+        )
+        row["evidence"] = f"{prior}; {na_evidence}" if prior else na_evidence
+
+
+# Research189 UI product-plane bulk chrome dual NA (soft tool-panel subset).
+# Dual-absent multi-select/bulk-action chrome on real greened tool panels
+# (ui_settings_vat_open / ui_settings_users_open / ui_vat_declarations_list).
+# Empty-shell contacts/invoices/bills(+lines) stay research187 honesty.
+UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE = "UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL"
+UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES: frozenset[str] = frozenset(
+    {
+        "salesTaxAccounts",
+        "salesTaxMetaFields",
+        "salesTaxPayments",
+        "salesTaxReturns",
+        "salesTaxRules",
+        "salesTaxRulesets",
+        "taxRateDeductionComponents",
+        "taxRates",
+        "users",
+    }
+)
+UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS: frozenset[str] = frozenset(
+    {
+        f"ui.parity.{resource}.{op}"
+        for resource in UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES
+        for op in ("bulk_save", "bulk_delete")
+    }
+)
+# resource -> greened tool panel observed dual (research189)
+UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS: dict[str, dict[str, str]] = {
+    "salesTaxAccounts": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "salesTaxMetaFields": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "salesTaxPayments": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "salesTaxRules": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "salesTaxRulesets": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "taxRateDeductionComponents": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "taxRates": {
+        "shell_id": "settings_vat_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_vat_open",
+    },
+    "salesTaxReturns": {
+        "shell_id": "vat_declarations_tool",
+        "path_class": "/vat-declarations",
+        "tool_ref": "ui_vat_declarations_list",
+    },
+    "users": {
+        "shell_id": "settings_users_tool",
+        "path_class": "/settings",
+        "tool_ref": "ui_settings_users_open",
+    },
+}
+
+
+def ui_bulk_chrome_absent_dual_tool_panel_qualification(
+    resource: str, operation: str
+) -> dict[str, Any]:
+    """Machine-readable UI not_applicable for soft dual-absent tool-panel bulk rows."""
+
+    panel = UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS[resource]
+    linked_api = f"api.{resource}.{operation}"
+    return {
+        "kind": "ui_not_applicable",
+        "evidence_code": UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE,
+        "not_applicable_decision": "accepted",
+        "not_applicable_reason": (
+            "research189 dual independent ephemeral sessions: greened tool panel "
+            "open succeeds and re-open bulk metrics show no multi-select / "
+            "bulk-action chrome for this API bulk parity row; design §10.2 UI "
+            "not_applicable accepted; no bulk FastMCP tool; empty-list shells "
+            "excluded"
+        ),
+        "sessions": "dual_independent_ephemeral",
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": "research189_bulk_followon_dual",
+        "tools_allowed": False,
+        "empty_list_shell": False,
+        "tool_panel": True,
+        "linked_api_row_id": linked_api,
+        "shell_id": panel["shell_id"],
+        "path_class": panel["path_class"],
+        "tool_ref": panel["tool_ref"],
+        "api_bulk_blocker": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+    }
+
+
+def apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(
+    workflows: list[dict[str, Any]],
+) -> None:
+    """Promote research189 soft tool dual-absent product-plane bulk rows to UI NA.
+
+    Exact 9 resources / 18 bulk_save+bulk_delete UI parity ids only. Runs after
+    research187 honesty and research188 strong dual-NA so NA wins over
+    discovery_required for this subset. Empty-shell honesty rows are not touched.
+    """
+
+    if len(UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES) != 9:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES must be exactly 9 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES)})"
+        )
+    if len(UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS) != 18:
+        raise RuntimeError(
+            "UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS must be exactly 18 "
+            f"(got {len(UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)})"
+        )
+    if set(UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS) != UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES:
+        raise RuntimeError("panel map must cover exactly soft dual-NA resources")
+    if not UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS.issubset(UI_PRODUCT_PLANE_BULK_HONESTY_IDS):
+        raise RuntimeError("soft dual-NA ids must be a subset of product-plane honesty ids")
+    if UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES & UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES:
+        raise RuntimeError("soft dual-NA resources must not overlap strong dual-NA resources")
+    empty_held = {
+        "contacts",
+        "invoices",
+        "invoiceLines",
+        "bills",
+        "billLines",
+    }
+    if UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES & empty_held:
+        raise RuntimeError("soft dual-NA resources must not include empty-shell held set")
+
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        if row_id not in UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS:
+            continue
+        parts = row_id.split(".")
+        if len(parts) < 4:
+            continue
+        resource = parts[2]
+        operation = parts[3]
+        if resource not in UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES:
+            continue
+        if operation not in ("bulk_save", "bulk_delete"):
+            continue
+
+        panel = UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS[resource]
+        qual = ui_bulk_chrome_absent_dual_tool_panel_qualification(resource, operation)
+        linked_api = qual["linked_api_row_id"]
+        row["tool_name"] = ""
+        row["parity_status"] = "not_applicable"
+        row["discovered"] = True
+        row["implemented"] = True
+        row["contract_tested"] = True
+        row["live_tested"] = True
+        row["vision_verified"] = True
+        row["vision_evidence"] = None
+        row["sensitivity"] = "low"
+        row["side_effects"] = (
+            "none; UI bulk parity classified not_applicable — no bulk browser "
+            "workflow tool and no records may be created through a bulk UI tool"
+        )
+        row["cleanup"] = (
+            "not_applicable; no UI bulk tool and no disposable records for this parity row"
+        )
+        row["errors"] = [
+            "AUTH_INTERACTION_REQUIRED",
+            "UI_CHANGED",
+            UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE,
+        ]
+        row["method_or_route"] = (
+            f"no equivalent mit.billy.dk bulk workflow for {linked_api} "
+            f"(research189 dual-session: tool panel {panel['shell_id']} "
+            f"tool_ref={panel['tool_ref']} path_class {panel['path_class']}; "
+            "dual tool success + re-open dual_agree multi-select/bulk-action "
+            "chrome absent; empty_list_shell=false; tool_panel=true; "
+            f"evidence_code={UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE}; "
+            "not_applicable accepted)"
+        )
+        row["qualification"] = dict(qual)
+        prior = str(row.get("evidence") or "").strip()
+        na_evidence = (
+            "research189 dual independent ephemeral browser sessions (no "
+            f"BILLY_API_TOKEN): dual tool READY sessions; tool_ref="
+            f"{panel['tool_ref']} success then re-open panel "
+            f"{panel['shell_id']} ({panel['path_class']}); "
+            "dual_agree_bulk_chrome_absent true (preference toggles on VAT "
+            f"panel are non-row multi-select); no bulk-action chrome for "
+            f"{linked_api}; design §10.2 UI parity not_applicable accepted; "
+            f"evidence_code={UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE}; "
+            "no ui_* bulk tool; API bulk lane unchanged "
+            "(external_contract_blocker BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS; "
+            "live_tested false out_of_scope_by_user); "
+            "evidence_ref=research189_bulk_followon_dual; "
+            f"docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; empty_list_shell=false; "
+            "tool_panel=true; held empty-shell contacts/invoices/bills not in "
             "this freeze"
         )
         row["evidence"] = f"{prior}; {na_evidence}" if prior else na_evidence
@@ -7327,6 +7541,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
 
     apply_ui_product_plane_bulk_parity_honesty(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_strong(workflows)
+    apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
@@ -7567,8 +7782,8 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
             "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
             "UI live and vision qualification incomplete "
-            "(UI product-plane bulk remaining ×28 discovery_required "
-            "(empty-shell 10 + soft VAT/users 18) UI_BULK_CHROME_DUAL_REQUIRED; "
+            "(UI product-plane bulk remaining ×10 discovery_required "
+            "(empty-shell 10) UI_BULK_CHROME_DUAL_REQUIRED; "
             "annual_reports org_inaccessible)"
         )
     if any(

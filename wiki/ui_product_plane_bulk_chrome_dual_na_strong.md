@@ -59,25 +59,25 @@ accounts, attachments, bankLineMatches, bankLineSubjectAssociations, bankLines, 
 | accounts | settings_accounting | `/settings` |
 | organizations | settings_company | `/settings` |
 
-## Held (still discovery_required honesty)
+## Held after research188 (before research189 soft package)
 
 | Subset | Resources | Why |
 | --- | --- | --- |
 | Empty-shell dual-absent | contacts, invoices, invoiceLines, bills, billLines | Dual landed on `/…/empty`; bulk chrome may appear when rows exist |
-| Soft path seeds | salesTax*, taxRates*, taxRateDeductionComponents, users | Soft SPA seeds soft-empty; need tool-based dual (`ui_settings_vat_open`, `ui_settings_users_open`, `ui_vat_declarations_list`) |
+| Soft path seeds | salesTax*, taxRates*, taxRateDeductionComponents, users | Soft SPA seeds soft-empty; need tool-based dual |
 
-28 UI bulk honesty rows remain `UI_BULK_CHROME_DUAL_REQUIRED` (see [[ui_product_plane_bulk_parity_inventory_honesty]]).
+Research189 promoted soft tool dual-absent ×18 to NA ([[ui_product_plane_bulk_chrome_dual_na_soft_tool]]). Empty-shell ×10 remain `UI_BULK_CHROME_DUAL_REQUIRED` (see [[ui_product_plane_bulk_parity_inventory_honesty]]).
 
-## Completeness walls still open
+## Completeness walls still open (after research189 soft package)
 
 | Blocker | Rows |
 | --- | ---: |
 | API bulk schema unspecified | 92 |
 | Residual clear honesty | 29 |
-| UI product-plane bulk remaining honesty | 28 |
+| UI product-plane bulk remaining honesty | 10 |
 | annual_reports org inaccessible | 1 |
 
-Green counts after this freeze: implemented/contract **500**, live/vision **316**, complete **false**.
+Green counts after strong freeze alone: implemented/contract **500**, live/vision **316**. After soft package: **518** / **334**. `complete` stays **false**.
 
 ## Generator and tests
 
