@@ -6,15 +6,17 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-03T14:41:00Z
+updated: 2026-08-03T15:36:39Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **110** COMMIT research200 HOLD (plan+memory). complete **false**. **528** / **344**.
-- Walls bulk **92**, residual, annual **1**. STEER **7A4311C2** stop after this iter. Not node complete.
+- PREPARE no-op; parent up to date; 0 mergeable children.
+- Walls bulk **92**, residual **29**, annual **1**. complete **false**. **528** / **344**.
+- Node **stopping** after PREPARE (resume: no product/contract slice).
+
 
 ## COMMIT (iter 110 / 186.110) (2026-08-03T14:41:00Z)
 
@@ -22,6 +24,23 @@ updated: 2026-08-03T14:41:00Z
 - package: plan + memory only (no src/coverage/wiki product)
 - IR PASS package; FIX-VERIFY lint+1671 tests; STEER 7A4311C2 finishing (not qualification complete)
 - complete false; walls bulk92 residual annual1; not complete:true
+
+## PREPARE (2026-08-03T15:36:39Z)
+
+- Parent `main`: already up to date (fetch+merge no-op).
+- Unmerged child tips: **62** (product **1**, wiki **3**, scaffolding **58**).
+- Product-code `ui_auth_status`: three-dot touches browser/models/server + tests; tip pre-evolution vs HEAD; `auth_status` already on HEAD; merge would regress. **Skip**.
+- Wiki-only (3): `ui_auth_credentials_research_codex_fallback`, `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`. Pages already on HEAD / superseded. **Skip**.
+- Remaining 58: fractal scaffolding or review leaves only. **Skip**.
+- No material integration. No outbox announce. Status active (stopping) after external-walls SYNC report.
+
+## SYNC (resume after stop-churn STEER) (2026-08-03T15:35:06Z)
+
+- Inbox **42B037CE** RESUME AUTHORIZED (supersedes stop-after-iter). ACK reply **1A73D465**.
+- Product/contract scan: **no** concrete interface product slice; **no** new official offline contract evidence.
+- Walls unchanged: bulk **92** (BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS), residual clear **29** (method-closed honesty), annual_reports **1** (Upsedasse org).
+- Counts: implemented/contract **528**; UI live/vision **344**/345; complete **false**. HEAD `ac8df4a`.
+- Outbox **57AA973B**. Private FFAAADF6. `fractal node stop` after SYNC (no fingerprint HOLD restart). Not complete:true.
 
 ## SYNC (iter 110 pre-COMMIT) (2026-08-03T14:40:00Z)
 
