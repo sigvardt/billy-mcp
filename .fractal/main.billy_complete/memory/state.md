@@ -6,17 +6,123 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-02T20:58:00Z
+updated: 2026-08-03T14:14:36Z
 ---
 
 # state
 
 ## Current state
 
-- Iter **98** RESEARCH198 **HOLD**. HEAD `2f16fdd`. Docs lock unchanged. No product unlock.
-- complete **false**. Counts: implemented/contract **528**; live/vision **344**. Walls: bulk **92**, residual **29**, annual_reports **1**.
-- Brief: `tmp/grok-research.md`. Fingerprint: `tmp/research198-fingerprint.json`.
-- Saved radio: **8612433E** STEER still open. No running children. Not node finish.
+- Iter **109** COMMIT research199 HOLD (plan+memory). complete **false**. **528** / **344**.
+- Walls bulk **92**, residual incomplete, annual **1**. STEER **8612433E**. Not node finish.
+
+## COMMIT (iter 109 / 186.109) (2026-08-03T14:14:36Z)
+
+- research199 HOLD: docs fingerprint unchanged; no offline unlock
+- package: plan + memory only (no src/coverage/wiki product)
+- IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E honored
+- complete false; walls bulk92 residual annual1; not node finish
+
+## SYNC (iter 109 pre-COMMIT) (2026-08-03T14:14:18Z)
+
+- Inbox/feed empty. Private AB8B794F read. Saved 8612433E open. No children. Quota OK.
+- Dirty: memory + plan 186.109 only. Proceed COMMIT plan+memory HOLD; not finish.
+
+## FIX-VERIFY (iter 109 / 186.109) (2026-08-03T14:13:54Z)
+
+- IR package fixes: none; product tree still clean vs `d64f229`
+- wiki lint both stores: clean
+- lint.sh: pass
+- test.sh: **1671 passed**, 54 deselected
+- complete false 528/344; walls bulk92 residual annual1
+- STEER 8612433E; not finish; no full/ui-full suite
+- Ready COMMIT 186.109 HOLD (memory+plan); not node finish
+
+## SYNC (iter 109 pre-FIX-VERIFY) (2026-08-03T14:03:08Z)
+
+- Inbox/feed empty. Private 2D80886E read. Saved 8612433E open. No children. Quota OK.
+- IR required package fixes: none. Proceed FIX-VERIFY then COMMIT plan+memory HOLD.
+
+## IR (iter 109 / 186.109) (2026-08-03T14:02:40Z)
+
+- Package HOLD research199: **PASS**. Required package fixes: **none**.
+- Node complete: **FAIL** (expected external walls).
+- Live docs re-lock match: MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603` chunk `8302558e…`.
+- Product tree empty; no greening; API live_tested true count 0.
+- Next: FIX-VERIFY then optional plan+memory COMMIT. Not finish.
+
+## SYNC (iter 109 pre-IR) (2026-08-03T14:01:36Z)
+
+- Inbox/feed empty. Private 61991C24 read. Saved 8612433E open. No children. Quota OK.
+- Package for IR: research199 brief + plan 186.109 + empty product tree.
+- Proceed INDEPENDENT-REVIEW. Not finish.
+
+## EXECUTE (iter 109 / 186.109) (2026-08-03T14:01:11Z)
+
+- HOLD product no-op honored vs HEAD `d64f229`
+- Dirty only: memory + plan (node-local). **No** src/coverage/tests/wiki edits
+- Invariants OK: complete false; implemented/contract 528; live/vision 344; api_ambiguous_bulk 92
+- docs lock MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603`
+- No browser; no live API; no children; STEER 8612433E; not finish
+
+## SYNC (iter 109 pre-EXECUTE) (2026-08-03T14:00:37Z)
+
+- Inbox/feed unread: empty. Private 04758869 read.
+- Saved **8612433E** kept open. No running children. Quota OK.
+- Outbox: pre-EXECUTE HOLD. Proceed EXECUTE product no-op.
+
+## PLAN (iter 109 / 186.109) (2026-08-03T14:00:12Z)
+
+- Plan: research199 HOLD external walls (product no-op under STEER 8612433E)
+- Authority: tmp/grok-research.md research199; docs lock unchanged
+- Children: none
+- Interrupted: 186.98 failed PLAN on Grok Build 402; this plan replaces it; quota OK this session
+- EXECUTE next: empty product tree + invariants 528/344 complete false
+
+## SYNC (iter 109 pre-PLAN) (2026-08-03T13:59:12Z)
+
+- Inbox/feed unread: empty. Private 44FB6538 read.
+- Saved **8612433E** kept open.
+- No running children. Quota OK.
+- RESEARCH199: docs lock match; HOLD product no-op.
+- Outbox: pre-PLAN HOLD. Proceed PLAN: HOLD slice only (no product/wiki greening).
+
+## RESEARCH (iter 109 / research199) (2026-08-03T13:58:21Z)
+
+- Official https://www.billy.dk/api/ MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603` bytes 147934 — **match** inventory lock (same as research193–198).
+- api-docs chunk md5 `8302558e6369c4914299efcc31565f53` unchanged; bulk save×46 + bulk delete×46 Supports-only; 0 bulk schema / ids[] / openapi / webhook.
+- OpenAPI/Swagger probes still fail (no published schema).
+- No browser, no unauth residual re-probe, no greening, no wiki (STEER).
+- Verdict: **HOLD product no-op** for PLAN/EXECUTE. Unlock still external (docs bulk schema, residual offline honesty holds, annual org).
+
+## SYNC (iter 109 pre-RESEARCH) (2026-08-03T13:56:08Z)
+
+- Inbox unread: empty. Feed unread: empty.
+- Private B3AD0BCA read (prior resume HOLD note).
+- Saved **8612433E** kept open (STEER binding).
+- PREPARE decision already recorded: 0 mergeable product among 62 tips.
+- Outbox: pre-RESEARCH HOLD handoff. Private: pre-RESEARCH note.
+- Quota: not exhausted this turn.
+- Proceed RESEARCH: only new official offline evidence can unlock product; otherwise HOLD.
+
+## PREPARE (iter 109) (2026-08-03T13:55:34Z)
+
+- Parent merge `main`: already up to date (fetch+merge no-op).
+- Unmerged child tips: **62** (productish **1**, wiki-only **3**, scaffolding **58**).
+- Product-code child `ui_auth_status`: three-dot touches browser/models/server + tests, but tip is pre-evolution (browser ~376 lines vs HEAD ~9572). `4ce5081` not ancestor of HEAD; merge-tree reports changed-in-both on product files. Auth status already on HEAD (`auth_status` tool). Merge would regress. **Skip**.
+- Wiki-only children (3): `ui_auth_credentials_research_codex_fallback`, `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback`. STEER blocks wiki churn; wave5t/wave5u pages already on HEAD. **Skip**.
+- Remaining 58: fractal/node scaffolding or review leaves only. **Skip**.
+- No material integration. No outbox announce. No wiki lint (no merge).
+
+## SYNC (iter 109 resume) (2026-08-03T13:54:36Z)
+
+- Resume mode: worktree clean (no frozen mid-edit). Re-oriented from memory + HEAD + coverage/status.json.
+- Inbox unread: empty. Feed unread: empty. Private unread: empty.
+- Saved **8612433E** kept open (STEER stop wiki-only churn).
+- Children: many historical branches; none running; no merge this SYNC step.
+- Outbox: resume HOLD report. Private: iter109 SYNC note.
+- Quota: not exhausted this turn.
+- Proceed PREPARE: parent merge check + unmerged child review only; skip wiki-only and scaffolding tips per STEER.
 
 ## RESEARCH (iter 98 / research198)
 
