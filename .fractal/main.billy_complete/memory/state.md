@@ -6,17 +6,25 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-04T10:47:00Z
+updated: 2026-08-04T10:50:00Z
 ---
-
-# state
 
 ## Current state
 
-- Continue iter2 COMMIT 189.2 done (`2ed8469`).
+- Continue iter3 SYNC: external walls only; **stop clean** (42B037CE).
 - complete **false**. Walls bulk92+residual29. Annual owner-scoped.
-- Parent B5C1EBE3 residual/bulk scope still open. Not finish.
+- Parent B5C1EBE3 residual/bulk scope still unanswered. Not finish.
 
+## SYNC (continue iter3) (2026-08-04T10:50:00Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- No running children. Branch clean at `97279fb` (189.2).
+- Coverage: complete false; implemented/contract 528; UI live/vision 344; annual `out_of_scope_by_user`.
+- Walls: **bulk92** (BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS) + **residual29** (method-closed honesty).
+- No concrete UI product slice. No new official offline bulk schema without forbidden re-lock HOLD.
+- Parent B5C1EBE3 owner residual/bulk scope: **0 replies**.
+- Steers 8612433E / 7A4311C2 / 42B037CE: no wiki-only; no HOLD fingerprint / plan-memory no-op churn.
+- Outbox: blockers once + stop clean. `fractal node stop` after SYNC. Not complete:true.
 
 ## COMMIT (continue iter2 / 189.2) (2026-08-04T10:47:00Z)
 
