@@ -11085,3 +11085,92 @@ updated: 2026-08-03T15:36:39Z
 - package: plan + memory only (no src/coverage/wiki product)
 - IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E honored
 - complete false; walls bulk92 residual29 annual1; not node finish
+
+
+## continue SYNC 2026-08-04T09:53Z (iter1)
+
+- Parent DC3B8E96 P10 OWNER DECISION: SKIP ANNUAL REPORTS — Joakim plan excludes Årsrapporter; `ui.discovery.annual_reports` is **out_of_scope_by_user**, not completion blocker. No invent annual-reports tool. Live interface-only; no live API; Grok-only.
+- Saved DC3B8E96; replied F00E2743; feed empty; no active children needing steer.
+- HEAD `3c0bfa7` clean. Coverage: complete false; 528 implemented/contract; 344 live/vision; walls **bulk92 + residual29 + annual1**.
+- Prior resume was external-walls HOLD (research199/200). That HOLD is superseded for **annual only** by owner decision; bulk+residual still external/red until offline unlock or further owner scope.
+- NEXT (not done this SYNC): rewrite annual_reports coverage path to owner out-of-scope (generator, tests, wiki, NODE.md), regenerate manifests/status, run lint+test suite, commit+push, report exact remaining blockers. Do not restart bulk research loops.
+
+
+## continue PREPARE 2026-08-04T09:53Z (iter1)
+
+- Parent `main`: Already up to date (no merge commit).
+- Child product scan: 157 child branches; product-diff tips only:
+  - `ui_auth_status`: auth_status already on mainline; child three-dot is older/regressive → **skip merge**.
+  - wiki-only: `ui_auth_credentials_research_codex_fallback` (missing wiki page; research child, not product) → **skip**.
+  - wiki-only: `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` (pages already on mainline) → **skip**.
+  - Remaining tips: init-only / failed review / fractal-only → **skip**.
+- 0 mergeable product. No integration outbox.
+- Owner DC3B8E96 still binding for PLAN/EXECUTE: annual_reports out_of_scope_by_user.
+- HEAD remains `3c0bfa7` + uncommitted memory state only.
+
+
+## continue SYNC pre-RESEARCH 2026-08-04
+
+- inbox/feed empty; saved DC3B8E96 still open (annual skip not implemented yet).
+- private 9427F8C5: NEXT annual_reports owner skip (binding).
+- no running children; PREPARE already clean (0 merges).
+- RESEARCH next must NOT restart bulk/docs HOLD loops; authority brief from DC3B8E96 only.
+
+
+## continue RESEARCH 2026-08-04 (iter1)
+
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`
+- Authority: owner DC3B8E96 skip annual_reports → `out_of_scope_by_user` (not NA, no tool, not live dual).
+- No docs re-lock; no browser; no greening; bulk92+residual29 unchanged walls.
+- Recommended slice: generator annual applier + tests + wiki + NODE.md + regenerate coverage; complete stays false.
+
+
+## continue SYNC pre-PLAN 2026-08-04
+- inbox/feed empty; saved DC3B8E96 open; research brief ready; PLAN annual owner-skip slice.
+
+
+## continue PLAN 2026-08-04 (189.1)
+
+- Plan: `plans/2026-08-04T09:59:18.394Z-189.1-annual_reports_owner_skip.md`
+- Slice: owner out_of_scope_by_user for ui.discovery.annual_reports (DC3B8E96)
+- No children; no bulk/residual greening; complete stays false
+- EXECUTE next on root
+
+
+## continue SYNC pre-EXECUTE 2026-08-04
+- inbox/feed/private empty; DC3B8E96 saved; plan 189.1 ready; EXECUTE annual owner skip next.
+
+
+## continue EXECUTE 2026-08-04 (189.1)
+
+- Owner annual skip implemented: apply_ui_annual_reports_out_of_scope_by_user
+- is_owner_out_of_scope excludes owner-scoped UI rows from completeness gates
+- Regenerated coverage: complete false; 528/344; blocker bulk92 + annual out_of_scope (not inaccessible)
+- wiki + NODE.md updated; lint pass; test.sh 1671 passed, 54 deselected
+- Remaining walls: bulk92 + residual29; not node finish
+
+
+## continue INDEPENDENT-REVIEW 2026-08-04 (189.1)
+
+- Verdict: PASS (package); node complete FAIL expected
+- Report: tmp/grok-review.md
+- Required fixes: none
+- Walls remain bulk92 + residual29; annual owner-scoped
+
+
+## continue SYNC pre-FIX-VERIFY 2026-08-04
+- inbox/feed empty; DC3B8E96 still saved until COMMIT; IR PASS package zero fixes; FIX-VERIFY next.
+
+
+## continue FIX-VERIFY 2026-08-04 (189.1)
+
+- IR required fixes: none (confirmed)
+- invariants hold: annual owner-scoped; complete false; walls bulk92+residual29
+- lint pass; wiki lint project+memory clean
+- test.sh: 1671 passed, 54 deselected
+- plan post-mortem appended
+- Ready COMMIT; not node finish
+
+
+## continue SYNC pre-COMMIT 2026-08-04
+- inbox/feed empty; FIX-VERIFY clean; uncommitted annual owner-skip package ready; DC3B8E96 unsaved after COMMIT.

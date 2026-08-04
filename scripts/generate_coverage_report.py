@@ -6408,29 +6408,24 @@ def apply_ui_settings_subscription_open_shell_evidence(row: dict[str, Any]) -> N
     ]
 
 
-def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
-    """Record dual-session Upsedasse freeze for annual_reports (research137 + research191).
+def apply_ui_annual_reports_out_of_scope_by_user(row: dict[str, Any]) -> None:
+    """Record owner plan skip for annual_reports (radio DC3B8E96, 2026-08-04).
 
-    Nav label Årsrapporter and path class /:org_slug/annual_reports exist, so
-    honest UI not_applicable is rejected (design: NA only when no equivalent UI
-    workflow). Dedicated test org dual-session renders h1 Upsedasse! with CVR
-    companies hint — not a plan gate and not a productable shell. Stay red:
-    no tool, no live/vision green. Unlock requires a non-production org (or
-    Billy platform fix) where annual_reports is non-Upsedasse.
+    Owner decision: Årsrapporter is not in Joakim's Billy plan for this
+    deployment. Treat ui.discovery.annual_reports as out_of_scope_by_user — not
+    a completion blocker, not not_applicable (nav/route still exist), and not a
+    live dual unlock wait. Do not invent ui_annual_* or api_annual_* tools.
 
-    research191 EXECUTE reconfirm (2026-08-02): dual independent ephemeral
-    sessions READY/READY, path /:org_slug/annual_reports both, h1 Upsedasse!
-    both, error_upsedasse true both, productable_shell false; tmp
-    research191_annual_dual.json. No writes; no API token; profiles purged.
-
-    research192 (2026-08-02): docs/API residual+bulk walls reconfirmed offline;
-    no new annual dual (same-day A1 still binding; no browser re-probe).
+    Historical dual Upsedasse evidence (research122/191/192) is retained under
+    prior_evidence_ref for inventory honesty. Qualification flags stay false so
+    the row is never claimed live- or vision-verified; completeness excludes
+    owner-scoped rows instead of greening live cells.
     """
 
     row["method_or_route"] = (
-        "mit.billy.dk /:org_slug/annual_reports (nav Årsrapporter present; dual "
-        "session h1 Upsedasse! + CVR companies URL hint; not a productable shell; "
-        "blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; not_applicable rejected)"
+        "mit.billy.dk /:org_slug/annual_reports (nav Årsrapporter present; "
+        "owner out_of_scope_by_user scope_code=ANNUAL_REPORTS_OWNER_SKIP "
+        "radio:DC3B8E96; not_applicable rejected; no tool)"
     )
     row["tool_name"] = ""
     row["request_fields"] = []
@@ -6440,19 +6435,17 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     row["api_row_id"] = None
     row["test_references"] = [TEST_REFERENCE]
     row["evidence"] = (
-        "research121/122/135 dual-session headless observation + research137 "
-        "decision + research191 dual reconfirm (READY/READY; path "
-        "/:org_slug/annual_reports; h1 Upsedasse! both; error_upsedasse true "
+        "owner decision radio:DC3B8E96 (2026-08-04): Årsrapporter not included "
+        "in Billy plan for this deployment → qualification.kind="
+        "out_of_scope_by_user scope_code=ANNUAL_REPORTS_OWNER_SKIP "
+        "tools_allowed=false; not a completion blocker; do not invent "
+        "ui_annual_* or api_annual_*; not_applicable rejected (nav Årsrapporter "
+        "and route family exist; owner skip is plan scope, not absence of UI). "
+        "Prior dual evidence retained: research121/122/135 + research191 dual "
+        "reconfirm (READY/READY; path /:org_slug/annual_reports; h1 Upsedasse! "
         "both; productable_shell false; tmp/research191_annual_dual.json) + "
-        "research192 walls reconfirm without new dual: "
-        "path class /:org_slug/annual_reports dual-renders h1 Upsedasse! with "
-        "CVR companies hint (# - url: /cvr/dk/companies/#) and recovery CTAs; "
-        "nav label Årsrapporter present so not_applicable is rejected (design: "
-        "NA only when Billy exposes no equivalent UI workflow); "
-        "blocker_code=ANNUAL_REPORTS_ORG_INACCESSIBLE; unlock requires a "
-        "non-production organisation (or Billy platform fix) where "
-        "annual_reports is non-Upsedasse so a typed ui_* shell can be dual-"
-        "session qualified; no invent api_annual_*; no tool; stay red"
+        "research192 walls reconfirm; no live dual re-probe for owner skip; "
+        "live_tested and vision_verified remain false (not dual-qualified)"
     )
     row["discovered"] = False
     row["implemented"] = False
@@ -6460,39 +6453,37 @@ def apply_ui_annual_reports_inaccessible_evidence(row: dict[str, Any]) -> None:
     row["live_tested"] = False
     row["vision_verified"] = False
     row["vision_evidence"] = None
-    row["parity_status"] = "discovery_required"
+    row["parity_status"] = "out_of_scope_by_user"
     row["sensitivity"] = "unknown"
     row["side_effects"] = (
-        "none until a non-Upsedasse shell exists; current dual observation is "
-        "error shell only (ANNUAL_REPORTS_ORG_INACCESSIBLE)"
+        "none; owner out of scope — no annual-reports FastMCP tool and no "
+        "disposable annual-report records for this deployment"
     )
     row["cleanup"] = (
-        "not_applicable for inaccessible discovery; no records may be created; "
-        "not_applicable parity classification rejected while nav route exists"
+        "not_applicable for owner out-of-scope discovery; no records may be "
+        "created; not_applicable parity classification rejected while nav "
+        "route exists"
     )
     row["errors"] = [
         "AUTH_INTERACTION_REQUIRED",
         "UI_CHANGED",
-        "ANNUAL_REPORTS_ORG_INACCESSIBLE",
     ]
     row["qualification"] = {
-        "kind": "org_inaccessible",
-        "blocker_code": "ANNUAL_REPORTS_ORG_INACCESSIBLE",
+        "kind": "out_of_scope_by_user",
+        "scope_code": "ANNUAL_REPORTS_OWNER_SKIP",
+        "owner_decision_ref": "radio:DC3B8E96",
+        "owner_decision_date": "2026-08-04",
+        "tools_allowed": False,
+        "reason": ("Årsrapporter is not included in the owner Billy plan for this MCP deployment"),
         "not_applicable_decision": "rejected",
         "not_applicable_reason": (
-            "nav Årsrapporter and route family exist; Upsedasse is accessibility "
-            "failure for this test org, not absence of UI workflow"
+            "nav Årsrapporter and route family exist; owner skip is plan "
+            "scope, not absence of a Billy UI workflow"
         ),
-        "unlock_requirement": (
-            "Non-production Billy organisation (or Billy platform fix) where "
-            "mit.billy.dk/:org_slug/annual_reports dual-session renders a "
-            "non-Upsedasse annual-reports shell"
-        ),
-        "evidence_ref": "research191_annual_dual",
-        "prior_evidence_ref": "discovery122_summary_dual_saft.annual_reports",
-        "reconfirm_date": "2026-08-02",
-        "dual_login": "READY/READY",
-        "dual_judgment": "A1_UPSEDASSE_STAY_RED",
+        "prior_evidence_ref": "research191_annual_dual",
+        "historical_dual_ref": "discovery122_summary_dual_saft.annual_reports",
+        "historical_dual_judgment": "A1_UPSEDASSE_STAY_RED",
+        "supersedes_blocker_code": "ANNUAL_REPORTS_ORG_INACCESSIBLE",
     }
 
 
@@ -7637,7 +7628,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
         if family == "settings_subscription":
             apply_ui_settings_subscription_open_shell_evidence(row)
         if family == "annual_reports":
-            apply_ui_annual_reports_inaccessible_evidence(row)
+            apply_ui_annual_reports_out_of_scope_by_user(row)
         workflows.append(row)
 
     for api_row in api_manifest["operations"]:
@@ -7961,9 +7952,19 @@ def count_by(items: list[dict[str, Any]], key: str) -> dict[str, int]:
     return dict(sorted(counts.items()))
 
 
+def is_owner_out_of_scope(row: dict[str, Any]) -> bool:
+    """Return whether a row is excluded from qualification completeness by owner scope."""
+
+    qualification = row.get("qualification")
+    return isinstance(qualification, dict) and qualification.get("kind") == "out_of_scope_by_user"
+
+
 def row_is_qualified(row: dict[str, Any], fields: tuple[str, ...]) -> bool:
     """Return whether a row satisfies every qualification state for its lane."""
 
+    if is_owner_out_of_scope(row):
+        # Owner-scoped rows are non-blocking; do not require live/vision green cells.
+        return True
     return all(row.get(field) is True for field in fields)
 
 
@@ -7992,9 +7993,9 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
             "92 ambiguous_bulk rows stay red after official docs/asset exhaust "
             "(research137); no bulk tools; "
             "API live_tested stays false (out_of_scope_by_user); "
-            "UI live and vision qualification incomplete "
-            "(annual_reports org_inaccessible; product-plane UI bulk honesty "
-            "closed via dual-NA strong+soft+empty-list freezes)"
+            "UI annual_reports out_of_scope_by_user (owner radio:DC3B8E96); "
+            "product-plane UI bulk honesty closed via dual-NA strong+soft+"
+            "empty-list freezes"
         )
     if any(
         not row.get("implemented") or not row.get("contract_tested")
@@ -8002,8 +8003,8 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
         if row.get("source_kind") != "ambiguous_bulk"
     ):
         return "API offline implementation or contract evidence is incomplete"
-    if any(not row.get("live_tested") for row in ui_rows) or any(
-        row.get("vision_verified") is not True for row in ui_rows
+    if any(not row.get("live_tested") for row in ui_rows if not is_owner_out_of_scope(row)) or any(
+        row.get("vision_verified") is not True for row in ui_rows if not is_owner_out_of_scope(row)
     ):
         return (
             "UI interface live qualification and vision verification incomplete; "

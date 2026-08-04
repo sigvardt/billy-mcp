@@ -76,6 +76,18 @@ Qualification scope changed by the user on 2026-07-31:
   and elsewhere in this node definition. It does not reduce API implementation
   or offline contract coverage.
 
+Qualification scope changed by the user on 2026-08-04 (owner radio DC3B8E96):
+
+- Årsrapporter is not included in the owner Billy plan for this deployment.
+- Treat `ui.discovery.annual_reports` as machine-readable
+  `out_of_scope_by_user` (`scope_code=ANNUAL_REPORTS_OWNER_SKIP`). It is not a
+  completion blocker.
+- Do not invent `ui_annual_*` or `api_annual_*` tools. Do not classify the row
+  as UI `not_applicable` solely because the feature is plan-skipped (nav and
+  route still exist).
+- Do not re-open live dual reconfirm or live API tests for annual reports under
+  this scope decision.
+
 Work in this order:
 
 1. Generate the official API inventory before API implementation. Record every

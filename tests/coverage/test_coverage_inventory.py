@@ -483,7 +483,8 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
     assert status["qualification"]["live_tested_rows"] == 344
     assert status["qualification"]["vision_verified_rows"] == 344
     assert status["complete"] is False
-    assert "annual_reports org_inaccessible" in status["qualification"]["blocker"]
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -587,7 +588,8 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
     assert status["qualification"]["live_tested_rows"] == 344
     assert status["qualification"]["vision_verified_rows"] == 344
     assert status["complete"] is False
-    assert "annual_reports org_inaccessible" in status["qualification"]["blocker"]
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -683,7 +685,8 @@ def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
     assert status["qualification"]["live_tested_rows"] == 344
     assert status["qualification"]["vision_verified_rows"] == 344
     assert status["complete"] is False
-    assert "annual_reports org_inaccessible" in status["qualification"]["blocker"]
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -757,13 +760,14 @@ def test_ui_product_plane_bulk_chrome_dual_na_empty_list_rows() -> None:
     assert status["qualification"]["live_tested_rows"] == 344
     assert status["qualification"]["vision_verified_rows"] == 344
     assert status["complete"] is False
-    assert "annual_reports org_inaccessible" in status["qualification"]["blocker"]
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
 
-def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
-    """Dual Upsedasse keeps annual_reports red; not_applicable is rejected."""
+def test_annual_reports_owner_out_of_scope_by_user() -> None:
+    """Owner plan skip records annual_reports as out_of_scope_by_user without a tool."""
 
     _, ui_manifest, _, status, _ = documents()
     annual = next(
@@ -776,26 +780,33 @@ def test_annual_reports_inaccessible_decision_rejects_not_applicable() -> None:
     assert annual["contract_tested"] is False
     assert annual["live_tested"] is False
     assert annual["vision_verified"] is False
-    assert annual["parity_status"] == "discovery_required"
+    assert annual["parity_status"] == "out_of_scope_by_user"
     assert annual["parity_status"] != "not_applicable"
-    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["evidence"]
-    assert "not_applicable is rejected" in annual["evidence"]
-    assert "Upsedasse" in annual["evidence"]
+    assert "out_of_scope_by_user" in annual["evidence"]
+    assert "ANNUAL_REPORTS_OWNER_SKIP" in annual["evidence"]
+    assert "radio:DC3B8E96" in annual["evidence"]
+    assert "not_applicable rejected" in annual["evidence"]
     assert "research191" in annual["evidence"]
-    assert "research192" in annual["evidence"]
     assert "/:org_slug/annual_reports" in annual["method_or_route"]
-    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" in annual["errors"]
+    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" not in annual["errors"]
+    assert "ui_annual" not in (annual.get("tool_name") or "")
+    assert "api_annual" not in (annual.get("tool_name") or "")
     qual = annual["qualification"]
-    assert qual["kind"] == "org_inaccessible"
-    assert qual["blocker_code"] == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
+    assert qual["kind"] == "out_of_scope_by_user"
+    assert qual["scope_code"] == "ANNUAL_REPORTS_OWNER_SKIP"
+    assert qual["owner_decision_ref"] == "radio:DC3B8E96"
+    assert qual["tools_allowed"] is False
     assert qual["not_applicable_decision"] == "rejected"
-    assert qual.get("evidence_ref") == "research191_annual_dual"
-    assert qual.get("dual_judgment") == "A1_UPSEDASSE_STAY_RED"
-    assert "non-Upsedasse" in qual["unlock_requirement"]
+    assert qual.get("prior_evidence_ref") == "research191_annual_dual"
+    assert qual.get("supersedes_blocker_code") == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
+    assert generator.is_owner_out_of_scope(annual) is True
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in status["qualification"]["blocker"]
     assert "external-contract" in status["qualification"]["blocker"].lower() or (
         "External-contract" in status["qualification"]["blocker"]
     )
+    assert status["complete"] is False
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
@@ -1719,7 +1730,7 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
     assert workflows["ui.parity.files.get"]["parity_status"] == "not_applicable"
     assert workflows["ui.parity.special.files_upload"]["tool_name"] == "ui_uploads_list"
 
-    # research188 lifts attachments/files bulk to dual-NA; annual stays incomplete
+    # research188 lifts attachments/files bulk to dual-NA; annual is owner out-of-scope
     for bulk_id in (
         "ui.parity.attachments.bulk_save",
         "ui.parity.attachments.bulk_delete",

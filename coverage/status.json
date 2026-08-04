@@ -6,7 +6,7 @@
   },
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
-    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI live and vision qualification incomplete (annual_reports org_inaccessible; product-plane UI bulk honesty closed via dual-NA strong+soft+empty-list freezes)",
+    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI annual_reports out_of_scope_by_user (owner radio:DC3B8E96); product-plane UI bulk honesty closed via dual-NA strong+soft+empty-list freezes",
     "contract_tested_rows": 528,
     "implemented_rows": 528,
     "live_tested_rows": 344,

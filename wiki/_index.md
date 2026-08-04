@@ -41,7 +41,7 @@ updated: 2026-08-02T17:38:44Z
 
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
-[[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Dual-session Upsedasse freeze for mit.billy.dk annual_reports (research122 + research191 reconfirm); not_applicable rejected because nav exists; unlock requires non-Upsedasse shell.
+[[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Owner skip (radio DC3B8E96, 2026-08-04) marks ui.discovery.annual_reports out_of_scope_by_user; no tool; not_applicable rejected; historical dual Upsedasse retained.
 
 [[ui_attachments_get_create_update_delete_not_applicable|ui_attachments_get_create_update_delete_not_applicable]]: Dual-session research185 freeze — no equivalent mit.billy.dk get-detail, join-form create, update-form, or delete-chrome workflow for residual attachments ops; list stays dual-count green on Bilag; exact NA for get/create/update/delete only.
 
