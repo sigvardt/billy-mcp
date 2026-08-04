@@ -6,14 +6,25 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-04T10:50:00Z
+updated: 2026-08-04T10:55:00Z
 ---
 
 ## Current state
 
-- Continue iter3 SYNC: external walls only; **stop clean** (42B037CE).
+- Continue iter3 PREPARE: parent up to date; **0** mergeable children. Stop holds.
 - complete **false**. Walls bulk92+residual29. Annual owner-scoped.
 - Parent B5C1EBE3 residual/bulk scope still unanswered. Not finish.
+
+## PREPARE (continue iter3) (2026-08-04T10:55:00Z)
+
+- Parent `main`: fetch+merge **Already up to date**.
+- Unmerged child tips: **62** (product **1**, wiki **3**, scaffolding **58**).
+- Product-code `ui_auth_status`: three-dot +408 on early auth_status only; HEAD browser ~9572 vs tip ~376; auth_status + auth_login_start + auth_login_wait already on HEAD. Merge would regress. **Skip**.
+- Wiki-only (3): wave5t/wave5u pages already on HEAD. credentials_codex_fallback page missing but superseded by `auth_credentials_pre_submit_research.md` (STEER 8612433E wiki-only skip). **Skip all**.
+- Remaining 58: fractal scaffolding or review leaves only (zero non-fractal three-dot paths). **Skip**.
+- wave5j_bank_line_product: 7 tip commits but empty non-fractal three-dot. **Skip**.
+- No material integration. No outbox announce.
+- Node already `active (stopping)` from SYNC. Walls bulk92+residual29. Not complete:true.
 
 ## SYNC (continue iter3) (2026-08-04T10:50:00Z)
 
