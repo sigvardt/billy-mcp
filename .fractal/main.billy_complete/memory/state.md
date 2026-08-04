@@ -6,16 +6,24 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-04T10:46:20Z
+updated: 2026-08-04T10:47:00Z
 ---
 
 # state
 
 ## Current state
 
-- Continue iter2 pre-COMMIT. HOLD 189.2 ready (plan+memory).
-- complete **false**. Walls bulk92+residual29. COMMIT next. Not finish.
+- Continue iter2 COMMIT 189.2 done (`2ed8469`).
+- complete **false**. Walls bulk92+residual29. Annual owner-scoped.
+- Parent B5C1EBE3 residual/bulk scope still open. Not finish.
 
+
+## COMMIT (continue iter2 / 189.2) (2026-08-04T10:47:00Z)
+
+- research HOLD: docs fingerprint unchanged; no offline unlock
+- package: plan + memory only (no src/coverage/wiki product)
+- IR PASS package; FIX-VERIFY lint+1671 tests; STEER 8612433E / 7A4311C2 honored
+- sha `2ed8469`; complete false; walls bulk92 residual29; not node finish
 
 ## SYNC (pre-COMMIT continue iter2) (2026-08-04T10:46:20Z)
 
