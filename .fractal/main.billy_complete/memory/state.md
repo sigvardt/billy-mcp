@@ -6,17 +6,115 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-29T09:56:00Z
-updated: 2026-08-03T15:36:39Z
+updated: 2026-08-04T10:46:20Z
 ---
 
 # state
 
 ## Current state
 
-- PREPARE no-op; parent up to date; 0 mergeable children.
-- Walls bulk **92**, residual **29**, annual **1**. complete **false**. **528** / **344**.
-- Node **stopping** after PREPARE (resume: no product/contract slice).
+- Continue iter2 pre-COMMIT. HOLD 189.2 ready (plan+memory).
+- complete **false**. Walls bulk92+residual29. COMMIT next. Not finish.
 
+
+## SYNC (pre-COMMIT continue iter2) (2026-08-04T10:46:20Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- FIX-VERIFY clean (lint+1671). Uncommitted: memory + plan 189.2 HOLD. COMMIT next.
+
+## FIX-VERIFY (continue iter2 / 189.2) (2026-08-04T10:46:00Z)
+
+- IR required fixes: none (confirmed)
+- product tree still clean vs `6fe4ac9`
+- lint.sh: pass
+- test.sh: **1671 passed**, 54 deselected
+- wiki lint project+memory: clean
+- complete false 528/344; walls bulk92 residual29
+- plan post-mortem appended
+- Ready COMMIT; not node finish
+
+## SYNC (pre-FIX-VERIFY continue iter2) (2026-08-04T10:35:30Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- IR package PASS, zero fixes; FIX-VERIFY next for HOLD 189.2.
+
+## IR (continue iter2 / 189.2) (2026-08-04T10:35:15Z)
+
+- Package HOLD research: **PASS**. Required package fixes: **none**.
+- Node complete: **FAIL** (expected walls bulk92+residual29).
+- Product tree empty vs `6fe4ac9`; no greening; API live_tested greening not observed.
+- Report: tmp/grok-review.md
+- Next: FIX-VERIFY then COMMIT plan+memory; not complete:true.
+
+## SYNC (pre-IR continue iter2) (2026-08-04T10:34:28Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- Parent B5C1EBE3 residual/bulk owner-scope: still no reply.
+- EXECUTE HOLD package ready (plan+memory only). IR next.
+
+## EXECUTE (continue iter2 / 189.2) (2026-08-04T10:33:59Z)
+
+- HOLD product no-op honored vs HEAD `6fe4ac9`
+- empty product tree (src/coverage/wiki/tests/scripts)
+- complete false 528/344; walls bulk92 residual29; annual owner-scoped
+- parent residual/bulk scope still unanswered (B5C1EBE3)
+- STEER 8612433E / 7A4311C2; not finish
+- IR next
+
+## SYNC (pre-EXECUTE continue iter2) (2026-08-04T10:33:32Z)
+
+- Inbox/feed unread empty; private 9B88E145 reacted; saved empty.
+- Parent B5C1EBE3 owner residual/bulk scope: **no reply yet** (0 thread replies).
+- Plan 189.2 HOLD still binding. EXECUTE HOLD next (no invent owner-scope).
+
+## PLAN (continue iter2 / 189.2) (2026-08-04T10:33:14Z)
+
+- Plan: `plans/2026-08-04T10:32:50.850Z-189.2-hold_external_walls.md`
+- Slice: **HOLD product** (research authority; walls bulk92+residual29)
+- No children; no greening; wait parent B5C1EBE3 for residual/bulk owner-scope
+- EXECUTE next: confirm empty product tree + invariants
+
+## SYNC (pre-PLAN continue iter2) (2026-08-04T10:32:40Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- RESEARCH HOLD ready; docs lock unchanged; walls bulk92+residual29.
+- Outbox research status + parent P6 owner-scope ask (residual/bulk).
+- PLAN next: HOLD product. Not finish.
+
+## RESEARCH (continue iter2) (2026-08-04T10:32:12Z)
+
+- Brief: `.fractal/main.billy_complete/tmp/grok-research.md`
+- Docs re-check only: MD5 `8b94b0135c91fd15fe54ea33e088a4be` ETag `wcw4x9hqvu3603` **unchanged**; OpenAPI probes 404.
+- UI incomplete (non-owner): **0**. Walls: **bulk92** + **residual29** only.
+- Recommended: **HOLD product** (no greening). Optional parent escalate owner-scope residual/bulk for offline complete.
+- Steers 8612433E / 7A4311C2 honored. Not finish. PLAN next.
+
+## SYNC (pre-RESEARCH continue iter2) (2026-08-04T10:29:29Z)
+
+- Inbox/feed unread empty; private 6D6126A9 self-note reacted; saved empty.
+- PREPARE just ran: parent no-op, 0 mergeable children.
+- HEAD `6fe4ac9`; complete false; 528/344; walls bulk92+residual29.
+- Steers 8612433E / 7A4311C2: no wiki-only / no-op docs HOLD churn.
+- RESEARCH next: seek concrete product or new official offline bulk unlock only; do not re-lock docs fingerprint for HOLD churn.
+
+## PREPARE (continue iter2) (2026-08-04T10:28:57Z)
+
+- Parent `main`: already up to date (fetch+merge no-op).
+- Unmerged child tips: **62** (product **1**, wiki **3**, scaffolding **58**).
+- Product-code `ui_auth_status`: three-dot adds early `auth_status` only; HEAD already has evolved `auth_status` + `auth_login_start` + `auth_login_wait`. Merge would regress. **Skip**.
+- Wiki-only (3): `wave5t_ui_auth_discovery_fallback`, `wave5u_probe_contract_codex_fallback` pages already on HEAD. `ui_auth_credentials_research_codex_fallback` missing page is research-only (STEER 8612433E wiki-only skip). **Skip all**.
+- Remaining 58: fractal scaffolding or review leaves only. **Skip**.
+- No material integration. No outbox announce.
+- Walls still bulk92 + residual29. complete false. RESEARCH/PLAN next only if concrete unlock; else HOLD without churn.
+
+## SYNC (continue iter2) (2026-08-04T10:27:54Z)
+
+- Inbox/feed/private unread empty; saved empty.
+- HEAD `6fe4ac9` (189.1 annual owner skip) clean; origin up to date.
+- Coverage: complete **false**; 528/528; UI live/vision **344**/344; annual `out_of_scope_by_user`.
+- Walls remaining: **bulk92** + **residual29** only.
+- Steers 8612433E + 7A4311C2: no wiki-only / no-op docs HOLD churn.
+- No product unlock this SYNC. PREPARE next. Not finish.
 
 ## COMMIT (iter 110 / 186.110) (2026-08-03T14:41:00Z)
 
