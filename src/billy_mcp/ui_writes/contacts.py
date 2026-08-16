@@ -16,6 +16,7 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.browser_submit import default_browser_runtime
+from billy_mcp.ui_writes.contacts_persist import execute_rename_save, persist_error_from_isolate
 from billy_mcp.ui_writes.page_flow import prove_text_on_fresh_page
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
@@ -110,6 +111,22 @@ class _Locator(Protocol):
 
     async def press_sequentially(self, text: str) -> None: ...
 
+    async def input_value(self) -> str: ...
+
+    async def is_disabled(self) -> bool: ...
+
+    async def bounding_box(self) -> dict[str, float] | None: ...
+
+
+class _Keyboard(Protocol):
+    async def press(self, key: str) -> None: ...
+
+    async def type(self, text: str) -> None: ...
+
+
+class _Mouse(Protocol):
+    async def click(self, x: float, y: float) -> None: ...
+
 
 class _Page(Protocol):
     @property
@@ -122,6 +139,16 @@ class _Page(Protocol):
     def get_by_role(self, role: str, *, name: re.Pattern[str]) -> _Locator: ...
 
     def get_by_text(self, text: str, *, exact: bool = False) -> _Locator: ...
+
+    def on(self, event: str, handler: object) -> None: ...
+
+    @property
+    def keyboard(self) -> _Keyboard: ...
+
+    @property
+    def mouse(self) -> _Mouse: ...
+
+    async def evaluate(self, expression: str, arg: object | None = None) -> object: ...
 
     async def close(self) -> None: ...
 
@@ -459,90 +486,12 @@ async def _goto_clients(page: _Page, slug: str) -> None:
     await _settle(page)
 
 
-_NAME_FORM_SAVE_JS = """el => {
-  const isGem = (node) => {
-    const text = (node.innerText || node.value || node.getAttribute('aria-label') || '')
-      .trim().split(/\\n/)[0];
-    return text === 'Gem' || text === 'Gem ændringer';
-  };
-  let root = el.parentElement;
-  while (root) {
-    const controls = root.querySelectorAll('button, a, [role="button"], input[type="submit"]');
-    for (const control of controls) {
-      if (!isGem(control)) continue;
-      const style = window.getComputedStyle(control);
-      const rect = control.getBoundingClientRect();
-      if (style.display === 'none' || style.visibility === 'hidden' || rect.width === 0) {
-        continue;
-      }
-      control.click();
-      return true;
-    }
-    root = root.parentElement;
-  }
-  return false;
-}"""
-
-
-_NAME_FORM_GEM_XPATH = (
-    "xpath=//input[@name='name']/ancestor::*[.//*[(self::button or self::a or @role='button')"
-    " and normalize-space()='Gem']][1]//*[(self::button or self::a or @role='button')"
-    " and normalize-space()='Gem']"
-)
-_NAME_FORM_GEM_AENDRINGER_XPATH = (
-    "xpath=//input[@name='name']/ancestor::*[.//*[(self::button or self::a or @role='button')"
-    " and normalize-space()='Gem ændringer']][1]"
-    "//*[(self::button or self::a or @role='button') and normalize-space()='Gem ændringer']"
-)
-
-
-async def _click_name_form_save(page: _Page) -> bool:
-    """Click the Gem that shares a container with input[name=name]. Skip decoys."""
-
-    save_button = page.locator("button[data-cy='save-button']")
-    try:
-        if await save_button.count() >= 1 and await save_button.first.is_visible():
-            await save_button.first.click()
-            await _settle(page)
-            return True
-    except Exception:
-        pass
-    for selector in (_NAME_FORM_GEM_XPATH, _NAME_FORM_GEM_AENDRINGER_XPATH):
-        locator = page.locator(selector)
-        try:
-            if await locator.count() >= 1 and await locator.first.is_visible():
-                await locator.first.click()
-                await _settle(page)
-                return True
-        except Exception:
-            continue
-    field = page.locator(_NAME)
-    try:
-        if await field.count() < 1 or not await field.first.is_visible():
-            return False
-        clicked = await field.first.evaluate(_NAME_FORM_SAVE_JS)
-    except Exception:
-        return False
-    if clicked:
-        await _settle(page)
-        return True
-    return False
-
-
 async def _click_dialog_save(page: _Page) -> bool:
     """Click the create-dialog Gem. Never match Gem kommentar via substring."""
 
     return await _click_exact_label(page, "Gem ændringer") or await _click_exact_label(
         page, "Gem", reverse=True
     )
-
-
-async def _click_save(page: _Page) -> bool:
-    """Click the customer-page save control. Prefer data-cy=save-button."""
-
-    if await _click_name_form_save(page):
-        return True
-    return await _click_dialog_save(page)
 
 
 async def _click_visible(
@@ -657,21 +606,6 @@ async def _wait_and_click(page: _Page, label: str) -> bool:
             return True
         await asyncio.sleep(0.25)
     return False
-
-
-async def _press_name_field(page: _Page, key: str) -> None:
-    field = page.locator(_NAME)
-    try:
-        await field.first.press(key)
-    except Exception:
-        return
-
-
-async def _commit_name_field(page: _Page) -> None:
-    """Leave the name field so Billy enables the real save control."""
-
-    await _press_name_field(page, "Tab")
-    await _settle(page)
 
 
 async def _fill_name(page: _Page, value: str) -> bool:
@@ -816,22 +750,23 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
             code=StableErrorCode.UI_CHANGED,
             message="Billy customer name field is not visible.",
         )
-    await _commit_name_field(page)
-    if not await _click_save(page):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy save control is not visible.",
-        )
-    await _settle(page)
+
+    async def _after_click() -> None:
+        await _settle(page)
+
+    isolated = await execute_rename_save(
+        page, old_name=name, new_name=new_name, settle=_after_click
+    )
+    if isinstance(isolated, ToolError):
+        return isolated
     await _goto_clients(page, slug)
     for _ in range(8):
         await _search_name(page, new_name)
         if await page.get_by_text(new_name, exact=True).count() >= 1:
             return {"ok": True}
         await asyncio.sleep(0.5)
-    return ToolError(
-        code=StableErrorCode.NOT_FOUND,
-        message="Billy customer rename was not visible on the list after save.",
+    return persist_error_from_isolate(
+        "Billy customer rename was not visible on the list after save.", isolated
     )
 
 

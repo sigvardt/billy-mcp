@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import asyncio
 import atexit
+import json
 import os
 import secrets
 import shutil
@@ -38,6 +39,9 @@ _VISION_RECORD = _REPO_ROOT / "tmp" / "vision-records" / "ui_contacts_writes.jso
 _BLOCKER_PATH = (
     _REPO_ROOT / ".fractal" / "main.billy_complete" / "tmp" / "live-contacts-writes-blocker.txt"
 )
+_ISOLATE_DUMP = (
+    _REPO_ROOT / ".fractal" / "main.billy_complete" / "tmp" / "inspect-live-persist-isolate.json"
+)
 
 
 def _credentials_configured() -> bool:
@@ -50,6 +54,14 @@ def _credentials_configured() -> bool:
 def _record_blocker(reason: str) -> None:
     _BLOCKER_PATH.parent.mkdir(parents=True, exist_ok=True)
     _BLOCKER_PATH.write_text(reason.strip() + "\n", encoding="utf-8")
+
+
+def _write_isolate_dump(payload: object) -> None:
+    _ISOLATE_DUMP.parent.mkdir(parents=True, exist_ok=True)
+    text = json.dumps(payload, default=str, indent=2)
+    if "token" in text.lower() or "password" in text.lower():
+        text = json.dumps({"redacted": True}, indent=2)
+    _ISOLATE_DUMP.write_text(text[:20000] + "\n", encoding="utf-8")
 
 
 def _require_live_credentials() -> None:
@@ -219,8 +231,10 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             {"confirmation_ticket": preview_update["confirmation_ticket"]},
         )
         if updated_result.get("code"):
+            _write_isolate_dump(updated_result.get("details") or updated_result)
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
+        _write_isolate_dump({"submitted": True, "code": None})
         assert updated_result["submitted"] is True
         await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
         assert await _list_has_name(observer, slug, updated) is True

@@ -63,8 +63,11 @@ Read-back treats `{tag}-U` as a different name from `{tag}`. Live create through
 FastMCP still submits and a second session sees the exact name. The live save
 control is `button[data-cy='save-button']` (Ember action, text **Gem**). The
 edit form stays open after that click. List exact-name is the persist proof.
-Live FastMCP update still does not show `{tag}-U` on the list. No
-`MCP-UI-C-*` leftovers remain. Coverage stays red.
+Live FastMCP update still does not persist. Pointer proof: save-button is
+visible, enabled, hit target `save-button`, Playwright `mouse.click` at
+the box center, no console errors. After that click there is still no
+Billy XHR. Isolate is evidence, not a pass. No `MCP-UI-C-*` leftovers.
+Coverage stays red.
 
 ## Review
 

@@ -36,9 +36,13 @@ not mark those rows live or complete.
 Create opens from `/:org_slug/clients` or `/:org_slug/clients/empty` after
 **Opret kontakt**. List heading may be **Kunder** or **Kontakter**. Update clicks
 the button whose text is exactly **Ret**, never a substring that matches
-**Opret**. Save is `button[data-cy='save-button']` (visible text **Gem**), never
-**Gem kommentar**. The customer edit form may stay open after a real save.
-List exact-name read-back is the persist proof.
+**Opret**. Save is a real Playwright pointer click on
+`button[data-cy='save-button']` (visible text **Gem**), never
+**Gem kommentar** and never a DOM `evaluate` click. Before that click the
+helper records the box, visibility, enabled state, and the hit target at the
+button center. An overlay or other hit target fails closed. The customer edit
+form may stay open after a real save. List exact-name read-back is the persist
+proof.
 Delete is exact **Mere**, then the **Slet kontakt** link, then **Ja, slet** (or **Slet**). Never **Arkivér**.
 Customers are located by unique tagged name, not an API id. Inputs are flat.
 There is no nested `input` object. Extra fields are rejected.

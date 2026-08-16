@@ -8,6 +8,8 @@ sources:
   - radio:E1E454F4
   - radio:4E471870
   - radio:E613984F
+  - radio:B50FBDAD
+  - radio:D42EAAA6
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -27,6 +29,10 @@ updated: 2026-08-16T13:50:50Z
 `4E471870` (done, unsaved): do not green from unarmed execute. `create_server` now passes the shared `BrowserRuntime` and requires `organization_id`.
 
 `5018B3FA` (done, unsaved): start-only execute is a false submit. The default path now performs the family action before `submitted=True`. That is not enough for live qualification.
+
+`D42EAAA6` (saved): isolate dump is evidence, not a pass. Do not change the name input. Prove a real Playwright pointer click reaches `button[data-cy='save-button']`: bounding box, visibility, enabled, hit target or overlay, console errors, and post-click event or navigation. Do not use DOM `evaluate` click as qualification. Fail closed. Keep coverage red. Keep cleanup proof.
+
+`B50FBDAD` (saved): do not repeat the same fill-and-click for live contact update. Capture the exact name input value, save-button disabled state, and visible validation or error before and after submit. If the field value did not reach Ember, use a real keyboard select-all and type plus blur or change. Click only `button[data-cy='save-button']`. If the value is correct and save still fails, inspect the interface response and visible error. No API. Keep coverage red. Clean the tagged record. Superseded for the next live click by `D42EAAA6` on pointer delivery.
 
 `E613984F` (saved): execute compares the live URL slug to `prepared.binding.organization_id` and fails closed on mismatch. Contacts no longer use a stored identity file for that compare. Read-back starts a second runtime. A blank `-readback` profile is not a live second session; authenticate it (`E1E454F4`) before live proof. Cleanup still needs a third fresh read-back. Keep coverage red.
 

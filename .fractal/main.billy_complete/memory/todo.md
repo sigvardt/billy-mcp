@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live contacts update: `button[data-cy='save-button']` is the commit control, but the list does not show `{tag}-U`. Bind the Ember name, then delete through `call_tool`, third-session cleanup, independent accept. Do not green until that proof.
+- Live persist after a proved pointer click: the save-button is reachable and was clicked. No Billy XHR followed. Next slice must find why Ember does not save, without changing the name input or using evaluate-click. Then delete, third-session cleanup, independent accept. Do not green.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
