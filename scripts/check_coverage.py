@@ -448,12 +448,12 @@ def require_complete_errors(
 
 
 def execute_twin_names(planned_tools: set[str]) -> set[str]:
-    """Return non-inventory execute companions for documented API write previews."""
+    """Return non-inventory execute companions for documented write previews."""
 
     return {
         f"{tool_name.removesuffix('_preview')}_execute"
         for tool_name in planned_tools
-        if tool_name.startswith("api_") and tool_name.endswith("_preview")
+        if tool_name.startswith(("api_", "ui_")) and tool_name.endswith("_preview")
     }
 
 

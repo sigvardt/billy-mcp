@@ -237,6 +237,14 @@ from billy_mcp.models import (
     UiVatDeclarationsListInput,
     UiVatDeclarationsListSuccess,
 )
+from billy_mcp.ui_writes.bills import register_ui_bill_write_tools
+from billy_mcp.ui_writes.contacts import register_ui_contact_write_tools
+from billy_mcp.ui_writes.files import register_ui_file_write_tools
+from billy_mcp.ui_writes.invoices import register_ui_invoice_write_tools
+from billy_mcp.ui_writes.ledger import register_ui_ledger_write_tools
+from billy_mcp.ui_writes.organizations import register_ui_organization_write_tools
+from billy_mcp.ui_writes.products import register_ui_product_write_tools
+from billy_mcp.ui_writes.protocol import UiWriteProtocol
 
 
 def create_server(
@@ -306,6 +314,7 @@ def create_server(
     client = BillyHttpClient(configuration.resolve_api_token)
     confirmations = ConfirmationStore()
     write_protocol = WriteProtocolService(client, confirmations)
+    ui_write_protocol = UiWriteProtocol(confirmations)
     browser = BrowserRuntime(
         configuration.browser_profile,
         credential_references=configuration.browser_credentials,
@@ -1182,6 +1191,13 @@ def create_server(
     register_organization_write_tools(server, client, write_protocol)
     register_user_write_tools(server, client, write_protocol)
     register_sales_tax_return_write_tools(server, client, write_protocol)
+    register_ui_contact_write_tools(server, ui_write_protocol)
+    register_ui_bill_write_tools(server, ui_write_protocol)
+    register_ui_invoice_write_tools(server, ui_write_protocol)
+    register_ui_product_write_tools(server, ui_write_protocol)
+    register_ui_ledger_write_tools(server, ui_write_protocol)
+    register_ui_file_write_tools(server, ui_write_protocol)
+    register_ui_organization_write_tools(server, ui_write_protocol)
     return server
 
 

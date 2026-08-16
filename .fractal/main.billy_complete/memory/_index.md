@@ -4,12 +4,16 @@ desc: Private working state and durable review decisions for billy_complete.
 tags: []
 sources: []
 created: 2026-07-29T07:56:19Z
-updated: 2026-07-31T12:05:05Z
+updated: 2026-08-16T13:50:50Z
 ---
 
 # memory
 
-[[state|state]]: Current node state, verified review decisions, and open qualification work.
+[[decisions|decisions]]: Binding owner scope and qualification decisions for this node.
+
+[[state|state]]: Current node state for the Billy MCP complete run.
+
+[[todo|todo]]: Open product work for the UI write lane.
 
 ***
 

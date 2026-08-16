@@ -914,6 +914,35 @@ SINGULAR_ROOT_KEY_OVERRIDES = {
 API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested", "live_tested")
 UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
 
+# Owner 96908DC6 / E004E7D5: open-only chrome is not a finished CUD write.
+UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS: frozenset[str] = frozenset(
+    {
+        "ui.parity.bills.create",
+        "ui.parity.bills.update",
+        "ui.parity.bills.delete",
+        "ui.parity.contacts.create",
+        "ui.parity.contacts.update",
+        "ui.parity.contacts.delete",
+        "ui.parity.daybooks.create",
+        "ui.parity.daybooks.delete",
+        "ui.parity.daybookTransactions.create",
+        "ui.parity.files.create",
+        "ui.parity.invoices.create",
+        "ui.parity.invoices.update",
+        "ui.parity.invoices.delete",
+        "ui.parity.organizations.update",
+        "ui.parity.products.create",
+        "ui.parity.transactions.create",
+    }
+)
+OPEN_ONLY_PARITY_STATUSES: frozenset[str] = frozenset(
+    {
+        "form_open_only",
+        "create_chrome_open_only",
+        "delete_chrome_open_only",
+    }
+)
+
 # The inventory is generated from this narrow, source-controlled map rather
 # than hand-editing checked-in generated artifacts. Each entry is a real module
 # contract suite plus the root registry assertion that exposes the tool.
@@ -1895,6 +1924,45 @@ def ui_bulk_parity_discovery_required_qualification(
             "dual bulk-chrome not run."
         ),
     }
+
+
+def apply_ui_cud_parity_open_only_honesty(workflows: list[dict[str, Any]]) -> None:
+    """Stop treating open-only CUD parity chrome as implemented live writes.
+
+    Keeps discovered and open-form contract_tested. Leaves tool_name on the
+    existing *_open / list / shell tool until a preview tool exists.
+    """
+
+    if len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS) != 16:
+        raise RuntimeError(
+            "UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS must be exactly 16 "
+            f"(got {len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)})"
+        )
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        if row_id not in UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS:
+            continue
+        seen.add(row_id)
+        if row.get("parity_status") not in OPEN_ONLY_PARITY_STATUSES:
+            raise RuntimeError(
+                f"{row_id} honesty requires an open-only parity_status, "
+                f"got {row.get('parity_status')!r}"
+            )
+        row["implemented"] = False
+        row["live_tested"] = False
+        row["vision_verified"] = False
+        prior = str(row.get("evidence") or "").strip()
+        honesty = (
+            "owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome "
+            "is not a finished create/update/delete write; implemented and "
+            "live_tested stay false until ui_*_preview + ui_*_execute exist"
+        )
+        if honesty not in prior:
+            row["evidence"] = f"{prior}; {honesty}" if prior else honesty
+    missing = UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS - seen
+    if missing:
+        raise RuntimeError(f"CUD parity honesty missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7744,6 +7812,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_product_plane_bulk_chrome_dual_na_strong(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_empty_list(workflows)
+    apply_ui_cud_parity_open_only_honesty(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",

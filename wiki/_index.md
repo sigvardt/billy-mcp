@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-02T17:38:44Z
+updated: 2026-08-16T14:05:51Z
 ---
 
 # billy_mcp
@@ -182,6 +182,8 @@ updated: 2026-08-02T17:38:44Z
 [[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list Bilag shell; dual-counts special.files_upload, attachments.list, and files.create open only.
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
+
+[[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 
