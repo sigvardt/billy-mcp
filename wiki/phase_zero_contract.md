@@ -37,6 +37,11 @@ exist, and then require the checker to enforce row-level completeness. A regular
 offline test run can validate only the implemented slice; it is never evidence
 that the complete product is qualified.
 
+`BILLY_TEST_MODE=ui-full` is the owner completion gate for this node: the full
+offline API suite plus live UI and vision tests, with no live API traffic
+(`pytest -m "not live_api"`), then `--require-complete` and repository policy
+`--release`. It must not be treated as passing while coverage is incomplete.
+
 The coverage status is generated evidence, never an operator-maintained success
 switch. A complete report requires every applicable API row to have discovery,
 implementation, contract, and dedicated non-production live evidence; every

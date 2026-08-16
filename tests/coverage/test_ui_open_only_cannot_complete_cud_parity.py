@@ -1,4 +1,4 @@
-"""Open-only UI chrome cannot complete create/update/delete parity rows."""
+"""Durable CUD parity invariant: open-only chrome cannot green a write row."""
 
 from __future__ import annotations
 
@@ -6,6 +6,7 @@ import importlib.util
 import sys
 from pathlib import Path
 from types import ModuleType
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[2]
 SCRIPTS = ROOT / "scripts"
@@ -41,6 +42,8 @@ CUD_PARITY_IDS = frozenset(
     }
 )
 
+GREEN_FIELDS = ("implemented", "live_tested", "vision_verified")
+
 
 def _load_script_module(name: str) -> ModuleType:
     spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
@@ -55,34 +58,46 @@ def _load_script_module(name: str) -> ModuleType:
 checker = _load_script_module("check_coverage")
 
 
-def test_open_only_tools_cannot_complete_cud_parity_rows() -> None:
-    """Owner 96908DC6 / E004E7D5: open-only chrome is not a finished write."""
+def _tool_is_open_only(tool_name: str) -> bool:
+    if not tool_name:
+        return True
+    return tool_name.endswith(("_open", "_list")) or not tool_name.endswith("_preview")
+
+
+def _is_green(row: dict[str, Any]) -> bool:
+    return all(row.get(field) is True for field in GREEN_FIELDS)
+
+
+def test_cud_parity_green_requires_preview_and_execute_twin() -> None:
+    """Owner EE0A0F1B: green CUD parity needs preview + registered execute twin.
+
+    Open-only status or open/list tool can never set implemented, live_tested,
+    or vision_verified. This is the same test that first went red on the 16
+    false-green rows. Do not delete it when write tools land.
+    """
 
     ui_manifest = checker.load_document(ROOT / "coverage" / "ui_workflows_manifest.yaml")
     rows = {str(row["id"]): row for row in ui_manifest["workflows"]}
     missing = sorted(CUD_PARITY_IDS - set(rows))
     assert missing == [], f"gate set missing from UI manifest: {missing}"
+    registered = checker.registered_domain_tools(ROOT)
 
-    false_complete: list[str] = []
+    violations: list[str] = []
     for row_id in sorted(CUD_PARITY_IDS):
         row = rows[row_id]
-        if row.get("parity_status") not in OPEN_ONLY_STATUSES:
+        tool_name = str(row.get("tool_name") or "")
+        open_only = row.get("parity_status") in OPEN_ONLY_STATUSES or _tool_is_open_only(tool_name)
+        if open_only:
+            for field in GREEN_FIELDS:
+                if row.get(field) is True:
+                    violations.append(f"{row_id}: open-only {field}=true tool={tool_name}")
             continue
-        if row.get("implemented") is True and row.get("live_tested") is True:
-            false_complete.append(row_id)
-    assert false_complete == [], (
-        "open-only CUD parity rows must not be implemented and live_tested: "
-        + ", ".join(false_complete)
-    )
-
-
-def test_no_ui_preview_or_execute_tools_are_registered() -> None:
-    """The 52 ui_* tools are open/list/shell only until write children land."""
-
-    registered = checker.registered_domain_tools(ROOT)
-    ui_write_tools = sorted(
-        name
-        for name in registered
-        if name.startswith("ui_") and name.endswith(("_preview", "_execute"))
-    )
-    assert ui_write_tools == []
+        if not _is_green(row):
+            continue
+        if not tool_name.endswith("_preview"):
+            violations.append(f"{row_id}: green without preview tool ({tool_name})")
+            continue
+        execute_name = f"{tool_name.removesuffix('_preview')}_execute"
+        if execute_name not in registered:
+            violations.append(f"{row_id}: missing execute twin {execute_name}")
+    assert violations == [], "CUD parity invariant failed: " + "; ".join(violations)

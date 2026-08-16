@@ -40,6 +40,7 @@ asyncio_mode = "auto"
 markers = [
   "live: requires the dedicated non-production Billy organisation",
   "vision: requires headless rendered-frame review by Grok",
+  "live_api: credentialed Billy HTTP API traffic (forbidden in ui-full)",
 ]
 testpaths = ["tests"]
 
