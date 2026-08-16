@@ -5,3 +5,7 @@ set -euo pipefail
 # -----------------------------------------------------------------
 
 # No-op by default; extend per node with the project's test command.
+
+WORKTREE_DIR="$(git rev-parse --show-toplevel)"
+cd "$WORKTREE_DIR"
+uv run pytest tests/unit/test_ui_contacts_writes.py -q
