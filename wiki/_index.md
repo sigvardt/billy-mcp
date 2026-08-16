@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-16T14:05:51Z
+updated: 2026-08-16T14:30:55Z
 ---
 
 # billy_mcp
@@ -112,6 +112,8 @@ updated: 2026-08-16T14:05:51Z
 [[ui_invoices_list_shell|ui_invoices_list_shell]]: Read-only headless ui_invoices_list contract for Billy invoices list shell open only.
 
 [[ui_invoices_update_open_shell|ui_invoices_update_open_shell]]: Read-only headless ui_invoices_update_open contract for Billy invoice draft edit form open only (research174).
+
+[[ui_ledger_writes|ui_ledger_writes]]: Ticketed UI ledger preview and execute tools, fail-closed submit rules, and cleanup order.
 
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.
 
