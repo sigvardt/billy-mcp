@@ -5,3 +5,4 @@ set -euo pipefail
 # -----------------------------------------------------------------
 
 # No-op by default; extend per node with the project's test command.
+uv run pytest tests/unit/test_ui_products_writes.py -q

@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-16T14:05:51Z
+updated: 2026-08-16T14:31:10Z
 ---
 
 # billy_mcp
@@ -136,6 +136,8 @@ updated: 2026-08-16T14:05:51Z
 [[ui_products_import_shell|ui_products_import_shell]]: Read-only headless ui_products_import contract for Billy products CSV import shell open only.
 
 [[ui_products_list_shell|ui_products_list_shell]]: Read-only headless ui_products_list contract for Billy products list shell open only.
+
+[[ui_products_writes|ui_products_writes]]: Ticketed UI product create preview and execute. No coverage greening.
 
 [[ui_quotes_list_shell|ui_quotes_list_shell]]: Read-only headless ui_quotes_list contract for Billy quotes list shell open only.
 
