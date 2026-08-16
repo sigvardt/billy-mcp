@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-16T14:05:51Z
+updated: 2026-08-16T14:32:02Z
 ---
 
 # billy_mcp
@@ -90,6 +90,8 @@ updated: 2026-08-16T14:05:51Z
 [[ui_exports_open_shell|ui_exports_open_shell]]: Read-only Billy exports (Eksportér data) hub shell contract (research121 freeze).
 
 [[ui_files_list_get_not_applicable_research184|ui_files_list_get_not_applicable_research184]]: Dual-session research184 freeze — api.files.list and api.files.get have no dedicated mit.billy.dk workflow; Bilag is attachments inventory not files list.
+
+[[ui_files_writes|ui_files_writes]]: Ticketed ui_files_create preview and execute. Path and digest bound. Live submit held.
 
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
