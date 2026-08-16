@@ -1073,6 +1073,23 @@ class BrowserRuntime:
         self._playwright_stopper: Callable[[], Awaitable[None]] | None = None
         self._lock = asyncio.Lock()
 
+    @property
+    def profile_path(self) -> Path:
+        """Resolved persistent profile directory. Never a repository path."""
+
+        return self._profile_path
+
+    def independent_readback_runtime(self) -> BrowserRuntime:
+        """Return a second persistent profile that does not share this session."""
+
+        return BrowserRuntime(
+            self._profile_path.with_name(f"{self._profile_path.name}-readback"),
+            egress_manifest_path=self._egress_manifest_path,
+            credential_references=self._credential_references,
+            credential_resolver=self._credential_resolver,
+            org_identity_path=self._org_identity_path,
+        )
+
     async def start(self) -> PersistentContext:
         """Launch exactly one persistent context with headless mode forced on."""
 

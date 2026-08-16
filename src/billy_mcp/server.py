@@ -319,6 +319,7 @@ def create_server(
         configuration.browser_profile,
         credential_references=configuration.browser_credentials,
     )
+    readback_browser = browser.independent_readback_runtime()
     checker = auth_status_checker or browser
     login_service = auth_login_service or browser
     invoices_list_service = ui_invoices_list_service or browser
@@ -1191,13 +1192,27 @@ def create_server(
     register_organization_write_tools(server, client, write_protocol)
     register_user_write_tools(server, client, write_protocol)
     register_sales_tax_return_write_tools(server, client, write_protocol)
-    register_ui_contact_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_bill_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_invoice_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_product_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_ledger_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_file_write_tools(server, ui_write_protocol, runtime=browser)
-    register_ui_organization_write_tools(server, ui_write_protocol, runtime=browser)
+    register_ui_contact_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_bill_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_invoice_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_product_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_ledger_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_file_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
+    register_ui_organization_write_tools(
+        server, ui_write_protocol, runtime=browser, readback_runtime=readback_browser
+    )
     return server
 
 

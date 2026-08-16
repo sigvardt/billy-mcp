@@ -85,8 +85,13 @@ class OrganizationUiSubmitter(Protocol):
 class BrowserOrganizationSubmitter:
     """Default production submitter. Company phone only. Enters BrowserRuntime first."""
 
-    def __init__(self, runtime: BrowserRuntime) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        readback_runtime: BrowserRuntime | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
 
     async def submit(self, prepared: UiWritePrepared) -> UiOrganizationUpdateResult | ToolError:
         phone = str(prepared.canonical_request.get("phone") or "")
@@ -99,6 +104,8 @@ class BrowserOrganizationSubmitter:
                 readback_path="settings",
                 readback_text=phone,
             ),
+            organization_id=str(prepared.binding.organization_id or ""),
+            readback_runtime=self._readback_runtime,
         )
         if failed is not None:
             return failed
@@ -132,13 +139,14 @@ def register_ui_organization_write_tools(
     *,
     submitter: OrganizationUiSubmitter | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register UI organization update preview and execute tools."""
 
     if submitter is not None:
         actor: OrganizationUiSubmitter | None = submitter
     elif runtime is not None:
-        actor = BrowserOrganizationSubmitter(runtime)
+        actor = BrowserOrganizationSubmitter(runtime, readback_runtime)
     else:
         actor = None
 

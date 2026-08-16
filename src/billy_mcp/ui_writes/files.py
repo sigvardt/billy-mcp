@@ -103,8 +103,13 @@ class _UnconfiguredUiFileSubmitter:
 class BrowserFileSubmitter:
     """Default production submitter. Enters the shared BrowserRuntime first."""
 
-    def __init__(self, runtime: BrowserRuntime) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        readback_runtime: BrowserRuntime | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
 
     async def submit(
         self,
@@ -115,7 +120,7 @@ class BrowserFileSubmitter:
         size: int,
         organization_id: str | None,
     ) -> UiFilesCreateExecuteSuccess | ToolError:
-        del digest, size, organization_id
+        del digest, size
         failed = await perform_family_write(
             self._runtime,
             FamilyWrite(
@@ -126,6 +131,8 @@ class BrowserFileSubmitter:
                 readback_text=filename,
                 upload_path=path,
             ),
+            organization_id=str(organization_id or ""),
+            readback_runtime=self._readback_runtime,
         )
         if failed is not None:
             return failed
@@ -208,6 +215,7 @@ def register_ui_file_write_tools(
     submitter: UiFileSubmitter | None = None,
     upload_roots: tuple[Path, ...] | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register ui_files_create_preview and ui_files_create_execute."""
 
@@ -219,7 +227,7 @@ def register_ui_file_write_tools(
     if submitter is not None:
         active_submitter: UiFileSubmitter = submitter
     elif runtime is not None:
-        active_submitter = BrowserFileSubmitter(runtime)
+        active_submitter = BrowserFileSubmitter(runtime, readback_runtime)
     else:
         active_submitter = _UnconfiguredUiFileSubmitter()
     service = UiFileWriteService(

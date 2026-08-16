@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
 
-from billy_mcp.browser import BrowserRuntime, LoginPage, PersistentContext
+from billy_mcp.browser import BrowserRuntime, LoginPage
 from billy_mcp.models import StableErrorCode, ToolError
 
 BILLY_ORIGIN: str = "https://mit.billy.dk"
@@ -26,8 +26,14 @@ class FamilyWrite:
     pre_clicks: tuple[str, ...] = ()
 
 
-async def perform_family_write(runtime: BrowserRuntime, action: FamilyWrite) -> ToolError | None:
-    """Navigate, fill, click, then prove the result on a second page."""
+async def perform_family_write(
+    runtime: BrowserRuntime,
+    action: FamilyWrite,
+    *,
+    organization_id: str,
+    readback_runtime: BrowserRuntime,
+) -> ToolError | None:
+    """Navigate, fill, click, then prove the result on a second session."""
 
     try:
         context = await runtime.start()
@@ -43,6 +49,17 @@ async def perform_family_write(runtime: BrowserRuntime, action: FamilyWrite) -> 
             return ToolError(
                 code=StableErrorCode.ORGANIZATION_REQUIRED,
                 message="Billy organisation slug is not available for the UI write.",
+            )
+        bound = organization_id.strip()
+        if not bound:
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="A proven Billy organisation id is required.",
+            )
+        if slug != bound:
+            return ToolError(
+                code=StableErrorCode.CONFIRMATION_MISMATCH,
+                message="Live Billy organisation does not match the confirmation ticket.",
             )
         await page.goto(
             f"{BILLY_ORIGIN}/{slug}/{action.write_path.lstrip('/')}",
@@ -69,7 +86,8 @@ async def perform_family_write(runtime: BrowserRuntime, action: FamilyWrite) -> 
             if missing is not None:
                 return missing
         return await prove_text_on_fresh_page(
-            context,
+            readback_runtime,
+            organization_id=bound,
             path=action.readback_path,
             text=action.readback_text,
             absent=action.readback_absent,
@@ -79,21 +97,34 @@ async def perform_family_write(runtime: BrowserRuntime, action: FamilyWrite) -> 
 
 
 async def prove_text_on_fresh_page(
-    context: PersistentContext,
+    runtime: BrowserRuntime,
     *,
     path: str,
     text: str,
     absent: bool = False,
+    organization_id: str | None = None,
 ) -> ToolError | None:
-    """Open a second page and prove a marker is present or gone."""
+    """Prove a marker on an independent session, never on the write context."""
 
-    page = await context.new_page()
+    try:
+        context = await runtime.start()
+        page = await context.new_page()
+    except (OSError, RuntimeError, AssertionError):
+        return ToolError(
+            code=StableErrorCode.BILLY_ERROR,
+            message="Billy interface read-back could not start the browser.",
+        )
     try:
         slug = await _session_slug(page)
         if slug is None:
             return ToolError(
                 code=StableErrorCode.ORGANIZATION_REQUIRED,
                 message="Billy organisation slug is not available for the UI write.",
+            )
+        if organization_id is not None and slug != organization_id.strip():
+            return ToolError(
+                code=StableErrorCode.CONFIRMATION_MISMATCH,
+                message="Live Billy organisation does not match the confirmation ticket.",
             )
         await page.goto(
             f"{BILLY_ORIGIN}/{slug}/{path.lstrip('/')}",

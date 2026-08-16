@@ -96,15 +96,25 @@ class LiveSlotBlockedSubmitter:
 class BrowserBillSubmitter:
     """Default production submitter. Enters the shared BrowserRuntime first."""
 
-    def __init__(self, runtime: BrowserRuntime) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        readback_runtime: BrowserRuntime | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
 
     async def submit(self, prepared: UiWritePrepared) -> UiBillWriteExecuteResult | ToolError:
         action = _action_from_prepared(prepared)
         unique_tag = _tag_from_prepared(prepared)
         bill_id = str(prepared.canonical_request.get("id") or "")
         write = _bill_write(action, unique_tag, bill_id)
-        failed = await perform_family_write(self._runtime, write)
+        failed = await perform_family_write(
+            self._runtime,
+            write,
+            organization_id=str(prepared.binding.organization_id or ""),
+            readback_runtime=self._readback_runtime,
+        )
         if failed is not None:
             return failed
         return UiBillWriteExecuteResult(
@@ -134,13 +144,14 @@ def register_ui_bill_write_tools(
     protocol: UiWriteProtocol,
     submitter: BillUiSubmitter | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register the six UI bill preview and execute tools."""
 
     if submitter is not None:
         actor: BillUiSubmitter = submitter
     elif runtime is not None:
-        actor = BrowserBillSubmitter(runtime)
+        actor = BrowserBillSubmitter(runtime, readback_runtime)
     else:
         actor = LiveSlotBlockedSubmitter()
 

@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import re
 from collections.abc import Awaitable, Callable
 from pathlib import Path
@@ -80,11 +79,17 @@ class UiContactWriteResult(BaseModel):
 class ContactUiActor(Protocol):
     """Submits the exact previewed interface action. Preview must never call this."""
 
-    def submit_create(self, request: dict[str, JsonValue]) -> Awaitable[object]: ...
+    def submit_create(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> Awaitable[object]: ...
 
-    def submit_update(self, request: dict[str, JsonValue]) -> Awaitable[object]: ...
+    def submit_update(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> Awaitable[object]: ...
 
-    def submit_delete(self, request: dict[str, JsonValue]) -> Awaitable[object]: ...
+    def submit_delete(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> Awaitable[object]: ...
 
 
 class _Locator(Protocol):
@@ -120,30 +125,47 @@ class _Page(Protocol):
 class BrowserContactUiActor:
     """Drive create, update, and delete on a logged-in Billy interface session."""
 
-    def __init__(self, runtime: BrowserRuntime, *, org_identity_path: Path | None = None) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        *,
+        readback_runtime: BrowserRuntime | None = None,
+        org_identity_path: Path | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
         self._org_identity_path = org_identity_path or (
             Path.home() / ".local" / "share" / "billy-mcp" / "ui-org-identity.json"
         )
 
-    async def submit_create(self, request: dict[str, JsonValue]) -> object:
+    async def submit_create(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> object:
         name = _require_name(request, "name")
-        return await self._with_page(_create_customer, name, readback_text=name)
+        return await self._with_page(
+            _create_customer, name, organization_id=organization_id, readback_text=name
+        )
 
-    async def submit_update(self, request: dict[str, JsonValue]) -> object:
+    async def submit_update(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> object:
         new_name = _require_name(request, "new_name")
         return await self._with_page(
             _update_customer,
             _require_name(request, "name"),
             new_name,
+            organization_id=organization_id,
             readback_text=new_name,
         )
 
-    async def submit_delete(self, request: dict[str, JsonValue]) -> object:
+    async def submit_delete(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> object:
         name = _require_name(request, "name")
         return await self._with_page(
             _delete_customer,
             name,
+            organization_id=organization_id,
             readback_text=name,
             readback_absent=True,
         )
@@ -152,6 +174,7 @@ class BrowserContactUiActor:
         self,
         work: Callable[..., Awaitable[object]],
         *args: str,
+        organization_id: str,
         readback_text: str,
         readback_absent: bool = False,
     ) -> object:
@@ -161,17 +184,29 @@ class BrowserContactUiActor:
             page = cast(_Page, await context.new_page())
             await page.goto("https://mit.billy.dk/", wait_until="domcontentloaded")
             await _settle(page)
-            slug = _slug_from(page.url, self._org_identity_path)
+            slug = _slug_from(page.url)
             if slug is None:
                 return ToolError(
                     code=StableErrorCode.ORGANIZATION_REQUIRED,
                     message="Billy organisation slug is not available for the UI write.",
                 )
+            bound = organization_id.strip()
+            if not bound:
+                return ToolError(
+                    code=StableErrorCode.ORGANIZATION_REQUIRED,
+                    message="A proven Billy organisation id is required.",
+                )
+            if slug != bound:
+                return ToolError(
+                    code=StableErrorCode.CONFIRMATION_MISMATCH,
+                    message="Live Billy organisation does not match the confirmation ticket.",
+                )
             submitted = await work(page, slug, *args)
             if isinstance(submitted, ToolError):
                 return submitted
             proved = await prove_text_on_fresh_page(
-                context,
+                self._readback_runtime,
+                organization_id=bound,
                 path="clients",
                 text=readback_text,
                 absent=readback_absent,
@@ -197,6 +232,7 @@ def register_ui_contact_write_tools(
     protocol: UiWriteProtocol,
     actor: ContactUiActor | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register the six UI contact preview and execute tools."""
 
@@ -205,7 +241,8 @@ def register_ui_contact_write_tools(
     def _actor() -> ContactUiActor:
         nonlocal bound
         if bound is None:
-            bound = BrowserContactUiActor(runtime or default_browser_runtime())
+            write = runtime or default_browser_runtime()
+            bound = BrowserContactUiActor(write, readback_runtime=readback_runtime)
         return bound
 
     def ui_clients_create_preview(
@@ -346,12 +383,19 @@ async def _execute(
     )
     if isinstance(prepared, ToolError):
         return prepared
+    organization_id = str(prepared.binding.organization_id or "")
     if method_name == "submit_create":
-        submitted = await actor.submit_create(prepared.canonical_request)
+        submitted = await actor.submit_create(
+            prepared.canonical_request, organization_id=organization_id
+        )
     elif method_name == "submit_update":
-        submitted = await actor.submit_update(prepared.canonical_request)
+        submitted = await actor.submit_update(
+            prepared.canonical_request, organization_id=organization_id
+        )
     elif method_name == "submit_delete":
-        submitted = await actor.submit_delete(prepared.canonical_request)
+        submitted = await actor.submit_delete(
+            prepared.canonical_request, organization_id=organization_id
+        )
     else:
         return ToolError(
             code=StableErrorCode.VALIDATION_ERROR,
@@ -374,18 +418,13 @@ def _require_name(request: dict[str, JsonValue], key: str) -> str:
     return value
 
 
-def _slug_from(url: str, identity_path: Path) -> str | None:
+def _slug_from(url: str) -> str | None:
+    """Return the live URL org slug only. Never fall back to a stored identity file."""
+
     path = urlsplit(url).path or ""
     parts = [part for part in path.split("/") if part]
     if parts and parts[0] not in {"login", ""}:
         return parts[0]
-    try:
-        payload = json.loads(identity_path.read_text(encoding="utf-8"))
-    except Exception:
-        return None
-    slug = payload.get("org_slug")
-    if isinstance(slug, str) and slug and "/" not in slug and slug != "login":
-        return slug
     return None
 
 

@@ -29,7 +29,9 @@ _CHROME: Final[frozenset[str]] = frozenset(
 class FakeBillySession:
     """Shared store for one fake browser context. Mutable because it records."""
 
-    def __init__(self) -> None:
+    def __init__(self, *, live_slug: str = "org-test") -> None:
+        self.live_slug = live_slug
+        self.starts = 0
         self.gotos: list[str] = []
         self.fills: list[tuple[str, str]] = []
         self.clicks: list[str] = []
@@ -39,6 +41,7 @@ class FakeBillySession:
         self.next_page = 0
 
     async def start(self, *_args: object, **_kwargs: object) -> FakeBillyContext:
+        self.starts += 1
         return FakeBillyContext(self)
 
     def has_route(self, fragment: str) -> bool:
@@ -74,7 +77,7 @@ class FakeBillyPage:
     async def goto(self, url: str, *, wait_until: str = "domcontentloaded") -> None:
         del wait_until
         if url.rstrip("/") in {"https://mit.billy.dk", "https://mit.billy.dk/"}:
-            url = "https://mit.billy.dk/org-test/"
+            url = f"https://mit.billy.dk/{self._session.live_slug}/"
         self.url = url
         self._session.gotos.append(url)
 

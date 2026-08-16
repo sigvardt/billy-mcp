@@ -24,10 +24,16 @@ second interface session.
 `ConfirmationStore` binds execute tool name, organisation, target, canonical
 request, expected effect, optional file path and digest, and optional
 destination URL. Preview refuses a missing organisation id
-(`ORGANIZATION_REQUIRED`). `create_server` passes its shared `BrowserRuntime`
-into every family register. Default execute performs the family route, fields,
-and submit control, then returns `submitted=True` only after a second page
-proves the change. Start-only is not a submit. Tickets are process-volatile
+(`ORGANIZATION_REQUIRED`). `create_server` passes its shared write `BrowserRuntime` and a second
+read-back runtime (profile name plus `-readback`) into every family register.
+Default execute performs the family route, fields, and submit control only
+when the live URL slug matches the ticket organisation. The live URL is the
+only org proof. A stored identity file is not a substitute. It returns
+`submitted=True` only after a second authenticated session proves the change.
+A blank `-readback` profile that lands on `/login` is `ORGANIZATION_REQUIRED`,
+not proof. A second page on the same persistent context is not a second
+session. Start-only is not a submit. Wrong-org execute is
+`CONFIRMATION_MISMATCH` before fill or click. Tickets are process-volatile
 and expire in at most five minutes. Coverage rows stay red until live FastMCP
 proof.
 

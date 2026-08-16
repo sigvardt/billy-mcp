@@ -61,14 +61,25 @@ class UiProductsCreateExecuteResult(BaseModel):
 
 
 class ProductUiActor(Protocol):
-    async def submit_create(self, request: dict[str, JsonValue]) -> object: ...
+    async def submit_create(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> object: ...
 
 
 class BrowserProductSubmitter:
-    def __init__(self, runtime: BrowserRuntime) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        readback_runtime: BrowserRuntime | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
 
-    async def submit_create(self, request: dict[str, JsonValue]) -> object:
+    async def submit_create(
+        self,
+        request: dict[str, JsonValue],
+        organization_id: str = "",
+    ) -> object:
         name = str(request.get("name") or "")
         return await perform_family_write(
             self._runtime,
@@ -80,6 +91,8 @@ class BrowserProductSubmitter:
                 readback_path="inventory",
                 readback_text=name,
             ),
+            organization_id=organization_id,
+            readback_runtime=self._readback_runtime,
         )
 
 
@@ -88,13 +101,14 @@ def register_ui_product_write_tools(
     protocol: UiWriteProtocol,
     actor: ProductUiActor | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register UI product create preview and execute tools."""
 
     if actor is not None:
         bound: ProductUiActor | None = actor
     elif runtime is not None:
-        bound = BrowserProductSubmitter(runtime)
+        bound = BrowserProductSubmitter(runtime, readback_runtime)
     else:
         bound = None
 
@@ -141,7 +155,10 @@ def register_ui_product_write_tools(
                 summary=prepared.summary,
                 submitted=False,
             )
-        submitted = await bound.submit_create(prepared.canonical_request)
+        submitted = await bound.submit_create(
+            prepared.canonical_request,
+            organization_id=str(prepared.binding.organization_id or ""),
+        )
         if isinstance(submitted, ToolError):
             return submitted
         return UiProductsCreateExecuteResult(

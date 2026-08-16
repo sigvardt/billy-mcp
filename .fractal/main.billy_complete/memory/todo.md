@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live contacts first (`E1E454F4` refs, prove org in the interface, FastMCP create/update/delete, session-B read-back, cleanup). Then green only those three rows.
+- Authenticate the second session (`E1E454F4` secondary refs or login on the `-readback` profile). Then live contacts create/update/delete through FastMCP, independent-session read-back, cleanup on a third fresh read-back. Green only those three rows after that proof.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
@@ -17,3 +17,4 @@ updated: 2026-08-16T14:29:47Z
 - 16-row gate, honesty, shared protocol, durable preview/execute invariant, `ui-full` mode.
 - Seven family children landed offline preview/execute tools and are merged.
 - `create_server` requires `organization_id` and reaches a shared `BrowserRuntime` actor. Commit-mode suite and lint pass. No greening.
+- Ticket org is compared to the live URL slug before fill or click. Contacts no longer read a stored identity file for that compare. Read-back starts a second runtime. Shared fake records are gone.

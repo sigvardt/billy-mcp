@@ -33,15 +33,24 @@ class FakeActor:
     def __init__(self) -> None:
         self.calls: list[tuple[str, dict[str, JsonValue]]] = []
 
-    async def submit_create(self, request: dict[str, JsonValue]) -> dict[str, JsonValue]:
+    async def submit_create(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> dict[str, JsonValue]:
+        del organization_id
         self.calls.append(("create", request))
         return {"ok": True}
 
-    async def submit_update(self, request: dict[str, JsonValue]) -> dict[str, JsonValue]:
+    async def submit_update(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> dict[str, JsonValue]:
+        del organization_id
         self.calls.append(("update", request))
         return {"ok": True}
 
-    async def submit_delete(self, request: dict[str, JsonValue]) -> dict[str, JsonValue]:
+    async def submit_delete(
+        self, request: dict[str, JsonValue], organization_id: str = ""
+    ) -> dict[str, JsonValue]:
+        del organization_id
         self.calls.append(("delete", request))
         return {"ok": True}
 

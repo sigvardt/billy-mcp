@@ -7,6 +7,7 @@ sources:
   - radio:DC3B8E96
   - radio:E1E454F4
   - radio:4E471870
+  - radio:E613984F
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -23,9 +24,11 @@ updated: 2026-08-16T13:50:50Z
 
 `DD80C9A8` (saved): node `test.sh` must accept `BILLY_TEST_MODE=ui-full` (offline API + live UI/vision, no live API), then require-complete and repository policy.
 
-`4E471870` (saved): do not green and do not start live qualification yet. `create_server` now passes the shared `BrowserRuntime` and requires `organization_id`, but that is not enough.
+`4E471870` (done, unsaved): do not green from unarmed execute. `create_server` now passes the shared `BrowserRuntime` and requires `organization_id`.
 
-`5018B3FA` (inbox, priority 10): start-only execute is a false submit. The default path now performs the family action and a second-page read-back before `submitted=True`. Fake-page unit tests lock route, fields, CTA, and read-back. Live FastMCP proof is still required before any greening. Do not mark rows implemented or live-tested from the unit fake page.
+`5018B3FA` (done, unsaved): start-only execute is a false submit. The default path now performs the family action before `submitted=True`. That is not enough for live qualification.
+
+`E613984F` (saved): execute compares the live URL slug to `prepared.binding.organization_id` and fails closed on mismatch. Contacts no longer use a stored identity file for that compare. Read-back starts a second runtime. A blank `-readback` profile is not a live second session; authenticate it (`E1E454F4`) before live proof. Cleanup still needs a third fresh read-back. Keep coverage red.
 
 Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI tools through the real MCP boundary, not direct BrowserRuntime as proof.
 

@@ -78,10 +78,12 @@ def register_ui_ledger_write_tools(
     server: FastMCP,
     protocol: UiWriteProtocol,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register the eight UI ledger preview and execute tools."""
 
     browser = runtime
+    readback = readback_runtime
 
     def ui_daybooks_create_preview(
         name: str = Field(min_length=1),
@@ -156,7 +158,11 @@ def register_ui_ledger_write_tools(
         """Execute a daybook-create ticket through the shared browser."""
 
         return await _execute_with_browser(
-            protocol, browser, confirmation_ticket, "ui_daybooks_create_execute"
+            protocol,
+            browser,
+            confirmation_ticket,
+            "ui_daybooks_create_execute",
+            readback_runtime=readback,
         )
 
     async def ui_daybooks_delete_execute(
@@ -165,7 +171,11 @@ def register_ui_ledger_write_tools(
         """Execute a daybook-delete ticket through the shared browser."""
 
         return await _execute_with_browser(
-            protocol, browser, confirmation_ticket, "ui_daybooks_delete_execute"
+            protocol,
+            browser,
+            confirmation_ticket,
+            "ui_daybooks_delete_execute",
+            readback_runtime=readback,
         )
 
     async def ui_daybook_transactions_create_execute(
@@ -179,6 +189,7 @@ def register_ui_ledger_write_tools(
             confirmation_ticket,
             "ui_daybook_transactions_create_execute",
             refuse_irreversible=True,
+            readback_runtime=readback,
         )
 
     async def ui_transactions_create_execute(
@@ -192,6 +203,7 @@ def register_ui_ledger_write_tools(
             confirmation_ticket,
             "ui_transactions_create_execute",
             refuse_irreversible=True,
+            readback_runtime=readback,
         )
 
     server.tool(
@@ -235,6 +247,7 @@ async def _execute_with_browser(
     execute_tool_name: str,
     *,
     refuse_irreversible: bool = False,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> UiLedgerExecuteResult | ToolError:
     """Consume the ticket, enter the shared browser when armed, then submit or refuse."""
 
@@ -254,7 +267,12 @@ async def _execute_with_browser(
                     expected_effect_state=prepared.expected_effect_state,
                     blocker=LEDGER_SUBMIT_BLOCKER,
                 )
-            failed = await perform_family_write(runtime, _ledger_write(prepared, execute_tool_name))
+            failed = await perform_family_write(
+                runtime,
+                _ledger_write(prepared, execute_tool_name),
+                organization_id=str(prepared.binding.organization_id or ""),
+                readback_runtime=readback_runtime or runtime.independent_readback_runtime(),
+            )
             if failed is not None:
                 return failed
             return UiLedgerExecuteResult(
@@ -262,7 +280,7 @@ async def _execute_with_browser(
                 summary=prepared.summary,
                 canonical_request=prepared.canonical_request,
                 expected_effect_state=prepared.expected_effect_state,
-                blocker="submitted and proved on a second interface page",
+                blocker="submitted and proved on a second interface session",
             )
 
 

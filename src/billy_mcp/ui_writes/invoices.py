@@ -110,8 +110,13 @@ class UnarmedInvoiceSubmitter:
 class BrowserInvoiceSubmitter:
     """Default production submitter. Draft save only. Enters BrowserRuntime first."""
 
-    def __init__(self, runtime: BrowserRuntime) -> None:
+    def __init__(
+        self,
+        runtime: BrowserRuntime,
+        readback_runtime: BrowserRuntime | None = None,
+    ) -> None:
         self._runtime = runtime
+        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
 
     async def submit(self, prepared: UiWritePrepared) -> UiInvoiceExecuteResult | ToolError:
         rejected = fail_closed_request(prepared.canonical_request)
@@ -119,7 +124,12 @@ class BrowserInvoiceSubmitter:
             return rejected
         action = _effect_action(prepared.expected_effect_state)
         save_cta = str(prepared.canonical_request.get("save_cta", ""))
-        failed = await perform_family_write(self._runtime, _invoice_write(prepared, action))
+        failed = await perform_family_write(
+            self._runtime,
+            _invoice_write(prepared, action),
+            organization_id=str(prepared.binding.organization_id or ""),
+            readback_runtime=self._readback_runtime,
+        )
         if failed is not None:
             return failed
         return UiInvoiceExecuteResult(
@@ -198,13 +208,14 @@ def register_ui_invoice_write_tools(
     protocol: UiWriteProtocol,
     submitter: InvoiceUiSubmitter | None = None,
     runtime: BrowserRuntime | None = None,
+    readback_runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register UI invoice preview and execute tools. Preview writes nothing."""
 
     if submitter is not None:
         active: InvoiceUiSubmitter = submitter
     elif runtime is not None:
-        active = BrowserInvoiceSubmitter(runtime)
+        active = BrowserInvoiceSubmitter(runtime, readback_runtime)
     else:
         active = UnarmedInvoiceSubmitter()
 

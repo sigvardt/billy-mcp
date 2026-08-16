@@ -13,17 +13,16 @@ updated: 2026-08-16T14:29:47Z
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 
-Parent `5018B3FA` is addressed on the default path. Execute now drives the
-family route, fields, and submit control, then returns `submitted=True`
-only after a second page proves the marker. Daybook and posting creates
-that have no cleanup path still refuse (`submitted=False`). Start-only
-returns an error, not success. Contacts also does second-page read-back.
+Ticket preview requires `organization_id`. Default execute drives the family
+route, fields, and submit control. Wrong-org execute is
+`CONFIRMATION_MISMATCH` before fill or click. Contacts org proof uses the
+live URL only. Read-back starts a second `BrowserRuntime` (`*-readback`).
+A blank read-back profile that lands on `/login` is `ORGANIZATION_REQUIRED`.
+Unit tests no longer share fake records; a second fake store cannot see the
+write, so execute returns `NOT_FOUND`. That is wiring, not live proof.
 
-Coverage: complete false. Sixteen CUD parity rows stay open-only. Do not
-green. Live FastMCP proof is still later.
-
-Lint is green. Commit-mode suite: 1802 passed, 59 deselected. No live UI
-or live API ran.
+Coverage stays red. No greening. Daybook and posting creates with no cleanup
+path still refuse.
 
 ## Children
 
@@ -43,13 +42,14 @@ Parent `E1E454F4` live refs stay: keyring service `billy-mcp`, opaque ids
 `billy-ui-primary` and `billy-ui-secondary`. `BILLY_ORGANIZATION_ID` stays
 unset until the dedicated non-production org is proved in the interface.
 
-Live contacts contract remains in
-`.fractal/main.billy_complete/tmp/grok-research.md` for the next slice.
+Next slice: authenticate the second session (`E1E454F4` secondary refs or
+login on the `-readback` profile), then live contacts create/update/delete
+through FastMCP, independent-session read-back, cleanup on a third fresh
+read-back. Green only those three rows after that proof.
 
 ## Review
 
-`.fractal/main.billy_complete/tmp/grok-review.md`: package FAIL. Start-only
-execute is a false submit (`5018B3FA`). Honesty on the 16 CUD rows still
-holds. Node complete stays false.
+Honesty on the 16 CUD rows still holds. Node complete stays false.
+Offline org-bind wiring is in. Live independence is not.
 
 See `decisions.md` and `todo.md`.
