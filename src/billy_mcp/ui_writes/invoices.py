@@ -1,13 +1,346 @@
-"""Ticketed UI invoice write tools. Filled by the invoices write child."""
+"""Ticketed UI invoice write tools. Draft save only; never send, email, or approve."""
 
 from __future__ import annotations
 
+from typing import Literal, Protocol
+
 from fastmcp import FastMCP
+from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
-from billy_mcp.ui_writes.protocol import UiWriteProtocol
+from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.protocol import (
+    UiWriteExecuteInput,
+    UiWritePrepared,
+    UiWritePreviewResult,
+    UiWriteProtocol,
+)
+
+CREATE_EXECUTE = "ui_invoices_create_execute"
+UPDATE_EXECUTE = "ui_invoices_update_execute"
+DELETE_EXECUTE = "ui_invoices_delete_execute"
+DRAFT_SAVE_CTA = "Gem som kladde"
+DRAFT_DELETE_CTA = "Slet"
+_FORBIDDEN_TOKENS = ("godkend", "send", "email", "e-mail")
+_ALLOWED: frozenset[tuple[str, str]] = frozenset(
+    {
+        ("draft_create", DRAFT_SAVE_CTA),
+        ("draft_update", DRAFT_SAVE_CTA),
+        ("draft_delete", DRAFT_DELETE_CTA),
+    }
+)
 
 
-def register_ui_invoice_write_tools(server: FastMCP, protocol: UiWriteProtocol) -> None:
-    """Register UI invoice preview/execute tools when the family lands."""
+class InvoiceCreatePreviewInput(BaseModel):
+    """Preview input for one draft invoice create (Gem som kladde)."""
 
-    del server, protocol
+    model_config = ConfigDict(extra="forbid")
+
+    contact_name: str = Field(min_length=1)
+    line_description: str = Field(min_length=1)
+    action: str = Field(min_length=1)
+    save_cta: str = Field(min_length=1)
+    organization_id: str | None = None
+
+
+class InvoiceUpdatePreviewInput(BaseModel):
+    """Preview input for one draft invoice update (Gem som kladde)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(min_length=1)
+    line_description: str = Field(min_length=1)
+    action: str = Field(min_length=1)
+    save_cta: str = Field(min_length=1)
+    organization_id: str | None = None
+
+
+class InvoiceDeletePreviewInput(BaseModel):
+    """Preview input for one draft invoice delete (Mere then Slet)."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    id: str = Field(min_length=1)
+    action: str = Field(min_length=1)
+    save_cta: str = Field(min_length=1)
+    organization_id: str | None = None
+
+
+class UiInvoiceExecuteResult(BaseModel):
+    """Result of consuming a ticket and invoking the family submitter."""
+
+    model_config = ConfigDict(extra="forbid")
+
+    action: Literal["create", "update", "delete"]
+    save_cta: str = Field(min_length=1)
+    submitted: bool
+    canonical_request: dict[str, JsonValue]
+    expected_effect_state: dict[str, JsonValue]
+
+
+class InvoiceUiSubmitter(Protocol):
+    """Performs the bound interface action after the ticket is consumed."""
+
+    def submit(self, prepared: UiWritePrepared) -> UiInvoiceExecuteResult | ToolError: ...
+
+
+class UnarmedInvoiceSubmitter:
+    """Consumes the ticket contract without clicking Billy chrome."""
+
+    def submit(self, prepared: UiWritePrepared) -> UiInvoiceExecuteResult | ToolError:
+        rejected = fail_closed_request(prepared.canonical_request)
+        if rejected is not None:
+            return rejected
+        action = _effect_action(prepared.expected_effect_state)
+        save_cta = str(prepared.canonical_request.get("save_cta", ""))
+        return UiInvoiceExecuteResult(
+            action=action,
+            save_cta=save_cta,
+            submitted=False,
+            canonical_request=prepared.canonical_request,
+            expected_effect_state=prepared.expected_effect_state,
+        )
+
+
+def fail_closed_request(request: dict[str, JsonValue]) -> ToolError | None:
+    """Reject send, email, approve, or any non-draft CTA."""
+
+    action = str(request.get("action", ""))
+    save_cta = str(request.get("save_cta", ""))
+    return fail_closed(action, save_cta)
+
+
+def fail_closed(action: str, save_cta: str) -> ToolError | None:
+    """Reject anything that is not draft create/update or draft delete."""
+
+    if (action, save_cta) not in _ALLOWED:
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice UI writes accept draft save or draft delete only.",
+            details={"action": action, "save_cta": save_cta},
+        )
+    blob = f"{action} {save_cta}".casefold()
+    if any(token in blob for token in _FORBIDDEN_TOKENS):
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice UI writes refuse send, email, and Godkend.",
+            details={"action": action, "save_cta": save_cta},
+        )
+    return None
+
+
+def register_ui_invoice_write_tools(
+    server: FastMCP,
+    protocol: UiWriteProtocol,
+    submitter: InvoiceUiSubmitter | None = None,
+) -> None:
+    """Register UI invoice preview and execute tools. Preview writes nothing."""
+
+    active = submitter or UnarmedInvoiceSubmitter()
+
+    def ui_invoices_create_preview(
+        contact_name: str = Field(min_length=1),
+        line_description: str = Field(min_length=1),
+        action: str = Field(min_length=1),
+        save_cta: str = Field(min_length=1),
+        organization_id: str | None = None,
+    ) -> UiWritePreviewResult | ToolError:
+        """Preview one draft invoice create. Does not click Gem som kladde."""
+
+        payload = InvoiceCreatePreviewInput(
+            contact_name=contact_name,
+            line_description=line_description,
+            action=action,
+            save_cta=save_cta,
+            organization_id=organization_id,
+        )
+        rejected = fail_closed(payload.action, payload.save_cta)
+        if rejected is not None:
+            return rejected
+        request = _create_request(payload)
+        return protocol.preview(
+            execute_tool_name=CREATE_EXECUTE,
+            organization_id=payload.organization_id,
+            target="invoices",
+            canonical_request=request,
+            expected_effect_state=_effect("create", payload.save_cta),
+            summary="Create one Billy invoice draft in the interface.",
+        )
+
+    def ui_invoices_create_execute(
+        confirmation_ticket: str = Field(min_length=1),
+    ) -> UiInvoiceExecuteResult | ToolError:
+        """Execute the exact previewed draft invoice create."""
+
+        return _execute(protocol, active, confirmation_ticket, CREATE_EXECUTE)
+
+    def ui_invoices_update_preview(
+        id: str = Field(min_length=1),
+        line_description: str = Field(min_length=1),
+        action: str = Field(min_length=1),
+        save_cta: str = Field(min_length=1),
+        organization_id: str | None = None,
+    ) -> UiWritePreviewResult | ToolError:
+        """Preview one draft invoice update. Does not click Gem som kladde."""
+
+        payload = InvoiceUpdatePreviewInput(
+            id=id,
+            line_description=line_description,
+            action=action,
+            save_cta=save_cta,
+            organization_id=organization_id,
+        )
+        rejected = fail_closed(payload.action, payload.save_cta)
+        if rejected is not None:
+            return rejected
+        request = _update_request(payload)
+        return protocol.preview(
+            execute_tool_name=UPDATE_EXECUTE,
+            organization_id=payload.organization_id,
+            target=payload.id,
+            canonical_request=request,
+            expected_effect_state=_effect("update", payload.save_cta, payload.id),
+            summary="Update one Billy invoice draft in the interface.",
+        )
+
+    def ui_invoices_update_execute(
+        confirmation_ticket: str = Field(min_length=1),
+    ) -> UiInvoiceExecuteResult | ToolError:
+        """Execute the exact previewed draft invoice update."""
+
+        return _execute(protocol, active, confirmation_ticket, UPDATE_EXECUTE)
+
+    def ui_invoices_delete_preview(
+        id: str = Field(min_length=1),
+        action: str = Field(min_length=1),
+        save_cta: str = Field(min_length=1),
+        organization_id: str | None = None,
+    ) -> UiWritePreviewResult | ToolError:
+        """Preview one draft invoice delete. Does not confirm Slet."""
+
+        payload = InvoiceDeletePreviewInput(
+            id=id,
+            action=action,
+            save_cta=save_cta,
+            organization_id=organization_id,
+        )
+        rejected = fail_closed(payload.action, payload.save_cta)
+        if rejected is not None:
+            return rejected
+        request = _delete_request(payload)
+        return protocol.preview(
+            execute_tool_name=DELETE_EXECUTE,
+            organization_id=payload.organization_id,
+            target=payload.id,
+            canonical_request=request,
+            expected_effect_state=_effect("delete", payload.save_cta, payload.id),
+            summary="Delete one Billy invoice draft in the interface.",
+        )
+
+    def ui_invoices_delete_execute(
+        confirmation_ticket: str = Field(min_length=1),
+    ) -> UiInvoiceExecuteResult | ToolError:
+        """Execute the exact previewed draft invoice delete."""
+
+        return _execute(protocol, active, confirmation_ticket, DELETE_EXECUTE)
+
+    server.tool(
+        name="ui_invoices_create_preview",
+        description="Preview one Billy invoice draft create without submitting.",
+    )(ui_invoices_create_preview)
+    server.tool(
+        name="ui_invoices_create_execute",
+        description="Execute a previewed Billy invoice draft create with its ticket.",
+    )(ui_invoices_create_execute)
+    server.tool(
+        name="ui_invoices_update_preview",
+        description="Preview one Billy invoice draft update without submitting.",
+    )(ui_invoices_update_preview)
+    server.tool(
+        name="ui_invoices_update_execute",
+        description="Execute a previewed Billy invoice draft update with its ticket.",
+    )(ui_invoices_update_execute)
+    server.tool(
+        name="ui_invoices_delete_preview",
+        description="Preview one Billy invoice draft delete without confirming Slet.",
+    )(ui_invoices_delete_preview)
+    server.tool(
+        name="ui_invoices_delete_execute",
+        description="Execute a previewed Billy invoice draft delete with its ticket.",
+    )(ui_invoices_delete_execute)
+
+
+def _execute(
+    protocol: UiWriteProtocol,
+    submitter: InvoiceUiSubmitter,
+    confirmation_ticket: str,
+    execute_tool_name: str,
+) -> UiInvoiceExecuteResult | ToolError:
+    prepared = protocol.consume(
+        UiWriteExecuteInput(confirmation_ticket=confirmation_ticket),
+        execute_tool_name=execute_tool_name,
+    )
+    if isinstance(prepared, ToolError):
+        return prepared
+    rejected = fail_closed_request(prepared.canonical_request)
+    if rejected is not None:
+        return rejected
+    return submitter.submit(prepared)
+
+
+def _create_request(payload: InvoiceCreatePreviewInput) -> dict[str, JsonValue]:
+    request: dict[str, JsonValue] = {
+        "action": payload.action,
+        "save_cta": payload.save_cta,
+        "contact_name": payload.contact_name,
+        "line_description": payload.line_description,
+    }
+    if payload.organization_id is not None:
+        request["organization_id"] = payload.organization_id
+    return request
+
+
+def _update_request(payload: InvoiceUpdatePreviewInput) -> dict[str, JsonValue]:
+    request: dict[str, JsonValue] = {
+        "action": payload.action,
+        "save_cta": payload.save_cta,
+        "id": payload.id,
+        "line_description": payload.line_description,
+    }
+    if payload.organization_id is not None:
+        request["organization_id"] = payload.organization_id
+    return request
+
+
+def _delete_request(payload: InvoiceDeletePreviewInput) -> dict[str, JsonValue]:
+    request: dict[str, JsonValue] = {
+        "action": payload.action,
+        "save_cta": payload.save_cta,
+        "id": payload.id,
+    }
+    if payload.organization_id is not None:
+        request["organization_id"] = payload.organization_id
+    return request
+
+
+def _effect(action: str, save_cta: str, invoice_id: str | None = None) -> dict[str, JsonValue]:
+    state: dict[str, JsonValue] = {
+        "action": action,
+        "resource": "invoice",
+        "save_cta": save_cta,
+    }
+    if invoice_id is not None:
+        state["id"] = invoice_id
+    return state
+
+
+def _effect_action(
+    expected_effect_state: dict[str, JsonValue],
+) -> Literal["create", "update", "delete"]:
+    action = expected_effect_state.get("action")
+    if action == "create":
+        return "create"
+    if action == "update":
+        return "update"
+    if action == "delete":
+        return "delete"
+    raise ValueError(f"unsupported invoice UI effect action: {action!r}")
