@@ -8,6 +8,7 @@ mutation until root grants a live slot and injects a submitter. FastMCP
 from __future__ import annotations
 
 import asyncio
+from typing import cast
 
 import pytest
 from fastmcp import FastMCP
@@ -27,11 +28,11 @@ def _server() -> FastMCP:
 
 def _call(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> dict[str, object]:
     result = asyncio.run(server.call_tool(tool_name, arguments))
-    structured_content = result.structured_content
-    assert isinstance(structured_content, dict)
+    assert isinstance(result.structured_content, dict)
+    structured_content = cast(dict[str, object], result.structured_content)
     payload = structured_content.get("result", structured_content)
     assert isinstance(payload, dict)
-    return payload
+    return cast(dict[str, object], payload)
 
 
 def test_live_daybook_create_execute_is_fail_closed_not_an_unsafe_skip() -> None:
@@ -39,7 +40,7 @@ def test_live_daybook_create_execute_is_fail_closed_not_an_unsafe_skip() -> None
     preview = _call(
         server,
         "ui_daybooks_create_preview",
-        {"name": "MCP-LEDGER-LIVE-BLOCKER"},
+        {"name": "MCP-LEDGER-LIVE-BLOCKER", "organization_id": "org-test"},
     )
     execution = _call(
         server,

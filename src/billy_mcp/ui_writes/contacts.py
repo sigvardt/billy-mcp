@@ -15,6 +15,8 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.browser_submit import default_browser_runtime
+from billy_mcp.ui_writes.page_flow import prove_text_on_fresh_page
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePreviewResult,
@@ -42,6 +44,7 @@ class ClientsCreatePreviewInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class ClientsUpdatePreviewInput(BaseModel):
@@ -51,6 +54,7 @@ class ClientsUpdatePreviewInput(BaseModel):
 
     name: str = Field(min_length=1)
     new_name: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class ClientsDeletePreviewInput(BaseModel):
@@ -59,6 +63,7 @@ class ClientsDeletePreviewInput(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     name: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class UiContactWriteResult(BaseModel):
@@ -122,22 +127,38 @@ class BrowserContactUiActor:
         )
 
     async def submit_create(self, request: dict[str, JsonValue]) -> object:
-        return await self._with_page(_create_customer, _require_name(request, "name"))
+        name = _require_name(request, "name")
+        return await self._with_page(_create_customer, name, readback_text=name)
 
     async def submit_update(self, request: dict[str, JsonValue]) -> object:
+        new_name = _require_name(request, "new_name")
         return await self._with_page(
             _update_customer,
             _require_name(request, "name"),
-            _require_name(request, "new_name"),
+            new_name,
+            readback_text=new_name,
         )
 
     async def submit_delete(self, request: dict[str, JsonValue]) -> object:
-        return await self._with_page(_delete_customer, _require_name(request, "name"))
+        name = _require_name(request, "name")
+        return await self._with_page(
+            _delete_customer,
+            name,
+            readback_text=name,
+            readback_absent=True,
+        )
 
-    async def _with_page(self, work: Callable[..., Awaitable[object]], *args: str) -> object:
-        context = await self._runtime.start()
-        page = cast(_Page, await context.new_page())
+    async def _with_page(
+        self,
+        work: Callable[..., Awaitable[object]],
+        *args: str,
+        readback_text: str,
+        readback_absent: bool = False,
+    ) -> object:
+        page: _Page | None = None
         try:
+            context = await self._runtime.start()
+            page = cast(_Page, await context.new_page())
             await page.goto("https://mit.billy.dk/", wait_until="domcontentloaded")
             await _settle(page)
             slug = _slug_from(page.url, self._org_identity_path)
@@ -146,23 +167,36 @@ class BrowserContactUiActor:
                     code=StableErrorCode.ORGANIZATION_REQUIRED,
                     message="Billy organisation slug is not available for the UI write.",
                 )
-            return await work(page, slug, *args)
+            submitted = await work(page, slug, *args)
+            if isinstance(submitted, ToolError):
+                return submitted
+            proved = await prove_text_on_fresh_page(
+                context,
+                path="clients",
+                text=readback_text,
+                absent=readback_absent,
+            )
+            if proved is not None:
+                return proved
+            return submitted
         except Exception:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Billy interface contact write could not be completed.",
             )
         finally:
-            try:
-                await page.close()
-            except Exception:
-                pass
+            if page is not None:
+                try:
+                    await page.close()
+                except Exception:
+                    pass
 
 
 def register_ui_contact_write_tools(
     server: FastMCP,
     protocol: UiWriteProtocol,
     actor: ContactUiActor | None = None,
+    runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register the six UI contact preview and execute tools."""
 
@@ -171,18 +205,21 @@ def register_ui_contact_write_tools(
     def _actor() -> ContactUiActor:
         nonlocal bound
         if bound is None:
-            bound = _default_browser_actor()
+            bound = BrowserContactUiActor(runtime or default_browser_runtime())
         return bound
 
-    def ui_clients_create_preview(name: str = Field(min_length=1)) -> UiWritePreviewResult:
+    def ui_clients_create_preview(
+        name: str = Field(min_length=1),
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview creating one Billy customer. Does not submit."""
 
-        ClientsCreatePreviewInput(name=name)
+        parsed = ClientsCreatePreviewInput(name=name, organization_id=organization_id)
         return protocol.preview(
             execute_tool_name="ui_clients_create_execute",
-            organization_id=None,
+            organization_id=parsed.organization_id,
             target="clients",
-            canonical_request={"action": "create", "name": name},
+            canonical_request={"action": "create", "name": parsed.name},
             expected_effect_state={"action": "create", "resource": "contact"},
             summary="Create one Billy customer in the interface.",
         )
@@ -203,15 +240,22 @@ def register_ui_contact_write_tools(
     def ui_clients_update_preview(
         name: str = Field(min_length=1),
         new_name: str = Field(min_length=1),
-    ) -> UiWritePreviewResult:
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview renaming one Billy customer. Does not submit."""
 
-        ClientsUpdatePreviewInput(name=name, new_name=new_name)
+        parsed = ClientsUpdatePreviewInput(
+            name=name, new_name=new_name, organization_id=organization_id
+        )
         return protocol.preview(
             execute_tool_name="ui_clients_update_execute",
-            organization_id=None,
+            organization_id=parsed.organization_id,
             target="clients",
-            canonical_request={"action": "update", "name": name, "new_name": new_name},
+            canonical_request={
+                "action": "update",
+                "name": parsed.name,
+                "new_name": parsed.new_name,
+            },
             expected_effect_state={
                 "action": "update",
                 "resource": "contact",
@@ -234,15 +278,18 @@ def register_ui_contact_write_tools(
             "submit_update",
         )
 
-    def ui_clients_delete_preview(name: str = Field(min_length=1)) -> UiWritePreviewResult:
+    def ui_clients_delete_preview(
+        name: str = Field(min_length=1),
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview deleting one Billy customer. Does not submit."""
 
-        ClientsDeletePreviewInput(name=name)
+        parsed = ClientsDeletePreviewInput(name=name, organization_id=organization_id)
         return protocol.preview(
             execute_tool_name="ui_clients_delete_execute",
-            organization_id=None,
+            organization_id=parsed.organization_id,
             target="clients",
-            canonical_request={"action": "delete", "name": name},
+            canonical_request={"action": "delete", "name": parsed.name},
             expected_effect_state={"action": "delete", "resource": "contact", "name": name},
             summary="Delete one Billy customer in the interface.",
         )
@@ -317,18 +364,6 @@ async def _execute(
         canonical_request=prepared.canonical_request,
         expected_effect_state=prepared.expected_effect_state,
         submitted=True,
-    )
-
-
-def _default_browser_actor() -> ContactUiActor:
-    from billy_mcp.config import AppConfig
-
-    configuration = AppConfig.from_environment()
-    return BrowserContactUiActor(
-        BrowserRuntime(
-            configuration.browser_profile,
-            credential_references=configuration.browser_credentials,
-        )
     )
 
 

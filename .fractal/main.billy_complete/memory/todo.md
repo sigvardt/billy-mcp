@@ -9,13 +9,11 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Merge the seven completed write children (offline preview/execute only).
-- Load browser credential refs for the contacts live slot. Do not read them into git.
-- After live proof: point those parity rows at preview tools. Do not green from stubs.
+- Live contacts first (`E1E454F4` refs, prove org in the interface, FastMCP create/update/delete, session-B read-back, cleanup). Then green only those three rows.
+- After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
 
-- 16-row gate failed, then honesty un-greened those parity rows.
-- Shared `ui_writes` protocol and empty family stubs.
-- Durable preview+execute invariant.
-- `ui-full` mode in node `test.sh`.
+- 16-row gate, honesty, shared protocol, durable preview/execute invariant, `ui-full` mode.
+- Seven family children landed offline preview/execute tools and are merged.
+- `create_server` requires `organization_id` and reaches a shared `BrowserRuntime` actor. Commit-mode suite and lint pass. No greening.

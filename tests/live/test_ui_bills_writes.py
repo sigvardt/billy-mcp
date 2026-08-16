@@ -33,7 +33,11 @@ def test_live_submit_refused_until_root_slot() -> None:
 
     assert "BrowserRuntime" not in globals()
     server = _server()
-    preview = _call(server, "ui_bills_create_preview", {"unique_tag": "MCP-BILL-LIVE-BLOCK"})
+    preview = _call(
+        server,
+        "ui_bills_create_preview",
+        {"unique_tag": "MCP-BILL-LIVE-BLOCK", "organization_id": "org-test"},
+    )
     ticket = cast(str, preview["confirmation_ticket"])
     assert ticket
     blocked = _call(server, "ui_bills_create_execute", {"confirmation_ticket": ticket})

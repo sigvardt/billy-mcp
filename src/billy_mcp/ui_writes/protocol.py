@@ -81,9 +81,15 @@ class UiWriteProtocol:
         file_path: Path | None = None,
         file_digest: str | None = None,
         destination_url: str | None = None,
-    ) -> UiWritePreviewResult:
+    ) -> UiWritePreviewResult | ToolError:
         """Bind the exact UI write and return a ticket. Does not submit."""
 
+        if organization_id is None or not organization_id.strip():
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="A proven Billy organisation id is required.",
+            )
+        organization_id = organization_id.strip()
         binding = ConfirmationBinding(
             tool=execute_tool_name,
             organization_id=organization_id,

@@ -943,6 +943,7 @@ OPEN_ONLY_PARITY_STATUSES: frozenset[str] = frozenset(
     }
 )
 
+
 # The inventory is generated from this narrow, source-controlled map rather
 # than hand-editing checked-in generated artifacts. Each entry is a real module
 # contract suite plus the root registry assertion that exposes the tool.

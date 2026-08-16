@@ -1,0 +1,149 @@
+"""Bounded Billy page actions for ticketed UI writes. Not generic browser tools."""
+
+from __future__ import annotations
+
+from dataclasses import dataclass
+from pathlib import Path
+from urllib.parse import urlsplit
+
+from billy_mcp.browser import BrowserRuntime, LoginPage, PersistentContext
+from billy_mcp.models import StableErrorCode, ToolError
+
+BILLY_ORIGIN: str = "https://mit.billy.dk"
+
+
+@dataclass(frozen=True, slots=True)
+class FamilyWrite:
+    """One family-specific Billy interface write plus its independent read-back."""
+
+    write_path: str
+    fills: tuple[tuple[str, str], ...]
+    clicks: tuple[str, ...]
+    readback_path: str
+    readback_text: str
+    readback_absent: bool = False
+    upload_path: Path | None = None
+    pre_clicks: tuple[str, ...] = ()
+
+
+async def perform_family_write(runtime: BrowserRuntime, action: FamilyWrite) -> ToolError | None:
+    """Navigate, fill, click, then prove the result on a second page."""
+
+    try:
+        context = await runtime.start()
+        page = await context.new_page()
+    except (OSError, RuntimeError, AssertionError):
+        return ToolError(
+            code=StableErrorCode.BILLY_ERROR,
+            message="Billy interface write could not start the browser.",
+        )
+    try:
+        slug = await _session_slug(page)
+        if slug is None:
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="Billy organisation slug is not available for the UI write.",
+            )
+        await page.goto(
+            f"{BILLY_ORIGIN}/{slug}/{action.write_path.lstrip('/')}",
+            wait_until="domcontentloaded",
+        )
+        for label in action.pre_clicks:
+            missing = await _click_named(page, label)
+            if missing is not None:
+                return missing
+        for field_name, value in action.fills:
+            missing = await _fill_named(page, field_name, value)
+            if missing is not None:
+                return missing
+        if action.upload_path is not None:
+            file_input = page.locator("input[type='file']")
+            if await file_input.count() < 1:
+                return ToolError(
+                    code=StableErrorCode.UI_CHANGED,
+                    message="Billy file input is not visible.",
+                )
+            await file_input.first.set_input_files(action.upload_path)
+        for label in action.clicks:
+            missing = await _click_named(page, label)
+            if missing is not None:
+                return missing
+        return await prove_text_on_fresh_page(
+            context,
+            path=action.readback_path,
+            text=action.readback_text,
+            absent=action.readback_absent,
+        )
+    finally:
+        await page.close()
+
+
+async def prove_text_on_fresh_page(
+    context: PersistentContext,
+    *,
+    path: str,
+    text: str,
+    absent: bool = False,
+) -> ToolError | None:
+    """Open a second page and prove a marker is present or gone."""
+
+    page = await context.new_page()
+    try:
+        slug = await _session_slug(page)
+        if slug is None:
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="Billy organisation slug is not available for the UI write.",
+            )
+        await page.goto(
+            f"{BILLY_ORIGIN}/{slug}/{path.lstrip('/')}",
+            wait_until="domcontentloaded",
+        )
+        found = await page.locator(f"text={text}").count()
+        if absent:
+            if found >= 1:
+                return ToolError(
+                    code=StableErrorCode.CONFLICT,
+                    message="Independent interface read-back still shows the deleted record.",
+                )
+            return None
+        if found < 1:
+            return ToolError(
+                code=StableErrorCode.NOT_FOUND,
+                message="Independent interface read-back did not prove the expected change.",
+            )
+        return None
+    finally:
+        await page.close()
+
+
+async def _session_slug(page: LoginPage) -> str | None:
+    if not page.url or page.url == "about:blank":
+        await page.goto(f"{BILLY_ORIGIN}/", wait_until="domcontentloaded")
+    path = urlsplit(page.url).path or ""
+    parts = [part for part in path.split("/") if part]
+    if parts and parts[0] not in {"login"}:
+        return parts[0]
+    return None
+
+
+async def _fill_named(page: LoginPage, field_name: str, value: str) -> ToolError | None:
+    field = page.locator(f"input[name='{field_name}']")
+    if await field.count() < 1:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message=f"Billy field {field_name} is not visible.",
+        )
+    await field.first.fill(value)
+    return None
+
+
+async def _click_named(page: LoginPage, label: str) -> ToolError | None:
+    control = page.locator(f"text={label}")
+    if await control.count() >= 1 and await control.first.is_visible():
+        await control.first.click()
+        return None
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message=f"Billy control {label} is not visible.",
+    )

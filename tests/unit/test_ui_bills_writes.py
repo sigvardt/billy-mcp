@@ -57,11 +57,11 @@ def test_registers_exactly_six_flat_typed_ui_bill_write_tools() -> None:
     server, _ = make_server()
     by_name = {tool.name: tool for tool in anyio.run(server.list_tools)}
     expected_properties = {
-        "ui_bills_create_preview": {"unique_tag"},
+        "ui_bills_create_preview": {"unique_tag", "organization_id"},
         "ui_bills_create_execute": {"confirmation_ticket"},
-        "ui_bills_update_preview": {"id", "unique_tag"},
+        "ui_bills_update_preview": {"id", "unique_tag", "organization_id"},
         "ui_bills_update_execute": {"confirmation_ticket"},
-        "ui_bills_delete_preview": {"id", "unique_tag"},
+        "ui_bills_delete_preview": {"id", "unique_tag", "organization_id"},
         "ui_bills_delete_execute": {"confirmation_ticket"},
     }
     assert set(by_name) == set(expected_properties)
@@ -105,7 +105,7 @@ def test_preview_does_not_submit() -> None:
     preview = call_tool(
         server,
         "ui_bills_create_preview",
-        {"unique_tag": "MCP-BILL-CREATE-1"},
+        {"unique_tag": "MCP-BILL-CREATE-1", "organization_id": "org-test"},
     )
     assert preview["confirmation_ticket"]
     assert preview["canonical_request"] == {
@@ -128,7 +128,7 @@ def test_execute_submits_once_and_replay_is_consumed() -> None:
     preview = call_tool(
         server,
         "ui_bills_create_preview",
-        {"unique_tag": "MCP-BILL-CREATE-2"},
+        {"unique_tag": "MCP-BILL-CREATE-2", "organization_id": "org-test"},
     )
     ticket = cast(str, preview["confirmation_ticket"])
     first = call_tool(server, "ui_bills_create_execute", {"confirmation_ticket": ticket})
@@ -149,7 +149,7 @@ def test_wrong_tool_and_tampered_ticket_do_not_submit() -> None:
     preview = call_tool(
         server,
         "ui_bills_create_preview",
-        {"unique_tag": "MCP-BILL-CREATE-3"},
+        {"unique_tag": "MCP-BILL-CREATE-3", "organization_id": "org-test"},
     )
     ticket = cast(str, preview["confirmation_ticket"])
     tampered = call_tool(
@@ -174,7 +174,7 @@ def test_expired_ticket_does_not_submit() -> None:
     preview = call_tool(
         server,
         "ui_bills_update_preview",
-        {"id": "bill-draft-1", "unique_tag": "MCP-BILL-UPDATE-1"},
+        {"id": "bill-draft-1", "unique_tag": "MCP-BILL-UPDATE-1", "organization_id": "org-test"},
     )
     assert preview["canonical_request"] == {
         "action": "update",
@@ -199,10 +199,12 @@ def test_default_submitter_blocks_live_slot_without_http() -> None:
     preview = call_tool(
         server,
         "ui_bills_delete_preview",
-        {"id": "bill-draft-2", "unique_tag": "MCP-BILL-DELETE-1"},
+        {"id": "bill-draft-2", "unique_tag": "MCP-BILL-DELETE-1", "organization_id": "org-test"},
     )
-    assert preview["canonical_request"]["id"] == "bill-draft-2"
-    assert preview["canonical_request"]["draft_only"] is True
+    request = preview["canonical_request"]
+    assert isinstance(request, dict)
+    assert request["id"] == "bill-draft-2"
+    assert request["draft_only"] is True
     blocked = call_tool(
         server,
         "ui_bills_delete_execute",

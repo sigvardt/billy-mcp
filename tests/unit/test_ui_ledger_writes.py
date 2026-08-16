@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from datetime import UTC, datetime, timedelta
+from typing import cast
 
 import pytest
 from fastmcp import FastMCP
@@ -28,14 +29,21 @@ PREVIEW_EXECUTE = {
     "ui_transactions_create_preview": "ui_transactions_create_execute",
 }
 
-PREVIEW_ARGUMENTS: dict[str, dict[str, str]] = {
-    "ui_daybooks_create_preview": {"name": "MCP-LEDGER-UNIT-DAYBOOK"},
-    "ui_daybooks_delete_preview": {"id": "daybook-1"},
+PREVIEW_ARGUMENTS: dict[str, dict[str, object]] = {
+    "ui_daybooks_create_preview": {
+        "name": "MCP-LEDGER-UNIT-DAYBOOK",
+        "organization_id": "org-test",
+    },
+    "ui_daybooks_delete_preview": {"id": "daybook-1", "organization_id": "org-test"},
     "ui_daybook_transactions_create_preview": {
         "daybook_id": "daybook-1",
         "text": "MCP-LEDGER-UNIT-LINE",
+        "organization_id": "org-test",
     },
-    "ui_transactions_create_preview": {"text": "MCP-LEDGER-UNIT-POSTING"},
+    "ui_transactions_create_preview": {
+        "text": "MCP-LEDGER-UNIT-POSTING",
+        "organization_id": "org-test",
+    },
 }
 
 
@@ -60,17 +68,15 @@ def make_server(*, clock: Clock | None = None) -> FastMCP:
     return server
 
 
-def call_tool(
-    server: FastMCP, tool_name: str, arguments: dict[str, object]
-) -> dict[str, object]:
+def call_tool(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> dict[str, object]:
     """Call one typed tool with its direct MCP argument object."""
 
     result = asyncio.run(server.call_tool(tool_name, arguments))
-    structured_content = result.structured_content
-    assert isinstance(structured_content, dict)
+    assert isinstance(result.structured_content, dict)
+    structured_content = cast(dict[str, object], result.structured_content)
     structured_result = structured_content.get("result", structured_content)
     assert isinstance(structured_result, dict)
-    return structured_result
+    return cast(dict[str, object], structured_result)
 
 
 def test_registers_exactly_eight_flat_typed_ledger_write_tools() -> None:
@@ -79,13 +85,13 @@ def test_registers_exactly_eight_flat_typed_ledger_write_tools() -> None:
 
     assert set(by_name) == set(PREVIEW_EXECUTE) | set(PREVIEW_EXECUTE.values())
     expected_properties = {
-        "ui_daybooks_create_preview": {"name"},
+        "ui_daybooks_create_preview": {"name", "organization_id"},
         "ui_daybooks_create_execute": {"confirmation_ticket"},
-        "ui_daybooks_delete_preview": {"id"},
+        "ui_daybooks_delete_preview": {"id", "organization_id"},
         "ui_daybooks_delete_execute": {"confirmation_ticket"},
-        "ui_daybook_transactions_create_preview": {"daybook_id", "text"},
+        "ui_daybook_transactions_create_preview": {"daybook_id", "text", "organization_id"},
         "ui_daybook_transactions_create_execute": {"confirmation_ticket"},
-        "ui_transactions_create_preview": {"text"},
+        "ui_transactions_create_preview": {"text", "organization_id"},
         "ui_transactions_create_execute": {"confirmation_ticket"},
     }
     for name, fields in expected_properties.items():
@@ -142,8 +148,14 @@ def test_preview_issues_ticket_and_does_not_submit(
     assert isinstance(ticket, str)
     assert ticket
     assert preview["expires_at"]
-    assert preview["canonical_request"] == PREVIEW_ARGUMENTS[preview_name]
-    assert preview["expected_effect_state"]["action"] in {"create", "delete"}
+    assert preview["canonical_request"] == {
+        key: value
+        for key, value in PREVIEW_ARGUMENTS[preview_name].items()
+        if key != "organization_id"
+    }
+    expected_effect = preview["expected_effect_state"]
+    assert isinstance(expected_effect, dict)
+    assert expected_effect["action"] in {"create", "delete"}
 
 
 @pytest.mark.parametrize("preview_name", list(PREVIEW_EXECUTE))
@@ -164,7 +176,11 @@ def test_execute_consumes_once_without_submitting(preview_name: str) -> None:
 
     assert first["submitted"] is False
     assert first["blocker"] == LEDGER_SUBMIT_BLOCKER
-    assert first["canonical_request"] == PREVIEW_ARGUMENTS[preview_name]
+    assert first["canonical_request"] == {
+        key: value
+        for key, value in PREVIEW_ARGUMENTS[preview_name].items()
+        if key != "organization_id"
+    }
     assert replay["code"] == StableErrorCode.CONFIRMATION_CONSUMED
 
 
@@ -174,7 +190,7 @@ def test_expired_ticket_fails_closed() -> None:
     preview = call_tool(
         server,
         "ui_daybooks_create_preview",
-        {"name": "MCP-LEDGER-UNIT-EXPIRE"},
+        {"name": "MCP-LEDGER-UNIT-EXPIRE", "organization_id": "org-test"},
     )
     clock.now = clock.now + MAX_TICKET_TTL + timedelta(seconds=1)
     expired = call_tool(
@@ -191,7 +207,7 @@ def test_wrong_tool_rejects_ticket() -> None:
     preview = call_tool(
         server,
         "ui_daybooks_create_preview",
-        {"name": "MCP-LEDGER-UNIT-MISMATCH"},
+        {"name": "MCP-LEDGER-UNIT-MISMATCH", "organization_id": "org-test"},
     )
     wrong = call_tool(
         server,

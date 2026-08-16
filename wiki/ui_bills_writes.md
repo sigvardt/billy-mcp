@@ -13,8 +13,9 @@ updated: 2026-08-16T14:35:00Z
 
 Six FastMCP tools preview and ticket draft bill writes. Preview issues a
 ticket and writes nothing. Execute accepts only `confirmation_ticket`.
-Default execute consumes the ticket and refuses live mutation until root
-radios a live slot. No Billy interface submit has run yet.
+Default execute opens the draft bill form, fills the bound tag, clicks
+`Gem som kladde` or `Slet`, and returns `submitted=True` only after a
+second page proves the result. Coverage stays red until live FastMCP proof.
 
 This lane never calls `https://api.billysbilling.com/v2`. Qualification is
 `server.call_tool`, not `BrowserRuntime`. Root greens

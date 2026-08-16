@@ -2,12 +2,16 @@
 
 from __future__ import annotations
 
+import inspect
+from collections.abc import Awaitable
 from typing import Literal, Protocol
 
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
+from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePrepared,
@@ -39,7 +43,7 @@ class InvoiceCreatePreviewInput(BaseModel):
     line_description: str = Field(min_length=1)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
-    organization_id: str | None = None
+    organization_id: str = Field(min_length=1)
 
 
 class InvoiceUpdatePreviewInput(BaseModel):
@@ -51,7 +55,7 @@ class InvoiceUpdatePreviewInput(BaseModel):
     line_description: str = Field(min_length=1)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
-    organization_id: str | None = None
+    organization_id: str = Field(min_length=1)
 
 
 class InvoiceDeletePreviewInput(BaseModel):
@@ -62,7 +66,7 @@ class InvoiceDeletePreviewInput(BaseModel):
     id: str = Field(min_length=1)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
-    organization_id: str | None = None
+    organization_id: str = Field(min_length=1)
 
 
 class UiInvoiceExecuteResult(BaseModel):
@@ -80,7 +84,9 @@ class UiInvoiceExecuteResult(BaseModel):
 class InvoiceUiSubmitter(Protocol):
     """Performs the bound interface action after the ticket is consumed."""
 
-    def submit(self, prepared: UiWritePrepared) -> UiInvoiceExecuteResult | ToolError: ...
+    def submit(
+        self, prepared: UiWritePrepared
+    ) -> UiInvoiceExecuteResult | ToolError | Awaitable[UiInvoiceExecuteResult | ToolError]: ...
 
 
 class UnarmedInvoiceSubmitter:
@@ -96,6 +102,30 @@ class UnarmedInvoiceSubmitter:
             action=action,
             save_cta=save_cta,
             submitted=False,
+            canonical_request=prepared.canonical_request,
+            expected_effect_state=prepared.expected_effect_state,
+        )
+
+
+class BrowserInvoiceSubmitter:
+    """Default production submitter. Draft save only. Enters BrowserRuntime first."""
+
+    def __init__(self, runtime: BrowserRuntime) -> None:
+        self._runtime = runtime
+
+    async def submit(self, prepared: UiWritePrepared) -> UiInvoiceExecuteResult | ToolError:
+        rejected = fail_closed_request(prepared.canonical_request)
+        if rejected is not None:
+            return rejected
+        action = _effect_action(prepared.expected_effect_state)
+        save_cta = str(prepared.canonical_request.get("save_cta", ""))
+        failed = await perform_family_write(self._runtime, _invoice_write(prepared, action))
+        if failed is not None:
+            return failed
+        return UiInvoiceExecuteResult(
+            action=action,
+            save_cta=save_cta,
+            submitted=True,
             canonical_request=prepared.canonical_request,
             expected_effect_state=prepared.expected_effect_state,
         )
@@ -128,21 +158,62 @@ def fail_closed(action: str, save_cta: str) -> ToolError | None:
     return None
 
 
+def _invoice_write(
+    prepared: UiWritePrepared, action: Literal["create", "update", "delete"]
+) -> FamilyWrite:
+    request = prepared.canonical_request
+    invoice_id = str(request.get("id") or "")
+    contact_name = str(request.get("contact_name") or "")
+    line_description = str(request.get("line_description") or invoice_id)
+    match action:
+        case "create":
+            return FamilyWrite(
+                write_path="invoices/new",
+                fills=(("contact", contact_name), ("description", line_description)),
+                clicks=(DRAFT_SAVE_CTA,),
+                readback_path="invoices",
+                readback_text=line_description,
+            )
+        case "update":
+            return FamilyWrite(
+                write_path=f"invoices/{invoice_id}/edit",
+                fills=(("description", line_description),),
+                clicks=(DRAFT_SAVE_CTA,),
+                readback_path="invoices",
+                readback_text=line_description,
+            )
+        case "delete":
+            return FamilyWrite(
+                write_path=f"invoices/{invoice_id}/edit",
+                fills=(),
+                clicks=("Mere", DRAFT_DELETE_CTA),
+                readback_path="invoices",
+                readback_text=invoice_id,
+                readback_absent=True,
+            )
+
+
 def register_ui_invoice_write_tools(
     server: FastMCP,
     protocol: UiWriteProtocol,
     submitter: InvoiceUiSubmitter | None = None,
+    runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register UI invoice preview and execute tools. Preview writes nothing."""
 
-    active = submitter or UnarmedInvoiceSubmitter()
+    if submitter is not None:
+        active: InvoiceUiSubmitter = submitter
+    elif runtime is not None:
+        active = BrowserInvoiceSubmitter(runtime)
+    else:
+        active = UnarmedInvoiceSubmitter()
 
     def ui_invoices_create_preview(
         contact_name: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
-        organization_id: str | None = None,
+        organization_id: str = Field(min_length=1),
     ) -> UiWritePreviewResult | ToolError:
         """Preview one draft invoice create. Does not click Gem som kladde."""
 
@@ -166,19 +237,19 @@ def register_ui_invoice_write_tools(
             summary="Create one Billy invoice draft in the interface.",
         )
 
-    def ui_invoices_create_execute(
+    async def ui_invoices_create_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiInvoiceExecuteResult | ToolError:
         """Execute the exact previewed draft invoice create."""
 
-        return _execute(protocol, active, confirmation_ticket, CREATE_EXECUTE)
+        return await _execute(protocol, active, confirmation_ticket, CREATE_EXECUTE)
 
     def ui_invoices_update_preview(
         id: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
-        organization_id: str | None = None,
+        organization_id: str = Field(min_length=1),
     ) -> UiWritePreviewResult | ToolError:
         """Preview one draft invoice update. Does not click Gem som kladde."""
 
@@ -202,18 +273,18 @@ def register_ui_invoice_write_tools(
             summary="Update one Billy invoice draft in the interface.",
         )
 
-    def ui_invoices_update_execute(
+    async def ui_invoices_update_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiInvoiceExecuteResult | ToolError:
         """Execute the exact previewed draft invoice update."""
 
-        return _execute(protocol, active, confirmation_ticket, UPDATE_EXECUTE)
+        return await _execute(protocol, active, confirmation_ticket, UPDATE_EXECUTE)
 
     def ui_invoices_delete_preview(
         id: str = Field(min_length=1),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
-        organization_id: str | None = None,
+        organization_id: str = Field(min_length=1),
     ) -> UiWritePreviewResult | ToolError:
         """Preview one draft invoice delete. Does not confirm Slet."""
 
@@ -236,12 +307,12 @@ def register_ui_invoice_write_tools(
             summary="Delete one Billy invoice draft in the interface.",
         )
 
-    def ui_invoices_delete_execute(
+    async def ui_invoices_delete_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiInvoiceExecuteResult | ToolError:
         """Execute the exact previewed draft invoice delete."""
 
-        return _execute(protocol, active, confirmation_ticket, DELETE_EXECUTE)
+        return await _execute(protocol, active, confirmation_ticket, DELETE_EXECUTE)
 
     server.tool(
         name="ui_invoices_create_preview",
@@ -269,7 +340,7 @@ def register_ui_invoice_write_tools(
     )(ui_invoices_delete_execute)
 
 
-def _execute(
+async def _execute(
     protocol: UiWriteProtocol,
     submitter: InvoiceUiSubmitter,
     confirmation_ticket: str,
@@ -284,7 +355,10 @@ def _execute(
     rejected = fail_closed_request(prepared.canonical_request)
     if rejected is not None:
         return rejected
-    return submitter.submit(prepared)
+    submitted = submitter.submit(prepared)
+    if inspect.isawaitable(submitted):
+        return await submitted
+    return submitted
 
 
 def _create_request(payload: InvoiceCreatePreviewInput) -> dict[str, JsonValue]:
@@ -294,8 +368,7 @@ def _create_request(payload: InvoiceCreatePreviewInput) -> dict[str, JsonValue]:
         "contact_name": payload.contact_name,
         "line_description": payload.line_description,
     }
-    if payload.organization_id is not None:
-        request["organization_id"] = payload.organization_id
+    request["organization_id"] = payload.organization_id
     return request
 
 
@@ -306,8 +379,7 @@ def _update_request(payload: InvoiceUpdatePreviewInput) -> dict[str, JsonValue]:
         "id": payload.id,
         "line_description": payload.line_description,
     }
-    if payload.organization_id is not None:
-        request["organization_id"] = payload.organization_id
+    request["organization_id"] = payload.organization_id
     return request
 
 
@@ -317,8 +389,7 @@ def _delete_request(payload: InvoiceDeletePreviewInput) -> dict[str, JsonValue]:
         "save_cta": payload.save_cta,
         "id": payload.id,
     }
-    if payload.organization_id is not None:
-        request["organization_id"] = payload.organization_id
+    request["organization_id"] = payload.organization_id
     return request
 
 

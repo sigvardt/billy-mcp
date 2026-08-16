@@ -5,6 +5,8 @@ tags: [owner, scope]
 sources:
   - radio:96908DC6
   - radio:DC3B8E96
+  - radio:E1E454F4
+  - radio:4E471870
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -21,13 +23,17 @@ updated: 2026-08-16T13:50:50Z
 
 `DD80C9A8` (saved): node `test.sh` must accept `BILLY_TEST_MODE=ui-full` (offline API + live UI/vision, no live API), then require-complete and repository policy.
 
+`4E471870` (saved): do not green and do not start live qualification yet. `create_server` now passes the shared `BrowserRuntime` and requires `organization_id`, but that is not enough.
+
+`5018B3FA` (inbox, priority 10): start-only execute is a false submit. The default path now performs the family action and a second-page read-back before `submitted=True`. Fake-page unit tests lock route, fields, CTA, and read-back. Live FastMCP proof is still required before any greening. Do not mark rows implemented or live-tested from the unit fake page.
+
 Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI tools through the real MCP boundary, not direct BrowserRuntime as proof.
 
 ## Still in force
 
 - No live Billy API tests. No credentialed API qualification calls. Each API row keeps `live_tested` false with `out_of_scope_by_user`.
 - Annual reports stay `out_of_scope_by_user` (`scope_code=ANNUAL_REPORTS_OWNER_SKIP`, owner radio `DC3B8E96`). Do not invent `ui_annual_*` or `api_annual_*`. Do not mark the row UI `not_applicable` only because the plan skips it.
-- Interface credentials live at `/Users/user/Desktop/billy_login.txt`. Never read them into memory, logs, commits, or radio.
+- Live UI refs (`E1E454F4`): `BILLY_BROWSER_PRIMARY_REFERENCE=billy-ui-primary` and `BILLY_BROWSER_SECONDARY_REFERENCE=billy-ui-secondary` in keyring service `billy-mcp`. Never log values. Never read `/Users/user/Desktop/billy_login.txt` into memory, logs, commits, or radio. `BILLY_ORGANIZATION_ID` stays unset until the dedicated non-production org is proved in the interface.
 - Do not send invoices or emails, make payments, submit VAT or filings, change users/access/tokens/subscription, or cause other external effects unless a separately safe non-production fixture proves no external consequence, or Joakim gives explicit authority.
 
 ## Not a completion wall by themselves

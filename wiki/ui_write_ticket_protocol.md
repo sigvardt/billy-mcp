@@ -23,8 +23,13 @@ second interface session.
 
 `ConfirmationStore` binds execute tool name, organisation, target, canonical
 request, expected effect, optional file path and digest, and optional
-destination URL. Tickets are process-volatile and expire in at most five
-minutes.
+destination URL. Preview refuses a missing organisation id
+(`ORGANIZATION_REQUIRED`). `create_server` passes its shared `BrowserRuntime`
+into every family register. Default execute performs the family route, fields,
+and submit control, then returns `submitted=True` only after a second page
+proves the change. Start-only is not a submit. Tickets are process-volatile
+and expire in at most five minutes. Coverage rows stay red until live FastMCP
+proof.
 
 Qualify tools through FastMCP `call_tool`, not `BrowserRuntime` as proof.
 

@@ -19,7 +19,11 @@ from billy_mcp.ui_writes.organizations import (
     RecordingOrganizationSubmitter,
     register_ui_organization_write_tools,
 )
-from billy_mcp.ui_writes.protocol import UiWriteExecuteInput, UiWriteProtocol
+from billy_mcp.ui_writes.protocol import (
+    UiWriteExecuteInput,
+    UiWritePreviewResult,
+    UiWriteProtocol,
+)
 
 
 class Clock:
@@ -71,7 +75,7 @@ def test_registers_exactly_two_flat_typed_organization_update_tools() -> None:
 
     by_name = {tool.name: tool for tool in asyncio.run(server.list_tools())}
     expected_properties = {
-        "ui_organizations_update_preview": {"phone"},
+        "ui_organizations_update_preview": {"phone", "organization_id"},
         "ui_organizations_update_execute": {"confirmation_ticket"},
     }
     assert set(by_name) == set(expected_properties)
@@ -120,7 +124,7 @@ def test_preview_issues_ticket_and_does_not_submit() -> None:
     preview = call_tool(
         server,
         "ui_organizations_update_preview",
-        {"phone": "+4511111111"},
+        {"phone": "+4511111111", "organization_id": "org-test"},
     )
 
     assert submitter.calls == []
@@ -145,7 +149,7 @@ def test_execute_submits_once_and_replay_is_consumed() -> None:
     preview = call_tool(
         server,
         "ui_organizations_update_preview",
-        {"phone": "+4522222222"},
+        {"phone": "+4522222222", "organization_id": "org-test"},
     )
     ticket = preview["confirmation_ticket"]
 
@@ -178,12 +182,13 @@ def test_execute_rejects_wrong_tool_without_submit() -> None:
 
     foreign = protocol.preview(
         execute_tool_name="ui_clients_create_execute",
-        organization_id=None,
+        organization_id="org-test",
         target="clients",
         canonical_request={"name": "MCP-TEST"},
         expected_effect_state={"action": "create", "resource": "contact"},
         summary="Create one Billy customer in the interface.",
     )
+    assert isinstance(foreign, UiWritePreviewResult)
     mismatch = call_tool(
         server,
         "ui_organizations_update_execute",
@@ -201,7 +206,7 @@ def test_execute_rejects_expired_ticket_without_submit() -> None:
     preview = call_tool(
         server,
         "ui_organizations_update_preview",
-        {"phone": "+4533333333"},
+        {"phone": "+4533333333", "organization_id": "org-test"},
     )
     clock.now = clock.now + MAX_TICKET_TTL + timedelta(seconds=1)
 
@@ -224,7 +229,7 @@ def test_missing_submitter_does_not_consume_ticket() -> None:
     preview = call_tool(
         bare,
         "ui_organizations_update_preview",
-        {"phone": "+4544444444"},
+        {"phone": "+4544444444", "organization_id": "org-test"},
     )
     ticket = preview["confirmation_ticket"]
 

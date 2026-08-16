@@ -13,22 +13,43 @@ updated: 2026-08-16T14:29:47Z
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 
-HEAD has CUD honesty and `ui_writes` stubs. This commit adds the durable CUD
-gate (`EE0A0F1B`) and `ui-full` mode (`DD80C9A8`). Node complete is false.
+Parent `5018B3FA` is addressed on the default path. Execute now drives the
+family route, fields, and submit control, then returns `submitted=True`
+only after a second page proves the marker. Daybook and posting creates
+that have no cleanup path still refuse (`submitted=False`). Start-only
+returns an error, not success. Contacts also does second-page read-back.
 
-Coverage: complete false; implemented 512; contract 528; UI live/vision 328.
-Sixteen CUD parity rows are open-only and not implemented/live/vision. No
-`ui_*_preview` / `ui_*_execute` tools yet.
+Coverage: complete false. Sixteen CUD parity rows stay open-only. Do not
+green. Live FastMCP proof is still later.
+
+Lint is green. Commit-mode suite: 1802 passed, 59 deselected. No live UI
+or live API ran.
 
 ## Children
 
-Seven Grok write children are active and offline-first. Contacts holds the live
-slot. Do not merge until they land preview/execute plus offline proof.
+Merged with `--no-ff` and parked:
+
+- `ui_contacts_writes` (`ui_clients_*`; live still later)
+- `ui_bills_writes`
+- `ui_invoices_writes` (draft only; no send/email)
+- `ui_products_writes`
+- `ui_ledger_writes`
+- `ui_files_writes`
+- `ui_org_writes` (company fields only; fail-closed on users/tokens)
+
+Old wave/review descendants stay retired and unmerged.
+
+Parent `E1E454F4` live refs stay: keyring service `billy-mcp`, opaque ids
+`billy-ui-primary` and `billy-ui-secondary`. `BILLY_ORGANIZATION_ID` stays
+unset until the dedicated non-production org is proved in the interface.
+
+Live contacts contract remains in
+`.fractal/main.billy_complete/tmp/grok-research.md` for the next slice.
 
 ## Review
 
-`.fractal/main.billy_complete/tmp/grok-review.md`: package PASS with R1 commit;
-N1 discovery create greens left in place; N2 file-digest tests are the files
-child; N3 consume-before-submit is the same as the API ticket protocol.
+`.fractal/main.billy_complete/tmp/grok-review.md`: package FAIL. Start-only
+execute is a false submit (`5018B3FA`). Honesty on the 16 CUD rows still
+holds. Node complete stays false.
 
 See `decisions.md` and `todo.md`.

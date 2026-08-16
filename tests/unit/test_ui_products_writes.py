@@ -17,7 +17,7 @@ from billy_mcp.ui_writes.products import (
     UiProductsCreatePreviewInput,
     register_ui_product_write_tools,
 )
-from billy_mcp.ui_writes.protocol import UiWriteProtocol
+from billy_mcp.ui_writes.protocol import UiWritePreviewResult, UiWriteProtocol
 
 
 class Clock:
@@ -61,7 +61,13 @@ def test_create_server_registers_product_create_preview_and_execute() -> None:
     execute_properties = cast(dict[str, object], execute["properties"])
     assert preview["additionalProperties"] is False
     assert execute["additionalProperties"] is False
-    assert set(preview_properties) == {"name", "account", "salesTaxRuleset", "unitPrice"}
+    assert set(preview_properties) == {
+        "name",
+        "organization_id",
+        "account",
+        "salesTaxRuleset",
+        "unitPrice",
+    }
     assert set(execute_properties) == {"confirmation_ticket"}
     ticket = execute_properties["confirmation_ticket"]
     assert isinstance(ticket, dict)
@@ -74,7 +80,7 @@ def test_preview_returns_ticket_and_does_not_submit() -> None:
     preview = call_tool(
         server,
         "ui_products_create_preview",
-        {"name": "MCP-TEST-PRODUCT-OFFLINE-1"},
+        {"name": "MCP-TEST-PRODUCT-OFFLINE-1", "organization_id": "org-test"},
     )
 
     assert preview["confirmation_ticket"]
@@ -94,6 +100,7 @@ def test_preview_binds_optional_form_fields() -> None:
             "account": "1000",
             "salesTaxRuleset": "ruleset-1",
             "unitPrice": 12.5,
+            "organization_id": "org-test",
         },
     )
 
@@ -107,7 +114,7 @@ def test_preview_binds_optional_form_fields() -> None:
 
 def test_preview_input_rejects_empty_name_and_unknown_fields() -> None:
     with pytest.raises(ValidationError):
-        UiProductsCreatePreviewInput(name="")
+        UiProductsCreatePreviewInput(name="", organization_id="org-test")
     with pytest.raises(ValidationError):
         UiProductsCreatePreviewInput.model_validate(
             {"name": "MCP-TEST-PRODUCT-OFFLINE-X", "unexpected": True}
@@ -119,7 +126,7 @@ def test_execute_consumes_ticket_once_and_echoes_previewed_name() -> None:
     preview = call_tool(
         server,
         "ui_products_create_preview",
-        {"name": "MCP-TEST-PRODUCT-OFFLINE-2"},
+        {"name": "MCP-TEST-PRODUCT-OFFLINE-2", "organization_id": "org-test"},
     )
 
     first = call_tool(
@@ -145,7 +152,7 @@ def test_execute_rejects_expired_ticket() -> None:
     preview = call_tool(
         server,
         "ui_products_create_preview",
-        {"name": "MCP-TEST-PRODUCT-OFFLINE-3"},
+        {"name": "MCP-TEST-PRODUCT-OFFLINE-3", "organization_id": "org-test"},
     )
 
     clock.now = clock.now + MAX_TICKET_TTL + timedelta(seconds=1)
@@ -163,12 +170,13 @@ def test_execute_rejects_ticket_bound_to_another_tool() -> None:
     server = make_server(protocol)
     foreign = protocol.preview(
         execute_tool_name="ui_bills_create_execute",
-        organization_id=None,
+        organization_id="org-test",
         target="bills",
         canonical_request={"name": "not-a-product"},
         expected_effect_state={"action": "create", "resource": "bill"},
         summary="Create one Billy bill in the interface.",
     )
+    assert isinstance(foreign, UiWritePreviewResult)
 
     mismatch = call_tool(
         server,

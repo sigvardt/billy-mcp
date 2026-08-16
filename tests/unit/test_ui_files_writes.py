@@ -6,6 +6,7 @@ import asyncio
 import hashlib
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
+from typing import cast
 
 from fastmcp import FastMCP
 
@@ -15,7 +16,7 @@ from billy_mcp.ui_writes.files import (
     UiFilesCreateExecuteSuccess,
     register_ui_file_write_tools,
 )
-from billy_mcp.ui_writes.protocol import UiWriteProtocol
+from billy_mcp.ui_writes.protocol import UiWritePreviewResult, UiWriteProtocol
 
 
 class Clock:
@@ -80,18 +81,18 @@ def make_server(
 
 def call_tool(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> dict[str, object]:
     result = asyncio.run(server.call_tool(tool_name, arguments))
-    structured_content = result.structured_content
-    assert isinstance(structured_content, dict)
+    assert isinstance(result.structured_content, dict)
+    structured_content = cast(dict[str, object], result.structured_content)
     payload = structured_content.get("result", structured_content)
     assert isinstance(payload, dict)
-    return payload
+    return cast(dict[str, object], payload)
 
 
 def preview_arguments(
     path: str = "safe.txt",
     filename: str = "MCP-TEST-ui-files-safe.txt",
 ) -> dict[str, object]:
-    return {"path": path, "filename": filename}
+    return {"path": path, "filename": filename, "organization_id": "org-test"}
 
 
 def test_registers_exactly_two_flat_typed_ui_file_write_tools(tmp_path: Path) -> None:
@@ -117,7 +118,7 @@ def test_preview_binds_resolved_path_and_digest_without_submit(tmp_path: Path) -
 
     request = preview["canonical_request"]
     assert isinstance(request, dict)
-    file_identity = request["file"]
+    file_identity = cast(dict[str, object], request)["file"]
     assert isinstance(file_identity, dict)
     assert file_identity["path"] == str(file_path.resolve())
     assert file_identity["sha256"] == _sha256(content)
@@ -174,12 +175,13 @@ def test_execute_rejects_wrong_tool_ticket_without_submit(tmp_path: Path) -> Non
     server, protocol, recorder = make_server(tmp_path)
     foreign = protocol.preview(
         execute_tool_name="ui_clients_create_execute",
-        organization_id=None,
+        organization_id="org-test",
         target="files",
         canonical_request={"filename": "foreign.txt"},
         expected_effect_state={"action": "create"},
         summary="Foreign ticket for mismatch.",
     )
+    assert isinstance(foreign, UiWritePreviewResult)
 
     mismatch = call_tool(
         server,

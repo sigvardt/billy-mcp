@@ -495,8 +495,14 @@ def validate_documents(
         for row in api_rows + ui_rows
         if isinstance(row.get("tool_name"), str) and row["tool_name"]
     }
-    allowed_registered_tools = planned_tools | execute_twin_names(planned_tools)
-    for tool_name in sorted(registered_domain_tools(root) - allowed_registered_tools):
+    registered = registered_domain_tools(root)
+    ui_write_twins = {
+        name
+        for name in registered
+        if name.startswith("ui_") and name.endswith(("_preview", "_execute"))
+    }
+    allowed_registered_tools = planned_tools | execute_twin_names(planned_tools) | ui_write_twins
+    for tool_name in sorted(registered - allowed_registered_tools):
         errors.append(f"registered domain tool lacks a coverage row: {tool_name}")
     return errors
 

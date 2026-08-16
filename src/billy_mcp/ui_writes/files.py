@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import hashlib
+import inspect
 import stat
+from collections.abc import Awaitable
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Annotated, Protocol
@@ -11,8 +13,10 @@ from typing import Annotated, Protocol
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue, StrictStr, field_validator
 
+from billy_mcp.browser import BrowserRuntime
 from billy_mcp.config import AppConfig
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePreviewResult,
@@ -32,7 +36,7 @@ class UiFilesCreatePreviewInput(BaseModel):
 
     path: str = Field(min_length=1)
     filename: str = Field(min_length=1)
-    organization_id: str | None = Field(default=None, min_length=1)
+    organization_id: str = Field(min_length=1)
 
     @field_validator("path", "filename", "organization_id")
     @classmethod
@@ -72,7 +76,9 @@ class UiFileSubmitter(Protocol):
         digest: str,
         size: int,
         organization_id: str | None,
-    ) -> UiFilesCreateExecuteSuccess | ToolError: ...
+    ) -> (
+        UiFilesCreateExecuteSuccess | ToolError | Awaitable[UiFilesCreateExecuteSuccess | ToolError]
+    ): ...
 
 
 class _UnconfiguredUiFileSubmitter:
@@ -92,6 +98,38 @@ class _UnconfiguredUiFileSubmitter:
             code=StableErrorCode.PLAN_UNAVAILABLE,
             message="UI file create submit is not configured for this process.",
         )
+
+
+class BrowserFileSubmitter:
+    """Default production submitter. Enters the shared BrowserRuntime first."""
+
+    def __init__(self, runtime: BrowserRuntime) -> None:
+        self._runtime = runtime
+
+    async def submit(
+        self,
+        *,
+        filename: str,
+        path: Path,
+        digest: str,
+        size: int,
+        organization_id: str | None,
+    ) -> UiFilesCreateExecuteSuccess | ToolError:
+        del digest, size, organization_id
+        failed = await perform_family_write(
+            self._runtime,
+            FamilyWrite(
+                write_path="uploads",
+                fills=(),
+                clicks=("Upload filer",),
+                readback_path="uploads",
+                readback_text=filename,
+                upload_path=path,
+            ),
+        )
+        if failed is not None:
+            return failed
+        return UiFilesCreateExecuteSuccess(filename=filename)
 
 
 class UiFileWriteService:
@@ -134,7 +172,7 @@ class UiFileWriteService:
             file_digest=identity.digest,
         )
 
-    def execute(self, input: UiWriteExecuteInput) -> UiFilesCreateExecuteSuccess | ToolError:
+    async def execute(self, input: UiWriteExecuteInput) -> UiFilesCreateExecuteSuccess | ToolError:
         """Consume the ticket, reject a changed file, then submit once."""
 
         prepared = self._protocol.consume(input, execute_tool_name=_EXECUTE_TOOL_NAME)
@@ -152,13 +190,16 @@ class UiFileWriteService:
         filename = str(prepared.canonical_request.get("filename") or "")
         if not filename:
             return _file_changed()
-        return self._submitter.submit(
+        submitted = self._submitter.submit(
             filename=filename,
             path=current.path,
             digest=current.digest,
             size=current.size,
             organization_id=prepared.binding.organization_id,
         )
+        if inspect.isawaitable(submitted):
+            return await submitted
+        return submitted
 
 
 def register_ui_file_write_tools(
@@ -166,6 +207,7 @@ def register_ui_file_write_tools(
     protocol: UiWriteProtocol,
     submitter: UiFileSubmitter | None = None,
     upload_roots: tuple[Path, ...] | None = None,
+    runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register ui_files_create_preview and ui_files_create_execute."""
 
@@ -174,16 +216,22 @@ def register_ui_file_write_tools(
         if upload_roots is not None
         else AppConfig.from_environment().allowed_upload_roots
     )
+    if submitter is not None:
+        active_submitter: UiFileSubmitter = submitter
+    elif runtime is not None:
+        active_submitter = BrowserFileSubmitter(runtime)
+    else:
+        active_submitter = _UnconfiguredUiFileSubmitter()
     service = UiFileWriteService(
         protocol,
-        submitter if submitter is not None else _UnconfiguredUiFileSubmitter(),
+        active_submitter,
         roots,
     )
 
     def ui_files_create_preview(
         path: _ToolText,
         filename: _ToolText,
-        organization_id: _ToolOptionalText = None,
+        organization_id: _ToolText,
     ) -> UiWritePreviewResult | ToolError:
         """Preview one local file upload in the Billy interface without submitting."""
 
@@ -191,12 +239,12 @@ def register_ui_file_write_tools(
             UiFilesCreatePreviewInput(path=path, filename=filename, organization_id=organization_id)
         )
 
-    def ui_files_create_execute(
+    async def ui_files_create_execute(
         confirmation_ticket: _ToolText,
     ) -> UiFilesCreateExecuteSuccess | ToolError:
         """Execute exactly the previewed UI file create with its ticket."""
 
-        return service.execute(UiWriteExecuteInput(confirmation_ticket=confirmation_ticket))
+        return await service.execute(UiWriteExecuteInput(confirmation_ticket=confirmation_ticket))
 
     server.tool(
         name="ui_files_create_preview",

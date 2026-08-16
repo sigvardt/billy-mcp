@@ -74,11 +74,11 @@ def test_registers_exactly_six_flat_typed_contact_ui_write_tools() -> None:
     server, _ = make_server()
     by_name = {tool.name: tool for tool in asyncio.run(server.list_tools())}
     expected = {
-        "ui_clients_create_preview": {"name"},
+        "ui_clients_create_preview": {"name", "organization_id"},
         "ui_clients_create_execute": {"confirmation_ticket"},
-        "ui_clients_update_preview": {"name", "new_name"},
+        "ui_clients_update_preview": {"name", "new_name", "organization_id"},
         "ui_clients_update_execute": {"confirmation_ticket"},
-        "ui_clients_delete_preview": {"name"},
+        "ui_clients_delete_preview": {"name", "organization_id"},
         "ui_clients_delete_execute": {"confirmation_ticket"},
     }
     assert set(by_name) == set(expected)
@@ -122,13 +122,13 @@ def test_outer_inputs_forbid_extras_and_empty_values(
     [
         (
             "ui_clients_create_preview",
-            {"name": "MCP-UI-C-AAAA"},
+            {"name": "MCP-UI-C-AAAA", "organization_id": "org-test"},
             {"action": "create", "name": "MCP-UI-C-AAAA"},
             {"action": "create", "resource": "contact"},
         ),
         (
             "ui_clients_update_preview",
-            {"name": "MCP-UI-C-AAAA", "new_name": "MCP-UI-C-AAAA-U"},
+            {"name": "MCP-UI-C-AAAA", "new_name": "MCP-UI-C-AAAA-U", "organization_id": "org-test"},
             {"action": "update", "name": "MCP-UI-C-AAAA", "new_name": "MCP-UI-C-AAAA-U"},
             {
                 "action": "update",
@@ -139,7 +139,7 @@ def test_outer_inputs_forbid_extras_and_empty_values(
         ),
         (
             "ui_clients_delete_preview",
-            {"name": "MCP-UI-C-AAAA-U"},
+            {"name": "MCP-UI-C-AAAA-U", "organization_id": "org-test"},
             {"action": "delete", "name": "MCP-UI-C-AAAA-U"},
             {"action": "delete", "resource": "contact", "name": "MCP-UI-C-AAAA-U"},
         ),
@@ -166,19 +166,19 @@ def test_preview_does_not_submit(
         (
             "ui_clients_create_preview",
             "ui_clients_create_execute",
-            {"name": "MCP-UI-C-BBBB"},
+            {"name": "MCP-UI-C-BBBB", "organization_id": "org-test"},
             "create",
         ),
         (
             "ui_clients_update_preview",
             "ui_clients_update_execute",
-            {"name": "MCP-UI-C-BBBB", "new_name": "MCP-UI-C-BBBB-U"},
+            {"name": "MCP-UI-C-BBBB", "new_name": "MCP-UI-C-BBBB-U", "organization_id": "org-test"},
             "update",
         ),
         (
             "ui_clients_delete_preview",
             "ui_clients_delete_execute",
-            {"name": "MCP-UI-C-BBBB-U"},
+            {"name": "MCP-UI-C-BBBB-U", "organization_id": "org-test"},
             "delete",
         ),
     ],
@@ -203,7 +203,11 @@ def test_execute_submits_once_then_replay_is_consumed(
 
 def test_execute_rejects_wrong_tool_and_does_not_submit() -> None:
     server, actor = make_server()
-    preview = call_tool(server, "ui_clients_create_preview", {"name": "MCP-UI-C-CCCC"})
+    preview = call_tool(
+        server,
+        "ui_clients_create_preview",
+        {"name": "MCP-UI-C-CCCC", "organization_id": "org-test"},
+    )
     ticket = cast(str, preview["confirmation_ticket"])
     for execute_name in ("ui_clients_update_execute", "ui_clients_delete_execute"):
         mismatch = call_tool(server, execute_name, {"confirmation_ticket": ticket})
@@ -214,7 +218,11 @@ def test_execute_rejects_wrong_tool_and_does_not_submit() -> None:
 def test_execute_rejects_expired_ticket_and_does_not_submit() -> None:
     clock = Clock()
     server, actor = make_server(clock=clock)
-    preview = call_tool(server, "ui_clients_create_preview", {"name": "MCP-UI-C-DDDD"})
+    preview = call_tool(
+        server,
+        "ui_clients_create_preview",
+        {"name": "MCP-UI-C-DDDD", "organization_id": "org-test"},
+    )
     clock.now = clock.now + MAX_TICKET_TTL + timedelta(seconds=1)
     expired = call_tool(
         server,

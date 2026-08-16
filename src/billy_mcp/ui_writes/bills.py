@@ -2,14 +2,18 @@
 
 from __future__ import annotations
 
+import inspect
+from collections.abc import Awaitable
 from dataclasses import dataclass, field
 from enum import StrEnum
-from typing import Final, Protocol, assert_never
+from typing import Final, Protocol
 
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
+from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePrepared,
@@ -37,6 +41,7 @@ class BillUiCreatePreviewInput(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     unique_tag: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class BillUiUpdatePreviewInput(BaseModel):
@@ -46,6 +51,7 @@ class BillUiUpdatePreviewInput(BaseModel):
 
     id: str = Field(min_length=1)
     unique_tag: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class BillUiDeletePreviewInput(BaseModel):
@@ -55,6 +61,7 @@ class BillUiDeletePreviewInput(BaseModel):
 
     id: str = Field(min_length=1)
     unique_tag: str = Field(min_length=1)
+    organization_id: str = Field(min_length=1)
 
 
 class UiBillWriteExecuteResult(BaseModel):
@@ -70,12 +77,13 @@ class UiBillWriteExecuteResult(BaseModel):
 class BillUiSubmitter(Protocol):
     """Performs the previewed interface action, or refuses it."""
 
-    def submit(self, prepared: UiWritePrepared) -> UiBillWriteExecuteResult | ToolError:
-        """Submit the bound draft bill action without calling the Billy HTTP API."""
+    def submit(
+        self, prepared: UiWritePrepared
+    ) -> UiBillWriteExecuteResult | ToolError | Awaitable[UiBillWriteExecuteResult | ToolError]: ...
 
 
 class LiveSlotBlockedSubmitter:
-    """Default submitter: consume is allowed, live mutation is not."""
+    """Legacy consume-only blocker. The default create_server path no longer uses it."""
 
     def submit(self, prepared: UiWritePrepared) -> ToolError:
         del prepared
@@ -85,11 +93,32 @@ class LiveSlotBlockedSubmitter:
         )
 
 
+class BrowserBillSubmitter:
+    """Default production submitter. Enters the shared BrowserRuntime first."""
+
+    def __init__(self, runtime: BrowserRuntime) -> None:
+        self._runtime = runtime
+
+    async def submit(self, prepared: UiWritePrepared) -> UiBillWriteExecuteResult | ToolError:
+        action = _action_from_prepared(prepared)
+        unique_tag = _tag_from_prepared(prepared)
+        bill_id = str(prepared.canonical_request.get("id") or "")
+        write = _bill_write(action, unique_tag, bill_id)
+        failed = await perform_family_write(self._runtime, write)
+        if failed is not None:
+            return failed
+        return UiBillWriteExecuteResult(
+            submitted=True,
+            action=action,
+            unique_tag=unique_tag,
+        )
+
+
 @dataclass(slots=True)
 class RecordingBillUiSubmitter:
     """Offline recorder. Mutation is the purpose: it stores each submit call."""
 
-    submissions: list[UiWritePrepared] = field(default_factory=list)
+    submissions: list[UiWritePrepared] = field(default_factory=list[UiWritePrepared])
 
     def submit(self, prepared: UiWritePrepared) -> UiBillWriteExecuteResult:
         self.submissions.append(prepared)
@@ -104,23 +133,37 @@ def register_ui_bill_write_tools(
     server: FastMCP,
     protocol: UiWriteProtocol,
     submitter: BillUiSubmitter | None = None,
+    runtime: BrowserRuntime | None = None,
 ) -> None:
     """Register the six UI bill preview and execute tools."""
 
-    actor = submitter if submitter is not None else LiveSlotBlockedSubmitter()
+    if submitter is not None:
+        actor: BillUiSubmitter = submitter
+    elif runtime is not None:
+        actor = BrowserBillSubmitter(runtime)
+    else:
+        actor = LiveSlotBlockedSubmitter()
 
-    def ui_bills_create_preview(unique_tag: str = Field(min_length=1)) -> UiWritePreviewResult:
+    def ui_bills_create_preview(
+        unique_tag: str = Field(min_length=1),
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview a tagged draft bill create. Writes nothing."""
 
-        parsed = BillUiCreatePreviewInput(unique_tag=unique_tag)
-        return _preview(protocol, action=BillUiWriteAction.CREATE, unique_tag=parsed.unique_tag)
+        parsed = BillUiCreatePreviewInput(unique_tag=unique_tag, organization_id=organization_id)
+        return _preview(
+            protocol,
+            action=BillUiWriteAction.CREATE,
+            unique_tag=parsed.unique_tag,
+            organization_id=parsed.organization_id,
+        )
 
-    def ui_bills_create_execute(
+    async def ui_bills_create_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiBillWriteExecuteResult | ToolError:
         """Execute the exact previewed draft bill create."""
 
-        return _execute(
+        return await _execute(
             protocol,
             actor,
             execute_tool_name="ui_bills_create_execute",
@@ -130,23 +173,27 @@ def register_ui_bill_write_tools(
     def ui_bills_update_preview(
         unique_tag: str = Field(min_length=1),
         id: str = Field(min_length=1),
-    ) -> UiWritePreviewResult:
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview a tagged draft bill update. Writes nothing."""
 
-        parsed = BillUiUpdatePreviewInput(id=id, unique_tag=unique_tag)
+        parsed = BillUiUpdatePreviewInput(
+            id=id, unique_tag=unique_tag, organization_id=organization_id
+        )
         return _preview(
             protocol,
             action=BillUiWriteAction.UPDATE,
             unique_tag=parsed.unique_tag,
             bill_id=parsed.id,
+            organization_id=parsed.organization_id,
         )
 
-    def ui_bills_update_execute(
+    async def ui_bills_update_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiBillWriteExecuteResult | ToolError:
         """Execute the exact previewed draft bill update."""
 
-        return _execute(
+        return await _execute(
             protocol,
             actor,
             execute_tool_name="ui_bills_update_execute",
@@ -156,23 +203,27 @@ def register_ui_bill_write_tools(
     def ui_bills_delete_preview(
         unique_tag: str = Field(min_length=1),
         id: str = Field(min_length=1),
-    ) -> UiWritePreviewResult:
+        organization_id: str = Field(min_length=1),
+    ) -> UiWritePreviewResult | ToolError:
         """Preview a tagged draft bill delete. Writes nothing."""
 
-        parsed = BillUiDeletePreviewInput(id=id, unique_tag=unique_tag)
+        parsed = BillUiDeletePreviewInput(
+            id=id, unique_tag=unique_tag, organization_id=organization_id
+        )
         return _preview(
             protocol,
             action=BillUiWriteAction.DELETE,
             unique_tag=parsed.unique_tag,
             bill_id=parsed.id,
+            organization_id=parsed.organization_id,
         )
 
-    def ui_bills_delete_execute(
+    async def ui_bills_delete_execute(
         confirmation_ticket: str = Field(min_length=1),
     ) -> UiBillWriteExecuteResult | ToolError:
         """Execute the exact previewed draft bill delete."""
 
-        return _execute(
+        return await _execute(
             protocol,
             actor,
             execute_tool_name="ui_bills_delete_execute",
@@ -210,8 +261,9 @@ def _preview(
     *,
     action: BillUiWriteAction,
     unique_tag: str,
+    organization_id: str,
     bill_id: str | None = None,
-) -> UiWritePreviewResult:
+) -> UiWritePreviewResult | ToolError:
     canonical: dict[str, JsonValue] = {
         "action": action.value,
         "resource": "bill",
@@ -226,6 +278,7 @@ def _preview(
     if bill_id is not None:
         canonical["id"] = bill_id
         expected["id"] = bill_id
+    summary: str
     match action:
         case BillUiWriteAction.CREATE:
             summary = "Create one draft Billy bill in the interface."
@@ -233,11 +286,9 @@ def _preview(
             summary = "Update one draft Billy bill in the interface."
         case BillUiWriteAction.DELETE:
             summary = "Delete one draft Billy bill in the interface."
-        case unreachable:
-            assert_never(unreachable)
     return protocol.preview(
         execute_tool_name=f"ui_bills_{action.value}_execute",
-        organization_id=None,
+        organization_id=organization_id,
         target="bills",
         canonical_request=canonical,
         expected_effect_state=expected,
@@ -245,7 +296,7 @@ def _preview(
     )
 
 
-def _execute(
+async def _execute(
     protocol: UiWriteProtocol,
     submitter: BillUiSubmitter,
     *,
@@ -260,9 +311,39 @@ def _execute(
         case ToolError():
             return prepared
         case UiWritePrepared():
-            return submitter.submit(prepared)
-        case unreachable:
-            assert_never(unreachable)
+            submitted = submitter.submit(prepared)
+            if inspect.isawaitable(submitted):
+                return await submitted
+            return submitted
+
+
+def _bill_write(action: BillUiWriteAction, unique_tag: str, bill_id: str) -> FamilyWrite:
+    match action:
+        case BillUiWriteAction.CREATE:
+            return FamilyWrite(
+                write_path="bills/new",
+                fills=(("description", unique_tag),),
+                clicks=("Gem som kladde",),
+                readback_path="bills",
+                readback_text=unique_tag,
+            )
+        case BillUiWriteAction.UPDATE:
+            return FamilyWrite(
+                write_path=f"bills/{bill_id}/edit",
+                fills=(("description", unique_tag),),
+                clicks=("Gem som kladde",),
+                readback_path="bills",
+                readback_text=unique_tag,
+            )
+        case BillUiWriteAction.DELETE:
+            return FamilyWrite(
+                write_path=f"bills/{bill_id}/edit",
+                fills=(),
+                clicks=("Slet",),
+                readback_path="bills",
+                readback_text=unique_tag,
+                readback_absent=True,
+            )
 
 
 def _action_from_prepared(prepared: UiWritePrepared) -> BillUiWriteAction:

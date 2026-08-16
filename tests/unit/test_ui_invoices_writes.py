@@ -92,6 +92,7 @@ def _create_args(**overrides: object) -> dict[str, object]:
         "line_description": "MCP-UI-INV line",
         "action": "draft_create",
         "save_cta": DRAFT_SAVE_CTA,
+        "organization_id": "org-test",
     }
     payload.update(overrides)
     return payload
@@ -226,6 +227,7 @@ def test_preview_does_not_submit() -> None:
         "save_cta": DRAFT_SAVE_CTA,
         "contact_name": "MCP-UI-INV-acme",
         "line_description": "MCP-UI-INV line",
+        "organization_id": "org-test",
     }
     assert recorder.submissions == []
 
@@ -300,11 +302,17 @@ def test_wrong_tool_mismatch_then_same_ticket_can_expire() -> None:
                 "line_description": "line",
                 "action": "send",
                 "save_cta": "Godkend og send",
+                "organization_id": "org-test",
             },
         ),
         (
             "ui_invoices_delete_preview",
-            {"id": "inv-1", "action": "send", "save_cta": "Send"},
+            {
+                "id": "inv-1",
+                "action": "send",
+                "save_cta": "Send",
+                "organization_id": "org-test",
+            },
         ),
     ],
 )
@@ -348,6 +356,7 @@ def test_update_and_delete_draft_execute_once() -> None:
             "line_description": "MCP-UI-INV line",
             "action": "draft_update",
             "save_cta": DRAFT_SAVE_CTA,
+            "organization_id": "org-test",
         },
     )
     update = call_tool(
@@ -358,7 +367,12 @@ def test_update_and_delete_draft_execute_once() -> None:
     delete_preview = call_tool(
         server,
         "ui_invoices_delete_preview",
-        {"id": "inv-1", "action": "draft_delete", "save_cta": DRAFT_DELETE_CTA},
+        {
+            "id": "inv-1",
+            "action": "draft_delete",
+            "save_cta": DRAFT_DELETE_CTA,
+            "organization_id": "org-test",
+        },
     )
     delete = call_tool(
         server,

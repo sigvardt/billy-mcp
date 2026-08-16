@@ -6,7 +6,11 @@ from datetime import UTC, datetime, timedelta
 
 from billy_mcp.confirmations import MAX_TICKET_TTL, ConfirmationStore
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.protocol import UiWriteExecuteInput, UiWriteProtocol
+from billy_mcp.ui_writes.protocol import (
+    UiWriteExecuteInput,
+    UiWritePreviewResult,
+    UiWriteProtocol,
+)
 
 
 class Clock:
@@ -21,6 +25,20 @@ def _protocol(clock: Clock | None = None) -> UiWriteProtocol:
     return UiWriteProtocol(ConfirmationStore(clock=clock or Clock()))
 
 
+def test_preview_rejects_missing_organization_id() -> None:
+    protocol = _protocol()
+    result = protocol.preview(
+        execute_tool_name="ui_clients_create_execute",
+        organization_id=None,
+        target="clients",
+        canonical_request={"name": "MCP-TEST-0"},
+        expected_effect_state={"action": "create"},
+        summary="Create one Billy customer in the interface.",
+    )
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.ORGANIZATION_REQUIRED
+
+
 def test_preview_does_not_submit_and_execute_consumes_once() -> None:
     protocol = _protocol()
     preview = protocol.preview(
@@ -31,6 +49,7 @@ def test_preview_does_not_submit_and_execute_consumes_once() -> None:
         expected_effect_state={"action": "create", "resource": "contact"},
         summary="Create one Billy customer in the interface.",
     )
+    assert isinstance(preview, UiWritePreviewResult)
     first = protocol.consume(
         UiWriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
         execute_tool_name="ui_clients_create_execute",
@@ -56,6 +75,7 @@ def test_execute_rejects_wrong_tool_and_expired_ticket() -> None:
         expected_effect_state={"action": "create"},
         summary="Create one Billy customer in the interface.",
     )
+    assert isinstance(preview, UiWritePreviewResult)
     wrong_tool = protocol.consume(
         UiWriteExecuteInput(confirmation_ticket=preview.confirmation_ticket),
         execute_tool_name="ui_clients_delete_execute",
