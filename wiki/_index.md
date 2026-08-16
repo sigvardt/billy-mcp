@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-16T14:33:13Z
+updated: 2026-08-16T14:50:25Z
 ---
 
 # billy_mcp
@@ -59,6 +59,8 @@ updated: 2026-08-16T14:33:13Z
 
 [[ui_bills_update_open_shell|ui_bills_update_open_shell]]: Read-only bill edit form open shell (maps api.bills.update).
 
+[[ui_bills_writes|ui_bills_writes]]: Ticketed UI bill create, update, and delete. Draft-only. Never pays.
+
 [[ui_clients_create_open_shell|ui_clients_create_open_shell]]: Read-only headless ui_clients_create_open contract for Billy clients create dialog form open only (research160).
 
 [[ui_clients_delete_open_shell|ui_clients_delete_open_shell]]: Read-only Billy UI tool that opens a client contact detail, opens Mere, and classifies Slet kontakt delete chrome without confirming deletion.
@@ -93,6 +95,8 @@ updated: 2026-08-16T14:33:13Z
 
 [[ui_files_list_get_not_applicable_research184|ui_files_list_get_not_applicable_research184]]: Dual-session research184 freeze — api.files.list and api.files.get have no dedicated mit.billy.dk workflow; Bilag is attachments inventory not files list.
 
+[[ui_files_writes|ui_files_writes]]: Ticketed ui_files_create preview and execute. Path and digest bound. Live submit held.
+
 [[ui_financing_open_shell|ui_financing_open_shell]]: Read-only Billy financing landing shell contract (research116 freeze).
 
 [[ui_geo_cities_not_applicable|ui_geo_cities_not_applicable]]: Dual-session research138 freeze — no equivalent mit.billy.dk workflow for cities/countries/countryGroups/states/zipcodes API parity; soft-empty paths match nonsense; NA accepted. Currencies/locales: see ui_currencies_locales_not_applicable (research139).
@@ -115,11 +119,17 @@ updated: 2026-08-16T14:33:13Z
 
 [[ui_invoices_update_open_shell|ui_invoices_update_open_shell]]: Read-only headless ui_invoices_update_open contract for Billy invoice draft edit form open only (research174).
 
+[[ui_invoices_writes|ui_invoices_writes]]: Ticketed FastMCP preview and execute tools for Billy invoice draft create, update, and delete. Never send, email, or Godkend.
+
+[[ui_ledger_writes|ui_ledger_writes]]: Ticketed UI ledger preview and execute tools, fail-closed submit rules, and cleanup order.
+
 [[ui_login_surface_contract|ui_login_surface_contract]]: Cited, evidence-bounded boundary for Billy's observed login surface: retain shared auth_status and keep post-login UI/auth work red pending dedicated non-production evidence.
 
 [[ui_login_surface_contract_independent_review|ui_login_surface_contract_independent_review]]: Independent Grok review98 of research98 and the merged wiki-only UI login-surface contract; accepts documentation freeze only; completeness remains failed.
 
 [[ui_organizations_create_not_applicable|ui_organizations_create_not_applicable]]: UI parity not_applicable freeze for api.organizations.create (research177 dual absence of org-create CTA).
+
+[[ui_organizations_writes|ui_organizations_writes]]: Ticketed ui_organizations_update preview and execute tools, fail-closed company-phone allowlist, and live-slot wait.
 
 [[ui_product_plane_bulk_chrome_dual_na_empty_list|ui_product_plane_bulk_chrome_dual_na_empty_list]]: Research190 dual-absent multi-select bulk chrome on real greened empty list shells — 5 resources / 10 UI bulk parity rows not_applicable; empty tool; not product ACCEPT; complete stays false.
 
@@ -138,6 +148,8 @@ updated: 2026-08-16T14:33:13Z
 [[ui_products_import_shell|ui_products_import_shell]]: Read-only headless ui_products_import contract for Billy products CSV import shell open only.
 
 [[ui_products_list_shell|ui_products_list_shell]]: Read-only headless ui_products_list contract for Billy products list shell open only.
+
+[[ui_products_writes|ui_products_writes]]: Ticketed UI product create preview and execute. No coverage greening.
 
 [[ui_quotes_list_shell|ui_quotes_list_shell]]: Read-only headless ui_quotes_list contract for Billy quotes list shell open only.
 
