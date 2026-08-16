@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-16T14:05:51Z
+updated: 2026-08-16T14:33:13Z
 ---
 
 # billy_mcp
@@ -74,6 +74,8 @@ updated: 2026-08-16T14:05:51Z
 [[ui_contact_persons_not_applicable|ui_contact_persons_not_applicable]]: Dual-session research148 freeze — no equivalent mit.billy.dk workflow for contactPersons API parity; soft-empty path matches nonsense; clients/Kunder shell is contacts only; NA accepted.
 
 [[ui_contact_postings_late_fees_reminder_assoc_not_applicable|ui_contact_postings_late_fees_reminder_assoc_not_applicable]]: Dual-session research144 freeze — no equivalent mit.billy.dk workflow for contactBalancePostings, invoiceLateFees, and invoiceReminderAssociations API parity; soft-empty paths match nonsense; NA accepted.
+
+[[ui_contacts_writes|ui_contacts_writes]]: Ticketed UI preview and execute tools for Billy customer create, update, and delete.
 
 [[ui_creditor_balances_list_shell|ui_creditor_balances_list_shell]]: Read-only headless ui_creditor_balances_list contract for Billy creditor balances (Skyldige udgifter) list shell open only.
 
