@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live contacts update read-back still fails after FastMCP create works. Finish update/delete, third-session cleanup, then independent accept. Do not green until that proof.
+- Live contacts create, exact-Ret update, and delete through `call_tool`. Third-session cleanup. Independent accept. Do not green until that proof.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
@@ -20,3 +20,5 @@ updated: 2026-08-16T14:29:47Z
 - Ticket org is compared to the live URL slug before fill or click. Contacts no longer read a stored identity file for that compare. Read-back starts a second runtime. Shared fake records are gone.
 - READY returns `organization_id`. DualSessionLogin READYs write then `-readback`.
 - Live write tests cannot self-approve vision or purge frames (`C7DBE974` gate).
+- Exact-text Ret and Slet-kontakt-as-link helpers, with unit tests. Substring Ret is documented as Opret.
+- Five leftover `MCP-UI-C-*` contacts deleted through FastMCP. Fresh session empty.

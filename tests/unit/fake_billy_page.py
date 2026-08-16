@@ -129,6 +129,10 @@ class FakeBillyLocator:
     def first(self) -> Self:
         return self
 
+    def nth(self, index: int) -> Self:
+        del index
+        return self
+
     async def count(self) -> int:
         if self._query_text is None or self._query_text in _CHROME:
             return 1
@@ -148,6 +152,9 @@ class FakeBillyLocator:
                 self._session.records.add(Path(path).name)
         if any(token in folded for token in ("slet", "delete", "bekræft")):
             self._session.records.clear()
+
+    async def inner_text(self) -> str:
+        return self._click_name or self._query_text or ""
 
     async def fill(self, value: str) -> None:
         self._session.fills.append((_field_name(self._selector), value))

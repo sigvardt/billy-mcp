@@ -34,8 +34,11 @@ not mark those rows live or complete.
 | `ui_clients_delete_execute` | `confirmation_ticket` | Delete the previewed customer |
 
 Create opens from `/:org_slug/clients` or `/:org_slug/clients/empty` after
-**Opret kontakt**. List heading may be **Kunder** or **Kontakter**. Customers
-are located by unique tagged name, not an API id. Inputs are flat.
+**Opret kontakt**. List heading may be **Kunder** or **Kontakter**. Update clicks
+the button whose text is exactly **Ret**, never a substring that matches
+**Opret**. Save is exact **Gem** or **Gem ændringer**, never **Gem kommentar**.
+Delete is exact **Mere**, then the **Slet kontakt** link, then exact **Slet**. Never **Arkivér**.
+Customers are located by unique tagged name, not an API id. Inputs are flat.
 There is no nested `input` object. Extra fields are rejected.
 
 Qualify through FastMCP `call_tool`. BrowserRuntime is not the pass proof.

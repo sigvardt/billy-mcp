@@ -53,9 +53,16 @@ create-open still require the old path and heading, so they return UI_CHANGED.
 The create dialog fields are still present. No submit was done.
 
 `/:org_slug/clients/empty` and heading Kontakter are accepted. Live create
-through FastMCP now submits and the second session sees the new name. Update
-was clicking Gem kommentar via substring text=Gem; that is now an exact-role
-save only. Live Ret form still has no name field and no Gem. Coverage stays
+through FastMCP submits and a second session sees the new name.
+
+Update and delete clicks now use exact labels. Substring `Ret` matches **Opret**.
+Exact **Ret** opens `input[name=name]` plus **Gem**. **Slet kontakt** is a link,
+not a button. Confirm is exact **Slet**. Never **Arkivér**.
+
+Five leftover `MCP-UI-C-*` customers were deleted through FastMCP. A fresh
+session lists none. Open uses the named list row, not the search box. Delete
+clicks the visible **Slet kontakt** link, not a hidden first match. Live
+create/update/delete of a new tagged customer is still unproved. Coverage stays
 red.
 
 ## Review

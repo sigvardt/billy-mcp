@@ -22,13 +22,7 @@ from billy_mcp.ui_writes.protocol import (
     UiWriteProtocol,
 )
 
-_CLIENTS_CREATE_CTA = "Opret kontakt"
-_GEM = re.compile(r"^Gem$")
-_GEM_CHANGES = re.compile(r"^Gem ændringer$")
 _RET = re.compile(r"^Ret$")
-_MERE = re.compile(r"^Mere$")
-_SLET = re.compile(r"Slet kontakt", re.I)
-_CONFIRM = re.compile(r"^(Slet|Delete|Bekræft|OK)$", re.I)
 _SEARCH = "input[type='search'], input[placeholder*='øg' i]"
 _NAME = "input[name='name']"
 _OPTIONAL_FIELDS = (
@@ -97,6 +91,8 @@ class _Locator(Protocol):
     @property
     def first(self) -> _Locator: ...
 
+    def nth(self, index: int) -> _Locator: ...
+
     async def count(self) -> int: ...
 
     async def is_visible(self) -> bool: ...
@@ -104,6 +100,8 @@ class _Locator(Protocol):
     async def click(self) -> None: ...
 
     async def fill(self, value: str) -> None: ...
+
+    async def inner_text(self) -> str: ...
 
 
 class _Page(Protocol):
@@ -457,16 +455,43 @@ async def _goto_clients(page: _Page, slug: str) -> None:
 async def _click_save(page: _Page) -> bool:
     """Click an exact save button. Never match Gem kommentar via substring text=Gem."""
 
-    for pattern in (_GEM_CHANGES, _GEM):
-        button = page.get_by_role("button", name=pattern)
-        try:
-            if await button.count() >= 1 and await button.first.is_visible():
-                await button.first.click()
-                await _settle(page)
-                return True
-        except Exception:
-            continue
+    return await _click_exact_label(page, "Gem ændringer") or await _click_exact_label(page, "Gem")
+
+
+async def _click_visible(locator: _Locator, *, settle_page: _Page, settle: bool) -> bool:
+    try:
+        count = await locator.count()
+        for index in range(min(count, 8)):
+            candidate = locator.nth(index)
+            if not await candidate.is_visible():
+                continue
+            await candidate.click()
+            if settle:
+                await _settle(settle_page)
+            return True
+    except Exception:
+        return False
     return False
+
+
+async def _click_exact_label(page: _Page, label: str, *, settle: bool = True) -> bool:
+    """Click a visible control whose name is exactly label. Never substring-match Opret."""
+
+    pattern = re.compile(rf"^{re.escape(label)}$")
+    for role in ("button", "link"):
+        if await _click_visible(
+            page.get_by_role(role, name=pattern), settle_page=page, settle=settle
+        ):
+            return True
+    if await _click_visible(
+        page.locator(f'button:has-text("{label}"), a:has-text("{label}")'),
+        settle_page=page,
+        settle=settle,
+    ):
+        return True
+    return await _click_visible(
+        page.get_by_text(label, exact=True), settle_page=page, settle=settle
+    )
 
 
 async def _click_named(page: _Page, pattern: re.Pattern[str], *, settle: bool = True) -> bool:
@@ -491,6 +516,54 @@ async def _click_named(page: _Page, pattern: re.Pattern[str], *, settle: bool = 
     return False
 
 
+async def _open_edit_name(page: _Page, new_name: str) -> bool:
+    """Open Ret once, then fill name. A second Ret click can close the form."""
+
+    if await _fill_name(page, new_name):
+        return True
+    if not await _click_exact_label(page, "Ret"):
+        return False
+    return await _fill_name(page, new_name)
+
+
+async def _confirm_delete_customer(page: _Page) -> bool:
+    """Mere, then Slet kontakt link, then exact Slet. Never click Arkivér."""
+
+    await _settle(page)
+    if not await _wait_and_click(page, "Mere"):
+        return False
+    if not await _wait_and_click(page, "Slet kontakt"):
+        return False
+    return await _wait_and_click(page, "Slet")
+
+
+async def _delete_chrome_flags(page: _Page) -> dict[str, int]:
+    mere = 0
+    slet_kontakt = 0
+    slet = 0
+    try:
+        mere = await page.get_by_role("button", name=re.compile(r"^Mere$")).count()
+    except Exception:
+        mere = -1
+    try:
+        slet_kontakt = await page.get_by_text("Slet kontakt", exact=True).count()
+    except Exception:
+        slet_kontakt = -1
+    try:
+        slet = await page.get_by_role("button", name=re.compile(r"^Slet$")).count()
+    except Exception:
+        slet = -1
+    return {"mere_exact": mere, "slet_kontakt": slet_kontakt, "slet_exact": slet}
+
+
+async def _wait_and_click(page: _Page, label: str) -> bool:
+    for _ in range(20):
+        if await _click_exact_label(page, label):
+            return True
+        await asyncio.sleep(0.25)
+    return False
+
+
 async def _fill_name(page: _Page, value: str) -> bool:
     field = page.locator(_NAME)
     try:
@@ -509,14 +582,54 @@ async def _search_name(page: _Page, name: str) -> None:
         await asyncio.sleep(1)
 
 
+def _is_contact_detail_path(url: str) -> bool:
+    path = urlsplit(url).path or ""
+    return "/contacts/" in path and "/customer" in path
+
+
+async def _wait_until_detail(page: _Page) -> bool:
+    for _ in range(20):
+        if _is_contact_detail_path(page.url):
+            return True
+        await asyncio.sleep(0.25)
+    return _is_contact_detail_path(page.url)
+
+
 async def _open_named_customer(page: _Page, name: str) -> bool:
+    """Open the contact row. Never treat the search box value as the row."""
+
     await _search_name(page, name)
-    match = page.get_by_text(name, exact=False)
-    if await match.count() < 1:
-        return False
-    await match.first.click()
-    await _settle(page)
-    return True
+    for _ in range(20):
+        row = page.locator(f'table tbody tr:has-text("{name}")')
+        try:
+            if await row.count() >= 1 and await row.first.is_visible():
+                await row.first.click()
+                if await _wait_until_detail(page):
+                    return True
+        except Exception:
+            pass
+        link = page.locator(f'a:has-text("{name}")')
+        try:
+            if await link.count() >= 1 and await link.first.is_visible():
+                await link.first.click()
+                if await _wait_until_detail(page):
+                    return True
+        except Exception:
+            pass
+        match = page.get_by_text(name, exact=False)
+        count = await match.count()
+        for index in range(count - 1, -1, -1):
+            candidate = match.nth(index)
+            try:
+                if not await candidate.is_visible():
+                    continue
+                await candidate.click()
+                if await _wait_until_detail(page):
+                    return True
+            except Exception:
+                continue
+        await asyncio.sleep(0.25)
+    return False
 
 
 async def _create_customer(page: _Page, slug: str, name: str) -> object:
@@ -547,7 +660,7 @@ async def _create_customer(page: _Page, slug: str, name: str) -> object:
                 await extra.first.fill(sample)
         except Exception:
             continue
-    if not await _click_named(page, _GEM):
+    if not await _click_save(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy save control is not visible.",
@@ -564,15 +677,7 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
             code=StableErrorCode.NOT_FOUND,
             message="Billy customer was not found for update.",
         )
-    opened = False
-    for _ in range(30):
-        if await _fill_name(page, new_name):
-            opened = True
-            break
-        await _click_named(page, _RET, settle=False)
-        await _settle(page)
-        await asyncio.sleep(0.2)
-    if not opened:
+    if not await _open_edit_name(page, new_name):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy customer name field is not visible.",
@@ -597,16 +702,31 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
 async def _delete_customer(page: _Page, slug: str, name: str) -> object:
     await _goto_clients(page, slug)
     if not await _open_named_customer(page, name):
+        path = urlsplit(page.url).path or ""
+        parts = [part for part in path.split("/") if part]
+        path_class = "/" if not parts else "/:org_slug/" + "/".join(parts[1:])
         return ToolError(
             code=StableErrorCode.NOT_FOUND,
             message="Billy customer was not found for delete.",
+            details={"path_class": path_class},
         )
-    await _click_named(page, _MERE)
-    if not await _click_named(page, _SLET):
+    if not await _confirm_delete_customer(page):
+        path = urlsplit(page.url).path or ""
+        parts = [part for part in path.split("/") if part]
+        path_class = (
+            "/"
+            if not parts
+            else "/:org_slug/"
+            + "/".join(
+                "id" if i == 1 and part not in {"contacts", "customer", "clients"} else part
+                for i, part in enumerate(parts[1:])
+            )
+        )
+        flags = await _delete_chrome_flags(page)
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy delete-customer control is not visible.",
+            details={"path_class": path_class, **flags},
         )
-    await _click_named(page, _CONFIRM)
     await asyncio.sleep(2)
     return {"ok": True}

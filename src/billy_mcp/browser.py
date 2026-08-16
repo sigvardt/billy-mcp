@@ -7646,21 +7646,15 @@ async def _click_clients_detail_candidate(page: LoginPage, slug: str) -> bool:
 
 
 async def _click_clients_ret_action(page: LoginPage) -> bool:
-    """Click Ret/Edit on contact detail without Gem/Slet. Research166 update open."""
+    """Click exact Ret/Edit on contact detail. Never substring-match Opret."""
 
     live = cast(Any, page)
-    for selector in ("text=Ret", "text=Edit"):
+    for pattern in (re.compile(r"^Ret$"), re.compile(r"^Edit$")):
         try:
-            ret = live.locator(selector)
-            count = int(await ret.count())
-            for index in range(min(count, 6)):
-                el = ret.nth(index)
-                try:
-                    if await el.is_visible():
-                        await el.click()
-                        return True
-                except Exception:
-                    continue
+            ret = live.get_by_role("button", name=pattern)
+            if int(await ret.count()) >= 1 and await ret.first.is_visible():
+                await ret.first.click()
+                return True
         except Exception:
             continue
     return False

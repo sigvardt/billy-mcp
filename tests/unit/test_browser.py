@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 from collections.abc import Callable
 from pathlib import Path
 from typing import cast
@@ -232,6 +233,14 @@ class FakeLoginPage:
 
     def locator(self, selector: str) -> FakeLoginControl:
         return self.controls.get(selector, FakeLoginControl(count=0, visible=False))
+
+    def get_by_role(self, role: str, *, name: str | re.Pattern[str]) -> FakeLoginControl:
+        if isinstance(name, re.Pattern):
+            label = name.pattern.strip("^$")
+        else:
+            label = name
+        key = f"role:{role}:{label}"
+        return self.controls.get(key, FakeLoginControl(count=0, visible=False))
 
     async def close(self) -> None:
         self.closed = True
@@ -9671,8 +9680,8 @@ def _clients_update_shell_controls(
             text="Acme Client (Kunde) Opret Ret Mere Fakturaer Overblik Menu"
         )
         page.controls["body"].bind(page.events, "body")
-        page.controls["text=Ret"] = FakeLoginControl(text="Ret", on_click=open_edit)
-        page.controls["text=Ret"].bind(page.events, "text=Ret")
+        page.controls["role:button:Ret"] = FakeLoginControl(text="Ret", on_click=open_edit)
+        page.controls["role:button:Ret"].bind(page.events, "role:button:Ret")
         page.controls["input[name='name']"] = FakeLoginControl(count=0, visible=False)
         page.controls["input[name='name']"].bind(page.events, "input[name='name']")
 
@@ -9720,6 +9729,7 @@ def _clients_update_shell_controls(
             on_click=open_detail,
         ),
         "text=Ret": FakeLoginControl(count=0, visible=False),
+        "role:button:Ret": FakeLoginControl(count=0, visible=False),
         "text=Gem": FakeLoginControl(count=0, visible=False),
         "text=Overblik": FakeLoginControl(text="Overblik"),
         "text=Menu": FakeLoginControl(text="Menu"),
@@ -9767,7 +9777,7 @@ def test_ui_clients_update_open_returns_success_for_edit_form(tmp_path: Path) ->
     assert "test-org-slug" not in str(result.model_dump())
     assert page.closed
     assert not any("click:text=Gem" in e for e in page.events)
-    assert any("click:text=Ret" in e for e in page.events)
+    assert any("click:role:button:Ret" in e for e in page.events)
 
 
 def test_ui_clients_update_open_rejects_get_overview_without_ret(tmp_path: Path) -> None:
