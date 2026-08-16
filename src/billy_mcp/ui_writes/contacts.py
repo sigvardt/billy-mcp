@@ -214,10 +214,11 @@ class BrowserContactUiActor:
             if proved is not None:
                 return proved
             return submitted
-        except Exception:
+        except Exception as exc:
             return ToolError(
                 code=StableErrorCode.BILLY_ERROR,
                 message="Billy interface contact write could not be completed.",
+                details={"error": type(exc).__name__},
             )
         finally:
             if page is not None:
@@ -440,17 +441,22 @@ async def _goto_clients(page: _Page, slug: str) -> None:
     await _settle(page)
 
 
-async def _click_named(page: _Page, pattern: re.Pattern[str]) -> bool:
+async def _click_named(page: _Page, pattern: re.Pattern[str], *, settle: bool = True) -> bool:
     button = page.get_by_role("button", name=pattern)
-    if await button.count() >= 1 and await button.first.is_visible():
-        await button.first.click()
-        await _settle(page)
-        return True
+    try:
+        if await button.count() >= 1 and await button.first.is_visible():
+            await button.first.click()
+            if settle:
+                await _settle(page)
+            return True
+    except Exception:
+        pass
     text = page.locator(f"text={pattern.pattern.strip('^$')}")
     try:
         if await text.count() >= 1 and await text.first.is_visible():
             await text.first.click()
-            await _settle(page)
+            if settle:
+                await _settle(page)
             return True
     except Exception:
         return False
@@ -459,9 +465,12 @@ async def _click_named(page: _Page, pattern: re.Pattern[str]) -> bool:
 
 async def _fill_name(page: _Page, value: str) -> bool:
     field = page.locator(_NAME)
-    if await field.count() < 1:
+    try:
+        if await field.count() < 1 or not await field.first.is_visible():
+            return False
+        await field.first.fill(value)
+    except Exception:
         return False
-    await field.first.fill(value)
     return True
 
 
@@ -484,15 +493,14 @@ async def _open_named_customer(page: _Page, name: str) -> bool:
 
 async def _create_customer(page: _Page, slug: str, name: str) -> object:
     await _goto_clients(page, slug)
-    cta = page.locator(f"text={_CLIENTS_CREATE_CTA}")
-    if await cta.count() < 1:
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy create-customer control is not visible.",
-        )
-    await cta.first.click()
-    await _settle(page)
-    if not await _fill_name(page, name):
+    filled = False
+    for _ in range(30):
+        await _click_named(page, re.compile(r"^Opret kontakt$"), settle=False)
+        if await _fill_name(page, name):
+            filled = True
+            break
+        await asyncio.sleep(0.2)
+    if not filled:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy customer name field is not visible.",

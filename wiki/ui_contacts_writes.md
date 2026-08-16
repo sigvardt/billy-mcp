@@ -26,11 +26,11 @@ not mark those rows live or complete.
 
 | Tool | Inputs | Effect |
 | --- | --- | --- |
-| `ui_clients_create_preview` | `name` | Ticket only |
+| `ui_clients_create_preview` | `name`, `organization_id` | Ticket only |
 | `ui_clients_create_execute` | `confirmation_ticket` | Create the previewed customer |
-| `ui_clients_update_preview` | `name`, `new_name` | Ticket only |
+| `ui_clients_update_preview` | `name`, `new_name`, `organization_id` | Ticket only |
 | `ui_clients_update_execute` | `confirmation_ticket` | Rename the previewed customer |
-| `ui_clients_delete_preview` | `name` | Ticket only |
+| `ui_clients_delete_preview` | `name`, `organization_id` | Ticket only |
 | `ui_clients_delete_execute` | `confirmation_ticket` | Delete the previewed customer |
 
 Customers are located by unique tagged name, not an API id. Inputs are flat.
@@ -52,8 +52,9 @@ returns `CONFIRMATION_CONSUMED`. A ticket for another execute tool returns
 Live submit uses disposable names of the form `MCP-UI-C-<8hex>` and
 `MCP-UI-C-<8hex>-U` after update. Session A runs create, then update, then
 delete through preview and execute. Session B is an independent login that
-lists customers after each step. Four-state frames are purged. Only a
-non-sensitive vision record is kept.
+lists customers after each step. Four-state frames stay in owner-only storage until an independent Grok
+review writes accept or reject. The live test writes
+`author=live_test` and `reviewer_verdict=pending_review` only.
 
 If create or update succeeds and delete later fails, retry delete through the
 same execute tool. Do not leave a tagged customer when delete can still run.

@@ -141,8 +141,13 @@ def test_login_tool_models_have_empty_inputs_and_no_secret_bearing_schema() -> N
     assert AuthLoginStartInput().model_dump() == {}
     assert AuthLoginWaitInput().model_dump() == {}
     assert AuthLoginStartSuccess().model_dump() == {"status": "AUTHENTICATING"}
-    assert AuthLoginWaitSuccess(status="READY").model_dump() == {"status": "READY"}
+    assert AuthLoginWaitSuccess(status="READY", organization_id="test-org-slug").model_dump() == {
+        "status": "READY",
+        "organization_id": "test-org-slug",
+    }
     assert AuthLoginWaitSuccess(status="AUTH_REQUIRED").model_dump() == {"status": "AUTH_REQUIRED"}
+    with pytest.raises(ValidationError):
+        AuthLoginWaitSuccess(status="READY")
 
     for model in (
         AuthLoginStartInput,

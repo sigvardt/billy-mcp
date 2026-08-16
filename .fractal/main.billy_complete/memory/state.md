@@ -13,16 +13,19 @@ updated: 2026-08-16T14:29:47Z
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 
-Ticket preview requires `organization_id`. Default execute drives the family
-route, fields, and submit control. Wrong-org execute is
-`CONFIRMATION_MISMATCH` before fill or click. Contacts org proof uses the
-live URL only. Read-back starts a second `BrowserRuntime` (`*-readback`).
-A blank read-back profile that lands on `/login` is `ORGANIZATION_REQUIRED`.
-Unit tests no longer share fake records; a second fake store cannot see the
-write, so execute returns `NOT_FOUND`. That is wiring, not live proof.
+`auth_login_wait` READY now returns `organization_id` from the live URL slug.
+Default `create_server` login drives write and `-readback` profiles. Mismatched
+slugs are `CONFIRMATION_MISMATCH`. A blank read-back after that sequence is
+`ORGANIZATION_REQUIRED`. Ticket execute still compares the live URL slug.
 
-Coverage stays red. No greening. Daybook and posting creates with no cleanup
-path still refuse.
+Live UI write tests may write `author=live_test` and
+`reviewer_verdict=pending_review` only. They must not write `accept` or purge
+frames. Coverage vision is true only after an independent review accepts and
+purge is verified (`C7DBE974`).
+
+Coverage stays red until live contacts CUD through `create_server` `call_tool`
+passes that provenance rule. Daybook and posting creates with no cleanup path
+still refuse.
 
 ## Children
 

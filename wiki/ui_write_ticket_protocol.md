@@ -30,7 +30,9 @@ Default execute performs the family route, fields, and submit control only
 when the live URL slug matches the ticket organisation. The live URL is the
 only org proof. A stored identity file is not a substitute. It returns
 `submitted=True` only after a second authenticated session proves the change.
-A blank `-readback` profile that lands on `/login` is `ORGANIZATION_REQUIRED`,
+`auth_login_wait` READY returns `organization_id` from the live URL first path
+segment. The same login sequence READYs the `-readback` profile. A blank
+`-readback` profile that lands on `/login` is `ORGANIZATION_REQUIRED`,
 not proof. A second page on the same persistent context is not a second
 session. Start-only is not a submit. Wrong-org execute is
 `CONFIRMATION_MISMATCH` before fill or click. Tickets are process-volatile

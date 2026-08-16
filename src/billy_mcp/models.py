@@ -2,10 +2,11 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from enum import StrEnum
-from typing import Any, Literal
+from typing import Any, Literal, Self
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, model_serializer, model_validator
 
 
 class StableErrorCode(StrEnum):
@@ -83,6 +84,23 @@ class AuthLoginWaitSuccess(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     status: Literal["AUTH_REQUIRED", "READY"]
+    organization_id: str | None = None
+
+    @model_validator(mode="after")
+    def _ready_requires_live_org(self) -> Self:
+        if self.status == "READY":
+            if self.organization_id is None or not self.organization_id.strip():
+                raise ValueError("READY requires organization_id from the live URL")
+        elif self.organization_id is not None:
+            raise ValueError("AUTH_REQUIRED cannot include organization_id")
+        return self
+
+    @model_serializer(mode="wrap")
+    def _omit_null_org(self, serializer: Callable[[Self], dict[str, Any]]) -> dict[str, Any]:
+        data = serializer(self)
+        if data.get("organization_id") is None:
+            data.pop("organization_id", None)
+        return data
 
 
 class UiInvoicesListInput(BaseModel):

@@ -1,13 +1,14 @@
 """Live MCP qualification for ticketed UI contact create, update, and delete.
 
 Requires opaque browser credential references. Never uses BILLY_API_TOKEN.
-Pass proof is FastMCP call_tool. Independent read-back is a second UI session.
+Pass proof is FastMCP call_tool on create_server. Independent read-back is the
+-readback session. Cleanup is proved on a third fresh session.
 """
 
 from __future__ import annotations
 
 import asyncio
-import json
+import atexit
 import os
 import secrets
 import shutil
@@ -20,33 +21,22 @@ from fastmcp import FastMCP
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.config import AppConfig
-from billy_mcp.confirmations import ConfirmationStore
 from billy_mcp.credentials import KeyringCredentialResolver
-from billy_mcp.models import AuthLoginWaitSuccess, ToolError
-from billy_mcp.ui_writes.contacts import BrowserContactUiActor, register_ui_contact_write_tools
-from billy_mcp.ui_writes.protocol import UiWriteProtocol
+from billy_mcp.models import AuthLoginWaitSuccess, StableErrorCode, ToolError
+from billy_mcp.server import create_server
 from billy_mcp.vision_evidence import (
     is_outside_repository,
-    mark_purge_verified,
     owner_only_frame_dir,
-    purge_frame_dir,
     write_vision_record,
 )
 
 pytestmark = pytest.mark.live
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
-_EGRESS = _REPO_ROOT / "coverage" / "browser_egress.yaml"
 _DATA_ROOT = Path.home() / ".local" / "share" / "billy-mcp"
-_VISION_RECORD_DIR = (
-    _REPO_ROOT / ".fractal" / "main.billy_complete.ui_contacts_writes" / "tmp" / "vision-records"
-)
+_VISION_RECORD = _REPO_ROOT / "tmp" / "vision-records" / "ui_contacts_writes.json"
 _BLOCKER_PATH = (
-    _REPO_ROOT
-    / ".fractal"
-    / "main.billy_complete.ui_contacts_writes"
-    / "tmp"
-    / "live-contacts-writes-blocker.txt"
+    _REPO_ROOT / ".fractal" / "main.billy_complete" / "tmp" / "live-contacts-writes-blocker.txt"
 )
 
 
@@ -67,68 +57,35 @@ def _require_live_credentials() -> None:
         return
     reason = (
         "Live MCP contact writes blocked: BILLY_BROWSER_PRIMARY_REFERENCE and "
-        "BILLY_BROWSER_SECONDARY_REFERENCE are not both set. This is a credential "
-        "blocker, not an unsafe skipped submit."
+        "BILLY_BROWSER_SECONDARY_REFERENCE are not both set."
     )
     _record_blocker(reason)
     pytest.skip(reason)
 
 
-def _ephemeral_profile() -> Path:
+_REGISTERED_PROFILES: list[Path] = []
+
+
+def _purge_registered_profiles() -> None:
+    for path in _REGISTERED_PROFILES:
+        shutil.rmtree(path, ignore_errors=True)
+
+
+atexit.register(_purge_registered_profiles)
+
+
+def _temp_profile() -> Path:
     _DATA_ROOT.mkdir(parents=True, exist_ok=True)
-    return Path(tempfile.mkdtemp(prefix="billy-live-contacts-writes-", dir=str(_DATA_ROOT)))
+    path = Path(tempfile.mkdtemp(prefix="billy-live-contacts-", dir=str(_DATA_ROOT)))
+    _REGISTERED_PROFILES.append(path)
+    _REGISTERED_PROFILES.append(path.with_name(f"{path.name}-readback"))
+    return path
 
 
-def _runtime(profile: Path, org_identity: Path) -> BrowserRuntime:
-    configuration = AppConfig.from_environment()
-    return BrowserRuntime(
-        profile,
-        egress_manifest_path=_EGRESS,
-        credential_references=configuration.browser_credentials,
-        credential_resolver=KeyringCredentialResolver(),
-        org_identity_path=org_identity,
-    )
-
-
-async def _login_until_ready(runtime: BrowserRuntime) -> AuthLoginWaitSuccess:
-    status = await runtime.auth_status()
-    if isinstance(status, ToolError):
-        wait0 = await runtime.auth_login_wait()
-        if isinstance(wait0, AuthLoginWaitSuccess) and wait0.status == "READY":
-            return wait0
-        pytest.fail(f"auth_status failed on fresh profile: {status.code}")
-    start = await runtime.auth_login_start()
-    if isinstance(start, ToolError):
-        pytest.fail(f"auth_login_start failed: {start.code}")
-    wait = await runtime.auth_login_wait()
-    if isinstance(wait, ToolError):
-        pytest.fail(f"auth_login_wait failed: {wait.code}: {wait.message}")
-    assert isinstance(wait, AuthLoginWaitSuccess)
-    assert wait.status == "READY"
-    return wait
-
-
-def _org_slug(path: Path) -> str:
-    payload = json.loads(path.read_text(encoding="utf-8"))
-    slug = payload.get("org_slug") or payload.get("organization_slug") or payload.get("slug")
-    assert isinstance(slug, str) and slug
-    return slug
-
-
-def _make_server(runtime: BrowserRuntime, org_identity: Path) -> FastMCP:
-    server = FastMCP("ui-contacts-write-live")
-    register_ui_contact_write_tools(
-        server,
-        UiWriteProtocol(ConfirmationStore()),
-        actor=BrowserContactUiActor(runtime, org_identity_path=org_identity),
-    )
-    return server
-
-
-async def _call_tool(
-    server: FastMCP, tool_name: str, arguments: dict[str, object]
+async def _call(
+    server: FastMCP, tool_name: str, arguments: dict[str, object] | None = None
 ) -> dict[str, object]:
-    result = await server.call_tool(tool_name, arguments)
+    result = await server.call_tool(tool_name, arguments or {})
     structured = result.structured_content
     assert isinstance(structured, dict)
     payload = structured.get("result", structured)
@@ -136,8 +93,26 @@ async def _call_tool(
     return cast(dict[str, object], payload)
 
 
-async def _list_has_name(runtime: BrowserRuntime, org_identity: Path, name: str) -> bool:
-    slug = _org_slug(org_identity)
+async def _login(server: FastMCP) -> str:
+    started = await _call(server, "auth_login_start")
+    if started.get("code") and started.get("code") != StableErrorCode.UI_CHANGED:
+        _record_blocker(f"auth_login_start failed: {started}")
+        pytest.fail(f"auth_login_start failed: {started}")
+    waited = await _call(server, "auth_login_wait")
+    if waited.get("code") == StableErrorCode.AUTH_INTERACTION_REQUIRED:
+        _record_blocker(f"AUTH_INTERACTION_REQUIRED: {waited}")
+        pytest.fail(f"non-automatable challenge: {waited}")
+    if waited.get("status") != "READY":
+        _record_blocker(f"auth_login_wait not READY: {waited}")
+        pytest.fail(f"auth_login_wait not READY: {waited}")
+    slug = waited.get("organization_id")
+    if not isinstance(slug, str) or not slug.strip():
+        _record_blocker("auth_login_wait READY omitted organization_id")
+        pytest.fail("READY omitted organization_id")
+    return slug
+
+
+async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
@@ -156,10 +131,7 @@ async def _list_has_name(runtime: BrowserRuntime, org_identity: Path, name: str)
         await page.close()
 
 
-async def _capture_list(
-    runtime: BrowserRuntime, org_identity: Path, destination: Path, name: str
-) -> None:
-    slug = _org_slug(org_identity)
+async def _capture(runtime: BrowserRuntime, slug: str, destination: Path, name: str) -> None:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
@@ -179,134 +151,156 @@ async def _capture_list(
 
 
 @pytest.mark.asyncio
-async def test_ui_contacts_create_update_delete_via_call_tool() -> None:
-    """Create, update, and delete one tagged customer through FastMCP call_tool."""
+async def test_ui_contacts_create_update_delete_via_call_tool(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Create, update, and delete one tagged customer through create_server call_tool."""
 
     _require_live_credentials()
-
     tag = f"MCP-UI-C-{secrets.token_hex(4).upper()}"
     updated = f"{tag}-U"
-    profile_a = _ephemeral_profile()
-    profile_b = _ephemeral_profile()
-    org_a = Path(tempfile.mkdtemp(dir=str(_DATA_ROOT))) / "org-a.json"
-    org_b = Path(tempfile.mkdtemp(dir=str(_DATA_ROOT))) / "org-b.json"
+    profile = _temp_profile()
+    third_profile = _temp_profile()
+    cleanup_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
     frame_dir = owner_only_frame_dir()
-    record_path = _VISION_RECORD_DIR / "ui_contacts_writes.json"
-    runtime_a: BrowserRuntime | None = None
-    runtime_b: BrowserRuntime | None = None
+    server: FastMCP | None = None
+    third: BrowserRuntime | None = None
     created = False
     renamed = False
+    slug = ""
 
     try:
         assert is_outside_repository(frame_dir, _REPO_ROOT)
-        runtime_a = _runtime(profile_a, org_a)
-        await _login_until_ready(runtime_a)
-        assert _org_slug(org_a)
-        server = _make_server(runtime_a, org_a)
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            third_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        third = observer
+        observer_wait = await observer.auth_login_wait()
+        if isinstance(observer_wait, AuthLoginWaitSuccess) and observer_wait.status != "READY":
+            started = await observer.auth_login_start()
+            if isinstance(started, ToolError):
+                pytest.fail(f"observer login start failed: {started.code}")
+            observer_wait = await observer.auth_login_wait()
+        if isinstance(observer_wait, ToolError):
+            pytest.fail(f"observer login failed: {observer_wait.code}")
+        assert isinstance(observer_wait, AuthLoginWaitSuccess)
+        assert observer_wait.status == "READY"
+        assert observer_wait.organization_id == slug
+        await _capture(observer, slug, frame_dir / "01_before.png", tag)
+        assert await _list_has_name(observer, slug, tag) is False
 
-        await _capture_list(runtime_a, org_a, frame_dir / "01_before.png", tag)
-        assert await _list_has_name(runtime_a, org_a, tag) is False
-
-        preview_create = await _call_tool(server, "ui_clients_create_preview", {"name": tag})
-        created_result = await _call_tool(
+        preview_create = await _call(
+            server, "ui_clients_create_preview", {"name": tag, "organization_id": slug}
+        )
+        created_result = await _call(
             server,
             "ui_clients_create_execute",
             {"confirmation_ticket": preview_create["confirmation_ticket"]},
         )
         if created_result.get("code"):
-            _record_blocker(
-                f"Live create execute failed: {created_result.get('code')} "
-                f"{created_result.get('message')}"
-            )
+            _record_blocker(f"create execute failed: {created_result}")
             pytest.fail(f"create execute failed: {created_result}")
         assert created_result["submitted"] is True
         created = True
-        await _capture_list(runtime_a, org_a, frame_dir / "02_after_create.png", tag)
+        await _capture(observer, slug, frame_dir / "02_after_create.png", tag)
+        assert await _list_has_name(observer, slug, tag) is True
 
-        runtime_b = _runtime(profile_b, org_b)
-        await _login_until_ready(runtime_b)
-        assert await _list_has_name(runtime_b, org_b, tag) is True
-
-        preview_update = await _call_tool(
+        preview_update = await _call(
             server,
             "ui_clients_update_preview",
-            {"name": tag, "new_name": updated},
+            {"name": tag, "new_name": updated, "organization_id": slug},
         )
-        updated_result = await _call_tool(
+        updated_result = await _call(
             server,
             "ui_clients_update_execute",
             {"confirmation_ticket": preview_update["confirmation_ticket"]},
         )
         if updated_result.get("code"):
-            _record_blocker(
-                f"Live update execute failed: {updated_result.get('code')} "
-                f"{updated_result.get('message')}"
-            )
+            _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
         assert updated_result["submitted"] is True
         renamed = True
         created = False
-        await _capture_list(runtime_a, org_a, frame_dir / "03_after_update.png", updated)
-        assert await _list_has_name(runtime_b, org_b, updated) is True
-        assert await _list_has_name(runtime_b, org_b, tag) is False
+        await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
+        assert await _list_has_name(observer, slug, updated) is True
+        assert await _list_has_name(observer, slug, tag) is False
 
-        preview_delete = await _call_tool(server, "ui_clients_delete_preview", {"name": updated})
-        deleted_result = await _call_tool(
+        preview_delete = await _call(
+            server, "ui_clients_delete_preview", {"name": updated, "organization_id": slug}
+        )
+        deleted_result = await _call(
             server,
             "ui_clients_delete_execute",
             {"confirmation_ticket": preview_delete["confirmation_ticket"]},
         )
         if deleted_result.get("code"):
-            _record_blocker(
-                f"Live delete execute failed: {deleted_result.get('code')} "
-                f"{deleted_result.get('message')}"
-            )
+            _record_blocker(f"delete execute failed: {deleted_result}")
             pytest.fail(f"delete execute failed: {deleted_result}")
         assert deleted_result["submitted"] is True
         renamed = False
-        await _capture_list(runtime_a, org_a, frame_dir / "04_after_delete.png", updated)
-        assert await _list_has_name(runtime_b, org_b, updated) is False
+        await _capture(observer, slug, frame_dir / "04_after_delete.png", updated)
+        await observer.close()
+        third = None
+        cleanup = BrowserRuntime(
+            cleanup_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        third = cleanup
+        cleanup_wait = await cleanup.auth_login_wait()
+        if isinstance(cleanup_wait, AuthLoginWaitSuccess) and cleanup_wait.status != "READY":
+            started = await cleanup.auth_login_start()
+            if isinstance(started, ToolError):
+                pytest.fail(f"cleanup-session login start failed: {started.code}")
+            cleanup_wait = await cleanup.auth_login_wait()
+        if isinstance(cleanup_wait, ToolError):
+            pytest.fail(f"cleanup-session login failed: {cleanup_wait.code}")
+        assert isinstance(cleanup_wait, AuthLoginWaitSuccess)
+        assert cleanup_wait.status == "READY"
+        assert cleanup_wait.organization_id == slug
+        assert await _list_has_name(cleanup, slug, updated) is False
+        assert await _list_has_name(cleanup, slug, tag) is False
 
         write_vision_record(
-            record_path,
+            _VISION_RECORD,
             workflow_ref="ui.parity.contacts.create",
             assertion_refs=[
                 "tests/live/test_ui_contacts_writes.py::"
                 "test_ui_contacts_create_update_delete_via_call_tool",
-                "session_a_call_tool_create_update_delete",
-                "session_b_list_read_back",
-                "four_state_capture",
+                "create_server_call_tool_create_update_delete",
+                "independent_readback_session",
+                "third_session_cleanup",
             ],
-            second_interface_ref="fresh_profile_b_full_login",
-            reviewer_verdict="accept",
+            second_interface_ref="create_server_readback_plus_third_profile",
+            reviewer_verdict="pending_review",
             purge_verified=False,
+            author="live_test",
         )
     finally:
         leftover = updated if renamed else (tag if created else None)
-        if leftover is not None and runtime_a is not None:
+        if leftover is not None and server is not None and slug:
             try:
-                cleanup_server = _make_server(runtime_a, org_a)
-                preview = await _call_tool(
-                    cleanup_server, "ui_clients_delete_preview", {"name": leftover}
+                preview = await _call(
+                    server,
+                    "ui_clients_delete_preview",
+                    {"name": leftover, "organization_id": slug},
                 )
-                await _call_tool(
-                    cleanup_server,
+                await _call(
+                    server,
                     "ui_clients_delete_execute",
                     {"confirmation_ticket": preview["confirmation_ticket"]},
                 )
             except Exception:
                 _record_blocker(f"Cleanup delete failed for leftover tagged name {leftover}.")
-        for runtime in (runtime_a, runtime_b):
-            if runtime is not None:
-                try:
-                    await runtime.close()
-                except Exception:
-                    pass
-        for profile in (profile_a, profile_b):
-            shutil.rmtree(profile, ignore_errors=True)
-        for org in (org_a, org_b):
-            if org.parent.exists():
-                shutil.rmtree(org.parent, ignore_errors=True)
-        purge_frame_dir(frame_dir)
-        if record_path.exists():
-            mark_purge_verified(record_path)
+        if third is not None:
+            try:
+                await third.close()
+            except Exception:
+                pass
+        _purge_registered_profiles()

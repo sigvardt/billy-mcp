@@ -9292,7 +9292,13 @@ async def _classify_session_page(page: LoginPage) -> AuthLoginWaitSuccess | Tool
     if _is_dashboard_shell_url(page.url) and await _has_shell_nav_markers(page):
         if await _has_login_signature(page):
             return None
-        return AuthLoginWaitSuccess(status="READY")
+        slug = _org_slug_from_url(page.url)
+        if slug is None:
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="Billy organisation slug is not available for the UI write.",
+            )
+        return AuthLoginWaitSuccess(status="READY", organization_id=slug)
     # Login controls away from the fixed login URL, or an incomplete shell, are
     # treated as settling rather than hard drift until the wait timeout.
     return None

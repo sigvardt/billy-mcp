@@ -30,6 +30,10 @@ updated: 2026-08-16T13:50:50Z
 
 `E613984F` (saved): execute compares the live URL slug to `prepared.binding.organization_id` and fails closed on mismatch. Contacts no longer use a stored identity file for that compare. Read-back starts a second runtime. A blank `-readback` profile is not a live second session; authenticate it (`E1E454F4`) before live proof. Cleanup still needs a third fresh read-back. Keep coverage red.
 
+`C7DBE974` (saved): the live contacts test must not write `reviewer_verdict=accept` or purge frames before an independent Grok review. The test may write a pending evidence manifest only. The reviewer writes accept or reject. Purge only after that, then mark `purge_verified`. A gate must reject coverage evidence whose reviewer record was created by the test. Do not run or green live contacts on the current self-approve path.
+
+`145EEAB3` (saved): remove leaked `billy-live-contacts-*` test profiles only. Never touch the persistent `chrome-profile`. Live test must delete write, readback, observer, and cleanup profiles on login failure, timeout, and review failure.
+
 Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI tools through the real MCP boundary, not direct BrowserRuntime as proof.
 
 ## Still in force

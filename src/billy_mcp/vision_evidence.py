@@ -30,6 +30,7 @@ class VisionEvidenceRecord(BaseModel):
     timestamp: str = Field(min_length=1)
     purge_verified: bool
     frame_paths_were_outside_repo: bool = True
+    author: Literal["live_test", "independent_review"] = "independent_review"
 
 
 def owner_only_frame_dir(base: Path | None = None) -> Path:
@@ -55,9 +56,12 @@ def write_vision_record(
     reviewer_verdict: Literal["pending_review", "accept", "reject"] = "pending_review",
     run_id: str | None = None,
     purge_verified: bool = False,
+    author: Literal["live_test", "independent_review"] = "independent_review",
 ) -> VisionEvidenceRecord:
     """Write one redacted vision record to disk (JSON, no frames)."""
 
+    if author == "live_test" and reviewer_verdict == "accept":
+        raise ValueError("independent review must write accept; a live test cannot")
     record = VisionEvidenceRecord(
         workflow_ref=workflow_ref,
         run_id=run_id or uuid.uuid4().hex,
@@ -67,6 +71,7 @@ def write_vision_record(
         timestamp=datetime.now(UTC).replace(microsecond=0).isoformat(),
         purge_verified=purge_verified,
         frame_paths_were_outside_repo=True,
+        author=author,
     )
     destination.parent.mkdir(parents=True, exist_ok=True)
     destination.write_text(record.model_dump_json(indent=2) + "\n", encoding="utf-8")
@@ -93,6 +98,16 @@ def mark_purge_verified(record_path: Path) -> VisionEvidenceRecord:
     record = VisionEvidenceRecord.model_validate(payload)
     record_path.write_text(record.model_dump_json(indent=2) + "\n", encoding="utf-8")
     return record
+
+
+def qualifies_for_coverage_vision(record: VisionEvidenceRecord) -> bool:
+    """True only after an independent review accepts and purge is verified."""
+
+    return (
+        record.author == "independent_review"
+        and record.reviewer_verdict == "accept"
+        and record.purge_verified is True
+    )
 
 
 def is_outside_repository(path: Path, repository_root: Path) -> bool:

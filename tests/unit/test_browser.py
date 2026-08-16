@@ -1023,7 +1023,7 @@ def test_auth_login_wait_returns_ready_for_dashboard_shell(tmp_path: Path) -> No
 
     result = asyncio.run(runtime.auth_login_wait())
 
-    assert result == AuthLoginWaitSuccess(status="READY")
+    assert result == AuthLoginWaitSuccess(status="READY", organization_id="test-org-slug")
     assert page.closed
     stored = json.loads(identity_path.read_text(encoding="utf-8"))
     assert stored == {"source": "ui_dashboard_path", "org_slug": "test-org-slug"}

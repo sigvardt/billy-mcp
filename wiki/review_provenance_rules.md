@@ -40,3 +40,9 @@ Review pages do not green inventory rows. Only implementation plus the required
 row-level test evidence can update generated coverage, and `complete: true`
 still requires all live, UI, vision, and independent-review obligations in the
 approved design.
+
+A live test may write a vision record with `author=live_test` and
+`reviewer_verdict=pending_review` only. It must not write `accept` or purge
+frames. `qualifies_for_coverage_vision` is true only when
+`author=independent_review`, `reviewer_verdict=accept`, and `purge_verified`.
+Owner radio `C7DBE974`.

@@ -124,6 +124,7 @@ from billy_mcp.coverage import (
     GeneratedCoverageStatus,
     load_coverage_report,
 )
+from billy_mcp.dual_login import DualSessionLogin
 from billy_mcp.models import (
     AuthLoginStartInput,
     AuthLoginStartSuccess,
@@ -321,7 +322,7 @@ def create_server(
     )
     readback_browser = browser.independent_readback_runtime()
     checker = auth_status_checker or browser
-    login_service = auth_login_service or browser
+    login_service = auth_login_service or DualSessionLogin(browser, readback_browser)
     invoices_list_service = ui_invoices_list_service or browser
     invoices_create_open_service = ui_invoices_create_open_service or browser
     invoices_get_open_service = ui_invoices_get_open_service or browser
