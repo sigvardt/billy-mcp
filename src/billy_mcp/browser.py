@@ -125,12 +125,12 @@ _INVOICES_UPDATE_FIELD_MARKERS = (
 _PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
 _PRODUCTS_LIST_HEADING = "Produkter"
 _PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
-_CLIENTS_LIST_PATH = re.compile(r"^/[^/]+/clients$")
+_CLIENTS_LIST_PATH = re.compile(r"^/[^/]+/clients(?:/empty)?$")
 _CLIENTS_DETAIL_PATH = re.compile(
     r"^/[^/]+/contacts/([^/]+)/(customer|supplier)$",
     re.I,
 )
-_CLIENTS_LIST_HEADING = "Kunder"
+_CLIENTS_LIST_HEADINGS = frozenset({"Kunder", "Kontakter"})
 _CLIENTS_CREATE_CTA = "Opret kontakt"
 _CLIENTS_HEADER_ROW_RE = re.compile(
     r"^(navn|e-?mail|telefon|land|oprettet|name|email|phone|country|created)"
@@ -1752,7 +1752,12 @@ class BrowserRuntime:
                 if await _has_error_shell_markers(page):
                     return _ui_clients_changed_error()
                 if _is_clients_list_url(page.url) and await _has_clients_list_signature(page):
+                    heading = await _clients_heading_text(page)
+                    if heading is None:
+                        return _ui_clients_changed_error()
                     return UiClientsListSuccess(
+                        path_class=_clients_path_class(page.url),
+                        heading=heading,
                         create_action_visible=True,
                         shell_markers_present=await _has_shell_nav_markers(page),
                     )
@@ -1836,8 +1841,13 @@ class BrowserRuntime:
                 if _is_clients_list_url(page.url) and await _has_clients_create_form_signature(
                     page
                 ):
+                    heading = await _clients_heading_text(page)
+                    if heading is None:
+                        return _ui_clients_create_changed_error()
                     signature = await _clients_create_form_field_flags(page)
                     return UiClientsCreateOpenSuccess(
+                        path_class=_clients_path_class(page.url),
+                        heading=heading,
                         create_dialog_open=True,
                         name_field_visible=signature["name_field_visible"],
                         registration_no_field_present=signature["registration_no_field_present"],
@@ -5472,6 +5482,17 @@ def _is_clients_list_url(url: str) -> bool:
     )
 
 
+def _clients_path_class(
+    url: str,
+) -> Literal["/:org_slug/clients", "/:org_slug/clients/empty"]:
+    """Return the observed clients list path class without the organisation slug."""
+
+    path = (urlsplit(url).path or "").rstrip("/")
+    if path.endswith("/clients/empty"):
+        return "/:org_slug/clients/empty"
+    return "/:org_slug/clients"
+
+
 def _is_bank_accounts_list_url(url: str) -> bool:
     """Accept mit.billy.dk /:org_slug/bank-accounts, including Billy list query params."""
 
@@ -7388,16 +7409,27 @@ def _is_clients_new_soft_url(url: str) -> bool:
     )
 
 
-async def _has_clients_list_heading(page: LoginPage) -> bool:
-    """True when the clients list h1 is Kunder."""
+async def _clients_heading_text(page: LoginPage) -> Literal["Kunder", "Kontakter"] | None:
+    """Return Kunder or Kontakter when the clients list heading is visible."""
 
     try:
         heading = page.locator("h1")
         if await heading.count() < 1 or not await heading.is_visible():
-            return False
-        return (await heading.inner_text()).strip() == _CLIENTS_LIST_HEADING
+            return None
+        text = (await heading.inner_text()).strip()
     except Exception:
-        return False
+        return None
+    if text == "Kunder":
+        return "Kunder"
+    if text == "Kontakter":
+        return "Kontakter"
+    return None
+
+
+async def _has_clients_list_heading(page: LoginPage) -> bool:
+    """True when the clients list h1 is Kunder or Kontakter."""
+
+    return await _clients_heading_text(page) is not None
 
 
 async def _click_clients_create_cta(page: LoginPage) -> bool:
@@ -7477,7 +7509,7 @@ async def _has_clients_list_signature(page: LoginPage) -> bool:
         heading = page.locator("h1")
         if await heading.count() < 1 or not await heading.is_visible():
             return False
-        if (await heading.inner_text()).strip() != _CLIENTS_LIST_HEADING:
+        if (await heading.inner_text()).strip() not in _CLIENTS_LIST_HEADINGS:
             return False
         create_action = page.locator(f"text={_CLIENTS_CREATE_CTA}")
         return await create_action.count() >= 1 and await create_action.is_visible()

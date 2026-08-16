@@ -15,13 +15,13 @@ updated: 2026-08-01T15:20:00Z
 ## Contract
 
 Tool `ui_clients_create_open` opens the authenticated Billy contact/customer
-create dialog on `mit.billy.dk` under path class `/:org_slug/clients` after the
-text CTA **Opret kontakt**.
+create dialog on `mit.billy.dk` under path class `/:org_slug/clients` or
+`/:org_slug/clients/empty` after the text CTA **Opret kontakt**.
 
 Success fields (non-PII only):
 
-- `path_class`: `/:org_slug/clients` (dialog on list path; not soft `/clients/new`)
-- `heading`: `Kunder`
+- `path_class`: `/:org_slug/clients` or `/:org_slug/clients/empty` (dialog on list path; not soft `/clients/new`)
+- `heading`: `Kunder` or `Kontakter`
 - `shell_kind`: `clients_create`
 - `create_dialog_open`: create dialog form surface present after CTA
 - `name_field_visible`: input `name` visible

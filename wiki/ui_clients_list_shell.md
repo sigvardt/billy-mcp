@@ -15,12 +15,13 @@ updated: 2026-07-31T10:35:00Z
 ## Contract
 
 Tool `ui_clients_list` opens the authenticated Billy clients list shell on
-`mit.billy.dk` under path class `/:org_slug/clients`.
+`mit.billy.dk` under path class `/:org_slug/clients` or
+`/:org_slug/clients/empty`.
 
 Success fields (non-PII only):
 
-- `path_class`: `/:org_slug/clients` (query params allowed on the real URL)
-- `heading`: `Kunder`
+- `path_class`: `/:org_slug/clients` or `/:org_slug/clients/empty` (query params allowed)
+- `heading`: `Kunder` or `Kontakter`
 - `create_action_visible`: CTA `Opret kontakt` is present (never clicked)
 - `shell_markers_present`: shared shell markers when visible
 

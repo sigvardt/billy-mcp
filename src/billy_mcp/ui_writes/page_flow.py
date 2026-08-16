@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -115,13 +116,20 @@ async def prove_text_on_fresh_page(
             message="Billy interface read-back could not start the browser.",
         )
     try:
+        bound = (organization_id or "").strip()
         slug = await _session_slug(page)
+        if slug is None and bound and _is_org_less_root(page.url):
+            await page.goto(
+                f"{BILLY_ORIGIN}/{bound}/{path.lstrip('/')}",
+                wait_until="domcontentloaded",
+            )
+            slug = _org_slug_from_live_url(page.url)
         if slug is None:
             return ToolError(
                 code=StableErrorCode.ORGANIZATION_REQUIRED,
                 message="Billy organisation slug is not available for the UI write.",
             )
-        if organization_id is not None and slug != organization_id.strip():
+        if bound and slug != bound:
             return ToolError(
                 code=StableErrorCode.CONFIRMATION_MISMATCH,
                 message="Live Billy organisation does not match the confirmation ticket.",
@@ -130,6 +138,14 @@ async def prove_text_on_fresh_page(
             f"{BILLY_ORIGIN}/{slug}/{path.lstrip('/')}",
             wait_until="domcontentloaded",
         )
+        try:
+            await page.wait_for_load_state("networkidle", timeout=15000)
+        except Exception:
+            pass
+        search = page.locator("input[type='search'], input[placeholder*='øg' i]")
+        if await search.count() >= 1:
+            await search.first.fill(text)
+            await asyncio.sleep(1.5)
         found = await page.locator(f"text={text}").count()
         if absent:
             if found >= 1:
@@ -148,14 +164,23 @@ async def prove_text_on_fresh_page(
         await page.close()
 
 
-async def _session_slug(page: LoginPage) -> str | None:
-    if not page.url or page.url == "about:blank":
-        await page.goto(f"{BILLY_ORIGIN}/", wait_until="domcontentloaded")
-    path = urlsplit(page.url).path or ""
+def _org_slug_from_live_url(url: str) -> str | None:
+    path = urlsplit(url).path or ""
     parts = [part for part in path.split("/") if part]
     if parts and parts[0] not in {"login"}:
         return parts[0]
     return None
+
+
+def _is_org_less_root(url: str) -> bool:
+    path = urlsplit(url).path or ""
+    return not [part for part in path.split("/") if part]
+
+
+async def _session_slug(page: LoginPage) -> str | None:
+    if not page.url or page.url == "about:blank":
+        await page.goto(f"{BILLY_ORIGIN}/", wait_until="domcontentloaded")
+    return _org_slug_from_live_url(page.url)
 
 
 async def _fill_named(page: LoginPage, field_name: str, value: str) -> ToolError | None:

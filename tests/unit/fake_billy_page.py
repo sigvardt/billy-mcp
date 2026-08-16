@@ -82,6 +82,8 @@ class FakeBillyPage:
         self._session.gotos.append(url)
 
     def locator(self, selector: str) -> FakeBillyLocator:
+        if "type='search'" in selector or "placeholder" in selector:
+            return FakeBillyLocator(self._session, selector, query_text="__no_search__")
         query = selector.removeprefix("text=") if selector.startswith("text=") else None
         return FakeBillyLocator(
             self._session,

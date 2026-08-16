@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live contacts CUD through `create_server` after login settles. Last live run: UI_CHANGED or create TimeoutError. Do not green until call_tool plus third-session cleanup pass and an independent review writes accept.
+- Live contacts update read-back still fails after FastMCP create works. Finish update/delete, third-session cleanup, then independent accept. Do not green until that proof.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done

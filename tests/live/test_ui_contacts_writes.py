@@ -167,8 +167,6 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
     frame_dir = owner_only_frame_dir()
     server: FastMCP | None = None
     third: BrowserRuntime | None = None
-    created = False
-    renamed = False
     slug = ""
 
     try:
@@ -207,7 +205,6 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             _record_blocker(f"create execute failed: {created_result}")
             pytest.fail(f"create execute failed: {created_result}")
         assert created_result["submitted"] is True
-        created = True
         await _capture(observer, slug, frame_dir / "02_after_create.png", tag)
         assert await _list_has_name(observer, slug, tag) is True
 
@@ -225,8 +222,6 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
         assert updated_result["submitted"] is True
-        renamed = True
-        created = False
         await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
         assert await _list_has_name(observer, slug, updated) is True
         assert await _list_has_name(observer, slug, tag) is False
@@ -243,7 +238,6 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             _record_blocker(f"delete execute failed: {deleted_result}")
             pytest.fail(f"delete execute failed: {deleted_result}")
         assert deleted_result["submitted"] is True
-        renamed = False
         await _capture(observer, slug, frame_dir / "04_after_delete.png", updated)
         await observer.close()
         third = None
@@ -283,21 +277,22 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             author="live_test",
         )
     finally:
-        leftover = updated if renamed else (tag if created else None)
-        if leftover is not None and server is not None and slug:
-            try:
-                preview = await _call(
-                    server,
-                    "ui_clients_delete_preview",
-                    {"name": leftover, "organization_id": slug},
-                )
-                await _call(
-                    server,
-                    "ui_clients_delete_execute",
-                    {"confirmation_ticket": preview["confirmation_ticket"]},
-                )
-            except Exception:
-                _record_blocker(f"Cleanup delete failed for leftover tagged name {leftover}.")
+        leftovers = {tag, updated}
+        if server is not None and slug:
+            for leftover in leftovers:
+                try:
+                    preview = await _call(
+                        server,
+                        "ui_clients_delete_preview",
+                        {"name": leftover, "organization_id": slug},
+                    )
+                    await _call(
+                        server,
+                        "ui_clients_delete_execute",
+                        {"confirmation_ticket": preview["confirmation_ticket"]},
+                    )
+                except Exception:
+                    _record_blocker(f"Cleanup delete failed for leftover tagged name {leftover}.")
         if third is not None:
             try:
                 await third.close()

@@ -24,6 +24,7 @@ from billy_mcp.ui_writes.protocol import (
 
 _CLIENTS_CREATE_CTA = "Opret kontakt"
 _GEM = re.compile(r"^Gem$")
+_GEM_CHANGES = re.compile(r"^Gem ændringer$")
 _RET = re.compile(r"^Ret$")
 _MERE = re.compile(r"^Mere$")
 _SLET = re.compile(r"Slet kontakt", re.I)
@@ -180,21 +181,27 @@ class BrowserContactUiActor:
     ) -> object:
         page: _Page | None = None
         try:
-            context = await self._runtime.start()
-            page = cast(_Page, await context.new_page())
-            await page.goto("https://mit.billy.dk/", wait_until="domcontentloaded")
-            await _settle(page)
-            slug = _slug_from(page.url)
-            if slug is None:
-                return ToolError(
-                    code=StableErrorCode.ORGANIZATION_REQUIRED,
-                    message="Billy organisation slug is not available for the UI write.",
-                )
             bound = organization_id.strip()
             if not bound:
                 return ToolError(
                     code=StableErrorCode.ORGANIZATION_REQUIRED,
                     message="A proven Billy organisation id is required.",
+                )
+            context = await self._runtime.start()
+            page = cast(_Page, await context.new_page())
+            await page.goto("https://mit.billy.dk/", wait_until="domcontentloaded")
+            await _settle(page)
+            slug = _slug_from(page.url)
+            if slug is None and _is_org_less_root(page.url):
+                await page.goto(
+                    f"https://mit.billy.dk/{bound}/clients", wait_until="domcontentloaded"
+                )
+                await _settle(page)
+                slug = _slug_from(page.url)
+            if slug is None:
+                return ToolError(
+                    code=StableErrorCode.ORGANIZATION_REQUIRED,
+                    message="Billy organisation slug is not available for the UI write.",
                 )
             if slug != bound:
                 return ToolError(
@@ -429,6 +436,12 @@ def _slug_from(url: str) -> str | None:
     return None
 
 
+def _is_org_less_root(url: str) -> bool:
+    path = urlsplit(url).path or ""
+    parts = [part for part in path.split("/") if part]
+    return not parts
+
+
 async def _settle(page: _Page) -> None:
     try:
         await page.wait_for_load_state("networkidle", timeout=15000)
@@ -439,6 +452,21 @@ async def _settle(page: _Page) -> None:
 async def _goto_clients(page: _Page, slug: str) -> None:
     await page.goto(f"https://mit.billy.dk/{slug}/clients", wait_until="domcontentloaded")
     await _settle(page)
+
+
+async def _click_save(page: _Page) -> bool:
+    """Click an exact save button. Never match Gem kommentar via substring text=Gem."""
+
+    for pattern in (_GEM_CHANGES, _GEM):
+        button = page.get_by_role("button", name=pattern)
+        try:
+            if await button.count() >= 1 and await button.first.is_visible():
+                await button.first.click()
+                await _settle(page)
+                return True
+        except Exception:
+            continue
+    return False
 
 
 async def _click_named(page: _Page, pattern: re.Pattern[str], *, settle: bool = True) -> bool:
@@ -496,6 +524,13 @@ async def _create_customer(page: _Page, slug: str, name: str) -> object:
     filled = False
     for _ in range(30):
         await _click_named(page, re.compile(r"^Opret kontakt$"), settle=False)
+        cta = page.locator("text=Opret kontakt")
+        try:
+            if await cta.count() >= 1 and await cta.first.is_visible():
+                await cta.first.click()
+        except Exception:
+            pass
+        await _settle(page)
         if await _fill_name(page, name):
             filled = True
             break
@@ -517,6 +552,7 @@ async def _create_customer(page: _Page, slug: str, name: str) -> object:
             code=StableErrorCode.UI_CHANGED,
             message="Billy save control is not visible.",
         )
+    await _settle(page)
     await asyncio.sleep(2)
     return {"ok": True}
 
@@ -528,22 +564,33 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
             code=StableErrorCode.NOT_FOUND,
             message="Billy customer was not found for update.",
         )
-    if not await _click_named(page, _RET):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy edit control is not visible.",
-        )
-    if not await _fill_name(page, new_name):
+    opened = False
+    for _ in range(30):
+        if await _fill_name(page, new_name):
+            opened = True
+            break
+        await _click_named(page, _RET, settle=False)
+        await _settle(page)
+        await asyncio.sleep(0.2)
+    if not opened:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy customer name field is not visible.",
         )
-    if not await _click_named(page, _GEM):
+    if not await _click_save(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy save control is not visible.",
         )
+    await _settle(page)
     await asyncio.sleep(2)
+    await _goto_clients(page, slug)
+    await _search_name(page, new_name)
+    if await page.get_by_text(new_name, exact=False).count() < 1:
+        return ToolError(
+            code=StableErrorCode.NOT_FOUND,
+            message="Billy customer rename was not visible on the list after save.",
+        )
     return {"ok": True}
 
 

@@ -338,8 +338,8 @@ class UiClientsListSuccess(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    path_class: Literal["/:org_slug/clients"] = "/:org_slug/clients"
-    heading: Literal["Kunder"] = "Kunder"
+    path_class: Literal["/:org_slug/clients", "/:org_slug/clients/empty"] = "/:org_slug/clients"
+    heading: Literal["Kunder", "Kontakter"] = "Kunder"
     create_action_visible: bool
     shell_markers_present: bool
 
@@ -355,8 +355,8 @@ class UiClientsCreateOpenSuccess(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    path_class: Literal["/:org_slug/clients"] = "/:org_slug/clients"
-    heading: Literal["Kunder"] = "Kunder"
+    path_class: Literal["/:org_slug/clients", "/:org_slug/clients/empty"] = "/:org_slug/clients"
+    heading: Literal["Kunder", "Kontakter"] = "Kunder"
     shell_kind: Literal["clients_create"] = "clients_create"
     create_dialog_open: bool
     name_field_visible: bool

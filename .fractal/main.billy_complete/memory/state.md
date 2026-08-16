@@ -39,16 +39,24 @@ Merged with `--no-ff` and parked:
 - `ui_files_writes`
 - `ui_org_writes` (company fields only; fail-closed on users/tokens)
 
-Old wave/review descendants stay retired and unmerged.
+Old wave/review descendants stay retired and unmerged. No children are running.
 
 Parent `E1E454F4` live refs stay: keyring service `billy-mcp`, opaque ids
 `billy-ui-primary` and `billy-ui-secondary`. `BILLY_ORGANIZATION_ID` stays
 unset until the dedicated non-production org is proved in the interface.
 
-Next slice: authenticate the second session (`E1E454F4` secondary refs or
-login on the `-readback` profile), then live contacts create/update/delete
-through FastMCP, independent-session read-back, cleanup on a third fresh
-read-back. Green only those three rows after that proof.
+The nine named idle `billy-live-contacts-*` profiles are gone. Zero remain.
+
+Live DualSessionLogin READY now returns a slug. The dedicated org's customers
+page is `/:org_slug/clients/empty` with heading Kontakter, not Kunder. List and
+create-open still require the old path and heading, so they return UI_CHANGED.
+The create dialog fields are still present. No submit was done.
+
+`/:org_slug/clients/empty` and heading Kontakter are accepted. Live create
+through FastMCP now submits and the second session sees the new name. Update
+was clicking Gem kommentar via substring text=Gem; that is now an exact-role
+save only. Live Ret form still has no name field and no Gem. Coverage stays
+red.
 
 ## Review
 

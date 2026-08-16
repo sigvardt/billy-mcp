@@ -589,6 +589,28 @@ def test_ui_clients_list_models_are_empty_input_and_non_pii_success() -> None:
         )
 
 
+def test_ui_clients_list_success_accepts_empty_path_and_kontakter_heading() -> None:
+    success = UiClientsListSuccess(
+        path_class="/:org_slug/clients/empty",
+        heading="Kontakter",
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert success.path_class == "/:org_slug/clients/empty"
+    assert success.heading == "Kontakter"
+    create_open = UiClientsCreateOpenSuccess(
+        path_class="/:org_slug/clients/empty",
+        heading="Kontakter",
+        create_dialog_open=True,
+        name_field_visible=True,
+        registration_no_field_present=True,
+        address_or_person_fields_present=True,
+        shell_markers_present=True,
+    )
+    assert create_open.path_class == "/:org_slug/clients/empty"
+    assert create_open.heading == "Kontakter"
+
+
 def test_ui_bank_accounts_list_models_are_empty_input_and_non_pii_success() -> None:
     assert UiBankAccountsListInput().model_dump() == {}
     success = UiBankAccountsListSuccess(

@@ -1895,6 +1895,52 @@ def test_ui_clients_list_returns_success_for_list_shell(tmp_path: Path) -> None:
     assert page.closed
 
 
+def test_ui_clients_list_accepts_empty_path_and_kontakter_heading(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _clients_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Kontakter")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_empty_state(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/clients"):
+            page.url = "https://mit.billy.dk/test-org-slug/clients/empty"
+        return result
+
+    page.goto = goto_empty_state  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_clients_list())
+
+    assert result == UiClientsListSuccess(
+        path_class="/:org_slug/clients/empty",
+        heading="Kontakter",
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
+
+
 def test_ui_clients_list_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
     identity_path = tmp_path / "ui-org-identity.json"
     identity_path.write_text(
@@ -9313,6 +9359,59 @@ def test_ui_clients_create_open_returns_success_for_create_dialog(tmp_path: Path
     assert "test-org-slug" not in str(result.model_dump())
     assert page.closed
     # Form was already signature-complete (dialog fields present); no submit clicks.
+    assert not any("click:text=Gem" in e for e in page.events)
+
+
+def test_ui_clients_create_open_accepts_empty_path_and_kontakter_heading(
+    tmp_path: Path,
+) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _clients_create_shell_controls()
+    controls["h1"] = FakeLoginControl(text="Kontakter")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_empty_state(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/clients"):
+            page.url = "https://mit.billy.dk/test-org-slug/clients/empty"
+        return result
+
+    page.goto = goto_empty_state  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_clients_create_open())
+
+    assert result == UiClientsCreateOpenSuccess(
+        path_class="/:org_slug/clients/empty",
+        heading="Kontakter",
+        create_dialog_open=True,
+        name_field_visible=True,
+        registration_no_field_present=True,
+        address_or_person_fields_present=True,
+        shell_markers_present=True,
+    )
+    assert not any("/clients/new" in url for url, _ in page.navigation)
+    assert "test-org-slug" not in str(result.model_dump())
+    assert page.closed
     assert not any("click:text=Gem" in e for e in page.events)
 
 
