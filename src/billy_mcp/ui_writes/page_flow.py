@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import re
 from dataclasses import dataclass
 from pathlib import Path
 from urllib.parse import urlsplit
@@ -11,6 +12,16 @@ from billy_mcp.browser import BrowserRuntime, LoginPage
 from billy_mcp.models import StableErrorCode, ToolError
 
 BILLY_ORIGIN: str = "https://mit.billy.dk"
+_EXACT_NAME_BOUNDARY = r"[\w-]"
+
+
+def exact_name_in_text(haystack: str, name: str) -> bool:
+    """True when name is a whole token, not a prefix of a longer tagged name."""
+
+    if not name:
+        return False
+    pattern = re.compile(rf"(?<!{_EXACT_NAME_BOUNDARY}){re.escape(name)}(?!{_EXACT_NAME_BOUNDARY})")
+    return pattern.search(haystack) is not None
 
 
 @dataclass(frozen=True, slots=True)
@@ -146,7 +157,7 @@ async def prove_text_on_fresh_page(
         if await search.count() >= 1:
             await search.first.fill(text)
             await asyncio.sleep(1.5)
-        found = await page.locator(f"text={text}").count()
+        found = await page.get_by_text(text, exact=True).count()
         if absent:
             if found >= 1:
                 return ToolError(

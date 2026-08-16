@@ -57,13 +57,14 @@ through FastMCP submits and a second session sees the new name.
 
 Update and delete clicks now use exact labels. Substring `Ret` matches **Opret**.
 Exact **Ret** opens `input[name=name]` plus **Gem**. **Slet kontakt** is a link,
-not a button. Confirm is exact **Slet**. Never **Arkivér**.
+not a button. Confirm is **Ja, slet** (fallback **Slet**). Never **Arkivér**.
 
-Five leftover `MCP-UI-C-*` customers were deleted through FastMCP. A fresh
-session lists none. Open uses the named list row, not the search box. Delete
-clicks the visible **Slet kontakt** link, not a hidden first match. Live
-create/update/delete of a new tagged customer is still unproved. Coverage stays
-red.
+Read-back treats `{tag}-U` as a different name from `{tag}`. Live create through
+FastMCP still submits and a second session sees the exact name. Live update
+still does not persist: **Gem** left the form open. Name fill now fires
+input/change events and save clicks the last exact **Gem**. A later live run
+failed on observer login `UI_CHANGED` before create. No `MCP-UI-C-*` leftovers
+remain. Coverage stays red.
 
 ## Review
 

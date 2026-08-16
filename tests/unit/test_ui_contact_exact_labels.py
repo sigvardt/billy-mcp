@@ -133,12 +133,19 @@ class _Locator:
             self._page.links.append(_Button("Slet kontakt"))
         elif label == "Slet kontakt":
             self._page.confirm_slet_visible = True
-            self._page.buttons.append(_Button("Slet"))
-        elif label == "Slet":
+            self._page.buttons.append(_Button("Ja, slet"))
+        elif label in {"Slet", "Ja, slet"}:
             self._page.confirm_slet_visible = False
 
     async def fill(self, value: str) -> None:
         del value
+
+    async def evaluate(self, expression: str) -> object:
+        del expression
+        return None
+
+    async def press(self, key: str) -> None:
+        del key
 
     async def inner_text(self) -> str:
         if not self._matches:
@@ -196,8 +203,26 @@ def test_open_named_customer_skips_search_box_and_opens_detail() -> None:
     assert "/contacts/" in page.url
 
 
+def test_exact_gem_does_not_click_gem_kommentar() -> None:
+    page = ContactDetailFake()
+    page.buttons.append(_Button("Gem"))
+    clicked = asyncio.run(contacts._click_exact_label(page, "Gem"))
+    assert clicked is True
+    assert page.clicks == ["Gem"]
+
+
+def test_save_clicks_last_exact_gem() -> None:
+    page = ContactDetailFake()
+    page.buttons.append(_Button("Gem"))
+    page.buttons.append(_Button("Gem"))
+    clicked = asyncio.run(contacts._click_save(page))
+    assert clicked is True
+    assert page.clicks == ["Gem"]
+    assert page.clicks[-1] == "Gem"
+
+
 def test_exact_slet_runs_after_slet_kontakt() -> None:
     page = ContactDetailFake()
     deleted = asyncio.run(contacts._confirm_delete_customer(page))
     assert deleted is True
-    assert page.clicks == ["Mere", "Slet kontakt", "Slet"]
+    assert page.clicks == ["Mere", "Slet kontakt", "Ja, slet"]

@@ -234,6 +234,10 @@ class FakeLoginPage:
     def locator(self, selector: str) -> FakeLoginControl:
         return self.controls.get(selector, FakeLoginControl(count=0, visible=False))
 
+    def get_by_text(self, text: str, *, exact: bool = False) -> FakeLoginControl:
+        del exact
+        return self.controls.get(f"text:{text}", FakeLoginControl(count=0, visible=False))
+
     def get_by_role(self, role: str, *, name: str | re.Pattern[str]) -> FakeLoginControl:
         if isinstance(name, re.Pattern):
             label = name.pattern.strip("^$")

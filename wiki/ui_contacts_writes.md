@@ -37,7 +37,7 @@ Create opens from `/:org_slug/clients` or `/:org_slug/clients/empty` after
 **Opret kontakt**. List heading may be **Kunder** or **Kontakter**. Update clicks
 the button whose text is exactly **Ret**, never a substring that matches
 **Opret**. Save is exact **Gem** or **Gem ændringer**, never **Gem kommentar**.
-Delete is exact **Mere**, then the **Slet kontakt** link, then exact **Slet**. Never **Arkivér**.
+Delete is exact **Mere**, then the **Slet kontakt** link, then **Ja, slet** (or **Slet**). Never **Arkivér**.
 Customers are located by unique tagged name, not an API id. Inputs are flat.
 There is no nested `input` object. Extra fields are rejected.
 
@@ -57,7 +57,9 @@ returns `CONFIRMATION_CONSUMED`. A ticket for another execute tool returns
 Live submit uses disposable names of the form `MCP-UI-C-<8hex>` and
 `MCP-UI-C-<8hex>-U` after update. Session A runs create, then update, then
 delete through preview and execute. Session B is an independent login that
-lists customers after each step. Four-state frames stay in owner-only storage until an independent Grok
+lists customers after each step. After update, `{tag}-U` is not a hit for
+`{tag}`: read-back uses exact visible text, never `name in body` or
+`text={tag}`. Four-state frames stay in owner-only storage until an independent Grok
 review writes accept or reject. The live test writes
 `author=live_test` and `reviewer_verdict=pending_review` only.
 

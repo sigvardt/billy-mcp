@@ -125,8 +125,8 @@ async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
         if await search.count() >= 1:
             await search.first.fill(name)
             await asyncio.sleep(1.5)
-        body = await page.locator("body").inner_text()
-        return name in body
+        exact = page.get_by_text(name, exact=True)
+        return await exact.count() >= 1
     finally:
         await page.close()
 

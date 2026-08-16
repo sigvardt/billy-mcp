@@ -103,6 +103,10 @@ class _Locator(Protocol):
 
     async def inner_text(self) -> str: ...
 
+    async def evaluate(self, expression: str) -> object: ...
+
+    async def press(self, key: str) -> None: ...
+
 
 class _Page(Protocol):
     @property
@@ -455,13 +459,18 @@ async def _goto_clients(page: _Page, slug: str) -> None:
 async def _click_save(page: _Page) -> bool:
     """Click an exact save button. Never match Gem kommentar via substring text=Gem."""
 
-    return await _click_exact_label(page, "Gem ændringer") or await _click_exact_label(page, "Gem")
+    return await _click_exact_label(page, "Gem ændringer") or await _click_exact_label(
+        page, "Gem", reverse=True
+    )
 
 
-async def _click_visible(locator: _Locator, *, settle_page: _Page, settle: bool) -> bool:
+async def _click_visible(
+    locator: _Locator, *, settle_page: _Page, settle: bool, reverse: bool = False
+) -> bool:
     try:
         count = await locator.count()
-        for index in range(min(count, 8)):
+        indexes = range(count - 1, -1, -1) if reverse else range(min(count, 8))
+        for index in indexes:
             candidate = locator.nth(index)
             if not await candidate.is_visible():
                 continue
@@ -474,23 +483,28 @@ async def _click_visible(locator: _Locator, *, settle_page: _Page, settle: bool)
     return False
 
 
-async def _click_exact_label(page: _Page, label: str, *, settle: bool = True) -> bool:
-    """Click a visible control whose name is exactly label. Never substring-match Opret."""
+async def _click_exact_label(
+    page: _Page, label: str, *, settle: bool = True, reverse: bool = False
+) -> bool:
+    """Click a visible control whose name is exactly label.
+
+    Never substring-match Opret or Gem kommentar.
+    """
 
     pattern = re.compile(rf"^{re.escape(label)}$")
     for role in ("button", "link"):
         if await _click_visible(
-            page.get_by_role(role, name=pattern), settle_page=page, settle=settle
+            page.get_by_role(role, name=pattern),
+            settle_page=page,
+            settle=settle,
+            reverse=reverse,
         ):
             return True
-    if await _click_visible(
-        page.locator(f'button:has-text("{label}"), a:has-text("{label}")'),
+    return await _click_visible(
+        page.get_by_text(label, exact=True),
         settle_page=page,
         settle=settle,
-    ):
-        return True
-    return await _click_visible(
-        page.get_by_text(label, exact=True), settle_page=page, settle=settle
+        reverse=reverse,
     )
 
 
@@ -527,14 +541,14 @@ async def _open_edit_name(page: _Page, new_name: str) -> bool:
 
 
 async def _confirm_delete_customer(page: _Page) -> bool:
-    """Mere, then Slet kontakt link, then exact Slet. Never click Arkivér."""
+    """Mere, then Slet kontakt, then Ja, slet or Slet. Never click Arkivér."""
 
     await _settle(page)
     if not await _wait_and_click(page, "Mere"):
         return False
     if not await _wait_and_click(page, "Slet kontakt"):
         return False
-    return await _wait_and_click(page, "Slet")
+    return await _wait_and_click(page, "Ja, slet") or await _wait_and_click(page, "Slet")
 
 
 async def _delete_chrome_flags(page: _Page) -> dict[str, int]:
@@ -564,12 +578,41 @@ async def _wait_and_click(page: _Page, label: str) -> bool:
     return False
 
 
+async def _name_field_visible(page: _Page) -> bool:
+    field = page.locator(_NAME)
+    try:
+        return await field.count() >= 1 and await field.first.is_visible()
+    except Exception:
+        return False
+
+
+async def _press_name_field(page: _Page, key: str) -> None:
+    field = page.locator(_NAME)
+    try:
+        await field.first.press(key)
+    except Exception:
+        return
+
+
+async def _commit_name_field(page: _Page) -> None:
+    """Leave the name field so Billy enables the real save control."""
+
+    await _press_name_field(page, "Tab")
+    await _settle(page)
+
+
 async def _fill_name(page: _Page, value: str) -> bool:
     field = page.locator(_NAME)
     try:
         if await field.count() < 1 or not await field.first.is_visible():
             return False
-        await field.first.fill(value)
+        target = field.first
+        await target.click()
+        await target.fill(value)
+        await target.evaluate(
+            "el => { el.dispatchEvent(new Event('input', {bubbles: true}));"
+            " el.dispatchEvent(new Event('change', {bubbles: true})); }"
+        )
     except Exception:
         return False
     return True
@@ -682,21 +725,27 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
             code=StableErrorCode.UI_CHANGED,
             message="Billy customer name field is not visible.",
         )
+    await _commit_name_field(page)
     if not await _click_save(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy save control is not visible.",
         )
+    if await _name_field_visible(page):
+        await _press_name_field(page, "Enter")
+        await _settle(page)
     await _settle(page)
     await asyncio.sleep(2)
     await _goto_clients(page, slug)
-    await _search_name(page, new_name)
-    if await page.get_by_text(new_name, exact=False).count() < 1:
-        return ToolError(
-            code=StableErrorCode.NOT_FOUND,
-            message="Billy customer rename was not visible on the list after save.",
-        )
-    return {"ok": True}
+    for _ in range(8):
+        await _search_name(page, new_name)
+        if await page.get_by_text(new_name, exact=False).count() >= 1:
+            return {"ok": True}
+        await asyncio.sleep(0.5)
+    return ToolError(
+        code=StableErrorCode.NOT_FOUND,
+        message="Billy customer rename was not visible on the list after save.",
+    )
 
 
 async def _delete_customer(page: _Page, slug: str, name: str) -> object:

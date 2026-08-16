@@ -160,6 +160,13 @@ class FakeBillyLocator:
         self._session.fills.append((_field_name(self._selector), value))
         self._session.records.add(value)
 
+    async def evaluate(self, expression: str) -> object:
+        del expression
+        return None
+
+    async def press(self, key: str) -> None:
+        del key
+
     async def set_input_files(self, path: str | Path) -> None:
         resolved = str(path)
         self._session.files.append(resolved)

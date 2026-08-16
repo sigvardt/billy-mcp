@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live contacts create, exact-Ret update, and delete through `call_tool`. Third-session cleanup. Independent accept. Do not green until that proof.
+- Live contacts update: **Gem** click does not persist the rename. Then delete through `call_tool`, third-session cleanup, independent accept. Do not green until that proof.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
@@ -22,3 +22,5 @@ updated: 2026-08-16T14:29:47Z
 - Live write tests cannot self-approve vision or purge frames (`C7DBE974` gate).
 - Exact-text Ret and Slet-kontakt-as-link helpers, with unit tests. Substring Ret is documented as Opret.
 - Five leftover `MCP-UI-C-*` contacts deleted through FastMCP. Fresh session empty.
+- Exact-name read-back: `{tag}` is not present inside `{tag}-U`.
+- Delete confirm label is **Ja, slet**.
