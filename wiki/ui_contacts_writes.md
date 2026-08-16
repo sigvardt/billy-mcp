@@ -36,7 +36,9 @@ not mark those rows live or complete.
 Create opens from `/:org_slug/clients` or `/:org_slug/clients/empty` after
 **Opret kontakt**. List heading may be **Kunder** or **Kontakter**. Update clicks
 the button whose text is exactly **Ret**, never a substring that matches
-**Opret**. Save is exact **Gem** or **Gem ændringer**, never **Gem kommentar**.
+**Opret**. Save is `button[data-cy='save-button']` (visible text **Gem**), never
+**Gem kommentar**. The customer edit form may stay open after a real save.
+List exact-name read-back is the persist proof.
 Delete is exact **Mere**, then the **Slet kontakt** link, then **Ja, slet** (or **Slet**). Never **Arkivér**.
 Customers are located by unique tagged name, not an API id. Inputs are flat.
 There is no nested `input` object. Extra fields are rejected.

@@ -60,11 +60,11 @@ Exact **Ret** opens `input[name=name]` plus **Gem**. **Slet kontakt** is a link,
 not a button. Confirm is **Ja, slet** (fallback **Slet**). Never **Arkivér**.
 
 Read-back treats `{tag}-U` as a different name from `{tag}`. Live create through
-FastMCP still submits and a second session sees the exact name. Live update
-still does not persist: **Gem** left the form open. Name fill now fires
-input/change events and save clicks the last exact **Gem**. A later live run
-failed on observer login `UI_CHANGED` before create. No `MCP-UI-C-*` leftovers
-remain. Coverage stays red.
+FastMCP still submits and a second session sees the exact name. The live save
+control is `button[data-cy='save-button']` (Ember action, text **Gem**). The
+edit form stays open after that click. List exact-name is the persist proof.
+Live FastMCP update still does not show `{tag}-U` on the list. No
+`MCP-UI-C-*` leftovers remain. Coverage stays red.
 
 ## Review
 

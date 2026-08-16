@@ -12,9 +12,30 @@ from billy_mcp.ui_writes import contacts
 
 
 class _Button:
-    def __init__(self, text: str, *, visible: bool = True) -> None:
+    def __init__(
+        self,
+        text: str,
+        *,
+        visible: bool = True,
+        near_name: bool = False,
+        decoy: bool = False,
+        save_button: bool = False,
+    ) -> None:
         self.text = text
         self.visible = visible
+        self.near_name = near_name
+        self.decoy = decoy
+        self.save_button = save_button
+
+    @property
+    def click_id(self) -> str:
+        if self.save_button:
+            return "Gem-save-button"
+        if self.near_name:
+            return "Gem-form"
+        if self.decoy:
+            return "Gem-decoy"
+        return self.text
 
 
 class ContactDetailFake:
@@ -38,8 +59,10 @@ class ContactDetailFake:
         if selector.startswith("text="):
             needle = selector.removeprefix("text=")
             return _Locator(self, substring=needle)
-        if "name='name'" in selector:
+        if "name='name'" in selector and not selector.startswith("xpath"):
             return _Locator(self, name_field=True)
+        if "data-cy" in selector and "save-button" in selector:
+            return _Locator(self, pool=[item for item in self.buttons if item.save_button])
         return _Locator(self, missing=True)
 
     def get_by_role(self, role: str, *, name: str | re.Pattern[str]) -> _Locator:
@@ -81,6 +104,8 @@ class _Locator:
             self._matches = matches
         elif name_field or missing:
             self._matches = []
+        elif pool is not None and role_name is None and substring is None:
+            self._matches = list(pool)
         elif isinstance(role_name, re.Pattern):
             self._matches = [item for item in source if role_name.search(item.text)]
         elif isinstance(role_name, str):
@@ -121,7 +146,7 @@ class _Locator:
         if self._missing or not self._matches:
             return
         label = self._matches[0].text
-        self._page.clicks.append(label)
+        self._page.clicks.append(self._matches[0].click_id)
         if label.startswith("MCP-UI-C-"):
             self._page.url = "https://mit.billy.dk/org-test/contacts/id/customer"
         elif label == "Ret":
@@ -141,11 +166,19 @@ class _Locator:
         del value
 
     async def evaluate(self, expression: str) -> object:
-        del expression
+        if self._name_field and "parentElement" in expression and "Gem" in expression:
+            for button in self._page.buttons:
+                if button.near_name and button.text in {"Gem", "Gem ændringer"}:
+                    self._page.clicks.append(button.click_id)
+                    return True
+            return False
         return None
 
     async def press(self, key: str) -> None:
         del key
+
+    async def press_sequentially(self, text: str) -> None:
+        del text
 
     async def inner_text(self) -> str:
         if not self._matches:
@@ -226,3 +259,46 @@ def test_exact_slet_runs_after_slet_kontakt() -> None:
     deleted = asyncio.run(contacts._confirm_delete_customer(page))
     assert deleted is True
     assert page.clicks == ["Mere", "Slet kontakt", "Ja, slet"]
+
+
+def _edit_page_with_decoy_last_gem(*, near_name: bool) -> ContactDetailFake:
+    page = ContactDetailFake()
+    page.name_visible = True
+    page.buttons.append(_Button("Virksomhed"))
+    if near_name:
+        page.buttons.append(_Button("Gem", near_name=True))
+    page.buttons.append(_Button("Gem", decoy=True))
+    return page
+
+
+def test_save_clicks_name_field_gem_not_last_decoy() -> None:
+    page = _edit_page_with_decoy_last_gem(near_name=True)
+    clicked = asyncio.run(contacts._click_save(page))
+    assert clicked is True
+    assert "Gem-form" in page.clicks
+    assert "Gem-decoy" not in page.clicks
+
+
+def test_save_clicks_data_cy_save_button_not_last_decoy() -> None:
+    page = ContactDetailFake()
+    page.name_visible = True
+    page.buttons.append(_Button("Gem", save_button=True))
+    page.buttons.append(_Button("Gem", decoy=True))
+    clicked = asyncio.run(contacts._click_save(page))
+    assert clicked is True
+    assert page.clicks == ["Gem-save-button"]
+
+
+def test_update_returns_not_found_when_rename_missing_from_list() -> None:
+    page = ContactDetailFake()
+    page.url = "https://mit.billy.dk/org-test/clients"
+    page.buttons.append(_Button("MCP-UI-C-AAAA"))
+    page.links.append(_Button("MCP-UI-C-AAAA"))
+    page.buttons.append(_Button("Virksomhed"))
+    page.buttons.append(_Button("Gem", decoy=True))
+    result = asyncio.run(
+        contacts._update_customer(page, "org-test", "MCP-UI-C-AAAA", "MCP-UI-C-AAAA-U")
+    )
+    assert isinstance(result, contacts.ToolError)
+    assert result.code == contacts.StableErrorCode.NOT_FOUND
+    assert "rename was not visible" in result.message

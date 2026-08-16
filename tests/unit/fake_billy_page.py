@@ -167,6 +167,10 @@ class FakeBillyLocator:
     async def press(self, key: str) -> None:
         del key
 
+    async def press_sequentially(self, text: str) -> None:
+        self._session.fills.append((_field_name(self._selector), text))
+        self._session.records.add(text)
+
     async def set_input_files(self, path: str | Path) -> None:
         resolved = str(path)
         self._session.files.append(resolved)
