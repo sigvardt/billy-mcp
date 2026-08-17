@@ -229,7 +229,7 @@ def test_draft_bill_line_description_uses_bill_line_field() -> None:
 
     assert LINE_DESCRIPTION == "input[name='billLines.0.description']"
     assert VENDOR == VENDOR_INPUT_SELECTORS[0]
-    assert VENDOR == "input[name='contact']"
+    assert VENDOR == "input[name='vendor']"
     assert BILL_DATE == "input[name='billDate']"
     assert LINE_AMOUNT == "input[name='billLines.0.inclVatAmount']"
     assert DRAFT_SAVE == "Gem som kladde"
@@ -356,14 +356,12 @@ def test_vendor_bind_rejects_typed_only() -> None:
     assert not vendor_bind_is_complete(option_clicked=False, enter_selected=False)
 
 
-def test_vendor_selectors_include_contact_and_leverandor_not_vendor_alone() -> None:
+def test_vendor_selectors_are_the_observed_vendor_field() -> None:
     from billy_mcp.ui_writes.bills_vendor import VENDOR_INPUT_SELECTORS, VENDOR_LABEL
 
-    assert "input[name='contact']" in VENDOR_INPUT_SELECTORS
-    assert "input[name='contactId']" in VENDOR_INPUT_SELECTORS
-    assert any("Leverandør" in selector for selector in VENDOR_INPUT_SELECTORS)
+    assert VENDOR_INPUT_SELECTORS == ("input[name='vendor']",)
     assert VENDOR_LABEL == "Leverandør"
-    assert VENDOR_INPUT_SELECTORS != ("input[name='vendor']",)
+    assert "input[name='contact']" not in VENDOR_INPUT_SELECTORS
 
 
 def test_create_vendor_option_accepts_opret_leverandor() -> None:
@@ -394,3 +392,69 @@ def test_live_bills_test_does_not_seed_customer() -> None:
     source = Path("tests/live/test_ui_bills_writes.py").read_text(encoding="utf-8")
     assert "ui_clients_create_preview" not in source
     assert "ui_clients_create_execute" not in source
+
+
+def test_vendor_option_targets_stay_inside_dropdown() -> None:
+    from billy_mcp.ui_writes.bills_vendor import (
+        DROPDOWN_SELECTORS,
+        vendor_option_click_targets,
+    )
+
+    tag = "MCP-UI-B-TEST"
+    targets = vendor_option_click_targets(tag)
+    roots = {root for root, _text in targets}
+    texts = {text for _root, text in targets}
+    assert set(DROPDOWN_SELECTORS) <= roots
+    assert tag in texts
+    assert f'Opret "{tag}"' in texts
+    assert "Opret leverandør" in texts
+    assert all(root in DROPDOWN_SELECTORS for root, _text in targets)
+
+
+def test_dropdown_create_row_requires_opret_and_tag() -> None:
+    from billy_mcp.ui_writes.bills_vendor import dropdown_create_row_matches
+
+    tag = "MCP-UI-B-TEST"
+    assert dropdown_create_row_matches(f'Opret "{tag}"', tag)
+    assert dropdown_create_row_matches(f"Opret {tag}", tag)
+    assert not dropdown_create_row_matches(tag, tag)
+    assert not dropdown_create_row_matches("Opret leverandør", tag)
+    assert not dropdown_create_row_matches("Ingen resultater", tag)
+
+
+def test_choose_vendor_source_has_no_page_wide_tag_click() -> None:
+    source = Path("src/billy_mcp/ui_writes/bills_form.py").read_text(encoding="utf-8")
+    assert "page.get_by_text(unique_tag" not in source
+    assert "page.get_by_text(label" not in source
+    assert "evaluate(" not in source
+    assert "input[name='contact']" not in source
+
+
+def test_scoped_wrapper_dump_is_non_pii(tmp_path: Path) -> None:
+    from billy_mcp.ui_writes.bills_vendor import dump_scoped_vendor_wrapper
+
+    dump = tmp_path / "wrapper.json"
+    dump_scoped_vendor_wrapper(
+        {
+            "after_click": {"phase": "after_click", "input_name": "vendor", "value_len": 0},
+            "after_type": {
+                "phase": "after_type",
+                "input_name": "vendor",
+                "value_len": 17,
+                "wrapper_list": {"has_opret": False},
+            },
+        },
+        destination=dump,
+    )
+    payload = json.loads(dump.read_text(encoding="utf-8"))
+    assert payload["after_type"]["input_name"] == "vendor"
+    assert "MCP-" not in dump.read_text(encoding="utf-8")
+
+
+def test_unit_dump_helpers_accept_tmp_path(tmp_path: Path) -> None:
+    from billy_mcp.ui_writes.bills_vendor import dump_vendor_chrome
+
+    dump = tmp_path / "vendor.json"
+    dump_vendor_chrome(names=["vendor"], chosen="option", destination=dump)
+    assert dump.is_file()
+    assert not str(dump).startswith(str(Path.home() / ".local" / "share" / "billy-mcp"))

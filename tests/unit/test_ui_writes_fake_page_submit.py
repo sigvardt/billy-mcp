@@ -59,7 +59,14 @@ def _preview_and_execute(
 
 def test_bills_create_execute_uses_route_fields_cta_and_readback(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
+    from billy_mcp.ui_writes import bills_form, bills_vendor
+
+    monkeypatch.setattr(bills_form, "CREATE_PRE_SUBMIT_DUMP", tmp_path / "create.json")
+    monkeypatch.setattr(bills_form, "PRE_SUBMIT_DUMP", tmp_path / "update.json")
+    monkeypatch.setattr(bills_form, "_PERSIST_DUMP", tmp_path / "persist.json")
+    monkeypatch.setattr(bills_vendor, "VENDOR_CHROME_DUMP", tmp_path / "vendor.json")
     session = _arm(monkeypatch)
     executed = _preview_and_execute(
         create_server(),

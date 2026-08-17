@@ -74,6 +74,8 @@ class FakeBillySession:
         self.next_page = 0
         self.focused: FakeBillyLocator | None = None
         self.response_handlers: list[object] = []
+        self.dropdown_options: list[str] = []
+        self.modal_open = False
 
     async def start(self, *_args: object, **_kwargs: object) -> FakeBillyContext:
         self.starts += 1
@@ -126,6 +128,7 @@ class FakeBillyPage:
             selector,
             query_text=query,
             click_name=query,
+            scope=selector,
         )
 
     def on(self, event: str, handler: object) -> None:
@@ -172,11 +175,13 @@ class FakeBillyLocator:
         *,
         query_text: str | None = None,
         click_name: str | None = None,
+        scope: str | None = None,
     ) -> None:
         self._session = session
         self._selector = selector
         self._query_text = query_text
         self._click_name = click_name
+        self._scope = scope
 
     @property
     def last(self) -> Self:
@@ -191,12 +196,26 @@ class FakeBillyLocator:
         return self
 
     async def count(self) -> int:
+        if "ModalWrapper" in self._selector:
+            return 1 if self._session.modal_open else 0
+        if self._query_text == "Gem":
+            return 1 if self._session.modal_open else 0
+        if (self._scope and _is_dropdown_scope(self._scope)) or _is_dropdown_scope(self._selector):
+            if self._query_text is None:
+                return 1 if self._session.dropdown_options else 0
+            return 1 if self._query_text in self._session.dropdown_options else 0
         if self._query_text is None or self._query_text in _CHROME:
             return 1
         return 1 if self._query_text in self._session.records else 0
 
     async def is_visible(self) -> bool:
         return True
+
+    def locator(self, selector: str) -> FakeBillyLocator:
+        return FakeBillyLocator(self._session, selector)
+
+    def filter(self, **_kwargs: object) -> FakeBillyLocator:
+        return self
 
     def get_by_role(
         self, role: str, *, name: str | re.Pattern[str], exact: bool = False
@@ -205,7 +224,14 @@ class FakeBillyLocator:
         return FakeBillyPage(self._session, 0).get_by_role(role, name=name)
 
     def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
-        return FakeBillyPage(self._session, 0).get_by_text(text, exact=exact)
+        del exact
+        return FakeBillyLocator(
+            self._session,
+            f"{self._selector} >> text={text}",
+            query_text=text,
+            click_name=text,
+            scope=self._selector,
+        )
 
     async def click(self, **_kwargs: object) -> None:
         if "name='" in self._selector:
@@ -213,6 +239,10 @@ class FakeBillyLocator:
         label = self._click_name or _click_label(self._selector)
         self._session.clicks.append(label)
         folded = label.casefold()
+        if "opret" in folded:
+            self._session.modal_open = True
+        if folded == "gem" or folded.startswith("gem "):
+            self._session.modal_open = False
         if any(token in folded for token in ("gem", "opret", "upload", "opdater")):
             for _name, value in self._session.fills:
                 self._session.records.add(value)
@@ -235,6 +265,10 @@ class FakeBillyLocator:
                     )
 
     async def inner_text(self) -> str:
+        if _is_dropdown_scope(self._selector) or (
+            self._scope is not None and _is_dropdown_scope(self._scope)
+        ):
+            return "\n".join(self._session.dropdown_options)
         return self._click_name or self._query_text or ""
 
     async def input_value(self) -> str:
@@ -254,6 +288,8 @@ class FakeBillyLocator:
         self._session.fills.append((_field_name(self._selector), value))
         self._session.records.add(value)
         self._session.focused = self
+        if _field_name(self._selector) == "vendor":
+            self._session.dropdown_options = [f'Opret "{value}"', "Opret leverandør"]
 
     async def evaluate(self, expression: str) -> object:
         del expression
@@ -265,11 +301,24 @@ class FakeBillyLocator:
     async def press_sequentially(self, text: str) -> None:
         self._session.fills.append((_field_name(self._selector), text))
         self._session.records.add(text)
+        if _field_name(self._selector) == "vendor":
+            self._session.dropdown_options = [f'Opret "{text}"', "Opret leverandør"]
 
     async def set_input_files(self, path: str | Path) -> None:
         resolved = str(path)
         self._session.files.append(resolved)
         self._session.records.add(Path(resolved).name)
+
+
+def _is_dropdown_scope(selector: str) -> bool:
+    tokens = (
+        ".ds-dropdown-list",
+        "role='listbox'",
+        "role='option'",
+        '[role="listbox"]',
+        '[role="option"]',
+    )
+    return any(token in selector for token in tokens)
 
 
 def _click_label(selector: str) -> str:

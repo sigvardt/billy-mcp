@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import asyncio
 import atexit
+import json
 import os
 import re
 import secrets
@@ -290,6 +291,17 @@ async def test_ui_bills_create_update_delete_via_call_tool(
             _record_blocker(f"create execute failed: {created_result}")
             pytest.fail(f"create execute failed: {created_result}")
         assert created_result["submitted"] is True
+        create_dump = json.loads(bills_form.CREATE_PRE_SUBMIT_DUMP.read_text(encoding="utf-8"))
+        assert create_dump["unique_tag"] == tag
+        assert str(create_dump["unique_tag"]).startswith("MCP-UI-B-")
+        assert create_dump["draft_cta"] == "Gem som kladde"
+        assert create_dump["vendor"] == tag
+        assert create_dump["date"]
+        assert create_dump["line_amount"]
+        vendor_bind = str(create_dump.get("vendor_bind") or "")
+        assert vendor_bind.endswith(":option") or vendor_bind.endswith(":enter")
+        form_frame = frame_dir / "01b_create_form.png"
+        assert form_frame.is_file() and form_frame.stat().st_size > 0
         await _capture(observer, slug, frame_dir / "02_after_create.png", tag)
         assert await _list_has_name(observer, slug, tag) is True
         bill_id = await _bill_id_for_tag(observer, slug, tag)

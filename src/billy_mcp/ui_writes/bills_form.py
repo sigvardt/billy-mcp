@@ -13,10 +13,10 @@ from urllib.parse import urlsplit
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.bills_vendor import (
-    DROPDOWN_SELECTORS,
     VENDOR_INPUT_SELECTORS,
     VENDOR_LABEL,
     create_vendor_labels,
+    dump_scoped_vendor_wrapper,
     dump_vendor_chrome,
     pre_submit_dump_path,
 )
@@ -63,7 +63,11 @@ class _Locator(Protocol):
 
     async def press(self, key: str) -> None: ...
 
+    async def press_sequentially(self, text: str) -> None: ...
+
     async def input_value(self) -> str: ...
+
+    async def inner_text(self) -> str: ...
 
     async def get_attribute(self, name: str) -> str | None: ...
 
@@ -74,6 +78,8 @@ class _Locator(Protocol):
     def get_by_text(self, text: str, **kwargs: object) -> _Locator: ...
 
     def locator(self, selector: str) -> _Locator: ...
+
+    def filter(self, **kwargs: object) -> _Locator: ...
 
     @property
     def last(self) -> _Locator: ...
@@ -408,18 +414,7 @@ async def _type_into(page: _Page, selector: str, value: str, *, tab: bool) -> st
     target = field.first
     try:
         await target.click()
-        keyboard = getattr(page, "keyboard", None)
-        if keyboard is not None:
-            press = getattr(keyboard, "press", None)
-            typed = getattr(keyboard, "type", None)
-            if press is not None:
-                await press("Meta+A")
-            if typed is not None:
-                await typed(value)
-            else:
-                await target.fill(value)
-        else:
-            await target.fill(value)
+        await target.fill(value)
         if tab:
             await target.press("Tab")
         await asyncio.sleep(0.3)
@@ -429,88 +424,178 @@ async def _type_into(page: _Page, selector: str, value: str, *, tab: bool) -> st
 
 
 async def _fill_vendor(page: _Page, unique_tag: str) -> str | None:
-    names = await _visible_input_names(page)
-    labeled = await _type_labeled(page, VENDOR_LABEL, unique_tag)
-    if labeled is not None:
-        bind = await _finish_vendor_bind(page, unique_tag)
-        if bind is not None:
-            chosen = f"label:{VENDOR_LABEL}:{bind}"
-            dump_vendor_chrome(names=names, chosen=chosen)
-            return chosen
-    for selector in VENDOR_INPUT_SELECTORS:
-        typed = await _type_into(page, selector, unique_tag, tab=False)
-        if typed is None:
-            continue
-        bind = await _finish_vendor_bind(page, unique_tag)
-        if bind is not None:
-            chosen = f"{selector}:{bind}"
-            dump_vendor_chrome(names=names, chosen=chosen)
-            return chosen
-    dump_vendor_chrome(names=names, chosen=None)
-    return None
-
-
-async def _finish_vendor_bind(page: _Page, unique_tag: str) -> str | None:
-    if await _wait_for_vendor_option(page, unique_tag):
-        return "option"
-    keyboard = getattr(page, "keyboard", None)
-    if keyboard is not None and getattr(keyboard, "press", None) is not None:
-        try:
-            await keyboard.press("Enter")
-        except Exception:
-            pass
-        if await _wait_for_vendor_option(page, unique_tag):
-            return "enter"
-    return None
-
-
-async def _wait_for_vendor_option(page: _Page, unique_tag: str) -> bool:
-    for _ in range(6):
-        if await _choose_vendor_option(page, unique_tag):
-            return True
-        await asyncio.sleep(0.2)
-    return False
-
-
-async def _visible_input_names(page: _Page) -> list[str]:
-    names: list[str] = []
-    fields = page.locator("input")
+    field = await _scoped_vendor_field(page)
+    if field is None:
+        dump_vendor_chrome(names=[], chosen=None)
+        dump_scoped_vendor_wrapper({"phase": "missing", "input_name": None})
+        return None
     try:
-        count = await fields.count()
+        await field.click()
     except Exception:
-        return names
-    for index in range(min(count, 40)):
-        try:
-            name = await fields.nth(index).get_attribute("name")
-        except Exception:
-            continue
-        if isinstance(name, str) and name and name not in names:
-            names.append(name)
-    return names
+        dump_vendor_chrome(names=["vendor"], chosen=None)
+        return None
+    after_click = await _observe_vendor_wrapper(page, field, unique_tag, phase="after_click")
+    typed = await _type_vendor_field(field, unique_tag)
+    after_type = await _observe_vendor_wrapper(page, field, unique_tag, phase="after_type")
+    dump_scoped_vendor_wrapper({"after_click": after_click, "after_type": after_type})
+    if typed is None or unique_tag not in typed:
+        dump_vendor_chrome(names=["vendor"], chosen=None)
+        return None
+    bind = await _bind_from_scoped_lists(page, unique_tag, after_type)
+    dump_vendor_chrome(names=["vendor"], chosen=bind)
+    return bind
 
 
-async def _choose_vendor_option(page: _Page, unique_tag: str) -> bool:
-    for root in DROPDOWN_SELECTORS:
-        existing = page.locator(root).get_by_text(unique_tag, exact=True)
-        try:
-            if await existing.count() >= 1 and await existing.first.is_visible():
-                await existing.first.click(timeout=5000)
-                return True
-        except Exception:
-            continue
-    existing = page.get_by_text(unique_tag, exact=True)
+async def _safe_attr(field: _Locator, name: str) -> str | None:
     try:
-        if await existing.count() >= 1 and await existing.first.is_visible():
-            await existing.first.click(timeout=5000)
-            return True
+        value = await field.get_attribute(name)
+    except Exception:
+        return None
+    return value if isinstance(value, str) and value else None
+
+
+async def _safe_count(node: _Locator) -> int:
+    try:
+        return await node.count()
+    except Exception:
+        return 0
+
+
+async def _scoped_vendor_field(page: _Page) -> _Locator | None:
+    labeled = page.get_by_label(VENDOR_LABEL, exact=True)
+    try:
+        if await labeled.count() >= 1 and await labeled.first.is_visible():
+            return labeled.first
     except Exception:
         pass
-    for label in create_vendor_labels(unique_tag):
-        create = page.get_by_text(label, exact=True)
+    field = page.locator("input[name='vendor']")
+    try:
+        if await field.count() >= 1 and await field.first.is_visible():
+            return field.first
+    except Exception:
+        return None
+    return None
+
+
+async def _type_vendor_field(field: _Locator, unique_tag: str) -> str | None:
+    try:
+        await field.fill("")
+        sequential = getattr(field, "press_sequentially", None)
+        if sequential is not None:
+            await sequential(unique_tag)
+        else:
+            await field.fill(unique_tag)
+        await asyncio.sleep(0.5)
+        return await field.input_value()
+    except Exception:
+        return None
+
+
+async def _observe_vendor_wrapper(
+    page: _Page, field: _Locator, unique_tag: str, *, phase: str
+) -> dict[str, object]:
+    name = await _safe_attr(field, "name")
+    placeholder = await _safe_attr(field, "placeholder")
+    value_len = 0
+    try:
+        value_len = len(await field.input_value())
+    except Exception:
+        value_len = -1
+    wrapper = page.locator("[data-testid='input-wrapper']").filter(
+        has=page.locator("input[name='vendor']")
+    )
+    search_n = await _safe_count(wrapper.locator("[data-testid='search']"))
+    clear_n = await _safe_count(wrapper.locator("[data-testid='circleX']"))
+    wrapper_list = await _list_snapshot(wrapper.locator(".ds-dropdown-list"), unique_tag)
+    portal_list = await _list_snapshot(
+        page.locator(".ds-dropdown-list.ds-moved-with-portal"), unique_tag
+    )
+    return {
+        "phase": phase,
+        "input_name": name,
+        "has_placeholder": bool(placeholder),
+        "value_len": value_len,
+        "search_trigger": search_n > 0,
+        "clear_trigger": clear_n > 0,
+        "wrapper_list": wrapper_list,
+        "portal_list": portal_list,
+    }
+
+
+async def _list_snapshot(node: _Locator, unique_tag: str) -> dict[str, object]:
+    try:
+        count = await node.count()
+    except Exception:
+        return {"count": 0, "has_opret": False, "has_tag": False}
+    has_opret = False
+    has_tag = False
+    for index in range(min(count, 4)):
         try:
-            if await create.count() >= 1 and await create.first.is_visible():
-                await create.first.click(timeout=5000)
+            text = (await node.nth(index).inner_text()).strip()
+        except Exception:
+            continue
+        if "Opret" in text:
+            has_opret = True
+        if unique_tag in text:
+            has_tag = True
+    return {"count": count, "has_opret": has_opret, "has_tag": has_tag}
+
+
+async def _bind_from_scoped_lists(
+    page: _Page, unique_tag: str, observation: dict[str, object]
+) -> str | None:
+    wrapper = page.locator("[data-testid='input-wrapper']").filter(
+        has=page.locator("input[name='vendor']")
+    )
+    portal = page.locator(".ds-dropdown-list.ds-moved-with-portal")
+    targets: list[_Locator] = []
+    wrapper_list = observation.get("wrapper_list")
+    portal_list = observation.get("portal_list")
+    if _snapshot_has_option(wrapper_list):
+        targets.append(wrapper.locator(".ds-dropdown-list"))
+    if _snapshot_has_option(portal_list):
+        targets.append(portal)
+    for root in targets:
+        if await _click_scoped_create_or_tag(page, root, unique_tag):
+            return "scoped:option"
+    return None
+
+
+def _snapshot_has_option(snapshot: object) -> bool:
+    if not isinstance(snapshot, dict):
+        return False
+    typed = cast(dict[str, object], snapshot)
+    return typed.get("has_opret") is True or typed.get("has_tag") is True
+
+
+async def _click_scoped_create_or_tag(page: _Page, root: _Locator, unique_tag: str) -> bool:
+    try:
+        count = await root.count()
+    except Exception:
+        return False
+    for index in range(min(count, 9)):
+        item = root.nth(index)
+        try:
+            text = (await item.inner_text()).strip()
+        except Exception:
+            continue
+        if unique_tag not in text or "Opret" not in text:
+            continue
+        for label in create_vendor_labels(unique_tag):
+            option = item.get_by_text(label, exact=True)
+            try:
+                if await option.count() < 1:
+                    continue
+                await option.first.click(timeout=5000)
                 return await _confirm_new_vendor_modal(page, unique_tag)
+            except Exception:
+                continue
+        option = item.get_by_text("Opret", exact=False)
+        try:
+            if await option.count() < 1:
+                continue
+            await option.first.click(timeout=5000)
+            return await _confirm_new_vendor_modal(page, unique_tag)
         except Exception:
             continue
     return False
@@ -525,14 +610,7 @@ async def _type_labeled(page: _Page, label: str, value: str) -> str | None:
         if not await target.is_visible():
             return None
         await target.click()
-        keyboard = getattr(page, "keyboard", None)
-        if keyboard is not None and getattr(keyboard, "type", None) is not None:
-            press = getattr(keyboard, "press", None)
-            if press is not None:
-                await press("Meta+A")
-            await keyboard.type(value)
-        else:
-            await target.fill(value)
+        await target.fill(value)
         await asyncio.sleep(0.3)
         return await target.input_value()
     except Exception:
@@ -605,7 +683,7 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy bill draft fields are not visible.",
-            details={"field": "vendor", "selectors": list(VENDOR_INPUT_SELECTORS)},
+            details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
         )
     actual_date = await _fill_named(page, BILL_DATE, bill_date, matches=dates_match)
     if actual_date is None:

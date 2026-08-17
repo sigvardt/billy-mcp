@@ -84,9 +84,15 @@ stay red. Do not remap.
 IR FAIL on the first live bills CUD: create dump was overwritten,
 typed-only vendor bind was accepted, vision `run_id` did not name the
 frame folder. FIX-VERIFY split the create dump, refused typed-only
-bind, and bound vision `run_id` to the frame dir. Honesty 16 stay red.
-Bills `tool_name` still `ui_bills_*_open`. Do not green. Do not remap.
-Do not finish.
+bind, and bound vision `run_id` to the frame dir.
+
+Page-wide `get_by_text(tag)` is no longer a bind. `evaluate` is gone.
+Vendor bind is one scoped Leverandør wrapper observation (`4994ECE6`).
+Live create types 17 characters into `input[name='vendor']`. The
+wrapper list is empty. The portal list reports `has_opret` and
+`has_tag`, but the derived click still returns `UI_CHANGED`. No bill
+created. Bills `tool_name` still `ui_bills_*_open`. Do not green. Do
+not remap. Do not finish.
 
 ## Review
 
