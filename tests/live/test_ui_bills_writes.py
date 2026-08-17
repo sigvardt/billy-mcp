@@ -144,6 +144,52 @@ async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
         await page.close()
 
 
+_LEFTOVER_SUPPLIER_RE = re.compile(r"MCP-UI-B-[0-9A-F]{8}")
+
+
+async def _first_leftover_supplier(runtime: BrowserRuntime, slug: str) -> str | None:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await _open_named_list(page, slug, "suppliers", "MCP-UI-B-")
+        body = await page.locator("body").inner_text()
+        found = _LEFTOVER_SUPPLIER_RE.findall(body)
+        return found[0] if found else None
+    finally:
+        await page.close()
+
+
+async def _delete_supplier_named(runtime: BrowserRuntime, slug: str, name: str) -> None:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await _open_named_list(page, slug, "suppliers", name)
+        match = page.get_by_text(name, exact=True)
+        if await match.count() < 1:
+            return
+        await match.first.click()
+        try:
+            await page.wait_for_load_state("domcontentloaded", timeout=15000)
+        except Exception:
+            pass
+        mere = page.get_by_role("button", name=re.compile(r"^Mere$"))
+        if await mere.count() >= 1:
+            await mere.first.click()
+            await asyncio.sleep(0.4)
+        slet = page.get_by_text("Slet kontakt", exact=True)
+        if await slet.count() >= 1:
+            await slet.first.click()
+            await asyncio.sleep(0.4)
+        confirm = page.get_by_role("button", name="Ja, slet", exact=True)
+        if await confirm.count() < 1:
+            confirm = page.get_by_role("button", name="Slet", exact=True)
+        if await confirm.count() >= 1:
+            await confirm.first.click()
+            await asyncio.sleep(0.8)
+    finally:
+        await page.close()
+
+
 async def _suppliers_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
@@ -249,8 +295,6 @@ async def test_ui_bills_create_update_delete_via_call_tool(
     """Create, update, and delete one tagged draft bill through create_server."""
 
     _require_live_credentials()
-    tag = f"MCP-UI-B-{secrets.token_hex(4).upper()}"
-    updated = f"{tag}-U"
     profile = _temp_profile()
     observer_profile = _temp_profile()
     cleanup_profile = _temp_profile()
@@ -261,6 +305,8 @@ async def test_ui_bills_create_update_delete_via_call_tool(
     extra: BrowserRuntime | None = None
     slug = ""
     bill_id: str | None = None
+    tag = ""
+    updated = ""
 
     try:
         assert is_outside_repository(frame_dir, _REPO_ROOT)
@@ -274,6 +320,13 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         )
         extra = observer
         await _ready_session(observer, slug)
+        leftover_supplier = await _first_leftover_supplier(observer, slug)
+        tag = leftover_supplier or f"MCP-UI-B-{secrets.token_hex(4).upper()}"
+        updated = f"{tag}-U"
+        for leftover_name in (tag, updated):
+            leftover_id = await _bill_id_for_tag(observer, slug, leftover_name)
+            if leftover_id:
+                await _delete_tagged(server, observer, slug, leftover_name, leftover_id)
         await _capture(observer, slug, frame_dir / "01_before.png", tag)
         assert await _list_has_name(observer, slug, tag) is False
 
@@ -299,11 +352,25 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         assert create_dump["date"]
         assert create_dump["line_amount"]
         vendor_bind = str(create_dump.get("vendor_bind") or "")
-        assert vendor_bind == "scoped:portal_footer"
+        if leftover_supplier:
+            assert vendor_bind == "scoped:existing_option"
+        else:
+            assert vendor_bind == "scoped:portal_footer"
         save_dump = json.loads(bills_form.SAVE_DUMP.read_text(encoding="utf-8"))
         assert save_dump["pointer"] is True
         assert save_dump["blocked"] is False
         assert save_dump["hit_target"] == "draft-save"
+        create_persist = json.loads(bills_form.CREATE_PERSIST_DUMP.read_text(encoding="utf-8"))
+        watched = create_persist.get("watched")
+        assert isinstance(watched, list)
+        watched_rows = cast(list[object], watched)
+        has_post = False
+        for raw in watched_rows:
+            if not isinstance(raw, str):
+                continue
+            if raw.startswith("POST 2") and "/v2/bills" in raw:
+                has_post = True
+        assert has_post is True
         form_frame = frame_dir / "01b_create_form.png"
         assert form_frame.is_file() and form_frame.stat().st_size > 0
         await _capture(observer, slug, frame_dir / "02_after_create.png", tag)
@@ -329,7 +396,8 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         assert updated_result["submitted"] is True
         await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
         assert await _list_has_name(observer, slug, updated) is True
-        assert await _list_has_name(observer, slug, tag) is False
+        if leftover_supplier is None:
+            assert await _list_has_name(observer, slug, tag) is False
 
         preview_delete = await _call(
             server,
@@ -357,6 +425,8 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         await _ready_session(cleanup, slug)
         assert await _list_has_name(cleanup, slug, updated) is False
         assert await _list_has_name(cleanup, slug, tag) is False
+        for leftover_name in (updated, tag):
+            await _delete_supplier_named(cleanup, slug, leftover_name)
         assert await _suppliers_has_name(cleanup, slug, updated) is False
         assert await _suppliers_has_name(cleanup, slug, tag) is False
 

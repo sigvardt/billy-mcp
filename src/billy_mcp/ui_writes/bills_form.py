@@ -25,10 +25,12 @@ from billy_mcp.ui_writes.bills_vendor import (
     dump_scoped_vendor_wrapper,
     dump_vendor_chrome,
     leftover_close_action,
+    leftover_close_after_existing_option,
     leftover_footer_means_bound,
     leftover_inspect_record,
     leftover_portal_kind,
     pick_portal_create_index,
+    pick_portal_existing_option_index,
     portal_create_footer_label,
     portal_list_item_flags,
     pre_submit_dump_path,
@@ -43,6 +45,9 @@ CREATE_PRE_SUBMIT_DUMP = (
 )
 CREATE_FORM_FRAME: Path | None = None
 _PERSIST_DUMP = Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-persist.json"
+CREATE_PERSIST_DUMP = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-create-persist.json"
+)
 SAVE_DUMP = Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-save.json"
 DRAFT_SAVE_HIT = "draft-save"
 _HIT_JS = """([x, y, expected]) => {
@@ -53,8 +58,9 @@ _HIT_JS = """([x, y, expected]) => {
     const text = (button.innerText || button.textContent || "").replace(/\\s+/g, " ").trim();
     if (text === expected) return "draft-save";
   }
-  const cls = typeof el.className === "string" ? el.className.split(/\\s+/)[0] : "";
-  return cls ? `${el.tagName}.${cls}` : el.tagName;
+  const raw = typeof el.className === "string" ? el.className : "";
+  const tokens = raw.split(/\\s+/).filter(Boolean).slice(0, 4);
+  return tokens.length ? `${el.tagName}.${tokens.join(".")}` : el.tagName;
 }"""
 
 LINE_DESCRIPTION = "input[name='billLines.0.description']"
@@ -190,7 +196,11 @@ def save_delivery_blocked(
 def leftover_portal_covers_save(hit_target: str | None) -> bool:
     """True when elementFromPoint on save is a leftover portal list."""
 
-    return bool(hit_target) and "ds-moved-with-portal" in hit_target
+    if not hit_target or "ds-moved-with-portal" not in hit_target:
+        return False
+    if "DropzoneFullScreenWrapper" in hit_target:
+        return False
+    return True
 
 
 def portal_overlay_gone(*, count: int, any_visible: bool) -> bool:
@@ -493,7 +503,7 @@ async def _create_draft(page: _Page, slug: str, unique_tag: str) -> ToolError | 
             },
         )
     failed = await _wait_for_bill_write(seen, method="POST")
-    _dump_persist(page, unique_tag, failed, seen, requests)
+    _dump_persist(page, unique_tag, failed, seen, requests, destination=CREATE_PERSIST_DUMP)
     if failed is not None:
         return failed
     created = created_bill_id(seen, bodies)
@@ -524,7 +534,7 @@ async def _update_draft(page: _Page, slug: str, bill_id: str, unique_tag: str) -
         )
     await page.goto(f"{BILLY_ORIGIN}/{slug}/bills/{bill_id}/edit", wait_until="domcontentloaded")
     await _settle(page)
-    filled = await _fill_draft_fields(page, unique_tag)
+    filled = await _fill_draft_fields(page, unique_tag, bind_vendor=False)
     if isinstance(filled, ToolError):
         return filled
     blocked = await _prepare_draft_click(page, unique_tag, filled, UPDATE_SAVE)
@@ -825,6 +835,10 @@ async def _bind_from_scoped_lists(
         if isinstance(maybe_items, list):
             typed_items = cast(list[object], maybe_items)
             items = [item for item in typed_items if isinstance(item, dict)]
+    existing = pick_portal_existing_option_index(items)
+    if existing is not None:
+        if await _click_portal_existing_option(page, portal.nth(existing), unique_tag):
+            return "scoped:existing_option"
     index = pick_portal_create_index(items)
     if index is not None:
         if await _click_portal_create_footer(page, portal.nth(index), unique_tag):
@@ -846,6 +860,29 @@ def _snapshot_has_option(snapshot: object) -> bool:
         return False
     typed = cast(dict[str, object], snapshot)
     return typed.get("has_create_footer") is True or typed.get("has_opret") is True
+
+
+async def _click_portal_existing_option(page: _Page, list_root: _Locator, unique_tag: str) -> bool:
+    option = list_root.get_by_text(unique_tag, exact=True)
+    footer = list_root.get_by_text(portal_create_footer_label(unique_tag), exact=True)
+    try:
+        if await option.count() < 1 or not await option.first.is_visible():
+            return False
+        if await footer.count() >= 1:
+            footer_box = await footer.first.bounding_box()
+            option_box = await option.first.bounding_box()
+            if footer_box is not None and option_box is not None:
+                same = (
+                    abs(float(footer_box["x"]) - float(option_box["x"])) < 1
+                    and abs(float(footer_box["y"]) - float(option_box["y"])) < 1
+                )
+                if same:
+                    return False
+        await option.first.click(timeout=5000)
+        await asyncio.sleep(0.3)
+        return True
+    except Exception:
+        return False
 
 
 async def _click_portal_create_footer(page: _Page, list_root: _Locator, unique_tag: str) -> bool:
@@ -1148,24 +1185,31 @@ async def _fill_named(
     return current if ok else None
 
 
-async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | ToolError:
+async def _fill_draft_fields(
+    page: _Page, unique_tag: str, *, bind_vendor: bool = True
+) -> dict[str, str] | ToolError:
     bill_date = date.today().strftime("%d.%m.%Y")
     amount = "1"
-    vendor_bind = await _fill_vendor(page, unique_tag)
-    if vendor_bind is None:
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy bill draft fields are not visible.",
-            details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
-        )
-    await _wait_vendor_dialog_gone(page)
-    leftover = await _close_leftover_portal(page, unique_tag)
-    if leftover.get("blocked"):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy leftover Leverandør portal has no safe close.",
-            details={"source": "leftover_portal", "leftover": leftover},
-        )
+    vendor_bind = "kept"
+    if bind_vendor:
+        vendor_bind = await _fill_vendor(page, unique_tag)
+        if vendor_bind is None:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Billy bill draft fields are not visible.",
+                details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
+            )
+        await _wait_vendor_dialog_gone(page)
+        if vendor_bind == "scoped:existing_option":
+            leftover_close_after_existing_option()
+        else:
+            leftover = await _close_leftover_portal(page, unique_tag)
+            if leftover.get("blocked"):
+                return ToolError(
+                    code=StableErrorCode.UI_CHANGED,
+                    message="Billy leftover Leverandør portal has no safe close.",
+                    details={"source": "leftover_portal", "leftover": leftover},
+                )
     date_obs = await _observe_date_field(page)
     dump_date_chrome(date_obs)
     if date_obs.get("count", 0) == 0:
@@ -1392,15 +1436,26 @@ async def _wait_for_bill_write(seen: list[str], *, method: str) -> ToolError | N
     )
 
 
+def persist_dump_path(*, create: bool) -> Path:
+    """Keep the create POST persist dump off the later PUT/DELETE overwrite path."""
+
+    if create:
+        return CREATE_PERSIST_DUMP
+    return _PERSIST_DUMP
+
+
 def _dump_persist(
     page: _Page,
     unique_tag: str,
     failed: ToolError | None,
     seen: list[str] | None = None,
     requests: list[str] | None = None,
+    *,
+    destination: Path | None = None,
 ) -> None:
+    path = destination if destination is not None else _PERSIST_DUMP
     _write_json(
-        _PERSIST_DUMP,
+        path,
         {
             "url": page.url,
             "tag_len": len(unique_tag),

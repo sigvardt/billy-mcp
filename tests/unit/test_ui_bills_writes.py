@@ -236,6 +236,19 @@ def test_draft_bill_line_description_uses_bill_line_field() -> None:
     assert UPDATE_SAVE == "Opdater"
 
 
+def test_create_persist_dump_is_not_the_update_path() -> None:
+    from billy_mcp.ui_writes.bills_form import (
+        CREATE_PERSIST_DUMP,
+        persist_dump_path,
+    )
+
+    create_path = persist_dump_path(create=True)
+    later_path = persist_dump_path(create=False)
+    assert create_path == CREATE_PERSIST_DUMP
+    assert later_path != create_path
+    assert create_path.name == "inspect-live-bills-create-persist.json"
+
+
 def test_create_persist_counts_only_post_not_put() -> None:
     from billy_mcp.ui_writes.bills_form import created_bill_id, is_persist_hit
 
@@ -505,6 +518,53 @@ def test_pick_portal_create_index_none_without_empty_create_footer() -> None:
     assert pick_portal_create_index(items) is None
 
 
+def test_pick_existing_option_before_create_footer() -> None:
+    from billy_mcp.ui_writes.bills_vendor import (
+        pick_portal_create_index,
+        pick_portal_existing_option_index,
+        portal_list_item_flags,
+    )
+
+    tag = "MCP-UI-B-TEST"
+    items = [
+        portal_list_item_flags("hidden", tag),
+        portal_list_item_flags(tag, tag),
+        portal_list_item_flags(f'Ingen resultater\n\nOpret "{tag}"', tag),
+    ]
+    items[0]["visible"] = False
+    items[1]["has_empty"] = False
+    items[1]["has_create_footer"] = True
+    items[1]["has_opret"] = True
+    assert pick_portal_existing_option_index(items) == 1
+    assert pick_portal_create_index(items) == 2
+    assert pick_portal_existing_option_index(items) != pick_portal_create_index(items)
+
+
+def test_leftover_after_existing_option_is_none() -> None:
+    from billy_mcp.ui_writes.bills_vendor import (
+        leftover_close_action,
+        leftover_close_after_existing_option,
+        leftover_portal_kind,
+    )
+
+    kind = leftover_portal_kind(
+        visible=False, has_opret=False, has_empty=False, has_modal_heading=False
+    )
+    assert kind is None
+    assert leftover_close_action(kind) is None
+    assert leftover_close_after_existing_option() is None
+
+
+def test_dropzone_wrapper_does_not_cover_save() -> None:
+    from billy_mcp.ui_writes.bills_form import leftover_portal_covers_save
+
+    assert leftover_portal_covers_save("DIV.ds-moved-with-portal")
+    assert not leftover_portal_covers_save(
+        "DIV.ds-moved-with-portal.css-1ksq8dw-DropzoneFullScreenWrapper"
+    )
+    assert not leftover_portal_covers_save("draft-save")
+
+
 def test_portal_create_footer_label_is_quoted_tag() -> None:
     from billy_mcp.ui_writes.bills_vendor import portal_create_footer_label
 
@@ -513,6 +573,9 @@ def test_portal_create_footer_label_is_quoted_tag() -> None:
 
 def test_bind_picks_named_portal_footer_not_row_walk() -> None:
     source = Path("src/billy_mcp/ui_writes/bills_form.py").read_text(encoding="utf-8")
+    assert "pick_portal_existing_option_index" in source
+    assert "scoped:existing_option" in source
+    assert "CREATE_PERSIST_DUMP" in source
     assert "pick_portal_create_index" in source
     assert "portal_create_footer_label" in source
     assert "scoped:portal_footer" in source

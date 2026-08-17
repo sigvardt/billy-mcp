@@ -12,7 +12,14 @@ updated: 2026-08-16T14:29:47Z
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-Next live slice is parent `7E7148F6`: after vendor bind, observe only the leftover Leverandør portal, close that one through its normal UI action, then pointer-click **Gem som kladde**. No generic portal sweep. No Escape. No force Save. If no safe close, `UI_CHANGED` and no bill.
+`91A2C363` resumes the leftover Leverandør slice. `A6FB8FC2` is a safety break, not a park.
+
+Live FastMCP draft-bill CUD passed on existing-option bind. Vision
+`run_id=9920dd9476474b41aef70e6d66d24638` is `author=independent_review`,
+`reviewer_verdict=accept`, `purge_verified=true`. Frame folder is gone.
+Bills `tool_name` stay `ui_bills_*_open`. Honesty 16 stay red.
+`complete=false`. Create persist dump is now separate from later PUT.
+Next is remap only the three bills rows.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched

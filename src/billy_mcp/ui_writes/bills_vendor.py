@@ -89,6 +89,22 @@ def pick_portal_create_index(items: Sequence[Mapping[str, object]]) -> int | Non
     return None
 
 
+def pick_portal_existing_option_index(items: Sequence[Mapping[str, object]]) -> int | None:
+    """Index of a visible existing supplier option. Create footer is not this bind."""
+
+    for index, item in enumerate(items):
+        if item.get("has_tag") is not True:
+            continue
+        if item.get("visible") is False:
+            continue
+        if item.get("short") is False:
+            continue
+        if item.get("has_empty") is True:
+            continue
+        return index
+    return None
+
+
 def vendor_option_click_targets(unique_tag: str) -> tuple[tuple[str, str], ...]:
     """Dropdown-scoped (root, text) pairs. Never a page-wide tag click."""
 
@@ -152,6 +168,12 @@ def leftover_close_action(kind: str | None) -> str | None:
         return "search_toggle"
     if kind == "create_vendor_modal":
         return "modal_gem"
+    return None
+
+
+def leftover_close_after_existing_option() -> None:
+    """Selecting an existing supplier completes the typeahead. No leftover close."""
+
     return None
 
 

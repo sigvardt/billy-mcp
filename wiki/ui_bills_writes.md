@@ -55,29 +55,34 @@ and can be consumed once. Replay, expiry, and wrong-tool mismatch fail closed.
 - Unique tagged names only. Create first as a draft.
 - Vendor is a typeahead. Official field is `contact` / `contactId`. UI
   label is **Leverandør**. Bind uses one scoped observation of that
-  field wrapper after click and after type. The create click is the
-  footer `Opret "{tag}"` on the one short `ds-moved-with-portal` list
-  that also says **Ingen resultater**. Huge ancestors that merely
-  contain both tokens are skipped. If that footer is missing, return
-  `UI_CHANGED` and create no record. No selector fan-out. No
-  `evaluate`. Create pre-submit dump is a separate owner-only file.
-  Do not seed a customer via `ui_clients_create`.
+  field wrapper after click and after type. If the list has an exact
+  existing option for the tag, click that option
+  (`scoped:existing_option`). That selection completes the typeahead
+  and is the leftover close. Create footer `Opret "{tag}"` is last
+  resort on the one short `ds-moved-with-portal` list that also says
+  **Ingen resultater**. Huge ancestors that merely contain both tokens
+  are skipped. If neither bind is possible, return `UI_CHANGED` and
+  create no record. No selector fan-out. No `evaluate`. Create
+  pre-submit dump is a separate owner-only file. Do not seed a
+  customer via `ui_clients_create`.
 - Date chrome stores `dd.mm.yyyy`. Amount chrome stores Danish `1,00`.
   After vendor bind, wait for the vendor dialog to close, dump
   `billDate`, then fill date and amount without a prior click. A
-  leftover-footer count error is not a vendor bind. After vendor bind,
-  observe the one leftover Leverandør portal and close only that portal:
-  the vendor wrapper `[data-testid=search]` toggle for the typeahead
-  list, or **Gem** on **Opret leverandør**. The leftover dump names
-  role, heading, and owning control. Do not add a second close. Do
-  not wait-all-visible, Tab, Escape, `circleX`, or sweep every
-  `.ds-moved-with-portal`. Draft
-  save inspects the exact **Gem som kladde** / **Opdater** button and
-  uses `mouse.click` at the center. A covered or disabled control
-  returns `UI_CHANGED`. Live hit after vendor bind was
-  `DIV.ds-moved-with-portal`. No `force=True` on draft save.
+  leftover-footer count error is not a vendor bind. After an
+  existing-option bind, leftover close is none. After a create-footer
+  bind, observe the one leftover Leverandør portal and close only that
+  portal: the vendor wrapper `[data-testid=search]` toggle for the
+  typeahead list, or **Gem** on **Opret leverandør**. Do not add a
+  second close. Do not wait-all-visible, Tab, Escape, `circleX`, or
+  sweep every `.ds-moved-with-portal`. The file-drop overlay
+  `DropzoneFullScreenWrapper` is not leftover. Draft save inspects the
+  exact **Gem som kladde** / **Opdater** button and uses `mouse.click`
+  at the center. A covered or disabled control returns `UI_CHANGED`.
+  No `force=True` on draft save.
   Offline tests must not write the owner save dump.
-  Persist watches request and response. Create persist is POST 2xx only.
+  Persist watches request and response. Create persist is POST 2xx only
+  and is written to a separate create persist dump so a later PUT or
+  DELETE cannot overwrite it.
 - Browser egress allows PUT prefix `/v2/bills/` only (no collection PUT,
   no PATCH). Create persist is POST 2xx only.
 - The no-runtime register still returns the old live-slot blocker. That

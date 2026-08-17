@@ -13,6 +13,8 @@ sources:
   - radio:F3F318A2
   - radio:93D7A063
   - radio:7E7148F6
+  - radio:91A2C363
+  - radio:A6FB8FC2
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -48,6 +50,10 @@ updated: 2026-08-16T13:50:50Z
 `31F6E753` (saved): before any further bill create, delete the untagged empty draft through the UI and prove the list clean in a fresh session. Next create requires a pre-submit DOM dump of unique tag, vendor, date, line amount, and draft-only action. Never book, approve, pay, or email. Count only the exact bill write response and independent tagged read-back.
 
 `7E7148F6` (saved): after vendor bind, observe only the leftover Leverandør portal. Close or complete that one portal through its normal UI action. Then prove **Gem som kladde** is unobscured and pointer-click it. Do not force-click Save. Do not close every `.ds-moved-with-portal`. Do not press Escape. If no exact safe close is visible, return `UI_CHANGED`, keep coverage red, and create no bill.
+
+`A6FB8FC2` (superseded as a park, still a constraint): do not retry dialog **Gem** plus a second search-toggle close. One named close only, and only after role, text, and owning-control proof.
+
+`91A2C363` (saved, current): resume and finish. Start with one no-click leftover snapshot after supplier select. Derive one close from that evidence. Failing fixture first, then smallest exact fix, then one tagged FastMCP draft-bill create, update, and delete with fresh-session read-back. Stay red until independent Grok review accepts the full proof. If the page differs, record `UI_CHANGED` and recapture. Do not use generic portal sweeps, force clicks, DOM evaluate clicks, or blind Escape.
 
 `93D7A063` (done, unsaved): accept recorded for `run-3d5b151dfd5342258f8734373597f8c1`, frames gone, then `tool_name` remapped to `ui_clients_{create,update,delete}_preview` in `f47b9d5`. Mapping did not self-approve. Honesty 16 stays red.
 
