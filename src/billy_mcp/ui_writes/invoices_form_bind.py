@@ -430,6 +430,38 @@ async def apply_named_control_action(page: Page, payload: dict[str, object]) -> 
     return {"applied": True, "option_role_count": count}
 
 
+async def capture_kunde_post_click(
+    page: Page,
+    unique_tag: str,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Scoped MutationObserver dump after one pickerfield click."""
+
+    from billy_mcp.ui_writes.invoices_kunde_post_click import (
+        apply_kunde_post_click_dump,
+        inspect_kunde_post_click,
+    )
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_post_click(page, unique_tag)
+    if dump_path is not None:
+        result = apply_kunde_post_click_dump(result, dump_path=dump_path)
+    return result
+
+
 async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:
     """Read-only widget contract recapture. Does not save a draft."""
 

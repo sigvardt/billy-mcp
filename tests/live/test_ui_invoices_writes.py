@@ -1207,3 +1207,147 @@ async def test_ui_invoices_kunde_control_contract(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_post_click_dom_ax(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Verify the delivered 07600147 dump. Do not repeat the wrapper click."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_post_click
+    from billy_mcp.ui_writes.invoices_kunde_post_click import (
+        KUNDE_POST_CLICK_DUMP,
+        REQUIRED_KUNDE_POST_CLICK_KEYS,
+        kunde_post_click_missing_keys,
+        post_click_dump_is_delivered,
+    )
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "post-click dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    cleanup_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    server: FastMCP | None = None
+    extra: BrowserRuntime | None = None
+    cleanup: BrowserRuntime | None = None
+    page: Any = None
+    slug = ""
+    tag = f"MCP-UI-INV-{secrets.token_hex(4).upper()}"
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        if post_click_dump_is_delivered():
+            written = json.loads(KUNDE_POST_CLICK_DUMP.read_text(encoding="utf-8"))
+            assert kunde_post_click_missing_keys(written) == []
+            assert written.get("click_target") == "pickerfield"
+            assert written.get("click_count") == 1
+            assert written.get("exact_match_target") is not True
+            assert "https://" not in KUNDE_POST_CLICK_DUMP.read_text(encoding="utf-8")
+            leftovers = await _leftover_invoice_contact_names(observer, slug)
+            assert leftovers == []
+            return
+        contact_preview = await _call(
+            server,
+            "ui_clients_create_preview",
+            {"name": tag, "organization_id": slug},
+        )
+        created = await _call(
+            server,
+            "ui_clients_create_execute",
+            {"confirmation_ticket": contact_preview["confirmation_ticket"]},
+        )
+        if created.get("code"):
+            _record_blocker(f"contact create failed: {created}")
+            pytest.fail(f"contact create failed: {created}")
+        await asyncio.sleep(2)
+        assert await _clients_has_name(observer, slug, tag) is True
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_post_click(page, tag)
+        if result.get("code") and result.get("code") != StableErrorCode.UI_CHANGED:
+            _record_blocker(f"post-click dump failed: {result}")
+            pytest.fail(f"post-click dump failed: {result}")
+        assert kunde_post_click_missing_keys(result) == []
+        assert result.get("click_target") == "pickerfield"
+        assert result.get("click_count") == 1
+        assert REQUIRED_KUNDE_POST_CLICK_KEYS == (
+            "baseline_input_tag",
+            "baseline_wrapper_class_categories",
+            "baseline_hidden_subtree_count",
+            "click_target",
+            "click_count",
+            "changed_node_count",
+            "changed_nodes",
+            "exact_match_count",
+            "exact_match_target",
+            "kunde_post_click_missing_keys",
+        )
+        encoded = json.dumps({"result": result})
+        assert "https://" not in encoded
+        assert tag not in encoded
+        if result.get("exact_match_target") is not True:
+            assert result.get("code") == "UI_CHANGED"
+        assert KUNDE_POST_CLICK_DUMP.is_file()
+        written = json.loads(KUNDE_POST_CLICK_DUMP.read_text(encoding="utf-8"))
+        assert kunde_post_click_missing_keys(written) == []
+        assert tag not in KUNDE_POST_CLICK_DUMP.read_text(encoding="utf-8")
+        contact_delete = await _call(
+            server,
+            "ui_clients_delete_preview",
+            {"name": tag, "organization_id": slug},
+        )
+        if not contact_delete.get("code"):
+            await _call(
+                server,
+                "ui_clients_delete_execute",
+                {"confirmation_ticket": contact_delete["confirmation_ticket"]},
+            )
+        cleanup = BrowserRuntime(
+            cleanup_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        await _ready_session(cleanup, slug)
+        assert await _clients_has_name(cleanup, slug, tag) is False
+    finally:
+        if page is not None:
+            await page.close()
+        if server is not None and slug:
+            try:
+                contact_delete = await _call(
+                    server,
+                    "ui_clients_delete_preview",
+                    {"name": tag, "organization_id": slug},
+                )
+                if not contact_delete.get("code"):
+                    await _call(
+                        server,
+                        "ui_clients_delete_execute",
+                        {"confirmation_ticket": contact_delete["confirmation_ticket"]},
+                    )
+            except (OSError, RuntimeError, AssertionError, TimeoutError):
+                _record_blocker(f"Cleanup delete failed for leftover tagged contact {tag}.")
+        if extra is not None:
+            await extra.close()
+        if cleanup is not None:
+            await cleanup.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

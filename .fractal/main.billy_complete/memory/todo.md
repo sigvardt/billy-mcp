@@ -4,12 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T22:10:00Z
+updated: 2026-08-17T23:03:00Z
 ---
 
 ## Open
 
-- Next: a different read-only capture. `click_open` on the `pickerfield` wrapper ran and showed no option. Invoice CUD stays unbound. Remap only after accept and purge.
+- Next (`E87B6AEF`): TDD-first descendant interaction map of visible
+  nodes inside the proved `pickerfield` only. No wrapper-center repeat.
+  Invoice CUD stays unbound. Remap only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -41,4 +43,5 @@ updated: 2026-08-17T22:10:00Z
 - Instrumented tagged-Kunde trace delivered (`8EFD0EAD`). Listeners first. Typed existing customer `value_len=19`. No contacts request, no portal, no option. `UI_CHANGED`. Contact deleted. Do not repeat that uninstrumented flow.
 - Event/pageerror dump delivered (`4A5CD1E7`). Rest pageerror marked unrelated. After type: `input=19` `keydown=19` `change=0`. One change event dispatched. Still `UI_CHANGED`.
 - `F12B607E` route-key dump delivered. Five rest bootstraps are `user` x3, `organizations` x1, unnamed `other_v2` x1. No contact-adjacent preload. Field shot and owner templates purged. Tagged customer deleted.
-- Control-contract helper and failing fixture landed (`452E0773`). Live dump named `click_open` on the `pickerfield` wrapper. One wrapper click. `option_role_count=0`. `UI_CHANGED`. No customer created.
+- Control-contract helper and failing fixture landed (`452E0773`). Live dump named `click_open` on the `pickerfield` wrapper. One wrapper click. `option_role_count=0`. `UI_CHANGED`. No customer created. Binding unsaved.
+- Post-click helper and failing fixture landed (`07600147`). Live dump: hidden subtree 2, one `pickerfield` click, `changed_node_count=0`, `exact_match_target=false`, `UI_CHANGED`. Tagged customer deleted. Absence proved.

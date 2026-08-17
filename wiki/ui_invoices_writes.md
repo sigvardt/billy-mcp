@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T22:30:00Z
+updated: 2026-08-18T00:20:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -178,9 +178,31 @@ Delete drafts created for live proof, then the tagged customer, in reverse
 dependency order. Prove absence in a fresh session. Do not send, approve, or
 email those drafts during cleanup.
 
+## Post-click Kunde dump
+
+`07600147` records what one `pickerfield` click opens. Role-option zero is
+not a closed picker. Attach a scoped `MutationObserver` on the contact
+input, the `pickerfield` wrapper, and any initially hidden linked subtree.
+Click that wrapper once. Store only newly visible or changed allowlisted
+nodes: tag, role, interactive, class-token categories, data-attribute
+names, text length and hash, exact-match booleans, box, z-index, ownership
+path, AX name hash. Never store raw names or text. `exact_match_target` is
+true only when exactly one visible interactive node matches the tagged
+customer. Helper: `src/billy_mcp/ui_writes/invoices_kunde_post_click.py`.
+Owner dump: `~/.local/share/billy-mcp/inspect-live-invoices-kunde-post-click.json`.
+Live recapture: `baseline_input_tag=INPUT`, wrapper categories include
+`pickerfield`, `baseline_hidden_subtree_count=2`, `click_count=1`,
+`changed_node_count=0`, `exact_match_target=false`, `UI_CHANGED`. The
+scoped subtree did not expose a newly visible interactive match. Do not
+sweep the rest of the page. The wrapper-center click is closed. Do not
+repeat it. Next read-only slice maps visible descendants inside that
+wrapper only.
+
 ## Live proof
 
 `tests/live/test_ui_invoices_writes.py` drives create, update, and delete
 through `create_server` `call_tool`. Independent second session after each
 write. Third session for final absence. Vision record is
 `author=live_test` and `reviewer_verdict=pending_review` only.
+The post-click dump creates one tagged customer through FastMCP, confirms
+it in a fresh session, then deletes it and proves absence.
