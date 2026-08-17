@@ -19,7 +19,7 @@ sources:
   - radio:A3AB03C3
   - radio:9F777B8F
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-17T17:35:00Z
+updated: 2026-08-17T18:12:12Z
 ---
 
 ## Binding now
@@ -32,11 +32,11 @@ updated: 2026-08-17T17:35:00Z
 
 `5E1EDFB4` (done, unsaved): opener dump now has every required key. `named_opener` is null. Hit target is the contact `INPUT`.
 
-`51E18E60` (saved; dump delivered at `1275d00`): stop typed-only repeats. Widget dump is complete. Never call the API directly. Do not land another unchanged typed-only red package.
+`51E18E60` (done, unsaved): stop typed-only repeats. Widget dump is complete. Never call the API directly. Do not land another unchanged typed-only red package.
 
-`A3AB03C3` (saved; dump delivered): right-edge hit is a nameless `DIV`. No click. Do not repeat that same chevron dump.
+`A3AB03C3` (done, unsaved): right-edge hit is a nameless `DIV`. No click. Do not repeat that same chevron dump.
 
-`9F777B8F` (saved): next slice. Failing fixture first. One read-only recapture of the exact right-edge DIV: `elementsFromPoint` stack, box versus the contact input box, `pointer-events`, role/name/testid/allowlisted classes, direct parent and closest owner relation to `input[name=contact]`, whether the hit DIV is contained by or shares the smallest wrapper with that input, and the nearest normally clickable ancestor with accessible role/name. Never store IDs or customer data. One normal Playwright locator or position action only if that evidence proves the DIV belongs to the same Kunde control. Then wait for a visible option before type. If not proved, `UI_CHANGED` and a different read-only capture later. No force, `evaluate` click, guessed selector, blind keyboard, or center-click plus type.
+`9F777B8F` (saved; dump delivered): DIV ownership recapture is complete. The nameless right-edge DIV shares the smallest wrapper with `input[name=contact]` and the stack includes that input. One position click ran. No visible option. `UI_CHANGED`. Do not repeat that click. Do not remap.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

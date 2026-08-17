@@ -20,6 +20,10 @@ from billy_mcp.ui_writes.invoices_kunde import (
     portal_list_item_flags,
     widget_contract_missing_keys,
 )
+from billy_mcp.ui_writes.invoices_kunde_div import (
+    div_ownership_missing_keys,
+    empty_div_ownership,
+)
 
 KUNDE_CHROME_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde.json"
@@ -146,6 +150,19 @@ async def observe_kunde(
         "before_content_kind": owned.get("before_content_kind"),
         "after_content_kind": owned.get("after_content_kind"),
         "input_child_count": owned.get("input_child_count"),
+        "right_edge_elements_from_point_stack": owned.get("right_edge_elements_from_point_stack"),
+        "hit_box": owned.get("hit_box"),
+        "hit_pointer_events": owned.get("hit_pointer_events"),
+        "hit_role": owned.get("hit_role"),
+        "hit_name_present": owned.get("hit_name_present"),
+        "hit_testid": owned.get("hit_testid"),
+        "hit_class_tokens": owned.get("hit_class_tokens"),
+        "hit_direct_parent": owned.get("hit_direct_parent"),
+        "hit_contained_by_input": owned.get("hit_contained_by_input"),
+        "hit_contains_input": owned.get("hit_contains_input"),
+        "hit_shares_smallest_wrapper": owned.get("hit_shares_smallest_wrapper"),
+        "smallest_wrapper": owned.get("smallest_wrapper"),
+        "nearest_clickable_ancestor": owned.get("nearest_clickable_ancestor"),
     }
     return await _attach_widget_contract(page, field, payload)
 
@@ -260,6 +277,57 @@ _OWNERSHIP_JS: Final = """el => {
   const sameInput = Boolean(
     rightHit && rightHit.tagName === "INPUT" && rightHit.getAttribute("name") === "contact"
   );
+  const peToken = (node) => {
+    const pe = String(window.getComputedStyle(node).pointerEvents || "").toLowerCase();
+    return (pe === "auto" || pe === "none") ? pe : (pe ? "other" : "none");
+  };
+  const namePresent = (node) => Boolean(
+    node.getAttribute("aria-label") || node.getAttribute("name") || node.getAttribute("title")
+  );
+  const stackSrc = (document.elementsFromPoint
+    ? document.elementsFromPoint(box.left + dx, box.top + dy)
+    : (rightHit ? [rightHit] : [])).slice(0, 8);
+  const stack = stackSrc.map((node) => ({
+    tag: node.tagName || "",
+    class_tokens: token(node.className),
+    name: node.getAttribute("name"),
+    testid: node.getAttribute("data-testid"),
+    role: node.getAttribute("role"),
+    pointer_events: peToken(node),
+  }));
+  const hitRect = rightHit ? rightHit.getBoundingClientRect() : null;
+  const hitParent = rightHit ? rightHit.parentElement : null;
+  const contactCount = (node) => {
+    if (!node) return 0;
+    let n = (node.tagName === "INPUT" && node.getAttribute("name") === "contact") ? 1 : 0;
+    n += node.querySelectorAll("input[name='contact']").length;
+    return n;
+  };
+  let smallest = null;
+  let walk = rightHit;
+  while (walk) {
+    if (walk.contains(el)) { smallest = walk; break; }
+    walk = walk.parentElement;
+  }
+  let nearest = null;
+  walk = rightHit;
+  while (walk) {
+    const role = (walk.getAttribute("role") || "").toLowerCase();
+    const tag = walk.tagName || "";
+    const isContact = tag === "INPUT" && walk.getAttribute("name") === "contact";
+    if (isContact || tag === "BUTTON" || tag === "A"
+        || role === "button" || role === "link" || role === "combobox" || role === "listbox") {
+      nearest = {
+        tag,
+        role: walk.getAttribute("role"),
+        name_present: namePresent(walk),
+        testid: walk.getAttribute("data-testid"),
+        is_contact_input: isContact,
+      };
+      break;
+    }
+    walk = walk.parentElement;
+  }
   return {
     input: {
       tag: el.tagName || "",
@@ -326,6 +394,35 @@ _OWNERSHIP_JS: Final = """el => {
     before_content_kind: kind(beforeRaw),
     after_content_kind: kind(afterRaw),
     input_child_count: el.children ? el.children.length : 0,
+    right_edge_elements_from_point_stack: stack,
+    hit_box: hitRect && {
+      x: Math.round(hitRect.x), y: Math.round(hitRect.y),
+      w: Math.round(hitRect.width), h: Math.round(hitRect.height)
+    },
+    hit_pointer_events: rightHit ? peToken(rightHit) : "none",
+    hit_role: rightHit ? rightHit.getAttribute("role") : null,
+    hit_name_present: rightHit ? namePresent(rightHit) : false,
+    hit_testid: rightHit ? rightHit.getAttribute("data-testid") : null,
+    hit_class_tokens: rightHit ? token(rightHit.className) : [],
+    hit_direct_parent: hitParent && {
+      tag: hitParent.tagName || "",
+      class_tokens: token(hitParent.className),
+      role: hitParent.getAttribute("role"),
+      name_present: namePresent(hitParent),
+      testid: hitParent.getAttribute("data-testid"),
+      contains_contact_input: contactCount(hitParent) > 0,
+    },
+    hit_contained_by_input: Boolean(rightHit && el.contains(rightHit) && rightHit !== el),
+    hit_contains_input: Boolean(rightHit && rightHit.contains(el)),
+    hit_shares_smallest_wrapper: Boolean(smallest),
+    smallest_wrapper: smallest && {
+      tag: smallest.tagName || "",
+      class_tokens: token(smallest.className),
+      contact_input_count: contactCount(smallest),
+      child_input_count: smallest.querySelectorAll("input").length
+        + ((smallest.tagName === "INPUT") ? 1 : 0),
+    },
+    nearest_clickable_ancestor: nearest,
   };
 }"""
 
@@ -374,6 +471,7 @@ def empty_ownership() -> dict[str, object]:
         "z_index": "auto",
         "element_from_point": None,
         **empty_chevron_hit(),
+        **empty_div_ownership(),
     }
 
 
@@ -532,8 +630,13 @@ async def _attach_widget_contract(
     for key, value in defaults_chevron.items():
         if payload.get(key) is None:
             payload[key] = value
+    defaults_div = empty_div_ownership()
+    for key, value in defaults_div.items():
+        if payload.get(key) is None:
+            payload[key] = value
     payload["widget_missing_keys"] = widget_contract_missing_keys(payload)
     payload["chevron_missing_keys"] = chevron_hit_missing_keys(payload)
+    payload["div_ownership_missing_keys"] = div_ownership_missing_keys(payload)
     return payload
 
 

@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T17:45:00Z
+updated: 2026-08-17T18:25:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -68,7 +68,23 @@ hit is a `DIV` with no name, testid, or allowlisted class tokens, so
 `right_edge_same_input=false` and no click ran. Appearance and
 background-image kinds are `none`. No `::before`/`::after` content.
 `input_child_count=0`. If the right-edge hit is not that input, do
-not click. No dump-named action. Count-only GET `/v2/contacts` after
+not click. `9F777B8F` then recaptures that nameless DIV's ownership:
+`right_edge_elements_from_point_stack` (max 8, allowlisted tokens
+only), `hit_box`, `hit_pointer_events`, `hit_role`,
+`hit_name_present`, `hit_testid`, `hit_class_tokens`,
+`hit_direct_parent`, `hit_contained_by_input`, `hit_contains_input`,
+`hit_shares_smallest_wrapper`, `smallest_wrapper`, and
+`nearest_clickable_ancestor`. Never store ids or accessible names.
+One `page.mouse.click` at the dumped page point runs only when
+`div_belongs_to_kunde_control` is true: shared wrapper with
+`contact_input_count == 1` and the stack or nearest clickable
+ancestor names the contact input. Live recapture: hit box `40x40`
+at the field's right edge, stack includes `INPUT` name `contact`,
+smallest wrapper is one `ember-view` `DIV` with
+`contact_input_count=1`, so ownership was proved and one position
+click ran at `{x:307, y:141}`. After that click: two hidden decoys,
+`option_role_count=0`, GET `/v2/contacts` count 0. No type. Execute
+returned `UI_CHANGED`. If ownership is not proved, do not click. No dump-named action. Count-only GET `/v2/contacts` after
 type is 0. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger

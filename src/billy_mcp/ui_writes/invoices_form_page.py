@@ -54,9 +54,16 @@ class Locator(Protocol):
     def filter(self, **kwargs: object) -> Locator: ...
 
 
+class Mouse(Protocol):
+    async def click(self, x: float, y: float) -> None: ...
+
+
 class Page(Protocol):
     @property
     def url(self) -> str: ...
+
+    @property
+    def mouse(self) -> Mouse: ...
 
     def locator(self, selector: str) -> Locator: ...
 

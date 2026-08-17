@@ -6,15 +6,21 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T18:05:00Z
+updated: 2026-08-17T18:12:12Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `1275d00`. `51E18E60` dump is delivered. `A3AB03C3` dump is delivered. Right-edge hit is a nameless `DIV`.
+HEAD is `31039b5`. `51E18E60` and `A3AB03C3` dumps are delivered. Right-edge hit is a nameless `DIV`.
 No click. Parent `9F777B8F` is the next slice: prove that DIV's
-ownership before any action. Do not repeat the same chevron dump.
+ownership dump is delivered. The nameless right-edge DIV shares the
+smallest wrapper with `input[name=contact]`
+(`contact_input_count=1`) and the stack includes that input, so
+ownership was proved. One position click ran at `{x:307, y:141}`.
+After click: `option_role_count=0`, GET `/v2/contacts` count 0.
+`UI_CHANGED`. Field shot purged after review. JSON flags kept.
+Do not repeat that click. Do not remap.
 Honesty 16 stay red. Never call the API. Stay red. Do not finish.
 `91A2C363` leftover Leverandør slice is closed. `A6FB8FC2` stays a
 one-close constraint.

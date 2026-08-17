@@ -28,6 +28,10 @@ from billy_mcp.ui_writes.invoices_kunde import (
     right_edge_click_offset,
     widget_named_action,
 )
+from billy_mcp.ui_writes.invoices_kunde_div import (
+    div_ownership_missing_keys,
+    ownership_click_point,
+)
 
 LINE_SELECTORS = (
     "textarea[name='invoiceLines.0.description']",
@@ -101,6 +105,71 @@ async def capture_kunde_chevron_hit_dump(page: Page, unique_tag: str) -> dict[st
         "option_visible": True,
         "contact_get_count": len(lookups),
         "chevron_missing_keys": chevron_hit_missing_keys(after_click),
+    }
+
+
+async def capture_kunde_div_ownership_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only 9F777B8F recapture. One position click only if DIV ownership is proved."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    point = ownership_click_point(opener)
+    if point is None:
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde DIV ownership is not proved.",
+            "opener": opener,
+            "clicked": False,
+            "after_click": None,
+            "option_visible": False,
+            "div_ownership_missing_keys": div_ownership_missing_keys(opener),
+            "hit_shares_smallest_wrapper": opener.get("hit_shares_smallest_wrapper"),
+        }
+    await page.mouse.click(point["x"], point["y"])
+    await asyncio.sleep(0.3)
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    items = await _wait_options(page, unique_tag, wrapper)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_click)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    if not option_visible:
+        dump_kunde_lookup(len(lookups))
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde existing option is not visible.",
+            "opener": opener,
+            "clicked": True,
+            "after_click": after_click,
+            "option_visible": False,
+            "contact_get_count": len(lookups),
+            "div_ownership_missing_keys": div_ownership_missing_keys(after_click),
+        }
+    return {
+        "opener": opener,
+        "clicked": True,
+        "after_click": after_click,
+        "option_visible": True,
+        "contact_get_count": len(lookups),
+        "div_ownership_missing_keys": div_ownership_missing_keys(after_click),
     }
 
 

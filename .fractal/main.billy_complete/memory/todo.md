@@ -9,7 +9,7 @@ updated: 2026-08-17T17:35:00Z
 
 ## Open
 
-- `9F777B8F`: dump the unnamed right-edge DIV ownership (stack, box vs input, pointer-events, owner/wrapper relation, nearest clickable ancestor). Click only if that evidence proves it belongs to the same Kunde control. Remap invoice CUD rows only after accept and purge.
+- Invoice CUD still unbound after the proved DIV position click. Next slice is a different read-only capture, not a repeat click. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
