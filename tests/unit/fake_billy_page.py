@@ -349,7 +349,7 @@ class FakeBillyLocator:
         field = _field_name(self._selector)
         if field == "vendor":
             self._session.dropdown_options = [f'Opret "{value}"', "Opret leverandør"]
-        if field in {"contactId", "contact"}:
+        if field in {"contactId", "contact"} or "data-testid='search'" in self._selector:
             self._session.dropdown_options = [value]
 
     async def set_input_files(self, path: str | Path) -> None:

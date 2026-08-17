@@ -91,6 +91,7 @@ def test_invoices_create_execute_uses_route_fields_cta_and_readback(
 
     monkeypatch.setattr(invoices_form, "CREATE_PRE_SUBMIT_DUMP", tmp_path / "create.json")
     monkeypatch.setattr(invoices_form_observe, "KUNDE_CHROME_DUMP", tmp_path / "kunde.json")
+    monkeypatch.setattr(invoices_form_observe, "KUNDE_OPENER_DUMP", tmp_path / "opener.json")
     session = _arm(monkeypatch)
     executed = _preview_and_execute(
         create_server(),

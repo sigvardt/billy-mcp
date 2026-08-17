@@ -83,3 +83,47 @@ def pick_kunde_create_index(items: Sequence[Mapping[str, object]]) -> int | None
             continue
         return index
     return None
+
+
+def kunde_phase_is_bound(phase: Mapping[str, object]) -> bool:
+    """True only when a visible existing option or create footer exists.
+
+    Typed-only ``input[name=contact]`` is not a bind. Live after-type dumps
+    with ``wrapper_count=0`` and hidden decoys stay unbound.
+    """
+
+    if phase.get("existing_index") is not None:
+        return True
+    return phase.get("create_index") is not None
+
+
+def placeholder_flags(text: str | None) -> dict[str, bool]:
+    """Non-PII placeholder tokens. Never stores the raw placeholder."""
+
+    compact = (text or "").casefold()
+    return {
+        "has_kunde": "kunde" in compact,
+        "has_customer": "customer" in compact,
+        "has_vaelg": "vælg" in compact or "vaelg" in compact,
+        "has_soeg": "søg" in compact or "soeg" in compact,
+        "has_select": "select" in compact,
+    }
+
+
+def named_kunde_opener(opener: Mapping[str, object]) -> str | None:
+    """Name the first real opener. The contact text field is not one."""
+
+    if opener.get("sibling_search") is True:
+        return "sibling_search"
+    if opener.get("uncle_search") is True:
+        return "uncle_search"
+    combobox_count = opener.get("combobox_count")
+    if isinstance(combobox_count, int) and combobox_count > 0:
+        return "combobox"
+    contact_id_count = opener.get("contact_id_count")
+    if isinstance(contact_id_count, int) and contact_id_count > 0:
+        return "contact_id"
+    trigger_count = opener.get("power_select_trigger_count")
+    if isinstance(trigger_count, int) and trigger_count > 0:
+        return "power_select_trigger"
+    return None

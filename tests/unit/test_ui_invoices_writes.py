@@ -489,3 +489,138 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "ui_clients_create_preview" in source
     assert "Godkend" in source
     assert "pending_review" in source
+
+
+def _live_unbound_after_type() -> dict[str, object]:
+    return {
+        "phase": "after_type",
+        "field_name": "contact",
+        "field_role": None,
+        "aria_expanded": None,
+        "value_len": 19,
+        "tag_len": 19,
+        "search_trigger": False,
+        "clear_trigger": False,
+        "trigger_count": 0,
+        "page_search_count": 0,
+        "wrapper_count": 0,
+        "alt_list_count": 0,
+        "existing_index": None,
+        "create_index": None,
+        "option_role_count": 0,
+        "items": [
+            {
+                "has_opret": False,
+                "has_tag": False,
+                "has_empty": False,
+                "has_create_footer": False,
+                "visible": False,
+                "short": True,
+            },
+            {
+                "has_opret": False,
+                "has_tag": False,
+                "has_empty": False,
+                "has_create_footer": False,
+                "visible": False,
+                "short": True,
+            },
+        ],
+    }
+
+
+def test_typed_contact_dump_is_not_a_kunde_bind() -> None:
+    """Given the live after-type dump, When judging bind, Then typed contact is unbound."""
+
+    from billy_mcp.ui_writes.invoices_kunde import kunde_phase_is_bound, named_kunde_opener
+
+    assert kunde_phase_is_bound(_live_unbound_after_type()) is False
+    assert (
+        named_kunde_opener(
+            {
+                "sibling_search": False,
+                "uncle_search": False,
+                "combobox_count": 0,
+                "contact_id_count": 0,
+                "placeholder_present": True,
+                "field_name": "contact",
+            }
+        )
+        is None
+    )
+
+
+def test_bind_does_not_press_extra_keys_on_unbound_contact() -> None:
+    """Given the live dump, When binding, Then extra keys on contact are gone."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    assert "Alt+ArrowDown" not in source
+    assert 'press("Enter")' not in source
+
+
+def test_opener_dump_writes_to_tmp_not_owner_file(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Given a unit opener dump, When writing, Then the owner kunde file is untouched."""
+
+    from billy_mcp.ui_writes import invoices_form_observe
+
+    owner = tmp_path / "inspect-live-invoices-kunde.json"
+    opener = tmp_path / "inspect-live-invoices-kunde-opener.json"
+    monkeypatch.setattr(invoices_form_observe, "KUNDE_CHROME_DUMP", owner)
+    monkeypatch.setattr(invoices_form_observe, "KUNDE_OPENER_DUMP", opener)
+    payload = {
+        "parent_testid": "input-wrapper",
+        "parent_class_tokens": ["ds-input"],
+        "sibling_search": False,
+        "uncle_search": False,
+        "kunde_label_count": 1,
+        "contact_id_count": 0,
+        "combobox_count": 0,
+        "placeholder_present": False,
+        "named_opener": None,
+    }
+    invoices_form_observe.dump_kunde_opener(payload)
+    assert opener.is_file()
+    assert not owner.exists()
+    written = opener.read_text(encoding="utf-8")
+    assert "parent_testid" in written
+    assert "named_opener" in written
+    assert "MCP-UI-INV" not in written
+
+
+def test_placeholder_flags_are_non_pii() -> None:
+    """Given a placeholder string, When flagging, Then raw text is not stored."""
+
+    from billy_mcp.ui_writes.invoices_kunde import named_kunde_opener, placeholder_flags
+
+    flags = placeholder_flags("Vælg kunde")
+    assert flags["has_kunde"] is True
+    assert flags["has_vaelg"] is True
+    assert flags["has_soeg"] is False
+    assert "Vælg" not in str(flags)
+    assert (
+        named_kunde_opener(
+            {
+                "sibling_search": False,
+                "uncle_search": False,
+                "combobox_count": 0,
+                "contact_id_count": 0,
+                "power_select_trigger_count": 0,
+                "placeholder_present": True,
+                "placeholder_flags": flags,
+            }
+        )
+        is None
+    )
+    assert named_kunde_opener({"power_select_trigger_count": 1}) == "power_select_trigger"
+
+
+def test_opener_observe_records_ancestors_and_placeholder_flags() -> None:
+    """Given the opener helper, Then it records ancestors and placeholder flags."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "ancestor_class_tokens" in source
+    assert "placeholder_flags" in source
+    assert "power_select_trigger_count" in source
+    assert "ember-power-select-trigger" in source

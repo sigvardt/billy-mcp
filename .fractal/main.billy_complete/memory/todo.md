@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Finish live FastMCP invoice draft CUD. The Kunde field types the tag and does not open a visible option. Use the live after-click / after-type dump. Do not treat typed-only as a bind. Then remap invoice CUD rows only after accept and purge.
+- Finish live FastMCP invoice draft CUD. `5E1EDFB4`: read-only accessibility and ownership dump before any live click or key. Derive one normal action from that evidence. Do not treat placeholder as a bind. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 

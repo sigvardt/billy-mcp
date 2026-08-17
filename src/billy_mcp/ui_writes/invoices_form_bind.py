@@ -8,14 +8,17 @@ from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_observe import (
     ALT_LIST_SELECTORS,
     dump_kunde_chrome,
+    dump_kunde_opener,
     dump_kunde_phases,
     observe_kunde,
+    observe_kunde_opener,
     portal_items,
 )
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page
 from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_INPUT_SELECTORS,
     KUNDE_LABEL,
+    kunde_phase_is_bound,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     portal_create_footer_label,
@@ -39,28 +42,31 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
             code=StableErrorCode.UI_CHANGED,
             message="Billy Kunde control is not visible.",
         )
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    named = opener.get("named_opener")
+    if not isinstance(named, str) or not named:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy Kunde opener is not visible.",
+        )
+    type_target = await _click_named_opener(page, field, named)
+    if type_target is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy Kunde opener is not visible.",
+        )
     wrapper = kunde_wrapper(page)
-    await field.click()
-    await asyncio.sleep(0.4)
-    search = wrapper.locator("[data-testid='search']")
-    if await search.count() >= 1 and await search.first.is_visible():
-        await search.first.click()
-        await asyncio.sleep(0.3)
-    trigger = wrapper.locator("[class*='trigger'], [class*='caret']")
-    if await trigger.count() >= 1 and await trigger.first.is_visible():
-        await trigger.first.click()
-        await asyncio.sleep(0.3)
-    await field.press("Alt+ArrowDown")
-    await asyncio.sleep(0.3)
     after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
-    await _type_kunde(field, unique_tag)
+    await _type_kunde(type_target, unique_tag)
     items = await _wait_options(page, unique_tag, wrapper)
-    if pick_kunde_existing_option_index(items) is None:
-        await field.press("Enter")
-        await asyncio.sleep(0.4)
-        items = await _wait_options(page, unique_tag, wrapper)
     after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
     dump_kunde_phases(after_click, after_type)
+    if not kunde_phase_is_bound(after_type):
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy Kunde existing option is not visible.",
+        )
     if pick_kunde_existing_option_index(items) is not None:
         if await _click_scoped_option(page, unique_tag):
             return "scoped:existing_option"
@@ -71,6 +77,28 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
         code=StableErrorCode.UI_CHANGED,
         message="Billy Kunde existing option is not visible.",
     )
+
+
+async def _click_named_opener(page: Page, field: Locator, named: str) -> Locator | None:
+    """Click the dump-named opener. The contact text field is not an opener."""
+
+    parent = field.locator("xpath=..")
+    uncle = parent.locator("xpath=..")
+    targets: dict[str, Locator] = {
+        "sibling_search": parent.locator("[data-testid='search']"),
+        "uncle_search": uncle.locator("[data-testid='search']"),
+        "combobox": page.locator("[role='combobox']"),
+        "contact_id": page.locator("input[name='contactId']"),
+        "power_select_trigger": page.locator(".ember-power-select-trigger"),
+    }
+    target = targets.get(named)
+    if target is None:
+        return None
+    if await target.count() < 1 or not await target.first.is_visible():
+        return None
+    await target.first.click()
+    await asyncio.sleep(0.3)
+    return target.first
 
 
 def kunde_wrapper(page: Page) -> Locator:

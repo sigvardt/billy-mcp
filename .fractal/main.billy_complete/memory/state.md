@@ -25,16 +25,12 @@ Honesty 16 stay red. `complete=false`. Invoice CUD still names
 `ui_invoices_*_open`. Offline invoice form helper and FastMCP live
 harness landed. Independent review of that slice is FAIL.
 
-Live invoice create still fails closed: `UI_CHANGED` Kunde option not
-visible. The IR-required no-click dump is now split `after_click` /
-`after_type`. Live values: `input[name=contact]` 250x40, typed
-`value_len=tag_len`, `search_trigger=false`, `page_search_count=0`,
-`trigger_count=0`, `aria-expanded` absent, `alt_list_count=0`, two
-hidden empty decoy portals, `option_role_count=0`. That is not a
-bind. Fake-page dumps are isolated to tmp so they cannot overwrite
-this file. Do not remap invoices. Do not green from stubs. Next is
-to identify the real Kunde opener from that dump, then one tagged
-draft CUD.
+Live invoice create fails closed: `UI_CHANGED` `Billy Kunde opener
+is not visible.` Deepened opener dump: parent `ember-view`,
+ancestors empty after that, placeholder flags `has_kunde` and
+`has_vaelg`, power-select trigger count 0, `named_opener=null`.
+Placeholder is not an opener. Extra keys on `input[name=contact]`
+are gone. Honesty 16 stay red. `complete=false`. Do not remap.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched

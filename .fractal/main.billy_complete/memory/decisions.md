@@ -27,6 +27,8 @@ updated: 2026-08-16T13:50:50Z
 
 `E004E7D5` (saved): minimum failing-gate set is the 16 false-green parity rows (bills CUD, contacts CUD, daybooks create/delete, daybookTransactions create, files create, invoices CUD, organizations update, products create, transactions create). Still catch any other write row wrongly treated as complete.
 
+`5E1EDFB4` (saved): before another live click or key, capture read-only Kunde accessibility and ownership evidence (input, owning ancestors to the form field, label/for, aria, active element, roles/names/states, visible text, boxes, pointer-events, z-index, elementFromPoint at input center, visible portal descendants after normal field click and after type). Derive one normal action from that evidence. Failing fixture first. No guessed selectors, generic portal sweeps, force clicks, evaluate clicks, or Escape.
+
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 
 `DD80C9A8` (in force, not saved): node `test.sh` must accept `BILLY_TEST_MODE=ui-full` (offline API + live UI/vision, no live API), then require-complete and repository policy.
@@ -47,13 +49,13 @@ updated: 2026-08-16T13:50:50Z
 
 `F3F318A2` (done, unsaved): failing browser-egress test first. Permit only PUT for `/v2/contacts/:id`. Do not add PATCH unless the live interface request is PATCH. One FastMCP CUD with independent fresh-session read-back after each step and final absence. Browser-originated PUT is interface qualification, not API-token qualification. Keep coverage red.
 
-`31F6E753` (saved): before any further bill create, delete the untagged empty draft through the UI and prove the list clean in a fresh session. Next create requires a pre-submit DOM dump of unique tag, vendor, date, line amount, and draft-only action. Never book, approve, pay, or email. Count only the exact bill write response and independent tagged read-back.
+`31F6E753` (done, unsaved): untagged empty bill drafts are gone. Fresh session list is `/:org_slug/bills/empty`. Pre-submit dump still required before any new bill create. Never book, approve, pay, or email.
 
-`7E7148F6` (saved): after vendor bind, observe only the leftover Leverandør portal. Close or complete that one portal through its normal UI action. Then prove **Gem som kladde** is unobscured and pointer-click it. Do not force-click Save. Do not close every `.ds-moved-with-portal`. Do not press Escape. If no exact safe close is visible, return `UI_CHANGED`, keep coverage red, and create no bill.
+`7E7148F6` (done, unsaved): leftover Leverandør portal rule still binds: one named close after role, text, and owning-control proof. No force Save, no generic portal sweep, no Escape.
 
-`A6FB8FC2` (superseded as a park, still a constraint): do not retry dialog **Gem** plus a second search-toggle close. One named close only, and only after role, text, and owning-control proof.
+`A6FB8FC2` (constraint only): do not retry dialog **Gem** plus a second search-toggle close.
 
-`91A2C363` (saved, leftover slice done): existing-option bind plus accept `9920dd9476474b41aef70e6d66d24638`. Bills CUD rows now name preview tools. Stay red. If the page differs later, record `UI_CHANGED` and recapture. Do not use generic portal sweeps, force clicks, DOM evaluate clicks, or blind Escape.
+`91A2C363` (done, unsaved): existing-option bind plus accept `9920dd9476474b41aef70e6d66d24638`. Bills CUD rows name preview tools. Stay red. If the page differs later, record `UI_CHANGED` and recapture.
 
 `93D7A063` (done, unsaved): accept recorded for `run-3d5b151dfd5342258f8734373597f8c1`, frames gone, then `tool_name` remapped to `ui_clients_{create,update,delete}_preview` in `f47b9d5`. Mapping did not self-approve. Honesty 16 stays red.
 

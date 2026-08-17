@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T12:50:00Z
+updated: 2026-08-17T14:35:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -36,15 +36,19 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 tagged names such as `MCP-UI-INV-...`. Create a tagged customer first with
 `ui_clients_*` tools. Do not use a leftover supplier as Kunde.
 
-Kunde bind is an existing-option pick on the wrapper that owns
-`input[name=contact]`. Live dump after click and after type: the field is
-`input[name=contact]` (250x40), `search_trigger=false`, `page_search_count=0`,
-`trigger_count=0`, `aria-expanded` absent, two hidden empty
-`.ds-dropdown-list.ds-moved-with-portal` decoys, and no Ember listbox. Typing
-the tagged name does not open a visible option. That is not a bind. Generic
-name fill is not a bind. Page-wide tag click is not a bind. Create footer is
-last resort only when an exact option exists. Stay red until a visible option
-is clicked.
+Kunde bind is an existing-option pick after a named opener. The live
+`input[name=contact]` field is typeable (250x40) and is **not** the bills
+typeahead: `wrapper_count=0`, `search_trigger=false`, no caret, no
+`aria-expanded`, two hidden empty decoy portals. Typing the tag there is not
+a bind. Extra keys on that field are not a bind. The opener dump records
+parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
+label count, `contactId` count, combobox count, ember-power-select trigger
+count, and placeholder token flags (never the raw placeholder). Bind only
+after that dump names `sibling_search`, `uncle_search`, `combobox`,
+`contact_id`, or `power_select_trigger`, then a visible option is clicked.
+A placeholder is not an opener. Generic name fill is not a
+bind. Page-wide tag click is not a bind. Create footer is last resort only
+when an exact option exists. Stay red until a visible option is clicked.
 
 ## Fail closed
 

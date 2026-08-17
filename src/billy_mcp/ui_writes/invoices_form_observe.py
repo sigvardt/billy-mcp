@@ -2,18 +2,24 @@
 
 from __future__ import annotations
 
+from collections.abc import Mapping
 from pathlib import Path
 from typing import Final
 
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page, write_json
 from billy_mcp.ui_writes.invoices_kunde import (
+    named_kunde_opener,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
+    placeholder_flags,
     portal_list_item_flags,
 )
 
 KUNDE_CHROME_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde.json"
+)
+KUNDE_OPENER_DUMP: Final = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-opener.json"
 )
 ALT_LIST_SELECTORS: Final[tuple[str, ...]] = (
     ".ember-power-select-dropdown",
@@ -115,6 +121,74 @@ def dump_kunde_phases(after_click: dict[str, object], after_type: dict[str, obje
             "after_type": after_type,
         },
     )
+
+
+def dump_kunde_opener(payload: Mapping[str, object]) -> None:
+    """Write non-PII opener chrome to the opener dump, never the owner file."""
+
+    write_json(KUNDE_OPENER_DUMP, dict(payload))
+
+
+def _class_tokens(raw: str | None) -> list[str]:
+    if not raw:
+        return []
+    return sorted(
+        token for token in raw.split() if token.startswith(("ds-", "ember-", "Dropdown", "input"))
+    )
+
+
+async def _safe_count(node: Locator) -> int:
+    try:
+        return await node.count()
+    except (TimeoutError, RuntimeError):
+        return 0
+
+
+async def _safe_attr(node: Locator, name: str) -> str | None:
+    try:
+        value = await node.get_attribute(name)
+    except (TimeoutError, RuntimeError):
+        return None
+    return value if isinstance(value, str) and value else None
+
+
+POWER_SELECT_TRIGGER: Final = ".ember-power-select-trigger"
+
+
+async def observe_kunde_opener(page: Page, field: Locator) -> dict[str, object]:
+    """Ancestor and sibling opener flags before any type. Never stores the tag."""
+
+    parent = field.locator("xpath=..")
+    uncle = parent.locator("xpath=..")
+    grand = uncle.locator("xpath=..")
+    sibling_search = await _safe_count(parent.locator("[data-testid='search']"))
+    uncle_search = await _safe_count(uncle.locator("[data-testid='search']"))
+    sibling_caret = await _safe_count(parent.locator("[class*='trigger'], [class*='caret']"))
+    uncle_caret = await _safe_count(uncle.locator("[class*='trigger'], [class*='caret']"))
+    ancestor_class_tokens = [
+        _class_tokens(await _safe_attr(parent, "class")),
+        _class_tokens(await _safe_attr(uncle, "class")),
+        _class_tokens(await _safe_attr(grand, "class")),
+    ]
+    trigger_n = await _safe_count(page.locator(POWER_SELECT_TRIGGER))
+    payload: dict[str, object] = {
+        "parent_testid": await _safe_attr(parent, "data-testid"),
+        "parent_class_tokens": ancestor_class_tokens[0],
+        "ancestor_class_tokens": ancestor_class_tokens,
+        "sibling_search": sibling_search > 0,
+        "uncle_search": uncle_search > 0,
+        "sibling_caret": sibling_caret > 0,
+        "uncle_caret": uncle_caret > 0,
+        "kunde_label_count": await _safe_count(page.get_by_text("Kunde", exact=True)),
+        "contact_id_count": await _safe_count(page.locator("input[name='contactId']")),
+        "combobox_count": await _safe_count(page.locator("[role='combobox']")),
+        "power_select_trigger_count": trigger_n,
+        "placeholder_present": bool(await _safe_attr(field, "placeholder")),
+        "placeholder_flags": placeholder_flags(await _safe_attr(field, "placeholder")),
+        "field_name": await _safe_attr(field, "name"),
+    }
+    payload["named_opener"] = named_kunde_opener(payload)
+    return payload
 
 
 async def dump_kunde_chrome(page: Page) -> None:
