@@ -12,6 +12,7 @@ updated: 2026-08-16T14:29:47Z
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
+Next live slice is parent `7E7148F6`: after vendor bind, observe only the leftover Leverandør portal, close that one through its normal UI action, then pointer-click **Gem som kladde**. No generic portal sweep. No Escape. No force Save. If no safe close, `UI_CHANGED` and no bill.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched
@@ -100,8 +101,13 @@ vendor, date, amount `1,00`, **Gem som kladde**, and
 that dump is visible, enabled, and covered:
 `hit_target=DIV.ds-moved-with-portal`. Execute waits for every visible
 `.ds-moved-with-portal` node, then Tabs once. The overlay stays.
-Execute returns `UI_CHANGED` `source=leftover_portal` and does not
-click. Do not press Escape. Persist still has no POST `/v2/bills`.
+Execute now observes the leftover and closes only that portal: vendor
+search toggle for the typeahead list, or **Gem** on a visible **Opret
+leverandør** dialog. The leftover dump names role, heading, and
+owning control. A second close is forbidden. A live run clicked that
+modal **Gem**; save hit stayed `DIV.ds-moved-with-portal`. Execute
+returns `UI_CHANGED` `source=leftover_portal` and does not click save.
+Do not press Escape. Persist still has no POST `/v2/bills`.
 Offline tests no longer write the owner save dump. Bills `tool_name` still `ui_bills_*_open`. Do not green.
 Do not remap. Do not finish. Do not accept vision
 `3af923d562b546d597e9f156b5c3227f`.

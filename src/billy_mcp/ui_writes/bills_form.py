@@ -14,13 +14,20 @@ from urllib.parse import urlsplit
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.bills_vendor import (
+    CREATE_VENDOR_LABEL,
     PORTAL_FOOTER_WRAPPER,
+    VENDOR_CLEAR,
     VENDOR_INPUT_SELECTORS,
     VENDOR_LABEL,
+    VENDOR_SEARCH_TOGGLE,
     dump_date_chrome,
+    dump_leftover_portal,
     dump_scoped_vendor_wrapper,
     dump_vendor_chrome,
+    leftover_close_action,
     leftover_footer_means_bound,
+    leftover_inspect_record,
+    leftover_portal_kind,
     pick_portal_create_index,
     portal_create_footer_label,
     portal_list_item_flags,
@@ -465,11 +472,12 @@ async def _create_draft(page: _Page, slug: str, unique_tag: str) -> ToolError | 
     blocked = await _prepare_draft_click(page, unique_tag, filled, DRAFT_SAVE)
     if blocked is not None:
         return blocked
-    if not await _wait_vendor_portal_gone(page):
+    leftover = await _close_leftover_portal(page, unique_tag)
+    if leftover.get("blocked"):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy draft save control is not pointer-reachable.",
-            details={"source": "leftover_portal"},
+            details={"source": "leftover_portal", "leftover": leftover},
         )
     seen, bodies, requests = _watch_bill_traffic(page)
     delivery = await pointer_click_draft_save(page, DRAFT_SAVE)
@@ -584,11 +592,12 @@ async def _prepare_draft_click(
 async def _save_draft(
     page: _Page, *, button: str = DRAFT_SAVE, method: str = "POST"
 ) -> ToolError | None:
-    if not await _wait_vendor_portal_gone(page):
+    leftover = await _close_leftover_portal(page, "save")
+    if leftover.get("blocked"):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy draft save control is not pointer-reachable.",
-            details={"source": "leftover_portal"},
+            details={"source": "leftover_portal", "leftover": leftover},
         )
     seen, _bodies, requests = _watch_bill_traffic(page)
     delivery = await pointer_click_draft_save(page, button)
@@ -951,22 +960,149 @@ async def _wait_vendor_dialog_gone(page: _Page) -> None:
         await asyncio.sleep(0.2)
 
 
-async def _wait_vendor_portal_gone(page: _Page) -> bool:
-    portal = page.locator(".ds-moved-with-portal")
-    for _ in range(30):
+def _leftover_kind(record: dict[str, object]) -> str | None:
+    kind = record.get("kind")
+    return kind if isinstance(kind, str) else None
+
+
+async def _observe_leftover_portal(page: _Page, unique_tag: str) -> dict[str, object]:
+    wrapper = page.locator("[data-testid='input-wrapper']").filter(
+        has=page.locator("input[name='vendor']")
+    )
+    search_n = await _safe_count(wrapper.locator(VENDOR_SEARCH_TOGGLE))
+    clear_n = await _safe_count(wrapper.locator(VENDOR_CLEAR))
+    snapshot = await _list_snapshot(
+        page.locator(".ds-dropdown-list.ds-moved-with-portal"), unique_tag
+    )
+    visible_count = 0
+    has_opret = False
+    has_empty = False
+    maybe_items: object = snapshot.get("items")
+    if isinstance(maybe_items, list):
+        for raw in cast(list[object], maybe_items):
+            if not isinstance(raw, dict):
+                continue
+            item = cast(dict[str, object], raw)
+            if item.get("visible") is not True:
+                continue
+            visible_count += 1
+            if item.get("has_opret") is True:
+                has_opret = True
+            if item.get("has_empty") is True:
+                has_empty = True
+    modal_heading = await _visible_create_vendor_modal(page)
+    kind = leftover_portal_kind(
+        visible=visible_count > 0,
+        has_opret=has_opret,
+        has_empty=has_empty,
+        has_modal_heading=modal_heading,
+    )
+    record = leftover_inspect_record(
+        kind=kind,
+        visible_count=visible_count,
+        has_opret=has_opret,
+        has_empty=has_empty,
+        search_trigger=search_n > 0,
+        clear_trigger=clear_n > 0,
+    )
+    dump_leftover_portal(record)
+    return record
+
+
+async def _visible_create_vendor_modal(page: _Page) -> bool:
+    modal = page.locator("div[class*='ModalWrapper'], [role='dialog']")
+    try:
+        count = await modal.count()
+    except Exception:
+        return False
+    for index in range(min(count, 9)):
+        node = modal.nth(index)
         try:
-            count = await portal.count()
-            any_visible = False
-            for index in range(count):
-                if await portal.nth(index).is_visible():
-                    any_visible = True
-                    break
-            if portal_overlay_gone(count=count, any_visible=any_visible):
+            if not await node.is_visible():
+                continue
+            heading = node.get_by_text(CREATE_VENDOR_LABEL, exact=True)
+            if await heading.count() >= 1 and await heading.first.is_visible():
                 return True
         except Exception:
-            return True
-        await asyncio.sleep(0.2)
+            continue
     return False
+
+
+async def _click_visible_create_vendor_gem(page: _Page) -> bool:
+    modal = page.locator("div[class*='ModalWrapper'], [role='dialog']")
+    try:
+        count = await modal.count()
+    except Exception:
+        return False
+    for index in range(min(count, 9)):
+        node = modal.nth(index)
+        try:
+            if not await node.is_visible():
+                continue
+            heading = node.get_by_text(CREATE_VENDOR_LABEL, exact=True)
+            if await heading.count() < 1 or not await heading.first.is_visible():
+                continue
+            save = node.get_by_role("button", name="Gem", exact=True)
+            if await save.count() < 1 or not await save.first.is_visible():
+                return False
+            await save.first.click(timeout=5000)
+            return True
+        except Exception:
+            continue
+    return False
+
+
+async def _click_vendor_search_toggle(page: _Page) -> bool:
+    wrapper = page.locator("[data-testid='input-wrapper']").filter(
+        has=page.locator("input[name='vendor']")
+    )
+    toggle = wrapper.locator(VENDOR_SEARCH_TOGGLE)
+    try:
+        if await toggle.count() < 1 or not await toggle.first.is_visible():
+            return False
+        await toggle.first.click(timeout=5000)
+        return True
+    except Exception:
+        return False
+
+
+async def _close_leftover_portal(page: _Page, unique_tag: str) -> dict[str, object]:
+    observed = await _observe_leftover_portal(page, unique_tag)
+    action = leftover_close_action(_leftover_kind(observed))
+    if action is None:
+        observed["blocked"] = False
+        return observed
+    closed = False
+    if action == "search_toggle":
+        closed = await _click_vendor_search_toggle(page)
+    elif action == "modal_gem":
+        closed = await _click_visible_create_vendor_gem(page)
+    if not closed:
+        observed["blocked"] = True
+        observed["close_failed"] = True
+        dump_leftover_portal(observed)
+        return observed
+    if action == "modal_gem":
+        for _ in range(24):
+            if not await _visible_create_vendor_modal(page):
+                break
+            await asyncio.sleep(0.25)
+    else:
+        await asyncio.sleep(0.3)
+    after = await _observe_leftover_portal(page, unique_tag)
+    after["closed"] = action
+    delivery = await inspect_draft_save(page, DRAFT_SAVE)
+    hit = delivery.get("hit_target")
+    hit_name = hit if isinstance(hit, str) else None
+    if leftover_portal_covers_save(hit_name):
+        after["blocked"] = True
+        after["hit_target"] = hit_name
+        dump_leftover_portal(after)
+        return after
+    after["blocked"] = False
+    after["hit_target"] = hit_name
+    dump_leftover_portal(after)
+    return after
 
 
 async def _observe_date_field(page: _Page) -> dict[str, object]:
@@ -1023,14 +1159,13 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
             details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
         )
     await _wait_vendor_dialog_gone(page)
-    keyboard = getattr(page, "keyboard", None)
-    press = getattr(keyboard, "press", None) if keyboard is not None else None
-    if press is not None:
-        try:
-            await press("Tab")
-        except Exception:
-            pass
-    await _wait_vendor_portal_gone(page)
+    leftover = await _close_leftover_portal(page, unique_tag)
+    if leftover.get("blocked"):
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy leftover Leverandør portal has no safe close.",
+            details={"source": "leftover_portal", "leftover": leftover},
+        )
     date_obs = await _observe_date_field(page)
     dump_date_chrome(date_obs)
     if date_obs.get("count", 0) == 0:

@@ -65,13 +65,17 @@ and can be consumed once. Replay, expiry, and wrong-tool mismatch fail closed.
 - Date chrome stores `dd.mm.yyyy`. Amount chrome stores Danish `1,00`.
   After vendor bind, wait for the vendor dialog to close, dump
   `billDate`, then fill date and amount without a prior click. A
-  leftover-footer count error is not a vendor bind. Draft save inspects
-  the exact **Gem som kladde** / **Opdater** button and uses
-  `mouse.click` at the center. A covered or disabled control returns
-  `UI_CHANGED`. Live hit after vendor bind was
-  `DIV.ds-moved-with-portal`. After vendor bind, wait until every
-  visible leftover portal list is gone, then Tab once. Live overlay
-  still stays. Do not press Escape. No `force=True` on draft save.
+  leftover-footer count error is not a vendor bind. After vendor bind,
+  observe the one leftover Leverandør portal and close only that portal:
+  the vendor wrapper `[data-testid=search]` toggle for the typeahead
+  list, or **Gem** on **Opret leverandør**. The leftover dump names
+  role, heading, and owning control. Do not add a second close. Do
+  not wait-all-visible, Tab, Escape, `circleX`, or sweep every
+  `.ds-moved-with-portal`. Draft
+  save inspects the exact **Gem som kladde** / **Opdater** button and
+  uses `mouse.click` at the center. A covered or disabled control
+  returns `UI_CHANGED`. Live hit after vendor bind was
+  `DIV.ds-moved-with-portal`. No `force=True` on draft save.
   Offline tests must not write the owner save dump.
   Persist watches request and response. Create persist is POST 2xx only.
 - Browser egress allows PUT prefix `/v2/bills/` only (no collection PUT,

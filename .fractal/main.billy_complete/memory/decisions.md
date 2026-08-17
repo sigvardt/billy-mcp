@@ -12,6 +12,7 @@ sources:
   - radio:D42EAAA6
   - radio:F3F318A2
   - radio:93D7A063
+  - radio:7E7148F6
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -45,6 +46,8 @@ updated: 2026-08-16T13:50:50Z
 `F3F318A2` (done, unsaved): failing browser-egress test first. Permit only PUT for `/v2/contacts/:id`. Do not add PATCH unless the live interface request is PATCH. One FastMCP CUD with independent fresh-session read-back after each step and final absence. Browser-originated PUT is interface qualification, not API-token qualification. Keep coverage red.
 
 `31F6E753` (saved): before any further bill create, delete the untagged empty draft through the UI and prove the list clean in a fresh session. Next create requires a pre-submit DOM dump of unique tag, vendor, date, line amount, and draft-only action. Never book, approve, pay, or email. Count only the exact bill write response and independent tagged read-back.
+
+`7E7148F6` (saved): after vendor bind, observe only the leftover Leverandør portal. Close or complete that one portal through its normal UI action. Then prove **Gem som kladde** is unobscured and pointer-click it. Do not force-click Save. Do not close every `.ds-moved-with-portal`. Do not press Escape. If no exact safe close is visible, return `UI_CHANGED`, keep coverage red, and create no bill.
 
 `93D7A063` (done, unsaved): accept recorded for `run-3d5b151dfd5342258f8734373597f8c1`, frames gone, then `tool_name` remapped to `ui_clients_{create,update,delete}_preview` in `f47b9d5`. Mapping did not self-approve. Honesty 16 stays red.
 

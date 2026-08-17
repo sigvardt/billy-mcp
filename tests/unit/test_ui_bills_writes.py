@@ -519,8 +519,12 @@ def test_bind_picks_named_portal_footer_not_row_walk() -> None:
     assert "PORTAL_FOOTER_WRAPPER" in source
     assert "_observe_date_field" in source
     assert "_wait_vendor_dialog_gone" in source
-    assert "_wait_vendor_portal_gone" in source
-    assert 'press("Tab")' in source
+    assert "_close_leftover_portal" in source
+    assert "_click_vendor_search_toggle" in source
+    assert "_click_visible_create_vendor_gem" in source
+    assert "modal_gem+search_toggle" not in source
+    assert "_wait_vendor_portal_gone" not in source
+    assert 'await press("Tab")' not in source
     assert "leftover_footer_means_bound" in source
     assert "force=not visible" in source
     assert "click_first=False" in source
@@ -577,6 +581,104 @@ def test_leftover_portal_covers_save() -> None:
     assert portal_overlay_gone(count=9, any_visible=False)
     assert not portal_overlay_gone(count=1, any_visible=True)
     assert not portal_overlay_gone(count=9, any_visible=True)
+
+
+def test_leftover_close_is_search_toggle_not_sweep() -> None:
+    from billy_mcp.ui_writes.bills_vendor import (
+        circle_x_is_close,
+        escape_is_close,
+        generic_portal_sweep_is_close,
+        leftover_close_action,
+        leftover_follow_up_is_close,
+        leftover_heading,
+        leftover_owning_control,
+        leftover_portal_kind,
+        leftover_role,
+        wait_all_plus_tab_is_close,
+    )
+
+    assert wait_all_plus_tab_is_close() is False
+    assert generic_portal_sweep_is_close() is False
+    assert leftover_follow_up_is_close() is False
+    assert circle_x_is_close() is False
+    assert escape_is_close() is False
+    assert leftover_close_action("vendor_list") == "search_toggle"
+    assert leftover_close_action("create_vendor_modal") == "modal_gem"
+    assert leftover_close_action("unknown") is None
+    assert leftover_role("vendor_list") == "listbox"
+    assert leftover_role("create_vendor_modal") == "dialog"
+    assert leftover_owning_control("vendor_list") == "search"
+    assert leftover_owning_control("create_vendor_modal") == "modal_gem"
+    assert leftover_heading(kind="create_vendor_modal", has_empty=False) == "Opret leverandør"
+    assert leftover_heading(kind="vendor_list", has_empty=True) == "Ingen resultater"
+    assert (
+        leftover_portal_kind(visible=True, has_opret=True, has_empty=True, has_modal_heading=False)
+        == "vendor_list"
+    )
+    assert (
+        leftover_portal_kind(
+            visible=False, has_opret=False, has_empty=False, has_modal_heading=True
+        )
+        == "create_vendor_modal"
+    )
+    assert (
+        leftover_portal_kind(
+            visible=True, has_opret=False, has_empty=False, has_modal_heading=False
+        )
+        == "vendor_list"
+    )
+    assert (
+        leftover_portal_kind(
+            visible=False, has_opret=False, has_empty=False, has_modal_heading=False
+        )
+        is None
+    )
+
+
+def test_leftover_inspect_record_names_role_and_owner() -> None:
+    from billy_mcp.ui_writes.bills_vendor import leftover_inspect_record
+
+    record = leftover_inspect_record(
+        kind="create_vendor_modal",
+        visible_count=0,
+        has_opret=False,
+        has_empty=False,
+        search_trigger=False,
+        clear_trigger=True,
+    )
+    assert record["role"] == "dialog"
+    assert record["heading"] == "Opret leverandør"
+    assert record["owning_control"] == "modal_gem"
+    assert record["close"] == "modal_gem"
+
+
+def test_leftover_dump_is_non_pii(tmp_path: Path) -> None:
+    from billy_mcp.ui_writes.bills_vendor import dump_leftover_portal
+
+    dump = tmp_path / "leftover.json"
+    dump_leftover_portal(
+        {
+            "kind": "vendor_list",
+            "role": "listbox",
+            "heading": "Ingen resultater",
+            "owning_control": "search",
+            "visible_count": 1,
+            "has_opret": True,
+            "has_empty": True,
+            "search_trigger": True,
+            "clear_trigger": True,
+            "close": "search_toggle",
+        },
+        destination=dump,
+    )
+    payload = json.loads(dump.read_text(encoding="utf-8"))
+    assert payload["kind"] == "vendor_list"
+    assert payload["role"] == "listbox"
+    assert payload["heading"] == "Ingen resultater"
+    assert payload["owning_control"] == "search"
+    assert payload["close"] == "search_toggle"
+    assert payload["search_trigger"] is True
+    assert "MCP-" not in dump.read_text(encoding="utf-8")
 
 
 def test_offline_default_save_dump_is_not_written(

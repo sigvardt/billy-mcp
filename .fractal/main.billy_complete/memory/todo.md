@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Leftover `.ds-moved-with-portal` stays after Tab. Observe a dismiss that is not Escape, then pointer-click and persist `POST /v2/bills`. Then update/delete, read-back, supplier absence including `MCP-UI-B-B3ACB728` if it remains.
+- Before the next live create, prove the bill list empty and delete leftover `MCP-UI-B-*` suppliers. Then one FastMCP draft CUD with create, leftover, and save dumps from the same run. Persist POST `/v2/bills` or `UI_CHANGED` with role, heading, and owning control. Stay red.
 - Independent vision accept + purge, then remap only the three bills rows.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
