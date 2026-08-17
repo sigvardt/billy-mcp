@@ -9,7 +9,11 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- After live MCP proof: point the remaining 13 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
+- Finish live FastMCP draft-bills CUD: bind the vendor typeahead (existing contact or **Opret** + **Opret leverandør** **Gem**), then date/amount, pre-submit dump, POST create, **Opdater** PUT, tagged **Slet**. Keep honesty 16 red. Do not remap bills yet.
+- Parent `31F6E753` dump is implemented offline. Live still fails before click because vendor select does not stick.
+- After bills accept+purge: point only the three bills CUD rows at preview tools.
+- After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
+- Ledger last. Files bind path+digest. Org update restores company fields only.
 
 ## Done
 

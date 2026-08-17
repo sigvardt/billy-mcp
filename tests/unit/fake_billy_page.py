@@ -22,8 +22,40 @@ _CHROME: Final[frozenset[str]] = frozenset(
         "Delete",
         "Bekræft",
         "OK",
+        "Opdater",
     }
 )
+
+
+class FakeRequest:
+    def __init__(self, method: str) -> None:
+        self.method = method
+
+
+class FakeResponse:
+    def __init__(self, method: str, url: str, status: int = 200) -> None:
+        self.method = method
+        self.url = url
+        self.status = status
+        self.request = FakeRequest(method)
+
+    def json(self) -> dict[str, object]:
+        if self.method == "POST" and "/v2/bills" in self.url:
+            return {"bills": [{"id": "fake-bill-id"}]}
+        return {}
+
+
+class FakeKeyboard:
+    def __init__(self, session: FakeBillySession) -> None:
+        self._session = session
+
+    async def press(self, key: str) -> None:
+        del key
+
+    async def type(self, text: str) -> None:
+        focused = self._session.focused
+        if focused is not None:
+            await focused.fill(text)
 
 
 class FakeBillySession:
@@ -39,6 +71,8 @@ class FakeBillySession:
         self.page_ids: list[int] = []
         self.records: set[str] = set()
         self.next_page = 0
+        self.focused: FakeBillyLocator | None = None
+        self.response_handlers: list[object] = []
 
     async def start(self, *_args: object, **_kwargs: object) -> FakeBillyContext:
         self.starts += 1
@@ -73,6 +107,7 @@ class FakeBillyPage:
         self._session = session
         self.page_id = page_id
         self.url = "about:blank"
+        self.keyboard = FakeKeyboard(session)
 
     async def goto(self, url: str, *, wait_until: str = "domcontentloaded") -> None:
         del wait_until
@@ -92,13 +127,19 @@ class FakeBillyPage:
             click_name=query,
         )
 
-    def get_by_role(self, role: str, *, name: str | re.Pattern[str]) -> FakeBillyLocator:
-        del role
+    def on(self, event: str, handler: object) -> None:
+        if event == "response":
+            self._session.response_handlers.append(handler)
+
+    def get_by_role(
+        self, role: str, *, name: str | re.Pattern[str], exact: bool = False
+    ) -> FakeBillyLocator:
+        del role, exact
         if isinstance(name, re.Pattern):
             label = name.pattern.strip("^$").replace(r"\ ", " ")
         else:
             label = name
-        return FakeBillyLocator(self._session, f"role:{label}", click_name=label)
+        return FakeBillyLocator(self._session, f"role:{label}", query_text=label, click_name=label)
 
     def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
         del exact
@@ -126,6 +167,10 @@ class FakeBillyLocator:
         self._click_name = click_name
 
     @property
+    def last(self) -> Self:
+        return self
+
+    @property
     def first(self) -> Self:
         return self
 
@@ -141,24 +186,56 @@ class FakeBillyLocator:
     async def is_visible(self) -> bool:
         return True
 
-    async def click(self) -> None:
+    def get_by_role(
+        self, role: str, *, name: str | re.Pattern[str], exact: bool = False
+    ) -> FakeBillyLocator:
+        del exact
+        return FakeBillyPage(self._session, 0).get_by_role(role, name=name)
+
+    def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
+        return FakeBillyPage(self._session, 0).get_by_text(text, exact=exact)
+
+    async def click(self, **_kwargs: object) -> None:
+        if "name='" in self._selector:
+            self._session.focused = self
         label = self._click_name or _click_label(self._selector)
         self._session.clicks.append(label)
         folded = label.casefold()
-        if any(token in folded for token in ("gem", "opret", "upload")):
+        if any(token in folded for token in ("gem", "opret", "upload", "opdater")):
             for _name, value in self._session.fills:
                 self._session.records.add(value)
             for path in self._session.files:
                 self._session.records.add(Path(path).name)
+            for handler in list(self._session.response_handlers):
+                if not callable(handler):
+                    continue
+                handler(FakeResponse("POST", "https://api.billysbilling.com/v2/bills"))
+                handler(FakeResponse("GET", "https://api.billysbilling.com/v2/bills/fake-bill-id"))
+                handler(FakeResponse("PUT", "https://api.billysbilling.com/v2/bills/fake-bill-id"))
         if any(token in folded for token in ("slet", "delete", "bekræft")):
             self._session.records.clear()
+            for handler in list(self._session.response_handlers):
+                if callable(handler):
+                    handler(
+                        FakeResponse(
+                            "DELETE", "https://api.billysbilling.com/v2/bills/fake-bill-id"
+                        )
+                    )
 
     async def inner_text(self) -> str:
         return self._click_name or self._query_text or ""
 
+    async def input_value(self) -> str:
+        name = _field_name(self._selector)
+        for field, value in reversed(self._session.fills):
+            if field == name:
+                return value
+        return ""
+
     async def fill(self, value: str) -> None:
         self._session.fills.append((_field_name(self._selector), value))
         self._session.records.add(value)
+        self._session.focused = self
 
     async def evaluate(self, expression: str) -> object:
         del expression

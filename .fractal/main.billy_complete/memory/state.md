@@ -72,9 +72,22 @@ The durable vision record is `author=independent_review`,
 `reviewer_verdict=accept`, `purge_verified=true`,
 `run_id=3d5b151dfd5342258f8734373597f8c1`. That frame folder is gone.
 Contacts CUD `tool_name` values are `ui_clients_{create,update,delete}_preview`.
-Discovery and get-open stay on `ui_clients_*_open`. Honesty 16 stays red.
-Coverage stays red. `check_coverage.RETAINED_OPEN_SHELL_TOOLS` keeps
+Discovery and get-open stay on `ui_clients_*_open`. `93D7A063` is closed.
+Honesty 16 stays red. Coverage stays red.
+`check_coverage.RETAINED_OPEN_SHELL_TOOLS` keeps
 `ui_clients_update_open` and `ui_clients_delete_open` registered.
+Empty untagged bill drafts are gone. A fresh session list is
+`/:org_slug/bills/empty`. Parent `31F6E753` still requires a pre-submit
+DOM dump before the next create. Update save is **Opdater**. Honesty 16
+stay red. Do not remap.
+
+Independent review **FAIL** still stands for live proof. Offline IR
+fixes are in: pre-submit dump, all four fields required, forbidden CTA
+refuse, POST-only create persist, created id from POST, PUT prefix
+`/v2/bills/` only. Login now reaches READY. Live create still fails on
+vendor typeahead bind (`UI_CHANGED` field `vendor`) after a contacts
+preview create. No bills CUD vision record. Do not green. Do not remap.
+Do not finish.
 
 ## Review
 

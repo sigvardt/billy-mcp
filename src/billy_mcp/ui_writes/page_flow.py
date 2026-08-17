@@ -56,17 +56,23 @@ async def perform_family_write(
             message="Billy interface write could not start the browser.",
         )
     try:
-        slug = await _session_slug(page)
-        if slug is None:
-            return ToolError(
-                code=StableErrorCode.ORGANIZATION_REQUIRED,
-                message="Billy organisation slug is not available for the UI write.",
-            )
         bound = organization_id.strip()
         if not bound:
             return ToolError(
                 code=StableErrorCode.ORGANIZATION_REQUIRED,
                 message="A proven Billy organisation id is required.",
+            )
+        slug = await _session_slug(page)
+        if slug is None and _is_org_less_root(page.url):
+            await page.goto(
+                f"{BILLY_ORIGIN}/{bound}/{action.write_path.lstrip('/')}",
+                wait_until="domcontentloaded",
+            )
+            slug = _org_slug_from_live_url(page.url)
+        if slug is None:
+            return ToolError(
+                code=StableErrorCode.ORGANIZATION_REQUIRED,
+                message="Billy organisation slug is not available for the UI write.",
             )
         if slug != bound:
             return ToolError(

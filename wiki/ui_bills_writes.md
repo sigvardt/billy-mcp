@@ -13,9 +13,15 @@ updated: 2026-08-16T14:35:00Z
 
 Six FastMCP tools preview and ticket draft bill writes. Preview issues a
 ticket and writes nothing. Execute accepts only `confirmation_ticket`.
-Default execute opens the draft bill form, fills the bound tag, clicks
-`Gem som kladde` or `Slet`, and returns `submitted=True` only after a
-second page proves the result. Coverage stays red until live FastMCP proof.
+Default `create_server` execute uses `BrowserBillSubmitter` and the
+shared write browser. Create opens `/:org_slug/bills/new`, fills vendor,
+date, line amount, and `billLines.0.description`, dumps those values
+plus the draft-only CTA before click, then clicks **Gem som kladde**.
+Update clicks **Opdater** on `/:org_slug/bills/:id/edit` after the same
+dump. Delete looks for **Slet** on edit, then the read path, then the
+confirm modal. Booking, pay, pull, upload, and email CTAs are refused.
+Coverage stays red until live FastMCP proof, independent vision accept,
+and purge.
 
 This lane never calls `https://api.billysbilling.com/v2`. Qualification is
 `server.call_tool`, not `BrowserRuntime`. Root greens
@@ -31,11 +37,11 @@ stay read-only: [[ui_bills_create_open_shell]],
 | Tool | Input | Effect |
 | --- | --- | --- |
 | `ui_bills_create_preview` | `unique_tag` | Bind a draft create. No submit. |
-| `ui_bills_create_execute` | `confirmation_ticket` | Consume the create ticket. Submit only with a live-slot submitter. |
+| `ui_bills_create_execute` | `confirmation_ticket` | Consume the create ticket and submit the draft. |
 | `ui_bills_update_preview` | `id`, `unique_tag` | Bind a draft update. No submit. |
-| `ui_bills_update_execute` | `confirmation_ticket` | Consume the update ticket. Submit only with a live-slot submitter. |
+| `ui_bills_update_execute` | `confirmation_ticket` | Consume the update ticket and submit the draft. |
 | `ui_bills_delete_preview` | `id`, `unique_tag` | Bind a draft delete. No submit. |
-| `ui_bills_delete_execute` | `confirmation_ticket` | Consume the delete ticket. Submit only with a live-slot submitter. |
+| `ui_bills_delete_execute` | `confirmation_ticket` | Consume the delete ticket and confirm delete. |
 
 Every preview binds `draft_only: true`. Payment, approve, email, and send
 fields are rejected (`extra="forbid"`). Tickets expire in at most five minutes
@@ -46,9 +52,16 @@ and can be consumed once. Replay, expiry, and wrong-tool mismatch fail closed.
 - Never pay a bill. Never click Registrer betaling, Godkend, Træk, or Upload.
 - Never send invoices or email. Never submit VAT or filings.
 - Never change users, access, tokens, or subscription.
-- Default execute refuses live submit until root radios a live slot. Contacts
-  family is first (radio `9F2EC46E`).
 - Unique tagged names only. Create first as a draft.
+- Vendor is a typeahead (`input[name='vendor']`). Type the name, then
+  click the matching contact or **Opret "name"**. A new supplier opens
+  **Opret leverandør**; save that modal with exact **Gem** before filling
+  the bill. Tab clears an unbound vendor value.
+- Date chrome stores `dd.mm.yyyy`. Amount chrome stores Danish `1,00`.
+- Browser egress allows PUT prefix `/v2/bills/` only (no collection PUT,
+  no PATCH). Create persist is POST 2xx only.
+- The no-runtime register still returns the old live-slot blocker. That
+  is not qualification.
 
 ## Cleanup
 
@@ -60,5 +73,6 @@ second UI login, not an API GET.
 
 - Offline: `tests/unit/test_ui_bills_writes.py` (preview no-submit, execute
   once, replay, expiry, wrong tool).
-- Live file: `tests/live/test_ui_bills_writes.py` records the live-slot
-  blocker through `call_tool`. It does not skip a submit.
+- Live file: `tests/live/test_ui_bills_writes.py` runs one tagged
+  create/update/delete through `create_server` `call_tool`. Vision
+  `author=live_test` / `pending_review` only.

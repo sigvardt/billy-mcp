@@ -2,7 +2,9 @@
 
 from __future__ import annotations
 
+import json
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import cast
 
 import anyio
@@ -212,3 +214,96 @@ def test_default_submitter_blocks_live_slot_without_http() -> None:
     )
     assert blocked["code"] == StableErrorCode.VALIDATION_ERROR
     assert LIVE_SLOT_BLOCKER_MESSAGE in cast(str, blocked["message"])
+
+
+def test_draft_bill_line_description_uses_bill_line_field() -> None:
+    from billy_mcp.ui_writes.bills_form import (
+        BILL_DATE,
+        DRAFT_SAVE,
+        LINE_AMOUNT,
+        LINE_DESCRIPTION,
+        UPDATE_SAVE,
+        VENDOR,
+    )
+
+    assert LINE_DESCRIPTION == "input[name='billLines.0.description']"
+    assert VENDOR == "input[name='vendor']"
+    assert BILL_DATE == "input[name='billDate']"
+    assert LINE_AMOUNT == "input[name='billLines.0.inclVatAmount']"
+    assert DRAFT_SAVE == "Gem som kladde"
+    assert UPDATE_SAVE == "Opdater"
+
+
+def test_create_persist_counts_only_post_not_put() -> None:
+    from billy_mcp.ui_writes.bills_form import created_bill_id, is_persist_hit
+
+    watched = [
+        "GET 200 /v2/bills/from-get",
+        "PUT 200 /v2/bills/from-put",
+        "POST 200 /v2/bills",
+    ]
+    assert is_persist_hit("POST 200 /v2/bills", method="POST")
+    assert not is_persist_hit("PUT 200 /v2/bills/from-put", method="POST")
+    assert not is_persist_hit("GET 200 /v2/bills/from-get", method="POST")
+    assert (
+        created_bill_id(watched, bodies={"POST 200 /v2/bills": {"bills": [{"id": "from-post"}]}})
+        == "from-post"
+    )
+    assert created_bill_id(watched) is None
+
+
+def test_update_persist_requires_put_on_bill_id() -> None:
+    from billy_mcp.ui_writes.bills_form import is_persist_hit
+
+    assert is_persist_hit("PUT 200 /v2/bills/abc", method="PUT")
+    assert not is_persist_hit("PUT 200 /v2/bills", method="PUT")
+    assert not is_persist_hit("POST 200 /v2/bills", method="PUT")
+    assert is_persist_hit("DELETE 204 /v2/bills/abc", method="DELETE")
+
+
+def test_date_and_amount_match_billy_chrome() -> None:
+    from billy_mcp.ui_writes.bills_form import amounts_match, dates_match
+
+    assert dates_match("17.08.2026", "17-08-2026")
+    assert dates_match("17-08-2026", "17-08-2026")
+    assert not dates_match("16.08.2026", "17-08-2026")
+    assert amounts_match("1,00", "1")
+    assert amounts_match("1.00", "1")
+    assert amounts_match("1", "1")
+    assert not amounts_match("0,00", "1")
+
+
+def test_refuse_booking_pay_and_email_ctas() -> None:
+    from billy_mcp.ui_writes.bills_form import FORBIDDEN_CTAS, refuse_non_draft_cta
+
+    for name in FORBIDDEN_CTAS:
+        failed = refuse_non_draft_cta(name)
+        assert failed is not None
+        assert failed.code == StableErrorCode.VALIDATION_ERROR
+    assert refuse_non_draft_cta("Gem som kladde") is None
+    assert refuse_non_draft_cta("Opdater") is None
+    assert refuse_non_draft_cta("Slet") is None
+
+
+def test_pre_submit_dump_includes_tag_vendor_date_amount_and_draft_cta(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from billy_mcp.ui_writes import bills_form
+
+    dump = tmp_path / "pre-submit.json"
+    monkeypatch.setattr(bills_form, "PRE_SUBMIT_DUMP", dump)
+    bills_form.dump_pre_submit(
+        url="https://mit.billy.dk/org-test/bills/new",
+        unique_tag="MCP-UI-B-TEST",
+        vendor="MCP-UI-B-TEST",
+        bill_date="17-08-2026",
+        line_amount="1",
+        draft_cta="Gem som kladde",
+    )
+    payload = json.loads(dump.read_text(encoding="utf-8"))
+    assert payload["unique_tag"] == "MCP-UI-B-TEST"
+    assert payload["vendor"] == "MCP-UI-B-TEST"
+    assert payload["date"] == "17-08-2026"
+    assert payload["line_amount"] == "1"
+    assert payload["draft_cta"] == "Gem som kladde"
+    assert payload["url"].endswith("/bills/new")

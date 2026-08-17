@@ -13,7 +13,7 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
+from billy_mcp.ui_writes.bills_form import submit_draft_bill
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePrepared,
@@ -108,11 +108,12 @@ class BrowserBillSubmitter:
         action = _action_from_prepared(prepared)
         unique_tag = _tag_from_prepared(prepared)
         bill_id = str(prepared.canonical_request.get("id") or "")
-        write = _bill_write(action, unique_tag, bill_id)
-        failed = await perform_family_write(
+        failed = await submit_draft_bill(
             self._runtime,
-            write,
+            action=action.value,
+            unique_tag=unique_tag,
             organization_id=str(prepared.binding.organization_id or ""),
+            bill_id=bill_id,
             readback_runtime=self._readback_runtime,
         )
         if failed is not None:
@@ -326,35 +327,6 @@ async def _execute(
             if inspect.isawaitable(submitted):
                 return await submitted
             return submitted
-
-
-def _bill_write(action: BillUiWriteAction, unique_tag: str, bill_id: str) -> FamilyWrite:
-    match action:
-        case BillUiWriteAction.CREATE:
-            return FamilyWrite(
-                write_path="bills/new",
-                fills=(("description", unique_tag),),
-                clicks=("Gem som kladde",),
-                readback_path="bills",
-                readback_text=unique_tag,
-            )
-        case BillUiWriteAction.UPDATE:
-            return FamilyWrite(
-                write_path=f"bills/{bill_id}/edit",
-                fills=(("description", unique_tag),),
-                clicks=("Gem som kladde",),
-                readback_path="bills",
-                readback_text=unique_tag,
-            )
-        case BillUiWriteAction.DELETE:
-            return FamilyWrite(
-                write_path=f"bills/{bill_id}/edit",
-                fills=(),
-                clicks=("Slet",),
-                readback_path="bills",
-                readback_text=unique_tag,
-                readback_absent=True,
-            )
 
 
 def _action_from_prepared(prepared: UiWritePrepared) -> BillUiWriteAction:
