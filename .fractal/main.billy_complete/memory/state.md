@@ -66,14 +66,20 @@ edit form stays open after that click. List exact-name is the persist proof.
 Live FastMCP create, update, and delete of one tagged contact passed.
 Browser egress now allows PUT `/v2/contacts/:id` only. PATCH stays
 denied. The SPA save is PUT with the new name. Persist waits for that
-response after the proved pointer click. Vision stays
-`pending_review`. Honesty 16 stays red. Coverage stays red.
+response after the proved pointer click.
+
+The durable vision record is `author=independent_review`,
+`reviewer_verdict=accept`, `purge_verified=true`,
+`run_id=3d5b151dfd5342258f8734373597f8c1`. That frame folder is gone.
+Parent `93D7A063` keeps contacts CUD `tool_name` on `ui_clients_*_open`
+until a later mapping slice. Honesty 16 stays red. Coverage stays red.
 
 ## Review
 
 Honesty on the 16 CUD rows still holds. Node complete stays false.
 Offline org-bind wiring is in. One live contacts CUD used a second
-session for read-back and a third session for absence. Independent
-vision accept is still pending.
+session for read-back and a third session for absence. Same-session
+accept plus an inverted mapping order failed independent review. The
+mapping was reverted. The accept record and purge stay.
 
 See `decisions.md` and `todo.md`.

@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Independent accept and purge for the live contacts CUD vision record. Then point the three contacts parity rows at preview tools. Do not green until that review.
+- Point the three contacts parity rows at preview tools only after `93D7A063` (recorded verdict and proved purge already exist). Do not green from that mapping alone.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
@@ -25,3 +25,4 @@ updated: 2026-08-16T14:29:47Z
 - Exact-name read-back: `{tag}` is not present inside `{tag}-U`.
 - Delete confirm label is **Ja, slet**.
 - Browser egress PUT `/v2/contacts/:id` only. Live FastMCP contacts CUD passed. Success execute keeps redacted PUT persist fields.
+- Durable contacts CUD vision record is accept with purge verified. Frame folder `run-3d5b151dfd5342258f8734373597f8c1` is gone. Preview mapping was reverted under `93D7A063`.

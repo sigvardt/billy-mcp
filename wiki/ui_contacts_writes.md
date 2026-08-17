@@ -76,6 +76,12 @@ lists customers after each step. After update, `{tag}-U` is not a hit for
 review writes accept or reject. The live test writes
 `author=live_test` and `reviewer_verdict=pending_review` only.
 
+The durable vision record for `run-3d5b151dfd5342258f8734373597f8c1`
+is accept with purge verified. That frame folder is gone. Parent
+`93D7A063` keeps the three contacts CUD rows on `ui_clients_*_open`
+until a later slice changes the mapping after that recorded verdict.
+Honesty still keeps those rows red.
+
 If create or update succeeds and delete later fails, retry delete through the
 same execute tool. Do not leave a tagged customer when delete can still run.
 

@@ -11,6 +11,7 @@ sources:
   - radio:B50FBDAD
   - radio:D42EAAA6
   - radio:F3F318A2
+  - radio:93D7A063
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -42,6 +43,8 @@ updated: 2026-08-16T13:50:50Z
 `145EEAB3` (done, unsaved): the nine named idle `billy-live-contacts-*` profiles are gone. After the last live run, zero `billy-live-contacts-*` remain. Do not touch `chrome-profile` or `chrome-profile-readback`. Hardening still applies: login UI_CHANGED, timeouts, and review failures must not leak write, readback, observer, or cleanup profiles.
 
 `F3F318A2` (saved): add a failing browser-egress test first. Permit only PUT for `/v2/contacts/:id`. Do not add PATCH unless the live interface request is PATCH. One FastMCP CUD with independent fresh-session read-back after each step and final absence. Browser-originated PUT is interface qualification, not API-token qualification. Keep coverage red.
+
+`93D7A063` (saved): record the vision verdict and prove the frame folder is gone before changing contacts CUD `tool_name` to preview. Mapping must not self-approve evidence. Rows stay red.
 
 Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI tools through the real MCP boundary, not direct BrowserRuntime as proof.
 
