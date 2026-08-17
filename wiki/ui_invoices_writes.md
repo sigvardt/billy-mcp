@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T15:20:00Z
+updated: 2026-08-17T17:45:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -53,8 +53,22 @@ a redacted field-shot flag (`present`, `bytes`, box). Pixels stay
 outside git. Live recapture: `autocomplete_token=off`, `list_present=false`,
 `datalist_count=0`, `datalist_option_count=0`, `visible_input_count=11`,
 accessibility snapshot has no listbox. Field shot was reviewed and
-purged. A chevron on that crop is input chrome, not a dump-named
-trigger. No dump-named action. Count-only GET `/v2/contacts` after
+purged. A chevron on that crop is input chrome, not a guessed selector.
+`A3AB03C3` recaptures the chevron **position** on the same
+`input[name=contact]`: `right_edge_offset` (`dx = w - 8`,
+`dy = h // 2`), `right_edge_element_from_point`,
+`right_edge_same_input`, allowlisted `appearance_token` /
+`background_image_kind` / `before_content_kind` /
+`after_content_kind`, and `input_child_count`. Never store CSS
+urls or pseudo content. One `locator.click(position=)` runs only
+when `right_edge_same_input` is true. Wait for a visible option
+before type or select. Live recapture: offset `{dx:242, dy:20}` on
+the 250x40 field. Center hit is `INPUT` name `contact`. Right-edge
+hit is a `DIV` with no name, testid, or allowlisted class tokens, so
+`right_edge_same_input=false` and no click ran. Appearance and
+background-image kinds are `none`. No `::before`/`::after` content.
+`input_child_count=0`. If the right-edge hit is not that input, do
+not click. No dump-named action. Count-only GET `/v2/contacts` after
 type is 0. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger

@@ -155,6 +155,20 @@ _A11Y_SNAPSHOT_KEYS: Final[tuple[str, ...]] = (
 )
 _FIELD_SHOT_KEYS: Final[tuple[str, ...]] = ("present", "bytes", "box")
 _AUTOCOMPLETE_TOKENS: Final[frozenset[str]] = frozenset({"on", "off", "name"})
+REQUIRED_CHEVRON_HIT_KEYS: Final[tuple[str, ...]] = (
+    "right_edge_offset",
+    "right_edge_element_from_point",
+    "right_edge_same_input",
+    "appearance_token",
+    "background_image_kind",
+    "before_content_kind",
+    "after_content_kind",
+    "input_child_count",
+)
+_RIGHT_EDGE_OFFSET_KEYS: Final[tuple[str, ...]] = ("dx", "dy")
+_RIGHT_EDGE_HIT_KEYS: Final[tuple[str, ...]] = ("tag", "class_tokens", "name", "testid")
+_APPEARANCE_TOKENS: Final[frozenset[str]] = frozenset({"auto", "none", "textfield"})
+CHEVRON_RIGHT_INSET: Final = 8
 
 
 def autocomplete_token(raw: str | None) -> str:
@@ -236,6 +250,109 @@ def widget_named_action(payload: Mapping[str, object]) -> str | None:
     ):
         return "tab_blur"
     return None
+
+
+def chevron_offset_from_box(width: int, height: int) -> dict[str, int]:
+    """One right-edge sample: dx = w - 8, dy = h // 2."""
+
+    return {"dx": max(0, width - CHEVRON_RIGHT_INSET), "dy": max(0, height // 2)}
+
+
+def appearance_token(raw: str | None) -> str:
+    """Allowlisted computed appearance. Never stores an unknown raw value."""
+
+    compact = (raw or "").strip().casefold()
+    if compact in _APPEARANCE_TOKENS:
+        return compact
+    if compact == "":
+        return "none"
+    return "other"
+
+
+def background_image_kind(raw: str | None) -> str:
+    """Allowlisted background-image kind. Never stores the URL."""
+
+    compact = (raw or "").strip().casefold()
+    if compact == "" or compact == "none":
+        return "none"
+    if "url(" in compact:
+        return "url"
+    if "gradient" in compact:
+        return "gradient"
+    return "other"
+
+
+def pseudo_content_kind(raw: str | None) -> str:
+    """Allowlisted ::before/::after content kind. Never stores the content."""
+
+    if raw is None:
+        return "none"
+    compact = raw.strip()
+    if compact == "" or compact.casefold() == "none":
+        return "none"
+    if compact in {"''", '""'}:
+        return "empty"
+    return "present"
+
+
+def chevron_hit_missing_keys(payload: Mapping[str, object]) -> list[str]:
+    """Keys A3AB03C3 requires that this opener or after_click dump does not record."""
+
+    missing: list[str] = []
+    if not _mapping_has_keys(payload.get("right_edge_offset"), _RIGHT_EDGE_OFFSET_KEYS):
+        missing.append("right_edge_offset")
+    if not _mapping_has_keys(payload.get("right_edge_element_from_point"), _RIGHT_EDGE_HIT_KEYS):
+        missing.append("right_edge_element_from_point")
+    for key in REQUIRED_CHEVRON_HIT_KEYS:
+        if key in {"right_edge_offset", "right_edge_element_from_point"}:
+            continue
+        if key not in payload:
+            missing.append(key)
+    return missing
+
+
+def empty_chevron_hit() -> dict[str, object]:
+    """Structurally complete A3AB03C3 keys when evaluate is unavailable."""
+
+    return {
+        "right_edge_offset": {"dx": 0, "dy": 0},
+        "right_edge_element_from_point": {
+            "tag": None,
+            "class_tokens": [],
+            "name": None,
+            "testid": None,
+        },
+        "right_edge_same_input": False,
+        "appearance_token": "none",
+        "background_image_kind": "none",
+        "before_content_kind": "none",
+        "after_content_kind": "none",
+        "input_child_count": 0,
+    }
+
+
+def right_edge_is_proved_input(payload: Mapping[str, object]) -> bool:
+    """True only when the right-edge hit is INPUT name=contact."""
+
+    return payload.get("right_edge_same_input") is True
+
+
+def right_edge_click_offset(payload: Mapping[str, object]) -> dict[str, int] | None:
+    """Integer dx/dy for one position click. None when the gate is closed."""
+
+    if not right_edge_is_proved_input(payload):
+        return None
+    raw = payload.get("right_edge_offset")
+    if not isinstance(raw, Mapping):
+        return None
+    typed = cast(Mapping[str, object], raw)
+    dx = typed.get("dx")
+    dy = typed.get("dy")
+    if not isinstance(dx, int) or not isinstance(dy, int):
+        return None
+    if dx < 0 or dy < 0:
+        return None
+    return {"dx": dx, "dy": dy}
 
 
 def opener_dump_missing_keys(opener: Mapping[str, object]) -> list[str]:

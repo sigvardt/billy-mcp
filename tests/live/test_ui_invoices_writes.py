@@ -516,3 +516,72 @@ async def test_ui_invoices_kunde_widget_contract_dump(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_chevron_hit_dump(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Recapture the Kunde chevron hit target. Do not type. Do not save a draft."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_chevron_hit_dump
+    from billy_mcp.ui_writes.invoices_form_observe import KUNDE_OPENER_DUMP
+    from billy_mcp.ui_writes.invoices_kunde import chevron_hit_missing_keys
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "chevron dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    extra: BrowserRuntime | None = None
+    page: Any = None
+    tag = "MCP-UI-INV-DEADBEEF"
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_chevron_hit_dump(page, tag)
+        opener = result.get("opener")
+        if not isinstance(opener, dict):
+            _record_blocker(f"chevron dump failed: {result}")
+            pytest.fail(f"chevron dump failed: {result}")
+        opener_map = cast(dict[str, object], opener)
+        assert chevron_hit_missing_keys(opener_map) == []
+        assert KUNDE_OPENER_DUMP.is_file()
+        written = json.loads(KUNDE_OPENER_DUMP.read_text(encoding="utf-8"))
+        assert chevron_hit_missing_keys(written) == []
+        same = opener_map.get("right_edge_same_input") is True
+        if not same:
+            assert result.get("clicked") is False
+        else:
+            assert result.get("clicked") is True
+            after_click = result.get("after_click")
+            assert isinstance(after_click, dict)
+            assert chevron_hit_missing_keys(cast(dict[str, object], after_click)) == []
+        encoded = json.dumps(result)
+        assert "Gem som kladde" not in encoded
+        assert tag not in encoded
+    finally:
+        if page is not None:
+            await page.close()
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

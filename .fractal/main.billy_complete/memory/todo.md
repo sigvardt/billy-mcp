@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T15:20:00Z
+updated: 2026-08-17T17:35:00Z
 ---
 
 ## Open
 
-- Invoice Kunde widget dump is complete and named no next action. Lookup count is 0. Stay on the proved `INPUT`. Do not add extra keys. Remap invoice CUD rows only after accept and purge.
+- `9F777B8F`: dump the unnamed right-edge DIV ownership (stack, box vs input, pointer-events, owner/wrapper relation, nearest clickable ancestor). Click only if that evidence proves it belongs to the same Kunde control. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 

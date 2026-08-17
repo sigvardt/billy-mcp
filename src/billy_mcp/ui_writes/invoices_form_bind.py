@@ -20,10 +20,12 @@ from billy_mcp.ui_writes.invoices_form_page import Locator, Page
 from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_INPUT_SELECTORS,
     KUNDE_LABEL,
+    chevron_hit_missing_keys,
     kunde_phase_is_bound,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     portal_create_footer_label,
+    right_edge_click_offset,
     widget_named_action,
 )
 
@@ -33,6 +35,73 @@ LINE_SELECTORS = (
     "textarea[name='description']",
     "input[name='description']",
 )
+
+
+async def capture_kunde_chevron_hit_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only A3AB03C3 recapture. One right-edge click only if the hit is the INPUT."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    offset = right_edge_click_offset(opener)
+    clicked = False
+    after_click: dict[str, object] | None = None
+    if offset is None:
+        return {
+            "opener": opener,
+            "clicked": False,
+            "after_click": None,
+            "option_visible": False,
+            "chevron_missing_keys": chevron_hit_missing_keys(opener),
+            "right_edge_same_input": opener.get("right_edge_same_input"),
+        }
+    type_target = await _click_field_once(field, offset=offset)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    clicked = True
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    items = await _wait_options(page, unique_tag, wrapper)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_click)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    if not option_visible:
+        dump_kunde_lookup(len(lookups))
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde existing option is not visible.",
+            "opener": opener,
+            "clicked": clicked,
+            "after_click": after_click,
+            "option_visible": False,
+            "contact_get_count": len(lookups),
+            "chevron_missing_keys": chevron_hit_missing_keys(after_click),
+        }
+    return {
+        "opener": opener,
+        "clicked": clicked,
+        "after_click": after_click,
+        "option_visible": True,
+        "contact_get_count": len(lookups),
+        "chevron_missing_keys": chevron_hit_missing_keys(after_click),
+    }
 
 
 async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:
@@ -175,12 +244,17 @@ async def _click_named_opener(page: Page, field: Locator, named: str) -> Locator
     return target.first
 
 
-async def _click_field_once(field: Locator) -> Locator | None:
+async def _click_field_once(
+    field: Locator, *, offset: dict[str, int] | None = None
+) -> Locator | None:
     """One normal click on the proved contact field. Not a guessed sibling."""
 
     if not await field.is_visible():
         return None
-    await field.click()
+    if offset is None:
+        await field.click()
+    else:
+        await field.click(position={"x": offset["dx"], "y": offset["dy"]})
     await asyncio.sleep(0.3)
     return field
 

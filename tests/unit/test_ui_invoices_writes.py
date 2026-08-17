@@ -788,3 +788,98 @@ def test_observe_records_51e18e60_widget_contract_keys() -> None:
     assert "a11y_snapshot" in source
     assert "field_shot" in source
     assert "GET /v2/contacts" in source
+
+
+def _live_chevron_payload() -> dict[str, object]:
+    """Current live opener plus after_click. A3AB03C3 right-edge keys are absent."""
+
+    payload = _live_widget_payload()
+    payload["phase"] = "after_click"
+    payload["value_len"] = 0
+    payload["element_from_point"] = {
+        "tag": "INPUT",
+        "class_tokens": ["ember-text-field", "ember-view"],
+        "name": "contact",
+        "testid": None,
+    }
+    payload["box"] = {"x": 65, "y": 121, "w": 250, "h": 40}
+    return payload
+
+
+def test_live_dumps_miss_a3ab03c3_chevron_hit_keys() -> None:
+    """Given current live dumps, When checking chevron keys, Then A3AB03C3 fields are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        REQUIRED_CHEVRON_HIT_KEYS,
+        chevron_hit_missing_keys,
+    )
+
+    payload = _live_chevron_payload()
+    assert chevron_hit_missing_keys(payload) == list(REQUIRED_CHEVRON_HIT_KEYS)
+    assert "right_edge_offset" not in payload
+    assert "right_edge_element_from_point" not in payload
+    assert "right_edge_same_input" not in payload
+    assert "appearance_token" not in payload
+    assert "background_image_kind" not in payload
+    assert "before_content_kind" not in payload
+    assert "after_content_kind" not in payload
+    assert "input_child_count" not in payload
+
+
+def test_complete_chevron_hit_has_no_missing_keys() -> None:
+    """Given a filled chevron dump, When checking keys, Then none are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        appearance_token,
+        background_image_kind,
+        chevron_hit_missing_keys,
+        chevron_offset_from_box,
+        empty_chevron_hit,
+        pseudo_content_kind,
+        right_edge_click_offset,
+        right_edge_is_proved_input,
+    )
+
+    payload = _live_chevron_payload()
+    payload.update(empty_chevron_hit())
+    payload["right_edge_offset"] = chevron_offset_from_box(250, 40)
+    payload["right_edge_element_from_point"] = {
+        "tag": "INPUT",
+        "class_tokens": ["ember-text-field"],
+        "name": "contact",
+        "testid": None,
+    }
+    payload["right_edge_same_input"] = True
+    payload["appearance_token"] = appearance_token("textfield")
+    payload["background_image_kind"] = background_image_kind("none")
+    payload["before_content_kind"] = pseudo_content_kind("none")
+    payload["after_content_kind"] = pseudo_content_kind('""')
+    payload["input_child_count"] = 0
+    assert chevron_hit_missing_keys(payload) == []
+    assert appearance_token("") == "none"
+    assert appearance_token("AUTO") == "auto"
+    assert appearance_token("menulist") == "other"
+    assert background_image_kind("url(https://example.invalid/x.png)") == "url"
+    assert background_image_kind("linear-gradient(red, blue)") == "gradient"
+    assert pseudo_content_kind(None) == "none"
+    assert right_edge_is_proved_input(payload) is True
+    assert right_edge_click_offset(payload) == {"dx": 242, "dy": 20}
+    payload["right_edge_same_input"] = False
+    assert right_edge_click_offset(payload) is None
+
+
+def test_observe_records_a3ab03c3_chevron_hit_keys() -> None:
+    """Given the observe helper, Then it records the chevron-hit keys."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "right_edge_offset" in source
+    assert "right_edge_element_from_point" in source
+    assert "right_edge_same_input" in source
+    assert "appearance_token" in source
+    assert "background_image_kind" in source
+    assert "before_content_kind" in source
+    assert "after_content_kind" in source
+    assert "input_child_count" in source
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    assert 'position={"x": offset["dx"], "y": offset["dy"]}' in bind
+    assert "capture_kunde_chevron_hit_dump" in bind

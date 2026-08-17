@@ -9,6 +9,8 @@ from typing import Final, cast
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page, write_json
 from billy_mcp.ui_writes.invoices_kunde import (
     autocomplete_token,
+    chevron_hit_missing_keys,
+    empty_chevron_hit,
     empty_widget_contract,
     named_kunde_opener,
     opener_dump_missing_keys,
@@ -136,6 +138,14 @@ async def observe_kunde(
         "a11y_snapshot": owned.get("a11y_snapshot"),
         "field_shot": owned.get("field_shot"),
         "contact_get_count": 0,
+        "right_edge_offset": owned.get("right_edge_offset"),
+        "right_edge_element_from_point": owned.get("right_edge_element_from_point"),
+        "right_edge_same_input": owned.get("right_edge_same_input"),
+        "appearance_token": owned.get("appearance_token"),
+        "background_image_kind": owned.get("background_image_kind"),
+        "before_content_kind": owned.get("before_content_kind"),
+        "after_content_kind": owned.get("after_content_kind"),
+        "input_child_count": owned.get("input_child_count"),
     }
     return await _attach_widget_contract(page, field, payload)
 
@@ -224,6 +234,32 @@ _OWNERSHIP_JS: Final = """el => {
   const wrapLabel = el.closest("label");
   const active = document.activeElement;
   const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+  const dx = Math.max(0, Math.round(box.width) - 8);
+  const dy = Math.max(0, Math.floor(box.height / 2));
+  const rightHit = document.elementFromPoint(box.left + dx, box.top + dy);
+  const appearanceRaw = String(style.appearance || style.webkitAppearance || "")
+    .trim().toLowerCase();
+  const appearanceToken = (appearanceRaw === "auto" || appearanceRaw === "none"
+    || appearanceRaw === "textfield")
+    ? appearanceRaw
+    : (appearanceRaw ? "other" : "none");
+  const bg = String(style.backgroundImage || "").trim();
+  const bgLower = bg.toLowerCase();
+  const backgroundImageKind = (!bg || bgLower === "none")
+    ? "none"
+    : (bgLower.includes("url(") ? "url"
+      : (bgLower.includes("gradient") ? "gradient" : "other"));
+  const kind = (raw) => {
+    if (!raw || String(raw).toLowerCase() === "none") return "none";
+    const compact = String(raw).trim();
+    if (compact === '""' || compact === "''") return "empty";
+    return "present";
+  };
+  const beforeRaw = window.getComputedStyle(el, "::before").content;
+  const afterRaw = window.getComputedStyle(el, "::after").content;
+  const sameInput = Boolean(
+    rightHit && rightHit.tagName === "INPUT" && rightHit.getAttribute("name") === "contact"
+  );
   return {
     input: {
       tag: el.tagName || "",
@@ -277,6 +313,19 @@ _OWNERSHIP_JS: Final = """el => {
       name: hit.getAttribute("name"),
       testid: hit.getAttribute("data-testid"),
     },
+    right_edge_offset: {dx, dy},
+    right_edge_element_from_point: rightHit && {
+      tag: rightHit.tagName || "",
+      class_tokens: token(rightHit.className),
+      name: rightHit.getAttribute("name"),
+      testid: rightHit.getAttribute("data-testid"),
+    },
+    right_edge_same_input: sameInput,
+    appearance_token: appearanceToken,
+    background_image_kind: backgroundImageKind,
+    before_content_kind: kind(beforeRaw),
+    after_content_kind: kind(afterRaw),
+    input_child_count: el.children ? el.children.length : 0,
   };
 }"""
 
@@ -324,6 +373,7 @@ def empty_ownership() -> dict[str, object]:
         "pointer_events": "unknown",
         "z_index": "auto",
         "element_from_point": None,
+        **empty_chevron_hit(),
     }
 
 
@@ -478,7 +528,12 @@ async def _attach_widget_contract(
     payload["input"] = input_map
     payload["a11y_snapshot"] = await _a11y_snapshot_counts(page)
     payload["field_shot"] = await _field_shot(page, field)
+    defaults_chevron = empty_chevron_hit()
+    for key, value in defaults_chevron.items():
+        if payload.get(key) is None:
+            payload[key] = value
     payload["widget_missing_keys"] = widget_contract_missing_keys(payload)
+    payload["chevron_missing_keys"] = chevron_hit_missing_keys(payload)
     return payload
 
 
