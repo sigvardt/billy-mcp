@@ -87,12 +87,18 @@ frame folder. FIX-VERIFY split the create dump, refused typed-only
 bind, and bound vision `run_id` to the frame dir.
 
 Page-wide `get_by_text(tag)` is no longer a bind. `evaluate` is gone.
-Vendor bind is one scoped Leverandør wrapper observation (`4994ECE6`).
-Live create types 17 characters into `input[name='vendor']`. The
-wrapper list is empty. The portal list reports `has_opret` and
-`has_tag`, but the derived click still returns `UI_CHANGED`. No bill
-created. Bills `tool_name` still `ui_bills_*_open`. Do not green. Do
-not remap. Do not finish.
+Vendor bind picks the one short portal list with **Ingen resultater**
+and footer `Opret "{tag}"`, then clicks
+`[class*='DropdownFooterWrapper']`. Live chosen bind is
+`scoped:portal_footer`. A leftover-footer count error is not a bind.
+After bind, wait for the vendor dialog to close. Fill `billDate` and
+line amount without a prior click. Live create dump now has tag,
+vendor, date, amount `1,00`, **Gem som kladde**, and
+`vendor_bind=scoped:portal_footer`. Persist then returns
+`BILLY_ERROR` with empty watched XHR. No POST `/v2/bills`. Do not
+press Escape. Bills `tool_name` still `ui_bills_*_open`. Do not green.
+Do not remap. Do not finish. Do not accept vision
+`3af923d562b546d597e9f156b5c3227f`.
 
 ## Review
 

@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Click the portal list row the scoped dump already shows (`has_opret` and `has_tag` on `.ds-dropdown-list.ds-moved-with-portal`). Then live FastMCP bills CUD, create dump, form frame, supplier absence. No selector fan-out.
+- After a live pre-submit dump (`scoped:portal_footer`, date, amount `1,00`, **Gem som kladde**), persist `POST /v2/bills`. Watched XHR is empty. Then update/delete, read-back, supplier absence.
 - Independent vision accept + purge, then remap only the three bills rows.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
@@ -30,3 +30,5 @@ updated: 2026-08-16T14:29:47Z
 - Durable contacts CUD vision record is accept with purge verified. Frame folder `run-3d5b151dfd5342258f8734373597f8c1` is gone.
 - Contacts CUD `tool_name` values are `ui_clients_{create,update,delete}_preview`. Honesty 16 stays red. `ui_clients_update_open` and `ui_clients_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
 - Page-wide vendor tag click removed. `evaluate` removed. Six-selector walk removed. Unit inspect dumps isolated. Scoped wrapper dump exists.
+- Portal create-footer picker skips decoy lists and huge ancestors. Live vendor bind is `scoped:portal_footer`.
+- Date fill works without a prior click (`value_len` 10). Amount fill without a prior click reaches **Gem som kladde**. A leftover-footer count error is not a bind.

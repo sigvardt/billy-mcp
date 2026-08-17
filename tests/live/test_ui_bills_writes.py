@@ -299,7 +299,7 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         assert create_dump["date"]
         assert create_dump["line_amount"]
         vendor_bind = str(create_dump.get("vendor_bind") or "")
-        assert vendor_bind.endswith(":option") or vendor_bind.endswith(":enter")
+        assert vendor_bind == "scoped:portal_footer"
         form_frame = frame_dir / "01b_create_form.png"
         assert form_frame.is_file() and form_frame.stat().st_size > 0
         await _capture(observer, slug, frame_dir / "02_after_create.png", tag)

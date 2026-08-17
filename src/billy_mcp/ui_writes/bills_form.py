@@ -13,11 +13,16 @@ from urllib.parse import urlsplit
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.bills_vendor import (
+    PORTAL_FOOTER_WRAPPER,
     VENDOR_INPUT_SELECTORS,
     VENDOR_LABEL,
-    create_vendor_labels,
+    dump_date_chrome,
     dump_scoped_vendor_wrapper,
     dump_vendor_chrome,
+    leftover_footer_means_bound,
+    pick_portal_create_index,
+    portal_create_footer_label,
+    portal_list_item_flags,
     pre_submit_dump_path,
 )
 from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN, prove_text_on_fresh_page
@@ -407,13 +412,22 @@ def amounts_match(actual: str, wanted: str) -> bool:
     return left is not None and right is not None and left == right
 
 
-async def _type_into(page: _Page, selector: str, value: str, *, tab: bool) -> str | None:
+async def _type_into(
+    page: _Page,
+    selector: str,
+    value: str,
+    *,
+    tab: bool,
+    click_first: bool = True,
+) -> str | None:
     field = page.locator(selector)
-    if await field.count() < 1 or not await field.first.is_visible():
+    if await field.count() < 1:
         return None
     target = field.first
     try:
-        await target.click()
+        if click_first:
+            visible = await target.is_visible()
+            await target.click(force=not visible)
         await target.fill(value)
         if tab:
             await target.press("Tab")
@@ -526,37 +540,71 @@ async def _list_snapshot(node: _Locator, unique_tag: str) -> dict[str, object]:
     try:
         count = await node.count()
     except Exception:
-        return {"count": 0, "has_opret": False, "has_tag": False}
+        return {
+            "count": 0,
+            "has_opret": False,
+            "has_tag": False,
+            "items": [],
+        }
+    items: list[dict[str, bool]] = []
     has_opret = False
     has_tag = False
-    for index in range(min(count, 4)):
+    for index in range(min(count, 9)):
+        item = node.nth(index)
         try:
-            text = (await node.nth(index).inner_text()).strip()
+            text = (await item.inner_text()).strip()
+            visible = await item.is_visible()
         except Exception:
+            items.append(
+                {
+                    "has_opret": False,
+                    "has_tag": False,
+                    "has_empty": False,
+                    "has_create_footer": False,
+                    "visible": False,
+                    "short": True,
+                }
+            )
             continue
-        if "Opret" in text:
+        flags = portal_list_item_flags(text, unique_tag)
+        flags["visible"] = visible
+        items.append(flags)
+        if flags["has_opret"]:
             has_opret = True
-        if unique_tag in text:
+        if flags["has_tag"]:
             has_tag = True
-    return {"count": count, "has_opret": has_opret, "has_tag": has_tag}
+    return {
+        "count": count,
+        "has_opret": has_opret,
+        "has_tag": has_tag,
+        "items": items,
+    }
 
 
 async def _bind_from_scoped_lists(
     page: _Page, unique_tag: str, observation: dict[str, object]
 ) -> str | None:
+    portal = page.locator(".ds-dropdown-list.ds-moved-with-portal")
+    portal_list = observation.get("portal_list")
+    items: list[dict[str, object]] = []
+    if isinstance(portal_list, dict):
+        typed_portal = cast(dict[str, object], portal_list)
+        maybe_items: object = typed_portal["items"] if "items" in typed_portal else []
+        if isinstance(maybe_items, list):
+            typed_items = cast(list[object], maybe_items)
+            items = [item for item in typed_items if isinstance(item, dict)]
+    index = pick_portal_create_index(items)
+    if index is not None:
+        if await _click_portal_create_footer(page, portal.nth(index), unique_tag):
+            return "scoped:portal_footer"
     wrapper = page.locator("[data-testid='input-wrapper']").filter(
         has=page.locator("input[name='vendor']")
     )
-    portal = page.locator(".ds-dropdown-list.ds-moved-with-portal")
-    targets: list[_Locator] = []
     wrapper_list = observation.get("wrapper_list")
-    portal_list = observation.get("portal_list")
     if _snapshot_has_option(wrapper_list):
-        targets.append(wrapper.locator(".ds-dropdown-list"))
-    if _snapshot_has_option(portal_list):
-        targets.append(portal)
-    for root in targets:
-        if await _click_scoped_create_or_tag(page, root, unique_tag):
+        if await _click_scoped_create_or_tag(
+            page, wrapper.locator(".ds-dropdown-list"), unique_tag
+        ):
             return "scoped:option"
     return None
 
@@ -565,7 +613,34 @@ def _snapshot_has_option(snapshot: object) -> bool:
     if not isinstance(snapshot, dict):
         return False
     typed = cast(dict[str, object], snapshot)
-    return typed.get("has_opret") is True or typed.get("has_tag") is True
+    return typed.get("has_create_footer") is True or typed.get("has_opret") is True
+
+
+async def _click_portal_create_footer(page: _Page, list_root: _Locator, unique_tag: str) -> bool:
+    label = portal_create_footer_label(unique_tag)
+    targets = (
+        list_root.locator(PORTAL_FOOTER_WRAPPER),
+        list_root.get_by_text(label, exact=True),
+    )
+    clicked = False
+    for option in targets:
+        try:
+            if await option.count() < 1:
+                continue
+            await option.first.click(force=True, timeout=5000)
+            clicked = True
+            break
+        except Exception:
+            continue
+    if not clicked:
+        return False
+    if await _confirm_new_vendor_modal(page, unique_tag, require_modal=True):
+        return True
+    try:
+        leftover_count = await list_root.get_by_text(label, exact=True).count()
+    except Exception:
+        return leftover_footer_means_bound(leftover_count=None, count_failed=True)
+    return leftover_footer_means_bound(leftover_count=leftover_count, count_failed=False)
 
 
 async def _click_scoped_create_or_tag(page: _Page, root: _Locator, unique_tag: str) -> bool:
@@ -573,32 +648,9 @@ async def _click_scoped_create_or_tag(page: _Page, root: _Locator, unique_tag: s
         count = await root.count()
     except Exception:
         return False
-    for index in range(min(count, 9)):
-        item = root.nth(index)
-        try:
-            text = (await item.inner_text()).strip()
-        except Exception:
-            continue
-        if unique_tag not in text or "Opret" not in text:
-            continue
-        for label in create_vendor_labels(unique_tag):
-            option = item.get_by_text(label, exact=True)
-            try:
-                if await option.count() < 1:
-                    continue
-                await option.first.click(timeout=5000)
-                return await _confirm_new_vendor_modal(page, unique_tag)
-            except Exception:
-                continue
-        option = item.get_by_text("Opret", exact=False)
-        try:
-            if await option.count() < 1:
-                continue
-            await option.first.click(timeout=5000)
-            return await _confirm_new_vendor_modal(page, unique_tag)
-        except Exception:
-            continue
-    return False
+    if count < 1:
+        return False
+    return await _click_portal_create_footer(page, root.first, unique_tag)
 
 
 async def _type_labeled(page: _Page, label: str, value: str) -> str | None:
@@ -617,15 +669,17 @@ async def _type_labeled(page: _Page, label: str, value: str) -> str | None:
         return None
 
 
-async def _confirm_new_vendor_modal(page: _Page, unique_tag: str) -> bool:
-    modal = page.locator("div[class*='ModalWrapper']")
+async def _confirm_new_vendor_modal(
+    page: _Page, unique_tag: str, *, require_modal: bool = False
+) -> bool:
+    modal = page.locator("div[class*='ModalWrapper'], [role='dialog']")
     save = modal.get_by_role("button", name="Gem", exact=True)
     for _ in range(20):
         if await save.count() >= 1 and await save.first.is_visible():
             break
         await asyncio.sleep(0.2)
     else:
-        return True
+        return not require_modal
     name_field = modal.locator("input[name='name']")
     if await name_field.count() >= 1:
         current = await name_field.first.input_value()
@@ -661,14 +715,56 @@ async def _confirm_new_vendor_modal(page: _Page, unique_tag: str) -> bool:
     return False
 
 
+async def _wait_vendor_dialog_gone(page: _Page) -> None:
+    modal = page.locator("div[class*='ModalWrapper'], [role='dialog']")
+    for _ in range(30):
+        try:
+            if await modal.count() < 1:
+                return
+            if not await modal.first.is_visible():
+                return
+        except Exception:
+            return
+        await asyncio.sleep(0.2)
+
+
+async def _observe_date_field(page: _Page) -> dict[str, object]:
+    field = page.locator(BILL_DATE)
+    count = 0
+    visible = False
+    name: str | None = None
+    value_len = -1
+    for _ in range(20):
+        try:
+            count = await field.count()
+            if count >= 1:
+                visible = await field.first.is_visible()
+                name = await field.first.get_attribute("name")
+                try:
+                    value_len = len(await field.first.input_value())
+                except Exception:
+                    value_len = -1
+                break
+        except Exception:
+            count = 0
+        await asyncio.sleep(0.2)
+    return {
+        "count": count,
+        "visible": visible,
+        "name": name,
+        "value_len": value_len,
+    }
+
+
 async def _fill_named(
     page: _Page,
     selector: str,
     value: str,
     *,
     matches: Callable[[str, str], bool] | None = None,
+    click_first: bool = True,
 ) -> str | None:
-    current = await _type_into(page, selector, value, tab=True)
+    current = await _type_into(page, selector, value, tab=True, click_first=click_first)
     if current is None:
         return None
     ok = current == value if matches is None else matches(current, value)
@@ -685,7 +781,20 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
             message="Billy bill draft fields are not visible.",
             details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
         )
-    actual_date = await _fill_named(page, BILL_DATE, bill_date, matches=dates_match)
+    await _wait_vendor_dialog_gone(page)
+    date_obs = await _observe_date_field(page)
+    dump_date_chrome(date_obs)
+    if date_obs.get("count", 0) == 0:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy bill draft fields are not visible.",
+            details={"field": "date", "selector": BILL_DATE, "observation": date_obs},
+        )
+    actual_date = await _fill_named(
+        page, BILL_DATE, bill_date, matches=dates_match, click_first=False
+    )
+    after_fill = await _observe_date_field(page)
+    dump_date_chrome({"before": date_obs, "after_fill": after_fill, "wanted_len": len(bill_date)})
     if actual_date is None:
         actual_date = await _type_labeled(page, "Bilagsdato", bill_date)
         if actual_date is not None and not dates_match(actual_date, bill_date):
@@ -694,16 +803,18 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy bill draft fields are not visible.",
-            details={"field": "date", "selector": BILL_DATE},
+            details={"field": "date", "selector": BILL_DATE, "observation": after_fill},
         )
-    actual_amount = await _fill_named(page, LINE_AMOUNT, amount, matches=amounts_match)
+    actual_amount = await _fill_named(
+        page, LINE_AMOUNT, amount, matches=amounts_match, click_first=False
+    )
     if actual_amount is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy bill draft fields are not visible.",
             details={"field": "line_amount", "selector": LINE_AMOUNT},
         )
-    actual_desc = await _fill_named(page, LINE_DESCRIPTION, unique_tag)
+    actual_desc = await _fill_named(page, LINE_DESCRIPTION, unique_tag, click_first=False)
     if actual_desc is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,

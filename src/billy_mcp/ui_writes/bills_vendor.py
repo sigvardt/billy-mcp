@@ -6,6 +6,7 @@ Official bill belongs-to is contact/contactId. UI label is Leverandør.
 from __future__ import annotations
 
 import json
+from collections.abc import Mapping, Sequence
 from pathlib import Path
 from typing import Final
 
@@ -14,6 +15,9 @@ VENDOR_CHROME_DUMP: Final = (
 )
 VENDOR_WRAPPER_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-vendor-wrapper.json"
+)
+DATE_CHROME_DUMP: Final = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-date.json"
 )
 
 VENDOR_INPUT_SELECTORS: Final[tuple[str, ...]] = ("input[name='vendor']",)
@@ -24,6 +28,7 @@ DROPDOWN_SELECTORS: Final[tuple[str, ...]] = (
     "[role='option']",
 )
 CREATE_VENDOR_LABEL: Final = "Opret leverandør"
+PORTAL_FOOTER_WRAPPER: Final = "[class*='DropdownFooterWrapper']"
 
 
 def is_create_vendor_option(label: str, unique_tag: str) -> bool:
@@ -38,7 +43,44 @@ def is_create_vendor_option(label: str, unique_tag: str) -> bool:
 def create_vendor_labels(unique_tag: str) -> tuple[str, ...]:
     """Exact create-row texts to click, in preference order."""
 
-    return (CREATE_VENDOR_LABEL, f'Opret "{unique_tag}"')
+    return (CREATE_VENDOR_LABEL, portal_create_footer_label(unique_tag))
+
+
+def portal_create_footer_label(unique_tag: str) -> str:
+    """Exact empty-list footer text observed on the vendor typeahead."""
+
+    return f'Opret "{unique_tag}"'
+
+
+def portal_list_item_flags(text: str, unique_tag: str) -> dict[str, bool]:
+    """Non-PII flags for one portal list. Never stores the tag."""
+
+    compact = " ".join(text.split())
+    footer = portal_create_footer_label(unique_tag)
+    return {
+        "has_opret": "Opret" in text,
+        "has_tag": unique_tag in text,
+        "has_empty": "Ingen resultater" in text,
+        "has_create_footer": footer in text,
+        "visible": True,
+        "short": len(compact) < 200,
+    }
+
+
+def pick_portal_create_index(items: Sequence[Mapping[str, object]]) -> int | None:
+    """Index of the empty vendor list with a create footer. Skip huge ancestors."""
+
+    for index, item in enumerate(items):
+        if item.get("has_empty") is not True:
+            continue
+        if item.get("has_create_footer") is not True:
+            continue
+        if item.get("short") is False:
+            continue
+        if item.get("visible") is False:
+            continue
+        return index
+    return None
 
 
 def vendor_option_click_targets(unique_tag: str) -> tuple[tuple[str, str], ...]:
@@ -55,6 +97,14 @@ def dropdown_create_row_matches(label: str, unique_tag: str) -> bool:
     if unique_tag not in text:
         return False
     return text.startswith("Opret") or is_create_vendor_option(text, unique_tag)
+
+
+def leftover_footer_means_bound(*, leftover_count: int | None, count_failed: bool) -> bool:
+    """True only when the create footer is gone. A count error is not a bind."""
+
+    if count_failed:
+        return False
+    return leftover_count == 0
 
 
 def vendor_bind_is_complete(*, option_clicked: bool, enter_selected: bool) -> bool:
@@ -84,6 +134,21 @@ def dump_scoped_vendor_wrapper(
     """Write one non-PII Leverandør wrapper observation outside git."""
 
     path = destination if destination is not None else VENDOR_WRAPPER_DUMP
+    try:
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(artifact, indent=2) + "\n", encoding="utf-8")
+    except OSError:
+        return
+
+
+def dump_date_chrome(
+    artifact: dict[str, object],
+    *,
+    destination: Path | None = None,
+) -> None:
+    """Write one non-PII billDate observation outside git."""
+
+    path = destination if destination is not None else DATE_CHROME_DUMP
     try:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(artifact, indent=2) + "\n", encoding="utf-8")

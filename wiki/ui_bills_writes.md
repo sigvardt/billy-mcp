@@ -55,13 +55,18 @@ and can be consumed once. Replay, expiry, and wrong-tool mismatch fail closed.
 - Unique tagged names only. Create first as a draft.
 - Vendor is a typeahead. Official field is `contact` / `contactId`. UI
   label is **Leverandør**. Bind uses one scoped observation of that
-  field wrapper after click and after type. Option clicks come only
-  from that artifact (wrapper list or `ds-moved-with-portal` list). If
-  no scoped **Opret leverandør** / `Opret "{tag}"` appears, return
+  field wrapper after click and after type. The create click is the
+  footer `Opret "{tag}"` on the one short `ds-moved-with-portal` list
+  that also says **Ingen resultater**. Huge ancestors that merely
+  contain both tokens are skipped. If that footer is missing, return
   `UI_CHANGED` and create no record. No selector fan-out. No
   `evaluate`. Create pre-submit dump is a separate owner-only file.
   Do not seed a customer via `ui_clients_create`.
 - Date chrome stores `dd.mm.yyyy`. Amount chrome stores Danish `1,00`.
+  After vendor bind, wait for the vendor dialog to close, dump
+  `billDate`, then fill date and amount without a prior click. A
+  leftover-footer count error is not a vendor bind. Live persist after
+  **Gem som kladde** still has empty watched XHR.
 - Browser egress allows PUT prefix `/v2/bills/` only (no collection PUT,
   no PATCH). Create persist is POST 2xx only.
 - The no-runtime register still returns the old live-slot blocker. That

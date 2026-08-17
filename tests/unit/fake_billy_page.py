@@ -212,7 +212,13 @@ class FakeBillyLocator:
         return True
 
     def locator(self, selector: str) -> FakeBillyLocator:
-        return FakeBillyLocator(self._session, selector)
+        click_name = None
+        if "DropdownFooterWrapper" in selector:
+            for option in self._session.dropdown_options:
+                if option.startswith("Opret"):
+                    click_name = option
+                    break
+        return FakeBillyLocator(self._session, selector, click_name=click_name)
 
     def filter(self, **_kwargs: object) -> FakeBillyLocator:
         return self

@@ -458,3 +458,94 @@ def test_unit_dump_helpers_accept_tmp_path(tmp_path: Path) -> None:
     dump_vendor_chrome(names=["vendor"], chosen="option", destination=dump)
     assert dump.is_file()
     assert not str(dump).startswith(str(Path.home() / ".local" / "share" / "billy-mcp"))
+
+
+def test_pick_portal_create_index_skips_decoy_and_huge_ancestors() -> None:
+    from billy_mcp.ui_writes.bills_vendor import (
+        pick_portal_create_index,
+        portal_list_item_flags,
+    )
+
+    tag = "MCP-UI-B-TEST"
+    texts = [
+        "Opret",
+        "Valuta\nOpret",
+        f"Opret køb\nGodkend\nLeverandør\n{tag}\nOpret fil",
+        "",
+        "",
+        "",
+        "",
+        "",
+        f'Ingen resultater\n\nOpret "{tag}"',
+    ]
+    items = [portal_list_item_flags(text, tag) for text in texts]
+    assert items[2]["has_opret"] is True
+    assert items[2]["has_tag"] is True
+    assert items[2]["has_create_footer"] is False
+    assert items[8]["has_empty"] is True
+    assert items[8]["has_create_footer"] is True
+    assert pick_portal_create_index(items) == 8
+
+
+def test_pick_portal_create_index_none_without_empty_create_footer() -> None:
+    from billy_mcp.ui_writes.bills_vendor import pick_portal_create_index
+
+    items = [
+        {
+            "has_opret": True,
+            "has_tag": True,
+            "has_empty": False,
+            "has_create_footer": False,
+            "visible": True,
+            "short": False,
+        }
+        for _ in range(9)
+    ]
+    assert pick_portal_create_index(items) is None
+
+
+def test_portal_create_footer_label_is_quoted_tag() -> None:
+    from billy_mcp.ui_writes.bills_vendor import portal_create_footer_label
+
+    assert portal_create_footer_label("MCP-UI-B-TEST") == 'Opret "MCP-UI-B-TEST"'
+
+
+def test_bind_picks_named_portal_footer_not_row_walk() -> None:
+    source = Path("src/billy_mcp/ui_writes/bills_form.py").read_text(encoding="utf-8")
+    assert "pick_portal_create_index" in source
+    assert "portal_create_footer_label" in source
+    assert "scoped:portal_footer" in source
+    assert "PORTAL_FOOTER_WRAPPER" in source
+    assert "_observe_date_field" in source
+    assert "_wait_vendor_dialog_gone" in source
+    assert "leftover_footer_means_bound" in source
+    assert "force=not visible" in source
+    assert "click_first=False" in source
+
+
+def test_leftover_footer_count_error_is_not_a_bind() -> None:
+    from billy_mcp.ui_writes.bills_vendor import leftover_footer_means_bound
+
+    assert leftover_footer_means_bound(leftover_count=0, count_failed=False) is True
+    assert leftover_footer_means_bound(leftover_count=1, count_failed=False) is False
+    assert leftover_footer_means_bound(leftover_count=None, count_failed=True) is False
+
+
+def test_date_chrome_dump_is_non_pii(tmp_path: Path) -> None:
+    from billy_mcp.ui_writes.bills_vendor import dump_date_chrome
+
+    dump = tmp_path / "date.json"
+    dump_date_chrome(
+        {"count": 1, "visible": True, "name": "billDate", "value_len": 10},
+        destination=dump,
+    )
+    payload = json.loads(dump.read_text(encoding="utf-8"))
+    assert payload["name"] == "billDate"
+    assert payload["count"] == 1
+    assert "MCP-" not in dump.read_text(encoding="utf-8")
+
+
+def test_portal_footer_wrapper_is_the_named_isolate() -> None:
+    from billy_mcp.ui_writes.bills_vendor import PORTAL_FOOTER_WRAPPER
+
+    assert PORTAL_FOOTER_WRAPPER == "[class*='DropdownFooterWrapper']"
