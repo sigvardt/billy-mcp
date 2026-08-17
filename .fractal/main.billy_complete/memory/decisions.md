@@ -42,7 +42,9 @@ updated: 2026-08-17T19:33:00Z
 
 `8EFD0EAD` (done, unsaved): instrumented tagged-Kunde trace is complete. Listeners ran before form open. Typed existing customer `value_len=19`. No `contacts` path_class, no portal insert, no option, no `aria-expanded`. `UI_CHANGED`. Do not repeat that uninstrumented. Do not remap.
 
-`4A5CD1E7` (saved): after this slice is reviewed, purged, committed, and cleanup re-proved, the next slice is TDD-first error and event causality. Attach before `/invoices/new`. Record phase-scoped focus/input/change/keydown/keyup counts and sanitized console/pageerror fingerprints at rest, after one field click, and after exact tagged typing. Commit only allowlisted error class, stable fingerprint, phase, safe source class, and counts. If evidence names one normal interaction or shows the event sequence is wrong, one focused fixture and the smallest fix. If the pageerror is pre-existing and unrelated, close it and continue with a different read-only capture.
+`4A5CD1E7` (done, unsaved): event/pageerror dump is complete. Listeners first. Rest pageerror unrelated. After type `input=19` `keydown=19` `change=0`. One change event dispatched. Still no contacts request. `UI_CHANGED`. Do not repeat this dump. Do not guess blur. Do not remap.
+
+`F12B607E` (saved): next slice after this commit. TDD-first on the five bootstrap requests collapsed as `other_v2`. Owner-only sanitized route templates and phase order. Commit only allowlisted route class, method, status, timing bucket, and phase. Prove whether the UI loaded a customer dataset under a different route before click/type. Never issue that route directly. No synthetic events, blur, Tab, or guessed keys.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

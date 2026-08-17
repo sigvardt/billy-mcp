@@ -6,6 +6,13 @@ from collections.abc import Mapping
 from typing import Final, cast
 from urllib.parse import urlsplit
 
+from billy_mcp.ui_writes.invoices_kunde_events import (
+    REQUIRED_KUNDE_EVENT_KEYS as REQUIRED_KUNDE_EVENT_KEYS,
+)
+from billy_mcp.ui_writes.invoices_kunde_events import (
+    kunde_event_missing_keys as kunde_event_missing_keys,
+)
+
 REQUIRED_KUNDE_TRACE_KEYS: Final[tuple[str, ...]] = (
     "listener_attached_before_form",
     "requests",

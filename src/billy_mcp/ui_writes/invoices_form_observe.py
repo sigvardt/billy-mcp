@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from collections.abc import Mapping
+from inspect import isawaitable
 from pathlib import Path
 from time import monotonic
 from typing import Final, cast
@@ -24,6 +25,22 @@ from billy_mcp.ui_writes.invoices_kunde import (
 from billy_mcp.ui_writes.invoices_kunde_div import (
     div_ownership_missing_keys,
     empty_div_ownership,
+)
+from billy_mcp.ui_writes.invoices_kunde_events import (
+    CONSOLE_DELTA_KEYS,
+    EVENT_ERROR_CAP,
+    KUNDE_EVENT_INIT_SCRIPT,
+    count_deltas,
+    empty_console_delta,
+    empty_event_counts,
+    event_error_row,
+    event_message_of,
+    event_name_of,
+    event_source_of,
+    kunde_event_missing_keys,
+    next_event_phase,
+    parse_event_counts,
+    scrub_message_shape,
 )
 from billy_mcp.ui_writes.invoices_kunde_trace import (
     TRACE_REQUEST_CAP,
@@ -47,6 +64,13 @@ KUNDE_LOOKUP_DUMP: Final = (
 )
 KUNDE_TRACE_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-trace.json"
+)
+KUNDE_EVENT_MESSAGE_DUMP: Final = (
+    Path.home()
+    / ".local"
+    / "share"
+    / "billy-mcp"
+    / "inspect-live-invoices-kunde-event-messages.json"
 )
 ALT_LIST_SELECTORS: Final[tuple[str, ...]] = (
     ".ember-power-select-dropdown",
@@ -600,6 +624,11 @@ class KundeTraceSink:
         self.console_categories: dict[str, int] = {"script": 0, "pageerror": 0, "other": 0}
         self._pending: dict[int, dict[str, object]] = {}
         self._started: dict[int, float] = {}
+        self.event_totals: dict[str, int] = empty_event_counts()
+        self._console_marked: dict[str, int] = empty_console_delta()
+        self.phase_errors: list[dict[str, str]] = []
+        self.current_phase: str = "at_rest"
+        self.scrubbed_messages: list[str] = []
 
     def snapshot_requests(self) -> list[dict[str, object]]:
         rows = list(self.requests)
@@ -662,14 +691,47 @@ class KundeTraceSink:
             )
         self._store_row(row)
 
-    def note_console(self, kind: str) -> None:
+    def note_console(self, kind: str, event: object | None = None) -> None:
         if kind == "error":
             self.console_categories["script"] += 1
-        else:
-            self.console_categories["other"] += 1
+            if event is not None:
+                self._record_event_error(event)
+            return
+        self.console_categories["other"] += 1
 
-    def note_page_error(self) -> None:
+    def note_page_error(self, event: object | None = None) -> None:
         self.console_categories["pageerror"] += 1
+        if event is not None:
+            self._record_event_error(event)
+
+    def _record_event_error(self, event: object) -> None:
+        message = event_message_of(event)
+        self.scrubbed_messages.append(scrub_message_shape(message))
+        if len(self.phase_errors) >= EVENT_ERROR_CAP:
+            return
+        self.phase_errors.append(
+            event_error_row(
+                name=event_name_of(event),
+                source=event_source_of(event),
+                message=message,
+                phase=self.current_phase,
+            )
+        )
+
+    def snapshot_phase(self, phase: str, event_totals: dict[str, int]) -> dict[str, object]:
+        """Freeze phase-scoped event and console deltas, then advance."""
+
+        event_counts = count_deltas(event_totals, self.event_totals)
+        self.event_totals = dict(event_totals)
+        console_delta = count_deltas(self.console_categories, self._console_marked)
+        self._console_marked = {key: self.console_categories[key] for key in CONSOLE_DELTA_KEYS}
+        errors = [row for row in self.phase_errors if row.get("phase") == phase]
+        self.current_phase = next_event_phase(phase)
+        return {
+            "event_counts": event_counts,
+            "console_delta": console_delta,
+            "errors": errors,
+        }
 
 
 def watch_kunde_trace(page: Page, sink: KundeTraceSink) -> None:
@@ -699,15 +761,47 @@ def watch_kunde_trace(page: Page, sink: KundeTraceSink) -> None:
         sink.note_response(request_id, method, url, status)
 
     def _on_console(event: object) -> None:
-        sink.note_console(str(getattr(event, "type", "") or "").casefold())
+        sink.note_console(str(getattr(event, "type", "") or "").casefold(), event)
 
-    def _on_page_error(_event: object) -> None:
-        sink.note_page_error()
+    def _on_page_error(event: object) -> None:
+        sink.note_page_error(event)
 
     page.on("request", _on_request)
     page.on("response", _on_response)
     page.on("console", _on_console)
     page.on("pageerror", _on_page_error)
+
+
+async def install_kunde_event_listeners(page: Page) -> None:
+    """Install contact-field event counters before the invoice form opens."""
+
+    added = page.add_init_script(KUNDE_EVENT_INIT_SCRIPT)
+    if isawaitable(added):
+        await added
+
+
+async def read_kunde_event_counts(page: Page) -> dict[str, int]:
+    """Read document event totals. Counts only name=contact targets."""
+
+    raw = await page.evaluate("() => window.__billyKundeEvents || null")
+    return parse_event_counts(raw)
+
+
+def attach_kunde_event(
+    payload: dict[str, object],
+    bundle: Mapping[str, object],
+    *,
+    pageerror_unrelated_at_rest: bool,
+) -> dict[str, object]:
+    """Copy phase-scoped event keys onto a dump. Never stores message text."""
+
+    payload["event_counts"] = bundle.get("event_counts") or empty_event_counts()
+    payload["console_delta"] = bundle.get("console_delta") or empty_console_delta()
+    errors = bundle.get("errors")
+    payload["errors"] = errors if isinstance(errors, list) else []
+    payload["pageerror_unrelated_at_rest"] = pageerror_unrelated_at_rest
+    payload["kunde_event_missing_keys"] = kunde_event_missing_keys(payload)
+    return payload
 
 
 async def observe_kunde_active_element(page: Page) -> dict[str, object]:
@@ -766,6 +860,12 @@ def dump_kunde_trace(payload: Mapping[str, object]) -> None:
     """Write the redacted tagged-flow dump. Never stores URLs or customer text."""
 
     write_json(KUNDE_TRACE_DUMP, dict(payload))
+
+
+def dump_kunde_event_messages(shapes: list[str]) -> None:
+    """Owner-only scrubbed shapes. Never commit this file."""
+
+    write_json(KUNDE_EVENT_MESSAGE_DUMP, {"shapes": shapes[-32:]})
 
 
 def watch_contact_lookups(page: Page, seen: list[str]) -> None:

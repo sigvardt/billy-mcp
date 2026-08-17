@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+import json
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from typing import Literal, cast
@@ -983,6 +984,144 @@ def test_observe_records_8efd0ead_trace_keys() -> None:
     bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
     assert "capture_kunde_tagged_trace" in bind
     assert "watch_kunde_trace" in bind
+
+
+def _live_event_phase_payload(*, value_len: int) -> dict[str, object]:
+    """Current live tagged-trace phase flags. 4A5CD1E7 event keys are absent."""
+
+    payload = _live_trace_after_click_payload()
+    payload["listener_attached_before_form"] = True
+    payload["console_categories"] = {"script": 23, "pageerror": 1, "other": 8}
+    payload["portal_inserted"] = False
+    payload["value_len"] = value_len
+    payload["active_element"] = {
+        "tag": "INPUT",
+        "name_token": "contact",
+        "aria_expanded_present": False,
+    }
+    return payload
+
+
+def test_live_dumps_miss_4a5cd1e7_event_keys() -> None:
+    """Given current live dumps, When checking event keys, Then 4A5CD1E7 fields are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        REQUIRED_KUNDE_EVENT_KEYS,
+        kunde_event_missing_keys,
+    )
+
+    at_rest = _live_event_phase_payload(value_len=0)
+    after_click = _live_event_phase_payload(value_len=0)
+    after_type = _live_event_phase_payload(value_len=19)
+    expected = [
+        "event_counts",
+        "console_delta",
+        "errors",
+        "pageerror_unrelated_at_rest",
+    ]
+    assert kunde_event_missing_keys(at_rest) == expected
+    assert kunde_event_missing_keys(after_click) == expected
+    assert kunde_event_missing_keys(after_type) == expected
+    assert set(expected).issubset(REQUIRED_KUNDE_EVENT_KEYS)
+    assert "event_counts" not in at_rest
+    assert "console_delta" not in after_click
+    assert "errors" not in after_type
+    assert "pageerror_unrelated_at_rest" not in after_type
+
+
+def test_complete_kunde_event_has_no_missing_keys() -> None:
+    """Given a filled event dump, When checking keys, Then none are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde_events import (
+        empty_kunde_event,
+        error_class_token,
+        event_names_change_gap,
+        event_sequence_is_wrong,
+        fingerprint_for,
+        kunde_event_missing_keys,
+        pageerror_unrelated_at_rest,
+        source_class_token,
+    )
+
+    payload = _live_event_phase_payload(value_len=19)
+    payload.update(empty_kunde_event())
+    assert kunde_event_missing_keys(payload) == []
+    assert error_class_token("TypeError") == "TypeError"
+    assert error_class_token("WeirdError") == "other"
+    assert source_class_token("https://mit.billy.dk/assets/app.js") == "same_origin"
+    assert source_class_token("https://evil.example/x.js") == "unknown"
+    digest = fingerprint_for(
+        "TypeError",
+        "same_origin",
+        "Cannot read STR of HEX",
+    )
+    assert len(digest) == 16
+    assert all(char in "0123456789abcdef" for char in digest)
+    assert "secret" not in digest
+    assert pageerror_unrelated_at_rest(rest_pageerror=1, click_delta=0, type_delta=0)
+    assert pageerror_unrelated_at_rest(rest_pageerror=1, click_delta=0, type_delta=1) is False
+    assert event_sequence_is_wrong({"keydown": 0, "input": 0}) is True
+    assert event_sequence_is_wrong({"keydown": 19, "input": 19}) is False
+    assert event_names_change_gap({"input": 19, "change": 0}, contacts=False) is True
+    assert event_names_change_gap({"input": 19, "change": 1}, contacts=False) is False
+    live_after_type = {
+        "focus": 0,
+        "input": 19,
+        "change": 0,
+        "keydown": 19,
+        "keyup": 19,
+    }
+    assert event_names_change_gap(live_after_type, contacts=False) is True
+
+
+def test_sink_snapshot_phase_is_scoped() -> None:
+    """Given console and event totals, When snapshot_phase runs, Then deltas are that phase only."""
+
+    from billy_mcp.ui_writes.invoices_form_observe import KundeTraceSink
+
+    sink = KundeTraceSink()
+    sink.note_page_error(RuntimeError("boot https://mit.billy.dk/x HEXDEAD"))
+    rest = sink.snapshot_phase(
+        "at_rest",
+        {"focus": 0, "input": 0, "change": 0, "keydown": 0, "keyup": 0},
+    )
+    sink.note_console("error", RuntimeError("later"))
+    click = sink.snapshot_phase(
+        "after_click",
+        {"focus": 1, "input": 0, "change": 0, "keydown": 0, "keyup": 0},
+    )
+    typed = sink.snapshot_phase(
+        "after_type",
+        {"focus": 1, "input": 19, "change": 0, "keydown": 19, "keyup": 19},
+    )
+    assert rest["console_delta"] == {"script": 0, "pageerror": 1, "other": 0}
+    assert click["console_delta"] == {"script": 1, "pageerror": 0, "other": 0}
+    assert typed["event_counts"] == {
+        "focus": 0,
+        "input": 19,
+        "change": 0,
+        "keydown": 19,
+        "keyup": 19,
+    }
+    encoded = json.dumps(rest)
+    assert '"phase": "at_rest"' in encoded
+    assert '"error_class": "other"' in encoded
+    assert "HEXDEAD" not in encoded
+    assert "https://" not in encoded
+
+
+def test_observe_records_4a5cd1e7_event_keys() -> None:
+    """Given the observe helper, Then it records the event-causality keys."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "install_kunde_event_listeners" in source
+    assert "snapshot_phase" in source
+    assert "attach_kunde_event" in source
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    assert "capture_kunde_event_trace" in bind
+    assert "install_kunde_event_listeners" in bind
+    assert "event_names_change_gap" in bind
+    assert 'dispatch_event("change")' in bind
 
 
 def test_trace_sink_keeps_contacts_when_cap_is_full() -> None:

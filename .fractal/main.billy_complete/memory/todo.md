@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T19:03:00Z
+updated: 2026-08-17T19:49:00Z
 ---
 
 ## Open
 
-- Invoice CUD still unbound after the instrumented tagged-Kunde trace (`UI_CHANGED`, no contacts request). After this slice is reviewed, purged, and committed, next is `4A5CD1E7` error/event causality. Remap invoice CUD rows only after accept and purge.
+- Next: `F12B607E` other_v2 bootstrap route templates. Invoice CUD stays unbound after `4A5CD1E7`. Do not repeat synthetic change, blur, or Tab. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -38,3 +38,5 @@ updated: 2026-08-17T19:03:00Z
 - Dummy 15-char `after_type` is not an existing-customer observation. Helper `after_type_is_existing_customer_observation` requires `MCP-UI-INV-` + 8 hex and matching `value_len`. Typed-only stays unbound.
 - Live FastMCP created that 19-char customer and typed it into the proved `INPUT`. Still no visible option. `UI_CHANGED`. Contact deleted.
 - DIV ownership dump delivered. Overlay click ran. No option. `UI_CHANGED`. Do not repeat that click.
+- Instrumented tagged-Kunde trace delivered (`8EFD0EAD`). Listeners first. Typed existing customer `value_len=19`. No contacts request, no portal, no option. `UI_CHANGED`. Contact deleted. Do not repeat that uninstrumented flow.
+- Event/pageerror dump delivered (`4A5CD1E7`). Rest pageerror marked unrelated. After type: `input=19` `keydown=19` `change=0`. One change event dispatched. Still `UI_CHANGED`.

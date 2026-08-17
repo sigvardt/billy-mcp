@@ -99,7 +99,17 @@ trace names a next action and a visible existing option exists.
 Otherwise `UI_CHANGED`. Live recapture: listeners on before form
 open. After center click and exact tagged type, `value_len=19`,
 `portal_inserted=false`, `option_role_count=0`, no `contacts`
-`path_class`, `named_next_action=false`, `UI_CHANGED`. The opener dump records
+`path_class`, `named_next_action=false`, `UI_CHANGED`. `4A5CD1E7`
+then records phase-scoped `event_counts` (`focus` / `input` /
+`change` / `keydown` / `keyup` on `name=contact` only),
+`console_delta`, allowlisted `errors` (`error_class`, 16-char
+`fingerprint`, `phase`, `source_class`), and
+`pageerror_unrelated_at_rest`. Never store message text, stack
+arguments, or typed keys in git. Detailed scrubbed shapes live
+only under `~/.local/share/billy-mcp/` and are purged after
+review. Live after_type named `input=19` `keydown=19` `change=0`
+with no contacts request, so one `dispatch_event("change")` runs
+after that dump. No Tab, Enter, or blur. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

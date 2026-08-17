@@ -8,6 +8,7 @@ from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_observe import (
     ALT_LIST_SELECTORS,
     KundeTraceSink,
+    attach_kunde_event,
     attach_kunde_trace,
     dump_kunde_chrome,
     dump_kunde_lookup,
@@ -18,6 +19,7 @@ from billy_mcp.ui_writes.invoices_form_observe import (
     observe_kunde_active_element,
     observe_kunde_opener,
     portal_items,
+    read_kunde_event_counts,
     watch_contact_lookups,
 )
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page
@@ -25,6 +27,7 @@ from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_INPUT_SELECTORS,
     KUNDE_LABEL,
     chevron_hit_missing_keys,
+    kunde_event_missing_keys,
     kunde_phase_is_bound,
     kunde_trace_missing_keys,
     kunde_trace_names_next_action,
@@ -37,6 +40,13 @@ from billy_mcp.ui_writes.invoices_kunde import (
 from billy_mcp.ui_writes.invoices_kunde_div import (
     div_ownership_missing_keys,
     ownership_click_point,
+)
+from billy_mcp.ui_writes.invoices_kunde_events import (
+    as_str_object_map,
+    event_names_change_gap,
+    mapping_int,
+    pageerror_unrelated_at_rest,
+    requests_have_contacts,
 )
 
 LINE_SELECTORS = (
@@ -214,6 +224,11 @@ async def capture_kunde_tagged_trace(
         listener_attached_before_form=listener_attached_before_form,
         rest_portal_count=rest_portal,
     )
+    attach_kunde_event(
+        rest,
+        sink.snapshot_phase("at_rest", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
     type_target = await _click_field_once(field)
     if type_target is None:
         return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
@@ -225,6 +240,11 @@ async def capture_kunde_tagged_trace(
         listener_attached_before_form=listener_attached_before_form,
         rest_portal_count=rest_portal,
     )
+    attach_kunde_event(
+        after_click,
+        sink.snapshot_phase("after_click", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
     await _type_kunde(type_target, unique_tag)
     after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
     after_type["active_element"] = await observe_kunde_active_element(page)
@@ -234,8 +254,39 @@ async def capture_kunde_tagged_trace(
         listener_attached_before_form=listener_attached_before_form,
         rest_portal_count=rest_portal,
     )
+    attach_kunde_event(
+        after_type,
+        sink.snapshot_phase("after_type", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
+    unrelated = pageerror_unrelated_at_rest(
+        rest_pageerror=mapping_int(rest.get("console_delta"), "pageerror"),
+        click_delta=mapping_int(after_click.get("console_delta"), "pageerror"),
+        type_delta=mapping_int(after_type.get("console_delta"), "pageerror"),
+    )
+    for phase in (rest, after_click, after_type):
+        attach_kunde_event(
+            phase,
+            {
+                "event_counts": phase.get("event_counts"),
+                "console_delta": phase.get("console_delta"),
+                "errors": phase.get("errors"),
+            },
+            pageerror_unrelated_at_rest=unrelated,
+        )
     dump_kunde_phases(after_click, after_type)
+    type_counts = as_str_object_map(after_type.get("event_counts"))
+    has_contacts = requests_have_contacts(after_type.get("requests"))
+    dispatched_change = False
+    if type_counts is not None and event_names_change_gap(type_counts, contacts=has_contacts):
+        await type_target.dispatch_event("change")
+        dispatched_change = True
+        await asyncio.sleep(0.5)
     named = kunde_trace_names_next_action(after_click) or kunde_trace_names_next_action(after_type)
+    if dispatched_change and any(
+        row.get("path_class") == "contacts" for row in sink.snapshot_requests()
+    ):
+        named = True
     items = await _wait_options(page, unique_tag, wrapper)
     option_visible = any(
         item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
@@ -260,11 +311,42 @@ async def capture_kunde_tagged_trace(
             "after_click": kunde_trace_missing_keys(after_click),
             "after_type": kunde_trace_missing_keys(after_type),
         },
+        "kunde_event_missing_keys": {
+            "at_rest": kunde_event_missing_keys(rest),
+            "after_click": kunde_event_missing_keys(after_click),
+            "after_type": kunde_event_missing_keys(after_type),
+        },
+        "pageerror_unrelated_at_rest": unrelated,
     }
     if not named or not clicked_option:
         result["code"] = "UI_CHANGED"
         result["message"] = "Billy Kunde existing option is not visible."
     dump_kunde_trace(result)
+    return result
+
+
+async def capture_kunde_event_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+) -> dict[str, object]:
+    """Instrumented 4A5CD1E7 recapture.
+
+    Caller must call install_kunde_event_listeners and watch_kunde_trace
+    before goto.
+    """
+
+    from billy_mcp.ui_writes.invoices_form_observe import dump_kunde_event_messages
+
+    result = await capture_kunde_tagged_trace(
+        page,
+        unique_tag,
+        sink=sink,
+        listener_attached_before_form=listener_attached_before_form,
+    )
+    dump_kunde_event_messages(sink.scrubbed_messages)
     return result
 
 
