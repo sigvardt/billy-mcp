@@ -10,6 +10,7 @@ sources:
   - radio:E613984F
   - radio:B50FBDAD
   - radio:D42EAAA6
+  - radio:F3F318A2
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -30,15 +31,17 @@ updated: 2026-08-16T13:50:50Z
 
 `5018B3FA` (done, unsaved): start-only execute is a false submit. The default path now performs the family action before `submitted=True`. That is not enough for live qualification.
 
-`D42EAAA6` (saved): isolate dump is evidence, not a pass. Do not change the name input. Prove a real Playwright pointer click reaches `button[data-cy='save-button']`: bounding box, visibility, enabled, hit target or overlay, console errors, and post-click event or navigation. Do not use DOM `evaluate` click as qualification. Fail closed. Keep coverage red. Keep cleanup proof.
+`D42EAAA6` (done, unsaved): real Playwright `mouse.click` at the save-button box center is proved. The control is visible, enabled, and the hit target. No console errors. After that click there is still no Billy XHR. Isolate is evidence, not a pass. Persist stays the open product work.
 
-`B50FBDAD` (saved): do not repeat the same fill-and-click for live contact update. Capture the exact name input value, save-button disabled state, and visible validation or error before and after submit. If the field value did not reach Ember, use a real keyboard select-all and type plus blur or change. Click only `button[data-cy='save-button']`. If the value is correct and save still fails, inspect the interface response and visible error. No API. Keep coverage red. Clean the tagged record. Superseded for the next live click by `D42EAAA6` on pointer delivery.
+`B50FBDAD` (done, unsaved): live update isolate is captured. Name input has the new value. Save is enabled. No visible validation error. Do not repeat the same fill-and-click. The next slice is why Ember does not save after the proved pointer click.
 
 `E613984F` (saved): execute compares the live URL slug to `prepared.binding.organization_id` and fails closed on mismatch. Contacts no longer use a stored identity file for that compare. Read-back starts a second runtime. A blank `-readback` profile is not a live second session; authenticate it (`E1E454F4`) before live proof. Cleanup still needs a third fresh read-back. Keep coverage red.
 
 `C7DBE974` (done, unsaved): live write tests may write `author=live_test` and `reviewer_verdict=pending_review` only. They must not write `accept` or purge frames. A gate rejects coverage evidence whose reviewer record was created by the test. An independent Grok review writes accept or reject, then purge, then `purge_verified`.
 
-`145EEAB3` (saved): the nine named idle `billy-live-contacts-*` profiles are gone. Zero `billy-live-contacts-*` remain. Do not touch `chrome-profile`. Keep this saved until a live run also leaves zero leftover write, readback, observer, and cleanup profiles.
+`145EEAB3` (done, unsaved): the nine named idle `billy-live-contacts-*` profiles are gone. After the last live run, zero `billy-live-contacts-*` remain. Do not touch `chrome-profile` or `chrome-profile-readback`. Hardening still applies: login UI_CHANGED, timeouts, and review failures must not leak write, readback, observer, or cleanup profiles.
+
+`F3F318A2` (saved): add a failing browser-egress test first. Permit only PUT for `/v2/contacts/:id`. Do not add PATCH unless the live interface request is PATCH. One FastMCP CUD with independent fresh-session read-back after each step and final absence. Browser-originated PUT is interface qualification, not API-token qualification. Keep coverage red.
 
 Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI tools through the real MCP boundary, not direct BrowserRuntime as proof.
 

@@ -9,7 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Live persist after a proved pointer click: the save-button is reachable and was clicked. No Billy XHR followed. Next slice must find why Ember does not save, without changing the name input or using evaluate-click. Then delete, third-session cleanup, independent accept. Do not green.
+- Independent accept and purge for the live contacts CUD vision record. Then point the three contacts parity rows at preview tools. Do not green until that review.
 - After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
@@ -24,3 +24,4 @@ updated: 2026-08-16T14:29:47Z
 - Five leftover `MCP-UI-C-*` contacts deleted through FastMCP. Fresh session empty.
 - Exact-name read-back: `{tag}` is not present inside `{tag}-U`.
 - Delete confirm label is **Ja, slet**.
+- Browser egress PUT `/v2/contacts/:id` only. Live FastMCP contacts CUD passed. Success execute keeps redacted PUT persist fields.

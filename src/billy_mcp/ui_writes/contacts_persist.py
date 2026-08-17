@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from collections.abc import Awaitable, Callable
 from typing import Protocol
 from urllib.parse import urlsplit
@@ -75,12 +76,14 @@ def watch_contact_responses(page: PersistPage) -> list[object]:
 
     seen: list[object] = []
 
-    def _on(response: object) -> None:
-        url = getattr(response, "url", "")
+    def _on(event: object) -> None:
+        url = getattr(event, "url", "")
         if isinstance(url, str) and _watchable_url(url):
-            seen.append(response)
+            seen.append(event)
 
     page.on("response", _on)
+    page.on("request", _on)
+    page.on("requestfailed", _on)
     return seen
 
 
@@ -171,8 +174,10 @@ async def execute_rename_save(
             extra={"click_delivery": delivery},
         )
     await settle()
+    traffic = await wait_for_contact_traffic(
+        traffic_responses, old_name=old_name, new_name=new_name
+    )
     after = await persist_snapshot(page)
-    traffic = summarize_contact_responses(traffic_responses, old_name=old_name, new_name=new_name)
     if persist_failed(after=after, traffic=traffic):
         return persist_error(
             "Billy customer rename did not persist.",
@@ -200,11 +205,12 @@ def summarize_contact_responses(
             "interface_method": None,
             "interface_path_class": None,
             "name_in_request": None,
+            "failure_class": None,
         }
-    response = responses[-1]
-    url = str(getattr(response, "url", "") or "")
-    request = getattr(response, "request", None)
-    method = getattr(request, "method", None)
+    event = _preferred_traffic(responses)
+    url = str(getattr(event, "url", "") or "")
+    request = getattr(event, "request", event)
+    method = getattr(request, "method", None) or getattr(event, "method", None)
     post_data = getattr(request, "post_data", None)
     name_in_request: str | None = None
     if isinstance(post_data, str):
@@ -214,13 +220,55 @@ def summarize_contact_responses(
             name_in_request = "old"
         else:
             name_in_request = "absent"
-    status = getattr(response, "status", None)
+    status = getattr(event, "status", None)
     return {
         "interface_status": status if isinstance(status, int) else None,
         "interface_method": method if isinstance(method, str) else None,
-        "interface_path_class": _path_class(url),
+        "interface_path_class": _path_class(url) if url else None,
         "name_in_request": name_in_request,
+        "failure_class": _failure_class(event),
     }
+
+
+def _preferred_traffic(events: list[object]) -> object:
+    for event in reversed(events):
+        if isinstance(getattr(event, "status", None), int):
+            return event
+    return events[-1]
+
+
+def _failure_class(event: object) -> str | None:
+    raw = getattr(event, "failure", None)
+    if raw is None:
+        raw = getattr(getattr(event, "request", None), "failure", None)
+    text = raw if isinstance(raw, str) else str(getattr(raw, "error_text", "") or "")
+    folded = text.lower()
+    if "blocked" in folded:
+        return "blockedbyclient"
+    if text:
+        return "requestfailed"
+    return None
+
+
+async def wait_for_contact_traffic(
+    responses: list[object],
+    *,
+    old_name: str,
+    new_name: str,
+    attempts: int = 40,
+    idle_stop: int = 20,
+) -> dict[str, JsonValue]:
+    """Wait for a PUT response or a failure after the pointer click."""
+
+    traffic = summarize_contact_responses(responses, old_name=old_name, new_name=new_name)
+    for attempt in range(attempts):
+        if isinstance(traffic.get("interface_status"), int) or traffic.get("failure_class"):
+            return traffic
+        await asyncio.sleep(0.25)
+        traffic = summarize_contact_responses(responses, old_name=old_name, new_name=new_name)
+        if attempt + 1 >= idle_stop and traffic.get("interface_method") is None:
+            return traffic
+    return traffic
 
 
 def persist_failed(

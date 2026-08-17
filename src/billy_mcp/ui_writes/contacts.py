@@ -71,6 +71,10 @@ class UiContactWriteResult(BaseModel):
     canonical_request: dict[str, JsonValue]
     expected_effect_state: dict[str, JsonValue]
     submitted: bool = True
+    interface_method: str | None = None
+    interface_status: int | None = None
+    interface_path_class: str | None = None
+    name_in_request: str | None = None
 
 
 class ContactUiActor(Protocol):
@@ -443,12 +447,27 @@ async def _execute(
         )
     if isinstance(submitted, ToolError):
         return submitted
+    persist: dict[str, JsonValue] = (
+        cast(dict[str, JsonValue], submitted) if isinstance(submitted, dict) else {}
+    )
     return UiContactWriteResult(
         summary=prepared.summary,
         canonical_request=prepared.canonical_request,
         expected_effect_state=prepared.expected_effect_state,
         submitted=True,
+        interface_method=_optional_str(persist.get("interface_method")),
+        interface_status=_optional_int(persist.get("interface_status")),
+        interface_path_class=_optional_str(persist.get("interface_path_class")),
+        name_in_request=_optional_str(persist.get("name_in_request")),
     )
+
+
+def _optional_str(value: object) -> str | None:
+    return value if isinstance(value, str) else None
+
+
+def _optional_int(value: object) -> int | None:
+    return value if isinstance(value, int) else None
 
 
 def _require_name(request: dict[str, JsonValue], key: str) -> str:
@@ -763,7 +782,13 @@ async def _update_customer(page: _Page, slug: str, name: str, new_name: str) -> 
     for _ in range(8):
         await _search_name(page, new_name)
         if await page.get_by_text(new_name, exact=True).count() >= 1:
-            return {"ok": True}
+            return {
+                "ok": True,
+                "interface_method": isolated.get("interface_method"),
+                "interface_status": isolated.get("interface_status"),
+                "interface_path_class": isolated.get("interface_path_class"),
+                "name_in_request": isolated.get("name_in_request"),
+            }
         await asyncio.sleep(0.5)
     return persist_error_from_isolate(
         "Billy customer rename was not visible on the list after save.", isolated

@@ -234,7 +234,16 @@ async def test_ui_contacts_create_update_delete_via_call_tool(
             _write_isolate_dump(updated_result.get("details") or updated_result)
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
-        _write_isolate_dump({"submitted": True, "code": None})
+        _write_isolate_dump(
+            {
+                "submitted": True,
+                "code": None,
+                "interface_method": updated_result.get("interface_method"),
+                "interface_status": updated_result.get("interface_status"),
+                "interface_path_class": updated_result.get("interface_path_class"),
+                "name_in_request": updated_result.get("name_in_request"),
+            }
+        )
         assert updated_result["submitted"] is True
         await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
         assert await _list_has_name(observer, slug, updated) is True

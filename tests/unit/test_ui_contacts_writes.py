@@ -210,6 +210,38 @@ def test_execute_submits_once_then_replay_is_consumed(
     assert actor.calls == [(op, preview["canonical_request"])]
 
 
+def test_update_execute_keeps_redacted_put_persist_fields() -> None:
+    class PersistActor(FakeActor):
+        async def submit_update(
+            self, request: dict[str, JsonValue], organization_id: str = ""
+        ) -> dict[str, JsonValue]:
+            await super().submit_update(request, organization_id)
+            return {
+                "ok": True,
+                "interface_method": "PUT",
+                "interface_status": 200,
+                "interface_path_class": "/v2/contacts/id",
+                "name_in_request": "new",
+            }
+
+    server, _ = make_server(PersistActor())
+    preview = call_tool(
+        server,
+        "ui_clients_update_preview",
+        {"name": "MCP-UI-C-DDDD", "new_name": "MCP-UI-C-DDDD-U", "organization_id": "org-test"},
+    )
+    result = call_tool(
+        server,
+        "ui_clients_update_execute",
+        {"confirmation_ticket": cast(str, preview["confirmation_ticket"])},
+    )
+    assert result["submitted"] is True
+    assert result["interface_method"] == "PUT"
+    assert result["interface_status"] == 200
+    assert result["interface_path_class"] == "/v2/contacts/id"
+    assert result["name_in_request"] == "new"
+
+
 def test_execute_rejects_wrong_tool_and_does_not_submit() -> None:
     server, actor = make_server()
     preview = call_tool(

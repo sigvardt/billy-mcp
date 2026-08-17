@@ -49,6 +49,13 @@ There is no nested `input` object. Extra fields are rejected.
 
 Qualify through FastMCP `call_tool`. BrowserRuntime is not the pass proof.
 
+Update persist uses the Billy SPA `PUT /v2/contacts/:id` data plane. Browser
+egress must allow that PUT. It must not allow collection PUT or PATCH unless
+the live save request is PATCH. A successful `ui_clients_update_execute`
+returns redacted `interface_method`, `interface_status`,
+`interface_path_class`, and `name_in_request` (`new` / `old` / `absent`).
+No request body.
+
 ## Fail closed
 
 Do not send invoices or emails, make payments, submit VAT or filings, or change

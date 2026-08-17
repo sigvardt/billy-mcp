@@ -9,7 +9,17 @@ import re
 from typing import Self
 
 from billy_mcp.ui_writes import contacts
-from billy_mcp.ui_writes.contacts_persist import click_update_save
+from billy_mcp.ui_writes.contacts_persist import click_update_save, wait_for_contact_traffic
+
+
+class _BlockedPut:
+    url = "https://api.billysbilling.com/v2/contacts/abc"
+    method = "PUT"
+    failure = "blockedbyclient"
+
+    @property
+    def request(self) -> _BlockedPut:
+        return self
 
 
 class _Button:
@@ -61,6 +71,8 @@ class _Mouse:
         for button in self._page.buttons:
             if button.save_button:
                 self._page.clicks.append(button.click_id)
+                if self._page.blocked_put:
+                    self._page.emit_blocked_put()
                 return
 
 
@@ -88,6 +100,9 @@ class ContactDetailFake:
         self.pointer_clicks: list[tuple[float, float]] = []
         self.hit_target = "save-button"
         self._response_handlers: list[object] = []
+        self._request_handlers: list[object] = []
+        self._requestfailed_handlers: list[object] = []
+        self.blocked_put = False
 
     async def evaluate(self, expression: str, arg: object | None = None) -> object:
         del expression, arg
@@ -108,6 +123,19 @@ class ContactDetailFake:
     def on(self, event: str, handler: object) -> None:
         if event == "response":
             self._response_handlers.append(handler)
+        elif event == "request":
+            self._request_handlers.append(handler)
+        elif event == "requestfailed":
+            self._requestfailed_handlers.append(handler)
+
+    def emit_blocked_put(self) -> None:
+        failed = _BlockedPut()
+        for handler in self._request_handlers:
+            if callable(handler):
+                handler(failed)
+        for handler in self._requestfailed_handlers:
+            if callable(handler):
+                handler(failed)
 
     def get_by_role(self, role: str, *, name: str | re.Pattern[str]) -> _Locator:
         pool = self.links if role == "link" else self.buttons
@@ -435,6 +463,44 @@ def test_update_returns_ui_changed_when_contact_xhr_missing() -> None:
     assert result.code == contacts.StableErrorCode.UI_CHANGED
     assert result.details.get("interface_status") is None
     assert "/clients" not in page.url or "contacts" in page.url
+
+
+def test_wait_for_contact_traffic_sees_late_put_response() -> None:
+    events: list[object] = []
+
+    class _OkPut:
+        url = "https://api.billysbilling.com/v2/contacts/abc"
+        status = 200
+        request = type("Req", (), {"method": "PUT", "post_data": "MCP-UI-C-AAAA-U"})()
+
+    async def _run() -> object:
+        async def _arrive() -> None:
+            await asyncio.sleep(0.05)
+            events.append(_OkPut())
+
+        asyncio.create_task(_arrive())
+        return await wait_for_contact_traffic(
+            events, old_name="MCP-UI-C-AAAA", new_name="MCP-UI-C-AAAA-U", attempts=20
+        )
+
+    traffic = asyncio.run(_run())
+    assert isinstance(traffic, dict)
+    assert traffic["interface_status"] == 200
+    assert traffic["interface_method"] == "PUT"
+    assert traffic["name_in_request"] == "new"
+
+
+def test_update_records_blocked_put_when_no_response() -> None:
+    page = _persist_edit_page(save_button=True, xpath_gem=False)
+    page.blocked_put = True
+    result = asyncio.run(
+        contacts._update_customer(page, "org-test", "MCP-UI-C-AAAA", "MCP-UI-C-AAAA-U")
+    )
+    assert isinstance(result, contacts.ToolError)
+    assert result.code == contacts.StableErrorCode.UI_CHANGED
+    assert result.details.get("interface_method") == "PUT"
+    assert result.details.get("interface_path_class") == "/v2/contacts/id"
+    assert result.details.get("failure_class") == "blockedbyclient"
 
 
 def test_update_uses_pointer_click_not_locator_click() -> None:

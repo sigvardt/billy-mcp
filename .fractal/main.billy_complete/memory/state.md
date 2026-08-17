@@ -63,15 +63,17 @@ Read-back treats `{tag}-U` as a different name from `{tag}`. Live create through
 FastMCP still submits and a second session sees the exact name. The live save
 control is `button[data-cy='save-button']` (Ember action, text **Gem**). The
 edit form stays open after that click. List exact-name is the persist proof.
-Live FastMCP update still does not persist. Pointer proof: save-button is
-visible, enabled, hit target `save-button`, Playwright `mouse.click` at
-the box center, no console errors. After that click there is still no
-Billy XHR. Isolate is evidence, not a pass. No `MCP-UI-C-*` leftovers.
-Coverage stays red.
+Live FastMCP create, update, and delete of one tagged contact passed.
+Browser egress now allows PUT `/v2/contacts/:id` only. PATCH stays
+denied. The SPA save is PUT with the new name. Persist waits for that
+response after the proved pointer click. Vision stays
+`pending_review`. Honesty 16 stays red. Coverage stays red.
 
 ## Review
 
 Honesty on the 16 CUD rows still holds. Node complete stays false.
-Offline org-bind wiring is in. Live independence is not.
+Offline org-bind wiring is in. One live contacts CUD used a second
+session for read-back and a third session for absence. Independent
+vision accept is still pending.
 
 See `decisions.md` and `todo.md`.

@@ -7908,6 +7908,8 @@ def build_browser_egress() -> dict[str, Any]:
                     "research100 headless credentialed discovery: POST /v2/user/login "
                     "then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: "
                     "GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; "
+                    "F3F318A2 PUT prefix /v2/contacts/ for SPA contact update only "
+                    "(no collection PUT, no PATCH); "
                     "research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts "
                     "and GET /v2/salesTaxRulesets for products list/detail and disposable seed "
                     "(was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); "
@@ -7934,6 +7936,7 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/contacts"},
                     {"match": "prefix", "methods": ["POST"], "path": "/v2/contacts"},
                     {"match": "prefix", "methods": ["DELETE"], "path": "/v2/contacts"},
+                    {"match": "prefix", "methods": ["PUT"], "path": "/v2/contacts/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/countries"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/products"},
                     {"match": "prefix", "methods": ["POST"], "path": "/v2/products"},
