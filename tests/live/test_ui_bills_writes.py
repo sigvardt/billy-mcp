@@ -27,6 +27,7 @@ from billy_mcp.config import AppConfig
 from billy_mcp.credentials import KeyringCredentialResolver
 from billy_mcp.models import AuthLoginWaitSuccess, StableErrorCode, ToolError
 from billy_mcp.server import create_server
+from billy_mcp.ui_writes import bills_form
 from billy_mcp.ui_writes.page_flow import exact_name_in_text
 from billy_mcp.vision_evidence import (
     is_outside_repository,
@@ -108,6 +109,8 @@ async def _login(server: FastMCP) -> str:
         _record_blocker(f"AUTH_INTERACTION_REQUIRED: {waited}")
         pytest.fail(f"non-automatable challenge: {waited}")
     if waited.get("status") != "READY":
+        waited = await _call(server, "auth_login_wait")
+    if waited.get("status") != "READY":
         _record_blocker(f"auth_login_wait not READY: {waited}")
         pytest.fail(f"auth_login_wait not READY: {waited}")
     slug = waited.get("organization_id")
@@ -117,8 +120,8 @@ async def _login(server: FastMCP) -> str:
     return slug
 
 
-async def _open_bills_list(page: Any, slug: str, name: str) -> None:
-    await page.goto(f"https://mit.billy.dk/{slug}/bills", wait_until="domcontentloaded")
+async def _open_named_list(page: Any, slug: str, path: str, name: str) -> None:
+    await page.goto(f"https://mit.billy.dk/{slug}/{path}", wait_until="domcontentloaded")
     try:
         await page.wait_for_load_state("networkidle", timeout=20000)
     except Exception:
@@ -133,7 +136,18 @@ async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
-        await _open_bills_list(page, slug, name)
+        await _open_named_list(page, slug, "bills", name)
+        body = await page.locator("body").inner_text()
+        return exact_name_in_text(body, name)
+    finally:
+        await page.close()
+
+
+async def _suppliers_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await _open_named_list(page, slug, "suppliers", name)
         body = await page.locator("body").inner_text()
         return exact_name_in_text(body, name)
     finally:
@@ -144,7 +158,7 @@ async def _bill_id_for_tag(runtime: BrowserRuntime, slug: str, name: str) -> str
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
-        await _open_bills_list(page, slug, name)
+        await _open_named_list(page, slug, "bills", name)
         links = page.locator("a[href*='/bills/']")
         for index in range(await links.count()):
             href = await links.nth(index).get_attribute("href")
@@ -182,7 +196,7 @@ async def _capture(runtime: BrowserRuntime, slug: str, destination: Path, name: 
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
-        await _open_bills_list(page, slug, name)
+        await _open_named_list(page, slug, "bills", name)
         await page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
     finally:
@@ -249,6 +263,7 @@ async def test_ui_bills_create_update_delete_via_call_tool(
 
     try:
         assert is_outside_repository(frame_dir, _REPO_ROOT)
+        monkeypatch.setattr(bills_form, "CREATE_FORM_FRAME", frame_dir / "01b_create_form.png")
         server = create_server(_REPO_ROOT)
         slug = await _login(server)
         observer = BrowserRuntime(
@@ -260,23 +275,6 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         await _ready_session(observer, slug)
         await _capture(observer, slug, frame_dir / "01_before.png", tag)
         assert await _list_has_name(observer, slug, tag) is False
-
-        preview_contact = await _call(
-            server,
-            "ui_clients_create_preview",
-            {"name": tag, "organization_id": slug},
-        )
-        if preview_contact.get("code"):
-            _record_blocker(f"vendor create preview failed: {preview_contact}")
-            pytest.fail(f"vendor create preview failed: {preview_contact}")
-        created_contact = await _call(
-            server,
-            "ui_clients_create_execute",
-            {"confirmation_ticket": preview_contact["confirmation_ticket"]},
-        )
-        if created_contact.get("code"):
-            _record_blocker(f"vendor create execute failed: {created_contact}")
-            pytest.fail(f"vendor create execute failed: {created_contact}")
 
         preview_create = await _call(
             server,
@@ -343,6 +341,8 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         await _ready_session(cleanup, slug)
         assert await _list_has_name(cleanup, slug, updated) is False
         assert await _list_has_name(cleanup, slug, tag) is False
+        assert await _suppliers_has_name(cleanup, slug, updated) is False
+        assert await _suppliers_has_name(cleanup, slug, tag) is False
 
         write_vision_record(
             _VISION_RECORD,
@@ -358,6 +358,7 @@ async def test_ui_bills_create_update_delete_via_call_tool(
             reviewer_verdict="pending_review",
             purge_verified=False,
             author="live_test",
+            run_id=frame_dir.name.removeprefix("run-"),
         )
     finally:
         if server is not None and slug:

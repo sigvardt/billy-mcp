@@ -14,6 +14,7 @@ _CHROME: Final[frozenset[str]] = frozenset(
         "Opret produkt",
         "Opret ny kassekladde",
         "Opret kontakt",
+        "Opret leverandør",
         "Upload filer",
         "Slet",
         "Mere",
@@ -145,11 +146,22 @@ class FakeBillyPage:
         del exact
         return FakeBillyLocator(self._session, f"text={text}", query_text=text, click_name=text)
 
+    def get_by_label(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
+        del exact
+        mapped = {
+            "Leverandør": "input[name='vendor']",
+            "Bilagsdato": "input[name='billDate']",
+        }.get(text, f"label:{text}")
+        return FakeBillyLocator(self._session, mapped)
+
     async def close(self) -> None:
         return None
 
     async def wait_for_load_state(self, state: str, *, timeout: float | None = None) -> None:
         del state, timeout
+
+    async def screenshot(self, **kwargs: object) -> None:
+        del kwargs
 
 
 class FakeBillyLocator:
@@ -231,6 +243,12 @@ class FakeBillyLocator:
             if field == name:
                 return value
         return ""
+
+    async def get_attribute(self, name: str) -> str | None:
+        if name == "name":
+            found = _field_name(self._selector)
+            return found if found and not found.startswith(("role:", "text=", "label:")) else None
+        return None
 
     async def fill(self, value: str) -> None:
         self._session.fills.append((_field_name(self._selector), value))

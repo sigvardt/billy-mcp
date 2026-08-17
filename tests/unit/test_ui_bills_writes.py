@@ -225,9 +225,11 @@ def test_draft_bill_line_description_uses_bill_line_field() -> None:
         UPDATE_SAVE,
         VENDOR,
     )
+    from billy_mcp.ui_writes.bills_vendor import VENDOR_INPUT_SELECTORS
 
     assert LINE_DESCRIPTION == "input[name='billLines.0.description']"
-    assert VENDOR == "input[name='vendor']"
+    assert VENDOR == VENDOR_INPUT_SELECTORS[0]
+    assert VENDOR == "input[name='contact']"
     assert BILL_DATE == "input[name='billDate']"
     assert LINE_AMOUNT == "input[name='billLines.0.inclVatAmount']"
     assert DRAFT_SAVE == "Gem som kladde"
@@ -291,7 +293,8 @@ def test_pre_submit_dump_includes_tag_vendor_date_amount_and_draft_cta(
     from billy_mcp.ui_writes import bills_form
 
     dump = tmp_path / "pre-submit.json"
-    monkeypatch.setattr(bills_form, "PRE_SUBMIT_DUMP", dump)
+    monkeypatch.setattr(bills_form, "CREATE_PRE_SUBMIT_DUMP", dump)
+    monkeypatch.setattr(bills_form, "PRE_SUBMIT_DUMP", tmp_path / "update.json")
     bills_form.dump_pre_submit(
         url="https://mit.billy.dk/org-test/bills/new",
         unique_tag="MCP-UI-B-TEST",
@@ -307,3 +310,87 @@ def test_pre_submit_dump_includes_tag_vendor_date_amount_and_draft_cta(
     assert payload["line_amount"] == "1"
     assert payload["draft_cta"] == "Gem som kladde"
     assert payload["url"].endswith("/bills/new")
+
+
+def test_create_pre_submit_dump_survives_update_dump(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    from billy_mcp.ui_writes import bills_form
+
+    create_dump = tmp_path / "create.json"
+    update_dump = tmp_path / "update.json"
+    monkeypatch.setattr(bills_form, "CREATE_PRE_SUBMIT_DUMP", create_dump)
+    monkeypatch.setattr(bills_form, "PRE_SUBMIT_DUMP", update_dump)
+    bills_form.dump_pre_submit(
+        url="https://mit.billy.dk/org-test/bills/new",
+        unique_tag="MCP-UI-B-TEST",
+        vendor="MCP-UI-B-TEST",
+        bill_date="17.08.2026",
+        line_amount="1",
+        draft_cta="Gem som kladde",
+        vendor_bind="label:Leverandør:option",
+    )
+    bills_form.dump_pre_submit(
+        url="https://mit.billy.dk/org-test/bills/id/edit",
+        unique_tag="MCP-UI-B-TEST-U",
+        vendor="MCP-UI-B-TEST-U",
+        bill_date="17.08.2026",
+        line_amount="1",
+        draft_cta="Opdater",
+        vendor_bind="label:Leverandør:option",
+    )
+    created = json.loads(create_dump.read_text(encoding="utf-8"))
+    updated = json.loads(update_dump.read_text(encoding="utf-8"))
+    assert created["unique_tag"] == "MCP-UI-B-TEST"
+    assert created["draft_cta"] == "Gem som kladde"
+    assert created["vendor_bind"] == "label:Leverandør:option"
+    assert updated["unique_tag"] == "MCP-UI-B-TEST-U"
+    assert updated["draft_cta"] == "Opdater"
+
+
+def test_vendor_bind_rejects_typed_only() -> None:
+    from billy_mcp.ui_writes.bills_vendor import vendor_bind_is_complete
+
+    assert vendor_bind_is_complete(option_clicked=True, enter_selected=False)
+    assert vendor_bind_is_complete(option_clicked=False, enter_selected=True)
+    assert not vendor_bind_is_complete(option_clicked=False, enter_selected=False)
+
+
+def test_vendor_selectors_include_contact_and_leverandor_not_vendor_alone() -> None:
+    from billy_mcp.ui_writes.bills_vendor import VENDOR_INPUT_SELECTORS, VENDOR_LABEL
+
+    assert "input[name='contact']" in VENDOR_INPUT_SELECTORS
+    assert "input[name='contactId']" in VENDOR_INPUT_SELECTORS
+    assert any("Leverandør" in selector for selector in VENDOR_INPUT_SELECTORS)
+    assert VENDOR_LABEL == "Leverandør"
+    assert VENDOR_INPUT_SELECTORS != ("input[name='vendor']",)
+
+
+def test_create_vendor_option_accepts_opret_leverandor() -> None:
+    from billy_mcp.ui_writes.bills_vendor import is_create_vendor_option
+
+    tag = "MCP-UI-B-TEST"
+    assert is_create_vendor_option("Opret leverandør", tag)
+    assert is_create_vendor_option(f'Opret "{tag}"', tag)
+    assert not is_create_vendor_option("Opret kontakt", tag)
+    assert not is_create_vendor_option(f'Opret "{tag}-U"', tag)
+
+
+def test_vendor_chrome_dump_is_non_pii(tmp_path: Path) -> None:
+    from billy_mcp.ui_writes.bills_vendor import dump_vendor_chrome
+
+    dump = tmp_path / "vendor.json"
+    dump_vendor_chrome(
+        names=["contact", "entryDate"],
+        chosen="input[name='contact']",
+        destination=dump,
+    )
+    payload = json.loads(dump.read_text(encoding="utf-8"))
+    assert payload["input_names"] == ["contact", "entryDate"]
+    assert payload["chosen"] == "input[name='contact']"
+
+
+def test_live_bills_test_does_not_seed_customer() -> None:
+    source = Path("tests/live/test_ui_bills_writes.py").read_text(encoding="utf-8")
+    assert "ui_clients_create_preview" not in source
+    assert "ui_clients_create_execute" not in source

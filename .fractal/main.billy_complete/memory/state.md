@@ -81,12 +81,11 @@ Empty untagged bill drafts are gone. A fresh session list is
 DOM dump before the next create. Update save is **Opdater**. Honesty 16
 stay red. Do not remap.
 
-Independent review **FAIL** still stands for live proof. Offline IR
-fixes are in: pre-submit dump, all four fields required, forbidden CTA
-refuse, POST-only create persist, created id from POST, PUT prefix
-`/v2/bills/` only. Login now reaches READY. Live create still fails on
-vendor typeahead bind (`UI_CHANGED` field `vendor`) after a contacts
-preview create. No bills CUD vision record. Do not green. Do not remap.
+IR FAIL on the first live bills CUD: create dump was overwritten,
+typed-only vendor bind was accepted, vision `run_id` did not name the
+frame folder. FIX-VERIFY split the create dump, refused typed-only
+bind, and bound vision `run_id` to the frame dir. Honesty 16 stay red.
+Bills `tool_name` still `ui_bills_*_open`. Do not green. Do not remap.
 Do not finish.
 
 ## Review

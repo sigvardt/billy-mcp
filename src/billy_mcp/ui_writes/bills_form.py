@@ -12,15 +12,27 @@ from urllib.parse import urlsplit
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.bills_vendor import (
+    DROPDOWN_SELECTORS,
+    VENDOR_INPUT_SELECTORS,
+    VENDOR_LABEL,
+    create_vendor_labels,
+    dump_vendor_chrome,
+    pre_submit_dump_path,
+)
 from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN, prove_text_on_fresh_page
 
 PRE_SUBMIT_DUMP = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-presubmit.json"
 )
+CREATE_PRE_SUBMIT_DUMP = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-create-presubmit.json"
+)
+CREATE_FORM_FRAME: Path | None = None
 _PERSIST_DUMP = Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-persist.json"
 
 LINE_DESCRIPTION = "input[name='billLines.0.description']"
-VENDOR = "input[name='vendor']"
+VENDOR = VENDOR_INPUT_SELECTORS[0]
 BILL_DATE = "input[name='billDate']"
 LINE_AMOUNT = "input[name='billLines.0.inclVatAmount']"
 DRAFT_SAVE = "Gem som kladde"
@@ -53,6 +65,10 @@ class _Locator(Protocol):
 
     async def input_value(self) -> str: ...
 
+    async def get_attribute(self, name: str) -> str | None: ...
+
+    def nth(self, index: int) -> _Locator: ...
+
     def get_by_role(self, role: str, **kwargs: object) -> _Locator: ...
 
     def get_by_text(self, text: str, **kwargs: object) -> _Locator: ...
@@ -71,6 +87,8 @@ class _Page(Protocol):
 
     def get_by_role(self, role: str, **kwargs: object) -> _Locator: ...
 
+    def get_by_label(self, text: str, **kwargs: object) -> _Locator: ...
+
     def get_by_text(self, text: str, **kwargs: object) -> _Locator: ...
 
     def on(self, event: str, handler: object) -> None: ...
@@ -81,6 +99,8 @@ class _Page(Protocol):
     async def goto(self, url: str, wait_until: str = "domcontentloaded") -> object: ...
 
     async def wait_for_load_state(self, state: str, timeout: float | None = None) -> None: ...
+
+    async def screenshot(self, **kwargs: object) -> object: ...
 
     async def close(self) -> None: ...
 
@@ -140,11 +160,15 @@ def dump_pre_submit(
     bill_date: str,
     line_amount: str,
     draft_cta: str,
+    vendor_bind: str = "",
 ) -> None:
     """Write the parent-required pre-submit field dump outside git."""
 
+    destination = pre_submit_dump_path(
+        draft_cta, create_path=CREATE_PRE_SUBMIT_DUMP, update_path=PRE_SUBMIT_DUMP
+    )
     _write_json(
-        PRE_SUBMIT_DUMP,
+        destination,
         {
             "url": url,
             "unique_tag": unique_tag,
@@ -152,6 +176,7 @@ def dump_pre_submit(
             "date": bill_date,
             "line_amount": line_amount,
             "draft_cta": draft_cta,
+            "vendor_bind": vendor_bind,
         },
     )
 
@@ -324,7 +349,9 @@ async def _prepare_draft_click(
         bill_date=filled["date"],
         line_amount=filled["line_amount"],
         draft_cta=cta,
+        vendor_bind=filled.get("vendor_bind", ""),
     )
+    await _capture_create_form(page, cta)
     if not await _button_visible(page, cta):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
@@ -401,28 +428,115 @@ async def _type_into(page: _Page, selector: str, value: str, *, tab: bool) -> st
     return await target.input_value()
 
 
-async def _fill_vendor(page: _Page, unique_tag: str) -> bool:
-    typed = await _type_into(page, VENDOR, unique_tag, tab=False)
-    if typed is None:
-        return False
-    await asyncio.sleep(1.0)
-    dropdown = page.locator(".ds-dropdown-list")
-    existing = dropdown.get_by_text(unique_tag, exact=True)
-    create = page.get_by_text(f'Opret "{unique_tag}"', exact=True)
+async def _fill_vendor(page: _Page, unique_tag: str) -> str | None:
+    names = await _visible_input_names(page)
+    labeled = await _type_labeled(page, VENDOR_LABEL, unique_tag)
+    if labeled is not None:
+        bind = await _finish_vendor_bind(page, unique_tag)
+        if bind is not None:
+            chosen = f"label:{VENDOR_LABEL}:{bind}"
+            dump_vendor_chrome(names=names, chosen=chosen)
+            return chosen
+    for selector in VENDOR_INPUT_SELECTORS:
+        typed = await _type_into(page, selector, unique_tag, tab=False)
+        if typed is None:
+            continue
+        bind = await _finish_vendor_bind(page, unique_tag)
+        if bind is not None:
+            chosen = f"{selector}:{bind}"
+            dump_vendor_chrome(names=names, chosen=chosen)
+            return chosen
+    dump_vendor_chrome(names=names, chosen=None)
+    return None
+
+
+async def _finish_vendor_bind(page: _Page, unique_tag: str) -> str | None:
+    if await _wait_for_vendor_option(page, unique_tag):
+        return "option"
+    keyboard = getattr(page, "keyboard", None)
+    if keyboard is not None and getattr(keyboard, "press", None) is not None:
+        try:
+            await keyboard.press("Enter")
+        except Exception:
+            pass
+        if await _wait_for_vendor_option(page, unique_tag):
+            return "enter"
+    return None
+
+
+async def _wait_for_vendor_option(page: _Page, unique_tag: str) -> bool:
+    for _ in range(6):
+        if await _choose_vendor_option(page, unique_tag):
+            return True
+        await asyncio.sleep(0.2)
+    return False
+
+
+async def _visible_input_names(page: _Page) -> list[str]:
+    names: list[str] = []
+    fields = page.locator("input")
+    try:
+        count = await fields.count()
+    except Exception:
+        return names
+    for index in range(min(count, 40)):
+        try:
+            name = await fields.nth(index).get_attribute("name")
+        except Exception:
+            continue
+        if isinstance(name, str) and name and name not in names:
+            names.append(name)
+    return names
+
+
+async def _choose_vendor_option(page: _Page, unique_tag: str) -> bool:
+    for root in DROPDOWN_SELECTORS:
+        existing = page.locator(root).get_by_text(unique_tag, exact=True)
+        try:
+            if await existing.count() >= 1 and await existing.first.is_visible():
+                await existing.first.click(timeout=5000)
+                return True
+        except Exception:
+            continue
+    existing = page.get_by_text(unique_tag, exact=True)
     try:
         if await existing.count() >= 1 and await existing.first.is_visible():
             await existing.first.click(timeout=5000)
-        elif await create.count() >= 1 and await create.first.is_visible():
-            await create.first.click(timeout=5000)
-            if not await _confirm_new_vendor_modal(page, unique_tag):
-                return False
-        else:
-            return False
-        await asyncio.sleep(0.3)
+            return True
     except Exception:
-        return False
-    current = await page.locator(VENDOR).first.input_value()
-    return current == unique_tag
+        pass
+    for label in create_vendor_labels(unique_tag):
+        create = page.get_by_text(label, exact=True)
+        try:
+            if await create.count() >= 1 and await create.first.is_visible():
+                await create.first.click(timeout=5000)
+                return await _confirm_new_vendor_modal(page, unique_tag)
+        except Exception:
+            continue
+    return False
+
+
+async def _type_labeled(page: _Page, label: str, value: str) -> str | None:
+    field = page.get_by_label(label, exact=True)
+    try:
+        if await field.count() < 1:
+            return None
+        target = field.first
+        if not await target.is_visible():
+            return None
+        await target.click()
+        keyboard = getattr(page, "keyboard", None)
+        if keyboard is not None and getattr(keyboard, "type", None) is not None:
+            press = getattr(keyboard, "press", None)
+            if press is not None:
+                await press("Meta+A")
+            await keyboard.type(value)
+        else:
+            await target.fill(value)
+        await asyncio.sleep(0.3)
+        return await target.input_value()
+    except Exception:
+        return None
 
 
 async def _confirm_new_vendor_modal(page: _Page, unique_tag: str) -> bool:
@@ -486,13 +600,18 @@ async def _fill_named(
 async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | ToolError:
     bill_date = date.today().strftime("%d.%m.%Y")
     amount = "1"
-    if not await _fill_vendor(page, unique_tag):
+    vendor_bind = await _fill_vendor(page, unique_tag)
+    if vendor_bind is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy bill draft fields are not visible.",
-            details={"field": "vendor", "selector": VENDOR},
+            details={"field": "vendor", "selectors": list(VENDOR_INPUT_SELECTORS)},
         )
     actual_date = await _fill_named(page, BILL_DATE, bill_date, matches=dates_match)
+    if actual_date is None:
+        actual_date = await _type_labeled(page, "Bilagsdato", bill_date)
+        if actual_date is not None and not dates_match(actual_date, bill_date):
+            actual_date = None
     if actual_date is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
@@ -518,6 +637,7 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
         "date": actual_date,
         "line_amount": actual_amount,
         "description": actual_desc,
+        "vendor_bind": vendor_bind,
     }
 
 
@@ -668,6 +788,18 @@ def _write_json(path: Path, payload: object) -> None:
         path.parent.mkdir(parents=True, exist_ok=True)
         path.write_text(json.dumps(payload, default=str, indent=2) + "\n", encoding="utf-8")
     except OSError:
+        return
+
+
+async def _capture_create_form(page: _Page, cta: str) -> None:
+    if cta != DRAFT_SAVE or CREATE_FORM_FRAME is None:
+        return
+    shot = getattr(page, "screenshot", None)
+    if shot is None:
+        return
+    try:
+        await shot(path=str(CREATE_FORM_FRAME), full_page=False)
+    except Exception:
         return
 
 
