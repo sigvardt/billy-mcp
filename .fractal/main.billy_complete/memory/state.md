@@ -6,19 +6,24 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T19:49:00Z
+updated: 2026-08-17T22:10:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `880849a` plus uncommitted `F12B607E` route keys. `51E18E60`,
-`A3AB03C3`, `9F777B8F`, `8EFD0EAD`, and `4A5CD1E7` dumps are delivered
-and unsaved. `F12B607E` live dump named the five rest `other_v2`
-bootstraps as `user` / `user` / `user` / `organizations` / unnamed
-`other_v2`. `contact_dataset_preloaded=false`. `UI_CHANGED`. Field
-shot and owner templates purged after review. JSON flags kept. Do not
-issue those routes. Right-edge hit is a nameless `DIV`.
+HEAD is `1d4822f` plus uncommitted `452E0773` control-contract
+helper. Live dump delivered. Closest wrapper is `pickerfield`.
+Named action is `click_open`. One wrapper click ran.
+`option_role_count=0`. `UI_CHANGED`. Live dump test no longer
+repeats that click.
+Do not type or recapture routes. Stay red. Do not finish.
+`51E18E60`, `A3AB03C3`, `9F777B8F`, `8EFD0EAD`, `4A5CD1E7`, and
+`F12B607E` dumps are delivered and unsaved. Five rest bootstraps are
+`user` / `user` / `user` / `organizations` / unnamed `other_v2`.
+`contact_dataset_preloaded=false`. `UI_CHANGED`. Field shot and owner
+templates purged. JSON flags kept. Do not issue those routes.
+Right-edge hit is a nameless `DIV`.
 Ownership is proved: that DIV shares the smallest wrapper with
 `input[name=contact]` (`contact_input_count=1`) and the stack includes
 that input. One position click ran at `{x:307, y:141}`. After click:

@@ -20,8 +20,10 @@ sources:
   - radio:9F777B8F
   - radio:8EFD0EAD
   - radio:4A5CD1E7
+  - radio:F12B607E
+  - radio:452E0773
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-17T19:33:00Z
+updated: 2026-08-17T22:10:00Z
 ---
 
 ## Binding now
@@ -44,7 +46,9 @@ updated: 2026-08-17T19:33:00Z
 
 `4A5CD1E7` (done, unsaved): event/pageerror dump is complete. Listeners first. Rest pageerror unrelated. After type `input=19` `keydown=19` `change=0`. One change event dispatched. Still no contacts request. `UI_CHANGED`. Do not repeat this dump. Do not guess blur. Do not remap.
 
-`F12B607E` (saved, dump delivered): TDD-first route keys landed. Live rest rows are `user` x3, `organizations` x1, unnamed `other_v2` x1. `contact_dataset_preloaded=false`. `UI_CHANGED`. Never issue those routes. No synthetic events, blur, Tab, or guessed keys.
+`F12B607E` (done, unsaved): five rest bootstraps resolve to `user` / `user` / `user` / `organizations` / unnamed `other_v2`. `contact_dataset_preloaded=false`. `UI_CHANGED`. Field shot and owner templates purged. Tagged customer already deleted. Never issue those routes. Do not repeat route capture.
+
+`452E0773` (saved, dump delivered): live control contract named `click_open` on the closest `pickerfield` wrapper (`data-cy` name only). Binding `token_class=name_quoted_contact`. One wrapper click ran. `option_role_count=0`. `UI_CHANGED`. Do not repeat that click. Do not type. Do not remap.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

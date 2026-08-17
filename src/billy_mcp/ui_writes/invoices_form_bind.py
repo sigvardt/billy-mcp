@@ -382,6 +382,54 @@ async def capture_kunde_route_trace(
     )
 
 
+async def capture_kunde_control_contract(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only 452E0773 dump. Does not click, type, or create records."""
+
+    from billy_mcp.ui_writes.invoices_kunde_control import inspect_kunde_control
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_control(page)
+    if dump_path is not None:
+        from billy_mcp.ui_writes.invoices_kunde_control import apply_kunde_control_dump
+
+        result = apply_kunde_control_dump(result, dump_path=dump_path)
+    return result
+
+
+async def apply_named_control_action(page: Page, payload: dict[str, object]) -> dict[str, object]:
+    """Run the one named control action. Does not type or click the overlay DIV."""
+
+    token = payload.get("named_next_action_token")
+    if token != "click_open":
+        return {"applied": False, "option_role_count": 0}
+    wrapper = page.locator("input[name='contact']").locator(
+        "xpath=ancestor::*[contains(@class,'pickerfield')][1]"
+    )
+    if await wrapper.count() < 1 or not await wrapper.first.is_visible():
+        return {"applied": False, "option_role_count": 0}
+    await wrapper.first.click()
+    await asyncio.sleep(0.4)
+    options = page.get_by_role("option")
+    count = await options.count()
+    return {"applied": True, "option_role_count": count}
+
+
 async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:
     """Read-only widget contract recapture. Does not save a draft."""
 

@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T18:25:00Z
+updated: 2026-08-17T22:30:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -121,7 +121,21 @@ text. If a contact-adjacent class (`contactPersons`,
 wait only for that class before type. Never issue the route.
 Otherwise `UI_CHANGED`. Live recapture: the five rest rows are
 `user`, `user`, `user`, `organizations`, and one unnamed
-`other_v2`. `contact_dataset_preloaded=false`. No Tab, Enter, or blur. The opener dump records
+`other_v2`. `contact_dataset_preloaded=false`. `452E0773` then
+records the loaded control contract on that already-open form:
+`input_listener_types`, `wrapper_listener_types`, sanitized
+listener locators (`script_basename`, 16-char `script_hash`,
+`line`, `column`), wrapper `data-*` names without values,
+`wrapper_class_tokens`, and one `binding_script` row or null.
+Never store source text or URLs. Live recapture: closest wrapper
+is `ember-view` `super-field` `pickerfield` with `data-cy` (value
+omitted). Input listeners are `keydown` / `focus` / `blur` /
+`other` / `mouseup` on `legacy-core.:id.js`. Wrapper listeners
+include `click`. Binding is `name_quoted_contact` in
+`react-web-components.:id.js`. That classifies as `click_open`.
+One wrapper click ran. `option_role_count=0`. `UI_CHANGED`. The
+live dump test no longer repeats that click. Do not type or
+recapture routes. No Tab, Enter, or blur. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

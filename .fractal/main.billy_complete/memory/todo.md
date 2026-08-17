@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T19:49:00Z
+updated: 2026-08-17T22:10:00Z
 ---
 
 ## Open
 
-- Next: a different read-only capture. Invoice CUD stays unbound after `F12B607E`. Five rest bootstraps are `user` x3, `organizations` x1, unnamed `other_v2` x1. No contact-adjacent preload. Do not issue those routes. Do not repeat synthetic change, blur, or Tab. Remap invoice CUD rows only after accept and purge.
+- Next: a different read-only capture. `click_open` on the `pickerfield` wrapper ran and showed no option. Invoice CUD stays unbound. Remap only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -40,3 +40,5 @@ updated: 2026-08-17T19:49:00Z
 - DIV ownership dump delivered. Overlay click ran. No option. `UI_CHANGED`. Do not repeat that click.
 - Instrumented tagged-Kunde trace delivered (`8EFD0EAD`). Listeners first. Typed existing customer `value_len=19`. No contacts request, no portal, no option. `UI_CHANGED`. Contact deleted. Do not repeat that uninstrumented flow.
 - Event/pageerror dump delivered (`4A5CD1E7`). Rest pageerror marked unrelated. After type: `input=19` `keydown=19` `change=0`. One change event dispatched. Still `UI_CHANGED`.
+- `F12B607E` route-key dump delivered. Five rest bootstraps are `user` x3, `organizations` x1, unnamed `other_v2` x1. No contact-adjacent preload. Field shot and owner templates purged. Tagged customer deleted.
+- Control-contract helper and failing fixture landed (`452E0773`). Live dump named `click_open` on the `pickerfield` wrapper. One wrapper click. `option_role_count=0`. `UI_CHANGED`. No customer created.

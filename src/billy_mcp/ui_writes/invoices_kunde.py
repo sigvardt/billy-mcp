@@ -9,6 +9,12 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Final, cast
 
+from billy_mcp.ui_writes.invoices_kunde_control import (
+    REQUIRED_KUNDE_CONTROL_KEYS as REQUIRED_KUNDE_CONTROL_KEYS,
+)
+from billy_mcp.ui_writes.invoices_kunde_control import (
+    kunde_control_missing_keys as kunde_control_missing_keys,
+)
 from billy_mcp.ui_writes.invoices_kunde_events import (
     REQUIRED_KUNDE_EVENT_KEYS as REQUIRED_KUNDE_EVENT_KEYS,
 )
