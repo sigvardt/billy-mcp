@@ -6,21 +6,30 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T18:12:12Z
+updated: 2026-08-17T19:03:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `31039b5`. `51E18E60` and `A3AB03C3` dumps are delivered. Right-edge hit is a nameless `DIV`.
-No click. Parent `9F777B8F` is the next slice: prove that DIV's
-ownership dump is delivered. The nameless right-edge DIV shares the
-smallest wrapper with `input[name=contact]`
-(`contact_input_count=1`) and the stack includes that input, so
-ownership was proved. One position click ran at `{x:307, y:141}`.
-After click: `option_role_count=0`, GET `/v2/contacts` count 0.
-`UI_CHANGED`. Field shot purged after review. JSON flags kept.
-Do not repeat that click. Do not remap.
+HEAD is `66b5586`. `51E18E60`, `A3AB03C3`, and `9F777B8F` dumps are
+delivered and unsaved. Right-edge hit is a nameless `DIV`. Ownership
+is proved: that DIV shares the smallest wrapper with
+`input[name=contact]` (`contact_input_count=1`) and the stack includes
+that input. One position click ran at `{x:307, y:141}`. After click:
+`option_role_count=0`, GET `/v2/contacts` count 0. `UI_CHANGED`. Field
+shot purged after review. JSON flags kept.
+Do not repeat that click. Do not remap. `8EFD0EAD` live trace
+delivered. Listeners attached before `/invoices/new`. Center click
+then exact tagged type reached `value_len=19`. No `contacts`
+request, no portal insert, `option_role_count=0`,
+`aria_expanded_present=false`. `named_next_action=false`.
+`UI_CHANGED`. Customer deleted in a fresh session. Honesty 16 stay
+red. Parent `4A5CD1E7` is saved for the slice after this IR/COMMIT.
+Independent review of the 8EFD0EAD dump is FAIL. Slice met the
+trace contract. Invoice CUD still unbound. After-type field shot
+purged. Trace JSON kept. Next COMMIT stays red. `4A5CD1E7` waits
+until after that commit.
 Honesty 16 stay red. Never call the API. Stay red. Do not finish.
 `91A2C363` leftover Leverandør slice is closed. `A6FB8FC2` stays a
 one-close constraint.

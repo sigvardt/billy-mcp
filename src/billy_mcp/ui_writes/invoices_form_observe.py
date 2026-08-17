@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from pathlib import Path
+from time import monotonic
 from typing import Final, cast
 
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page, write_json
@@ -24,6 +25,13 @@ from billy_mcp.ui_writes.invoices_kunde_div import (
     div_ownership_missing_keys,
     empty_div_ownership,
 )
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    TRACE_REQUEST_CAP,
+    kunde_trace_missing_keys,
+    name_token,
+    redact_trace_request,
+    request_url_class,
+)
 
 KUNDE_CHROME_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde.json"
@@ -36,6 +44,9 @@ KUNDE_FIELD_SHOT: Final = (
 )
 KUNDE_LOOKUP_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-lookup.json"
+)
+KUNDE_TRACE_DUMP: Final = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-trace.json"
 )
 ALT_LIST_SELECTORS: Final[tuple[str, ...]] = (
     ".ember-power-select-dropdown",
@@ -579,6 +590,182 @@ async def _field_shot(page: Page, field: Locator) -> dict[str, object]:
         }
     except (OSError, TimeoutError, RuntimeError, TypeError):
         return {"present": False, "bytes": 0, "box": None}
+
+
+class KundeTraceSink:
+    """Redacted same-origin request and console counters. Never stores bodies."""
+
+    def __init__(self) -> None:
+        self.requests: list[dict[str, object]] = []
+        self.console_categories: dict[str, int] = {"script": 0, "pageerror": 0, "other": 0}
+        self._pending: dict[int, dict[str, object]] = {}
+        self._started: dict[int, float] = {}
+
+    def snapshot_requests(self) -> list[dict[str, object]]:
+        rows = list(self.requests)
+        for request_id, row in self._pending.items():
+            if len(rows) >= TRACE_REQUEST_CAP:
+                break
+            started = self._started.get(request_id, monotonic())
+            rows.append(
+                redact_trace_request(
+                    method=str(row.get("method") or "OTHER"),
+                    path_class=str(row.get("path_class") or "denied"),
+                    status=0,
+                    timing_ms=max(0, int((monotonic() - started) * 1000)),
+                )
+            )
+        return rows[:TRACE_REQUEST_CAP]
+
+    def note_request(self, request_id: int, method: str, url: str) -> None:
+        path_class = request_url_class(url)
+        if (
+            len(self.requests) >= TRACE_REQUEST_CAP
+            and request_id not in self._pending
+            and path_class not in {"contacts", "invoices"}
+        ):
+            return
+        self._pending[request_id] = {
+            "method": method,
+            "path_class": path_class,
+        }
+        self._started[request_id] = monotonic()
+
+    def _store_row(self, row: dict[str, object]) -> None:
+        if len(self.requests) < TRACE_REQUEST_CAP:
+            self.requests.append(row)
+            return
+        if row.get("path_class") not in {"contacts", "invoices"}:
+            return
+        for index, existing in enumerate(self.requests):
+            if existing.get("path_class") not in {"contacts", "invoices"}:
+                self.requests[index] = row
+                return
+        self.requests[-1] = row
+
+    def note_response(self, request_id: int, method: str, url: str, status: int) -> None:
+        pending = self._pending.pop(request_id, None)
+        started = self._started.pop(request_id, monotonic())
+        if pending is None:
+            row = redact_trace_request(
+                method=method,
+                path_class=request_url_class(url),
+                status=status,
+                timing_ms=0,
+            )
+        else:
+            row = redact_trace_request(
+                method=str(pending.get("method") or method),
+                path_class=str(pending.get("path_class") or request_url_class(url)),
+                status=status,
+                timing_ms=max(0, int((monotonic() - started) * 1000)),
+            )
+        self._store_row(row)
+
+    def note_console(self, kind: str) -> None:
+        if kind == "error":
+            self.console_categories["script"] += 1
+        else:
+            self.console_categories["other"] += 1
+
+    def note_page_error(self) -> None:
+        self.console_categories["pageerror"] += 1
+
+
+def watch_kunde_trace(page: Page, sink: KundeTraceSink) -> None:
+    """Attach read-only request/console listeners. Call before goto."""
+
+    def _on_request(event: object) -> None:
+        url = str(getattr(event, "url", "") or "")
+        request = getattr(event, "request", None)
+        method = str(
+            getattr(event, "method", "")
+            or (getattr(request, "method", "") if request is not None else "")
+        )
+        sink.note_request(id(event), method, url)
+
+    def _on_response(event: object) -> None:
+        request = getattr(event, "request", None)
+        request_id = id(request) if request is not None else id(event)
+        url = str(getattr(event, "url", "") or "")
+        if request is not None:
+            url = str(getattr(request, "url", "") or url)
+        method = str(
+            getattr(event, "method", "")
+            or (getattr(request, "method", "") if request is not None else "")
+        )
+        status_raw = getattr(event, "status", 0)
+        status = status_raw if isinstance(status_raw, int) else 0
+        sink.note_response(request_id, method, url, status)
+
+    def _on_console(event: object) -> None:
+        sink.note_console(str(getattr(event, "type", "") or "").casefold())
+
+    def _on_page_error(_event: object) -> None:
+        sink.note_page_error()
+
+    page.on("request", _on_request)
+    page.on("response", _on_response)
+    page.on("console", _on_console)
+    page.on("pageerror", _on_page_error)
+
+
+async def observe_kunde_active_element(page: Page) -> dict[str, object]:
+    """Active-element flags only. Never stores ids or accessible names."""
+
+    raw = await page.evaluate(
+        """() => {
+          const el = document.activeElement;
+          if (!el) {
+            return {tag: null, name: "", aria_expanded: false};
+          }
+          return {
+            tag: el.tagName || null,
+            name: el.getAttribute("name") || "",
+            aria_expanded: el.getAttribute("aria-expanded") != null,
+          };
+        }"""
+    )
+    if not isinstance(raw, dict):
+        return {"tag": None, "name_token": "empty", "aria_expanded_present": False}
+    typed = cast(dict[str, object], raw)
+    name_raw = typed.get("name")
+    name = name_raw if isinstance(name_raw, str) else None
+    tag_raw = typed.get("tag")
+    tag = tag_raw if isinstance(tag_raw, str) else None
+    return {
+        "tag": tag,
+        "name_token": name_token(name),
+        "aria_expanded_present": typed.get("aria_expanded") is True,
+    }
+
+
+def attach_kunde_trace(
+    payload: dict[str, object],
+    sink: KundeTraceSink,
+    *,
+    listener_attached_before_form: bool,
+    rest_portal_count: int,
+) -> dict[str, object]:
+    """Copy redacted trace fields onto a phase dump. Never stores tag text."""
+
+    portal_count_raw = payload.get("portal_count")
+    portal_count = portal_count_raw if isinstance(portal_count_raw, int) else 0
+    payload["listener_attached_before_form"] = listener_attached_before_form
+    payload["requests"] = sink.snapshot_requests()
+    payload["console_categories"] = dict(sink.console_categories)
+    payload["portal_inserted"] = portal_count > rest_portal_count
+    payload["portal_count"] = portal_count
+    option_raw = payload.get("option_role_count")
+    payload["option_role_count"] = option_raw if isinstance(option_raw, int) else 0
+    payload["kunde_trace_missing_keys"] = kunde_trace_missing_keys(payload)
+    return payload
+
+
+def dump_kunde_trace(payload: Mapping[str, object]) -> None:
+    """Write the redacted tagged-flow dump. Never stores URLs or customer text."""
+
+    write_json(KUNDE_TRACE_DUMP, dict(payload))
 
 
 def watch_contact_lookups(page: Page, seen: list[str]) -> None:

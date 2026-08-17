@@ -9,6 +9,25 @@ import re
 from collections.abc import Mapping, Sequence
 from typing import Final, cast
 
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    REQUIRED_KUNDE_TRACE_KEYS as REQUIRED_KUNDE_TRACE_KEYS,
+)
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    kunde_trace_missing_keys as kunde_trace_missing_keys,
+)
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    kunde_trace_names_next_action as kunde_trace_names_next_action,
+)
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    name_token as name_token,
+)
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    request_path_class as request_path_class,
+)
+from billy_mcp.ui_writes.invoices_kunde_trace import (
+    request_url_class as request_url_class,
+)
+
 KUNDE_LABEL: Final = "Kunde"
 KUNDE_INPUT_SELECTORS: Final[tuple[str, ...]] = (
     "input[name='contactId']",

@@ -18,8 +18,10 @@ sources:
   - radio:51E18E60
   - radio:A3AB03C3
   - radio:9F777B8F
+  - radio:8EFD0EAD
+  - radio:4A5CD1E7
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-17T18:12:12Z
+updated: 2026-08-17T19:33:00Z
 ---
 
 ## Binding now
@@ -36,7 +38,11 @@ updated: 2026-08-17T18:12:12Z
 
 `A3AB03C3` (done, unsaved): right-edge hit is a nameless `DIV`. No click. Do not repeat that same chevron dump.
 
-`9F777B8F` (saved; dump delivered): DIV ownership recapture is complete. The nameless right-edge DIV shares the smallest wrapper with `input[name=contact]` and the stack includes that input. One position click ran. No visible option. `UI_CHANGED`. Do not repeat that click. Do not remap.
+`9F777B8F` (done, unsaved): DIV ownership recapture is complete. The nameless right-edge DIV shares the smallest wrapper with `input[name=contact]` and the stack includes that input. One position click ran. No visible option. `UI_CHANGED`. Do not repeat that click. Do not remap.
+
+`8EFD0EAD` (done, unsaved): instrumented tagged-Kunde trace is complete. Listeners ran before form open. Typed existing customer `value_len=19`. No `contacts` path_class, no portal insert, no option, no `aria-expanded`. `UI_CHANGED`. Do not repeat that uninstrumented. Do not remap.
+
+`4A5CD1E7` (saved): after this slice is reviewed, purged, committed, and cleanup re-proved, the next slice is TDD-first error and event causality. Attach before `/invoices/new`. Record phase-scoped focus/input/change/keydown/keyup counts and sanitized console/pageerror fingerprints at rest, after one field click, and after exact tagged typing. Commit only allowlisted error class, stable fingerprint, phase, safe source class, and counts. If evidence names one normal interaction or shows the event sequence is wrong, one focused fixture and the smallest fix. If the pageerror is pre-existing and unrelated, close it and continue with a different read-only capture.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

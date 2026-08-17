@@ -81,6 +81,8 @@ class Page(Protocol):
 
     def on(self, event: str, handler: object) -> None: ...
 
+    async def evaluate(self, expression: str, arg: object = None) -> object: ...
+
 
 async def click_exact(page: Page, label: str) -> ToolError | None:
     """Click the exact visible button or text. Substring matches are not a click."""

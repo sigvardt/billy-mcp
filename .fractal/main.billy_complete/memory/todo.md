@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T17:35:00Z
+updated: 2026-08-17T19:03:00Z
 ---
 
 ## Open
 
-- Invoice CUD still unbound after the proved DIV position click. Next slice is a different read-only capture, not a repeat click. Remap invoice CUD rows only after accept and purge.
+- Invoice CUD still unbound after the instrumented tagged-Kunde trace (`UI_CHANGED`, no contacts request). After this slice is reviewed, purged, and committed, next is `4A5CD1E7` error/event causality. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -37,3 +37,4 @@ updated: 2026-08-17T17:35:00Z
 - Invoice Kunde opener dump records the `5E1EDFB4` ownership fields. Live recapture has every key. `named_opener` is still null. Hit target is the contact `INPUT`.
 - Dummy 15-char `after_type` is not an existing-customer observation. Helper `after_type_is_existing_customer_observation` requires `MCP-UI-INV-` + 8 hex and matching `value_len`. Typed-only stays unbound.
 - Live FastMCP created that 19-char customer and typed it into the proved `INPUT`. Still no visible option. `UI_CHANGED`. Contact deleted.
+- DIV ownership dump delivered. Overlay click ran. No option. `UI_CHANGED`. Do not repeat that click.

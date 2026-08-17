@@ -7,11 +7,15 @@ import asyncio
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_observe import (
     ALT_LIST_SELECTORS,
+    KundeTraceSink,
+    attach_kunde_trace,
     dump_kunde_chrome,
     dump_kunde_lookup,
     dump_kunde_opener,
     dump_kunde_phases,
+    dump_kunde_trace,
     observe_kunde,
+    observe_kunde_active_element,
     observe_kunde_opener,
     portal_items,
     watch_contact_lookups,
@@ -22,6 +26,8 @@ from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_LABEL,
     chevron_hit_missing_keys,
     kunde_phase_is_bound,
+    kunde_trace_missing_keys,
+    kunde_trace_names_next_action,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     portal_create_footer_label,
@@ -171,6 +177,95 @@ async def capture_kunde_div_ownership_dump(page: Page, unique_tag: str) -> dict[
         "contact_get_count": len(lookups),
         "div_ownership_missing_keys": div_ownership_missing_keys(after_click),
     }
+
+
+async def capture_kunde_tagged_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+) -> dict[str, object]:
+    """Instrumented 8EFD0EAD recapture. Caller attaches watch_kunde_trace first."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    wrapper = kunde_wrapper(page)
+    rest = await observe_kunde(page, field, unique_tag, phase="at_rest", wrapper=wrapper)
+    rest_portal_raw = rest.get("portal_count")
+    rest_portal = rest_portal_raw if isinstance(rest_portal_raw, int) else 0
+    rest["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        rest,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    type_target = await _click_field_once(field)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        after_click,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    await _type_kunde(type_target, unique_tag)
+    after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
+    after_type["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        after_type,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    dump_kunde_phases(after_click, after_type)
+    named = kunde_trace_names_next_action(after_click) or kunde_trace_names_next_action(after_type)
+    items = await _wait_options(page, unique_tag, wrapper)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    clicked_option = False
+    if named and option_visible and pick_kunde_existing_option_index(items) is not None:
+        clicked_option = await _click_scoped_option(page, unique_tag)
+    result: dict[str, object] = {
+        "opener": opener,
+        "at_rest": rest,
+        "after_click": after_click,
+        "after_type": after_type,
+        "clicked": True,
+        "typed": True,
+        "listener_attached_before_form": listener_attached_before_form,
+        "named_next_action": named,
+        "option_visible": option_visible,
+        "clicked_option": clicked_option,
+        "kunde_trace_missing_keys": {
+            "at_rest": kunde_trace_missing_keys(rest),
+            "after_click": kunde_trace_missing_keys(after_click),
+            "after_type": kunde_trace_missing_keys(after_type),
+        },
+    }
+    if not named or not clicked_option:
+        result["code"] = "UI_CHANGED"
+        result["message"] = "Billy Kunde existing option is not visible."
+    dump_kunde_trace(result)
+    return result
 
 
 async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:

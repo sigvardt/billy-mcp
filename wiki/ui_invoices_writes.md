@@ -85,7 +85,21 @@ smallest wrapper is one `ember-view` `DIV` with
 click ran at `{x:307, y:141}`. After that click: two hidden decoys,
 `option_role_count=0`, GET `/v2/contacts` count 0. No type. Execute
 returned `UI_CHANGED`. If ownership is not proved, do not click. No dump-named action. Count-only GET `/v2/contacts` after
-type is 0. The opener dump records
+type is 0. `8EFD0EAD` then traces the failed full flow with listeners attached
+**before** `/:org_slug/invoices/new` and before any focus/click/type. The
+trace dump records `listener_attached_before_form`, redacted `requests`
+(`method`, `path_class`, `status`, `timing_ms`), `console_categories`
+(`script` / `pageerror` / `other` counts only), `portal_inserted`,
+`portal_count`, `option_role_count`, and `active_element`
+(`tag`, `name_token`, `aria_expanded_present`). Never store bodies, raw
+URLs, query strings, IDs, or customer text. One center click on the
+proved `input[name=contact]` and one exact tagged type run only while
+those listeners are on. A follow-up option click runs only when the
+trace names a next action and a visible existing option exists.
+Otherwise `UI_CHANGED`. Live recapture: listeners on before form
+open. After center click and exact tagged type, `value_len=19`,
+`portal_inserted=false`, `option_role_count=0`, no `contacts`
+`path_class`, `named_next_action=false`, `UI_CHANGED`. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

@@ -883,3 +883,129 @@ def test_observe_records_a3ab03c3_chevron_hit_keys() -> None:
     bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
     assert 'position={"x": offset["dx"], "y": offset["dy"]}' in bind
     assert "capture_kunde_chevron_hit_dump" in bind
+
+
+def _live_trace_opener_payload() -> dict[str, object]:
+    """Current live opener. 8EFD0EAD trace keys are absent."""
+
+    return _live_chevron_payload()
+
+
+def _live_trace_after_click_payload() -> dict[str, object]:
+    """Current overlay after_click. Has portal counts, not the trace keys."""
+
+    payload = _live_chevron_payload()
+    payload["phase"] = "after_click"
+    payload["portal_count"] = 2
+    payload["option_role_count"] = 0
+    payload["value_len"] = 0
+    return payload
+
+
+def test_live_dumps_miss_8efd0ead_trace_keys() -> None:
+    """Given current live dumps, When checking trace keys, Then 8EFD0EAD fields are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        REQUIRED_KUNDE_TRACE_KEYS,
+        kunde_trace_missing_keys,
+    )
+
+    opener = _live_trace_opener_payload()
+    after_click = _live_trace_after_click_payload()
+    opener_missing = kunde_trace_missing_keys(opener)
+    click_missing = kunde_trace_missing_keys(after_click)
+    assert opener_missing == [
+        "listener_attached_before_form",
+        "requests",
+        "console_categories",
+        "portal_inserted",
+        "portal_count",
+        "active_element",
+    ]
+    assert set(opener_missing).issubset(REQUIRED_KUNDE_TRACE_KEYS)
+    assert "listener_attached_before_form" in click_missing
+    assert "requests" in click_missing
+    assert "console_categories" in click_missing
+    assert "portal_inserted" in click_missing
+    assert "active_element" in click_missing
+    assert "portal_count" not in click_missing
+    assert "option_role_count" not in click_missing
+    assert "listener_attached_before_form" not in opener
+    assert "requests" not in after_click
+    assert "active_element" not in after_click
+
+
+def test_complete_kunde_trace_has_no_missing_keys() -> None:
+    """Given a filled trace dump, When checking keys, Then none are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        kunde_trace_missing_keys,
+        kunde_trace_names_next_action,
+        name_token,
+        request_path_class,
+        request_url_class,
+    )
+    from billy_mcp.ui_writes.invoices_kunde_trace import empty_kunde_trace
+
+    payload = _live_trace_after_click_payload()
+    payload.update(empty_kunde_trace())
+    payload["portal_count"] = 2
+    payload["option_role_count"] = 0
+    assert kunde_trace_missing_keys(payload) == []
+    assert request_path_class("/v2/contacts?q=x") == "contacts"
+    assert request_path_class("/v2/invoices") == "invoices"
+    assert request_path_class("/v2/products") == "other_v2"
+    assert request_path_class("/app/bootstrap") == "other_same_origin"
+    assert request_url_class("https://evil.example/v2/contacts") == "denied"
+    assert request_url_class("https://api.billysbilling.com/v2/contacts") == "contacts"
+    assert name_token("contact") == "contact"
+    assert name_token("contactId") == "contactId"
+    assert name_token(None) == "empty"
+    assert name_token("secret") == "other"
+    assert kunde_trace_names_next_action(payload) is False
+    payload["requests"] = [
+        {"method": "GET", "path_class": "contacts", "status": 200, "timing_ms": 12}
+    ]
+    assert kunde_trace_names_next_action(payload) is True
+    payload["requests"] = []
+    payload["portal_inserted"] = True
+    assert kunde_trace_names_next_action(payload) is True
+
+
+def test_observe_records_8efd0ead_trace_keys() -> None:
+    """Given the observe helper, Then it records the tagged-flow trace keys."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "watch_kunde_trace" in source
+    assert "listener_attached_before_form" in source
+    assert "console_categories" in source
+    assert "portal_inserted" in source
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    assert "capture_kunde_tagged_trace" in bind
+    assert "watch_kunde_trace" in bind
+
+
+def test_trace_sink_keeps_contacts_when_cap_is_full() -> None:
+    """Given a full sink, When a contacts row arrives, Then an other row is evicted."""
+
+    from billy_mcp.ui_writes.invoices_form_observe import KundeTraceSink
+    from billy_mcp.ui_writes.invoices_kunde_trace import TRACE_REQUEST_CAP
+
+    sink = KundeTraceSink()
+    for index in range(TRACE_REQUEST_CAP):
+        sink.note_response(
+            index,
+            "GET",
+            "https://mit.billy.dk/assets/app.js",
+            200,
+        )
+    assert len(sink.requests) == TRACE_REQUEST_CAP
+    sink.note_response(
+        TRACE_REQUEST_CAP + 1,
+        "GET",
+        "https://api.billysbilling.com/v2/contacts",
+        200,
+    )
+    classes = [row.get("path_class") for row in sink.requests]
+    assert "contacts" in classes
+    assert len(sink.requests) == TRACE_REQUEST_CAP
