@@ -108,8 +108,20 @@ then records phase-scoped `event_counts` (`focus` / `input` /
 arguments, or typed keys in git. Detailed scrubbed shapes live
 only under `~/.local/share/billy-mcp/` and are purged after
 review. Live after_type named `input=19` `keydown=19` `change=0`
-with no contacts request, so one `dispatch_event("change")` runs
-after that dump. No Tab, Enter, or blur. The opener dump records
+with no contacts request, so one `dispatch_event("change")` ran
+after that dump. That event dump is closed. Do not dispatch
+`change` again. `F12B607E` then names the five `/v2/` bootstraps
+collapsed as `other_v2`. Committed request rows add allowlisted
+`route_class`, `timing_bucket` (`0_49` / `50_99` / `100_249` /
+`250_499` / `500_plus`), and first-observation `phase`. Sanitized
+`route_template` values stay owner-only and are purged after
+review. Never store raw URLs, query strings, UUIDs, or customer
+text. If a contact-adjacent class (`contactPersons`,
+`contactBalancePayments`, `contactBalancePostings`) loads at rest,
+wait only for that class before type. Never issue the route.
+Otherwise `UI_CHANGED`. Live recapture: the five rest rows are
+`user`, `user`, `user`, `organizations`, and one unnamed
+`other_v2`. `contact_dataset_preloaded=false`. No Tab, Enter, or blur. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

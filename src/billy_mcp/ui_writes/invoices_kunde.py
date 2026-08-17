@@ -15,6 +15,15 @@ from billy_mcp.ui_writes.invoices_kunde_events import (
 from billy_mcp.ui_writes.invoices_kunde_events import (
     kunde_event_missing_keys as kunde_event_missing_keys,
 )
+from billy_mcp.ui_writes.invoices_kunde_routes import (
+    REQUIRED_KUNDE_ROUTE_KEYS as REQUIRED_KUNDE_ROUTE_KEYS,
+)
+from billy_mcp.ui_writes.invoices_kunde_routes import (
+    contact_dataset_preloaded as contact_dataset_preloaded,
+)
+from billy_mcp.ui_writes.invoices_kunde_routes import (
+    kunde_route_missing_keys as kunde_route_missing_keys,
+)
 from billy_mcp.ui_writes.invoices_kunde_trace import (
     REQUIRED_KUNDE_TRACE_KEYS as REQUIRED_KUNDE_TRACE_KEYS,
 )

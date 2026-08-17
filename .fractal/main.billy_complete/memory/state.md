@@ -12,8 +12,13 @@ updated: 2026-08-17T19:49:00Z
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `c9791c3`. `51E18E60`, `A3AB03C3`, `9F777B8F`, and `8EFD0EAD`
-dumps are delivered and unsaved. Right-edge hit is a nameless `DIV`.
+HEAD is `880849a` plus uncommitted `F12B607E` route keys. `51E18E60`,
+`A3AB03C3`, `9F777B8F`, `8EFD0EAD`, and `4A5CD1E7` dumps are delivered
+and unsaved. `F12B607E` live dump named the five rest `other_v2`
+bootstraps as `user` / `user` / `user` / `organizations` / unnamed
+`other_v2`. `contact_dataset_preloaded=false`. `UI_CHANGED`. Field
+shot and owner templates purged after review. JSON flags kept. Do not
+issue those routes. Right-edge hit is a nameless `DIV`.
 Ownership is proved: that DIV shares the smallest wrapper with
 `input[name=contact]` (`contact_input_count=1`) and the stack includes
 that input. One position click ran at `{x:307, y:141}`. After click:

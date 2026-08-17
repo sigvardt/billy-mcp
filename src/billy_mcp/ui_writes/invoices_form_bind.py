@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import asyncio
+from pathlib import Path
 
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_observe import (
@@ -195,6 +196,7 @@ async def capture_kunde_tagged_trace(
     *,
     sink: KundeTraceSink,
     listener_attached_before_form: bool,
+    allow_change_dispatch: bool = True,
 ) -> dict[str, object]:
     """Instrumented 8EFD0EAD recapture. Caller attaches watch_kunde_trace first."""
 
@@ -278,7 +280,11 @@ async def capture_kunde_tagged_trace(
     type_counts = as_str_object_map(after_type.get("event_counts"))
     has_contacts = requests_have_contacts(after_type.get("requests"))
     dispatched_change = False
-    if type_counts is not None and event_names_change_gap(type_counts, contacts=has_contacts):
+    if (
+        allow_change_dispatch
+        and type_counts is not None
+        and event_names_change_gap(type_counts, contacts=has_contacts)
+    ):
         await type_target.dispatch_event("change")
         dispatched_change = True
         await asyncio.sleep(0.5)
@@ -348,6 +354,32 @@ async def capture_kunde_event_trace(
     )
     dump_kunde_event_messages(sink.scrubbed_messages)
     return result
+
+
+async def capture_kunde_route_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+    template_path: Path | None = None,
+) -> dict[str, object]:
+    """Instrumented F12B607E recapture. Does not dispatch change."""
+
+    from billy_mcp.ui_writes.invoices_kunde_routes import apply_kunde_route_dump
+
+    result = await capture_kunde_tagged_trace(
+        page,
+        unique_tag,
+        sink=sink,
+        listener_attached_before_form=listener_attached_before_form,
+        allow_change_dispatch=False,
+    )
+    return apply_kunde_route_dump(
+        result,
+        sink.route_templates,
+        template_path=template_path,
+    )
 
 
 async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:

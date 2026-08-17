@@ -973,3 +973,158 @@ async def test_ui_invoices_kunde_event_causality(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_other_v2_routes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Create a tagged customer, then name the five other_v2 bootstraps."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_route_trace
+    from billy_mcp.ui_writes.invoices_form_observe import (
+        KUNDE_TRACE_DUMP,
+        KundeTraceSink,
+        install_kunde_event_listeners,
+        watch_kunde_trace,
+    )
+    from billy_mcp.ui_writes.invoices_kunde_routes import (
+        KUNDE_ROUTE_TEMPLATE_DUMP,
+        REQUIRED_KUNDE_ROUTE_KEYS,
+        kunde_route_missing_keys,
+    )
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "route trace must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    cleanup_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    extra: BrowserRuntime | None = None
+    page: Any = None
+    server: FastMCP | None = None
+    slug = ""
+    tag = f"MCP-UI-INV-{secrets.token_hex(4).upper()}"
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        contact_preview = await _call(
+            server,
+            "ui_clients_create_preview",
+            {"name": tag, "organization_id": slug},
+        )
+        contact_created = await _call(
+            server,
+            "ui_clients_create_execute",
+            {"confirmation_ticket": contact_preview["confirmation_ticket"]},
+        )
+        if contact_created.get("code"):
+            _record_blocker(f"contact create failed: {contact_created}")
+            pytest.fail(f"contact create failed: {contact_created}")
+        assert contact_created.get("submitted") is True
+        seen = False
+        for _ in range(4):
+            await asyncio.sleep(2)
+            if await _clients_has_name(observer, slug, tag):
+                seen = True
+                break
+        assert seen is True
+
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        sink = KundeTraceSink()
+        await install_kunde_event_listeners(page)
+        watch_kunde_trace(page, sink)
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_route_trace(
+            page,
+            tag,
+            sink=sink,
+            listener_attached_before_form=True,
+        )
+        at_rest = result.get("at_rest")
+        if not isinstance(at_rest, dict):
+            _record_blocker(f"route trace dump failed: {result}")
+            pytest.fail(f"route trace dump failed: {result}")
+        at_rest_map = cast(dict[str, object], at_rest)
+        raw_requests = at_rest_map.get("requests")
+        rows: list[object] = (
+            cast(list[object], raw_requests) if isinstance(raw_requests, list) else []
+        )
+        assert len(rows) >= 1
+        assert kunde_route_missing_keys(rows) == []
+        assert result.get("kunde_route_missing_keys") == []
+        assert REQUIRED_KUNDE_ROUTE_KEYS == ("route_class", "timing_bucket", "phase")
+        assert result.get("listener_attached_before_form") is True
+        encoded = json.dumps({"result": result})
+        assert tag not in encoded
+        assert "confirmation_ticket" not in encoded
+        assert "/v2/contacts?" not in encoded
+        assert "route_template" not in encoded
+        if KUNDE_ROUTE_TEMPLATE_DUMP.is_file():
+            templates = KUNDE_ROUTE_TEMPLATE_DUMP.read_text(encoding="utf-8")
+            assert tag not in templates
+            assert "http" not in templates
+        if result.get("contact_dataset_preloaded") is not True:
+            assert result.get("code") == "UI_CHANGED"
+        await page.close()
+        page = None
+        await observer.close()
+        extra = None
+        cleanup = BrowserRuntime(
+            cleanup_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = cleanup
+        await _ready_session(cleanup, slug)
+        contact_delete = await _call(
+            server,
+            "ui_clients_delete_preview",
+            {"name": tag, "organization_id": slug},
+        )
+        if not contact_delete.get("code"):
+            await _call(
+                server,
+                "ui_clients_delete_execute",
+                {"confirmation_ticket": contact_delete["confirmation_ticket"]},
+            )
+        assert await _clients_has_name(cleanup, slug, tag) is False
+        assert KUNDE_TRACE_DUMP.is_file()
+    finally:
+        if page is not None:
+            await page.close()
+        if server is not None and slug:
+            try:
+                contact_delete = await _call(
+                    server,
+                    "ui_clients_delete_preview",
+                    {"name": tag, "organization_id": slug},
+                )
+                if not contact_delete.get("code"):
+                    await _call(
+                        server,
+                        "ui_clients_delete_execute",
+                        {"confirmation_ticket": contact_delete["confirmation_ticket"]},
+                    )
+            except (OSError, RuntimeError, AssertionError, TimeoutError):
+                _record_blocker(f"Cleanup delete failed for leftover tagged contact {tag}.")
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

@@ -9,7 +9,7 @@ updated: 2026-08-17T19:49:00Z
 
 ## Open
 
-- Next: `F12B607E` other_v2 bootstrap route templates. Invoice CUD stays unbound after `4A5CD1E7`. Do not repeat synthetic change, blur, or Tab. Remap invoice CUD rows only after accept and purge.
+- Next: a different read-only capture. Invoice CUD stays unbound after `F12B607E`. Five rest bootstraps are `user` x3, `organizations` x1, unnamed `other_v2` x1. No contact-adjacent preload. Do not issue those routes. Do not repeat synthetic change, blur, or Tab. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 

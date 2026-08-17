@@ -42,11 +42,14 @@ from billy_mcp.ui_writes.invoices_kunde_events import (
     parse_event_counts,
     scrub_message_shape,
 )
+from billy_mcp.ui_writes.invoices_kunde_routes import (
+    pending_from_url,
+    row_from_pending,
+)
 from billy_mcp.ui_writes.invoices_kunde_trace import (
     TRACE_REQUEST_CAP,
     kunde_trace_missing_keys,
     name_token,
-    redact_trace_request,
     request_url_class,
 )
 
@@ -629,6 +632,7 @@ class KundeTraceSink:
         self.phase_errors: list[dict[str, str]] = []
         self.current_phase: str = "at_rest"
         self.scrubbed_messages: list[str] = []
+        self.route_templates: list[str] = []
 
     def snapshot_requests(self) -> list[dict[str, object]]:
         rows = list(self.requests)
@@ -637,28 +641,30 @@ class KundeTraceSink:
                 break
             started = self._started.get(request_id, monotonic())
             rows.append(
-                redact_trace_request(
-                    method=str(row.get("method") or "OTHER"),
-                    path_class=str(row.get("path_class") or "denied"),
+                row_from_pending(
+                    row,
                     status=0,
                     timing_ms=max(0, int((monotonic() - started) * 1000)),
+                    phase=self.current_phase,
                 )
             )
         return rows[:TRACE_REQUEST_CAP]
 
     def note_request(self, request_id: int, method: str, url: str) -> None:
-        path_class = request_url_class(url)
+        pending = pending_from_url(method, url)
+        path_class = str(pending.get("path_class") or request_url_class(url))
         if (
             len(self.requests) >= TRACE_REQUEST_CAP
             and request_id not in self._pending
             and path_class not in {"contacts", "invoices"}
         ):
             return
-        self._pending[request_id] = {
-            "method": method,
-            "path_class": path_class,
-        }
+        self._pending[request_id] = pending
         self._started[request_id] = monotonic()
+        template = pending.get("template")
+        if isinstance(template, str) and path_class == "other_v2":
+            if template not in self.route_templates:
+                self.route_templates.append(template)
 
     def _store_row(self, row: dict[str, object]) -> None:
         if len(self.requests) < TRACE_REQUEST_CAP:
@@ -676,19 +682,13 @@ class KundeTraceSink:
         pending = self._pending.pop(request_id, None)
         started = self._started.pop(request_id, monotonic())
         if pending is None:
-            row = redact_trace_request(
-                method=method,
-                path_class=request_url_class(url),
-                status=status,
-                timing_ms=0,
-            )
-        else:
-            row = redact_trace_request(
-                method=str(pending.get("method") or method),
-                path_class=str(pending.get("path_class") or request_url_class(url)),
-                status=status,
-                timing_ms=max(0, int((monotonic() - started) * 1000)),
-            )
+            pending = pending_from_url(method, url)
+        row = row_from_pending(
+            pending,
+            status=status,
+            timing_ms=max(0, int((monotonic() - started) * 1000)),
+            phase=self.current_phase,
+        )
         self._store_row(row)
 
     def note_console(self, kind: str, event: object | None = None) -> None:
