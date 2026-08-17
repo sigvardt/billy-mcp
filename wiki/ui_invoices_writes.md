@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-17T14:35:00Z
+updated: 2026-08-17T15:20:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -43,12 +43,21 @@ typeahead: `wrapper_count=0`, `search_trigger=false`, no caret, no
 a bind. Extra keys on that field are not a bind. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
-count, and placeholder token flags (never the raw placeholder). Bind only
-after that dump names `sibling_search`, `uncle_search`, `combobox`,
-`contact_id`, or `power_select_trigger`, then a visible option is clicked.
-A placeholder is not an opener. Generic name fill is not a
-bind. Page-wide tag click is not a bind. Create footer is last resort only
-when an exact option exists. Stay red until a visible option is clicked.
+count, and placeholder token flags (never the raw placeholder). It also
+records the `5E1EDFB4` ownership fields as non-PII flags only: exact input
+(tag, type, id present, autocomplete present, disabled, readonly, `aria-*`
+names), owners until `FORM`, label/for and wrapping-label flags, aria
+relationships, active element flags, roles/names/states, box, pointer-events,
+z-index, and `elementFromPoint` at the input center. Never store the tag,
+raw placeholder, or raw accessible name. After the resting dump, one normal
+click on that same field is the observation click, then type. Bind only after
+that dump names `sibling_search`, `uncle_search`, `combobox`, `contact_id`,
+or `power_select_trigger`, then a visible option is clicked. A live dump of
+the contact field shows no `FORM`, no label/for, no aria expander, and
+`elementFromPoint` on the input itself. A placeholder is not an opener.
+Generic name fill is not a bind. Page-wide tag click is not a bind. Create
+footer is last resort only when an exact option exists. Stay red until a
+visible option is clicked.
 
 ## Fail closed
 

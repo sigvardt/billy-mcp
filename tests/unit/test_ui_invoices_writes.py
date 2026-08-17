@@ -556,6 +556,7 @@ def test_bind_does_not_press_extra_keys_on_unbound_contact() -> None:
     source = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
     assert "Alt+ArrowDown" not in source
     assert 'press("Enter")' not in source
+    assert "_click_field_once" in source
 
 
 def test_opener_dump_writes_to_tmp_not_owner_file(
@@ -624,3 +625,60 @@ def test_opener_observe_records_ancestors_and_placeholder_flags() -> None:
     assert "placeholder_flags" in source
     assert "power_select_trigger_count" in source
     assert "ember-power-select-trigger" in source
+
+
+def _live_opener_payload() -> dict[str, object]:
+    """Pre-ownership live opener dump. Named opener is still null after recapture."""
+
+    return {
+        "parent_testid": None,
+        "parent_class_tokens": ["ember-view"],
+        "ancestor_class_tokens": [["ember-view"], [], []],
+        "sibling_search": False,
+        "uncle_search": False,
+        "sibling_caret": False,
+        "uncle_caret": False,
+        "kunde_label_count": 0,
+        "contact_id_count": 0,
+        "combobox_count": 0,
+        "power_select_trigger_count": 0,
+        "placeholder_present": True,
+        "placeholder_flags": {
+            "has_kunde": True,
+            "has_customer": False,
+            "has_vaelg": True,
+            "has_soeg": False,
+            "has_select": False,
+        },
+        "field_name": "contact",
+        "named_opener": None,
+    }
+
+
+def test_live_opener_payload_missing_5e1edfb4_keys() -> None:
+    """Given the live opener dump, When checking keys, Then 5E1EDFB4 fields are missing."""
+
+    from billy_mcp.ui_writes.invoices_form_observe import empty_ownership
+    from billy_mcp.ui_writes.invoices_kunde import (
+        REQUIRED_OPENER_DUMP_KEYS,
+        named_kunde_opener,
+        opener_dump_missing_keys,
+    )
+
+    payload = _live_opener_payload()
+    assert opener_dump_missing_keys(payload) == list(REQUIRED_OPENER_DUMP_KEYS)
+    assert named_kunde_opener(payload) is None
+    complete = {**payload, **empty_ownership()}
+    assert opener_dump_missing_keys(complete) == []
+    assert named_kunde_opener(complete) is None
+
+
+def test_opener_observe_records_5e1edfb4_ownership_keys() -> None:
+    """Given the opener helper, Then it walks owners to FORM and records hit target."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "owners" in source
+    assert "elementFromPoint" in source
+    assert 'tag === "FORM"' in source
+    assert "pointer_events" in source
+    assert "missing_keys" in source

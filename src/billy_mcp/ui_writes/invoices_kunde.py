@@ -110,6 +110,26 @@ def placeholder_flags(text: str | None) -> dict[str, bool]:
     }
 
 
+REQUIRED_OPENER_DUMP_KEYS: Final[tuple[str, ...]] = (
+    "input",
+    "owners",
+    "label",
+    "aria",
+    "active_element",
+    "a11y",
+    "box",
+    "pointer_events",
+    "z_index",
+    "element_from_point",
+)
+
+
+def opener_dump_missing_keys(opener: Mapping[str, object]) -> list[str]:
+    """Keys 5E1EDFB4 requires that this opener dump does not record."""
+
+    return [key for key in REQUIRED_OPENER_DUMP_KEYS if key not in opener]
+
+
 def named_kunde_opener(opener: Mapping[str, object]) -> str | None:
     """Name the first real opener. The contact text field is not one."""
 

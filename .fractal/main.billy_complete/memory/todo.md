@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-16T14:29:47Z
+updated: 2026-08-17T15:20:00Z
 ---
 
 ## Open
 
-- Finish live FastMCP invoice draft CUD. `5E1EDFB4`: read-only accessibility and ownership dump before any live click or key. Derive one normal action from that evidence. Do not treat placeholder as a bind. Remap invoice CUD rows only after accept and purge.
+- Derive the next invoice Kunde action only from the recaptured dump: the hit target is the contact `INPUT` itself, no named opener, no list after click or type. Do not invent selectors. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -34,3 +34,4 @@ updated: 2026-08-16T14:29:47Z
 - Draft save `force=True` is gone. Offline owner save-dump overwrite is closed.
 - Existing-option bind wins over create footer. Dropzone wrapper is not leftover. Live FastMCP draft-bill CUD passed with `vendor_bind=scoped:existing_option`.
 - Bills CUD `tool_name` values are `ui_bills_{create,update,delete}_preview`. Honesty 16 stays red. `ui_bills_update_open` and `ui_bills_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
+- Invoice Kunde opener dump records the `5E1EDFB4` ownership fields. Live recapture has every key. `named_opener` is still null. Hit target is the contact `INPUT`.

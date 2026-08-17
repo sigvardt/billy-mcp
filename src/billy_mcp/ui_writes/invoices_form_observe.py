@@ -4,11 +4,12 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from pathlib import Path
-from typing import Final
+from typing import Final, cast
 
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page, write_json
 from billy_mcp.ui_writes.invoices_kunde import (
     named_kunde_opener,
+    opener_dump_missing_keys,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     placeholder_flags,
@@ -81,6 +82,13 @@ async def observe_kunde(
     except (TimeoutError, RuntimeError):
         value_len = -1
     combined = [*wrapper_items, *alt_items, *items]
+    owned = await _ownership_dump(field)
+    raw_owners = owned.get("owners")
+    owner_rows: list[dict[str, object]] = []
+    if isinstance(raw_owners, list):
+        for item in cast(list[object], raw_owners):
+            if isinstance(item, dict):
+                owner_rows.append(cast(dict[str, object], item))
     return {
         "phase": phase,
         "field_name": await field.get_attribute("name"),
@@ -107,6 +115,11 @@ async def observe_kunde(
         "items": items,
         "wrapper_items": wrapper_items,
         "alt_items": alt_items,
+        "owners_n": len(owner_rows),
+        "reached_form": any(row.get("is_form") is True for row in owner_rows),
+        "element_from_point": owned.get("element_from_point"),
+        "pointer_events": owned.get("pointer_events"),
+        "z_index": owned.get("z_index"),
     }
 
 
@@ -153,10 +166,150 @@ async def _safe_attr(node: Locator, name: str) -> str | None:
 
 
 POWER_SELECT_TRIGGER: Final = ".ember-power-select-trigger"
+_OWNERSHIP_JS: Final = """el => {
+  const token = (raw) => (typeof raw === "string" ? raw : "")
+    .split(/\\s+/).filter((t) => /^(ds-|ember-|Dropdown|input|form)/.test(t)).sort();
+  const ariaNames = [];
+  for (const name of el.getAttributeNames()) {
+    if (name.startsWith("aria-")) ariaNames.push(name);
+  }
+  const box = el.getBoundingClientRect();
+  const style = window.getComputedStyle(el);
+  const owners = [];
+  let node = el.parentElement;
+  while (node && owners.length < 16) {
+    const tag = node.tagName || "";
+    owners.push({
+      tag,
+      has_id: Boolean(node.id),
+      role: node.getAttribute("role"),
+      has_name: Boolean(node.getAttribute("name")),
+      testid: node.getAttribute("data-testid"),
+      class_tokens: token(node.className),
+      is_form: tag === "FORM",
+    });
+    if (tag === "FORM") break;
+    node = node.parentElement;
+  }
+  const id = el.id || "";
+  const forLabel = id ? document.querySelector("label[for=\\"" + CSS.escape(id) + "\\"]") : null;
+  const wrapLabel = el.closest("label");
+  const active = document.activeElement;
+  const hit = document.elementFromPoint(box.left + box.width / 2, box.top + box.height / 2);
+  return {
+    input: {
+      tag: el.tagName || "",
+      type: el.getAttribute("type"),
+      has_id: Boolean(id),
+      has_autocomplete: Boolean(el.getAttribute("autocomplete")),
+      disabled: Boolean(el.disabled),
+      readonly: Boolean(el.readOnly),
+      aria_names: ariaNames.sort(),
+    },
+    owners,
+    label: {has_for: Boolean(forLabel), has_wrap: Boolean(wrapLabel)},
+    aria: {
+      labelledby: Boolean(el.getAttribute("aria-labelledby")),
+      describedby: Boolean(el.getAttribute("aria-describedby")),
+      controls: Boolean(el.getAttribute("aria-controls")),
+      owns: Boolean(el.getAttribute("aria-owns")),
+      activedescendant: Boolean(el.getAttribute("aria-activedescendant")),
+      autocomplete: Boolean(el.getAttribute("aria-autocomplete")),
+      haspopup: Boolean(el.getAttribute("aria-haspopup")),
+      expanded: el.getAttribute("aria-expanded"),
+    },
+    active_element: active && {
+      tag: active.tagName || "",
+      name: active.getAttribute("name"),
+      role: active.getAttribute("role"),
+      testid: active.getAttribute("data-testid"),
+    },
+    a11y: {
+      role: el.getAttribute("role"),
+      has_name: Boolean(el.getAttribute("aria-label") || forLabel || wrapLabel),
+      disabled: el.getAttribute("aria-disabled") === "true" || Boolean(el.disabled),
+      invalid: el.getAttribute("aria-invalid") === "true",
+      busy: el.getAttribute("aria-busy") === "true",
+      expanded: el.getAttribute("aria-expanded"),
+    },
+    box: {
+      x: Math.round(box.x), y: Math.round(box.y),
+      w: Math.round(box.width), h: Math.round(box.height)
+    },
+    pointer_events: style.pointerEvents || "unknown",
+    z_index: style.zIndex || "auto",
+    element_from_point: hit && {
+      tag: hit.tagName || "",
+      class_tokens: token(hit.className),
+      name: hit.getAttribute("name"),
+      testid: hit.getAttribute("data-testid"),
+    },
+  };
+}"""
+
+
+def empty_ownership() -> dict[str, object]:
+    """Structurally complete 5E1EDFB4 keys when evaluate is unavailable."""
+
+    return {
+        "input": {
+            "tag": None,
+            "type": None,
+            "has_id": False,
+            "has_autocomplete": False,
+            "disabled": False,
+            "readonly": False,
+            "aria_names": [],
+        },
+        "owners": [],
+        "label": {"has_for": False, "has_wrap": False},
+        "aria": {
+            "labelledby": False,
+            "describedby": False,
+            "controls": False,
+            "owns": False,
+            "activedescendant": False,
+            "autocomplete": False,
+            "haspopup": False,
+            "expanded": None,
+        },
+        "active_element": None,
+        "a11y": {
+            "role": None,
+            "has_name": False,
+            "disabled": False,
+            "invalid": False,
+            "busy": False,
+            "expanded": None,
+        },
+        "box": None,
+        "pointer_events": "unknown",
+        "z_index": "auto",
+        "element_from_point": None,
+    }
+
+
+async def _ownership_dump(field: Locator) -> dict[str, object]:
+    """Read-only ownership walk. Never clicks. Never stores the tag."""
+
+    payload = empty_ownership()
+    evaluate = getattr(field, "evaluate", None)
+    if evaluate is None:
+        return payload
+    try:
+        raw = await evaluate(_OWNERSHIP_JS)
+    except (TimeoutError, RuntimeError, AttributeError):
+        return payload
+    if not isinstance(raw, dict):
+        return payload
+    for key in payload:
+        if key in raw:
+            payload[key] = raw[key]
+    return payload
 
 
 async def observe_kunde_opener(page: Page, field: Locator) -> dict[str, object]:
-    """Ancestor and sibling opener flags before any type. Never stores the tag."""
+    """Ancestor, sibling, and 5E1EDFB4 ownership flags. Never stores the tag."""
 
     parent = field.locator("xpath=..")
     uncle = parent.locator("xpath=..")
@@ -187,7 +340,9 @@ async def observe_kunde_opener(page: Page, field: Locator) -> dict[str, object]:
         "placeholder_flags": placeholder_flags(await _safe_attr(field, "placeholder")),
         "field_name": await _safe_attr(field, "name"),
     }
+    payload.update(await _ownership_dump(field))
     payload["named_opener"] = named_kunde_opener(payload)
+    payload["missing_keys"] = opener_dump_missing_keys(payload)
     return payload
 
 

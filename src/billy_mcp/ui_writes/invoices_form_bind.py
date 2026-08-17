@@ -45,12 +45,10 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
     opener = await observe_kunde_opener(page, field)
     dump_kunde_opener(opener)
     named = opener.get("named_opener")
-    if not isinstance(named, str) or not named:
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy Kunde opener is not visible.",
-        )
-    type_target = await _click_named_opener(page, field, named)
+    if isinstance(named, str) and named:
+        type_target = await _click_named_opener(page, field, named)
+    else:
+        type_target = await _click_field_once(field)
     if type_target is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
@@ -99,6 +97,16 @@ async def _click_named_opener(page: Page, field: Locator, named: str) -> Locator
     await target.first.click()
     await asyncio.sleep(0.3)
     return target.first
+
+
+async def _click_field_once(field: Locator) -> Locator | None:
+    """One normal click on the proved contact field. Not a guessed sibling."""
+
+    if not await field.is_visible():
+        return None
+    await field.click()
+    await asyncio.sleep(0.3)
+    return field
 
 
 def kunde_wrapper(page: Page) -> Locator:

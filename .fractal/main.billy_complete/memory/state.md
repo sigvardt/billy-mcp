@@ -25,12 +25,16 @@ Honesty 16 stay red. `complete=false`. Invoice CUD still names
 `ui_invoices_*_open`. Offline invoice form helper and FastMCP live
 harness landed. Independent review of that slice is FAIL.
 
-Live invoice create fails closed: `UI_CHANGED` `Billy Kunde opener
-is not visible.` Deepened opener dump: parent `ember-view`,
-ancestors empty after that, placeholder flags `has_kunde` and
-`has_vaelg`, power-select trigger count 0, `named_opener=null`.
-Placeholder is not an opener. Extra keys on `input[name=contact]`
-are gone. Honesty 16 stay red. `complete=false`. Do not remap.
+Live invoice create last failed closed: `UI_CHANGED` `Billy Kunde
+existing option is not visible.` The opener dump now has every
+`5E1EDFB4` key. Live recapture: `input` is `INPUT` type text with
+id and autocomplete, no `aria-*`. Thirteen owners (`DIV` then
+`BODY`/`HTML`), no `FORM`, no testids, no label/for, no wrap label.
+`elementFromPoint` at the input center is that same `INPUT`
+(`ember-text-field`). `named_opener` is still null. After one
+normal field click and after type: `aria-expanded` still null, two
+hidden decoy portals, no option. Placeholder is not an opener.
+Honesty 16 stay red. `complete=false`. Do not remap.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched
