@@ -94,9 +94,15 @@ and footer `Opret "{tag}"`, then clicks
 After bind, wait for the vendor dialog to close. Fill `billDate` and
 line amount without a prior click. Live create dump now has tag,
 vendor, date, amount `1,00`, **Gem som kladde**, and
-`vendor_bind=scoped:portal_footer`. Persist then returns
-`BILLY_ERROR` with empty watched XHR. No POST `/v2/bills`. Do not
-press Escape. Bills `tool_name` still `ui_bills_*_open`. Do not green.
+`vendor_bind=scoped:portal_footer`. Draft save now inspects the exact
+**Gem som kladde** button and uses `mouse.click` at the center. A
+`force=True` locator click is not persist proof. Live inspect after
+that dump is visible, enabled, and covered:
+`hit_target=DIV.ds-moved-with-portal`. Execute waits for every visible
+`.ds-moved-with-portal` node, then Tabs once. The overlay stays.
+Execute returns `UI_CHANGED` `source=leftover_portal` and does not
+click. Do not press Escape. Persist still has no POST `/v2/bills`.
+Offline tests no longer write the owner save dump. Bills `tool_name` still `ui_bills_*_open`. Do not green.
 Do not remap. Do not finish. Do not accept vision
 `3af923d562b546d597e9f156b5c3227f`.
 

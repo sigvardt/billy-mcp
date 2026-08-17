@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import os
 from collections.abc import Callable
 from datetime import date
 from pathlib import Path
@@ -35,6 +36,19 @@ CREATE_PRE_SUBMIT_DUMP = (
 )
 CREATE_FORM_FRAME: Path | None = None
 _PERSIST_DUMP = Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-persist.json"
+SAVE_DUMP = Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-bills-save.json"
+DRAFT_SAVE_HIT = "draft-save"
+_HIT_JS = """([x, y, expected]) => {
+  const el = document.elementFromPoint(x, y);
+  if (!el) return null;
+  const button = el.closest("button");
+  if (button) {
+    const text = (button.innerText || button.textContent || "").replace(/\\s+/g, " ").trim();
+    if (text === expected) return "draft-save";
+  }
+  const cls = typeof el.className === "string" ? el.className.split(/\\s+/)[0] : "";
+  return cls ? `${el.tagName}.${cls}` : el.tagName;
+}"""
 
 LINE_DESCRIPTION = "input[name='billLines.0.description']"
 VENDOR = VENDOR_INPUT_SELECTORS[0]
@@ -64,6 +78,10 @@ class _Locator(Protocol):
 
     async def click(self, **kwargs: object) -> None: ...
 
+    async def is_disabled(self) -> bool: ...
+
+    async def bounding_box(self) -> dict[str, float] | None: ...
+
     async def fill(self, value: str) -> None: ...
 
     async def press(self, key: str) -> None: ...
@@ -90,6 +108,28 @@ class _Locator(Protocol):
     def last(self) -> _Locator: ...
 
 
+class _SaveButton(Protocol):
+    @property
+    def first(self) -> _SaveButton: ...
+
+    async def count(self) -> int: ...
+
+    async def is_visible(self) -> bool: ...
+
+    async def is_disabled(self) -> bool: ...
+
+    async def bounding_box(self) -> dict[str, float] | None: ...
+
+
+class _SavePage(Protocol):
+    def get_by_role(self, role: str, **kwargs: object) -> _SaveButton: ...
+
+    async def evaluate(self, expression: str, arg: object | None = None) -> object: ...
+
+    @property
+    def mouse(self) -> object: ...
+
+
 class _Page(Protocol):
     @property
     def url(self) -> str: ...
@@ -104,8 +144,13 @@ class _Page(Protocol):
 
     def on(self, event: str, handler: object) -> None: ...
 
+    async def evaluate(self, expression: str, arg: object | None = None) -> object: ...
+
     @property
     def keyboard(self) -> object: ...
+
+    @property
+    def mouse(self) -> object: ...
 
     async def goto(self, url: str, wait_until: str = "domcontentloaded") -> object: ...
 
@@ -114,6 +159,77 @@ class _Page(Protocol):
     async def screenshot(self, **kwargs: object) -> object: ...
 
     async def close(self) -> None: ...
+
+
+def locator_force_click_is_persist_proof() -> bool:
+    """A force=True locator click is never persist proof."""
+
+    return False
+
+
+def save_delivery_blocked(
+    *,
+    visible: bool,
+    disabled: bool | None,
+    box: object,
+    hit_target: str | None,
+    expected_hit: str = DRAFT_SAVE_HIT,
+) -> bool:
+    """True when the draft save control must not be clicked."""
+
+    return (not visible) or bool(disabled) or box is None or hit_target != expected_hit
+
+
+def leftover_portal_covers_save(hit_target: str | None) -> bool:
+    """True when elementFromPoint on save is a leftover portal list."""
+
+    return bool(hit_target) and "ds-moved-with-portal" in hit_target
+
+
+def portal_overlay_gone(*, count: int, any_visible: bool) -> bool:
+    """True when leftover portal lists are absent or hidden."""
+
+    return count < 1 or not any_visible
+
+
+def record_bill_watch_item(
+    *,
+    kind: str,
+    method: str,
+    path: str,
+    status: str | None = None,
+    failure: str | None = None,
+) -> str | None:
+    """Format one bills request, response, or abort. Ignore other paths."""
+
+    del failure
+    if "/v2/bills" not in path:
+        return None
+    if kind == "response":
+        return f"{method} {status} {path}"
+    if kind == "failed":
+        return f"{method} FAILED {path}"
+    return f"{method} REQUEST {path}"
+
+
+def dump_save_delivery(payload: dict[str, object], *, destination: Path | None = None) -> None:
+    """Write a non-PII save-button dump outside git."""
+
+    path = destination if destination is not None else SAVE_DUMP
+    current = os.environ.get("PYTEST_CURRENT_TEST", "")
+    if destination is None and current and "/live/" not in current.replace("\\", "/"):
+        return
+    _write_json(
+        path,
+        {
+            "visible": payload.get("visible"),
+            "disabled": payload.get("disabled"),
+            "hit_target": payload.get("hit_target"),
+            "pointer": payload.get("pointer"),
+            "blocked": payload.get("blocked"),
+            "cta": payload.get("cta"),
+        },
+    )
 
 
 def is_persist_hit(item: str, *, method: str) -> bool:
@@ -192,6 +308,87 @@ def dump_pre_submit(
     )
 
 
+async def inspect_draft_save(page: _SavePage, name: str) -> dict[str, object]:
+    """Observe the exact draft save button. Never clicks."""
+
+    blocked_cta = refuse_non_draft_cta(name)
+    if blocked_cta is not None:
+        return {
+            "visible": False,
+            "disabled": None,
+            "box": None,
+            "center": None,
+            "hit_target": None,
+            "blocked": True,
+            "pointer": False,
+            "cta": name,
+        }
+    control = page.get_by_role("button", name=name, exact=True).first
+    visible = await control.count() >= 1 and await control.is_visible()
+    disabled = await control.is_disabled() if visible else None
+    box = await control.bounding_box() if visible else None
+    center: list[float] | None = None
+    hit: str | None = None
+    if isinstance(box, dict):
+        center = [
+            float(box["x"]) + float(box["width"]) / 2,
+            float(box["y"]) + float(box["height"]) / 2,
+        ]
+        raw = await page.evaluate(_HIT_JS, [center[0], center[1], name])
+        hit = raw if isinstance(raw, str) else None
+    return {
+        "visible": visible,
+        "disabled": disabled,
+        "box": box,
+        "center": center,
+        "hit_target": hit,
+        "blocked": save_delivery_blocked(
+            visible=visible, disabled=disabled, box=box, hit_target=hit
+        ),
+        "pointer": False,
+        "cta": name,
+    }
+
+
+async def pointer_click_draft_save(
+    page: _SavePage, name: str, *, destination: Path | None = None
+) -> dict[str, object]:
+    """Click the exact draft save center with the real mouse. Never force-click."""
+
+    delivery = await inspect_draft_save(page, name)
+    for _ in range(30):
+        hit = delivery.get("hit_target")
+        hit_name = hit if isinstance(hit, str) else None
+        if not leftover_portal_covers_save(hit_name):
+            break
+        await asyncio.sleep(0.2)
+        delivery = await inspect_draft_save(page, name)
+    dump_save_delivery(delivery, destination=destination)
+    if delivery.get("blocked"):
+        return delivery
+    raw_center = delivery.get("center")
+    points = cast(list[object], raw_center) if isinstance(raw_center, list) else []
+    if len(points) != 2:
+        delivery["blocked"] = True
+        dump_save_delivery(delivery, destination=destination)
+        return delivery
+    first = points[0]
+    second = points[1]
+    if not isinstance(first, (int, float)) or not isinstance(second, (int, float)):
+        delivery["blocked"] = True
+        dump_save_delivery(delivery, destination=destination)
+        return delivery
+    click = getattr(page.mouse, "click", None)
+    if click is None:
+        delivery["blocked"] = True
+        dump_save_delivery(delivery, destination=destination)
+        return delivery
+    await click(float(first), float(second))
+    delivery["pointer"] = True
+    dump_save_delivery(delivery, destination=destination)
+    return delivery
+
+
 async def submit_draft_bill(
     runtime: BrowserRuntime,
     *,
@@ -268,14 +465,27 @@ async def _create_draft(page: _Page, slug: str, unique_tag: str) -> ToolError | 
     blocked = await _prepare_draft_click(page, unique_tag, filled, DRAFT_SAVE)
     if blocked is not None:
         return blocked
-    seen, bodies = _watch_bill_traffic(page)
-    if not await _click_exact_button(page, DRAFT_SAVE):
+    if not await _wait_vendor_portal_gone(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
-            message="Billy draft save control is not visible.",
+            message="Billy draft save control is not pointer-reachable.",
+            details={"source": "leftover_portal"},
+        )
+    seen, bodies, requests = _watch_bill_traffic(page)
+    delivery = await pointer_click_draft_save(page, DRAFT_SAVE)
+    if delivery.get("blocked") or not delivery.get("pointer"):
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy draft save control is not pointer-reachable.",
+            details={
+                "visible": delivery.get("visible"),
+                "disabled": delivery.get("disabled"),
+                "hit_target": delivery.get("hit_target"),
+                "pointer": delivery.get("pointer"),
+            },
         )
     failed = await _wait_for_bill_write(seen, method="POST")
-    _dump_persist(page, unique_tag, failed, seen)
+    _dump_persist(page, unique_tag, failed, seen, requests)
     if failed is not None:
         return failed
     created = created_bill_id(seen, bodies)
@@ -329,7 +539,7 @@ async def _delete_draft(page: _Page, slug: str, bill_id: str) -> ToolError | Non
     blocked = refuse_non_draft_cta(DELETE)
     if blocked is not None:
         return blocked
-    seen, _bodies = _watch_bill_traffic(page)
+    seen, _bodies, _requests = _watch_bill_traffic(page)
     if not await _click_exact_button(page, DELETE):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
@@ -374,14 +584,27 @@ async def _prepare_draft_click(
 async def _save_draft(
     page: _Page, *, button: str = DRAFT_SAVE, method: str = "POST"
 ) -> ToolError | None:
-    seen, _bodies = _watch_bill_traffic(page)
-    if not await _click_exact_button(page, button):
+    if not await _wait_vendor_portal_gone(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
-            message="Billy draft save control is not visible.",
+            message="Billy draft save control is not pointer-reachable.",
+            details={"source": "leftover_portal"},
+        )
+    seen, _bodies, requests = _watch_bill_traffic(page)
+    delivery = await pointer_click_draft_save(page, button)
+    if delivery.get("blocked") or not delivery.get("pointer"):
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy draft save control is not pointer-reachable.",
+            details={
+                "visible": delivery.get("visible"),
+                "disabled": delivery.get("disabled"),
+                "hit_target": delivery.get("hit_target"),
+                "pointer": delivery.get("pointer"),
+            },
         )
     failed = await _wait_for_bill_write(seen, method=method)
-    _dump_persist(page, "save", failed, seen)
+    _dump_persist(page, "save", failed, seen, requests)
     return failed
 
 
@@ -728,6 +951,24 @@ async def _wait_vendor_dialog_gone(page: _Page) -> None:
         await asyncio.sleep(0.2)
 
 
+async def _wait_vendor_portal_gone(page: _Page) -> bool:
+    portal = page.locator(".ds-moved-with-portal")
+    for _ in range(30):
+        try:
+            count = await portal.count()
+            any_visible = False
+            for index in range(count):
+                if await portal.nth(index).is_visible():
+                    any_visible = True
+                    break
+            if portal_overlay_gone(count=count, any_visible=any_visible):
+                return True
+        except Exception:
+            return True
+        await asyncio.sleep(0.2)
+    return False
+
+
 async def _observe_date_field(page: _Page) -> dict[str, object]:
     field = page.locator(BILL_DATE)
     count = 0
@@ -782,6 +1023,14 @@ async def _fill_draft_fields(page: _Page, unique_tag: str) -> dict[str, str] | T
             details={"field": "vendor", "source": "scoped_leverandor_wrapper"},
         )
     await _wait_vendor_dialog_gone(page)
+    keyboard = getattr(page, "keyboard", None)
+    press = getattr(keyboard, "press", None) if keyboard is not None else None
+    if press is not None:
+        try:
+            await press("Tab")
+        except Exception:
+            pass
+    await _wait_vendor_portal_gone(page)
     date_obs = await _observe_date_field(page)
     dump_date_chrome(date_obs)
     if date_obs.get("count", 0) == 0:
@@ -882,23 +1131,74 @@ def _is_org_less_root(url: str) -> bool:
     return not [part for part in (urlsplit(url).path or "").split("/") if part]
 
 
-def _watch_bill_traffic(page: _Page) -> tuple[list[str], dict[str, object]]:
+def _event_url(event: object) -> str:
+    url = str(getattr(event, "url", "") or "")
+    if url:
+        return url
+    request = getattr(event, "request", event)
+    return str(getattr(request, "url", "") or "")
+
+
+def _event_method(event: object) -> str:
+    request = getattr(event, "request", event)
+    return str(getattr(request, "method", "") or getattr(event, "method", "") or "")
+
+
+def _event_path(event: object) -> str:
+    url = _event_url(event)
+    if "api.billysbilling.com" not in url:
+        return ""
+    return urlsplit(url).path
+
+
+def _event_failure(event: object) -> str:
+    failure = getattr(event, "failure", "")
+    if callable(failure):
+        try:
+            failure = failure()
+        except Exception:
+            failure = "failed"
+    return str(failure or "failed")
+
+
+def _watch_bill_traffic(page: _Page) -> tuple[list[str], dict[str, object], list[str]]:
     seen: list[str] = []
     bodies: dict[str, object] = {}
+    requests: list[str] = []
 
-    def _on(event: object) -> None:
-        url = str(getattr(event, "url", "") or "")
-        if "api.billysbilling.com" not in url or "/v2/bills" not in url:
-            return
-        status = getattr(event, "status", None)
-        request = getattr(event, "request", event)
-        used = str(getattr(request, "method", "") or getattr(event, "method", "") or "")
-        item = f"{used} {status} {urlsplit(url).path}"
-        seen.append(item)
-        bodies[item] = event
+    def _on_request(event: object) -> None:
+        item = record_bill_watch_item(
+            kind="request", method=_event_method(event), path=_event_path(event)
+        )
+        if item is not None:
+            requests.append(item)
 
-    page.on("response", _on)
-    return seen, bodies
+    def _on_response(event: object) -> None:
+        item = record_bill_watch_item(
+            kind="response",
+            method=_event_method(event),
+            path=_event_path(event),
+            status=str(getattr(event, "status", "") or ""),
+        )
+        if item is not None:
+            seen.append(item)
+            bodies[item] = event
+
+    def _on_failed(event: object) -> None:
+        item = record_bill_watch_item(
+            kind="failed",
+            method=_event_method(event),
+            path=_event_path(event),
+            failure=_event_failure(event),
+        )
+        if item is not None:
+            requests.append(item)
+            seen.append(item)
+
+    page.on("request", _on_request)
+    page.on("response", _on_response)
+    page.on("requestfailed", _on_failed)
+    return seen, bodies, requests
 
 
 async def _created_bill_id_from_responses(seen: list[str], bodies: dict[str, object]) -> str | None:
@@ -958,7 +1258,11 @@ async def _wait_for_bill_write(seen: list[str], *, method: str) -> ToolError | N
 
 
 def _dump_persist(
-    page: _Page, unique_tag: str, failed: ToolError | None, seen: list[str] | None = None
+    page: _Page,
+    unique_tag: str,
+    failed: ToolError | None,
+    seen: list[str] | None = None,
+    requests: list[str] | None = None,
 ) -> None:
     _write_json(
         _PERSIST_DUMP,
@@ -968,6 +1272,7 @@ def _dump_persist(
             "failed_code": None if failed is None else failed.code,
             "failed_details": None if failed is None else failed.details,
             "watched": list(seen or []),
+            "requests": list(requests or []),
         },
     )
 

@@ -300,6 +300,10 @@ async def test_ui_bills_create_update_delete_via_call_tool(
         assert create_dump["line_amount"]
         vendor_bind = str(create_dump.get("vendor_bind") or "")
         assert vendor_bind == "scoped:portal_footer"
+        save_dump = json.loads(bills_form.SAVE_DUMP.read_text(encoding="utf-8"))
+        assert save_dump["pointer"] is True
+        assert save_dump["blocked"] is False
+        assert save_dump["hit_target"] == "draft-save"
         form_frame = frame_dir / "01b_create_form.png"
         assert form_frame.is_file() and form_frame.stat().st_size > 0
         await _capture(observer, slug, frame_dir / "02_after_create.png", tag)

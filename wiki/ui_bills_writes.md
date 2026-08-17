@@ -16,8 +16,8 @@ ticket and writes nothing. Execute accepts only `confirmation_ticket`.
 Default `create_server` execute uses `BrowserBillSubmitter` and the
 shared write browser. Create opens `/:org_slug/bills/new`, fills vendor,
 date, line amount, and `billLines.0.description`, dumps those values
-plus the draft-only CTA before click, then clicks **Gem som kladde**.
-Update clicks **Opdater** on `/:org_slug/bills/:id/edit` after the same
+plus the draft-only CTA before click, then pointer-clicks **Gem som kladde**.
+Update pointer-clicks **Opdater** on `/:org_slug/bills/:id/edit` after the same
 dump. Delete looks for **Slet** on edit, then the read path, then the
 confirm modal. Booking, pay, pull, upload, and email CTAs are refused.
 Coverage stays red until live FastMCP proof, independent vision accept,
@@ -65,8 +65,15 @@ and can be consumed once. Replay, expiry, and wrong-tool mismatch fail closed.
 - Date chrome stores `dd.mm.yyyy`. Amount chrome stores Danish `1,00`.
   After vendor bind, wait for the vendor dialog to close, dump
   `billDate`, then fill date and amount without a prior click. A
-  leftover-footer count error is not a vendor bind. Live persist after
-  **Gem som kladde** still has empty watched XHR.
+  leftover-footer count error is not a vendor bind. Draft save inspects
+  the exact **Gem som kladde** / **Opdater** button and uses
+  `mouse.click` at the center. A covered or disabled control returns
+  `UI_CHANGED`. Live hit after vendor bind was
+  `DIV.ds-moved-with-portal`. After vendor bind, wait until every
+  visible leftover portal list is gone, then Tab once. Live overlay
+  still stays. Do not press Escape. No `force=True` on draft save.
+  Offline tests must not write the owner save dump.
+  Persist watches request and response. Create persist is POST 2xx only.
 - Browser egress allows PUT prefix `/v2/bills/` only (no collection PUT,
   no PATCH). Create persist is POST 2xx only.
 - The no-runtime register still returns the old live-slot blocker. That

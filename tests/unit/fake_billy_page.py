@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import re
 from pathlib import Path
-from typing import Final, Self
+from typing import Final, Self, cast
 
 _CHROME: Final[frozenset[str]] = frozenset(
     {
@@ -59,6 +59,20 @@ class FakeKeyboard:
             await focused.fill(text)
 
 
+class FakeMouse:
+    def __init__(self, session: FakeBillySession, page: FakeBillyPage) -> None:
+        self._session = session
+        self._page = page
+
+    async def click(self, x: float, y: float) -> None:
+        del x, y
+        label = self._page.pending_save or "Gem som kladde"
+        locator = FakeBillyLocator(
+            self._session, f"role:{label}", query_text=label, click_name=label
+        )
+        await locator.click()
+
+
 class FakeBillySession:
     """Shared store for one fake browser context. Mutable because it records."""
 
@@ -111,6 +125,8 @@ class FakeBillyPage:
         self.page_id = page_id
         self.url = "about:blank"
         self.keyboard = FakeKeyboard(session)
+        self.mouse = FakeMouse(session, self)
+        self.pending_save: str | None = None
 
     async def goto(self, url: str, *, wait_until: str = "domcontentloaded") -> None:
         del wait_until
@@ -132,8 +148,16 @@ class FakeBillyPage:
         )
 
     def on(self, event: str, handler: object) -> None:
-        if event == "response":
+        if event in {"response", "request", "requestfailed"}:
             self._session.response_handlers.append(handler)
+
+    async def evaluate(self, expression: str, arg: object | None = None) -> object:
+        del expression
+        items = cast(list[object], arg) if isinstance(arg, list) else []
+        if len(items) >= 3 and isinstance(items[2], str):
+            self.pending_save = items[2]
+            return "draft-save"
+        return None
 
     def get_by_role(
         self, role: str, *, name: str | re.Pattern[str], exact: bool = False
@@ -196,6 +220,8 @@ class FakeBillyLocator:
         return self
 
     async def count(self) -> int:
+        if "ds-moved-with-portal" in self._selector and "dropdown-list" not in self._selector:
+            return 1 if self._session.modal_open else 0
         if "ModalWrapper" in self._selector:
             return 1 if self._session.modal_open else 0
         if self._query_text == "Gem":
@@ -210,6 +236,12 @@ class FakeBillyLocator:
 
     async def is_visible(self) -> bool:
         return True
+
+    async def is_disabled(self) -> bool:
+        return False
+
+    async def bounding_box(self) -> dict[str, float] | None:
+        return {"x": 0.0, "y": 0.0, "width": 10.0, "height": 10.0}
 
     def locator(self, selector: str) -> FakeBillyLocator:
         click_name = None
