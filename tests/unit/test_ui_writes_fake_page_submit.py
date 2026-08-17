@@ -85,7 +85,12 @@ def test_bills_create_execute_uses_route_fields_cta_and_readback(
 
 def test_invoices_create_execute_uses_route_fields_cta_and_readback(
     monkeypatch: pytest.MonkeyPatch,
+    tmp_path: Path,
 ) -> None:
+    from billy_mcp.ui_writes import invoices_form, invoices_form_observe
+
+    monkeypatch.setattr(invoices_form, "CREATE_PRE_SUBMIT_DUMP", tmp_path / "create.json")
+    monkeypatch.setattr(invoices_form_observe, "KUNDE_CHROME_DUMP", tmp_path / "kunde.json")
     session = _arm(monkeypatch)
     executed = _preview_and_execute(
         create_server(),

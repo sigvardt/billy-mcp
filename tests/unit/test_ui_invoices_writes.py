@@ -4,13 +4,14 @@ from __future__ import annotations
 
 import asyncio
 from datetime import UTC, datetime, timedelta
+from pathlib import Path
 from typing import Literal, cast
 
 import pytest
 from fastmcp import FastMCP
-from pydantic import ValidationError
+from pydantic import JsonValue, ValidationError
 
-from billy_mcp.confirmations import MAX_TICKET_TTL, ConfirmationStore
+from billy_mcp.confirmations import MAX_TICKET_TTL, ConfirmationBinding, ConfirmationStore
 from billy_mcp.models import StableErrorCode
 from billy_mcp.ui_writes.invoices import (
     CREATE_EXECUTE,
@@ -20,6 +21,7 @@ from billy_mcp.ui_writes.invoices import (
     InvoiceDeletePreviewInput,
     InvoiceUpdatePreviewInput,
     UiInvoiceExecuteResult,
+    invoice_family_write,
     register_ui_invoice_write_tools,
 )
 from billy_mcp.ui_writes.protocol import UiWriteExecuteInput, UiWritePrepared, UiWriteProtocol
@@ -383,3 +385,107 @@ def test_update_and_delete_draft_execute_once() -> None:
     assert update["action"] == "update"
     assert delete["action"] == "delete"
     assert len(recorder.submissions) == 2
+
+
+def test_fill_named_contact_is_not_a_kunde_bind() -> None:
+    """Given the invoice form helper, When creating, Then generic contact fill is gone."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    assert "_fill_named" not in form
+    assert "_fill_named" not in bind
+    assert "bind_kunde" in form
+    assert "input[name='contact']" in bind
+
+
+def _create_prepared() -> UiWritePrepared:
+    request: dict[str, JsonValue] = {
+        "action": "draft_create",
+        "save_cta": DRAFT_SAVE_CTA,
+        "contact_name": "MCP-UI-INV-x",
+        "line_description": "MCP-UI-INV-x line",
+    }
+    return UiWritePrepared(
+        binding=ConfirmationBinding(
+            tool="ui_invoices_create_execute",
+            organization_id="org-test",
+            target="invoices",
+            request=request,
+            expected_effect_state={"action": "create"},
+        ),
+        canonical_request=request,
+        expected_effect_state={"action": "create", "save_cta": DRAFT_SAVE_CTA},
+        summary="Create one Billy invoice draft in the interface.",
+    )
+
+
+def test_invoice_create_does_not_fill_generic_contact() -> None:
+    """Given a draft create ticket, When mapping the write, Then contact is not a name fill."""
+
+    write = invoice_family_write(_create_prepared(), "create")
+
+    assert all(field_name != "contact" for field_name, _ in write.fills)
+
+
+def test_kunde_existing_option_beats_create_footer() -> None:
+    """Given an exact Kunde option and a create footer, When picking, Then existing wins."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        pick_kunde_create_index,
+        pick_kunde_existing_option_index,
+        portal_list_item_flags,
+    )
+
+    tag = "MCP-UI-INV-x"
+    items = [
+        portal_list_item_flags("hidden", tag),
+        portal_list_item_flags(tag, tag),
+        portal_list_item_flags(f'Ingen resultater\n\nOpret "{tag}"', tag),
+    ]
+    items[0]["visible"] = False
+    items[1]["has_empty"] = False
+    items[1]["has_create_footer"] = True
+    items[1]["has_opret"] = True
+
+    assert pick_kunde_existing_option_index(items) == 1
+    assert pick_kunde_create_index(items) == 2
+    assert pick_kunde_existing_option_index(items) != pick_kunde_create_index(items)
+
+
+def test_kunde_field_prefers_wrapper_input() -> None:
+    """Given the bind helper, Then it looks inside the Kunde input-wrapper first."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    observe = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "[data-testid='input-wrapper']" in source
+    assert "input[name='contact']" in source
+    assert "dump_kunde_phases" in observe
+    assert "after_type" in observe
+
+
+def test_kunde_bind_scopes_search_to_contact_wrapper() -> None:
+    """Given live contact chrome, When binding Kunde, Then search is wrapper-scoped."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    observe_path = Path("src/billy_mcp/ui_writes/invoices_form_observe.py")
+    observe = observe_path.read_text(encoding="utf-8") if observe_path.is_file() else ""
+    combined = f"{source}\n{observe}"
+    assert "input[name='contact']" in source
+    assert "filter(" in source
+    assert "[data-testid='search']" in source
+    assert "after_click" in combined
+    assert "search_trigger" in combined
+    assert "page.get_by_text(unique_tag" not in source
+
+
+def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
+    """Given the live invoice writes file, Then it drives FastMCP CUD, not the old hold."""
+
+    source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
+    assert "30D194C8" not in source
+    assert "test_ui_invoices_create_update_delete_via_call_tool" in source
+    assert "create_server" in source
+    assert "ui_invoices_create_preview" in source
+    assert "ui_clients_create_preview" in source
+    assert "Godkend" in source
+    assert "pending_review" in source

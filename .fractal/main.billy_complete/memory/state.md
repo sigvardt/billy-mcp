@@ -21,9 +21,20 @@ Live FastMCP draft-bill CUD passed on existing-option bind. Vision
 Bills CUD `tool_name` values are `ui_bills_{create,update,delete}_preview`.
 Discovery and get-open stay `ui_bills_*_open`. `ui_bills_update_open` and
 `ui_bills_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
-Honesty 16 stay red. `complete=false`. Next is live FastMCP proof for
-the remaining 10 honesty families, then remap those rows. Do not green
-from stubs.
+Honesty 16 stay red. `complete=false`. Invoice CUD still names
+`ui_invoices_*_open`. Offline invoice form helper and FastMCP live
+harness landed. Independent review of that slice is FAIL.
+
+Live invoice create still fails closed: `UI_CHANGED` Kunde option not
+visible. The IR-required no-click dump is now split `after_click` /
+`after_type`. Live values: `input[name=contact]` 250x40, typed
+`value_len=tag_len`, `search_trigger=false`, `page_search_count=0`,
+`trigger_count=0`, `aria-expanded` absent, `alt_list_count=0`, two
+hidden empty decoy portals, `option_role_count=0`. That is not a
+bind. Fake-page dumps are isolated to tmp so they cannot overwrite
+this file. Do not remap invoices. Do not green from stubs. Next is
+to identify the real Kunde opener from that dump, then one tagged
+draft CUD.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched

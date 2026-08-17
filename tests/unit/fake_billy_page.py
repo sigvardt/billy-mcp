@@ -178,6 +178,7 @@ class FakeBillyPage:
         mapped = {
             "Leverandør": "input[name='vendor']",
             "Bilagsdato": "input[name='billDate']",
+            "Kunde": "input[name='contactId']",
         }.get(text, f"label:{text}")
         return FakeBillyLocator(self._session, mapped)
 
@@ -292,6 +293,10 @@ class FakeBillyLocator:
                 handler(FakeResponse("POST", "https://api.billysbilling.com/v2/bills"))
                 handler(FakeResponse("GET", "https://api.billysbilling.com/v2/bills/fake-bill-id"))
                 handler(FakeResponse("PUT", "https://api.billysbilling.com/v2/bills/fake-bill-id"))
+                handler(FakeResponse("POST", "https://api.billysbilling.com/v2/invoices"))
+                handler(
+                    FakeResponse("PUT", "https://api.billysbilling.com/v2/invoices/fake-invoice-id")
+                )
         if any(token in folded for token in ("slet", "delete", "bekræft")):
             self._session.records.clear()
             for handler in list(self._session.response_handlers):
@@ -326,8 +331,7 @@ class FakeBillyLocator:
         self._session.fills.append((_field_name(self._selector), value))
         self._session.records.add(value)
         self._session.focused = self
-        if _field_name(self._selector) == "vendor":
-            self._session.dropdown_options = [f'Opret "{value}"', "Opret leverandør"]
+        self._open_typeahead(value)
 
     async def evaluate(self, expression: str) -> object:
         del expression
@@ -339,8 +343,14 @@ class FakeBillyLocator:
     async def press_sequentially(self, text: str) -> None:
         self._session.fills.append((_field_name(self._selector), text))
         self._session.records.add(text)
-        if _field_name(self._selector) == "vendor":
-            self._session.dropdown_options = [f'Opret "{text}"', "Opret leverandør"]
+        self._open_typeahead(text)
+
+    def _open_typeahead(self, value: str) -> None:
+        field = _field_name(self._selector)
+        if field == "vendor":
+            self._session.dropdown_options = [f'Opret "{value}"', "Opret leverandør"]
+        if field in {"contactId", "contact"}:
+            self._session.dropdown_options = [value]
 
     async def set_input_files(self, path: str | Path) -> None:
         resolved = str(path)

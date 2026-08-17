@@ -11,7 +11,8 @@ from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
+from billy_mcp.ui_writes.invoices_form import submit_draft_invoice
+from billy_mcp.ui_writes.page_flow import FamilyWrite
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePrepared,
@@ -124,10 +125,15 @@ class BrowserInvoiceSubmitter:
             return rejected
         action = _effect_action(prepared.expected_effect_state)
         save_cta = str(prepared.canonical_request.get("save_cta", ""))
-        failed = await perform_family_write(
+        request = prepared.canonical_request
+        failed = await submit_draft_invoice(
             self._runtime,
-            _invoice_write(prepared, action),
+            action=action,
+            unique_tag=str(request.get("contact_name") or request.get("line_description") or ""),
+            contact_name=str(request.get("contact_name") or ""),
+            line_description=str(request.get("line_description") or ""),
             organization_id=str(prepared.binding.organization_id or ""),
+            invoice_id=str(request.get("id") or ""),
             readback_runtime=self._readback_runtime,
         )
         if failed is not None:
@@ -168,18 +174,17 @@ def fail_closed(action: str, save_cta: str) -> ToolError | None:
     return None
 
 
-def _invoice_write(
+def invoice_family_write(
     prepared: UiWritePrepared, action: Literal["create", "update", "delete"]
 ) -> FamilyWrite:
     request = prepared.canonical_request
     invoice_id = str(request.get("id") or "")
-    contact_name = str(request.get("contact_name") or "")
     line_description = str(request.get("line_description") or invoice_id)
     match action:
         case "create":
             return FamilyWrite(
                 write_path="invoices/new",
-                fills=(("contact", contact_name), ("description", line_description)),
+                fills=(("description", line_description),),
                 clicks=(DRAFT_SAVE_CTA,),
                 readback_path="invoices",
                 readback_text=line_description,
