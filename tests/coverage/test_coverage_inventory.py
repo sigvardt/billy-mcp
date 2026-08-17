@@ -1858,8 +1858,8 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.parity.invoices.update": "ui_invoices_update_open",
         "ui.parity.invoices.delete": "ui_invoices_delete_open",
         "ui.parity.bills.get": "ui_bills_get_open",
-        "ui.parity.bills.update": "ui_bills_update_open",
-        "ui.parity.bills.delete": "ui_bills_delete_open",
+        "ui.parity.bills.update": "ui_bills_update_preview",
+        "ui.parity.bills.delete": "ui_bills_delete_preview",
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
         "ui.discovery.products_create": "ui_products_create_open",
@@ -1880,7 +1880,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.purchases": "ui_bills_list",
         "ui.parity.bills.list": "ui_bills_list",
         "ui.discovery.bills_create": "ui_bills_create_open",
-        "ui.parity.bills.create": "ui_bills_create_open",
+        "ui.parity.bills.create": "ui_bills_create_preview",
         "ui.discovery.debtor_balances": "ui_debtor_balances_list",
         "ui.discovery.creditor_balances": "ui_creditor_balances_list",
         "ui.discovery.uploads": "ui_uploads_list",
@@ -2326,7 +2326,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
 
     bills_update_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.update")
     assert bills_update_parity["api_row_id"] == "api.bills.update"
-    assert bills_update_parity["tool_name"] == "ui_bills_update_open"
+    assert bills_update_parity["tool_name"] == "ui_bills_update_preview"
     assert bills_update_parity["parity_status"] == "form_open_only"
     assert bills_update_parity["live_tested"] is False
     assert bills_update_parity["vision_verified"] is False
@@ -2335,7 +2335,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
 
     bills_delete_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.delete")
     assert bills_delete_parity["api_row_id"] == "api.bills.delete"
-    assert bills_delete_parity["tool_name"] == "ui_bills_delete_open"
+    assert bills_delete_parity["tool_name"] == "ui_bills_delete_preview"
     assert bills_delete_parity["parity_status"] == "delete_chrome_open_only"
     assert bills_delete_parity["live_tested"] is False
     assert bills_delete_parity["vision_verified"] is False
@@ -2344,7 +2344,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
 
     bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
     assert bills_create_parity["api_row_id"] == "api.bills.create"
-    assert bills_create_parity["tool_name"] == "ui_bills_create_open"
+    assert bills_create_parity["tool_name"] == "ui_bills_create_preview"
     assert bills_create_parity["parity_status"] == "form_open_only"
     assert "api.bills.create" in bills_create_parity["evidence"]
     assert "research154" in bills_create_parity["evidence"]

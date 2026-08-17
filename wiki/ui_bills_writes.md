@@ -20,13 +20,15 @@ plus the draft-only CTA before click, then pointer-clicks **Gem som kladde**.
 Update pointer-clicks **Opdater** on `/:org_slug/bills/:id/edit` after the same
 dump. Delete looks for **Slet** on edit, then the read path, then the
 confirm modal. Booking, pay, pull, upload, and email CTAs are refused.
-Coverage stays red until live FastMCP proof, independent vision accept,
-and purge.
+The three CUD parity rows now name `ui_bills_{create,update,delete}_preview`.
+Honesty 16 still keeps implemented, live_tested, and vision_verified false.
+Discovery and get-open stay on `ui_bills_*_open`. Update and delete open
+shells stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
 
 This lane never calls `https://api.billysbilling.com/v2`. Qualification is
-`server.call_tool`, not `BrowserRuntime`. Root greens
-`ui.parity.bills.create`, `ui.parity.bills.update`, and
-`ui.parity.bills.delete` only after a live MCP proof.
+`server.call_tool`, not `BrowserRuntime`. Root does not green
+`ui.parity.bills.create`, `ui.parity.bills.update`, or
+`ui.parity.bills.delete` while they remain in the honesty set.
 
 Shared ticket rules live in [[ui_write_ticket_protocol]]. Open-only shells
 stay read-only: [[ui_bills_create_open_shell]],

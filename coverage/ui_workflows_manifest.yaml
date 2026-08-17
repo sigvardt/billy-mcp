@@ -5480,7 +5480,7 @@
         "tests/live/test_ui_bills_create_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_bills_create_open",
+      "tool_name": "ui_bills_create_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"
@@ -5528,7 +5528,7 @@
         "tests/live/test_ui_bills_update_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_bills_update_open",
+      "tool_name": "ui_bills_update_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"
@@ -5576,7 +5576,7 @@
         "tests/live/test_ui_bills_delete_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_bills_delete_open",
+      "tool_name": "ui_bills_delete_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"

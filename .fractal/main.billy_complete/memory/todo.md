@@ -9,8 +9,6 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Remap only the three bills CUD rows to `ui_bills_{create,update,delete}_preview`. Keep honesty 16 red until the remaining 10 families have live MCP proof.
-- Independent vision accept + purge, then remap only the three bills rows.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -34,3 +32,4 @@ updated: 2026-08-16T14:29:47Z
 - Date fill works without a prior click (`value_len` 10). Amount fill without a prior click reaches **Gem som kladde**. A leftover-footer count error is not a bind.
 - Draft save `force=True` is gone. Offline owner save-dump overwrite is closed.
 - Existing-option bind wins over create footer. Dropzone wrapper is not leftover. Live FastMCP draft-bill CUD passed with `vendor_bind=scoped:existing_option`.
+- Bills CUD `tool_name` values are `ui_bills_{create,update,delete}_preview`. Honesty 16 stays red. `ui_bills_update_open` and `ui_bills_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.

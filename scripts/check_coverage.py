@@ -28,12 +28,14 @@ from generate_coverage_report import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
-# Contacts CUD parity names preview tools. Update/delete open shells stay
-# registered for form-open and delete-chrome live tests.
+# Contacts and bills CUD parity name preview tools. Update/delete open
+# shells stay registered for form-open and delete-chrome live tests.
 RETAINED_OPEN_SHELL_TOOLS: frozenset[str] = frozenset(
     {
         "ui_clients_update_open",
         "ui_clients_delete_open",
+        "ui_bills_update_open",
+        "ui_bills_delete_open",
     }
 )
 REQUIRED_ROW_FIELDS = {

@@ -103,10 +103,17 @@ def test_cud_parity_green_requires_preview_and_execute_twin() -> None:
     assert violations == [], "CUD parity invariant failed: " + "; ".join(violations)
 
 
-def test_contacts_update_delete_open_shells_stay_registered() -> None:
+def test_contacts_and_bills_update_delete_open_shells_stay_registered() -> None:
     """Preview remap must not drop the update/delete open-shell tools."""
 
     retained = checker.RETAINED_OPEN_SHELL_TOOLS
-    assert retained == frozenset({"ui_clients_update_open", "ui_clients_delete_open"})
+    assert retained == frozenset(
+        {
+            "ui_clients_update_open",
+            "ui_clients_delete_open",
+            "ui_bills_update_open",
+            "ui_bills_delete_open",
+        }
+    )
     registered = checker.registered_domain_tools(ROOT)
     assert retained <= registered

@@ -949,6 +949,13 @@ UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.contacts.update": "ui_clients_update_preview",
     "ui.parity.contacts.delete": "ui_clients_delete_preview",
 }
+# After bills CUD accept+purge: CUD parity names preview tools. Honesty
+# still keeps implemented/live/vision false. Discovery/get-open stay *_open.
+UI_BILLS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
+    "ui.parity.bills.create": "ui_bills_create_preview",
+    "ui.parity.bills.update": "ui_bills_update_preview",
+    "ui.parity.bills.delete": "ui_bills_delete_preview",
+}
 
 
 # The inventory is generated from this narrow, source-controlled map rather
@@ -1992,6 +1999,27 @@ def apply_ui_contacts_cud_preview_tool_names(workflows: list[dict[str, Any]]) ->
     missing = set(UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES) - seen
     if missing:
         raise RuntimeError(f"contacts CUD preview mapping missing rows: {sorted(missing)}")
+
+
+def apply_ui_bills_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> None:
+    """Point bills CUD parity rows at preview tools after honesty.
+
+    Leaves ``parity_status`` open-only. Honesty still forces implemented,
+    live_tested, and vision_verified false. Discovery and get-open stay on
+    ``ui_bills_*_open``.
+    """
+
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        preview = UI_BILLS_CUD_PREVIEW_TOOL_NAMES.get(row_id)
+        if preview is None:
+            continue
+        seen.add(row_id)
+        row["tool_name"] = preview
+    missing = set(UI_BILLS_CUD_PREVIEW_TOOL_NAMES) - seen
+    if missing:
+        raise RuntimeError(f"bills CUD preview mapping missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7843,6 +7871,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_product_plane_bulk_chrome_dual_na_empty_list(workflows)
     apply_ui_cud_parity_open_only_honesty(workflows)
     apply_ui_contacts_cud_preview_tool_names(workflows)
+    apply_ui_bills_cud_preview_tool_names(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
@@ -7948,6 +7977,8 @@ def build_browser_egress() -> dict[str, Any]:
                     "at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, "
                     "prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill "
                     "seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); "
+                    "31F6E753 PUT prefix /v2/bills/ for SPA draft bill update only "
+                    "(no collection PUT, no PATCH); "
                     "research179 dual: GET/POST/DELETE /v2/daybooks for daybook "
                     "get-open SPA list and disposable seed/cleanup"
                 ),
@@ -7978,6 +8009,7 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/bills"},
                     {"match": "exact", "methods": ["POST"], "path": "/v2/bills"},
                     {"match": "prefix", "methods": ["DELETE"], "path": "/v2/bills"},
+                    {"match": "prefix", "methods": ["PUT"], "path": "/v2/bills/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/taxRates"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/daybooks"},
                     {"match": "exact", "methods": ["POST"], "path": "/v2/daybooks"},

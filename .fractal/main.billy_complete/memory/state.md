@@ -12,14 +12,18 @@ updated: 2026-08-16T14:29:47Z
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-`91A2C363` resumes the leftover Leverandør slice. `A6FB8FC2` is a safety break, not a park.
+`91A2C363` leftover Leverandør slice is closed. `A6FB8FC2` stays a
+one-close constraint.
 
 Live FastMCP draft-bill CUD passed on existing-option bind. Vision
 `run_id=9920dd9476474b41aef70e6d66d24638` is `author=independent_review`,
 `reviewer_verdict=accept`, `purge_verified=true`. Frame folder is gone.
-Bills `tool_name` stay `ui_bills_*_open`. Honesty 16 stay red.
-`complete=false`. Create persist dump is now separate from later PUT.
-Next is remap only the three bills rows.
+Bills CUD `tool_name` values are `ui_bills_{create,update,delete}_preview`.
+Discovery and get-open stay `ui_bills_*_open`. `ui_bills_update_open` and
+`ui_bills_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
+Honesty 16 stay red. `complete=false`. Next is live FastMCP proof for
+the remaining 10 honesty families, then remap those rows. Do not green
+from stubs.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched
@@ -86,8 +90,8 @@ Honesty 16 stays red. Coverage stays red.
 `ui_clients_update_open` and `ui_clients_delete_open` registered.
 Empty untagged bill drafts are gone. A fresh session list is
 `/:org_slug/bills/empty`. Parent `31F6E753` still requires a pre-submit
-DOM dump before the next create. Update save is **Opdater**. Honesty 16
-stay red. Do not remap.
+DOM dump before any new create. Update save is **Opdater**. Honesty 16
+stay red. Bills CUD rows name preview tools.
 
 IR FAIL on the first live bills CUD: create dump was overwritten,
 typed-only vendor bind was accepted, vision `run_id` did not name the
@@ -115,9 +119,9 @@ owning control. A second close is forbidden. A live run clicked that
 modal **Gem**; save hit stayed `DIV.ds-moved-with-portal`. Execute
 returns `UI_CHANGED` `source=leftover_portal` and does not click save.
 Do not press Escape. Persist still has no POST `/v2/bills`.
-Offline tests no longer write the owner save dump. Bills `tool_name` still `ui_bills_*_open`. Do not green.
-Do not remap. Do not finish. Do not accept vision
-`3af923d562b546d597e9f156b5c3227f`.
+Offline tests no longer write the owner save dump. Bills CUD
+`tool_name` values are preview. Do not green. Do not finish. Do not
+accept vision `3af923d562b546d597e9f156b5c3227f`.
 
 ## Review
 

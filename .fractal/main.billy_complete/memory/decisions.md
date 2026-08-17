@@ -53,7 +53,7 @@ updated: 2026-08-16T13:50:50Z
 
 `A6FB8FC2` (superseded as a park, still a constraint): do not retry dialog **Gem** plus a second search-toggle close. One named close only, and only after role, text, and owning-control proof.
 
-`91A2C363` (saved, current): resume and finish. Start with one no-click leftover snapshot after supplier select. Derive one close from that evidence. Failing fixture first, then smallest exact fix, then one tagged FastMCP draft-bill create, update, and delete with fresh-session read-back. Stay red until independent Grok review accepts the full proof. If the page differs, record `UI_CHANGED` and recapture. Do not use generic portal sweeps, force clicks, DOM evaluate clicks, or blind Escape.
+`91A2C363` (saved, leftover slice done): existing-option bind plus accept `9920dd9476474b41aef70e6d66d24638`. Bills CUD rows now name preview tools. Stay red. If the page differs later, record `UI_CHANGED` and recapture. Do not use generic portal sweeps, force clicks, DOM evaluate clicks, or blind Escape.
 
 `93D7A063` (done, unsaved): accept recorded for `run-3d5b151dfd5342258f8734373597f8c1`, frames gone, then `tool_name` remapped to `ui_clients_{create,update,delete}_preview` in `f47b9d5`. Mapping did not self-approve. Honesty 16 stays red.
 
