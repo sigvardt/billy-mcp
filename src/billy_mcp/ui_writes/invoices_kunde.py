@@ -5,6 +5,7 @@ Official invoice belongs-to is contact/contactId. UI label is Kunde.
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping, Sequence
 from typing import Final
 
@@ -15,6 +16,7 @@ KUNDE_INPUT_SELECTORS: Final[tuple[str, ...]] = (
     "[data-cy*='contact' i]",
 )
 CREATE_KUNDE_LABEL: Final = "Opret kunde"
+EXISTING_CUSTOMER_TAG_RE: Final = re.compile(r"^MCP-UI-INV-[0-9A-F]{8}$")
 PORTAL_FOOTER_WRAPPER: Final = "[class*='DropdownFooterWrapper']"
 DROPDOWN_SELECTORS: Final[tuple[str, ...]] = (
     ".ds-dropdown-list",
@@ -95,6 +97,20 @@ def kunde_phase_is_bound(phase: Mapping[str, object]) -> bool:
     if phase.get("existing_index") is not None:
         return True
     return phase.get("create_index") is not None
+
+
+def after_type_is_existing_customer_observation(
+    phase: Mapping[str, object], unique_tag: str
+) -> bool:
+    """True when after_type typed a live MCP-UI-INV tag. Not a bind.
+
+    The 15-char dummy dump is not an existing-customer observation.
+    """
+
+    if EXISTING_CUSTOMER_TAG_RE.fullmatch(unique_tag) is None:
+        return False
+    expected = len(unique_tag)
+    return phase.get("tag_len") == expected and phase.get("value_len") == expected
 
 
 def placeholder_flags(text: str | None) -> dict[str, bool]:

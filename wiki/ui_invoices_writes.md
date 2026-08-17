@@ -40,7 +40,12 @@ Kunde bind is an existing-option pick after a named opener. The live
 `input[name=contact]` field is typeable (250x40) and is **not** the bills
 typeahead: `wrapper_count=0`, `search_trigger=false`, no caret, no
 `aria-expanded`, two hidden empty decoy portals. Typing the tag there is not
-a bind. Extra keys on that field are not a bind. The opener dump records
+a bind. A 15-char dummy `after_type` is not an existing-customer
+observation. Existing-customer type uses a FastMCP-created
+`MCP-UI-INV-` + 8 hex name in that same `INPUT`. A live type of that
+19-char name reached `value_len=19` and still showed two hidden decoys,
+`option_role_count=0`, and no bind. Extra keys on that field
+are not a bind. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

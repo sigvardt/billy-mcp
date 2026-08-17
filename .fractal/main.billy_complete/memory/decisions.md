@@ -15,6 +15,7 @@ sources:
   - radio:7E7148F6
   - radio:91A2C363
   - radio:A6FB8FC2
+  - radio:51E18E60
 created: 2026-08-16T13:50:50Z
 updated: 2026-08-16T13:50:50Z
 ---
@@ -27,7 +28,9 @@ updated: 2026-08-16T13:50:50Z
 
 `E004E7D5` (saved): minimum failing-gate set is the 16 false-green parity rows (bills CUD, contacts CUD, daybooks create/delete, daybookTransactions create, files create, invoices CUD, organizations update, products create, transactions create). Still catch any other write row wrongly treated as complete.
 
-`5E1EDFB4` (saved): before another live click or key, capture read-only Kunde accessibility and ownership evidence (input, owning ancestors to the form field, label/for, aria, active element, roles/names/states, visible text, boxes, pointer-events, z-index, elementFromPoint at input center, visible portal descendants after normal field click and after type). Derive one normal action from that evidence. Failing fixture first. No guessed selectors, generic portal sweeps, force clicks, evaluate clicks, or Escape.
+`5E1EDFB4` (done, unsaved): opener dump now has every required key. `named_opener` is null. Hit target is the contact `INPUT`.
+
+`51E18E60` (saved): stop typed-only repeats. The existing 19-char type matched the dummy. Before another write, extend the read-only capture with safe input attrs (type, name, autocomplete, list, role, aria, placeholder flags), linked native datalist and option count, visible input count and geometry, a Playwright accessibility snapshot, and a redacted field screenshot after click and type. Check native datalist, a separate visual trigger, or Tab/blur completion. Derive one next action from that evidence. Failing fixture first. If none, a redacted count-only trace of whether the interface issues a customer lookup after type. Never call the API directly. Do not land another unchanged typed-only red package.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

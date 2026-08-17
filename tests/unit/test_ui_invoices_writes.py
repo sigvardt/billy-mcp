@@ -529,6 +529,15 @@ def _live_unbound_after_type() -> dict[str, object]:
     }
 
 
+def _live_dummy_after_type() -> dict[str, object]:
+    """Current owner dump after_type: 15-char dummy, not MCP-UI-INV- + 8 hex."""
+
+    payload = _live_unbound_after_type()
+    payload["value_len"] = 15
+    payload["tag_len"] = 15
+    return payload
+
+
 def test_typed_contact_dump_is_not_a_kunde_bind() -> None:
     """Given the live after-type dump, When judging bind, Then typed contact is unbound."""
 
@@ -548,6 +557,28 @@ def test_typed_contact_dump_is_not_a_kunde_bind() -> None:
         )
         is None
     )
+
+
+def test_dummy_15_char_after_type_is_not_existing_customer_observation() -> None:
+    """Given the 15-char dummy dump, When judging observation, Then it is not existing-customer."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        after_type_is_existing_customer_observation,
+        kunde_phase_is_bound,
+    )
+
+    dummy = _live_dummy_after_type()
+    existing_tag = "MCP-UI-INV-DEADBEEF"
+    assert len(existing_tag) == 19
+    assert dummy["tag_len"] == 15
+    assert kunde_phase_is_bound(dummy) is False
+    assert after_type_is_existing_customer_observation(dummy, existing_tag) is False
+    assert after_type_is_existing_customer_observation(dummy, "short-dummy-15x") is False
+    matched = dict(dummy)
+    matched["value_len"] = 19
+    matched["tag_len"] = 19
+    assert after_type_is_existing_customer_observation(matched, existing_tag) is True
+    assert kunde_phase_is_bound(matched) is False
 
 
 def test_bind_does_not_press_extra_keys_on_unbound_contact() -> None:

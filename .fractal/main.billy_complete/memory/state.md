@@ -33,8 +33,16 @@ id and autocomplete, no `aria-*`. Thirteen owners (`DIV` then
 `elementFromPoint` at the input center is that same `INPUT`
 (`ember-text-field`). `named_opener` is still null. After one
 normal field click and after type: `aria-expanded` still null, two
-hidden decoy portals, no option. Placeholder is not an opener.
-Honesty 16 stay red. `complete=false`. Do not remap.
+hidden decoy portals, no option. A dummy `after_type` used `tag_len=15`. That is not an
+existing-customer observation.
+`after_type_is_existing_customer_observation` is true only for
+`MCP-UI-INV-` + 8 hex with matching `value_len`. It is not a bind.
+A live FastMCP create then typed that 19-char name into the proved
+`INPUT` (`value_len=19`) and still had two hidden decoys and
+`option_role_count=0`. Execute returned `UI_CHANGED`. The tagged
+contact is gone.
+Placeholder is not an opener. Honesty 16 stay red. `complete=false`.
+Do not remap.
 
 `auth_login_wait` READY now returns `organization_id` from the live URL slug.
 Default `create_server` login drives write and `-readback` profiles. Mismatched

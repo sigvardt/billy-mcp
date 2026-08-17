@@ -9,7 +9,7 @@ updated: 2026-08-17T15:20:00Z
 
 ## Open
 
-- Derive the next invoice Kunde action only from the recaptured dump: the hit target is the contact `INPUT` itself, no named opener, no list after click or type. Do not invent selectors. Remap invoice CUD rows only after accept and purge.
+- After an existing 19-char type, recapture whether a hidden `contactId` appears and whether browser GET `/v2/contacts` fires. Stay on the proved `INPUT`. Do not add extra keys. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -35,3 +35,5 @@ updated: 2026-08-17T15:20:00Z
 - Existing-option bind wins over create footer. Dropzone wrapper is not leftover. Live FastMCP draft-bill CUD passed with `vendor_bind=scoped:existing_option`.
 - Bills CUD `tool_name` values are `ui_bills_{create,update,delete}_preview`. Honesty 16 stays red. `ui_bills_update_open` and `ui_bills_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.
 - Invoice Kunde opener dump records the `5E1EDFB4` ownership fields. Live recapture has every key. `named_opener` is still null. Hit target is the contact `INPUT`.
+- Dummy 15-char `after_type` is not an existing-customer observation. Helper `after_type_is_existing_customer_observation` requires `MCP-UI-INV-` + 8 hex and matching `value_len`. Typed-only stays unbound.
+- Live FastMCP created that 19-char customer and typed it into the proved `INPUT`. Still no visible option. `UI_CHANGED`. Contact deleted.
