@@ -12,6 +12,15 @@ updated: 2026-08-16T14:29:47Z
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
+`51E18E60` is the live slice: stop typed-only invoice Kunde repeats. The
+widget-contract helper now lists missing keys on the current live dumps.
+Observe records `autocomplete_token`, `list_present`, datalist counts,
+visible input count, a11y snapshot counts, and a field-shot flag. Live
+recapture: `autocomplete_token=off`, no native datalist, 11 visible
+inputs, no listbox, named action none, GET `/v2/contacts` count 0.
+Independent review FAIL. Field shot purged. The chevron in that shot
+is input chrome, not a dump-named trigger. Never call the API. Do
+not land another unchanged typed-only red package.
 `91A2C363` leftover Leverandør slice is closed. `A6FB8FC2` stays a
 one-close constraint.
 

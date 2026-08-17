@@ -45,7 +45,17 @@ observation. Existing-customer type uses a FastMCP-created
 `MCP-UI-INV-` + 8 hex name in that same `INPUT`. A live type of that
 19-char name reached `value_len=19` and still showed two hidden decoys,
 `option_role_count=0`, and no bind. Extra keys on that field
-are not a bind. The opener dump records
+are not a bind. Typed-only repeats are closed (`51E18E60`). The
+widget-contract dump records `autocomplete_token` (allowlisted),
+`list_present`, `datalist_count`, `datalist_option_count`,
+`visible_input_count`, an accessibility snapshot of counts only, and
+a redacted field-shot flag (`present`, `bytes`, box). Pixels stay
+outside git. Live recapture: `autocomplete_token=off`, `list_present=false`,
+`datalist_count=0`, `datalist_option_count=0`, `visible_input_count=11`,
+accessibility snapshot has no listbox. Field shot was reviewed and
+purged. A chevron on that crop is input chrome, not a dump-named
+trigger. No dump-named action. Count-only GET `/v2/contacts` after
+type is 0. The opener dump records
 parent and three ancestor class tokens, sibling/uncle search, exact **Kunde**
 label count, `contactId` count, combobox count, ember-power-select trigger
 count, and placeholder token flags (never the raw placeholder). It also

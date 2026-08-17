@@ -9,7 +9,7 @@ updated: 2026-08-17T15:20:00Z
 
 ## Open
 
-- After an existing 19-char type, recapture whether a hidden `contactId` appears and whether browser GET `/v2/contacts` fires. Stay on the proved `INPUT`. Do not add extra keys. Remap invoice CUD rows only after accept and purge.
+- Invoice Kunde widget dump is complete and named no next action. Lookup count is 0. Stay on the proved `INPUT`. Do not add extra keys. Remap invoice CUD rows only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 

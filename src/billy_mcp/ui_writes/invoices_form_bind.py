@@ -8,11 +8,13 @@ from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_observe import (
     ALT_LIST_SELECTORS,
     dump_kunde_chrome,
+    dump_kunde_lookup,
     dump_kunde_opener,
     dump_kunde_phases,
     observe_kunde,
     observe_kunde_opener,
     portal_items,
+    watch_contact_lookups,
 )
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page
 from billy_mcp.ui_writes.invoices_kunde import (
@@ -22,6 +24,7 @@ from billy_mcp.ui_writes.invoices_kunde import (
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     portal_create_footer_label,
+    widget_named_action,
 )
 
 LINE_SELECTORS = (
@@ -30,6 +33,61 @@ LINE_SELECTORS = (
     "textarea[name='description']",
     "input[name='description']",
 )
+
+
+async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only widget contract recapture. Does not save a draft."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    type_target = await _click_field_once(field)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    await _type_kunde(type_target, unique_tag)
+    await _wait_options(page, unique_tag, wrapper)
+    after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
+    after_type["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_type)
+    merged = {**opener, **after_type}
+    named_action = widget_named_action(merged)
+    if named_action == "tab_blur":
+        press = getattr(type_target, "press", None)
+        if press is not None:
+            await press("Tab")
+            await asyncio.sleep(0.4)
+            after_type = await observe_kunde(
+                page, field, unique_tag, phase="after_tab", wrapper=wrapper
+            )
+            after_type["contact_get_count"] = len(lookups)
+            dump_kunde_phases(after_click, after_type)
+            merged = {**opener, **after_type}
+            named_action = widget_named_action(merged)
+    if named_action is None:
+        dump_kunde_lookup(len(lookups))
+    return {
+        "opener": opener,
+        "after_type": after_type,
+        "named_action": named_action,
+        "contact_get_count": len(lookups),
+        "widget_missing_keys": after_type.get("widget_missing_keys"),
+    }
 
 
 async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
@@ -55,16 +113,34 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
             message="Billy Kunde opener is not visible.",
         )
     wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
     after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
     await _type_kunde(type_target, unique_tag)
     items = await _wait_options(page, unique_tag, wrapper)
     after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
+    after_type["contact_get_count"] = len(lookups)
     dump_kunde_phases(after_click, after_type)
     if not kunde_phase_is_bound(after_type):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy Kunde existing option is not visible.",
-        )
+        merged = {**opener, **after_type}
+        named_action = widget_named_action(merged)
+        if named_action == "tab_blur":
+            press = getattr(type_target, "press", None)
+            if press is not None:
+                await press("Tab")
+                await asyncio.sleep(0.4)
+                after_type = await observe_kunde(
+                    page, field, unique_tag, phase="after_tab", wrapper=wrapper
+                )
+                after_type["contact_get_count"] = len(lookups)
+                dump_kunde_phases(after_click, after_type)
+        elif named_action is None:
+            dump_kunde_lookup(len(lookups))
+        if not kunde_phase_is_bound(after_type):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Billy Kunde existing option is not visible.",
+            )
     if pick_kunde_existing_option_index(items) is not None:
         if await _click_scoped_option(page, unique_tag):
             return "scoped:existing_option"

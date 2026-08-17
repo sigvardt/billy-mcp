@@ -8,12 +8,15 @@ from typing import Final, cast
 
 from billy_mcp.ui_writes.invoices_form_page import Locator, Page, write_json
 from billy_mcp.ui_writes.invoices_kunde import (
+    autocomplete_token,
+    empty_widget_contract,
     named_kunde_opener,
     opener_dump_missing_keys,
     pick_kunde_create_index,
     pick_kunde_existing_option_index,
     placeholder_flags,
     portal_list_item_flags,
+    widget_contract_missing_keys,
 )
 
 KUNDE_CHROME_DUMP: Final = (
@@ -21,6 +24,12 @@ KUNDE_CHROME_DUMP: Final = (
 )
 KUNDE_OPENER_DUMP: Final = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-opener.json"
+)
+KUNDE_FIELD_SHOT: Final = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-field.png"
+)
+KUNDE_LOOKUP_DUMP: Final = (
+    Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-kunde-lookup.json"
 )
 ALT_LIST_SELECTORS: Final[tuple[str, ...]] = (
     ".ember-power-select-dropdown",
@@ -89,7 +98,7 @@ async def observe_kunde(
         for item in cast(list[object], raw_owners):
             if isinstance(item, dict):
                 owner_rows.append(cast(dict[str, object], item))
-    return {
+    payload: dict[str, object] = {
         "phase": phase,
         "field_name": await field.get_attribute("name"),
         "field_role": await field.get_attribute("role"),
@@ -120,7 +129,15 @@ async def observe_kunde(
         "element_from_point": owned.get("element_from_point"),
         "pointer_events": owned.get("pointer_events"),
         "z_index": owned.get("z_index"),
+        "input": owned.get("input"),
+        "datalist_count": owned.get("datalist_count", 0),
+        "datalist_option_count": owned.get("datalist_option_count", 0),
+        "visible_input_count": owned.get("visible_input_count", 0),
+        "a11y_snapshot": owned.get("a11y_snapshot"),
+        "field_shot": owned.get("field_shot"),
+        "contact_get_count": 0,
     }
+    return await _attach_widget_contract(page, field, payload)
 
 
 def dump_kunde_phases(after_click: dict[str, object], after_type: dict[str, object]) -> None:
@@ -175,6 +192,17 @@ _OWNERSHIP_JS: Final = """el => {
   }
   const box = el.getBoundingClientRect();
   const style = window.getComputedStyle(el);
+  const rawAuto = (el.getAttribute("autocomplete") || "").trim().toLowerCase();
+  const autocompleteToken = !rawAuto
+    ? "empty"
+    : (rawAuto === "on" || rawAuto === "off" || rawAuto === "name" ? rawAuto : "other");
+  const listId = el.getAttribute("list") || "";
+  const linked = listId ? document.getElementById(listId) : null;
+  const visibleInputs = Array.from(document.querySelectorAll("input")).filter((node) => {
+    const computed = window.getComputedStyle(node);
+    return computed.display !== "none" && computed.visibility !== "hidden"
+      && node.getClientRects().length > 0;
+  });
   const owners = [];
   let node = el.parentElement;
   while (node && owners.length < 16) {
@@ -202,10 +230,15 @@ _OWNERSHIP_JS: Final = """el => {
       type: el.getAttribute("type"),
       has_id: Boolean(id),
       has_autocomplete: Boolean(el.getAttribute("autocomplete")),
+      autocomplete_token: autocompleteToken,
+      list_present: Boolean(listId),
       disabled: Boolean(el.disabled),
       readonly: Boolean(el.readOnly),
       aria_names: ariaNames.sort(),
     },
+    datalist_count: document.querySelectorAll("datalist").length,
+    datalist_option_count: linked ? linked.querySelectorAll("option").length : 0,
+    visible_input_count: visibleInputs.length,
     owners,
     label: {has_for: Boolean(forLabel), has_wrap: Boolean(wrapLabel)},
     aria: {
@@ -257,10 +290,15 @@ def empty_ownership() -> dict[str, object]:
             "type": None,
             "has_id": False,
             "has_autocomplete": False,
+            "autocomplete_token": "empty",
+            "list_present": False,
             "disabled": False,
             "readonly": False,
             "aria_names": [],
         },
+        "datalist_count": 0,
+        "datalist_option_count": 0,
+        "visible_input_count": 0,
         "owners": [],
         "label": {"has_for": False, "has_wrap": False},
         "aria": {
@@ -302,9 +340,145 @@ async def _ownership_dump(field: Locator) -> dict[str, object]:
         return payload
     if not isinstance(raw, dict):
         return payload
+    typed_raw = cast(dict[str, object], raw)
     for key in payload:
-        if key in raw:
-            payload[key] = raw[key]
+        if key in typed_raw:
+            payload[key] = typed_raw[key]
+    for key, value in typed_raw.items():
+        if key not in payload:
+            payload[key] = value
+    return payload
+
+
+def _count_a11y(node: object) -> dict[str, object]:
+    """Role and control counts only. Never stores names."""
+
+    role_counts: dict[str, int] = {}
+    control_count = 0
+    listbox_present = False
+
+    def walk(item: object) -> None:
+        nonlocal control_count, listbox_present
+        if not isinstance(item, Mapping):
+            return
+        typed_item = cast(Mapping[str, object], item)
+        role = typed_item.get("role")
+        if isinstance(role, str) and role:
+            role_counts[role] = role_counts.get(role, 0) + 1
+            if role in {"textbox", "combobox", "button", "link", "searchbox"}:
+                control_count += 1
+            if role == "listbox":
+                listbox_present = True
+        children = typed_item.get("children")
+        if isinstance(children, list):
+            for child in cast(list[object], children):
+                walk(child)
+
+    walk(node)
+    return {
+        "control_count": control_count,
+        "listbox_present": listbox_present,
+        "role_counts": role_counts,
+    }
+
+
+async def _a11y_snapshot_counts(page: Page) -> dict[str, object]:
+    """Playwright accessibility snapshot reduced to counts."""
+
+    accessibility = getattr(page, "accessibility", None)
+    snap_fn = getattr(accessibility, "snapshot", None) if accessibility is not None else None
+    if snap_fn is None:
+        return cast(dict[str, object], empty_widget_contract()["a11y_snapshot"])
+    try:
+        snapshot = await snap_fn()
+    except (TimeoutError, RuntimeError, TypeError):
+        return cast(dict[str, object], empty_widget_contract()["a11y_snapshot"])
+    return _count_a11y(snapshot)
+
+
+async def _field_shot(page: Page, field: Locator) -> dict[str, object]:
+    """Owner-only cropped field shot. Repo stores flags and box only."""
+
+    box = None
+    try:
+        box = await field.bounding_box()
+    except (TimeoutError, RuntimeError):
+        box = None
+    shot = getattr(page, "screenshot", None)
+    if shot is None or box is None:
+        return {"present": False, "bytes": 0, "box": None}
+    clip = {
+        "x": float(box.get("x", 0)),
+        "y": float(box.get("y", 0)),
+        "width": float(box.get("width", 0)),
+        "height": float(box.get("height", 0)),
+    }
+    if clip["width"] <= 0 or clip["height"] <= 0:
+        return {"present": False, "bytes": 0, "box": None}
+    try:
+        KUNDE_FIELD_SHOT.parent.mkdir(parents=True, exist_ok=True)
+        await shot(path=str(KUNDE_FIELD_SHOT), full_page=False, clip=clip)
+        size = KUNDE_FIELD_SHOT.stat().st_size if KUNDE_FIELD_SHOT.is_file() else 0
+        return {
+            "present": size > 0,
+            "bytes": size,
+            "box": {
+                "x": round(clip["x"]),
+                "y": round(clip["y"]),
+                "w": round(clip["width"]),
+                "h": round(clip["height"]),
+            },
+        }
+    except (OSError, TimeoutError, RuntimeError, TypeError):
+        return {"present": False, "bytes": 0, "box": None}
+
+
+def watch_contact_lookups(page: Page, seen: list[str]) -> None:
+    """Count browser GET /v2/contacts. Never stores the query string."""
+
+    def _on_request(event: object) -> None:
+        url = str(getattr(event, "url", "") or "")
+        request = getattr(event, "request", None)
+        method = str(
+            getattr(event, "method", "")
+            or (getattr(request, "method", "") if request is not None else "")
+        )
+        path = url.split("?", 1)[0]
+        if method == "GET" and path.endswith("/v2/contacts"):
+            seen.append("GET /v2/contacts")
+
+    page.on("request", _on_request)
+
+
+def dump_kunde_lookup(count: int) -> None:
+    """Write the count-only lookup trace. Never stores URLs or query strings."""
+
+    write_json(KUNDE_LOOKUP_DUMP, {"contact_get_count": count, "path": "/v2/contacts"})
+
+
+async def _attach_widget_contract(
+    page: Page, field: Locator, payload: dict[str, object]
+) -> dict[str, object]:
+    """Fill 51E18E60 widget keys. Never stores tag, names, or pixels."""
+
+    defaults = empty_widget_contract()
+    for key, value in defaults.items():
+        if payload.get(key) is None:
+            payload[key] = value
+    raw_input = payload.get("input")
+    input_map: dict[str, object] = (
+        dict(cast(Mapping[str, object], raw_input)) if isinstance(raw_input, Mapping) else {}
+    )
+    if "autocomplete_token" not in input_map:
+        input_map["autocomplete_token"] = autocomplete_token(
+            await _safe_attr(field, "autocomplete")
+        )
+    if "list_present" not in input_map:
+        input_map["list_present"] = bool(await _safe_attr(field, "list"))
+    payload["input"] = input_map
+    payload["a11y_snapshot"] = await _a11y_snapshot_counts(page)
+    payload["field_shot"] = await _field_shot(page, field)
+    payload["widget_missing_keys"] = widget_contract_missing_keys(payload)
     return payload
 
 
@@ -343,7 +517,7 @@ async def observe_kunde_opener(page: Page, field: Locator) -> dict[str, object]:
     payload.update(await _ownership_dump(field))
     payload["named_opener"] = named_kunde_opener(payload)
     payload["missing_keys"] = opener_dump_missing_keys(payload)
-    return payload
+    return await _attach_widget_contract(page, field, payload)
 
 
 async def dump_kunde_chrome(page: Page) -> None:

@@ -7,7 +7,7 @@ from __future__ import annotations
 
 import re
 from collections.abc import Mapping, Sequence
-from typing import Final
+from typing import Final, cast
 
 KUNDE_LABEL: Final = "Kunde"
 KUNDE_INPUT_SELECTORS: Final[tuple[str, ...]] = (
@@ -138,6 +138,104 @@ REQUIRED_OPENER_DUMP_KEYS: Final[tuple[str, ...]] = (
     "z_index",
     "element_from_point",
 )
+REQUIRED_WIDGET_CONTRACT_KEYS: Final[tuple[str, ...]] = (
+    "autocomplete_token",
+    "list_present",
+    "datalist_count",
+    "datalist_option_count",
+    "visible_input_count",
+    "a11y_snapshot",
+    "field_shot",
+)
+_WIDGET_INPUT_KEYS: Final[tuple[str, ...]] = ("autocomplete_token", "list_present")
+_A11Y_SNAPSHOT_KEYS: Final[tuple[str, ...]] = (
+    "control_count",
+    "listbox_present",
+    "role_counts",
+)
+_FIELD_SHOT_KEYS: Final[tuple[str, ...]] = ("present", "bytes", "box")
+_AUTOCOMPLETE_TOKENS: Final[frozenset[str]] = frozenset({"on", "off", "name"})
+
+
+def autocomplete_token(raw: str | None) -> str:
+    """Allowlisted autocomplete token. Never stores an unknown raw value."""
+
+    if raw is None or raw.strip() == "":
+        return "empty"
+    compact = raw.strip().casefold()
+    if compact in _AUTOCOMPLETE_TOKENS:
+        return compact
+    return "other"
+
+
+def _mapping_has_keys(value: object, keys: tuple[str, ...]) -> bool:
+    if not isinstance(value, Mapping):
+        return False
+    return all(key in value for key in keys)
+
+
+def widget_contract_missing_keys(payload: Mapping[str, object]) -> list[str]:
+    """Keys 51E18E60 requires that this opener or after_type dump does not record."""
+
+    missing: list[str] = []
+    raw_input = payload.get("input")
+    input_map: Mapping[str, object] = (
+        cast(Mapping[str, object], raw_input) if isinstance(raw_input, Mapping) else {}
+    )
+    for key in _WIDGET_INPUT_KEYS:
+        if key not in input_map:
+            missing.append(key)
+    for key in REQUIRED_WIDGET_CONTRACT_KEYS:
+        if key in _WIDGET_INPUT_KEYS:
+            continue
+        if key == "a11y_snapshot":
+            if not _mapping_has_keys(payload.get(key), _A11Y_SNAPSHOT_KEYS):
+                missing.append(key)
+            continue
+        if key == "field_shot":
+            if not _mapping_has_keys(payload.get(key), _FIELD_SHOT_KEYS):
+                missing.append(key)
+            continue
+        if key not in payload:
+            missing.append(key)
+    return missing
+
+
+def empty_widget_contract() -> dict[str, object]:
+    """Structurally complete 51E18E60 widget keys when evaluate is unavailable."""
+
+    return {
+        "datalist_count": 0,
+        "datalist_option_count": 0,
+        "visible_input_count": 0,
+        "a11y_snapshot": {
+            "control_count": 0,
+            "listbox_present": False,
+            "role_counts": {},
+        },
+        "field_shot": {"present": False, "bytes": 0, "box": None},
+    }
+
+
+def widget_named_action(payload: Mapping[str, object]) -> str | None:
+    """Name one next action from a complete widget dump. None means lookup-trace."""
+
+    option_count = payload.get("datalist_option_count")
+    if isinstance(option_count, int) and option_count > 0:
+        return "datalist_option"
+    named = payload.get("named_opener")
+    if isinstance(named, str) and named:
+        return "named_opener"
+    aria = payload.get("aria")
+    if isinstance(aria, Mapping) and cast(Mapping[str, object], aria).get("autocomplete") is True:
+        return "tab_blur"
+    snapshot = payload.get("a11y_snapshot")
+    if (
+        isinstance(snapshot, Mapping)
+        and cast(Mapping[str, object], snapshot).get("listbox_present") is True
+    ):
+        return "tab_blur"
+    return None
 
 
 def opener_dump_missing_keys(opener: Mapping[str, object]) -> list[str]:

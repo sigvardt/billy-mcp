@@ -441,3 +441,78 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_widget_contract_dump(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Recapture the Kunde widget contract. Do not save a draft."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_widget_dump
+    from billy_mcp.ui_writes.invoices_form_observe import (
+        KUNDE_CHROME_DUMP,
+        KUNDE_LOOKUP_DUMP,
+        KUNDE_OPENER_DUMP,
+    )
+    from billy_mcp.ui_writes.invoices_kunde import widget_contract_missing_keys
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "widget dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    server: FastMCP | None = None
+    extra: BrowserRuntime | None = None
+    page: Any = None
+    tag = "MCP-UI-INV-DEADBEEF"
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_widget_dump(page, tag)
+        if result.get("code"):
+            _record_blocker(f"widget dump failed: {result}")
+            pytest.fail(f"widget dump failed: {result}")
+        after_type = result["after_type"]
+        opener = result["opener"]
+        assert isinstance(after_type, dict)
+        assert isinstance(opener, dict)
+        after_map = cast(dict[str, object], after_type)
+        opener_map = cast(dict[str, object], opener)
+        assert widget_contract_missing_keys(after_map) == []
+        assert widget_contract_missing_keys(opener_map) == []
+        assert KUNDE_OPENER_DUMP.is_file()
+        assert KUNDE_CHROME_DUMP.is_file()
+        written = json.loads(KUNDE_CHROME_DUMP.read_text(encoding="utf-8"))
+        assert widget_contract_missing_keys(written["after_type"]) == []
+        if result.get("named_action") is None:
+            assert KUNDE_LOOKUP_DUMP.is_file()
+            lookup = json.loads(KUNDE_LOOKUP_DUMP.read_text(encoding="utf-8"))
+            assert lookup["path"] == "/v2/contacts"
+            assert "contact_get_count" in lookup
+        assert "Gem som kladde" not in json.dumps(result)
+    finally:
+        if page is not None:
+            await page.close()
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

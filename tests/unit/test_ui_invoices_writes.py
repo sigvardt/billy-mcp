@@ -713,3 +713,78 @@ def test_opener_observe_records_5e1edfb4_ownership_keys() -> None:
     assert 'tag === "FORM"' in source
     assert "pointer_events" in source
     assert "missing_keys" in source
+
+
+def _live_widget_payload() -> dict[str, object]:
+    """Current live opener input plus after_type keys. Widget contract is absent."""
+
+    payload = _live_opener_payload()
+    payload["input"] = {
+        "tag": "INPUT",
+        "type": "text",
+        "has_id": True,
+        "has_autocomplete": True,
+        "disabled": False,
+        "readonly": False,
+        "aria_names": [],
+    }
+    payload.update(_live_unbound_after_type())
+    return payload
+
+
+def test_live_dumps_miss_51e18e60_widget_contract_keys() -> None:
+    """Given current live dumps, When checking widget keys, Then 51E18E60 fields are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        REQUIRED_WIDGET_CONTRACT_KEYS,
+        widget_contract_missing_keys,
+    )
+
+    payload = _live_widget_payload()
+    assert widget_contract_missing_keys(payload) == list(REQUIRED_WIDGET_CONTRACT_KEYS)
+    live_input = payload["input"]
+    assert isinstance(live_input, dict)
+    assert "autocomplete_token" not in live_input
+    assert "list_present" not in live_input
+    assert "datalist_count" not in payload
+    assert "field_shot" not in payload
+
+
+def test_complete_widget_contract_has_no_missing_keys() -> None:
+    """Given a filled widget dump, When checking keys, Then none are missing."""
+
+    from billy_mcp.ui_writes.invoices_kunde import (
+        autocomplete_token,
+        empty_widget_contract,
+        widget_contract_missing_keys,
+        widget_named_action,
+    )
+
+    payload = _live_widget_payload()
+    payload.update(empty_widget_contract())
+    live_input = payload["input"]
+    assert isinstance(live_input, dict)
+    input_map: dict[str, object] = dict(cast(dict[str, object], live_input))
+    input_map["autocomplete_token"] = autocomplete_token("off")
+    input_map["list_present"] = False
+    payload["input"] = input_map
+    assert widget_contract_missing_keys(payload) == []
+    assert autocomplete_token("") == "empty"
+    assert autocomplete_token("OFF") == "off"
+    assert autocomplete_token("section-name") == "other"
+    assert widget_named_action(payload) is None
+    payload["datalist_option_count"] = 2
+    assert widget_named_action(payload) == "datalist_option"
+
+
+def test_observe_records_51e18e60_widget_contract_keys() -> None:
+    """Given the observe helper, Then it records the widget-contract keys."""
+
+    source = Path("src/billy_mcp/ui_writes/invoices_form_observe.py").read_text(encoding="utf-8")
+    assert "autocomplete_token" in source
+    assert "list_present" in source
+    assert "datalist_count" in source
+    assert "visible_input_count" in source
+    assert "a11y_snapshot" in source
+    assert "field_shot" in source
+    assert "GET /v2/contacts" in source
