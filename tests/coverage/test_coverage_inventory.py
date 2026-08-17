@@ -1867,10 +1867,10 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.customers": "ui_clients_list",
         "ui.parity.contacts.list": "ui_clients_list",
         "ui.discovery.clients_create": "ui_clients_create_open",
-        "ui.parity.contacts.create": "ui_clients_create_open",
+        "ui.parity.contacts.create": "ui_clients_create_preview",
         "ui.parity.contacts.get": "ui_clients_get_open",
-        "ui.parity.contacts.update": "ui_clients_update_open",
-        "ui.parity.contacts.delete": "ui_clients_delete_open",
+        "ui.parity.contacts.update": "ui_clients_update_preview",
+        "ui.parity.contacts.delete": "ui_clients_delete_preview",
         "ui.discovery.bank_accounts": "ui_bank_accounts_list",
         "ui.discovery.quotes": "ui_quotes_list",
         "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
@@ -2358,7 +2358,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.contacts.create"
     )
     assert contacts_create_parity["api_row_id"] == "api.contacts.create"
-    assert contacts_create_parity["tool_name"] == "ui_clients_create_open"
+    assert contacts_create_parity["tool_name"] == "ui_clients_create_preview"
     assert contacts_create_parity["parity_status"] == "form_open_only"
     assert "api.contacts.create" in contacts_create_parity["evidence"]
     assert "research160" in contacts_create_parity["evidence"]
@@ -2372,7 +2372,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.contacts.update"
     )
     assert contacts_update_parity["api_row_id"] == "api.contacts.update"
-    assert contacts_update_parity["tool_name"] == "ui_clients_update_open"
+    assert contacts_update_parity["tool_name"] == "ui_clients_update_preview"
     assert contacts_update_parity["parity_status"] == "form_open_only"
     assert "api.contacts.update" in contacts_update_parity["evidence"]
     assert "research166" in contacts_update_parity["evidence"]
@@ -2380,7 +2380,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.contacts.delete"
     )
     assert contacts_delete_parity["api_row_id"] == "api.contacts.delete"
-    assert contacts_delete_parity["tool_name"] == "ui_clients_delete_open"
+    assert contacts_delete_parity["tool_name"] == "ui_clients_delete_preview"
     assert contacts_delete_parity["parity_status"] == "delete_chrome_open_only"
     assert "api.contacts.delete" in contacts_delete_parity["evidence"]
     assert "research167" in contacts_delete_parity["evidence"]
@@ -2396,7 +2396,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert suppliers_create_discovery["api_row_id"] is None
     assert suppliers_create_discovery.get("parity_status") == "form_open_only"
     # contacts.create remains on clients create only (no suppliers re-count)
-    assert contacts_create_parity["tool_name"] == "ui_clients_create_open"
+    assert contacts_create_parity["tool_name"] == "ui_clients_create_preview"
     files_upload_special_parity = next(
         row for row in qualified if row["id"] == "ui.parity.special.files_upload"
     )

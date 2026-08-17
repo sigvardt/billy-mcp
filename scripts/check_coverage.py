@@ -28,6 +28,14 @@ from generate_coverage_report import (
 )
 
 ROOT = Path(__file__).resolve().parents[1]
+# Contacts CUD parity names preview tools. Update/delete open shells stay
+# registered for form-open and delete-chrome live tests.
+RETAINED_OPEN_SHELL_TOOLS: frozenset[str] = frozenset(
+    {
+        "ui_clients_update_open",
+        "ui_clients_delete_open",
+    }
+)
 REQUIRED_ROW_FIELDS = {
     "id",
     "lane",
@@ -501,7 +509,12 @@ def validate_documents(
         for name in registered
         if name.startswith("ui_") and name.endswith(("_preview", "_execute"))
     }
-    allowed_registered_tools = planned_tools | execute_twin_names(planned_tools) | ui_write_twins
+    allowed_registered_tools = (
+        planned_tools
+        | execute_twin_names(planned_tools)
+        | ui_write_twins
+        | RETAINED_OPEN_SHELL_TOOLS
+    )
     for tool_name in sorted(registered - allowed_registered_tools):
         errors.append(f"registered domain tool lacks a coverage row: {tool_name}")
     return errors

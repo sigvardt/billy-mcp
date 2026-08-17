@@ -7191,7 +7191,7 @@
         "tests/live/test_ui_clients_create_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_clients_create_open",
+      "tool_name": "ui_clients_create_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"
@@ -7239,7 +7239,7 @@
         "tests/live/test_ui_clients_update_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_clients_update_open",
+      "tool_name": "ui_clients_update_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"
@@ -7287,7 +7287,7 @@
         "tests/live/test_ui_clients_delete_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_clients_delete_open",
+      "tool_name": "ui_clients_delete_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"

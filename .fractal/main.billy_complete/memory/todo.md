@@ -9,8 +9,7 @@ updated: 2026-08-16T14:29:47Z
 
 ## Open
 
-- Point the three contacts parity rows at preview tools only after `93D7A063` (recorded verdict and proved purge already exist). Do not green from that mapping alone.
-- After live MCP proof: point the remaining CUD parity rows at preview tools. Do not green from stubs.
+- After live MCP proof: point the remaining 13 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 
 ## Done
 
@@ -25,4 +24,5 @@ updated: 2026-08-16T14:29:47Z
 - Exact-name read-back: `{tag}` is not present inside `{tag}-U`.
 - Delete confirm label is **Ja, slet**.
 - Browser egress PUT `/v2/contacts/:id` only. Live FastMCP contacts CUD passed. Success execute keeps redacted PUT persist fields.
-- Durable contacts CUD vision record is accept with purge verified. Frame folder `run-3d5b151dfd5342258f8734373597f8c1` is gone. Preview mapping was reverted under `93D7A063`.
+- Durable contacts CUD vision record is accept with purge verified. Frame folder `run-3d5b151dfd5342258f8734373597f8c1` is gone.
+- Contacts CUD `tool_name` values are `ui_clients_{create,update,delete}_preview`. Honesty 16 stays red. `ui_clients_update_open` and `ui_clients_delete_open` stay registered via `RETAINED_OPEN_SHELL_TOOLS`.

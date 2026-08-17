@@ -77,10 +77,11 @@ review writes accept or reject. The live test writes
 `author=live_test` and `reviewer_verdict=pending_review` only.
 
 The durable vision record for `run-3d5b151dfd5342258f8734373597f8c1`
-is accept with purge verified. That frame folder is gone. Parent
-`93D7A063` keeps the three contacts CUD rows on `ui_clients_*_open`
-until a later slice changes the mapping after that recorded verdict.
-Honesty still keeps those rows red.
+is accept with purge verified. That frame folder is gone. The three
+contacts CUD rows now name `ui_clients_{create,update,delete}_preview`.
+Honesty still keeps those rows red. `ui_clients_update_open` and
+`ui_clients_delete_open` stay registered through
+`RETAINED_OPEN_SHELL_TOOLS` because they have no discovery row.
 
 If create or update succeeds and delete later fails, retry delete through the
 same execute tool. Do not leave a tagged customer when delete can still run.

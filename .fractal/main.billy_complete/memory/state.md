@@ -71,8 +71,10 @@ response after the proved pointer click.
 The durable vision record is `author=independent_review`,
 `reviewer_verdict=accept`, `purge_verified=true`,
 `run_id=3d5b151dfd5342258f8734373597f8c1`. That frame folder is gone.
-Parent `93D7A063` keeps contacts CUD `tool_name` on `ui_clients_*_open`
-until a later mapping slice. Honesty 16 stays red. Coverage stays red.
+Contacts CUD `tool_name` values are `ui_clients_{create,update,delete}_preview`.
+Discovery and get-open stay on `ui_clients_*_open`. Honesty 16 stays red.
+Coverage stays red. `check_coverage.RETAINED_OPEN_SHELL_TOOLS` keeps
+`ui_clients_update_open` and `ui_clients_delete_open` registered.
 
 ## Review
 
@@ -80,6 +82,7 @@ Honesty on the 16 CUD rows still holds. Node complete stays false.
 Offline org-bind wiring is in. One live contacts CUD used a second
 session for read-back and a third session for absence. Same-session
 accept plus an inverted mapping order failed independent review. The
-mapping was reverted. The accept record and purge stay.
+accept record and purge stay. Mapping now points at preview after that
+recorded verdict.
 
 See `decisions.md` and `todo.md`.

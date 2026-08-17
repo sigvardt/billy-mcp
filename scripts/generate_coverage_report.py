@@ -942,6 +942,13 @@ OPEN_ONLY_PARITY_STATUSES: frozenset[str] = frozenset(
         "delete_chrome_open_only",
     }
 )
+# After 93D7A063 accept+purge: CUD parity names preview tools. Honesty
+# still keeps implemented/live/vision false. Discovery/get-open stay *_open.
+UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
+    "ui.parity.contacts.create": "ui_clients_create_preview",
+    "ui.parity.contacts.update": "ui_clients_update_preview",
+    "ui.parity.contacts.delete": "ui_clients_delete_preview",
+}
 
 
 # The inventory is generated from this narrow, source-controlled map rather
@@ -1964,6 +1971,27 @@ def apply_ui_cud_parity_open_only_honesty(workflows: list[dict[str, Any]]) -> No
     missing = UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS - seen
     if missing:
         raise RuntimeError(f"CUD parity honesty missing rows: {sorted(missing)}")
+
+
+def apply_ui_contacts_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> None:
+    """Point contacts CUD parity rows at preview tools after honesty.
+
+    Leaves ``parity_status`` open-only. Honesty still forces implemented,
+    live_tested, and vision_verified false. Discovery and get-open stay on
+    ``ui_clients_*_open``.
+    """
+
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        preview = UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES.get(row_id)
+        if preview is None:
+            continue
+        seen.add(row_id)
+        row["tool_name"] = preview
+    missing = set(UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES) - seen
+    if missing:
+        raise RuntimeError(f"contacts CUD preview mapping missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7814,6 +7842,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_product_plane_bulk_chrome_dual_na_soft_tool(workflows)
     apply_ui_product_plane_bulk_chrome_dual_na_empty_list(workflows)
     apply_ui_cud_parity_open_only_honesty(workflows)
+    apply_ui_contacts_cud_preview_tool_names(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
