@@ -25,8 +25,9 @@ sources:
   - radio:07600147
   - radio:E87B6AEF
   - radio:31B0C7A6
+  - radio:28C8FBC8
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T00:33:20Z
+updated: 2026-08-18T01:03:00Z
 ---
 
 ## Binding now
@@ -57,7 +58,11 @@ updated: 2026-08-18T00:33:20Z
 
 `E87B6AEF` (done, unsaved, on `522105c`): live read-only map has two visible descendants. Contact `INPUT` plus overlay `DIV` at `dx=242`. `unique_target=false`. `wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either target. Do not remake that map.
 
-`31B0C7A6` (saved, dump delivered): Ember view present via `Ember.View.views`. `lookup_class=view_registry`. `view_constructor_token=pickerfield`. No allowlisted properties or methods. `unique_normal_action=false`. `UI_CHANGED`. No click. Do not remake. Do not invoke.
+`31B0C7A6` (done, unsaved, on `1df08a5`): Ember view present via `Ember.View.views`. `lookup_class=view_registry`. `view_constructor_token=pickerfield`. No allowlisted properties or methods. `unique_normal_action=false`. `UI_CHANGED`. No click. Do not remake. Do not invoke.
+
+Fiber inspect (done, unsaved): live dump `fiber_key_class=none` on the contact `INPUT` and `pickerfield`. No named action. `unique_normal_action=false`. `UI_CHANGED`. Do not remake. Do not click.
+
+`28C8FBC8` (saved): after this COMMIT, next slice is an actionable listener contract, not another framework-key inspector. CDP `DOMDebugger.getEventListeners` plus already-loaded script locations on the proved Kunde input, overlay, pickerfield, and nearest ancestor chain. Sanitized event fields only. No click, type, method invoke, or `Runtime.evaluate` mutate. Do not repeat closed probes. If one unique normal UI action is proved, TDD then one FastMCP verify. Else `UI_CHANGED` and next compare structure to the live-proved bills Leverandoer picker. Stay red. Do not finish.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

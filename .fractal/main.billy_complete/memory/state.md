@@ -10,16 +10,29 @@ sources:
   - radio:E87B6AEF
   - radio:31B0C7A6
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T00:33:20Z
+updated: 2026-08-18T01:03:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `522105c`. `E87B6AEF` dump is on the branch. Stay red. Do not finish.
-Parent `31B0C7A6` names the next slice.
+HEAD is `1df08a5`. Stay red. Do not finish.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
+
+`31B0C7A6` Ember inspect is delivered and closed. Ember view is present
+(`view_registry`, `pickerfield`, `ember_digit` id class). No
+allowlisted selection, collection, open state, or methods.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+Do not remake this inspect. Do not invoke the view.
+
+Fiber inspect is delivered and closed. `fiber_key_class=none`.
+`unique_normal_action=false`. `UI_CHANGED`. Parent `28C8FBC8` is
+binding for the next slice: sanitized listener contract via CDP
+`DOMDebugger.getEventListeners` on the proved Kunde input, overlay,
+`pickerfield`, and nearest ancestors only. Not another framework
+inspector. Do not remake Ember or fiber inspect. Do not click.
+Stay red.
 
 `452E0773` is closed. The loaded control contract names `click_open` on
 the closest `pickerfield` wrapper (`data-cy` name only). Binding
@@ -42,17 +55,12 @@ Closed and not to be repeated: typed-only bind (`51E18E60`), right-edge
 chevron dump (`A3AB03C3`), DIV ownership click (`9F777B8F`), tagged type
 trace (`8EFD0EAD`), event or pageerror dump (`4A5CD1E7`), rest route
 capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
-instrumented post-click dump (`07600147`), and the descendant map
-(`E87B6AEF`).
+instrumented post-click dump (`07600147`), the descendant map
+(`E87B6AEF`), the Ember inspect (`31B0C7A6`), and the fiber inspect.
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
-Do not remake the descendant map.
-`31B0C7A6` live inspect is delivered. Ember view is present
-(`view_registry`, `pickerfield`, `ember_digit` id class). No
-allowlisted selection, collection, open state, or methods.
-`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
-Do not remake this inspect. Do not invoke the view. React fiber is a
-later slice only.
+Do not remake the descendant map. Do not remake the Ember inspect.
+Do not remake the fiber inspect.
 
 ## Proved and still red
 

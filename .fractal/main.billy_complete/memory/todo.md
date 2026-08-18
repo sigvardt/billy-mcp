@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T00:33:20Z
+updated: 2026-08-18T01:03:00Z
 ---
 
 ## Open
 
-- Invoice CUD stays unbound after `31B0C7A6`. Ember view has no named open/select/filter action. Next parent slice may inspect React fiber. Do not remake the Ember inspect.
+- Invoice CUD stays unbound. Next parent slice `28C8FBC8`: sanitized listener contract on the proved Kunde input, overlay, pickerfield, and nearest ancestors. TDD first. Read-only CDP `getEventListeners`. No remake of Ember or fiber. No click. If non-actionable, `UI_CHANGED` then compare structure to the live-proved bills Leverandoer picker. Stay red.
 - Invoice CUD stays unbound. Remap only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
@@ -45,3 +45,5 @@ updated: 2026-08-18T00:33:20Z
 - Control-contract helper and failing fixture landed (`452E0773`). Live dump named `click_open` on the `pickerfield` wrapper. One wrapper click. `option_role_count=0`. `UI_CHANGED`. No customer created. Binding unsaved.
 - Post-click helper and failing fixture landed (`07600147`). Live dump: hidden subtree 2, one `pickerfield` click, `changed_node_count=0`, `exact_match_target=false`, `UI_CHANGED`. Tagged customer deleted. Absence proved. Dump is committed on `1936b7c`.
 - Descendant helper and failing fixture landed (`E87B6AEF`). Live dump: two visible descendants, overlay suffix excluded, `unique_target=false`, `wrapper_handler_guard=none`, `UI_CHANGED`. No customer. No click.
+- Ember inspect helper and failing fixture landed (`31B0C7A6`). Live dump: `lookup_class=view_registry`, `view_constructor_token=pickerfield`, no allowlisted selection, collection, open state, or methods, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
+- Fiber inspect helper and failing fixture landed. Live dump: `fiber_key_class=none`, `wrapper_fiber_key_class=none`, no named action, `unique_fiber_host=false`, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.

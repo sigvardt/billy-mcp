@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T00:45:00Z
+updated: 2026-08-18T01:15:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -238,6 +238,33 @@ Live recapture: `ember_global_present=true`,
 `unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
 Empty `property_rows` is not a bind and is not a reason to remake
 this inspect. Do not invoke the view.
+
+## React fiber inspect
+
+The next different capture records the React fiber on the proved
+contact `INPUT` and closest `pickerfield`, if present. Ember inspect
+skipped own-properties whose names start with `_`, so
+`__reactFiber$` was never read. The name bind lives in
+`react-web-components.:id.js`. Do not remake Ember inspect. Do not
+click. Persist only `fiber_key_class`, `wrapper_fiber_key_class`,
+`type_token`, `prop_rows`, method tokens, selection / collection /
+open flags, `host_class`, `unique_fiber_host`, and
+`unique_normal_action`. Never persist fiber key suffixes, raw
+values, ids, or source. `unique_normal_action` is true only when
+exactly one named open/select/filter action is present and
+`unique_fiber_host` is true (one unused host that is not the
+contact `INPUT`, not wrapper-center, and not the overlay at
+`dx=242`). Helper: `src/billy_mcp/ui_writes/invoices_kunde_fiber.py`.
+Owner dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-kunde-fiber.json`.
+Walk `return` at most 8. Do not invoke fiber methods, `dispatch`,
+or `setState`. Do not install React DevTools. Live recapture:
+`fiber_key_class=none`, `wrapper_fiber_key_class=none`,
+`type_token=none`, empty `prop_rows`, empty methods, all named
+actions `none`, `host_class=none`, `unique_fiber_host=false`,
+`unique_normal_action=false`, `UI_CHANGED`. No click. No customer.
+The two proved DOM nodes have no `__reactFiber` key. That is not a
+bind and is not a reason to remake Ember inspect or click.
 
 ## Live proof
 
