@@ -11,13 +11,13 @@ sources:
   - radio:31B0C7A6
   - radio:28C8FBC8
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T02:17:00Z
+updated: 2026-08-18T02:30:30Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `bf112fe`. Stay red. Do not finish.
+HEAD is `c52d1ae`. Stay red. Do not finish.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
 
@@ -30,13 +30,20 @@ Do not remake this inspect. Do not invoke the view.
 Fiber inspect is delivered and closed. `fiber_key_class=none`.
 `unique_normal_action=false`. `UI_CHANGED`. Do not remake.
 
-Listener contract is delivered. Nine sanitized rows. Input
-`keydown` / `focus` / `blur` / `other` / `mouseup`. Overlay
-`mousedown`. Pickerfield `other` / `other` / `click`. All bubble.
-No property categories. No accepted key. No named invoke.
+Listener contract (`28C8FBC8`) is delivered, closed, and unsaved.
+Nine sanitized rows. Input `keydown` / `focus` / `blur` / `other` /
+`mouseup`. Overlay `mousedown`. Pickerfield `other` / `other` /
+`click`. All bubble. No property categories. No accepted key. No
+named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click.
+No customer. Do not remake Ember, fiber, or the `452E0773` locator
+dump. Do not infer `click_open`. Stay red.
+
+Structure compare is delivered. Kunde is `pickerfield` plus
+`data-cy` and overlay. Bills is `input_wrapper` plus search plus
+portal list. `same_family=false`. `transferable_action=none`.
 `unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
-Do not remake Ember, fiber, or the `452E0773` locator dump. Do not
-infer `click_open`. Stay red.
+Do not copy the bills wrapper. Do not remake Ember, fiber, or
+listener.
 
 `452E0773` is closed. The loaded control contract names `click_open` on
 the closest `pickerfield` wrapper (`data-cy` name only). Binding

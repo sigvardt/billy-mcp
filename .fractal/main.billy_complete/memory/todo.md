@@ -4,13 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T01:03:00Z
+updated: 2026-08-18T02:30:30Z
 ---
 
 ## Open
 
-- Invoice CUD stays unbound. Listener contract is delivered and non-actionable (`unique_normal_action=false`). Remap only after accept and purge. Next compare only sanitized control structure to the live-proved bills Leverandoer picker. Do not remake Ember, fiber, or this listener dump. Stay red.
-- Invoice CUD stays unbound. Remap only after accept and purge.
+- Invoice CUD stays unbound. Next is parent `C0721A14`: customer-detail **Opret faktura** prebind. TDD first. One tagged disposable customer through FastMCP. Remap only after accept and purge. Do not remake Ember, fiber, listener, or the structure compare. Stay red.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 

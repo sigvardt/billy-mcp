@@ -1680,3 +1680,86 @@ async def test_ui_invoices_kunde_listener_inspect(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_structure_compare(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Compare Kunde and Leverandør structure. Do not click or remake inspectors."""
+
+    from billy_mcp.ui_writes.invoices_kunde_structure import (
+        KUNDE_STRUCTURE_DUMP,
+        REQUIRED_KUNDE_STRUCTURE_KEYS,
+        apply_kunde_structure_dump,
+        capture_kunde_structure,
+        kunde_structure_missing_keys,
+        map_existing_dumps,
+        structure_dump_is_delivered,
+    )
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "structure dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    extra: BrowserRuntime | None = None
+    page: Any = None
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+        if not structure_dump_is_delivered():
+            apply_kunde_structure_dump(map_existing_dumps())
+        if structure_dump_is_delivered():
+            written = json.loads(KUNDE_STRUCTURE_DUMP.read_text(encoding="utf-8"))
+            assert kunde_structure_missing_keys(written) == []
+            text = KUNDE_STRUCTURE_DUMP.read_text(encoding="utf-8")
+            assert "https://" not in text
+            assert "function(" not in text
+            assert "MCP-UI-INV-" not in text
+            return
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_structure(page)
+        if result.get("code") and result.get("code") != "UI_CHANGED":
+            _record_blocker(f"structure dump failed: {result}")
+            pytest.fail(f"structure dump failed: {result}")
+        assert kunde_structure_missing_keys(result) == []
+        assert set(REQUIRED_KUNDE_STRUCTURE_KEYS) <= set(result)
+        encoded = json.dumps({"result": result})
+        assert "https://" not in encoded
+        assert "function(" not in encoded
+        assert "confirmation_ticket" not in encoded
+        assert "MCP-UI-INV-" not in encoded
+        if result.get("unique_normal_action") is not True:
+            assert result.get("code") == "UI_CHANGED"
+        assert KUNDE_STRUCTURE_DUMP.is_file()
+        written = json.loads(KUNDE_STRUCTURE_DUMP.read_text(encoding="utf-8"))
+        assert kunde_structure_missing_keys(written) == []
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+    finally:
+        if page is not None:
+            await page.close()
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

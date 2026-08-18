@@ -288,16 +288,37 @@ Owner dump:
 `~/.local/share/billy-mcp/inspect-live-invoices-kunde-listeners.json`.
 `unique_normal_action` is true only when exactly one pointer or
 named-key keyboard row also names an invoke. Else `UI_CHANGED`.
-If the live dump is non-actionable, do not start the bills
-Leverandør structure compare in this slice. Live recapture: nine
-rows. Input has `keydown` / `focus` / `blur` / `other` / `mouseup`.
-Overlay has `mousedown`. Pickerfield has `other` / `other` /
-`click`. All bubble. Empty property categories. `accepted_key_category=none`.
-`invoked_action_token=none`. `unique_normal_action=false`.
-`UI_CHANGED`. No click. No customer. The pickerfield `click` is
-not unique because it names no invoke. That is not a bind and is
-not a reason to remake Ember, fiber, or the `452E0773` locator
-dump.
+Live recapture: nine rows. Input has `keydown` / `focus` / `blur` /
+`other` / `mouseup`. Overlay has `mousedown`. Pickerfield has
+`other` / `other` / `click`. All bubble. Empty property categories.
+`accepted_key_category=none`. `invoked_action_token=none`.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+The pickerfield `click` is not unique because it names no invoke.
+That is not a bind and is not a reason to remake Ember, fiber, or
+the `452E0773` locator dump.
+
+## Structure compare
+
+The next slice after a non-actionable listener dump compares only
+the sanitized invoice Kunde control structure to the live-proved
+bills Leverandør picker. Helper:
+`src/billy_mcp/ui_writes/invoices_kunde_structure.py`. Owner dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-kunde-structure.json`.
+Persist input name tokens, wrapper families, Kunde data-attr names,
+search triggers, overlay present, list hosts, option-role counts,
+`same_family`, `transferable_action`, `unique_normal_action`, and
+proved binds. Map already delivered dumps. Do not remake Ember,
+fiber, listener, descendant, or post-click dumps. Do not click or
+type. `same_family` is true only when both sides are
+`input_wrapper` plus search plus `ds_dropdown_portal`.
+`transferable_action` is non-`none` only when the invoice rest page
+has an unused bills-family host on the contact field. Else
+`UI_CHANGED`. Do not copy the bills wrapper onto this field. Live
+map from existing dumps: Kunde `pickerfield` plus `data-cy` and
+overlay at `dx=242`. Bills `input_wrapper` plus search plus portal
+list. `same_family=false`. `transferable_action=none`.
+`proved_kunde_bind=none`. `proved_bills_bind=scoped_existing_option`.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
 
 ## Live proof
 

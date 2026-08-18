@@ -26,8 +26,9 @@ sources:
   - radio:E87B6AEF
   - radio:31B0C7A6
   - radio:28C8FBC8
+  - radio:C0721A14
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T01:03:00Z
+updated: 2026-08-18T02:30:30Z
 ---
 
 ## Binding now
@@ -62,7 +63,11 @@ updated: 2026-08-18T01:03:00Z
 
 Fiber inspect (done, unsaved): live dump `fiber_key_class=none` on the contact `INPUT` and `pickerfield`. No named action. `unique_normal_action=false`. `UI_CHANGED`. Do not remake. Do not click.
 
-`28C8FBC8` (saved, dump delivered): listener contract is complete. Nine sanitized rows. No named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click. No customer. Do not remake. Next compare only sanitized control structure to the live-proved bills Leverandoer picker. Stay red. Do not finish.
+`28C8FBC8` (done, unsaved, on `c52d1ae`): listener contract is complete. Nine sanitized rows. No named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click. No customer. Do not remake.
+
+Structure compare (delivered): Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not copy the bills wrapper. Stay red. Do not finish.
+
+`C0721A14` (saved, next after this commit): prove whether customer detail has an exact **Opret faktura** action that opens a prebound invoice form. TDD first. One tagged disposable customer through FastMCP. Open create is safe. Do not save until a failing fixture exists and prebinding is proved. If absent, `UI_CHANGED`, delete, prove absence, close that route. Do not start another identity-only inspector.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 
