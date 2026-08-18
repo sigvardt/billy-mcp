@@ -16,22 +16,35 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T07:11:30Z
+updated: 2026-08-18T08:20:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `d223c37`. Stay red. Do not finish. No children are running.
+HEAD is `e49c8f3`. Stay red. Do not finish. No children are running.
 
-`FD39FFE7` is the next binding. Invoice draft CUD first, then product
+`2683CE6B` is the next binding after this commit. Scoped
+post-validation capture on the contact input, not another
+page-wide dump. `FD39FFE7` still makes invoice draft CUD and
+product create mandatory. Invoice draft CUD first, then product
 create, then files or ledger. Both stay mandatory and red. They are
 not finished as `UI_CHANGED`. Official first-invoice support names
-**Vælg kunde** then **Opret ny**. Live rest dump: button 0, link 0,
-other 0, `hit_is_contact_input=true`, no click, `proved_bind=none`,
-`UI_CHANGED`. Those words are the contact-input placeholder, not a
-separate named control. Do not remake that rest dump. Do not remake
-the closed picker set. Invoice CUD stays red and is not finished.
+**Vælg kunde** then **Opret ny**. Live rest dump is committed on
+`e49c8f3`: button 0, link 0, other 0, `hit_is_contact_input=true`,
+no click, `proved_bind=none`, `UI_CHANGED`. Those words are the
+contact-input placeholder, not a separate named control. Do not remake
+that rest dump. Do not remake the closed picker set. Invoice CUD stays
+red and is not finished.
+
+Draft-save validation-open dump is delivered. One **Gem som kladde**
+click: `gem_clicked=true`, `invoice_persisted=false`,
+`validation_message_present=false`, `ingen_kontakter_count=0`,
+`opret_ny_count=1`, `option_role_count=0`, `proved_bind=none`,
+`UI_CHANGED`. Page-wide `opret_ny_count=1` is not a proved list
+open (sidebar decoy). No existing-option bind. Do not remake that
+dump. Do not click **Opret ny**. Leftover tagged customer deleted.
+Absence count 0.
 Honesty 16 stay red. Never call the API. Do not guess selectors.
 Do not force or evaluate clicks. If that path cannot bind, ask the
 owner. Do not freeze either as done.
@@ -106,8 +119,10 @@ instrumented post-click dump (`07600147`), the descendant map
 (`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
 the listener contract (`28C8FBC8`), the structure compare, and
 the customer-detail **Opret faktura** inspect (`C0721A14`),
-the product delete-chrome recapture (`D326FFB3`), and the
-**Vælg kunde** named-control rest dump (`hit_is_contact_input=true`).
+the product delete-chrome recapture (`D326FFB3`), the
+**Vælg kunde** named-control rest dump (`hit_is_contact_input=true`),
+and the draft-save validation-open dump (`opret_ny_count=1`,
+`proved_bind=none`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.

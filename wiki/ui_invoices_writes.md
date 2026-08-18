@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T07:30:00Z
+updated: 2026-08-18T08:15:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -365,6 +365,35 @@ recapture: button 0, link 0, other 0, `hit_is_contact_input=true`,
 separate named control. Do not remake this rest dump. Do not fall
 back to closed picker probes. Invoice CUD stays red and is not
 finished.
+
+## Draft-save validation open
+
+Official first-invoice shot 2 shows the customer list after field
+validation: tooltip **Dette felt skal udfyldes.**, empty copy
+**Ingen kontakter fundet.**, footer **Opret ny**. Helper:
+`src/billy_mcp/ui_writes/invoices_draft_save_validation.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-draft-save-validation.json`.
+Create one `MCP-UI-INV-` + 8 hex customer through FastMCP. Confirm
+in a fresh session. Open `/:org_slug/invoices/new` through
+`ui_invoices_create_open`. Persist only
+`validation_message_present`, `ingen_kontakter_count`,
+`opret_ny_count`, `option_role_count`, `gem_clicked`,
+`invoice_persisted`, `proved_bind`, and `missing_keys`. Never
+persist ids, URLs, or names. One click of exact **Gem som kladde**.
+Do not click **Opret ny**. Do not click **Godkend**.
+`proved_bind` is `draft_save_validation_existing_option` only when
+that click leaves `invoice_persisted=false`, shows the official
+validation copy or an open list, and a unique existing option
+matches the tagged customer. Else `UI_CHANGED`. Live recapture:
+`gem_clicked=true`, `invoice_persisted=false`,
+`validation_message_present=false`, `ingen_kontakter_count=0`,
+`opret_ny_count=1`, `option_role_count=0`, `proved_bind=none`,
+`UI_CHANGED`. Page-wide **Opret ny** is not a proved customer-list
+open: official shot 1 has that label on the sidebar. Validation
+copy and empty-list copy were absent. No existing-option bind. Do
+not remake this dump, the **Vælg kunde** rest dump, or the closed
+picker set. Do not click **Opret ny**.
 
 ## Live proof
 

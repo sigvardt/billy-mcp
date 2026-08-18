@@ -31,8 +31,9 @@ sources:
   - radio:AD8966F2
   - radio:23709235
   - radio:FD39FFE7
+  - radio:2683CE6B
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T07:11:30Z
+updated: 2026-08-18T08:20:00Z
 ---
 
 ## Binding now
@@ -79,7 +80,9 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `23709235` (done, unsaved, accepted, remapped): empty original is a reversible clear. Live FastMCP tagged set plus empty restore passed. Independent accept `run_id=0937a009bf7e496ca2ce15a8af313868` with purge verified. `ui.parity.organizations.update` names `ui_organizations_update_preview`. Honesty still red.
 
-`FD39FFE7` (saved, next work, supersedes the permanent-freeze reading of `AD8966F2`): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. Organization remap is committed. Work invoice draft CUD first, then product create, before files or ledger. Official support click is **Vælg kunde** then **Opret ny**. Live rest dump proved those words are the contact-input placeholder (`hit_is_contact_input=true`, no named button or link). Independent review FAIL: dump contract met, invoice CUD unbound. Do not remake that dump. Do not remap. Do not treat it as a finished invoice freeze. Do not repeat closed picker or delete-chrome probes. Do not guess selectors. Do not use force or evaluate clicks. Do not call the API. If that path cannot bind, ask the owner. Do not freeze them as finished.
+`2683CE6B` (saved, next after this commit): stop page-wide one-off dumps. After the current helper commit, one scoped post-validation DOM+AX capture anchored to `input[name=contact]`, its owning pickerfield, and only the mutation-owned subtree from empty **Gem som kladde**. Derive exactly one owned action: a visible existing-customer option, or a uniquely owned inline **Opret ny** footer if and only if it belongs to the Kunde picker. Failing fixture first. Then FastMCP draft CUD with fresh-session read-back and reverse cleanup. No page-wide counts, portal sweeps, guessed selectors, force or evaluate clicks, APIs, send, approve, or email. If no unique scoped action exists, report the evidence and pick a different path. Do not freeze. Do not finish.
+
+`FD39FFE7` (saved, still in force, refined by `2683CE6B`): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. Organization remap is committed. Work invoice draft CUD first, then product create, before files or ledger. Official support click is **Vælg kunde** then **Opret ny**. Live rest dump proved those words are the contact-input placeholder (`hit_is_contact_input=true`, no named button or link). Draft-save validation-open dump: one **Gem som kladde** click, `opret_ny_count=1`, no existing option, no persist. Independent review FAIL: page-wide **Opret ny** is not a proved customer-list open. Do not remake either dump. Do not remap. Do not treat them as a finished invoice freeze. Do not click **Opret ny**. Do not repeat closed picker or delete-chrome probes. Do not guess selectors. Do not use force or evaluate clicks. Do not call the API. If that path cannot bind, ask the owner. Do not freeze them as finished.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 
