@@ -10,16 +10,29 @@ sources:
   - radio:E87B6AEF
   - radio:31B0C7A6
   - radio:28C8FBC8
+  - radio:C0721A14
+  - radio:D326FFB3
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T02:30:30Z
+updated: 2026-08-18T03:48:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `c52d1ae`. Stay red. Do not finish.
+HEAD is `8feb636`. Stay red. Do not finish.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
+
+`C0721A14` customer-detail **Opret faktura** inspect is delivered
+and closed. Path `contacts_customer`. Tagged name visible. **Ret**
+count 1. Exact **Opret faktura** count 0. Role `none`. Href `none`.
+No click. `proved_prebind=none`. `UI_CHANGED`. Customer deleted.
+Absence proved. This alternative route is closed. Do not remake.
+
+`D326FFB3` binds after this commit. Freeze invoice CUD as
+`UI_CHANGED`. Do not remake invoice picker or alternate invoice
+routes. Next family is `ui.parity.products.create`. Do not alter
+invoice coverage. Stay red.
 
 `31B0C7A6` Ember inspect is delivered and closed. Ember view is present
 (`view_registry`, `pickerfield`, `ember_digit` id class). No
@@ -38,12 +51,12 @@ named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click.
 No customer. Do not remake Ember, fiber, or the `452E0773` locator
 dump. Do not infer `click_open`. Stay red.
 
-Structure compare is delivered. Kunde is `pickerfield` plus
+Structure compare is closed on `8feb636`. Kunde is `pickerfield` plus
 `data-cy` and overlay. Bills is `input_wrapper` plus search plus
 portal list. `same_family=false`. `transferable_action=none`.
 `unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
-Do not copy the bills wrapper. Do not remake Ember, fiber, or
-listener.
+Do not copy the bills wrapper. Do not remake Ember, fiber,
+listener, or this compare.
 
 `452E0773` is closed. The loaded control contract names `click_open` on
 the closest `pickerfield` wrapper (`data-cy` name only). Binding
@@ -68,12 +81,14 @@ trace (`8EFD0EAD`), event or pageerror dump (`4A5CD1E7`), rest route
 capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
 instrumented post-click dump (`07600147`), the descendant map
 (`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
-and the listener contract (`28C8FBC8`).
+the listener contract (`28C8FBC8`), the structure compare, and
+the customer-detail **Opret faktura** inspect (`C0721A14`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.
 Do not remake the fiber inspect.
 Do not remake the listener contract.
+Do not remake the structure compare.
 
 ## Proved and still red
 

@@ -27,8 +27,9 @@ sources:
   - radio:31B0C7A6
   - radio:28C8FBC8
   - radio:C0721A14
+  - radio:D326FFB3
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T02:30:30Z
+updated: 2026-08-18T03:46:00Z
 ---
 
 ## Binding now
@@ -65,9 +66,11 @@ Fiber inspect (done, unsaved): live dump `fiber_key_class=none` on the contact `
 
 `28C8FBC8` (done, unsaved, on `c52d1ae`): listener contract is complete. Nine sanitized rows. No named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click. No customer. Do not remake.
 
-Structure compare (delivered): Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not copy the bills wrapper. Stay red. Do not finish.
+Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not copy the bills wrapper. Do not remake. Stay red. Do not finish.
 
-`C0721A14` (saved, next after this commit): prove whether customer detail has an exact **Opret faktura** action that opens a prebound invoice form. TDD first. One tagged disposable customer through FastMCP. Open create is safe. Do not save until a failing fixture exists and prebinding is proved. If absent, `UI_CHANGED`, delete, prove absence, close that route. Do not start another identity-only inspector.
+`C0721A14` (done, unsaved): customer-detail **Opret faktura** inspect is complete. Path `contacts_customer`. **Ret** 1. Exact **Opret faktura** count 0. `proved_prebind=none`. `UI_CHANGED`. Customer deleted. Absence proved. Route closed. Do not remake.
+
+`D326FFB3` (saved, next after this commit): freeze invoice CUD as `UI_CHANGED` for this Billy interface version. Do not spend another pass on invoice picker diagnostics or alternate invoice routes unless a genuinely new UI signal appears. Do not alter invoice coverage. Next family is `ui.parity.products.create` through existing `ui_products_create_preview` plus exact execute. TDD first. Row stays red until independent accept and purge. Ledger last.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

@@ -719,6 +719,18 @@ async def _open_named_customer(page: _Page, name: str) -> bool:
     return False
 
 
+async def goto_clients(page: _Page, slug: str) -> None:
+    """Open the clients list. Used by named-detail inspects."""
+
+    await _goto_clients(page, slug)
+
+
+async def open_named_customer(page: _Page, name: str) -> bool:
+    """Open one named customer detail. Search box value is not the row."""
+
+    return await _open_named_customer(page, name)
+
+
 async def _create_customer(page: _Page, slug: str, name: str) -> object:
     await _goto_clients(page, slug)
     filled = False

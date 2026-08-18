@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T01:15:00Z
+updated: 2026-08-18T03:30:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -319,6 +319,31 @@ overlay at `dx=242`. Bills `input_wrapper` plus search plus portal
 list. `same_family=false`. `transferable_action=none`.
 `proved_kunde_bind=none`. `proved_bills_bind=scoped_existing_option`.
 `unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+
+## Customer-detail Opret faktura prebind
+
+Parent `C0721A14` checks a different route: an exact **Opret faktura**
+action on a tagged customer detail. Helper:
+`src/billy_mcp/ui_writes/invoices_customer_detail_prebind.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-customer-detail-prebind.json`.
+Create one `MCP-UI-INV-` + 8 hex customer through FastMCP. Fresh
+session confirms the name. Open that row with `open_named_customer`.
+Do not use `ui_clients_get_open`. Persist only path class, tagged-name
+visible, exact **Ret** count, exact **Opret faktura** role and count,
+href path class, href query token class, clicked, destination heading
+token, contact input length, tag match, `unique_normal_action`,
+`proved_prebind`, and `missing_keys`. Never persist ids, URLs, query
+values, or names. `unique_normal_action` is true only when exactly one
+**Opret faktura** control is visible. `proved_prebind` is
+`customer_detail_opret_faktura` only when the destination heading is
+**Opret faktura** and the contact field shows the tagged name. Else
+`UI_CHANGED`. Opening create is safe. Do not save until prebind is
+proved. Live recapture: path `contacts_customer`, tagged name visible,
+**Ret** count 1, **Opret faktura** count 0, role `none`, href `none`,
+no click, `proved_prebind=none`, `UI_CHANGED`. Customer deleted.
+Absence proved. This alternative route is closed. Do not start another
+identity-only inspector.
 
 ## Live proof
 

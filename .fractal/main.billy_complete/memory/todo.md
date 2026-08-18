@@ -4,12 +4,13 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T02:30:30Z
+updated: 2026-08-18T03:14:07Z
 ---
 
 ## Open
 
-- Invoice CUD stays unbound. Next is parent `C0721A14`: customer-detail **Opret faktura** prebind. TDD first. One tagged disposable customer through FastMCP. Remap only after accept and purge. Do not remake Ember, fiber, listener, or the structure compare. Stay red.
+- Invoice CUD is frozen `UI_CHANGED` for this interface (`D326FFB3`). Do not remake picker or customer-detail inspects. Do not alter invoice coverage.
+- Next after this commit: `ui.parity.products.create` through existing preview/execute. TDD first. Row stays red until accept and purge. Ledger last.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
 
@@ -47,3 +48,5 @@ updated: 2026-08-18T02:30:30Z
 - Ember inspect helper and failing fixture landed (`31B0C7A6`). Live dump: `lookup_class=view_registry`, `view_constructor_token=pickerfield`, no allowlisted selection, collection, open state, or methods, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
 - Fiber inspect helper and failing fixture landed. Live dump: `fiber_key_class=none`, `wrapper_fiber_key_class=none`, no named action, `unique_fiber_host=false`, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
 - Listener-contract helper and failing fixture landed. Live dump: nine rows, empty property categories, no accepted key, no named invoke, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
+- Structure compare closed on `8feb636`. Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not remake. Do not copy the bills wrapper.
+- Customer-detail **Opret faktura** inspect closed. Path `contacts_customer`, **Ret** 1, **Opret faktura** 0, `proved_prebind=none`, `UI_CHANGED`. Customer deleted. Absence proved. Do not remake.
