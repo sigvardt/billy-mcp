@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T08:20:00Z
+updated: 2026-08-18T08:47:30Z
 ---
 
 ## Open
 
-- Invoice draft CUD is mandatory (`FD39FFE7`, next slice `2683CE6B`). After this commit: one scoped post-validation capture on the contact input and owning pickerfield. No page-wide counts. Stay red. Never send, approve, or email.
+- Invoice draft CUD is mandatory (`FD39FFE7`). Contact-owned dump is `unique_action=none`. Stay red. Next is a different normal-interface path, not another observer dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`). Stay red. Prove a normal create submit and a UI cleanup path before persist. Do not remake delete-chrome. Do not leave an uncleanable product.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files and ledger after invoice and product.
 
@@ -52,3 +52,4 @@ updated: 2026-08-18T08:20:00Z
 - Product delete-chrome recapture closed. **Mere** opened. **Slet** counts 0. Create form open. Save token `other`. `proved_delete_path=none`. No product created. Do not remake.
 - Organizations update accepted and purged. `tool_name` is `ui_organizations_update_preview`. Honesty still red.
 - Draft-save validation-open dump delivered. `gem_clicked=true`, `invoice_persisted=false`, `opret_ny_count=1`, `option_role_count=0`, `proved_bind=none`. Page-wide **Opret ny** is not a proved list open. Leftover tagged customer deleted. Absence 0.
+- Scoped post-validation dump delivered. Contact input and pickerfield present. Two `validation` rows above the input. `unique_action=none`. `proved_bind=none`. Tagged customer deleted. Absence proved. Do not remake.

@@ -395,6 +395,46 @@ copy and empty-list copy were absent. No existing-option bind. Do
 not remake this dump, the **Vælg kunde** rest dump, or the closed
 picker set. Do not click **Opret ny**.
 
+## Draft-save scoped capture
+
+`2683CE6B` requires a contact-owned dump after empty **Gem som
+kladde**, not another page-wide count. Helper:
+`src/billy_mcp/ui_writes/invoices_draft_save_scoped.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-draft-save-scoped.json`.
+Create one `MCP-UI-INV-` + 8 hex customer through FastMCP. Confirm
+in a fresh session. Open `/:org_slug/invoices/new` through
+`ui_invoices_create_open`. Attach a read-only observer to
+`input[name=contact]`, the closest `.pickerfield`, in-control
+ancestors and siblings, and pre-existing `aria-controls` /
+`aria-owns` / `for` links. Do not observe `document.body`. One click
+of exact **Gem som kladde**. Persist only `gem_clicked`,
+`invoice_persisted`, `contact_input_present`,
+`pickerfield_present`, `active_element_category`,
+`mutation_owned_count`, `scoped_rows` (cap 16), `unique_action`,
+`unique_action_owned_by_picker`, `proved_bind`, and
+`missing_keys`. Each row stores tag, role, visible, interactive,
+exact-match token, relative box, z-index, ownership path tokens,
+and `is_mutation_owned`. Never persist ids, URLs, or names.
+`unique_action` is `existing_option` only for one picker-owned
+visible option, or `inline_opret_ny` only for one picker-owned
+footer with no option. Sidebar **Opret ny** is not owned.
+`proved_bind` is `draft_save_scoped_existing_option` only when
+that existing option is unique and the invoice did not persist.
+Else `UI_CHANGED`. Do not click **Opret ny**. Do not click
+**Godkend**. `8EBC19D5` forbids a body-wide observer and forbids
+raising the row cap. Allowed recapture after that fix:
+`gem_clicked=true`, `invoice_persisted=false`,
+`contact_input_present=true`, `pickerfield_present=true`,
+`active_element_category=gem_button`, `mutation_owned_count=1`,
+seven pickerfield rows (chevron overlay only),
+`unique_action=none`, `unique_action_owned_by_picker=false`,
+`proved_bind=none`, `UI_CHANGED`. No option. No picker-owned
+footer. Contact-owned roots have no unique action. Choose a
+different normal-interface path next. Do not remake this dump,
+the page-wide draft-save dump, the **Vælg kunde** rest dump, or
+the closed picker set. Do not click **Opret ny**.
+
 ## Live proof
 
 `tests/live/test_ui_invoices_writes.py` drives create, update, and delete

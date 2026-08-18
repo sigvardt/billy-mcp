@@ -16,17 +16,23 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T08:20:00Z
+updated: 2026-08-18T08:47:30Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `e49c8f3`. Stay red. Do not finish. No children are running.
+HEAD is `3b025f4`. Stay red. Do not finish. No children are running.
 
-`2683CE6B` is the next binding after this commit. Scoped
-post-validation capture on the contact input, not another
-page-wide dump. `FD39FFE7` still makes invoice draft CUD and
+`8EBC19D5` is applied. The helper no longer observes
+`document.body`. Row cap stays 16. Allowed recapture:
+`mutation_owned_count=1`, seven pickerfield rows, no option, no
+footer, `unique_action=none`, `proved_bind=none`. Do not remake
+that dump. Do not remake the page-wide draft-save dump.
+
+`2683CE6B` scoped dump is delivered under the contact-owned
+roots. Official list footer did not appear. Next path is a
+different normal-interface route, not another observer dump. `FD39FFE7` still makes invoice draft CUD and
 product create mandatory. Invoice draft CUD first, then product
 create, then files or ledger. Both stay mandatory and red. They are
 not finished as `UI_CHANGED`. Official first-invoice support names
@@ -122,7 +128,8 @@ the customer-detail **Opret faktura** inspect (`C0721A14`),
 the product delete-chrome recapture (`D326FFB3`), the
 **Vælg kunde** named-control rest dump (`hit_is_contact_input=true`),
 and the draft-save validation-open dump (`opret_ny_count=1`,
-`proved_bind=none`).
+`proved_bind=none`), and the scoped post-validation dump
+(`unique_action=none`, `proved_bind=none`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.
