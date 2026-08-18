@@ -39,11 +39,23 @@ sources:
   - radio:8EBC19D5
   - radio:EC676F84
   - radio:9310BC17
+  - radio:1F1B34F8
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T15:46:00Z
+updated: 2026-08-18T16:52:00Z
 ---
 
 ## Binding now
+
+`1F1B34F8` (saved, P9): persist 422 is invalid zero-value fixture
+data after the proved Kunde bind, not a Billy UI blocker. Keep the
+fresh-page/chevron fix. Failing fixture: draft create must reject
+an unpriced line. Then fill one uniquely tagged reversible line
+with a positive unit price and the minimum description/product
+the live form requires (**Antal**, **Enhedspris**, **Evt.
+beskrivelse**, **Vælg produkt**) before **Gem som kladde**. Fresh
+session draft read-back, then update/delete and customer cleanup.
+If the minimum line is uncertain, inspect the authenticated
+browser. Do not escalate to Joakim.
 
 `9310BC17` (saved, P10, owner fact-check): do not wait for `802D71CF`. Owner created `Codex UI Probe 20260818T1541Z` in the normal UI, saw it in Kunder, opened a new `/invoices/new`, opened the customer chevron, and the picker showed that name immediately. Then Mere -> Slet kontakt -> Ja, slet. Invoice Kunde is not `interface_control_absent`. `UI_CHANGED` is load-order or session staleness: the invoice page was open before the customer existed, or was not freshly navigated after create. Recovery: failing fixture for a preloaded invoice state; create and confirm the customer first; only then start a fresh `BrowserRuntime` or hard-navigate `/invoices/new`; open the evidence-derived dropdown-icon/chevron; select the exact visible tag; FastMCP draft CUD. Do not remove required bind helpers as the resolution. Do not ask Joakim to inspect routine UI state.
 

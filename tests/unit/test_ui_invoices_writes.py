@@ -523,6 +523,42 @@ def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
     assert "independent clients list did not show" in body
 
 
+def test_invoice_create_opens_new_page_before_bind() -> None:
+    """Owner 9310BC17: do not bind Kunde on a preloaded invoices/new page."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    start = form.index("async def submit_draft_invoice")
+    create = form.index("async def _create_draft")
+    submit = form[start:create]
+    body = form[create : form.index("async def _update_draft")]
+    assert 'action == "create"' in submit
+    create_idx = submit.index('action == "create"')
+    new_page_idx = submit.index("new_page", create_idx)
+    run_idx = submit.index("_run_action", create_idx)
+    assert new_page_idx < run_idx
+    assert "bind_kunde" in body
+    assert "invoices/new" in body
+
+
+def test_bind_kunde_clicks_chevron_before_type() -> None:
+    """Owner 9310BC17: open the chevron, then pick the exact tag. Type is fallback."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def bind_kunde")
+    helper_at = bind.index("async def _click_kunde_chevron")
+    end = bind.index("async def _vaelg_kunde_textbox")
+    body = bind[start:helper_at]
+    helper = bind[helper_at:end]
+    assert "_click_kunde_chevron" in body
+    assert "chevron_offset_from_box" in helper
+    assert "dropdown-icon" in helper
+    assert "len(visible) != 1" in bind
+    assert "_click_scoped_option" in body
+    assert body.index("_click_kunde_chevron") < body.index("_type_kunde")
+    assert body.index("_click_scoped_option") < body.index("_type_kunde")
+    assert "_click_scoped_footer" not in body
+
+
 def _live_unbound_after_type() -> dict[str, object]:
     return {
         "phase": "after_type",

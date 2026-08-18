@@ -9,7 +9,7 @@ updated: 2026-08-18T15:35:00Z
 
 ## Open
 
-- `9310BC17`: after COMMIT, add a failing fixture for a preloaded invoice page. Create and confirm the customer first. Then a fresh session or hard-nav `/invoices/new`, open the chevron, select the exact tag, FastMCP draft CUD. Restore bind helpers. Do not ask the owner to inspect routine UI. Stay red.
+- `1F1B34F8`: after this commit, failing fixture that draft create rejects an unpriced line. Then fill **Antal**, **Enhedspris**, **Evt. beskrivelse**, and **Vælg produkt** with a uniquely tagged reversible positive-price line before **Gem som kladde**. Fresh-session read-back, update/delete, customer last. Inspect the live form if the minimum line is uncertain. Stay red.
 - Residual table invoice rows are `kunde_option_missing_after_proved_customer`. Product, daybook, and files still wait on `67CBACB6` / `D02702C5`. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and fail-closed. Official dialog proved **Gem produkt** and **Arkiveret**. Both `/products` and `/inventory` named archive-filter counts are 0 (`unique_restore_readback=none`). `A337A622` forbids more product list, dialog, or archive probes. Persist stays fail-closed until the owner answers `67CBACB6`. Stay red. Do not remake form-contract, delete-chrome, or either archive dump. Do not leave an uncleanable product.

@@ -22,21 +22,29 @@ sources:
   - radio:802D71CF
   - radio:9310BC17
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T15:46:00Z
+updated: 2026-08-18T15:54:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `e87ad1c` plus uncommitted customer-confirm and bind work.
+HEAD is `28de432` plus uncommitted 198.36 bind and residual
+fixes, tracking `origin/main.billy_complete`.
 Stay red. Do not finish. No children are running.
-`9310BC17`: Kunde shows an existing customer on a fresh
-`/invoices/new` after the customer exists. `UI_CHANGED` is a stale
-invoice page. Next slice after COMMIT: fixture for preloaded
-invoice state, create and confirm customer, then a new session or
-hard-nav to `/invoices/new`, chevron, exact tag, FastMCP draft CUD.
-Do not remove bind helpers. Do not ask the owner to inspect routine
-UI. Honesty-16 stay red. Product, daybook, and files still wait.
+Continue iteration 36. `9310BC17` still binds: Kunde shows an
+existing customer on a fresh `/invoices/new` after the customer
+exists. `UI_CHANGED` is a stale invoice page. Research brief
+`.fractal/main.billy_complete/tmp/grok-research.md` named the
+slice. Official docs ETag still `"121myuqjdm53603"`; do not
+re-lock. EXECUTE 198.36: new page plus
+`[data-cy='dropdown-icon']` binds the tagged customer
+(`vendor_bind=scoped:existing_option`, GET with `contactId`).
+**Gem som kladde** then `POST /v2/invoices` **422** with
+`grossAmount=0`. Independent review FAIL. Residual intro now
+matches that persist fact. Exact-tag pick is unique-only.
+Do not remake picker dumps. Do not green. Next persist slice
+needs a proved line Billy accepts. Honesty-16 stay red.
+Product, daybook, and files still wait.
 
 Daybook create-contract dump is delivered:
 `inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.
@@ -258,7 +266,8 @@ leftover Leverandør slice is closed.
 ## Children
 
 Parent `main` is already in this branch. `git merge main` is already
-up to date. No new parent commits.
+up to date. `origin/main` has nothing this branch lacks. No new
+parent commits.
 
 Merged with `--no-ff` and parked. No new child commits:
 

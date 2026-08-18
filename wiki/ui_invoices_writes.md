@@ -7,8 +7,9 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
   - radio:EC676F84
+  - radio:9310BC17
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T15:00:00Z
+updated: 2026-08-18T15:54:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -41,8 +42,14 @@ Delete the draft invoice first, then the customer.
 
 Owner `EC676F84`: the Kunde control works. An empty customer dataset shows
 textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not
-patch or probe the dropdown. If a verified customer still does not appear in
-Kunde, ask the orchestrator to inspect.
+patch or probe the dropdown. Owner `9310BC17`: create and confirm the
+customer first, then start a fresh session or hard-navigate `/invoices/new`
+before opening the chevron. `submit_draft_invoice` closes the bootstrap page
+and opens a new Playwright page before create bind. `bind_kunde` clicks `[data-cy='dropdown-icon']` in the contact
+`.pickerfield`, then picks the exact tag. `chevron_offset_from_box` is
+fallback. Type is last.
+A preloaded invoice page is a stale-session bug, not a missing control. Do
+not ask Joakim to inspect routine UI.
 
 Kunde bind is an existing-option pick after a named opener. The live
 `input[name=contact]` field is typeable (250x40) and is **not** the bills

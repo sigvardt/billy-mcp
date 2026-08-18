@@ -28,6 +28,7 @@ from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_INPUT_SELECTORS,
     KUNDE_LABEL,
     chevron_hit_missing_keys,
+    chevron_offset_from_box,
     kunde_event_missing_keys,
     kunde_trace_missing_keys,
     kunde_trace_names_next_action,
@@ -641,7 +642,7 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
             code=StableErrorCode.UI_CHANGED,
             message="Billy Kunde control is not visible.",
         )
-    type_target = await _click_field_once(field)
+    type_target = await _click_kunde_chevron(page, field)
     if type_target is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
@@ -652,6 +653,8 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
     if pick_kunde_existing_option_index(items) is not None:
         if await _click_scoped_option(page, unique_tag):
             return "scoped:existing_option"
+    if await _click_exact_visible_tag(page, unique_tag):
+        return "scoped:existing_option"
     await _type_kunde(type_target, unique_tag)
     items = await _wait_options(page, unique_tag, wrapper)
     if pick_kunde_existing_option_index(items) is not None:
@@ -661,6 +664,36 @@ async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
         code=StableErrorCode.UI_CHANGED,
         message="Billy Kunde existing option is not visible.",
     )
+
+
+async def _click_kunde_chevron(page: Page, field: Locator) -> Locator | None:
+    """Open Kunde via data-cy=dropdown-icon. Chevron offset is fallback only."""
+
+    picker = page.locator(".pickerfield").filter(has=page.locator("input[name='contact']"))
+    icon = picker.locator("[data-cy='dropdown-icon']")
+    try:
+        if await icon.count() >= 1 and await icon.first.is_visible():
+            box = await icon.first.bounding_box()
+            if box is not None:
+                await page.mouse.click(
+                    box["x"] + box["width"] / 2,
+                    box["y"] + box["height"] / 2,
+                )
+            else:
+                await icon.first.click(timeout=5000)
+            await asyncio.sleep(0.5)
+            return field
+        box = await field.bounding_box()
+        if box is None:
+            return None
+        return await _click_field_once(
+            field,
+            offset=chevron_offset_from_box(int(box["width"]), int(box["height"])),
+        )
+    except Exception as exc:
+        if type(exc).__name__ != "TimeoutError":
+            raise
+        return None
 
 
 async def _vaelg_kunde_textbox(page: Page) -> Locator | None:
@@ -683,9 +716,9 @@ async def _click_field_once(
     if not await field.is_visible():
         return None
     if offset is None:
-        await field.click()
+        await field.click(timeout=5000)
     else:
-        await field.click(position={"x": offset["dx"], "y": offset["dy"]})
+        await field.click(position={"x": offset["dx"], "y": offset["dy"]}, timeout=5000)
     await asyncio.sleep(0.3)
     return field
 
@@ -768,6 +801,31 @@ async def _click_scoped_option(page: Page, unique_tag: str) -> bool:
             await option.first.click()
             return True
     return False
+
+
+async def _click_exact_visible_tag(page: Page, unique_tag: str) -> bool:
+    """Pick the exact visible customer name. Never the Opret ny footer."""
+
+    footer_label = portal_create_footer_label(unique_tag)
+    matches = page.get_by_text(unique_tag, exact=True)
+    visible: list[Locator] = []
+    try:
+        for index in range(min(await matches.count(), 9)):
+            node = matches.nth(index)
+            if not await node.is_visible():
+                continue
+            text = (await node.inner_text()).strip()
+            if text != unique_tag or text == footer_label:
+                continue
+            visible.append(node)
+        if len(visible) != 1:
+            return False
+        await visible[0].click(timeout=5000)
+        return True
+    except Exception as exc:
+        if type(exc).__name__ != "TimeoutError":
+            raise
+        return False
 
 
 async def fill_line(page: Page, value: str) -> str | None:

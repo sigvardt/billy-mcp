@@ -69,6 +69,9 @@ async def submit_draft_invoice(
                 message="Live Billy organisation does not match the confirmation ticket.",
             )
         assert page is not None
+        if action == "create":
+            await page.close()
+            page = cast(Page, await context.new_page())
         failed = await _run_action(
             page,
             slug=slug,
