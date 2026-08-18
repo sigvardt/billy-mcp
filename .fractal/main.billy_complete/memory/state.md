@@ -7,14 +7,15 @@ sources:
   - https://www.billy.dk/api/
   - radio:96908DC6
   - radio:07600147
+  - radio:E87B6AEF
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-17T23:03:00Z
+updated: 2026-08-18T00:20:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `f7f8520`. The tree is clean. Stay red. Do not finish.
+HEAD is `1936b7c`. `E87B6AEF` files wait for COMMIT. Stay red. Do not finish.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
 
@@ -24,20 +25,27 @@ the closest `pickerfield` wrapper (`data-cy` name only). Binding
 `option_role_count=0`. `UI_CHANGED`. Role-option zero is not proof the
 picker stayed closed.
 
-`07600147` live dump is delivered and review FAIL. One FastMCP tagged
-customer, fresh confirm, scoped observer, one `pickerfield` click.
-`changed_node_count=0`. `exact_match_target=false`. `UI_CHANGED`.
-Customer deleted. Absence proved. Live test now verifies the dump
-without repeating that click. Next binding is `E87B6AEF`. Stay red.
-Do not finish.
+`07600147` is closed and committed. One FastMCP tagged customer, fresh
+confirm, scoped observer, one `pickerfield` click. `changed_node_count=0`.
+`exact_match_target=false`. `UI_CHANGED`. Customer deleted. Absence
+proved. Live test verifies the dump without repeating that click.
+
+`E87B6AEF` dump is delivered and review FAIL. Two visible descendants:
+contact `INPUT` and overlay `DIV` at `dx=242`. `unique_target=false`.
+`wrapper_handler_guard=none`. `UI_CHANGED`. No customer. No click.
+Independent review: dump contract met. Invoice CUD still unbound.
+Do not remap. Do not click the overlay or the wrapper.
 
 Closed and not to be repeated: typed-only bind (`51E18E60`), right-edge
 chevron dump (`A3AB03C3`), DIV ownership click (`9F777B8F`), tagged type
 trace (`8EFD0EAD`), event or pageerror dump (`4A5CD1E7`), rest route
-capture (`F12B607E`), the first `pickerfield` click (`452E0773`), and
-the instrumented post-click dump (`07600147`).
+capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
+instrumented post-click dump (`07600147`), and the descendant map
+(`E87B6AEF`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
+Do not remake the descendant map. Next is a different read-only
+capture.
 
 ## Proved and still red
 

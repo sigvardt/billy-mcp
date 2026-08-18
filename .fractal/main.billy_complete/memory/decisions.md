@@ -23,8 +23,9 @@ sources:
   - radio:F12B607E
   - radio:452E0773
   - radio:07600147
+  - radio:E87B6AEF
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-17T23:03:00Z
+updated: 2026-08-17T23:47:07Z
 ---
 
 ## Binding now
@@ -51,9 +52,9 @@ updated: 2026-08-17T23:03:00Z
 
 `452E0773` (done, unsaved): live control contract named `click_open` on the closest `pickerfield` wrapper (`data-cy` name only). Binding `token_class=name_quoted_contact`. One wrapper click ran. `option_role_count=0`. `UI_CHANGED`. That dump is closed.
 
-`07600147` (done, dump delivered): one FastMCP tagged customer, fresh confirm, scoped observer, one `pickerfield` click. `changed_node_count=0`. `exact_match_target=false`. `UI_CHANGED`. Customer deleted. Absence proved. Do not repeat that wrapper-center click.
+`07600147` (done, committed on `1936b7c`): one FastMCP tagged customer, fresh confirm, scoped observer, one `pickerfield` click. `changed_node_count=0`. `exact_match_target=false`. `UI_CHANGED`. Customer deleted. Absence proved. Do not repeat that wrapper-center click.
 
-`E87B6AEF` (saved, in force after this commit): TDD-first sanitized descendant map of visible nodes inside the proved `pickerfield` only. No wrapper-center repeat. Classify whether the wrapper handler guards on event target. Commit allowlisted guard summary only.
+`E87B6AEF` (saved, dump delivered): live read-only map has two visible descendants. Contact `INPUT` plus overlay `DIV` at `dx=242`. `unique_target=false`. `wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either target. Do not repeat the wrapper-center click.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

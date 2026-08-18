@@ -195,8 +195,26 @@ Live recapture: `baseline_input_tag=INPUT`, wrapper categories include
 `changed_node_count=0`, `exact_match_target=false`, `UI_CHANGED`. The
 scoped subtree did not expose a newly visible interactive match. Do not
 sweep the rest of the page. The wrapper-center click is closed. Do not
-repeat it. Next read-only slice maps visible descendants inside that
-wrapper only.
+repeat it.
+
+## Descendant map
+
+`E87B6AEF` records visible descendants inside the proved `pickerfield`
+only. Do not click the wrapper center. For each descendant store tag
+category, role, class-token categories, `data-*` names, `{dx,dy,w,h}`
+from the wrapper, `pointer-events`, and listener types. Omit text and
+every attribute value. Classify the already-loaded wrapper click
+handler as `input_ignored`, `suffix_accepted`, `toggle_accepted`, or
+`none`. Never persist source. `unique_target` is true only when exactly
+one unused interactive descendant remains (not the contact `INPUT` and
+not the already-clicked overlay suffix). Helper:
+`src/billy_mcp/ui_writes/invoices_kunde_descendants.py`. Owner dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-kunde-descendants.json`.
+Live recapture: two visible descendants, the contact `INPUT` at
+`{dx:0,w:210,h:40}` and a nameless overlay `DIV` at
+`{dx:242,w:40,h:40}`. `unique_target=false`.
+`wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either
+target. Do not repeat the wrapper-center click.
 
 ## Live proof
 

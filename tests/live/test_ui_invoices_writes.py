@@ -1351,3 +1351,90 @@ async def test_ui_invoices_kunde_post_click_dom_ax(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_descendant_map(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Read-only E87B6AEF descendant map. Do not repeat a closed click."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_descendants
+    from billy_mcp.ui_writes.invoices_kunde_descendants import (
+        KUNDE_DESCENDANT_DUMP,
+        REQUIRED_KUNDE_DESCENDANT_KEYS,
+        descendant_dump_is_delivered,
+        kunde_descendant_missing_keys,
+    )
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "descendant dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    server: FastMCP | None = None
+    extra: BrowserRuntime | None = None
+    page: Any = None
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+        if descendant_dump_is_delivered():
+            written = json.loads(KUNDE_DESCENDANT_DUMP.read_text(encoding="utf-8"))
+            assert kunde_descendant_missing_keys(written) == []
+            assert "https://" not in KUNDE_DESCENDANT_DUMP.read_text(encoding="utf-8")
+            assert "function(" not in KUNDE_DESCENDANT_DUMP.read_text(encoding="utf-8")
+            return
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_descendants(page)
+        if result.get("code") and result.get("code") != "UI_CHANGED":
+            _record_blocker(f"descendant dump failed: {result}")
+            pytest.fail(f"descendant dump failed: {result}")
+        assert kunde_descendant_missing_keys(result) == []
+        assert REQUIRED_KUNDE_DESCENDANT_KEYS == (
+            "wrapper_tag",
+            "visible_descendant_count",
+            "descendants",
+            "unique_target",
+            "unique_target_category",
+            "wrapper_handler_guard",
+            "kunde_descendant_missing_keys",
+        )
+        encoded = json.dumps({"result": result})
+        assert "https://" not in encoded
+        assert "function(" not in encoded
+        assert "confirmation_ticket" not in encoded
+        assert "MCP-UI-INV-" not in encoded
+        if result.get("unique_target") is not True:
+            assert result.get("code") == "UI_CHANGED"
+        assert KUNDE_DESCENDANT_DUMP.is_file()
+        written = json.loads(KUNDE_DESCENDANT_DUMP.read_text(encoding="utf-8"))
+        assert kunde_descendant_missing_keys(written) == []
+        assert "https://" not in KUNDE_DESCENDANT_DUMP.read_text(encoding="utf-8")
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+    finally:
+        if page is not None:
+            await page.close()
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

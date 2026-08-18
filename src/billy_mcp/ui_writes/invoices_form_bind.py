@@ -412,6 +412,36 @@ async def capture_kunde_control_contract(
     return result
 
 
+async def capture_kunde_descendants(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only E87B6AEF descendant map. Does not click or type."""
+
+    from billy_mcp.ui_writes.invoices_kunde_descendant_inspect import inspect_kunde_descendants
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_descendants(page)
+    if dump_path is not None:
+        from billy_mcp.ui_writes.invoices_kunde_descendants import apply_kunde_descendant_dump
+
+        result = apply_kunde_descendant_dump(result, dump_path=dump_path)
+    return result
+
+
 async def apply_named_control_action(page: Page, payload: dict[str, object]) -> dict[str, object]:
     """Run the one named control action. Does not type or click the overlay DIV."""
 
