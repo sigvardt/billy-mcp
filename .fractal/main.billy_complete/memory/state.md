@@ -18,21 +18,25 @@ sources:
   - radio:A337A622
   - radio:113F1E05
   - radio:D68E402A
+  - radio:EC676F84
+  - radio:802D71CF
+  - radio:9310BC17
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T14:30:00Z
+updated: 2026-08-18T15:46:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `a5dcdca`. Stay red. Do not finish. No children are running.
-`D68E402A` residual table is in `wiki/ui_write_residual_table.md`.
-Honesty-16 is the only remaining red owner-scope write set.
-Actionable now: none. Contacts, bills, and organizations are
-already live-proved. Invoice, product, files, and daybooks lack a
-unique control or cleanup. One consolidated owner decision `D02702C5` is in the parent
-inbox and unanswered. Independent review passed. Lint and
-commit-mode tests passed. No more classify dumps.
+HEAD is `e87ad1c` plus uncommitted customer-confirm and bind work.
+Stay red. Do not finish. No children are running.
+`9310BC17`: Kunde shows an existing customer on a fresh
+`/invoices/new` after the customer exists. `UI_CHANGED` is a stale
+invoice page. Next slice after COMMIT: fixture for preloaded
+invoice state, create and confirm customer, then a new session or
+hard-nav to `/invoices/new`, chevron, exact tag, FastMCP draft CUD.
+Do not remove bind helpers. Do not ask the owner to inspect routine
+UI. Honesty-16 stay red. Product, daybook, and files still wait.
 
 Daybook create-contract dump is delivered:
 `inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.
@@ -253,7 +257,8 @@ leftover Leverandør slice is closed.
 
 ## Children
 
-Parent `main` is already in this branch. No new parent commits.
+Parent `main` is already in this branch. `git merge main` is already
+up to date. No new parent commits.
 
 Merged with `--no-ff` and parked. No new child commits:
 
@@ -265,8 +270,12 @@ Merged with `--no-ff` and parked. No new child commits:
 - `ui_files_writes`
 - `ui_org_writes` (company fields only; fail-closed on users or tokens)
 
-No children are running. 157 old wave or review descendants stay retired
-and unmerged. Do not continue, reset, or merge them.
+No children are running. 62 leftover descendant branches still have
+commits not in this branch. They stay retired and unmerged. Four have
+leftover project diffs (`ui_auth_status`, two Codex-fallback wiki
+pages, one Codex-fallback research page). Current `auth_status` plus
+login start/wait, and the existing wiki pages, already supersede them.
+Do not continue, reset, or merge them.
 
 Coverage stays red until remaining honesty families prove live FastMCP
 CUD with independent review. Node complete stays false.

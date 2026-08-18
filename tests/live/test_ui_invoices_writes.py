@@ -151,9 +151,14 @@ async def _ready_session(runtime: BrowserRuntime, slug: str) -> None:
 
 async def _open_named_list(page: Any, slug: str, path: str, name: str) -> None:
     await page.goto(f"https://mit.billy.dk/{slug}/{path}", wait_until="domcontentloaded")
+    try:
+        await page.wait_for_load_state("networkidle", timeout=20000)
+    except (TimeoutError, RuntimeError):
+        pass
     search = page.locator("input[type='search'], input[placeholder*='øg' i]")
     if await search.count() >= 1:
         await search.first.fill(name)
+        await asyncio.sleep(1.5)
 
 
 async def _list_has_name(runtime: BrowserRuntime, slug: str, path: str, name: str) -> bool:
@@ -274,7 +279,12 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         if contact_created.get("code"):
             _record_blocker(f"contact create failed: {contact_created}")
             pytest.fail(f"contact create failed: {contact_created}")
-        await asyncio.sleep(2)
+        if contact_created.get("submitted") is not True:
+            _record_blocker(f"contact create did not submit: {contact_created}")
+            pytest.fail(f"contact create did not submit: {contact_created}")
+        if not await _list_has_name(observer, slug, "clients", tag):
+            _record_blocker("independent clients list did not show tagged customer")
+            pytest.fail("independent clients list did not show tagged customer")
 
         preview_create = await _call(
             server,
@@ -387,6 +397,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                 "tests/live/test_ui_invoices_writes.py::"
                 "test_ui_invoices_create_update_delete_via_call_tool",
                 "create_server_call_tool_create_update_delete",
+                "independent_contact_confirm_before_invoice",
                 "independent_readback_session",
                 "third_session_cleanup",
             ],
@@ -398,6 +409,26 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
     finally:
         if server is not None and slug:
+            if invoice_id:
+                try:
+                    preview_delete = await _call(
+                        server,
+                        "ui_invoices_delete_preview",
+                        {
+                            "id": invoice_id,
+                            "action": "draft_delete",
+                            "save_cta": "Slet",
+                            "organization_id": slug,
+                        },
+                    )
+                    if not preview_delete.get("code"):
+                        await _call(
+                            server,
+                            "ui_invoices_delete_execute",
+                            {"confirmation_ticket": preview_delete["confirmation_ticket"]},
+                        )
+                except (OSError, RuntimeError, AssertionError, TimeoutError):
+                    _record_blocker(f"Cleanup delete failed for leftover tagged invoice {tag}.")
             try:
                 contact_delete = await _call(
                     server,
@@ -435,26 +466,6 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                         _record_blocker(
                             f"Cleanup delete failed for leftover tagged contact {leftover}."
                         )
-            if invoice_id:
-                try:
-                    preview_delete = await _call(
-                        server,
-                        "ui_invoices_delete_preview",
-                        {
-                            "id": invoice_id,
-                            "action": "draft_delete",
-                            "save_cta": "Slet",
-                            "organization_id": slug,
-                        },
-                    )
-                    if not preview_delete.get("code"):
-                        await _call(
-                            server,
-                            "ui_invoices_delete_execute",
-                            {"confirmation_ticket": preview_delete["confirmation_ticket"]},
-                        )
-                except (OSError, RuntimeError, AssertionError, TimeoutError):
-                    _record_blocker(f"Cleanup delete failed for leftover tagged invoice {tag}.")
         if extra is not None:
             await extra.close()
         for path in list(_REGISTERED_PROFILES):

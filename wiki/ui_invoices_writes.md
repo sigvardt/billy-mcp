@@ -6,8 +6,9 @@ tags: [billy, ui, invoices, writes, tickets]
 sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
+  - radio:EC676F84
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T10:00:00Z
+updated: 2026-08-18T15:00:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -34,7 +35,14 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 
 `action` must be `draft_create`, `draft_update`, or `draft_delete`. Use unique
 tagged names such as `MCP-UI-INV-...`. Create a tagged customer first with
-`ui_clients_*` tools. Do not use a leftover supplier as Kunde.
+`ui_clients_*` tools. Confirm that name in a fresh interface session before
+any invoice preview (`EC676F84`). Do not use a leftover supplier as Kunde.
+Delete the draft invoice first, then the customer.
+
+Owner `EC676F84`: the Kunde control works. An empty customer dataset shows
+textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not
+patch or probe the dropdown. If a verified customer still does not appear in
+Kunde, ask the orchestrator to inspect.
 
 Kunde bind is an existing-option pick after a named opener. The live
 `input[name=contact]` field is typeable (250x40) and is **not** the bills

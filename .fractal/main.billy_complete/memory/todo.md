@@ -4,13 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T14:30:00Z
+updated: 2026-08-18T15:35:00Z
 ---
 
 ## Open
 
-- Residual table is in `wiki/ui_write_residual_table.md`. Actionable now: none. Wait for one owner answer on invoice bind, `67CBACB6` product archive, daybook persist token, and files delete. Stay red. Do not add helpers.
-- Invoice draft CUD is mandatory (`FD39FFE7`) and still unbound. Create-form derivation from closed probes is `unique_normal_action=false`, `next_slice=product_create`, `UI_CHANGED`. `113F1E05` forbids another entry-CTA dump. Stay red. Never send, approve, or email.
+- `9310BC17`: after COMMIT, add a failing fixture for a preloaded invoice page. Create and confirm the customer first. Then a fresh session or hard-nav `/invoices/new`, open the chevron, select the exact tag, FastMCP draft CUD. Restore bind helpers. Do not ask the owner to inspect routine UI. Stay red.
+- Residual table invoice rows are `kunde_option_missing_after_proved_customer`. Product, daybook, and files still wait on `67CBACB6` / `D02702C5`. Do not add classify helpers.
+- Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and fail-closed. Official dialog proved **Gem produkt** and **Arkiveret**. Both `/products` and `/inventory` named archive-filter counts are 0 (`unique_restore_readback=none`). `A337A622` forbids more product list, dialog, or archive probes. Persist stays fail-closed until the owner answers `67CBACB6`. Stay red. Do not remake form-contract, delete-chrome, or either archive dump. Do not leave an uncleanable product.
 - Daybook create persist is not unique (`opret_ny_kassekladde_count=1` and `indstillinger_count=1`). Helper dropped after review. Do not remake that dump. Do not arm `_ledger_write`. Stay red.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files stay fail-closed (research185 **Slet** 0).

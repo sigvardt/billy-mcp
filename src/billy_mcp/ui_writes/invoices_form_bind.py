@@ -29,10 +29,8 @@ from billy_mcp.ui_writes.invoices_kunde import (
     KUNDE_LABEL,
     chevron_hit_missing_keys,
     kunde_event_missing_keys,
-    kunde_phase_is_bound,
     kunde_trace_missing_keys,
     kunde_trace_names_next_action,
-    pick_kunde_create_index,
     pick_kunde_existing_option_index,
     portal_create_footer_label,
     right_edge_click_offset,
@@ -635,88 +633,46 @@ async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, ob
 
 
 async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
-    """Bind an existing Kunde option. Create footer is last resort."""
+    """Bind an existing Kunde option. Never clicks Opret ny."""
 
-    field = await kunde_field(page)
+    field = await _vaelg_kunde_textbox(page)
     if field is None:
-        await dump_kunde_chrome(page)
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy Kunde control is not visible.",
         )
-    opener = await observe_kunde_opener(page, field)
-    dump_kunde_opener(opener)
-    named = opener.get("named_opener")
-    if isinstance(named, str) and named:
-        type_target = await _click_named_opener(page, field, named)
-    else:
-        type_target = await _click_field_once(field)
+    type_target = await _click_field_once(field)
     if type_target is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy Kunde opener is not visible.",
         )
     wrapper = kunde_wrapper(page)
-    lookups: list[str] = []
-    watch_contact_lookups(page, lookups)
-    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
-    await _type_kunde(type_target, unique_tag)
     items = await _wait_options(page, unique_tag, wrapper)
-    after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
-    after_type["contact_get_count"] = len(lookups)
-    dump_kunde_phases(after_click, after_type)
-    if not kunde_phase_is_bound(after_type):
-        merged = {**opener, **after_type}
-        named_action = widget_named_action(merged)
-        if named_action == "tab_blur":
-            press = getattr(type_target, "press", None)
-            if press is not None:
-                await press("Tab")
-                await asyncio.sleep(0.4)
-                after_type = await observe_kunde(
-                    page, field, unique_tag, phase="after_tab", wrapper=wrapper
-                )
-                after_type["contact_get_count"] = len(lookups)
-                dump_kunde_phases(after_click, after_type)
-        elif named_action is None:
-            dump_kunde_lookup(len(lookups))
-        if not kunde_phase_is_bound(after_type):
-            return ToolError(
-                code=StableErrorCode.UI_CHANGED,
-                message="Billy Kunde existing option is not visible.",
-            )
     if pick_kunde_existing_option_index(items) is not None:
         if await _click_scoped_option(page, unique_tag):
             return "scoped:existing_option"
-    if pick_kunde_create_index(items) is not None:
-        if await _click_scoped_footer(page, unique_tag):
-            return "scoped:portal_footer"
+    await _type_kunde(type_target, unique_tag)
+    items = await _wait_options(page, unique_tag, wrapper)
+    if pick_kunde_existing_option_index(items) is not None:
+        if await _click_scoped_option(page, unique_tag):
+            return "scoped:existing_option"
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy Kunde existing option is not visible.",
     )
 
 
-async def _click_named_opener(page: Page, field: Locator, named: str) -> Locator | None:
-    """Click the dump-named opener. The contact text field is not an opener."""
+async def _vaelg_kunde_textbox(page: Page) -> Locator | None:
+    """Owner-visible Kunde textbox. Placeholder is Vælg kunde."""
 
-    parent = field.locator("xpath=..")
-    uncle = parent.locator("xpath=..")
-    targets: dict[str, Locator] = {
-        "sibling_search": parent.locator("[data-testid='search']"),
-        "uncle_search": uncle.locator("[data-testid='search']"),
-        "combobox": page.locator("[role='combobox']"),
-        "contact_id": page.locator("input[name='contactId']"),
-        "power_select_trigger": page.locator(".ember-power-select-trigger"),
-    }
-    target = targets.get(named)
-    if target is None:
-        return None
-    if await target.count() < 1 or not await target.first.is_visible():
-        return None
-    await target.first.click()
-    await asyncio.sleep(0.3)
-    return target.first
+    named = page.get_by_role("textbox", name="Vælg kunde")
+    if await named.count() >= 1 and await named.first.is_visible():
+        return named.first
+    placeholder = page.locator("input[placeholder='Vælg kunde']")
+    if await placeholder.count() >= 1 and await placeholder.first.is_visible():
+        return placeholder.first
+    return await kunde_field(page)
 
 
 async def _click_field_once(
@@ -810,23 +766,6 @@ async def _click_scoped_option(page: Page, unique_tag: str) -> bool:
             if await footer.count() >= 1 and await footer.first.is_visible():
                 continue
             await option.first.click()
-            return True
-    return False
-
-
-async def _click_scoped_footer(page: Page, unique_tag: str) -> bool:
-    label = portal_create_footer_label(unique_tag)
-    for selector in (
-        ".ds-dropdown-list.ds-moved-with-portal",
-        ".ds-dropdown-list",
-        *ALT_LIST_SELECTORS,
-    ):
-        lists = page.locator(selector)
-        for index in range(min(await lists.count(), 9)):
-            footer = lists.nth(index).get_by_text(label, exact=True)
-            if await footer.count() < 1:
-                continue
-            await footer.first.click()
             return True
     return False
 

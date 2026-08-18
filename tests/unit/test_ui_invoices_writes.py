@@ -399,6 +399,24 @@ def test_fill_named_contact_is_not_a_kunde_bind() -> None:
     assert "input[name='contact']" in bind
 
 
+def test_bind_kunde_picks_existing_option_from_vaelg_kunde() -> None:
+    """Owner EC676F84: open Vælg kunde and pick the existing customer. No Opret ny."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def bind_kunde")
+    helper = bind.index("async def _vaelg_kunde_textbox")
+    end = bind.index("\nasync def ", helper + 1)
+    body = bind[start:end]
+    assert "Vælg kunde" in body
+    assert "_vaelg_kunde_textbox" in body
+    assert "_click_scoped_option" in body
+    assert "_click_scoped_footer" not in body
+    assert "portal_create_footer" not in body
+    option_idx = body.index("_click_scoped_option")
+    type_idx = body.index("_type_kunde")
+    assert option_idx < type_idx
+
+
 def _create_prepared() -> UiWritePrepared:
     request: dict[str, JsonValue] = {
         "action": "draft_create",
@@ -465,18 +483,15 @@ def test_kunde_field_prefers_wrapper_input() -> None:
 
 
 def test_kunde_bind_scopes_search_to_contact_wrapper() -> None:
-    """Given live contact chrome, When binding Kunde, Then search is wrapper-scoped."""
+    """Given live contact chrome, When binding Kunde, Then pick existing option only."""
 
     source = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
-    observe_path = Path("src/billy_mcp/ui_writes/invoices_form_observe.py")
-    observe = observe_path.read_text(encoding="utf-8") if observe_path.is_file() else ""
-    combined = f"{source}\n{observe}"
     assert "input[name='contact']" in source
+    assert "Vælg kunde" in source
+    assert "[data-testid='input-wrapper']" in source
     assert "filter(" in source
-    assert "[data-testid='search']" in source
-    assert "after_click" in combined
-    assert "search_trigger" in combined
-    assert "page.get_by_text(unique_tag" not in source
+    assert "_click_scoped_option" in source
+    assert "async def _click_scoped_footer" not in source
 
 
 def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
@@ -490,6 +505,22 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "ui_clients_create_preview" in source
     assert "Godkend" in source
     assert "pending_review" in source
+
+
+def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
+    """Owner EC676F84: prove the tagged customer in a second session first."""
+
+    source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
+    start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
+    end = source.index("\nasync def ", start + 1)
+    body = source[start:end]
+    create_idx = body.index("ui_clients_create_execute")
+    submitted_idx = body.index('contact_created.get("submitted") is not True')
+    confirm_idx = body.index('await _list_has_name(observer, slug, "clients", tag)')
+    invoice_idx = body.index("ui_invoices_create_preview")
+    assert create_idx < submitted_idx < confirm_idx < invoice_idx
+    assert "asyncio.sleep(2)" not in body[create_idx:invoice_idx]
+    assert "independent clients list did not show" in body
 
 
 def _live_unbound_after_type() -> dict[str, object]:
