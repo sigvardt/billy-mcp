@@ -57,8 +57,11 @@ and `/:org_slug/inventory`. Create form opened. Name field visible.
 Save CTA token is `other`, not exact **Gem**.
 `proved_delete_path=none`. `UI_CHANGED`.
 
-Do not click **Gem**. Do not run `ui_products_create_execute` until
-a later recapture proves a unique delete control. Do not invent
+Do not click **Gem**. `BrowserProductSubmitter` now fail-closes
+when `product_persist_allowed` is false: missing dump or
+`proved_delete_path=none`. Do not run a live
+`ui_products_create_execute` persist until a later recapture
+proves a unique delete control. Do not invent
 `ui_products_delete_*`. Do not API-delete. Do not remake this dump
 unless the page shows a genuinely new Slet control.
 

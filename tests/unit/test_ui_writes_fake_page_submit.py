@@ -115,6 +115,13 @@ def test_invoices_create_execute_uses_route_fields_cta_and_readback(
 def test_products_create_execute_uses_route_fields_cta_and_readback(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
+    from billy_mcp.ui_writes import products
+
+    def _allow_persist(path: Path | None = None) -> bool:
+        del path
+        return True
+
+    monkeypatch.setattr(products, "product_persist_allowed", _allow_persist)
     session = _arm(monkeypatch)
     executed = _preview_and_execute(
         create_server(),

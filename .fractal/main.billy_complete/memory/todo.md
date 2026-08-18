@@ -9,8 +9,8 @@ updated: 2026-08-18T10:05:00Z
 
 ## Open
 
-- Invoice draft CUD is mandatory (`FD39FFE7`). Official list **Opret faktura** landing is `proved_bind=none`. Same empty closed form. Stay red. Do not remake that dump or picker dumps. Never send, approve, or email.
-- Product create is mandatory (`FD39FFE7`). Stay red. Prove a normal create submit and a UI cleanup path before persist. Do not remake delete-chrome. Do not leave an uncleanable product.
+- Invoice draft CUD is mandatory (`FD39FFE7`) and still unbound. Create-form derivation from closed probes is `unique_normal_action=false`, `next_slice=product_create`, `UI_CHANGED`. `113F1E05` forbids another entry-CTA dump. Stay red. Never send, approve, or email.
+- Product create is mandatory (`FD39FFE7`). Persist is fail-closed until a unique UI delete path exists. Stay red. Do not remake delete-chrome. Do not leave an uncleanable product.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files and ledger after invoice and product.
 
 ## Done

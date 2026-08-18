@@ -2,14 +2,16 @@
 
 from __future__ import annotations
 
+from pathlib import Path
 from typing import Final, Protocol
 
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from billy_mcp.browser import BrowserRuntime
-from billy_mcp.models import ToolError
+from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
+from billy_mcp.ui_writes.products_delete_chrome import product_persist_allowed
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePreviewResult,
@@ -71,15 +73,22 @@ class BrowserProductSubmitter:
         self,
         runtime: BrowserRuntime,
         readback_runtime: BrowserRuntime | None = None,
+        delete_chrome_dump: Path | None = None,
     ) -> None:
         self._runtime = runtime
         self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
+        self._delete_chrome_dump = delete_chrome_dump
 
     async def submit_create(
         self,
         request: dict[str, JsonValue],
         organization_id: str = "",
     ) -> object:
+        if not product_persist_allowed(self._delete_chrome_dump):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Product create stays fail-closed until a unique UI delete path is proved.",
+            )
         name = str(request.get("name") or "")
         return await perform_family_write(
             self._runtime,

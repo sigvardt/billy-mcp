@@ -31,6 +31,7 @@ sources:
   - radio:AD8966F2
   - radio:23709235
   - radio:FD39FFE7
+  - radio:113F1E05
   - radio:2683CE6B
   - radio:8EBC19D5
 created: 2026-08-16T13:50:50Z
@@ -85,7 +86,9 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `2683CE6B` (done, unsaved, dump delivered, refined by `8EBC19D5`): stop page-wide one-off dumps. Live scoped dump: `gem_clicked=true`, `invoice_persisted=false`, two `validation` rows, `unique_action=none`, `proved_bind=none`. Contact-owned roots showed no unique visible option or owned **Opret ny** footer. Do not remake via a body-wide recapture. Next is a different normal-interface path under `FD39FFE7`. Do not freeze. Do not finish.
 
-`FD39FFE7` (saved, still in force): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. Official list **Opret faktura** landing is delivered: empty list, one button click, destination `invoices_new`, contact empty, `proved_bind=none`. Same empty closed form as raw create-open. Owner question posted. Do not remake that dump. Do not remake picker dumps. Do not remap. Do not treat `ui_invoices_list` `UI_CHANGED` on `/invoices/empty` as a bind. Do not expand into a list-shell rewrite. Do not freeze invoice CUD as finished. Product create still waits.
+`FD39FFE7` (saved, still in force): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. Official list **Opret faktura** landing is delivered: empty list, one button click, destination `invoices_new`, contact empty, `proved_bind=none`. Same empty closed form as raw create-open. Do not remake that dump. Do not remake picker dumps. Do not remap. Do not treat `ui_invoices_list` `UI_CHANGED` on `/invoices/empty` as a bind. Do not expand into a list-shell rewrite. Do not freeze invoice CUD as finished. Product create still waits.
+
+`113F1E05` (saved, P10, supersedes Tilgodehavender CTA dump): stop enumerating alternate **Opret faktura** entry CTAs. Those entries reach the same empty create form. Do not execute or commit another route-entry diagnostic on assumption. Inspect the loaded create-form customer control locally (scoped DOM/AX plus page-local frontend source or component evidence, no live API). Derive one exact normal existing-customer interaction. Failing fixture first. Then FastMCP draft CUD if that interaction exists. If none, record `UI_CHANGED` and move to product create. Do not accumulate more diagnostic helpers. Stay red. Do not stop the root.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

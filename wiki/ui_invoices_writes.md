@@ -469,6 +469,20 @@ with query `none`, heading `opret_faktura`,
 same empty closed form. Do not remake this dump, the scoped dump,
 or the closed picker set.
 
+## Create-form control derivation
+
+`113F1E05` forbids another **Opret faktura** entry dump, including
+**Tilgodehavender**. Helper:
+`src/billy_mcp/ui_writes/invoices_create_form_control.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-create-form-control.json`.
+This helper restates frozen closed-probe flags. It is **not** a new
+scoped DOM/AX or page-local source inspect. Invented tokens such as
+`arrow_open` are ignored. Closed evidence derives
+`derived_interaction=none`, `next_slice=product_create`,
+`proved_bind=none`, `UI_CHANGED`. Do not remake those dumps. Do not
+click a new entry CTA.
+
 ## Live proof
 
 `tests/live/test_ui_invoices_writes.py` drives create, update, and delete

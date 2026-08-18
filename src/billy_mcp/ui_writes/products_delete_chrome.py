@@ -411,6 +411,21 @@ async def inspect_inventory_chrome(page: _CountPage, *, open_create: bool) -> di
     return payload
 
 
+def product_persist_allowed(path: Path | None = None) -> bool:
+    """True only when a delivered dump names exactly one UI delete path."""
+
+    target = path or PRODUCTS_DELETE_CHROME_DUMP
+    if not products_delete_chrome_dump_is_delivered(target):
+        return False
+    try:
+        raw = json.loads(target.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return False
+    if not isinstance(raw, dict):
+        return False
+    return proved_delete_path_from(cast(dict[str, object], raw)) != "none"
+
+
 def products_delete_chrome_dump_is_delivered(path: Path | None = None) -> bool:
     """True when the owner dump already recorded the delete-chrome inspect."""
 
@@ -445,6 +460,7 @@ __all__ = [
     "empty_products_delete_chrome",
     "inspect_inventory_chrome",
     "inspect_products_list_chrome",
+    "product_persist_allowed",
     "products_delete_chrome_dump_is_delivered",
     "products_delete_chrome_dump_json",
     "products_delete_chrome_missing_keys",
