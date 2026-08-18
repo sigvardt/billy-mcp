@@ -18,13 +18,26 @@ sources:
   - radio:A337A622
   - radio:113F1E05
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T13:28:00Z
+updated: 2026-08-18T13:42:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `a87177f`. Stay red. Do not finish. No children are running.
+HEAD is `6180222`. Stay red. Do not finish. No children are running.
+`D68E402A` stops further classify dumps. Next is a residual table
+from existing evidence, then one actionable FastMCP write or one
+owner decision.
+
+Daybook create-contract dump is delivered:
+`inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.
+Heading `none`. `opret_ny_kassekladde_count=1` and
+`indstillinger_count=1`, so `unique_persist_token=none`.
+`name_input_count=0`. **Godkend** / **Bogfør** / **Gem** are 0.
+**Tilføj** and **Mere** are 1. `proved_bind=none`. Independent
+review failed the helper as a redundant permanent diagnostic.
+The helper files are deleted. Wiki keeps the dump fact. Do not
+remake. Do not arm `_ledger_write`. Execute stays fail-closed.
 
 `A337A622` stops product archive and list-shell enumeration.
 Independent review failed the Lagermodul helper as a redundant

@@ -5,8 +5,9 @@ tags: [billy, ui, writes, ledger, daybooks]
 sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:7696B03D
+  - radio:A337A622
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-16T14:30:00Z
+updated: 2026-08-18T13:55:00Z
 ---
 
 # ui_ledger_writes
@@ -31,6 +32,32 @@ Coverage rows these tools target later (root greens after live proof):
 `ui.parity.daybooks.create`, `ui.parity.daybooks.delete`,
 `ui.parity.daybookTransactions.create`, `ui.parity.transactions.create`.
 This family does not green those rows.
+
+## Create-contract dump
+
+Owner dump `~/.local/share/billy-mcp/inspect-live-daybooks-create-contract.json`
+on `/:org_slug/daybooks/new`:
+
+- `path_class=daybooks_new`
+- `heading_token=none`
+- `opret_ny_kassekladde_count=1`
+- `indstillinger_count=1`
+- `name_input_count=0`
+- `gem_count=0`
+- `godkend_count=0`
+- `godkend_alle_count=0`
+- `bogfor_count=0`
+- `tilfoej_count=1`
+- `mere_count=1`
+- `unique_persist_token=none`
+- `proved_bind=none`
+
+Both named persist counts are 1, so persist is not unique. **Indstillinger**
+also matches global nav. Independent review failed the classify helper as a
+redundant permanent diagnostic. The helper is not in the tree. Do not treat
+**Opret ny kassekladde** as a unique create submit. Do not arm
+`_ledger_write`. Do not remake this dump. Honesty rows stay on
+`ui_daybooks_open` / `ui_daybooks_delete_open`.
 
 ## Fail closed
 
