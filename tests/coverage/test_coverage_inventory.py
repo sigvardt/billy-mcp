@@ -1910,7 +1910,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.settings_company": "ui_settings_company_open",
         "ui.parity.organizations.list": "ui_settings_company_open",
         "ui.parity.organizations.get": "ui_settings_company_open",
-        "ui.parity.organizations.update": "ui_settings_company_open",
+        "ui.parity.organizations.update": "ui_organizations_update_preview",
         "ui.discovery.settings_accounting": "ui_settings_accounting_open",
         "ui.parity.accounts.list": "ui_settings_accounting_open",
         "ui.discovery.settings_invoicing": "ui_settings_invoicing_open",
@@ -2147,7 +2147,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.organizations.update"
     )
     assert organizations_update["api_row_id"] == "api.organizations.update"
-    assert organizations_update["tool_name"] == "ui_settings_company_open"
+    assert organizations_update["tool_name"] == "ui_organizations_update_preview"
     assert organizations_update["parity_status"] == "form_open_only"
     assert "api.organizations.update" in organizations_update["evidence"]
     assert "research177" in organizations_update["evidence"]

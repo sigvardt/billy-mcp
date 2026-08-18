@@ -10,6 +10,8 @@ from billy_mcp.vision_evidence import (
     mark_purge_verified,
     owner_only_frame_dir,
     purge_frame_dir,
+    qualifies_for_coverage_vision,
+    write_live_pending_unless_accepted,
     write_vision_record,
 )
 
@@ -48,6 +50,43 @@ def test_purge_frame_dir_and_mark_verified(tmp_path: Path) -> None:
     verified = mark_purge_verified(record_path)
     assert verified.purge_verified is True
     assert json.loads(record_path.read_text(encoding="utf-8"))["purge_verified"] is True
+
+
+def test_live_pending_binds_run_id_and_does_not_overwrite_accept(tmp_path: Path) -> None:
+    destination = tmp_path / "ui_organizations_writes.json"
+    accepted = write_vision_record(
+        destination,
+        workflow_ref="ui.parity.organizations.update",
+        assertion_refs=["live"],
+        second_interface_ref="fresh-session-input-name-phone",
+        reviewer_verdict="accept",
+        run_id="0937a009bf7e496ca2ce15a8af313868",
+        purge_verified=True,
+        author="independent_review",
+    )
+    assert qualifies_for_coverage_vision(accepted) is True
+    kept = write_live_pending_unless_accepted(
+        destination,
+        workflow_ref="ui.parity.organizations.update",
+        assertion_refs=["new-live"],
+        second_interface_ref="fresh-session-input-name-phone",
+        run_id="ffffffffffffffffffffffffffffffff",
+    )
+    assert kept.run_id == "0937a009bf7e496ca2ce15a8af313868"
+    assert kept.author == "independent_review"
+    assert kept.reviewer_verdict == "accept"
+    pending_path = tmp_path / "pending.json"
+    pending = write_live_pending_unless_accepted(
+        pending_path,
+        workflow_ref="ui.parity.organizations.update",
+        assertion_refs=["live"],
+        second_interface_ref="fresh-session-input-name-phone",
+        run_id="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    )
+    assert pending.author == "live_test"
+    assert pending.reviewer_verdict == "pending_review"
+    assert pending.run_id == "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    assert qualifies_for_coverage_vision(pending) is False
 
 
 def test_is_outside_repository(tmp_path: Path) -> None:

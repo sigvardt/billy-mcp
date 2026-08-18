@@ -14,8 +14,9 @@ sources:
   - radio:D326FFB3
   - radio:AD8966F2
   - radio:23709235
+  - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T06:04:00Z
+updated: 2026-08-18T06:58:00Z
 ---
 
 ## Now
@@ -23,26 +24,26 @@ updated: 2026-08-18T06:04:00Z
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 HEAD is this commit. Stay red. Do not finish.
 
-Invoice CUD is frozen `UI_CHANGED` for this Billy interface version.
-Honesty 16 stay red. Never call the API. Do not remake invoice picker
-diagnostics or alternate invoice routes unless a genuinely new UI
-signal appears. Do not alter invoice coverage.
+`FD39FFE7` is binding. Invoice draft CUD and product create stay
+mandatory. They are not finished as `UI_CHANGED`. After this
+organization remap is reviewed and committed, work invoice first,
+then product, before files or ledger. Honesty 16 stay red. Never
+call the API. Do not remake the closed picker or delete-chrome
+probes. Do not guess selectors. Do not force or evaluate clicks.
 
 `D326FFB3` product delete-chrome recapture is closed and unsaved.
-`proved_delete_path=none`. `UI_CHANGED`. No product created.
-Products create is frozen `UI_CHANGED`. Do not remake that dump.
-Do not Gem. Do not create an uncleanable product.
+`proved_delete_path=none`. Do not remake that dump. `FD39FFE7`
+keeps product create mandatory and red. Do not treat the closed
+probe as a finished product. Do not create an uncleanable product.
 
 `AD8966F2` phone dump is delivered. Do not remake that dump.
 
-`23709235` empty-phone contract is implemented. Preview binds
-exact empty as `clear`. Live FastMCP tagged set plus exact empty
-restore passed on `input[name=phone]`. Four-state frames exist
-outside git. Vision is `author=live_test` / `pending_review`.
-Independent review of this pass was FAIL on empty frames; that
-gap is now closed in the live test. Do not remap
-`ui.parity.organizations.update` until independent accept and
-purge. Stay red. Ledger last.
+`23709235` empty-phone contract is implemented. Live FastMCP
+tagged set plus exact empty restore passed. Independent review
+accepted `run_id=0937a009bf7e496ca2ce15a8af313868`. Frames purged.
+`ui.parity.organizations.update` names
+`ui_organizations_update_preview`. Honesty 16 stay red. Do not
+remake the phone dump. Ledger is after invoice and product.
 
 `C0721A14` customer-detail **Opret faktura** inspect is delivered
 and closed on `5fa106c`. Path `contacts_customer`. Tagged name

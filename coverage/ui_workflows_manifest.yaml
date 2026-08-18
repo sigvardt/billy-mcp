@@ -12217,7 +12217,7 @@
         "tests/live/test_ui_settings_company_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_settings_company_open",
+      "tool_name": "ui_organizations_update_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"

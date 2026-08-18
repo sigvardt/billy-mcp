@@ -956,6 +956,11 @@ UI_BILLS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.bills.update": "ui_bills_update_preview",
     "ui.parity.bills.delete": "ui_bills_delete_preview",
 }
+# After 23709235 accept+purge: update CUD names the preview tool. Honesty
+# still keeps implemented/live/vision false. Discovery/list/get stay *_open.
+UI_ORGANIZATIONS_UPDATE_PREVIEW_TOOL_NAMES: dict[str, str] = {
+    "ui.parity.organizations.update": "ui_organizations_update_preview",
+}
 
 
 # The inventory is generated from this narrow, source-controlled map rather
@@ -2020,6 +2025,27 @@ def apply_ui_bills_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> No
     missing = set(UI_BILLS_CUD_PREVIEW_TOOL_NAMES) - seen
     if missing:
         raise RuntimeError(f"bills CUD preview mapping missing rows: {sorted(missing)}")
+
+
+def apply_ui_organizations_update_preview_tool_name(workflows: list[dict[str, Any]]) -> None:
+    """Point organizations update CUD at the preview tool after honesty.
+
+    Leaves ``parity_status`` open-only. Honesty still forces implemented,
+    live_tested, and vision_verified false. Discovery, list, and get stay on
+    ``ui_settings_company_open``.
+    """
+
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        preview = UI_ORGANIZATIONS_UPDATE_PREVIEW_TOOL_NAMES.get(row_id)
+        if preview is None:
+            continue
+        seen.add(row_id)
+        row["tool_name"] = preview
+    missing = set(UI_ORGANIZATIONS_UPDATE_PREVIEW_TOOL_NAMES) - seen
+    if missing:
+        raise RuntimeError(f"organizations update preview mapping missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7872,6 +7898,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_cud_parity_open_only_honesty(workflows)
     apply_ui_contacts_cud_preview_tool_names(workflows)
     apply_ui_bills_cud_preview_tool_names(workflows)
+    apply_ui_organizations_update_preview_tool_name(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",
@@ -7991,6 +8018,7 @@ def build_browser_egress() -> dict[str, Any]:
                     {"match": "exact", "methods": ["GET"], "path": "/user/organizations"},
                     {"match": "exact", "methods": ["GET"], "path": "/user/umbrellas"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/organizations/"},
+                    {"match": "prefix", "methods": ["PUT"], "path": "/v2/organizations/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/organizations/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/e-invoicing/"},
                     {"match": "prefix", "methods": ["GET"], "path": "/v2/contacts"},

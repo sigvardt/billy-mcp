@@ -6,7 +6,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
 created: 2026-07-31T20:00:00Z
-updated: 2026-08-02T04:00:00Z
+updated: 2026-08-18T06:26:00Z
 ---
 
 # ui_settings_company_open_shell
@@ -16,7 +16,7 @@ updated: 2026-08-02T04:00:00Z
 | Field | Value |
 | --- | --- |
 | Tool | `ui_settings_company_open` |
-| Coverage rows | `ui.discovery.settings_company`; dual-count `ui.parity.organizations.list` → `api.organizations.list` (research146); dual-count `ui.parity.organizations.get` → `api.organizations.get` (research177, `detail_open_only`); dual-count `ui.parity.organizations.update` → `api.organizations.update` (research177, `form_open_only`) |
+| Coverage rows | `ui.discovery.settings_company`; dual-count `ui.parity.organizations.list` → `api.organizations.list` (research146); dual-count `ui.parity.organizations.get` → `api.organizations.get` (research177, `detail_open_only`). Update CUD remaps to `ui_organizations_update_preview` after accept+purge; this open tool stays for discovery/list/get. |
 | Path class | `/:org_slug/settings` |
 | Heading | `Indstillinger` |
 | shell_kind | `settings_company` |

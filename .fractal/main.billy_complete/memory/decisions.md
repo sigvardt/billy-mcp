@@ -30,8 +30,9 @@ sources:
   - radio:D326FFB3
   - radio:AD8966F2
   - radio:23709235
+  - radio:FD39FFE7
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T04:44:00Z
+updated: 2026-08-18T06:47:00Z
 ---
 
 ## Binding now
@@ -76,7 +77,9 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `AD8966F2` (saved, dump done): freeze `products.create` as `UI_CHANGED`. Company phone dump is complete. `proved_phone_only=true`. `phone_value_len=0`. Do not remake that dump.
 
-`23709235` (saved, live proved, not remapped): empty original is a reversible clear. Preview binds exact empty as `clear`. Live FastMCP tagged set plus empty restore passed. Independent accept and purge still required before remapping `ui.parity.organizations.update`. Invoice and product blockers stay red. Ledger last.
+`23709235` (saved, accepted, remapped): empty original is a reversible clear. Live FastMCP tagged set plus empty restore passed. Independent accept `run_id=0937a009bf7e496ca2ce15a8af313868` with purge verified. `ui.parity.organizations.update` names `ui_organizations_update_preview`. Honesty still red.
+
+`FD39FFE7` (saved, supersedes the permanent-freeze reading of `AD8966F2`): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. After the organization remap is committed, work invoice draft CUD first, then product create, before files or ledger. Do not repeat closed picker or delete-chrome probes. Do not guess selectors. Do not use force or evaluate clicks. Do not call the API. If a later evidence-backed approach still cannot prove a safe cleanup path, ask the owner. Do not freeze them as finished.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

@@ -47,6 +47,31 @@ def owner_only_frame_dir(base: Path | None = None) -> Path:
     return destination
 
 
+def write_live_pending_unless_accepted(
+    destination: Path,
+    *,
+    workflow_ref: str,
+    assertion_refs: list[str],
+    second_interface_ref: str,
+    run_id: str,
+) -> VisionEvidenceRecord:
+    """Write a live pending record. Keep an accepted purged review in place."""
+
+    if destination.is_file():
+        current = VisionEvidenceRecord.model_validate_json(destination.read_text(encoding="utf-8"))
+        if qualifies_for_coverage_vision(current):
+            return current
+    return write_vision_record(
+        destination,
+        workflow_ref=workflow_ref,
+        assertion_refs=assertion_refs,
+        second_interface_ref=second_interface_ref,
+        reviewer_verdict="pending_review",
+        run_id=run_id,
+        author="live_test",
+    )
+
+
 def write_vision_record(
     destination: Path,
     *,

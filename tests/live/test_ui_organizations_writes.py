@@ -27,7 +27,7 @@ from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
 from billy_mcp.vision_evidence import (
     is_outside_repository,
     owner_only_frame_dir,
-    write_vision_record,
+    write_live_pending_unless_accepted,
 )
 
 pytestmark = pytest.mark.live
@@ -261,7 +261,7 @@ async def test_ui_organizations_set_then_clear_via_call_tool(
         assert (frame_dir / "02_before_submit.png").is_file()
         assert (frame_dir / "03_after_set.png").is_file()
         assert (frame_dir / "04_restored.png").is_file()
-        write_vision_record(
+        write_live_pending_unless_accepted(
             _VISION_RECORD,
             workflow_ref="ui.parity.organizations.update",
             assertion_refs=[
@@ -269,8 +269,7 @@ async def test_ui_organizations_set_then_clear_via_call_tool(
                 "input[name=phone]",
             ],
             second_interface_ref="fresh-session-input-name-phone",
-            reviewer_verdict="pending_review",
-            author="live_test",
+            run_id=frame_dir.name.removeprefix("run-"),
         )
     finally:
         if observer is not None:

@@ -4,15 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T04:46:00Z
+updated: 2026-08-18T06:26:00Z
 ---
 
 ## Open
 
-- Invoice CUD is frozen `UI_CHANGED`. Do not remake invoice inspects. Do not alter invoice coverage.
-- Products create is frozen `UI_CHANGED`. Delete-chrome dump is closed. Do not remake. Do not create an uncleanable product.
-- Organizations update live set plus empty restore is proved through FastMCP. Four-state frames exist outside git. Keep the coverage row red until independent accept and purge. Do not remap yet. Ledger last.
-- After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs.
+- Invoice draft CUD is mandatory (`FD39FFE7`). Stay red. Find a real existing-customer bind by a new evidence-backed path. Do not remake closed picker probes. Never send, approve, or email.
+- Product create is mandatory (`FD39FFE7`). Stay red. Prove a normal create submit and a UI cleanup path before persist. Do not remake delete-chrome. Do not leave an uncleanable product.
+- After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files and ledger after invoice and product.
 
 ## Done
 
@@ -51,3 +50,4 @@ updated: 2026-08-18T04:46:00Z
 - Structure compare closed on `8feb636`. Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not remake. Do not copy the bills wrapper.
 - Customer-detail **Opret faktura** inspect closed. Path `contacts_customer`, **Ret** 1, **Opret faktura** 0, `proved_prebind=none`, `UI_CHANGED`. Customer deleted. Absence proved. Do not remake.
 - Product delete-chrome recapture closed. **Mere** opened. **Slet** counts 0. Create form open. Save token `other`. `proved_delete_path=none`. No product created. Do not remake.
+- Organizations update accepted and purged. `tool_name` is `ui_organizations_update_preview`. Honesty still red.
