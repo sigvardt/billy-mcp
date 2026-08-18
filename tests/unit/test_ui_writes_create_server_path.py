@@ -40,7 +40,7 @@ def _preview_cases(upload_file: Path) -> list[tuple[str, dict[str, object]]]:
                 "save_cta": UI_DRAFT_SAVE_CTA,
             },
         ),
-        ("ui_products_create_preview", {"name": "MCP-PROD-GATE"}),
+        ("ui_products_create_preview", {"name": "MCP-PROD-GATE", "unitPrice": 1.0}),
         ("ui_daybooks_create_preview", {"name": "MCP-DB-GATE"}),
         (
             "ui_daybook_transactions_create_preview",

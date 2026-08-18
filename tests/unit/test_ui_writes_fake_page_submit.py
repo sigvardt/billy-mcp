@@ -113,27 +113,46 @@ def test_invoices_create_execute_uses_route_fields_cta_and_readback(
     assert session.readback_page_count() >= 1
 
 
+def test_products_create_execute_reports_ui_changed_when_dialog_stays_open(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from billy_mcp.models import StableErrorCode
+
+    session = FakeBillySession(keep_modal_after_save=True)
+
+    async def _start(self: BrowserRuntime) -> object:
+        del self
+        return await session.start()
+
+    monkeypatch.setattr(BrowserRuntime, "start", _start)
+    executed = _preview_and_execute(
+        create_server(),
+        "ui_products_create_preview",
+        "ui_products_create_execute",
+        {"name": "MCP-PROD-STILL-OPEN", "unitPrice": 1.0},
+    )
+    assert executed.get("code") == StableErrorCode.UI_CHANGED
+    assert executed.get("submitted") is not True
+    assert "dialog stayed open" in str(executed.get("message", "")).lower()
+    assert session.has_click("Gem produkt")
+    assert session.readback_page_count() == 0
+
+
 def test_products_create_execute_uses_route_fields_cta_and_readback(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    from billy_mcp.ui_writes import products
-
-    def _allow_persist(path: Path | None = None) -> bool:
-        del path
-        return True
-
-    monkeypatch.setattr(products, "product_persist_allowed", _allow_persist)
     session = _arm(monkeypatch)
     executed = _preview_and_execute(
         create_server(),
         "ui_products_create_preview",
         "ui_products_create_execute",
-        {"name": "MCP-PROD-ACT"},
+        {"name": "MCP-PROD-ACT", "unitPrice": 1.0},
     )
     assert executed.get("submitted") is True
     assert session.has_route("/inventory")
     assert session.has_click("Opret produkt")
     assert session.has_fill_value("MCP-PROD-ACT")
+    assert session.has_fill_value("1")
     assert session.has_click("Gem produkt")
     assert session.readback_page_count() >= 1
 

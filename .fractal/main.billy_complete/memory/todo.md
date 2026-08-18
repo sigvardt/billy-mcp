@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T16:53:30Z
+updated: 2026-08-18T17:46:25Z
 ---
 
 ## Open
 
-- `56354201`: after this commit, failing fixture then FastMCP product create/delete (`Opret produkt`, **Enhedspris**, row `delete-icon`, **Ja, slet**). Then invoice draft CUD with disposable customer + product + price. Cleanup invoice, product, customer. Do not stop on `67CBACB6`. Stay red.
+- `C6DA7FC8` / `56354201`: slug compare and still-open dialog are in the tree. Next persist slice is a fresh `/products` page and the unfiltered list before any search. Then delete, then invoice CUD. Stay red. Do not call the earlier `NOT_FOUND` Billy persist failure.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Invoice persist needs a disposable product from `56354201`, not archive-only. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.

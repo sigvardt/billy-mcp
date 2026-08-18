@@ -41,11 +41,28 @@ sources:
   - radio:9310BC17
   - radio:1F1B34F8
   - radio:56354201
+  - radio:C6DA7FC8
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T17:45:00Z
+updated: 2026-08-18T18:45:00Z
 ---
 
 ## Binding now
+
+`C6DA7FC8` (saved, P10): B777AA82 is our session/search miss,
+not Billy persist. Owner sequence on the authenticated browser:
+`/:org/products` -> **Opret produkter** -> **Opret produkt**
+dialog -> name (placeholder F.eks. webdesign-tjenester / Acme
+Red Hammer) -> **Enhedspris**=1 -> leave defaults 1110 Salg,
+Normalt salg af varer, DKK -> **Gem produkt**. Modal closed.
+Unfiltered Products list showed the tag with Salg and 1,00 DKK.
+A fresh invoice **Vælg produkt** showed it. Hard-delete returned
+**Ingen produkter**. Binding: compare live org slug before fill;
+after Gem require the visible modal to close or capture visible
+validation; then hard-navigate a fresh `/products` page and read
+the unfiltered list before any search. Hidden Ember dialog nodes
+are not failure. Do not call independent `NOT_FOUND` Billy
+behavior while this sequence works. Next persist slice: unfiltered
+`/products` read-back, no search first.
 
 `56354201` (saved, P10): product create and hard-delete work in
 the live UI. Owner created `Codex UI Product Probe 20260818T1741Z`
@@ -54,8 +71,12 @@ fresh `/invoices/new` **Vælg produkt** chevron, then deleted it
 with row `data-cy=delete-icon` and **Ja, slet**. Products list
 returned to **Ingen produkter**. Do not treat product as
 `interface_control_absent` or archive-only. Do not stop on
-`67CBACB6`. Next: failing fixture first, then FastMCP product
-preview/execute plus exact delete, then invoice draft CUD with
+`67CBACB6`. FastMCP product actors must compare the live URL
+slug to the ticket organisation before fill or click. A
+still-visible create dialog after **Gem produkt** is
+`UI_CHANGED`, not persist. Live independent list read-back
+after Gem is still `NOT_FOUND`. Persist is not proved. Next:
+prove persist, then delete, then invoice draft CUD with a
 disposable customer + product + positive price. Cleanup invoice,
 product, customer. Prove empty. Do not ask Joakim.
 
@@ -128,7 +149,7 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `D68E402A` (saved, P10): stop read-only classify churn on ledger and files. Do not commit another helper or dump unless it enables a safe write or fixes a production bug. Residual table is in `wiki/ui_write_residual_table.md`. `EC676F84` makes invoice draft CUD actionable after a tagged customer. Product, daybook, and files still wait. Stay red. Keep the root active.
 
-`67CBACB6` (open, sent to parent): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Product list and Lagermodul list archive-filter dumps both proved **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede** counts 0 and `unique_restore_readback=none`. Persist stays fail-closed. Ask whether archive-until-absent counts as restored state even with no list filter. Do not remake the form-contract or archive-list dumps. Do not treat product create as done. Restated in the consolidated owner decision `D02702C5`.
+`67CBACB6` (superseded as a stop, not unsaved as a dump ban): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Archive-list dumps still have named filter counts 0. `56354201` now names the unique cleanup path (row `delete-icon` + **Ja, slet**). Do not remake the form-contract or archive-list dumps. Do not wait on an archive-as-restore answer.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

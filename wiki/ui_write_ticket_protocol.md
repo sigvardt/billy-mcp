@@ -56,7 +56,7 @@ Children fill one family module only:
 - `contacts.py` — contacts create/update/delete
 - `bills.py` — bills create/update/delete
 - `invoices.py` — invoices create/update/delete (never send)
-- `products.py` — products create
+- `products.py` — products create and delete
 - `ledger.py` — daybooks create/delete, daybookTransactions create, transactions create
 - `files.py` — files create (bind path and digest)
 - `organizations.py` — organizations update (restore company fields; no users/tokens/subscription)

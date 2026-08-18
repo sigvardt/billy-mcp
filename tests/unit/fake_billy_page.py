@@ -77,8 +77,9 @@ class FakeMouse:
 class FakeBillySession:
     """Shared store for one fake browser context. Mutable because it records."""
 
-    def __init__(self, *, live_slug: str = "org-test") -> None:
+    def __init__(self, *, live_slug: str = "org-test", keep_modal_after_save: bool = False) -> None:
         self.live_slug = live_slug
+        self.keep_modal_after_save = keep_modal_after_save
         self.starts = 0
         self.gotos: list[str] = []
         self.fills: list[tuple[str, str]] = []
@@ -174,6 +175,14 @@ class FakeBillyPage:
             label = name.pattern.strip("^$").replace(r"\ ", " ")
         else:
             label = name
+        if role == "heading" and label == "Opret produkt":
+            return FakeBillyLocator(
+                self._session,
+                f"role:{label}",
+                query_text=label,
+                click_name=label,
+                scope="dialog-heading",
+            )
         return FakeBillyLocator(self._session, f"role:{label}", query_text=label, click_name=label)
 
     def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
@@ -186,6 +195,7 @@ class FakeBillyPage:
             "Leverandør": "input[name='vendor']",
             "Bilagsdato": "input[name='billDate']",
             "Kunde": "input[name='contactId']",
+            "Enhedspris": "input[name='unitPrice']",
         }.get(text, f"label:{text}")
         return FakeBillyLocator(self._session, mapped)
 
@@ -230,7 +240,9 @@ class FakeBillyLocator:
     async def count(self) -> int:
         if "ds-moved-with-portal" in self._selector and "dropdown-list" not in self._selector:
             return 1 if self._session.modal_open else 0
-        if "ModalWrapper" in self._selector:
+        if "ModalWrapper" in self._selector or "role='dialog'" in self._selector:
+            return 1 if self._session.modal_open else 0
+        if self._scope == "dialog-heading":
             return 1 if self._session.modal_open else 0
         if self._query_text == "Gem":
             return 1 if self._session.modal_open else 0
@@ -288,7 +300,8 @@ class FakeBillyLocator:
         if "opret" in folded:
             self._session.modal_open = True
         if folded == "gem" or folded.startswith("gem "):
-            self._session.modal_open = False
+            if not self._session.keep_modal_after_save:
+                self._session.modal_open = False
         if any(token in folded for token in ("gem", "opret", "upload", "opdater")):
             for _name, value in self._session.fills:
                 self._session.records.add(value)
@@ -315,6 +328,10 @@ class FakeBillyLocator:
                     )
 
     async def inner_text(self) -> str:
+        if self._selector == "h1":
+            if any("/inventory" in url for url in self._session.gotos):
+                return "Lagermodul"
+            return ""
         if _is_dropdown_scope(self._selector) or (
             self._scope is not None and _is_dropdown_scope(self._scope)
         ):

@@ -138,14 +138,14 @@ def test_delivered_form_contract_dump_requires_complete_keys(tmp_path: Path) -> 
 def test_execute_names_gem_produkt_while_persist_stays_closed() -> None:
     """Given the live official save label, When reading execute, Then persist stays closed."""
 
-    from billy_mcp.ui_writes import products
+    from billy_mcp.ui_writes import products_submit
     from billy_mcp.ui_writes.products_delete_chrome import (
         PRODUCTS_DELETE_CHROME_DUMP,
         product_persist_allowed,
     )
 
-    body = Path(products.__file__).read_text(encoding="utf-8")
-    assert 'clicks=("Gem produkt",)' in body
+    body = Path(products_submit.__file__).read_text(encoding="utf-8")
+    assert "Gem produkt" in body
     assert 'clicks=("Gem",)' not in body
     assert product_persist_allowed(PRODUCTS_DELETE_CHROME_DUMP) is False
 

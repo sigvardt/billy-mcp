@@ -2,16 +2,15 @@
 
 from __future__ import annotations
 
-from pathlib import Path
 from typing import Final, Protocol
 
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
 from billy_mcp.browser import BrowserRuntime
-from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.page_flow import FamilyWrite, perform_family_write
-from billy_mcp.ui_writes.products_delete_chrome import product_persist_allowed
+from billy_mcp.models import ToolError
+from billy_mcp.ui_writes.products_delete import register_ui_product_delete_tools
+from billy_mcp.ui_writes.products_submit import BrowserProductSubmitter
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
     UiWritePreviewResult,
@@ -36,18 +35,19 @@ class UiProductsCreatePreviewInput(BaseModel):
     organization_id: str = Field(min_length=1)
     account: str | None = None
     sales_tax_ruleset: str | None = Field(default=None, alias="salesTaxRuleset")
-    unit_price: float | None = Field(default=None, alias="unitPrice")
+    unit_price: float = Field(gt=0, alias="unitPrice")
 
     def canonical_request(self) -> dict[str, JsonValue]:
         """Return the bound form fields, omitting unset optionals."""
 
-        payload: dict[str, JsonValue] = {"name": self.name}
+        payload: dict[str, JsonValue] = {
+            "name": self.name,
+            "unitPrice": self.unit_price,
+        }
         if self.account is not None:
             payload["account"] = self.account
         if self.sales_tax_ruleset is not None:
             payload["salesTaxRuleset"] = self.sales_tax_ruleset
-        if self.unit_price is not None:
-            payload["unitPrice"] = self.unit_price
         return payload
 
 
@@ -68,43 +68,6 @@ class ProductUiActor(Protocol):
     ) -> object: ...
 
 
-class BrowserProductSubmitter:
-    def __init__(
-        self,
-        runtime: BrowserRuntime,
-        readback_runtime: BrowserRuntime | None = None,
-        delete_chrome_dump: Path | None = None,
-    ) -> None:
-        self._runtime = runtime
-        self._readback_runtime = readback_runtime or runtime.independent_readback_runtime()
-        self._delete_chrome_dump = delete_chrome_dump
-
-    async def submit_create(
-        self,
-        request: dict[str, JsonValue],
-        organization_id: str = "",
-    ) -> object:
-        if not product_persist_allowed(self._delete_chrome_dump):
-            return ToolError(
-                code=StableErrorCode.UI_CHANGED,
-                message="Product create stays fail-closed until a unique UI delete path is proved.",
-            )
-        name = str(request.get("name") or "")
-        return await perform_family_write(
-            self._runtime,
-            FamilyWrite(
-                write_path="inventory",
-                fills=(("name", name),),
-                pre_clicks=("Opret produkt",),
-                clicks=("Gem produkt",),
-                readback_path="inventory",
-                readback_text=name,
-            ),
-            organization_id=organization_id,
-            readback_runtime=self._readback_runtime,
-        )
-
-
 def register_ui_product_write_tools(
     server: FastMCP,
     protocol: UiWriteProtocol,
@@ -123,10 +86,10 @@ def register_ui_product_write_tools(
 
     def ui_products_create_preview(
         name: str,
+        unitPrice: float = Field(gt=0),
         organization_id: str = Field(min_length=1),
         account: str | None = None,
         salesTaxRuleset: str | None = None,
-        unitPrice: float | None = None,
     ) -> UiWritePreviewResult | ToolError:
         """Issue a product-create ticket without submitting the Billy form."""
 
@@ -187,3 +150,6 @@ def register_ui_product_write_tools(
         name="ui_products_create_execute",
         description="Execute a previewed Billy product creation with its ticket.",
     )(ui_products_create_execute)
+    register_ui_product_delete_tools(
+        server, protocol, runtime=runtime, readback_runtime=readback_runtime
+    )

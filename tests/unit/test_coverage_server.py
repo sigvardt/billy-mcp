@@ -1259,6 +1259,8 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         "ui_invoices_delete_execute",
         "ui_products_create_preview",
         "ui_products_create_execute",
+        "ui_products_delete_preview",
+        "ui_products_delete_execute",
         "ui_daybooks_create_preview",
         "ui_daybooks_create_execute",
         "ui_daybooks_delete_preview",

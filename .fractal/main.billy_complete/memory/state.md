@@ -22,33 +22,43 @@ sources:
   - radio:802D71CF
   - radio:9310BC17
   - radio:1F1B34F8
+  - radio:C6DA7FC8
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T16:53:30Z
+updated: 2026-08-18T18:45:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `9bbf15a` plus uncommitted priced-line work,
-tracking `origin/main.billy_complete`.
-Stay red. Do not finish. No children are running.
-Continue from the committed Kunde bind. `9310BC17` still binds:
-Kunde shows an existing customer on a fresh `/invoices/new`
-after the customer exists. `UI_CHANGED` was a stale invoice
-page. Official docs ETag still `"121myuqjdm53603"`; do not
-re-lock. Live FastMCP: new page plus
-`[data-cy='dropdown-icon']` binds the tagged customer
-(`vendor_bind=scoped:existing_option`, GET with `contactId`).
-**Gem som kladde** after the priced fill sent GET
-`grossAmount=1` (price landed) then opened **Vælg produkt**.
-No existing product option. Execute returned `UI_CHANGED`.
-**Opret ny** was not clicked. That is `67CBACB6` overlap, not
-another Kunde dump. Create preview requires `unit_price > 0`.
-Honesty-16 stay red. Owner `56354201` now proves product create
-and hard-delete. Do not stop on `67CBACB6`. After this commit:
-product FastMCP CUD, then invoice CUD with a disposable product.
-Do not remake picker dumps. Do not green. Daybook and files
-still wait.
+HEAD is `7725bd7`, clean, tracking `origin/main.billy_complete`.
+Priced invoice line is committed. Stay red. Do not finish.
+No children are running.
+`9310BC17` still binds: Kunde shows an existing customer on a
+fresh `/invoices/new` after the customer exists. Official docs
+ETag still `"121myuqjdm53603"`; do not re-lock. Live FastMCP:
+new page plus `[data-cy='dropdown-icon']` binds the tagged
+customer (`vendor_bind=scoped:existing_option`, GET with
+`contactId`). Create preview requires `unit_price > 0`.
+**Enhedspris** fill proved (`grossAmount=1`). **Vælg produkt**
+then had no existing option. **Opret ny** was not clicked.
+Owner `56354201` proves product create and hard-delete:
+**Opret produkt**, **Enhedspris**=1, row `data-cy=delete-icon`,
+**Ja, slet**. Do not stop on `67CBACB6`. Do not treat product
+as archive-only. Create preview now requires `unitPrice > 0`. Delete tools
+`ui_products_delete_{preview,execute}` are registered. The old
+`product_persist_allowed` dump gate is gone. Product create and
+delete execute compare the live URL slug to the ticket
+organisation before fill or click (`CONFIRMATION_MISMATCH`).
+A still-visible create dialog after **Gem produkt** is
+`UI_CHANGED` with any visible validation, not success. Parent
+`C6DA7FC8`: that live `NOT_FOUND` is our session/search miss,
+not Billy persist. Owner proved create on `/:org/products`
+with defaults 1110 Salg, then an unfiltered Products list.
+Next persist slice: after Gem, hard-navigate a fresh
+`/products` page and read the unfiltered list before any
+search. Do not call that `NOT_FOUND` Billy behavior. Stay red.
+Do not remake dumps. Do not green.
+Daybook and files still wait.
 
 Daybook create-contract dump is delivered:
 `inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.

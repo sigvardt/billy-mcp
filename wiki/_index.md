@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-18T17:32:45Z
+updated: 2026-08-18T17:50:46Z
 ---
 
 # billy_mcp
@@ -149,7 +149,7 @@ updated: 2026-08-18T17:32:45Z
 
 [[ui_products_list_shell|ui_products_list_shell]]: Read-only headless ui_products_list contract for Billy products list shell open only.
 
-[[ui_products_writes|ui_products_writes]]: Ticketed UI product create preview and execute. No coverage greening.
+[[ui_products_writes|ui_products_writes]]: Ticketed UI product create and owner-proved hard-delete. No coverage greening.
 
 [[ui_quotes_list_shell|ui_quotes_list_shell]]: Read-only headless ui_quotes_list contract for Billy quotes list shell open only.
 
@@ -197,7 +197,7 @@ updated: 2026-08-18T17:32:45Z
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
 
-[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table. Invoice priced line is proved. Persist waits on an existing product.
+[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table. Product hard-delete is owner-proved. FastMCP product CUD is next.
 
 [[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
 

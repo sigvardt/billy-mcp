@@ -1,20 +1,20 @@
 ---
 name: ui_products_writes
-desc: Ticketed UI product create preview and execute. No coverage greening.
+desc: Ticketed UI product create and owner-proved hard-delete. No coverage greening.
 tags: [billy, ui, writes, products, tickets]
 sources:
   - wiki/ui_write_ticket_protocol.md
   - wiki/ui_products_create_open_shell.md
   - wiki/ui_products_get_update_delete_not_applicable.md
 created: 2026-08-16T14:31:10Z
-updated: 2026-08-18T12:30:00Z
+updated: 2026-08-18T19:20:00Z
 ---
 
 # ui_products_writes
 
-Ticketed interface create for Billy products. Preview writes nothing. Execute
-accepts only `confirmation_ticket`. This lane never calls
-`https://api.billysbilling.com/v2`.
+Ticketed interface create and delete for Billy products. Preview writes
+nothing. Execute accepts only `confirmation_ticket`. This lane never
+calls `https://api.billysbilling.com/v2`.
 
 See [[ui_write_ticket_protocol]] for the shared ticket rule. The read-only
 form-open tool remains [[ui_products_create_open_shell]].
@@ -23,12 +23,30 @@ form-open tool remains [[ui_products_create_open_shell]].
 
 | Tool | Role |
 | --- | --- |
-| `ui_products_create_preview` | Bind name plus optional account, salesTaxRuleset, unitPrice. Return a ticket. |
-| `ui_products_create_execute` | Consume that ticket once. Offline execute returns the bound request. It does not open a browser. |
+| `ui_products_create_preview` | Bind name and required `unitPrice > 0`. Optional account and salesTaxRuleset. Return a ticket. |
+| `ui_products_create_execute` | Consume that ticket once. Fill **Enhedspris**, then **Gem produkt**. |
+| `ui_products_delete_preview` | Bind unique tagged name and organisation. Optional id. Return a ticket. |
+| `ui_products_delete_execute` | Consume that ticket once. Row `data-cy=delete-icon`, then **Ja, slet**. |
 
-The bound action is the Lagermodul **Opret produkt** form on
-`/:org_slug/inventory`. Offline execute does not open that form. Catalog
-`/products` has no create CTA. Soft `/products/new` is not success.
+The bound create is the Lagermodul **Opret produkt** form on
+`/:org_slug/inventory`. Catalog `/products` has no create CTA. Soft
+`/products/new` is not success. Delete starts on `/products`, then
+tries `/inventory` once if the icon is missing.
+
+Create and delete execute compare the live URL slug to the ticket
+organisation before fill or click. A mismatch is
+`CONFIRMATION_MISMATCH`. After **Gem produkt**, a still-visible
+create dialog is `UI_CHANGED` with any visible validation text.
+That is not a successful persist. Hidden Ember dialog nodes are
+not failure.
+
+Owner `C6DA7FC8` proves persist on `/:org/products`: **Opret
+produkter**, then the **Opret produkt** dialog, name, **Enhedspris**=1,
+defaults 1110 Salg / Normalt salg af varer / DKK, **Gem produkt**.
+The modal closes. Read-back must hard-navigate a fresh `/products`
+page and read the unfiltered list before any search. A FastMCP
+`NOT_FOUND` after search-first or inventory-first read-back is our
+session miss, not Billy refusing to save.
 
 Qualify through FastMCP `call_tool`. Do not treat BrowserRuntime as the pass
 proof.
@@ -37,7 +55,8 @@ proof.
 
 Do not send invoices or emails. Do not make payments. Do not submit VAT or
 filings. Do not change users, access, tokens, or subscription. Do not invent
-`ui_annual_*` tools. Do not add product update or delete tools.
+`ui_annual_*` tools. Do not add product update tools. Owner `56354201`
+requires exact product delete through the proved row control.
 
 ## Coverage
 
@@ -83,20 +102,19 @@ classifies `/:org_slug/inventory` as `inventory_path_class=inventory`,
 exact **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede**
 counts 0, `archived_filter_token=none`,
 `unique_restore_readback=none`, `proved_bind=none`. No product
-created. Do not remake this dump. Do not open **Opret produkt**.
-Persist stays fail-closed. `67CBACB6` stays open: archive-until-absent
-cannot be independently read back from either list shell.
+created. Do not remake this dump. Do not open **Opret produkt**
+in inspect tests. Archive-until-absent is not the cleanup path.
 
-Do not click **Gem** or **Gem produkt** in inspect tests.
-`BrowserProductSubmitter` fail-closes when
-`product_persist_allowed` is false: missing delete-chrome dump or
-`proved_delete_path=none`. The unbound execute click is now
-**Gem produkt** to match the official dialog. That click is not
-live-proved. Do not run a live `ui_products_create_execute`
-persist until the owner accepts archive-until-absent as restored
-state, or a unique **Slet** control appears. Do not invent
-`ui_products_delete_*`. Do not API-delete.
+Owner `56354201` proves the unique cleanup path: row
+`data-cy=delete-icon` then **Ja, slet**. The products list
+returns to **Ingen produkter**. Archive-until-absent is not
+the cleanup path. Do not remake the form-contract, Mere/Slet,
+or archive-list dumps (`A337A622`).
 
-Cleanup blocker: [[ui_products_get_update_delete_not_applicable]]
-(research176) still holds. If a live create ever submits, record
-that tagged name as leftover cleanup.
+Do not remake inspect dumps. Do not click **Arkiveret**. Live
+FastMCP create/delete uses `call_tool`. Do not treat
+BrowserRuntime as the pass proof. Do not API-delete.
+
+Cleanup: delete the tagged product through the owner-proved
+row delete, then prove **Ingen produkter** on a fresh session.
+Honesty stays red until independent accept and purge.

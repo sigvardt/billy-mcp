@@ -72,6 +72,38 @@ def test_bills_create_execute_refuses_wrong_live_org(monkeypatch: pytest.MonkeyP
     assert readback.starts == 0
 
 
+def test_products_create_execute_refuses_wrong_live_org(monkeypatch: pytest.MonkeyPatch) -> None:
+    write, readback = _arm_pair(monkeypatch, write_slug="org-b")
+    executed = _preview_and_execute(
+        create_server(),
+        "ui_products_create_preview",
+        "ui_products_create_execute",
+        {"name": "MCP-PROD-WRONG-ORG", "unitPrice": 1.0},
+        organization_id="org-a",
+    )
+    assert executed.get("code") == StableErrorCode.CONFIRMATION_MISMATCH
+    assert executed.get("submitted") is not True
+    assert write.fills == []
+    assert write.clicks == []
+    assert readback.starts == 0
+
+
+def test_products_delete_execute_refuses_wrong_live_org(monkeypatch: pytest.MonkeyPatch) -> None:
+    write, readback = _arm_pair(monkeypatch, write_slug="org-b")
+    executed = _preview_and_execute(
+        create_server(),
+        "ui_products_delete_preview",
+        "ui_products_delete_execute",
+        {"unique_tag": "MCP-PROD-DEL-WRONG-ORG"},
+        organization_id="org-a",
+    )
+    assert executed.get("code") == StableErrorCode.CONFIRMATION_MISMATCH
+    assert executed.get("submitted") is not True
+    assert write.fills == []
+    assert write.clicks == []
+    assert readback.starts == 0
+
+
 def test_clients_create_execute_refuses_wrong_live_org(monkeypatch: pytest.MonkeyPatch) -> None:
     write, readback = _arm_pair(monkeypatch, write_slug="org-b")
     executed = _preview_and_execute(

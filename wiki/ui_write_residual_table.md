@@ -1,6 +1,6 @@
 ---
 name: ui_write_residual_table
-desc: Residual honesty-16 UI write table. Invoice priced line is proved. Persist waits on an existing product.
+desc: Residual honesty-16 UI write table. Product hard-delete is owner-proved. FastMCP product CUD is next.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
@@ -9,6 +9,7 @@ sources:
   - radio:113F1E05
   - radio:A337A622
   - radio:67CBACB6
+  - radio:56354201
   - radio:EC676F84
   - radio:9310BC17
   - radio:1F1B34F8
@@ -22,7 +23,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-18T17:35:00Z
+updated: 2026-08-18T17:46:25Z
 ---
 
 # ui_write_residual_table
@@ -41,9 +42,18 @@ customer (`vendor_bind=scoped:existing_option`, GET with
 `contactId`). Invoice Kunde is not `interface_control_absent`.
 Create preview now requires `unit_price > 0`. Live execute fills
 **Enhedspris** (GET `grossAmount=1`) then opens **Vælg produkt**.
-No existing product option. **Opret ny** was not clicked. Persist
-waits on `67CBACB6`. Do not remake picker dumps. Do not create a
-product. Do not ask the owner to inspect routine UI.
+No existing product option. **Opret ny** was not clicked.
+
+Owner `56354201` proves product create and hard-delete in the
+normal UI: **Opret produkt**, **Enhedspris**=1, visible on a
+fresh `/invoices/new` **Vælg produkt**, then row
+`data-cy=delete-icon` and **Ja, slet**. Products list returned
+to **Ingen produkter**. Do not treat product as
+`interface_control_absent` or archive-only. Do not stop on
+`67CBACB6`. Next is FastMCP product create/delete, then invoice
+draft CUD with that disposable product. Do not remake picker,
+archive, or Kunde dumps. Do not ask the owner to inspect
+routine UI.
 
 `FD39FFE7` still makes invoice draft CUD and product create mandatory
 and red. They are not finished as `UI_CHANGED`.
@@ -51,7 +61,7 @@ and red. They are not finished as `UI_CHANGED`.
 ## Categories
 
 - `already_live_proved_honesty_red`
-- `owner_decision_67CBACB6`
+- `owner_proved_pending_fastmcp`
 - `interface_control_absent_UI_CHANGED`
 - `high_impact_prohibited`
 
@@ -66,10 +76,10 @@ and red. They are not finished as `UI_CHANGED`.
 | `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist offline. Coverage still names `*_open` | Kunde bind proved. **Enhedspris** fill proved (`grossAmount=1`). **Vælg produkt** opened. No existing product option. **Opret ny** not clicked. Honesty stays red | Draft delete chrome exists. Invoice first, customer second | `owner_decision_67CBACB6` |
-| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Blocked on a tagged draft | Blocked on create | `owner_decision_67CBACB6` |
-| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | **Mere** then **Slet** on open chrome | Blocked on create | `owner_decision_67CBACB6` |
-| `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` | **Gem produkt** count 1. **Arkiveret** count 1 | **Slet** counts 0. Both list shells archive-filter counts 0. `unique_restore_readback=none` | `owner_decision_67CBACB6` |
+| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist offline. Coverage still names `*_open` | Kunde bind proved. **Enhedspris** fill proved (`grossAmount=1`). Persist waits on a disposable product from `56354201`, not archive-only | Draft delete chrome exists. Invoice first, product second, customer last | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Blocked on a tagged draft | Blocked on create | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | **Mere** then **Slet** on open chrome | Blocked on create | `owner_proved_pending_fastmcp` |
+| `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Required `unitPrice > 0`. Live slug must match the ticket org before fill. A still-visible create dialog after **Gem produkt** is `UI_CHANGED`. `C6DA7FC8`: FastMCP `NOT_FOUND` was our search/session miss. Next is unfiltered `/products` read-back before search | Cleanup is row `data-cy=delete-icon` then **Ja, slet**. List returns to **Ingen produkter** | `owner_proved_pending_fastmcp` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.delete` | `ui_daybooks_delete_open` | `ui_daybooks_delete_{preview,execute}` | **Mere** then menu **Slet** on disposable journals. Primary **Slet** absent | No tagged create, so no tagged cleanup | `interface_control_absent_UI_CHANGED` |
@@ -82,13 +92,14 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 
 ## Owner questions
 
-1. Invoice (`9310BC17` / `1F1B34F8`, bind and price closed): Kunde
-   and **Enhedspris** work. Persist waits on an existing product
-   option (`67CBACB6`). Do not ask the owner to inspect routine UI.
-2. Product: answer `67CBACB6`. Does archive-until-absent count as
-   restored state, or must create stay unbound? The same answer
-   unblocks invoice persist. `A337A622` forbids more product list,
-   dialog, or archive probes.
+1. Invoice (`9310BC17` / `1F1B34F8` / `56354201`): Kunde and
+   **Enhedspris** work. Persist waits on a FastMCP disposable
+   product, not an archive answer. Do not ask the owner to
+   inspect routine UI.
+2. Product (`56354201`): hard-delete is owner-proved. Do not
+   remake archive or dialog dumps (`A337A622`). Implement
+   FastMCP create/delete. Do not treat archive-only as the
+   cleanup path.
 3. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
    `_ledger_write`.
 4. Files: accept fail-closed (no UI delete), or name a delete control
@@ -101,6 +112,5 @@ green honesty-16 from this page.
 
 ## Coverage
 
-This page does not green any row. `complete` stays false until the
-owner answers or a later live FastMCP write plus independent accept
-plus purge exists.
+This page does not green any row. `complete` stays false until a later
+live FastMCP write plus independent accept plus purge exists.
