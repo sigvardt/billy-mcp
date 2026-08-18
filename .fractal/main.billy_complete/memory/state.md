@@ -16,13 +16,26 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T10:35:00Z
+updated: 2026-08-18T11:30:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `880dce8`. Stay red. Do not finish. No children are running.
+HEAD is `5e634d2`. Stay red. Do not finish. No children are running.
+
+Official product create dialog is classified on the live
+Lagermodul form. `inventory_path_class=inventory`.
+`inventory_heading_token=lagermodul`. `create_form_open=true`.
+`dialog_heading_token=opret_produkt`. `gem_produkt_count=1`.
+`gem_count=0`. `save_cta_token=gem_produkt`.
+`proved_submit=gem_produkt`. `arkiveret_count=1`.
+`cleanup_token=archive_checkbox`.
+`unique_cleanup_path=archive_checkbox`. Persist stays
+fail-closed. Archive hides from lists. It is not **Slet**.
+Owner question `67CBACB6` is open. Unbound execute now names
+**Gem produkt**. Persist still fail-closed. Do not remake this
+dump. Do not remake Mere/Slet. Do not click **Gem produkt**.
 
 Official invoice-list **Opret faktura** landing is delivered
 on `880dce8`. `list_path_class=invoices_empty`. One button click.

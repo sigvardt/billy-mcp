@@ -9,6 +9,7 @@ from typing import Final, Self, cast
 _CHROME: Final[frozenset[str]] = frozenset(
     {
         "Gem",
+        "Gem produkt",
         "Gem som kladde",
         "Gem ændringer",
         "Opret produkt",

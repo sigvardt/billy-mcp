@@ -133,7 +133,7 @@ def test_products_create_execute_uses_route_fields_cta_and_readback(
     assert session.has_route("/inventory")
     assert session.has_click("Opret produkt")
     assert session.has_fill_value("MCP-PROD-ACT")
-    assert session.has_click("Gem")
+    assert session.has_click("Gem produkt")
     assert session.readback_page_count() >= 1
 
 

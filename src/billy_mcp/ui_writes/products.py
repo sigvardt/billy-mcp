@@ -96,7 +96,7 @@ class BrowserProductSubmitter:
                 write_path="inventory",
                 fills=(("name", name),),
                 pre_clicks=("Opret produkt",),
-                clicks=("Gem",),
+                clicks=("Gem produkt",),
                 readback_path="inventory",
                 readback_text=name,
             ),

@@ -55,15 +55,27 @@ still shows no unique UI delete path. Products **Mere** opened.
 **Slet** and **Slet produkt** counts are 0 on `/:org_slug/products`
 and `/:org_slug/inventory`. Create form opened. Name field visible.
 Save CTA token is `other`, not exact **Gem**.
-`proved_delete_path=none`. `UI_CHANGED`.
+`proved_delete_path=none`. `UI_CHANGED`. Do not remake that dump.
 
-Do not click **Gem**. `BrowserProductSubmitter` now fail-closes
-when `product_persist_allowed` is false: missing dump or
-`proved_delete_path=none`. Do not run a live
-`ui_products_create_execute` persist until a later recapture
-proves a unique delete control. Do not invent
-`ui_products_delete_*`. Do not API-delete. Do not remake this dump
-unless the page shows a genuinely new Slet control.
+Official dialog dump
+`~/.local/share/billy-mcp/inspect-live-products-form-contract.json`
+classifies the Lagermodul **Opret produkt** form as
+`proved_submit=gem_produkt` and
+`unique_cleanup_path=archive_checkbox`. Exact **Gem produkt**
+count is 1. Exact **Gem** count is 0. Exact **Arkiveret (skjul
+fra lister)** count is 1. Dialog heading is `opret_produkt`.
+Archive hides from lists (`isArchived`). It is not **Slet**.
+Do not remake this dump. Do not click **Gem produkt**.
+
+Do not click **Gem** or **Gem produkt** in inspect tests.
+`BrowserProductSubmitter` fail-closes when
+`product_persist_allowed` is false: missing delete-chrome dump or
+`proved_delete_path=none`. The unbound execute click is now
+**Gem produkt** to match the official dialog. That click is not
+live-proved. Do not run a live `ui_products_create_execute`
+persist until the owner accepts archive-until-absent as restored
+state, or a unique **Slet** control appears. Do not invent
+`ui_products_delete_*`. Do not API-delete.
 
 Cleanup blocker: [[ui_products_get_update_delete_not_applicable]]
 (research176) still holds. If a live create ever submits, record
