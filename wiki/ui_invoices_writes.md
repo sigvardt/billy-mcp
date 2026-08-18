@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T08:15:00Z
+updated: 2026-08-18T10:00:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -434,6 +434,40 @@ footer. Contact-owned roots have no unique action. Choose a
 different normal-interface path next. Do not remake this dump,
 the page-wide draft-save dump, the **Vælg kunde** rest dump, or
 the closed picker set. Do not click **Opret ny**.
+
+## Invoice-list Opret faktura entry
+
+Official first-invoice and discount guides start from the invoice
+index **Opret faktura** button. Current `_create_draft` skips that
+and goes to `/invoices/new`. Helper:
+`src/billy_mcp/ui_writes/invoices_list_opret_faktura.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-list-opret-faktura.json`.
+Create one `MCP-UI-INV-` + 8 hex customer through FastMCP. Confirm
+in a fresh session. Open the list through `ui_invoices_list`. Do
+not `goto /invoices/new`. Click exact **Opret faktura** only when
+the list count is 1. Persist only `list_path_class`,
+`exact_list_opret_faktura_count`, `list_opret_faktura_role`,
+`clicked_list_opret_faktura`, `destination_path_class`,
+`destination_query_token_class`, `destination_heading_token`,
+`contact_input_present`, `contact_input_value_len`,
+`contact_input_matches_tag`, `option_role_count`,
+`aria_expanded_token`, `unique_action`, `proved_bind`, and
+`missing_keys`. Never persist ids, URLs, query values, or names.
+`proved_bind` is `list_cta_prebound` only when the contact field
+matches the tagged customer, or `list_cta_existing_option` only
+when exactly one option is visible. Else `UI_CHANGED`. Do not type.
+Do not click the picker. Do not **Gem som kladde**. Do not
+**Godkend**. Live recapture: `list_path_class=invoices_empty`,
+`exact_list_opret_faktura_count=1`, role `button`,
+`clicked_list_opret_faktura=true`, destination `invoices_new`
+with query `none`, heading `opret_faktura`,
+`contact_input_present=true`, `contact_input_value_len=0`,
+`contact_input_matches_tag=false`, `option_role_count=0`,
+`aria_expanded_token=missing`, `unique_action=none`,
+`proved_bind=none`, `UI_CHANGED`. Official list CTA lands on the
+same empty closed form. Do not remake this dump, the scoped dump,
+or the closed picker set.
 
 ## Live proof
 

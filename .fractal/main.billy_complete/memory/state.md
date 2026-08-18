@@ -16,13 +16,20 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T08:47:30Z
+updated: 2026-08-18T10:20:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `3b025f4`. Stay red. Do not finish. No children are running.
+HEAD is `2498696`. Stay red. Do not finish. No children are running.
+
+Official invoice-list **Opret faktura** landing is delivered.
+`list_path_class=invoices_empty`. One button click.
+Destination `invoices_new` with no query. Contact empty.
+`option_role_count=0`. `proved_bind=none`. Same empty closed
+form as raw create-open. Do not remake that dump. Do not remake
+picker dumps. Invoice CUD stays red and is not frozen as done.
 
 `8EBC19D5` is applied. The helper no longer observes
 `document.body`. Row cap stays 16. Allowed recapture:
