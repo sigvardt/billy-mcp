@@ -62,7 +62,7 @@ updated: 2026-08-18T01:03:00Z
 
 Fiber inspect (done, unsaved): live dump `fiber_key_class=none` on the contact `INPUT` and `pickerfield`. No named action. `unique_normal_action=false`. `UI_CHANGED`. Do not remake. Do not click.
 
-`28C8FBC8` (saved): after this COMMIT, next slice is an actionable listener contract, not another framework-key inspector. CDP `DOMDebugger.getEventListeners` plus already-loaded script locations on the proved Kunde input, overlay, pickerfield, and nearest ancestor chain. Sanitized event fields only. No click, type, method invoke, or `Runtime.evaluate` mutate. Do not repeat closed probes. If one unique normal UI action is proved, TDD then one FastMCP verify. Else `UI_CHANGED` and next compare structure to the live-proved bills Leverandoer picker. Stay red. Do not finish.
+`28C8FBC8` (saved, dump delivered): listener contract is complete. Nine sanitized rows. No named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click. No customer. Do not remake. Next compare only sanitized control structure to the live-proved bills Leverandoer picker. Stay red. Do not finish.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

@@ -9,14 +9,15 @@ sources:
   - radio:07600147
   - radio:E87B6AEF
   - radio:31B0C7A6
+  - radio:28C8FBC8
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T01:03:00Z
+updated: 2026-08-18T02:17:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `1df08a5`. Stay red. Do not finish.
+HEAD is `bf112fe`. Stay red. Do not finish.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
 
@@ -27,12 +28,15 @@ allowlisted selection, collection, open state, or methods.
 Do not remake this inspect. Do not invoke the view.
 
 Fiber inspect is delivered and closed. `fiber_key_class=none`.
-`unique_normal_action=false`. `UI_CHANGED`. Parent `28C8FBC8` is
-binding for the next slice: sanitized listener contract via CDP
-`DOMDebugger.getEventListeners` on the proved Kunde input, overlay,
-`pickerfield`, and nearest ancestors only. Not another framework
-inspector. Do not remake Ember or fiber inspect. Do not click.
-Stay red.
+`unique_normal_action=false`. `UI_CHANGED`. Do not remake.
+
+Listener contract is delivered. Nine sanitized rows. Input
+`keydown` / `focus` / `blur` / `other` / `mouseup`. Overlay
+`mousedown`. Pickerfield `other` / `other` / `click`. All bubble.
+No property categories. No accepted key. No named invoke.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+Do not remake Ember, fiber, or the `452E0773` locator dump. Do not
+infer `click_open`. Stay red.
 
 `452E0773` is closed. The loaded control contract names `click_open` on
 the closest `pickerfield` wrapper (`data-cy` name only). Binding
@@ -56,11 +60,13 @@ chevron dump (`A3AB03C3`), DIV ownership click (`9F777B8F`), tagged type
 trace (`8EFD0EAD`), event or pageerror dump (`4A5CD1E7`), rest route
 capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
 instrumented post-click dump (`07600147`), the descendant map
-(`E87B6AEF`), the Ember inspect (`31B0C7A6`), and the fiber inspect.
+(`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
+and the listener contract (`28C8FBC8`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.
 Do not remake the fiber inspect.
+Do not remake the listener contract.
 
 ## Proved and still red
 

@@ -264,7 +264,40 @@ or `setState`. Do not install React DevTools. Live recapture:
 actions `none`, `host_class=none`, `unique_fiber_host=false`,
 `unique_normal_action=false`, `UI_CHANGED`. No click. No customer.
 The two proved DOM nodes have no `__reactFiber` key. That is not a
-bind and is not a reason to remake Ember inspect or click.
+bind and is not a reason to remake Ember inspect or click. Do not
+remake this fiber inspect.
+
+## Listener contract
+
+`28C8FBC8` records a sanitized event contract on the proved contact
+`INPUT`, overlay `DIV` at `{dx:242,w:40,h:40}`, closest
+`.pickerfield`, and nearest ancestors (cap 8). Chrome DevTools
+`DOMDebugger.getEventListeners` once per host. No `depth`. No
+`pierce`. Classify a short already-loaded source window at the
+listener `scriptId` + line + column, then delete the source.
+Persist only `event_type`, `phase` (`capture` / `bubble`),
+`target_category`, `event_property_categories`,
+`accepted_key_category`, `invoked_action_token`, and
+`unique_normal_action`. Never persist source, URLs, locators,
+`scriptId`, ids, or values. A `click` listener with no named
+invoke is not unique. Do not reuse the `452E0773` `click_open`
+inference. Do not remake Ember inspect or fiber inspect. Do not
+click. Helpers: `src/billy_mcp/ui_writes/invoices_kunde_listeners.py`
+and `src/billy_mcp/ui_writes/invoices_kunde_listener_inspect.py`.
+Owner dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-kunde-listeners.json`.
+`unique_normal_action` is true only when exactly one pointer or
+named-key keyboard row also names an invoke. Else `UI_CHANGED`.
+If the live dump is non-actionable, do not start the bills
+Leverandør structure compare in this slice. Live recapture: nine
+rows. Input has `keydown` / `focus` / `blur` / `other` / `mouseup`.
+Overlay has `mousedown`. Pickerfield has `other` / `other` /
+`click`. All bubble. Empty property categories. `accepted_key_category=none`.
+`invoked_action_token=none`. `unique_normal_action=false`.
+`UI_CHANGED`. No click. No customer. The pickerfield `click` is
+not unique because it names no invoke. That is not a bind and is
+not a reason to remake Ember, fiber, or the `452E0773` locator
+dump.
 
 ## Live proof
 

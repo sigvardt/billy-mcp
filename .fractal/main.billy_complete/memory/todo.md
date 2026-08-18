@@ -9,7 +9,7 @@ updated: 2026-08-18T01:03:00Z
 
 ## Open
 
-- Invoice CUD stays unbound. Next parent slice `28C8FBC8`: sanitized listener contract on the proved Kunde input, overlay, pickerfield, and nearest ancestors. TDD first. Read-only CDP `getEventListeners`. No remake of Ember or fiber. No click. If non-actionable, `UI_CHANGED` then compare structure to the live-proved bills Leverandoer picker. Stay red.
+- Invoice CUD stays unbound. Listener contract is delivered and non-actionable (`unique_normal_action=false`). Remap only after accept and purge. Next compare only sanitized control structure to the live-proved bills Leverandoer picker. Do not remake Ember, fiber, or this listener dump. Stay red.
 - Invoice CUD stays unbound. Remap only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.
@@ -47,3 +47,4 @@ updated: 2026-08-18T01:03:00Z
 - Descendant helper and failing fixture landed (`E87B6AEF`). Live dump: two visible descendants, overlay suffix excluded, `unique_target=false`, `wrapper_handler_guard=none`, `UI_CHANGED`. No customer. No click.
 - Ember inspect helper and failing fixture landed (`31B0C7A6`). Live dump: `lookup_class=view_registry`, `view_constructor_token=pickerfield`, no allowlisted selection, collection, open state, or methods, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
 - Fiber inspect helper and failing fixture landed. Live dump: `fiber_key_class=none`, `wrapper_fiber_key_class=none`, no named action, `unique_fiber_host=false`, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
+- Listener-contract helper and failing fixture landed. Live dump: nine rows, empty property categories, no accepted key, no named invoke, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
