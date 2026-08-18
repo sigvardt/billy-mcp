@@ -28,8 +28,9 @@ sources:
   - radio:28C8FBC8
   - radio:C0721A14
   - radio:D326FFB3
+  - radio:AD8966F2
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T03:46:00Z
+updated: 2026-08-18T04:44:00Z
 ---
 
 ## Binding now
@@ -70,7 +71,9 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `C0721A14` (done, unsaved): customer-detail **Opret faktura** inspect is complete. Path `contacts_customer`. **Ret** 1. Exact **Opret faktura** count 0. `proved_prebind=none`. `UI_CHANGED`. Customer deleted. Absence proved. Route closed. Do not remake.
 
-`D326FFB3` (saved, next after this commit): freeze invoice CUD as `UI_CHANGED` for this Billy interface version. Do not spend another pass on invoice picker diagnostics or alternate invoice routes unless a genuinely new UI signal appears. Do not alter invoice coverage. Next family is `ui.parity.products.create` through existing `ui_products_create_preview` plus exact execute. TDD first. Row stays red until independent accept and purge. Ledger last.
+`D326FFB3` (saved, dump done): freeze invoice CUD as `UI_CHANGED`. Product delete-chrome recapture is complete. `proved_delete_path=none`. Do not remake. Do not Gem.
+
+`AD8966F2` (saved, next after this commit): freeze `products.create` as `UI_CHANGED`. Do not remake that inspect or create an uncleanable product. Next family is `ui.parity.organizations.update` through existing `ui_organizations_update_preview` plus exact execute. TDD first. Company phone only. Original value stays in owner-local runtime state, never git or radio. Restore through a second ticket. Third-session restore proof. Fail closed on users, access, tokens, subscription, or any other field. Invoice and product blockers stay red. Ledger last.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

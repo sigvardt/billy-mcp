@@ -13,26 +13,34 @@ sources:
   - radio:C0721A14
   - radio:D326FFB3
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T03:48:00Z
+updated: 2026-08-18T04:02:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `8feb636`. Stay red. Do not finish.
+HEAD is `5fa106c`. Stay red. Do not finish.
 
-Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
+Invoice CUD is frozen `UI_CHANGED` for this Billy interface version.
+Honesty 16 stay red. Never call the API. Do not remake invoice picker
+diagnostics or alternate invoice routes unless a genuinely new UI
+signal appears. Do not alter invoice coverage.
+
+`D326FFB3` product delete-chrome recapture is closed.
+`proved_delete_path=none`. `UI_CHANGED`. No product created.
+Do not remake that dump. Do not Gem.
+
+`AD8966F2` binds after this commit. Freeze `products.create` as
+`UI_CHANGED`. Next family is `ui.parity.organizations.update`.
+Company phone only. Restore the original value. Stay red.
+Ledger last.
 
 `C0721A14` customer-detail **Opret faktura** inspect is delivered
-and closed. Path `contacts_customer`. Tagged name visible. **Ret**
-count 1. Exact **Opret faktura** count 0. Role `none`. Href `none`.
-No click. `proved_prebind=none`. `UI_CHANGED`. Customer deleted.
-Absence proved. This alternative route is closed. Do not remake.
-
-`D326FFB3` binds after this commit. Freeze invoice CUD as
-`UI_CHANGED`. Do not remake invoice picker or alternate invoice
-routes. Next family is `ui.parity.products.create`. Do not alter
-invoice coverage. Stay red.
+and closed on `5fa106c`. Path `contacts_customer`. Tagged name
+visible. **Ret** count 1. Exact **Opret faktura** count 0. Role
+`none`. Href `none`. No click. `proved_prebind=none`. `UI_CHANGED`.
+Customer deleted. Absence proved. This alternative route is closed.
+Do not remake.
 
 `31B0C7A6` Ember inspect is delivered and closed. Ember view is present
 (`view_registry`, `pickerfield`, `ember_digit` id class). No
@@ -82,7 +90,8 @@ capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
 instrumented post-click dump (`07600147`), the descendant map
 (`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
 the listener contract (`28C8FBC8`), the structure compare, and
-the customer-detail **Opret faktura** inspect (`C0721A14`).
+the customer-detail **Opret faktura** inspect (`C0721A14`),
+and the product delete-chrome recapture (`D326FFB3`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.

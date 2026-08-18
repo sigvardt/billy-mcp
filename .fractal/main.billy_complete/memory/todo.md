@@ -4,15 +4,15 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T03:14:07Z
+updated: 2026-08-18T04:32:00Z
 ---
 
 ## Open
 
-- Invoice CUD is frozen `UI_CHANGED` for this interface (`D326FFB3`). Do not remake picker or customer-detail inspects. Do not alter invoice coverage.
-- Next after this commit: `ui.parity.products.create` through existing preview/execute. TDD first. Row stays red until accept and purge. Ledger last.
-- After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
-- Ledger last. Files bind path+digest. Org update restores company fields only.
+- Invoice CUD is frozen `UI_CHANGED`. Do not remake invoice inspects. Do not alter invoice coverage.
+- Products create is frozen `UI_CHANGED` (`AD8966F2`). Delete-chrome dump is closed. Do not remake. Do not create an uncleanable product.
+- Next after this commit: `ui.parity.organizations.update`. Company phone only. Restore the original value. TDD first. Ledger last.
+- After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
 
@@ -50,3 +50,4 @@ updated: 2026-08-18T03:14:07Z
 - Listener-contract helper and failing fixture landed. Live dump: nine rows, empty property categories, no accepted key, no named invoke, `unique_normal_action=false`, `UI_CHANGED`. No click. No customer. Do not remake.
 - Structure compare closed on `8feb636`. Kunde `pickerfield` versus bills `input_wrapper`. `same_family=false`. `transferable_action=none`. `UI_CHANGED`. Do not remake. Do not copy the bills wrapper.
 - Customer-detail **Opret faktura** inspect closed. Path `contacts_customer`, **Ret** 1, **Opret faktura** 0, `proved_prebind=none`, `UI_CHANGED`. Customer deleted. Absence proved. Do not remake.
+- Product delete-chrome recapture closed. **Mere** opened. **Slet** counts 0. Create form open. Save token `other`. `proved_delete_path=none`. No product created. Do not remake.

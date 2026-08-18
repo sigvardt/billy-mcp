@@ -7,7 +7,7 @@ sources:
   - wiki/ui_products_create_open_shell.md
   - wiki/ui_products_get_update_delete_not_applicable.md
 created: 2026-08-16T14:31:10Z
-updated: 2026-08-16T14:31:10Z
+updated: 2026-08-18T04:32:00Z
 ---
 
 # ui_products_writes
@@ -46,14 +46,22 @@ it at the preview tool after a live MCP proof.
 
 ## Live and cleanup
 
-Live submit waits for a root radio go-ahead. Contacts family is first
-(parent `72C01DF9`). Use a unique tagged name
-`MCP-TEST-PRODUCT-<node>-<nonce>`. Read back in a second independent UI
-session. Capture four states. Purge raw frames. Store only a non-sensitive
-vision record.
+`D326FFB3` is the live go-ahead for this family. Stale radio
+`72C01DF9` no longer holds the slot.
 
-Cleanup blocker: [[ui_products_get_update_delete_not_applicable]] (research176)
-dual-proved no Slet / Slet produkt chrome and no product detail delete. Safe UI
-delete does not exist. Do not invent `ui_products_delete_*`. Do not API-delete a
-leftover tagged product. If a live create ever submits, record that tagged name
-as leftover cleanup.
+Recapture dump
+`~/.local/share/billy-mcp/inspect-live-products-delete-chrome.json`
+still shows no unique UI delete path. Products **Mere** opened.
+**Slet** and **Slet produkt** counts are 0 on `/:org_slug/products`
+and `/:org_slug/inventory`. Create form opened. Name field visible.
+Save CTA token is `other`, not exact **Gem**.
+`proved_delete_path=none`. `UI_CHANGED`.
+
+Do not click **Gem**. Do not run `ui_products_create_execute` until
+a later recapture proves a unique delete control. Do not invent
+`ui_products_delete_*`. Do not API-delete. Do not remake this dump
+unless the page shows a genuinely new Slet control.
+
+Cleanup blocker: [[ui_products_get_update_delete_not_applicable]]
+(research176) still holds. If a live create ever submits, record
+that tagged name as leftover cleanup.
