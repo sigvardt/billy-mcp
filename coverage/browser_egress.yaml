@@ -126,6 +126,13 @@
         {
           "match": "prefix",
           "methods": [
+            "PUT"
+          ],
+          "path": "/v2/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
             "GET"
           ],
           "path": "/organizations/"

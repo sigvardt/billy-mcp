@@ -15,7 +15,7 @@ sources:
   - radio:AD8966F2
   - radio:23709235
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T05:22:00Z
+updated: 2026-08-18T06:04:00Z
 ---
 
 ## Now
@@ -33,15 +33,16 @@ signal appears. Do not alter invoice coverage.
 Products create is frozen `UI_CHANGED`. Do not remake that dump.
 Do not Gem. Do not create an uncleanable product.
 
-`AD8966F2` phone dump is delivered. `proved_phone_only=true`.
-`phone_value_len=0`. No **Gem ændringer**. No company field
-changed. Do not remake that dump.
+`AD8966F2` phone dump is delivered. Do not remake that dump.
 
-`23709235` binds after this commit. Empty original is a reversible
-clear, not a freeze. Next: failing fixture that preview can bind
-exact empty phone, then smallest contract repair, then FastMCP
-tagged set plus exact empty restore. Read-back is
-`input[name=phone]`, not page text. Stay red. Ledger last.
+`23709235` empty-phone contract is implemented. Preview binds
+exact empty as `clear`. Live FastMCP tagged set plus exact empty
+restore passed on `input[name=phone]`. Four-state frames exist
+outside git. Vision is `author=live_test` / `pending_review`.
+Independent review of this pass was FAIL on empty frames; that
+gap is now closed in the live test. Do not remap
+`ui.parity.organizations.update` until independent accept and
+purge. Stay red. Ledger last.
 
 `C0721A14` customer-detail **Opret faktura** inspect is delivered
 and closed on `5fa106c`. Path `contacts_customer`. Tagged name

@@ -129,14 +129,10 @@ async def test_ui_organizations_phone_dump() -> None:
         text = ORGANIZATIONS_PHONE_DUMP.read_text(encoding="utf-8")
         assert "https://" not in text
         assert "+4500" not in text
-        if persist_allowed_from(written):
+        if written.get("proved_phone_only") is True:
             _record_blocker(
-                "phone-only surface proved with restorable original; persist half not run"
-            )
-        elif written.get("proved_phone_only") is True:
-            _record_blocker(
-                "phone-only surface proved; original phone empty or unreadable; "
-                "restore ticket cannot bind a blank value. No submit."
+                "phone dump already delivered; persist lives in "
+                "test_ui_organizations_writes.py. No remake."
             )
         return
 

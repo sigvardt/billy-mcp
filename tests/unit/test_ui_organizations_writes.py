@@ -85,15 +85,18 @@ def test_registers_exactly_two_flat_typed_organization_update_tools() -> None:
         assert schema["additionalProperties"] is False
         assert set(properties) == fields
         assert "input" not in properties
-        for field in fields:
-            assert properties[field]["minLength"] == 1
+        if name == "ui_organizations_update_preview":
+            assert "minLength" not in properties["phone"]
+            assert properties["organization_id"]["minLength"] == 1
+        else:
+            for field in fields:
+                assert properties[field]["minLength"] == 1
 
 
 @pytest.mark.parametrize(
     "payload",
     [
         {"phone": "123", "extra": True},
-        {"phone": ""},
         {"phone": "   "},
         {"name": "Acme"},
         {"users": "1"},
@@ -134,6 +137,7 @@ def test_preview_issues_ticket_and_does_not_submit() -> None:
         "resource": "organization",
         "surface": "settings_company",
         "field": "phone",
+        "phone_action": "set",
     }
     assert isinstance(preview["confirmation_ticket"], str)
     assert preview["confirmation_ticket"]

@@ -11,7 +11,7 @@ updated: 2026-08-18T04:46:00Z
 
 - Invoice CUD is frozen `UI_CHANGED`. Do not remake invoice inspects. Do not alter invoice coverage.
 - Products create is frozen `UI_CHANGED`. Delete-chrome dump is closed. Do not remake. Do not create an uncleanable product.
-- Organizations update dump is closed. Do not remake. `23709235`: allow exact empty phone as a deliberate clear, then FastMCP tagged set plus empty restore. Keep the coverage row red. Ledger last.
+- Organizations update live set plus empty restore is proved through FastMCP. Four-state frames exist outside git. Keep the coverage row red until independent accept and purge. Do not remap yet. Ledger last.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done

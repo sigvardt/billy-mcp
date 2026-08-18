@@ -76,7 +76,7 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `AD8966F2` (saved, dump done): freeze `products.create` as `UI_CHANGED`. Company phone dump is complete. `proved_phone_only=true`. `phone_value_len=0`. Do not remake that dump.
 
-`23709235` (saved, next after this commit): empty original is a reversible clear. Preview must bind exact empty phone as a deliberate clear and keep non-empty trim. Read-back compares `input[name=phone]` exactly. FastMCP tagged set, then separately previewed empty restore, third-session empty proof. Invoice and product blockers stay red. Ledger last.
+`23709235` (saved, live proved, not remapped): empty original is a reversible clear. Preview binds exact empty as `clear`. Live FastMCP tagged set plus empty restore passed. Independent accept and purge still required before remapping `ui.parity.organizations.update`. Invoice and product blockers stay red. Ledger last.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

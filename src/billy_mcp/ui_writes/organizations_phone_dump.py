@@ -206,9 +206,9 @@ def proved_phone_only_from(payload: Mapping[str, object]) -> bool:
 
 
 def persist_allowed_from(payload: Mapping[str, object]) -> bool:
-    """True only when the surface is proved and a restore ticket can bind."""
+    """True when the surface is proved. Empty original is a reversible clear."""
 
-    return proved_phone_only_from(payload) and _int_count(payload.get("phone_value_len")) > 0
+    return proved_phone_only_from(payload)
 
 
 def _key_is_present(payload: Mapping[str, object], key: PhoneDumpKey) -> bool:

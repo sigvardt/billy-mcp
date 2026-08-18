@@ -80,8 +80,8 @@ def test_proved_phone_only_needs_every_gate() -> None:
     assert proved_phone_only_from(payload) is False
 
 
-def test_empty_original_phone_forbids_persist() -> None:
-    """Given a proved surface with value_len 0, When persist is checked, Then it is refused."""
+def test_empty_original_phone_allows_persist() -> None:
+    """Given a proved surface with value_len 0, When persist is checked, Then it is allowed."""
 
     from billy_mcp.ui_writes.organizations_phone_dump import (
         empty_organizations_phone_dump,
@@ -104,7 +104,7 @@ def test_empty_original_phone_forbids_persist() -> None:
         }
     )
     assert proved_phone_only_from(payload) is True
-    assert persist_allowed_from(payload) is False
+    assert persist_allowed_from(payload) is True
     payload["phone_value_len"] = 8
     assert persist_allowed_from(payload) is True
 
