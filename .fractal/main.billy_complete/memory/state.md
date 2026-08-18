@@ -8,14 +8,16 @@ sources:
   - radio:96908DC6
   - radio:07600147
   - radio:E87B6AEF
+  - radio:31B0C7A6
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T00:20:00Z
+updated: 2026-08-18T00:33:20Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `1936b7c`. `E87B6AEF` files wait for COMMIT. Stay red. Do not finish.
+HEAD is `522105c`. `E87B6AEF` dump is on the branch. Stay red. Do not finish.
+Parent `31B0C7A6` names the next slice.
 
 Invoice CUD stays unbound. Honesty 16 stay red. Never call the API.
 
@@ -44,8 +46,13 @@ instrumented post-click dump (`07600147`), and the descendant map
 (`E87B6AEF`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
-Do not remake the descendant map. Next is a different read-only
-capture.
+Do not remake the descendant map.
+`31B0C7A6` live inspect is delivered. Ember view is present
+(`view_registry`, `pickerfield`, `ember_digit` id class). No
+allowlisted selection, collection, open state, or methods.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+Do not remake this inspect. Do not invoke the view. React fiber is a
+later slice only.
 
 ## Proved and still red
 

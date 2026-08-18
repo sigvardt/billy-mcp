@@ -1438,3 +1438,83 @@ async def test_ui_invoices_kunde_descendant_map(
         for path in list(_REGISTERED_PROFILES):
             if path.name.startswith("billy-live-invoices-"):
                 shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoices_kunde_ember_inspect(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Read-only 31B0C7A6 Ember inspect. Do not click or invoke methods."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import capture_kunde_ember
+    from billy_mcp.ui_writes.invoices_kunde_ember import (
+        KUNDE_EMBER_DUMP,
+        REQUIRED_KUNDE_EMBER_KEYS,
+        ember_dump_is_delivered,
+        kunde_ember_missing_keys,
+    )
+    from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "ember dump must not use API token"
+    profile = _temp_profile()
+    observer_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    server: FastMCP | None = None
+    extra: BrowserRuntime | None = None
+    page: Any = None
+
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        observer = BrowserRuntime(
+            observer_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = observer
+        await _ready_session(observer, slug)
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+        if ember_dump_is_delivered():
+            written = json.loads(KUNDE_EMBER_DUMP.read_text(encoding="utf-8"))
+            assert kunde_ember_missing_keys(written) == []
+            assert "https://" not in KUNDE_EMBER_DUMP.read_text(encoding="utf-8")
+            assert "function(" not in KUNDE_EMBER_DUMP.read_text(encoding="utf-8")
+            assert "ember" + "123" not in KUNDE_EMBER_DUMP.read_text(encoding="utf-8")
+            return
+        context = await observer.start()
+        page = cast(Any, await context.new_page())
+        await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle")
+        except (TimeoutError, RuntimeError):
+            pass
+        result = await capture_kunde_ember(page)
+        if result.get("code") and result.get("code") != "UI_CHANGED":
+            _record_blocker(f"ember dump failed: {result}")
+            pytest.fail(f"ember dump failed: {result}")
+        assert kunde_ember_missing_keys(result) == []
+        assert set(REQUIRED_KUNDE_EMBER_KEYS) <= set(result)
+        encoded = json.dumps({"result": result})
+        assert "https://" not in encoded
+        assert "function(" not in encoded
+        assert "confirmation_ticket" not in encoded
+        assert "MCP-UI-INV-" not in encoded
+        if result.get("unique_normal_action") is not True:
+            assert result.get("code") == "UI_CHANGED"
+        assert KUNDE_EMBER_DUMP.is_file()
+        written = json.loads(KUNDE_EMBER_DUMP.read_text(encoding="utf-8"))
+        assert kunde_ember_missing_keys(written) == []
+        assert "https://" not in KUNDE_EMBER_DUMP.read_text(encoding="utf-8")
+        leftovers = await _leftover_invoice_contact_names(observer, slug)
+        assert leftovers == []
+    finally:
+        if page is not None:
+            await page.close()
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)

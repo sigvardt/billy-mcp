@@ -4,11 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T00:10:00Z
+updated: 2026-08-18T00:33:20Z
 ---
 
 ## Open
 
+- Invoice CUD stays unbound after `31B0C7A6`. Ember view has no named open/select/filter action. Next parent slice may inspect React fiber. Do not remake the Ember inspect.
 - Invoice CUD stays unbound. Remap only after accept and purge.
 - After live MCP proof: point the remaining 10 CUD parity rows at preview tools. Do not green from stubs. Keep a retained-open allowlist for any open-shell tool that still has live form-open tests.
 - Ledger last. Files bind path+digest. Org update restores company fields only.

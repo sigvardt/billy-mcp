@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T00:20:00Z
+updated: 2026-08-18T00:45:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -215,6 +215,29 @@ Live recapture: two visible descendants, the contact `INPUT` at
 `{dx:242,w:40,h:40}`. `unique_target=false`.
 `wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either
 target. Do not repeat the wrapper-center click.
+
+## Ember view inspect
+
+`31B0C7A6` records the already loaded Ember view or component that
+owns the proved `pickerfield`. DevTools `Runtime.getProperties`
+only. Do not click. Do not call `Ember.get`, `view.get`, or any
+view method. Persist only allowlisted name tokens, value types,
+and booleans for bound selection, candidate collection, open
+state, and named open/select/filter actions. Never persist raw
+values, ids, source, or URLs. `unique_normal_action` is true only
+when exactly one named action is present and a unique unused DOM
+target exists. A method with no new DOM target is `UI_CHANGED`.
+Do not inspect React fiber in this slice. Helper:
+`src/billy_mcp/ui_writes/invoices_kunde_ember.py`. Owner dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-kunde-ember.json`.
+Live recapture: `ember_global_present=true`,
+`view_registry_present=true`, `wrapper_ember_id_class=ember_digit`,
+`lookup_class=view_registry`, `view_present=true`,
+`view_constructor_token=pickerfield`. `property_rows` empty.
+`method_name_tokens` empty. All named actions `none`.
+`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
+Empty `property_rows` is not a bind and is not a reason to remake
+this inspect. Do not invoke the view.
 
 ## Live proof
 

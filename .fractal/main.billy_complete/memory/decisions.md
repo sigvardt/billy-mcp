@@ -24,8 +24,9 @@ sources:
   - radio:452E0773
   - radio:07600147
   - radio:E87B6AEF
+  - radio:31B0C7A6
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-17T23:47:07Z
+updated: 2026-08-18T00:33:20Z
 ---
 
 ## Binding now
@@ -54,7 +55,9 @@ updated: 2026-08-17T23:47:07Z
 
 `07600147` (done, committed on `1936b7c`): one FastMCP tagged customer, fresh confirm, scoped observer, one `pickerfield` click. `changed_node_count=0`. `exact_match_target=false`. `UI_CHANGED`. Customer deleted. Absence proved. Do not repeat that wrapper-center click.
 
-`E87B6AEF` (saved, dump delivered): live read-only map has two visible descendants. Contact `INPUT` plus overlay `DIV` at `dx=242`. `unique_target=false`. `wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either target. Do not repeat the wrapper-center click.
+`E87B6AEF` (done, unsaved, on `522105c`): live read-only map has two visible descendants. Contact `INPUT` plus overlay `DIV` at `dx=242`. `unique_target=false`. `wrapper_handler_guard=none`. `UI_CHANGED`. Do not click either target. Do not remake that map.
+
+`31B0C7A6` (saved, dump delivered): Ember view present via `Ember.View.views`. `lookup_class=view_registry`. `view_constructor_token=pickerfield`. No allowlisted properties or methods. `unique_normal_action=false`. `UI_CHANGED`. No click. Do not remake. Do not invoke.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 
