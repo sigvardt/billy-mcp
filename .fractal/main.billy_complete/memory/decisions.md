@@ -32,11 +32,12 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
   - radio:113F1E05
+  - radio:A337A622
   - radio:67CBACB6
   - radio:2683CE6B
   - radio:8EBC19D5
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T10:20:00Z
+updated: 2026-08-18T13:28:00Z
 ---
 
 ## Binding now
@@ -91,7 +92,9 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `113F1E05` (saved, P10, supersedes Tilgodehavender CTA dump): stop enumerating alternate **Opret faktura** entry CTAs. Those entries reach the same empty create form. Do not execute or commit another route-entry diagnostic on assumption. Inspect the loaded create-form customer control locally (scoped DOM/AX plus page-local frontend source or component evidence, no live API). Derive one exact normal existing-customer interaction. Failing fixture first. Then FastMCP draft CUD if that interaction exists. If none, record `UI_CHANGED` and move to product create. Do not accumulate more diagnostic helpers. Stay red. Do not stop the root.
 
-`67CBACB6` (open, sent to parent): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Product list archive-filter dump proved **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede** counts 0 and `unique_restore_readback=none`. Persist stays fail-closed. Ask whether archive-until-absent counts as restored state even with no list filter. Do not remake the form-contract or archive-list dumps. Do not treat product create as done.
+`A337A622` (saved, P10): stop product archive and list-shell enumeration. `/products` and Lagermodul `/inventory` both have named filter counts 0. Independent review failed the Lagermodul helper as a redundant permanent diagnostic. Drop the helper. Keep the wiki fact. Do not persist. Do not remap. Do not treat archive as restored state without an answer to `67CBACB6`. Record product create `UI_CHANGED` / fail-closed. No more product list, dialog, or archive probes unless new read-only evidence names a different normal cleanup control.
+
+`67CBACB6` (open, sent to parent): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Product list and Lagermodul list archive-filter dumps both proved **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede** counts 0 and `unique_restore_readback=none`. Persist stays fail-closed. Ask whether archive-until-absent counts as restored state even with no list filter. Do not remake the form-contract or archive-list dumps. Do not treat product create as done.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 

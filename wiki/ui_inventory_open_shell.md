@@ -30,6 +30,7 @@ updated: 2026-07-31T19:30:00Z
 - Products list (`/:org_slug/products`, h1 `Produkter`) is a different shell already greened by `ui_products_list`.
 - No official Billy API inventory/stock/warehouse resource. Do **not** invent `api_inventory_*`.
 - Never click create CTAs (`Opret primo`, `Opret produkt`, `Opret status`).
+- Archive-filter classify is separate (`inspect-live-inventory-archive-list.json`). Exact **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede** counts were 0. That dump is not this shell-open row.
 - Product create form open is a **separate** tool: `ui_products_create_open` (see [[ui_products_create_open_shell|ui_products_create_open_shell]]).
 - Does not green settings_*, annual_reports, or re-green products/addons/integrations.
 - API `live_tested` remains false with `out_of_scope_by_user`.

@@ -15,22 +15,38 @@ sources:
   - radio:AD8966F2
   - radio:23709235
   - radio:FD39FFE7
+  - radio:A337A622
+  - radio:113F1E05
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T12:14:00Z
+updated: 2026-08-18T13:28:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `b56ee43`. Stay red. Do not finish. No children are running.
+HEAD is `a87177f`. Stay red. Do not finish. No children are running.
+
+`A337A622` stops product archive and list-shell enumeration.
+Independent review failed the Lagermodul helper as a redundant
+permanent diagnostic. The helper files are deleted. Wiki keeps
+the dump fact. Do not remake product list, dialog, or archive
+probes unless new read-only evidence names a different normal
+cleanup control. Persist stays fail-closed.
 
 Product list archive chrome is classified. Dump
 `inspect-live-products-archive-list.json`:
 `products_path_class=products`, heading `produkter`,
 `search_control_visible=false`, named archive-filter counts 0,
 `unique_restore_readback=none`, `proved_bind=none`. No product
-created. Do not remake this dump. Persist stays fail-closed.
-`67CBACB6` stays open.
+created. Do not remake this dump.
+
+Lagermodul list archive chrome is classified. Dump
+`inspect-live-inventory-archive-list.json`:
+`inventory_path_class=inventory`, heading `lagermodul`,
+`create_form_open=false`, named archive-filter counts 0,
+`unique_restore_readback=none`, `proved_bind=none`. No product
+created. Do not remake this dump. `67CBACB6` stays open: neither
+list shell has a unique restore filter.
 
 Official product create dialog is classified on the live
 Lagermodul form. `inventory_path_class=inventory`.

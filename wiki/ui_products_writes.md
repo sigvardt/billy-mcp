@@ -74,9 +74,18 @@ classifies `/:org_slug/products` as `products_path_class=products`,
 exact **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede**
 counts 0, `archived_filter_token=none`,
 `unique_restore_readback=none`, `proved_bind=none`. No product
-created. Do not remake this dump. Do not click those labels. Persist
-stays fail-closed. `67CBACB6` stays open: archive-until-absent still
-cannot be independently read back from list chrome.
+created. Do not remake this dump. Do not click those labels.
+
+Lagermodul archive-list dump
+`~/.local/share/billy-mcp/inspect-live-inventory-archive-list.json`
+classifies `/:org_slug/inventory` as `inventory_path_class=inventory`,
+`inventory_heading_token=lagermodul`, `create_form_open=false`,
+exact **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede**
+counts 0, `archived_filter_token=none`,
+`unique_restore_readback=none`, `proved_bind=none`. No product
+created. Do not remake this dump. Do not open **Opret produkt**.
+Persist stays fail-closed. `67CBACB6` stays open: archive-until-absent
+cannot be independently read back from either list shell.
 
 Do not click **Gem** or **Gem produkt** in inspect tests.
 `BrowserProductSubmitter` fail-closes when
