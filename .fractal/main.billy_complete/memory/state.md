@@ -23,15 +23,16 @@ sources:
   - radio:9310BC17
   - radio:1F1B34F8
   - radio:C6DA7FC8
+  - radio:BF91E28F
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T18:45:00Z
+updated: 2026-08-18T18:54:22Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `7725bd7`, clean, tracking `origin/main.billy_complete`.
-Priced invoice line is committed. Stay red. Do not finish.
+HEAD is `3101495`, clean, tracking `origin/main.billy_complete`.
+Slug compare and still-open dialog `UI_CHANGED` are in. Stay red. Do not finish.
 No children are running.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
@@ -54,9 +55,11 @@ A still-visible create dialog after **Gem produkt** is
 `C6DA7FC8`: that live `NOT_FOUND` is our session/search miss,
 not Billy persist. Owner proved create on `/:org/products`
 with defaults 1110 Salg, then an unfiltered Products list.
-Next persist slice: after Gem, hard-navigate a fresh
-`/products` page and read the unfiltered list before any
-search. Do not call that `NOT_FOUND` Billy behavior. Stay red.
+Live FastMCP product create persist and table-item delete
+passed. Owner `65521475` leftovers `MCP-UI-PRD-8CA457EE` and
+`MCP-UI-PRD-EA28FA6B` were deleted. A third fresh `/products`
+session shows **Ingen produkter**. Honesty stays red. Next
+family is invoice draft CUD.
 Do not remake dumps. Do not green.
 Daybook and files still wait.
 

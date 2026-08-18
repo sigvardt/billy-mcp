@@ -28,10 +28,11 @@ form-open tool remains [[ui_products_create_open_shell]].
 | `ui_products_delete_preview` | Bind unique tagged name and organisation. Optional id. Return a ticket. |
 | `ui_products_delete_execute` | Consume that ticket once. Row `data-cy=delete-icon`, then **Ja, slet**. |
 
-The bound create is the Lagermodul **Opret produkt** form on
-`/:org_slug/inventory`. Catalog `/products` has no create CTA. Soft
-`/products/new` is not success. Delete starts on `/products`, then
-tries `/inventory` once if the icon is missing.
+The bound create follows owner `C6DA7FC8` on `/:org_slug/products`:
+**Opret produkter**, then the **Opret produkt** dialog if the name
+field is not yet visible. Soft `/products/new` is not success.
+Delete starts on `/products`, then tries `/inventory` once if the
+icon is missing.
 
 Create and delete execute compare the live URL slug to the ticket
 organisation before fill or click. A mismatch is
@@ -43,10 +44,14 @@ not failure.
 Owner `C6DA7FC8` proves persist on `/:org/products`: **Opret
 produkter**, then the **Opret produkt** dialog, name, **Enhedspris**=1,
 defaults 1110 Salg / Normalt salg af varer / DKK, **Gem produkt**.
-The modal closes. Read-back must hard-navigate a fresh `/products`
-page and read the unfiltered list before any search. A FastMCP
-`NOT_FOUND` after search-first or inventory-first read-back is our
-session miss, not Billy refusing to save.
+The modal closes. Create execute starts on `/:org/products` (**Opret produkter** then
+the dialog). After **Gem produkt** it hard-navigates `/products`
+and proves the tag in visible body text (`allow_search=False`,
+`visible_body=True`). Hidden Ember `get_by_text` hits are not
+persist. Inventory is only the second attempt. Delete scopes to the tagged `[data-cy='table-item']`, reveals
+row actions, then clicks that row's `delete-icon` and **Ja,
+slet**. Never a page-wide `delete-icon`.first. No `force=True`.
+Stay red.
 
 Qualify through FastMCP `call_tool`. Do not treat BrowserRuntime as the pass
 proof.

@@ -24,6 +24,7 @@ _EXECUTE_TOOL_NAME: Final = "ui_products_delete_execute"
 _PREVIEW_SUMMARY: Final = "Preview deletion of one Billy product in the interface."
 _CONFIRM: Final = "Ja, slet"
 _DELETE_ICON: Final = "[data-cy='delete-icon']"
+_TABLE_ITEM: Final = "[data-cy='table-item']"
 _LIST_PATHS: Final = ("products", "inventory")
 
 
@@ -113,6 +114,8 @@ class BrowserProductDeleter:
             path="products",
             text=tag,
             absent=True,
+            allow_search=False,
+            visible_body=True,
         )
 
 
@@ -207,19 +210,22 @@ async def _delete_tagged_row(
         await page.wait_for_load_state("networkidle", timeout=15000)
     except TimeoutError:
         pass
-    search = page.locator("input[type='search']")
-    if await search.count() >= 1:
-        await search.first.fill(tag)
     match = page.get_by_text(tag, exact=True)
     if await match.count() < 1:
         return False
-    row = page.locator("tr, [role='row'], li").filter(has=match)
+    row = page.locator(_TABLE_ITEM).filter(has=match)
+    if await row.count() < 1:
+        return False
+    await row.first.hover()
     icon = row.locator(_DELETE_ICON)
-    if await icon.count() < 1:
-        icon = page.locator(_DELETE_ICON)
     if await icon.count() < 1 or not await icon.first.is_visible():
         return False
-    await icon.first.click()
+    try:
+        await icon.first.click(timeout=5000)
+    except Exception as exc:
+        if type(exc).__name__ != "TimeoutError":
+            raise
+        return False
     confirm = page.get_by_role("button", name=_CONFIRM, exact=True)
     if await confirm.count() < 1:
         confirm = page.get_by_text(_CONFIRM, exact=True)

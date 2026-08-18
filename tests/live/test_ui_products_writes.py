@@ -30,6 +30,7 @@ from billy_mcp.vision_evidence import (
     owner_only_frame_dir,
     write_vision_record,
 )
+from tests.live.product_leftover_sweep import OWNER_LEFTOVERS, visible_prd_tags
 
 pytestmark = pytest.mark.live
 
@@ -129,15 +130,12 @@ async def _ready_session(runtime: BrowserRuntime, slug: str) -> None:
     assert waited.organization_id == slug
 
 
-async def _open_named_list(page: Any, slug: str, path: str, name: str) -> None:
+async def _open_named_list(page: Any, slug: str, path: str) -> None:
     await page.goto(f"https://mit.billy.dk/{slug}/{path}", wait_until="domcontentloaded")
     try:
         await page.wait_for_load_state("networkidle", timeout=20000)
     except TimeoutError:
         pass
-    search = page.locator("input[type='search'], input[placeholder*='øg' i]")
-    if await search.count() >= 1:
-        await search.first.fill(name)
 
 
 async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
@@ -145,10 +143,16 @@ async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
     page = cast(Any, await context.new_page())
     try:
         for path in ("products", "inventory"):
-            await _open_named_list(page, slug, path, name)
+            await _open_named_list(page, slug, path)
             body = await page.locator("body").inner_text()
             if exact_name_in_text(body, name):
                 return True
+            search = page.locator("input[type='search'], input[placeholder*='øg' i]")
+            if await search.count() >= 1:
+                await search.first.fill(name)
+                body = await page.locator("body").inner_text()
+                if exact_name_in_text(body, name):
+                    return True
         return False
     finally:
         await page.close()
@@ -198,9 +202,13 @@ async def test_ui_products_create_delete_via_call_tool(
         )
         extra = observer
         await _ready_session(observer, slug)
+        for leftover in OWNER_LEFTOVERS:
+            if await _list_has_name(observer, slug, leftover):
+                await _delete_tagged(server, slug, leftover)
+        extras = await visible_prd_tags(observer, slug, _open_named_list)
+        for leftover in reversed(extras):
+            await _delete_tagged(server, slug, leftover)
         tag = f"MCP-UI-PRD-{secrets.token_hex(4).upper()}"
-        if await _list_has_name(observer, slug, tag):
-            await _delete_tagged(server, slug, tag)
         assert await _list_has_name(observer, slug, tag) is False
 
         preview_create = await _call(
@@ -246,7 +254,7 @@ async def test_ui_products_create_delete_via_call_tool(
         empty = await cleanup.start()
         empty_page = cast(Any, await empty.new_page())
         try:
-            await _open_named_list(empty_page, slug, "products", tag)
+            await _open_named_list(empty_page, slug, "products")
             body = await empty_page.locator("body").inner_text()
             assert "Ingen produkter" in body or exact_name_in_text(body, tag) is False
         finally:

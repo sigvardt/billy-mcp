@@ -42,11 +42,21 @@ sources:
   - radio:1F1B34F8
   - radio:56354201
   - radio:C6DA7FC8
+  - radio:BF91E28F
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T18:45:00Z
+updated: 2026-08-18T18:54:22Z
 ---
 
 ## Binding now
+
+`BF91E28F` (saved, P10): persist is proved. Seven leftover
+tagged products are visible on `/products`. Each name is in
+its own `data-cy=table-item` (first row y=201, h=80). Page-wide
+`delete-icon`.first is unrelated chrome at x=20,y=0. Delete
+must scope to the tagged table-item after revealing row
+actions, then **Ja, slet**. Clean all seven in reverse
+creation order and prove **Ingen produkter** before invoice
+CUD. Do not stop. Do not ask the owner.
 
 `C6DA7FC8` (saved, P10): B777AA82 is our session/search miss,
 not Billy persist. Owner sequence on the authenticated browser:
@@ -141,7 +151,7 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `2683CE6B` (done, unsaved, dump delivered, refined by `8EBC19D5`): stop page-wide one-off dumps. Live scoped dump: `gem_clicked=true`, `invoice_persisted=false`, two `validation` rows, `unique_action=none`, `proved_bind=none`. Contact-owned roots showed no unique visible option or owned **Opret ny** footer. Do not remake via a body-wide recapture. Next is a different normal-interface path under `FD39FFE7`. Do not freeze. Do not finish.
 
-`FD39FFE7` (saved, still in force): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. `EC676F84` now names the invoice path: tagged FastMCP customer, then draft CUD. Do not remake picker dumps. Do not freeze invoice CUD as finished. Product create still waits on `67CBACB6`.
+`FD39FFE7` (saved, still in force): invoice draft CUD and product create are mandatory MCP capabilities. They stay red until live proof. They are not done as `UI_CHANGED`. `EC676F84` now names the invoice path: tagged FastMCP customer, then draft CUD. Do not remake picker dumps. Do not freeze invoice CUD as finished. Product create follows `56354201` / `C6DA7FC8`: persist, hard-delete, then invoice CUD. `67CBACB6` is not a stop.
 
 `113F1E05` (saved, P10, supersedes Tilgodehavender CTA dump): stop enumerating alternate **Opret faktura** entry CTAs. Those entries reach the same empty create form. Do not execute or commit another route-entry diagnostic on assumption. Inspect the loaded create-form customer control locally (scoped DOM/AX plus page-local frontend source or component evidence, no live API). Derive one exact normal existing-customer interaction. Failing fixture first. Then FastMCP draft CUD if that interaction exists. If none, record `UI_CHANGED` and move to product create. Do not accumulate more diagnostic helpers. Stay red. Do not stop the root.
 

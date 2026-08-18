@@ -13,6 +13,7 @@ _CHROME: Final[frozenset[str]] = frozenset(
         "Gem som kladde",
         "Gem ændringer",
         "Opret produkt",
+        "Opret produkter",
         "Opret ny kassekladde",
         "Opret kontakt",
         "Opret leverandør",
@@ -291,6 +292,9 @@ class FakeBillyLocator:
             scope=self._selector,
         )
 
+    async def hover(self) -> None:
+        return None
+
     async def click(self, **_kwargs: object) -> None:
         if "name='" in self._selector:
             self._session.focused = self
@@ -329,9 +333,13 @@ class FakeBillyLocator:
 
     async def inner_text(self) -> str:
         if self._selector == "h1":
+            if any("/products" in url for url in self._session.gotos):
+                return "Produkter"
             if any("/inventory" in url for url in self._session.gotos):
                 return "Lagermodul"
             return ""
+        if self._selector == "body":
+            return "\n".join(sorted(self._session.records))
         if _is_dropdown_scope(self._selector) or (
             self._scope is not None and _is_dropdown_scope(self._scope)
         ):

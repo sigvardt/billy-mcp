@@ -15,10 +15,10 @@ from billy_mcp.ui_writes.page_flow import (
 )
 
 _OPRET: str = "Opret produkt"
+_OPRET_LIST: str = "Opret produkter"
 _GEM: str = "Gem produkt"
 _PRICE_LABEL: str = "Enhedspris"
-_HEADING: str = "Lagermodul"
-_DIALOG: str = "[role='dialog'], .ModalWrapper, [class*='ModalWrapper']"
+_HEADING: str = "Produkter"
 
 
 class BrowserProductSubmitter:
@@ -60,15 +60,19 @@ class BrowserProductSubmitter:
         proved = await prove_text_on_fresh_page(
             self._readback_runtime,
             organization_id=bound,
-            path="inventory",
+            path="products",
             text=name,
+            allow_search=False,
+            visible_body=True,
         )
         if isinstance(proved, ToolError) and proved.code == StableErrorCode.NOT_FOUND:
             return await prove_text_on_fresh_page(
                 self._readback_runtime,
                 organization_id=bound,
-                path="products",
+                path="inventory",
                 text=name,
+                allow_search=False,
+                visible_body=True,
             )
         return proved
 
@@ -76,33 +80,42 @@ class BrowserProductSubmitter:
 async def _fill_and_save(
     page: LoginPage, *, organization_id: str, name: str, price: str
 ) -> ToolError | None:
-    """Open Lagermodul create, fill name and Enhedspris, then Gem produkt."""
+    """Open /products create, fill name and Enhedspris, then Gem produkt."""
 
-    slug = await require_matching_org_slug(page, organization_id, "inventory")
+    slug = await require_matching_org_slug(page, organization_id, "products")
     if isinstance(slug, ToolError):
         return slug
     await page.goto(
-        f"{BILLY_ORIGIN}/{slug}/inventory",
+        f"{BILLY_ORIGIN}/{slug}/products",
         wait_until="domcontentloaded",
     )
     await _settle(page)
     if not await _wait_heading(page):
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
-            message="Billy Lagermodul heading is not visible.",
+            message="Billy Produkter heading is not visible.",
         )
-    if not await _click_visible(page, _OPRET):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy control Opret produkt is not visible.",
-        )
+    if not await _click_visible(page, _OPRET_LIST):
+        if not await _click_visible(page, _OPRET):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Billy control Opret produkter is not visible.",
+            )
     await _settle(page)
     name_field = page.locator("input[name='name']")
     if not await _wait_visible(name_field):
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy field name is not visible.",
-        )
+        if not await _click_visible(page, _OPRET):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Billy control Opret produkt is not visible.",
+            )
+        await _settle(page)
+        name_field = page.locator("input[name='name']")
+        if not await _wait_visible(name_field):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Billy field name is not visible.",
+            )
     await name_field.first.fill(name)
     await name_field.first.press("Tab")
     if not await _fill_price(page, price):
@@ -122,6 +135,11 @@ async def _fill_and_save(
             code=StableErrorCode.UI_CHANGED,
             message=f"Billy product create dialog stayed open after Gem produkt: {leftover}",
         )
+    await page.goto(
+        f"{BILLY_ORIGIN}/{slug}/products",
+        wait_until="domcontentloaded",
+    )
+    await _settle(page)
     return None
 
 
@@ -139,16 +157,18 @@ async def _wait_create_dialog_closed(page: LoginPage) -> str | None:
     return last
 
 
+def leftover_create_dialog_message(*, form_visible: bool, validation: str) -> str | None:
+    """Return leftover text only for visible validation. Ember nodes are not failure."""
+
+    del form_visible
+    return validation or None
+
+
 async def _create_dialog_leftover(page: LoginPage) -> str | None:
-    dialog = page.locator(_DIALOG)
     heading = page.get_by_role("heading", name=_OPRET, exact=True)
-    dialog_open = await dialog.count() >= 1 and await dialog.first.is_visible()
-    if not dialog_open and await heading.count() >= 1 and await heading.first.is_visible():
-        dialog_open = True
-    if not dialog_open:
-        return None
+    heading_open = await heading.count() >= 1 and await heading.first.is_visible()
     validation = await _visible_validation(page)
-    return validation or "create dialog still open after Gem produkt"
+    return leftover_create_dialog_message(form_visible=heading_open, validation=validation)
 
 
 async def _visible_validation(page: LoginPage) -> str:

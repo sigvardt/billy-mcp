@@ -114,6 +114,8 @@ async def prove_text_on_fresh_page(
     text: str,
     absent: bool = False,
     organization_id: str | None = None,
+    allow_search: bool = True,
+    visible_body: bool = False,
 ) -> ToolError | None:
     """Prove a marker on an independent session, never on the write context."""
 
@@ -152,13 +154,13 @@ async def prove_text_on_fresh_page(
             await page.wait_for_load_state("networkidle", timeout=15000)
         except TimeoutError:
             pass
-        found = await page.get_by_text(text, exact=True).count()
-        if found < 1:
+        found = await _visible_text_count(page, text, visible_body=visible_body)
+        if found < 1 and allow_search:
             search = page.locator("input[type='search'], input[placeholder*='øg' i]")
             if await search.count() >= 1:
                 await search.first.fill(text)
                 await asyncio.sleep(1.5)
-                found = await page.get_by_text(text, exact=True).count()
+                found = await _visible_text_count(page, text, visible_body=visible_body)
         if absent:
             if found >= 1:
                 return ToolError(
@@ -174,6 +176,15 @@ async def prove_text_on_fresh_page(
         return None
     finally:
         await page.close()
+
+
+async def _visible_text_count(page: LoginPage, text: str, *, visible_body: bool) -> int:
+    """Count exact text. Visible body text only when hidden Ember nodes must not count."""
+
+    if visible_body:
+        body = await page.locator("body").inner_text()
+        return 1 if exact_name_in_text(body, text) else 0
+    return await page.get_by_text(text, exact=True).count()
 
 
 async def require_matching_org_slug(
