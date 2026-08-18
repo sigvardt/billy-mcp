@@ -4,16 +4,16 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T18:54:22Z
+updated: 2026-08-18T20:29:32Z
 ---
 
 ## Open
 
-- Invoice draft CUD is next (`FD39FFE7` / `1F1B34F8`). Product create persist and table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
-- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Invoice persist needs a disposable product from `56354201`, not archive-only. Stay red.
+- Invoice draft CUD is next (`FD39FFE7` / `1F1B34F8` / `65521475`). Product create persist and scoped table-item hard-delete are live-proved. Leftover tagged products are gone. Honesty stays red until independent accept and purge. Stay red.
+- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Invoice persist needs a disposable product from the proved FastMCP product tools, not archive-only. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
-- Product create is mandatory (`FD39FFE7`). Official dialog proved **Gem produkt**. `56354201` names cleanup: row `delete-icon` then **Ja, slet**. `67CBACB6` is not a stop. `A337A622` still forbids more product list, dialog, or archive probes. Next is unfiltered `/products` read-back after Gem, then delete. Stay red. Do not remake form-contract, delete-chrome, or either archive dump.
+- Product create is mandatory (`FD39FFE7`) and live-proved. `56354201` / `BF91E28F` cleanup is scoped table-item `delete-icon` then **Ja, slet**. `A337A622` still forbids more product list, dialog, or archive probes. Do not remake form-contract, delete-chrome, leftover-cleanup, or either archive dump.
 - Daybook create persist is not unique (`opret_ny_kassekladde_count=1` and `indstillinger_count=1`). Helper dropped after review. Do not remake that dump. Do not arm `_ledger_write`. Stay red.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files stay fail-closed (research185 **Slet** 0).
 

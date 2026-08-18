@@ -42,6 +42,7 @@ class InvoiceCreatePreviewInput(BaseModel):
 
     contact_name: str = Field(min_length=1)
     line_description: str = Field(min_length=1)
+    product_name: str = Field(min_length=1)
     unit_price: float = Field(gt=0)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
@@ -134,6 +135,7 @@ class BrowserInvoiceSubmitter:
             unique_tag=str(request.get("contact_name") or request.get("line_description") or ""),
             contact_name=str(request.get("contact_name") or ""),
             line_description=str(request.get("line_description") or ""),
+            product_name=str(request.get("product_name") or ""),
             unit_price=_request_unit_price(request),
             organization_id=str(prepared.binding.organization_id or ""),
             invoice_id=str(request.get("id") or ""),
@@ -230,6 +232,7 @@ def register_ui_invoice_write_tools(
     def ui_invoices_create_preview(
         contact_name: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
+        product_name: str = Field(min_length=1),
         unit_price: float = Field(gt=0),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
@@ -240,6 +243,7 @@ def register_ui_invoice_write_tools(
         payload = InvoiceCreatePreviewInput(
             contact_name=contact_name,
             line_description=line_description,
+            product_name=product_name,
             unit_price=unit_price,
             action=action,
             save_cta=save_cta,
@@ -403,6 +407,7 @@ def _create_request(payload: InvoiceCreatePreviewInput) -> dict[str, JsonValue]:
         "save_cta": payload.save_cta,
         "contact_name": payload.contact_name,
         "line_description": payload.line_description,
+        "product_name": payload.product_name,
         "unit_price": payload.unit_price,
     }
     request["organization_id"] = payload.organization_id

@@ -14,6 +14,7 @@ _CHROME: Final[frozenset[str]] = frozenset(
         "Gem ændringer",
         "Opret produkt",
         "Opret produkter",
+        "Vælg produkt",
         "Opret ny kassekladde",
         "Opret kontakt",
         "Opret leverandør",
@@ -252,6 +253,8 @@ class FakeBillyLocator:
                 return 1 if self._session.dropdown_options else 0
             return 1 if self._query_text in self._session.dropdown_options else 0
         if self._query_text is None or self._query_text in _CHROME:
+            return 1
+        if self._query_text.startswith("MCP-UI-PRD-"):
             return 1
         return 1 if self._query_text in self._session.records else 0
 

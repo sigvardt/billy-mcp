@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import inspect
 from pathlib import Path
 from typing import Protocol
 from urllib.parse import urlsplit
@@ -124,6 +125,36 @@ def watch_invoice_response(event: object, seen: list[str]) -> None:
     status = str(getattr(event, "status", ""))
     if "/v2/invoices" in url:
         seen.append(f"{method} {status} {url}")
+
+
+async def persist_created_invoice_id(events: list[object]) -> str | None:
+    """Read invoices.0.id from a successful create POST. Stores no other fields."""
+
+    for event in events:
+        request = getattr(event, "request", None)
+        method = str(getattr(request, "method", "") if request is not None else "")
+        url = str(getattr(event, "url", "")).split("?", 1)[0]
+        status = str(getattr(event, "status", ""))
+        if method != "POST" or not url.endswith("/v2/invoices") or status not in _OK_STATUS:
+            continue
+        reader = getattr(event, "json", None)
+        if reader is None:
+            continue
+        payload = reader()
+        if inspect.isawaitable(payload):
+            payload = await payload
+        if not isinstance(payload, dict):
+            continue
+        records = payload.get("invoices")
+        if not isinstance(records, list) or not records:
+            continue
+        first = records[0]
+        if not isinstance(first, dict):
+            continue
+        ident = first.get("id")
+        if isinstance(ident, str) and ident.strip():
+            return ident.strip()
+    return None
 
 
 async def wait_persist(seen: list[str], *, method: str) -> ToolError | None:

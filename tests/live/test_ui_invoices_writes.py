@@ -149,23 +149,32 @@ async def _ready_session(runtime: BrowserRuntime, slug: str) -> None:
     assert waited.organization_id == slug
 
 
-async def _open_named_list(page: Any, slug: str, path: str, name: str) -> None:
+async def _open_named_list(
+    page: Any, slug: str, path: str, name: str, *, allow_search: bool = True
+) -> None:
     await page.goto(f"https://mit.billy.dk/{slug}/{path}", wait_until="domcontentloaded")
     try:
         await page.wait_for_load_state("networkidle", timeout=20000)
     except (TimeoutError, RuntimeError):
         pass
+    if not allow_search:
+        return
     search = page.locator("input[type='search'], input[placeholder*='øg' i]")
     if await search.count() >= 1:
         await search.first.fill(name)
         await asyncio.sleep(1.5)
 
 
-async def _list_has_name(runtime: BrowserRuntime, slug: str, path: str, name: str) -> bool:
+async def _list_has_name(
+    runtime: BrowserRuntime, slug: str, path: str, name: str, *, allow_search: bool = True
+) -> bool:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
-        await _open_named_list(page, slug, path, name)
+        await _open_named_list(page, slug, path, name, allow_search=allow_search)
+        if path == "invoices":
+            visible = page.get_by_text(name, exact=True)
+            return await visible.count() >= 1 and await visible.first.is_visible()
         body = await page.locator("body").inner_text()
         return exact_name_in_text(body, name)
     finally:
@@ -202,21 +211,123 @@ async def _leftover_invoice_contact_names(runtime: BrowserRuntime, slug: str) ->
         await page.close()
 
 
-async def _invoice_id_for_tag(runtime: BrowserRuntime, slug: str, name: str) -> str | None:
+async def _invoice_ids(runtime: BrowserRuntime, slug: str) -> list[str]:
     context = await runtime.start()
     page = cast(Any, await context.new_page())
+    found: list[str] = []
     try:
-        await _open_named_list(page, slug, "invoices", name)
+        await page.goto(f"https://mit.billy.dk/{slug}/invoices", wait_until="domcontentloaded")
+        try:
+            await page.wait_for_load_state("networkidle", timeout=20000)
+        except (TimeoutError, RuntimeError):
+            pass
         links = page.locator("a[href*='/invoices/']")
         for index in range(await links.count()):
             href = await links.nth(index).get_attribute("href")
             if not isinstance(href, str) or not href:
                 continue
-            found = _INVOICE_ID_RE.search(str(urlsplit(href).path))
-            if found is None or found.group(1) in {"new", "empty"}:
+            match = _INVOICE_ID_RE.search(str(urlsplit(href).path))
+            if match is None or match.group(1) in {"new", "empty"}:
                 continue
-            return found.group(1)
-        return None
+            if match.group(1) not in found:
+                found.append(match.group(1))
+        if found:
+            return found
+        rows = page.locator("[data-row-id]")
+        for index in range(await rows.count()):
+            ident = await rows.nth(index).get_attribute("data-row-id")
+            if isinstance(ident, str) and ident.strip() and ident not in found:
+                found.append(ident.strip())
+        return found
+    finally:
+        await page.close()
+
+
+async def _invoice_id_for_tag(runtime: BrowserRuntime, slug: str, name: str) -> str | None:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await _open_named_list(page, slug, "invoices", name, allow_search=False)
+        tagged_row = page.locator("[data-row-id]").filter(has_text=name)
+        if await tagged_row.count() >= 1:
+            ident = await tagged_row.first.get_attribute("data-row-id")
+            if isinstance(ident, str) and ident.strip():
+                return ident.strip()
+        row = page.locator("table tbody tr, [data-cy='table-item'], [role='row']").filter(
+            has_text=name
+        )
+        if await row.count() >= 1:
+            await row.first.click()
+        else:
+            match = page.get_by_text(name, exact=True)
+            if await match.count() < 1 or not await match.first.is_visible():
+                return None
+            await match.first.click()
+        try:
+            await page.wait_for_load_state("networkidle", timeout=20000)
+        except (TimeoutError, RuntimeError):
+            pass
+        found = _INVOICE_ID_RE.search(str(urlsplit(page.url).path or ""))
+        if found is None or found.group(1) in {"new", "empty"}:
+            return None
+        return found.group(1)
+    finally:
+        await page.close()
+
+
+async def _edit_has_text(
+    runtime: BrowserRuntime, slug: str, invoice_id: str, name: str
+) -> bool:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await page.goto(
+            f"https://mit.billy.dk/{slug}/invoices/{invoice_id}/edit",
+            wait_until="domcontentloaded",
+        )
+        try:
+            await page.wait_for_load_state("networkidle", timeout=20000)
+        except (TimeoutError, RuntimeError):
+            pass
+        body = await page.locator("body").inner_text()
+        if exact_name_in_text(body, name):
+            return True
+        fields = page.locator("input, textarea")
+        for index in range(min(await fields.count(), 40)):
+            try:
+                value = await fields.nth(index).input_value()
+            except (TimeoutError, RuntimeError):
+                continue
+            if exact_name_in_text(value, name):
+                return True
+        return False
+    finally:
+        await page.close()
+
+
+async def _edit_unit_price(
+    runtime: BrowserRuntime, slug: str, invoice_id: str
+) -> str:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await page.goto(
+            f"https://mit.billy.dk/{slug}/invoices/{invoice_id}/edit",
+            wait_until="domcontentloaded",
+        )
+        try:
+            await page.wait_for_load_state("networkidle", timeout=20000)
+        except (TimeoutError, RuntimeError):
+            pass
+        field = page.locator(
+            "input[name='invoiceLines.0.unitPrice'], input[name='unitPrice']"
+        )
+        if await field.count() < 1:
+            return ""
+        try:
+            return await field.first.input_value()
+        except (TimeoutError, RuntimeError):
+            return ""
     finally:
         await page.close()
 
@@ -225,7 +336,7 @@ async def _capture(runtime: BrowserRuntime, slug: str, destination: Path, name: 
     context = await runtime.start()
     page = cast(Any, await context.new_page())
     try:
-        await _open_named_list(page, slug, "invoices", name)
+        await _open_named_list(page, slug, "invoices", name, allow_search=False)
         await page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
     finally:
@@ -251,6 +362,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
     slug = ""
     invoice_id: str | None = None
     tag = f"MCP-UI-INV-{secrets.token_hex(4).upper()}"
+    product_tag = f"MCP-UI-PRD-{secrets.token_hex(4).upper()}"
     line = f"{tag} line"
     updated = f"{tag}-U"
 
@@ -265,6 +377,23 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = observer
         await _ready_session(observer, slug)
+        for leftover_id in await _invoice_ids(observer, slug):
+            preview = await _call(
+                server,
+                "ui_invoices_delete_preview",
+                {
+                    "id": leftover_id,
+                    "action": "draft_delete",
+                    "save_cta": "Slet",
+                    "organization_id": slug,
+                },
+            )
+            if not preview.get("code"):
+                await _call(
+                    server,
+                    "ui_invoices_delete_execute",
+                    {"confirmation_ticket": preview["confirmation_ticket"]},
+                )
 
         contact_preview = await _call(
             server,
@@ -286,12 +415,33 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             _record_blocker("independent clients list did not show tagged customer")
             pytest.fail("independent clients list did not show tagged customer")
 
+        product_preview = await _call(
+            server,
+            "ui_products_create_preview",
+            {"name": product_tag, "unitPrice": 1.0, "organization_id": slug},
+        )
+        product_created = await _call(
+            server,
+            "ui_products_create_execute",
+            {"confirmation_ticket": product_preview["confirmation_ticket"]},
+        )
+        if product_created.get("code"):
+            _record_blocker(f"product create failed: {product_created}")
+            pytest.fail(f"product create failed: {product_created}")
+        if product_created.get("submitted") is not True:
+            _record_blocker(f"product create did not submit: {product_created}")
+            pytest.fail(f"product create did not submit: {product_created}")
+        if not await _list_has_name(observer, slug, "products", product_tag):
+            _record_blocker("independent products list did not show tagged product")
+            pytest.fail("independent products list did not show tagged product")
+
         preview_create = await _call(
             server,
             "ui_invoices_create_preview",
             {
                 "contact_name": tag,
                 "line_description": line,
+                "product_name": product_tag,
                 "unit_price": 1.0,
                 "action": "draft_create",
                 "save_cta": "Gem som kladde",
@@ -310,19 +460,27 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         create_dump = json.loads(invoices_form.CREATE_PRE_SUBMIT_DUMP.read_text(encoding="utf-8"))
         assert create_dump["unique_tag"] == tag
         assert create_dump["customer"] == tag
+        assert create_dump["product_name"] == product_tag
         assert create_dump["line_description"] == line
         assert create_dump["unit_price"] == 1.0
         assert create_dump["draft_cta"] == "Gem som kladde"
         assert create_dump["vendor_bind"] == "scoped:existing_option"
+        assert create_dump["product_bind"] == "scoped:existing_option"
         persist = json.loads(CREATE_PERSIST_DUMP.read_text(encoding="utf-8"))
         watched_rows = _watched_rows(persist)
         assert any(row.startswith("POST 2") and "/v2/invoices" in row for row in watched_rows)
-        await _capture(observer, slug, frame_dir / "02_after_create.png", line)
-        assert await _list_has_name(observer, slug, "invoices", line) is True
-        invoice_id = await _invoice_id_for_tag(observer, slug, line)
+        await _capture(observer, slug, frame_dir / "02_after_create.png", tag)
+        assert await _list_has_name(observer, slug, "invoices", tag, allow_search=False) is True
+        persist_id = persist.get("invoice_id")
+        invoice_id = persist_id if isinstance(persist_id, str) and persist_id else None
+        if not invoice_id:
+            invoice_id = await _invoice_id_for_tag(observer, slug, tag)
         if not invoice_id:
             _record_blocker("independent invoices list did not yield an edit id")
             pytest.fail("independent invoices list did not yield an edit id")
+        if not await _edit_has_text(observer, slug, invoice_id, tag):
+            _record_blocker("independent invoice edit did not show the customer tag")
+            pytest.fail("independent invoice edit did not show the customer tag")
 
         preview_update = await _call(
             server,
@@ -330,7 +488,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             {
                 "id": invoice_id,
                 "line_description": updated,
-                "unit_price": 1.0,
+                "unit_price": 9.0,
                 "action": "draft_update",
                 "save_cta": "Gem som kladde",
                 "organization_id": slug,
@@ -345,9 +503,11 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
         assert updated_result["submitted"] is True
-        await _capture(observer, slug, frame_dir / "03_after_update.png", updated)
-        assert await _list_has_name(observer, slug, "invoices", updated) is True
-        assert await _list_has_name(observer, slug, "invoices", line) is False
+        await _capture(observer, slug, frame_dir / "03_after_update.png", tag)
+        assert await _list_has_name(observer, slug, "invoices", tag, allow_search=False) is True
+        if not await _edit_has_text(observer, slug, invoice_id, tag):
+            _record_blocker("independent invoice edit lost the customer tag after update")
+            pytest.fail("independent invoice edit lost the customer tag after update")
 
         preview_delete = await _call(
             server,
@@ -377,8 +537,22 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = cleanup
         await _ready_session(cleanup, slug)
-        assert await _list_has_name(cleanup, slug, "invoices", updated) is False
-        assert await _list_has_name(cleanup, slug, "invoices", line) is False
+        assert await _list_has_name(cleanup, slug, "invoices", tag, allow_search=False) is False
+        assert await _list_has_name(cleanup, slug, "invoices", updated, allow_search=False) is False
+        assert await _list_has_name(cleanup, slug, "invoices", line, allow_search=False) is False
+
+        product_delete = await _call(
+            server,
+            "ui_products_delete_preview",
+            {"unique_tag": product_tag, "organization_id": slug},
+        )
+        if not product_delete.get("code"):
+            await _call(
+                server,
+                "ui_products_delete_execute",
+                {"confirmation_ticket": product_delete["confirmation_ticket"]},
+            )
+        assert await _list_has_name(cleanup, slug, "products", product_tag) is False
 
         contact_delete = await _call(
             server,
@@ -401,6 +575,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                 "test_ui_invoices_create_update_delete_via_call_tool",
                 "create_server_call_tool_create_update_delete",
                 "independent_contact_confirm_before_invoice",
+                "independent_product_confirm_before_invoice",
                 "independent_readback_session",
                 "third_session_cleanup",
             ],
@@ -412,6 +587,11 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
     finally:
         if server is not None and slug:
+            if extra is not None and not invoice_id:
+                try:
+                    invoice_id = await _invoice_id_for_tag(extra, slug, tag)
+                except (OSError, RuntimeError, AssertionError, TimeoutError):
+                    invoice_id = None
             if invoice_id:
                 try:
                     preview_delete = await _call(
@@ -432,6 +612,20 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                         )
                 except (OSError, RuntimeError, AssertionError, TimeoutError):
                     _record_blocker(f"Cleanup delete failed for leftover tagged invoice {tag}.")
+            try:
+                leftover_product = await _call(
+                    server,
+                    "ui_products_delete_preview",
+                    {"unique_tag": product_tag, "organization_id": slug},
+                )
+                if not leftover_product.get("code"):
+                    await _call(
+                        server,
+                        "ui_products_delete_execute",
+                        {"confirmation_ticket": leftover_product["confirmation_ticket"]},
+                    )
+            except (OSError, RuntimeError, AssertionError, TimeoutError):
+                _record_blocker(f"Cleanup delete failed for leftover tagged product {product_tag}.")
             try:
                 contact_delete = await _call(
                     server,

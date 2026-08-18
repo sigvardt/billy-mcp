@@ -844,7 +844,9 @@ async def fill_line(page: Page, value: str) -> str | None:
     return await _fill_first_visible(page, LINE_SELECTORS, value)
 
 
-async def fill_priced_line(page: Page, description: str, unit_price: float) -> ToolError | None:
+async def fill_priced_line(
+    page: Page, description: str, unit_price: float, product_name: str = ""
+) -> ToolError | None:
     """Fill description, Antal, and Enhedspris. Never create a product."""
 
     if unit_price <= 0:
@@ -852,7 +854,7 @@ async def fill_priced_line(page: Page, description: str, unit_price: float) -> T
             code=StableErrorCode.VALIDATION_ERROR,
             message="Invoice draft line requires a positive unit price.",
         )
-    if await fill_line(page, description) is None:
+    if await fill_line(page, description) is None and product_name.strip():
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy invoice line description field is not visible.",
@@ -869,7 +871,9 @@ async def fill_priced_line(page: Page, description: str, unit_price: float) -> T
             code=StableErrorCode.UI_CHANGED,
             message="Billy invoice unit price field is not visible.",
         )
-    return await _bind_existing_product(page)
+    if not product_name.strip():
+        return None
+    return await _bind_existing_product(page, product_name)
 
 
 def _price_text(unit_price: float) -> str:
@@ -906,12 +910,20 @@ async def _fill_first_visible(page: Page, selectors: tuple[str, ...], value: str
     return None
 
 
-async def _bind_existing_product(page: Page) -> ToolError | None:
-    """Open Vælg produkt and pick one existing option. Never Opret ny."""
+async def _bind_existing_product(page: Page, product_name: str) -> ToolError | None:
+    """Open Vælg produkt and pick the exact tagged option. Never Opret ny."""
 
+    if not product_name.strip():
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice draft line requires a product name.",
+        )
     field = page.get_by_role("textbox", name="Vælg produkt")
     if await field.count() < 1 or not await field.first.is_visible():
-        return None
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice product control is not visible.",
+        )
     picker = page.locator(".pickerfield").filter(has=field)
     icon = picker.locator("[data-cy='dropdown-icon']")
     if await icon.count() >= 1 and await icon.first.is_visible():
@@ -925,8 +937,13 @@ async def _bind_existing_product(page: Page) -> ToolError | None:
             await icon.first.click(timeout=5000)
         await asyncio.sleep(0.5)
     for _ in range(16):
-        if await _pick_visible_existing_product(page):
+        if await _product_field_has_tag(page, product_name):
             return None
+        option = page.get_by_role("option", name=product_name, exact=True)
+        if await option.count() >= 1 and await option.first.is_visible():
+            await option.first.click()
+        else:
+            await _click_exact_visible_tag(page, product_name)
         await asyncio.sleep(0.25)
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
@@ -934,15 +951,20 @@ async def _bind_existing_product(page: Page) -> ToolError | None:
     )
 
 
-async def _pick_visible_existing_product(page: Page) -> bool:
-    options = page.get_by_role("option")
-    for index in range(min(await options.count(), 9)):
-        node = options.nth(index)
-        if not await node.is_visible():
-            continue
-        text = (await node.inner_text()).strip()
-        if not text or text == "Opret ny" or text.startswith("Opret "):
-            continue
-        await node.click()
+async def _product_field_has_tag(page: Page, product_name: str) -> bool:
+    """True when the Vælg produkt control shows the exact tagged product."""
+
+    field = page.get_by_role("textbox", name="Vælg produkt")
+    if await field.count() < 1:
+        return False
+    try:
+        value = await field.first.input_value()
+    except Exception:
+        value = ""
+    if product_name == value.strip() or product_name in value:
         return True
-    return False
+    try:
+        text = (await field.first.inner_text()).strip()
+    except Exception:
+        text = ""
+    return product_name == text or product_name in text

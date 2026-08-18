@@ -27,7 +27,7 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 
 | Tool | Input | Effect |
 | --- | --- | --- |
-| `ui_invoices_create_preview` | `contact_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. |
+| `ui_invoices_create_preview` | `contact_name`, `product_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. `product_name` must name an existing product. |
 | `ui_invoices_create_execute` | `confirmation_ticket` | Consume ticket. Runtime submitter binds Kunde then clicks draft save. |
 | `ui_invoices_update_preview` | `id`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. |
 | `ui_invoices_update_execute` | `confirmation_ticket` | Consume ticket. Clicks observed draft save or **Opdater**. |
@@ -36,9 +36,10 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 
 `action` must be `draft_create`, `draft_update`, or `draft_delete`. Use unique
 tagged names such as `MCP-UI-INV-...`. Create a tagged customer first with
-`ui_clients_*` tools. Confirm that name in a fresh interface session before
-any invoice preview (`EC676F84`). Do not use a leftover supplier as Kunde.
-Delete the draft invoice first, then the customer.
+`ui_clients_*` tools. Create a tagged product with `ui_products_*` tools.
+Confirm both names in a fresh interface session before any invoice preview
+(`EC676F84`, `56354201`). Do not use a leftover supplier as Kunde.
+Delete the draft invoice first, then the product, then the customer.
 
 Owner `EC676F84`: the Kunde control works. An empty customer dataset shows
 textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not
@@ -50,10 +51,10 @@ and opens a new Playwright page before create bind. `bind_kunde` clicks `[data-c
 fallback. Type is last. After bind, `fill_priced_line` writes
 **Evt. beskrivelse**, confirms **Antal** is 1, and fills **Enhedspris**
 from the ticket `unit_price`. Live GET then showed `grossAmount=1`.
-It opens **Vælg produkt** and picks an existing option only. It never
-clicks **Opret ny**. The dedicated org currently has no existing
-product option (`67CBACB6`). Preview rejects a missing or
-non-positive price (`1F1B34F8`).
+It opens **Vælg produkt** and picks the exact ticket
+`product_name`. It never clicks **Opret ny**. A missing picker or
+missing tag is `UI_CHANGED`. Preview rejects a missing product name
+and a missing or non-positive price (`1F1B34F8`).
 A preloaded invoice page is a stale-session bug, not a missing control. Do
 not ask Joakim to inspect routine UI.
 

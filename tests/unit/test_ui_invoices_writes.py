@@ -94,6 +94,7 @@ def _create_args(**overrides: object) -> dict[str, object]:
     payload: dict[str, object] = {
         "contact_name": "MCP-UI-INV-acme",
         "line_description": "MCP-UI-INV line",
+        "product_name": "MCP-UI-PRD-acme",
         "unit_price": 1.0,
         "action": "draft_create",
         "save_cta": DRAFT_SAVE_CTA,
@@ -119,6 +120,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         "ui_invoices_create_preview": {
             "contact_name",
             "line_description",
+            "product_name",
             "unit_price",
             "action",
             "save_cta",
@@ -268,6 +270,7 @@ def test_preview_does_not_submit() -> None:
         "save_cta": DRAFT_SAVE_CTA,
         "contact_name": "MCP-UI-INV-acme",
         "line_description": "MCP-UI-INV line",
+        "product_name": "MCP-UI-PRD-acme",
         "unit_price": 1.0,
         "organization_id": "org-test",
     }
@@ -596,6 +599,73 @@ def test_invoice_create_opens_new_page_before_bind() -> None:
     assert new_page_idx < run_idx
     assert "bind_kunde" in body
     assert "invoices/new" in body
+
+
+def test_invoice_create_readback_uses_contact_tag() -> None:
+    """Invoice list shows the customer tag, not Evt. beskrivelse."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    start = form.index("marker =")
+    chunk = form[start : start + 80]
+    assert "unique_tag" in chunk
+    assert "allow_search=False" in form
+    assert "visible_body=True" in form
+    assert "line_description if action" not in form
+
+
+def test_create_preview_rejects_missing_product_name() -> None:
+    """Official invoiceLines.product is required. Create preview must name it."""
+
+    server, recorder, _ = make_server()
+
+    missing = _create_args()
+    del missing["product_name"]
+    with pytest.raises(ValidationError):
+        InvoiceCreatePreviewInput.model_validate(missing)
+    with pytest.raises(ValidationError):
+        InvoiceCreatePreviewInput.model_validate(_create_args(product_name=""))
+    try:
+        preview = call_tool(server, "ui_invoices_create_preview", missing)
+    except (ValidationError, FastMcpValidationError, TypeError, ValueError):
+        preview = {"code": StableErrorCode.VALIDATION_ERROR}
+    assert preview.get("code") == StableErrorCode.VALIDATION_ERROR
+    assert recorder.submissions == []
+    assert not preview.get("confirmation_ticket")
+
+
+def test_bind_existing_product_requires_exact_tag() -> None:
+    """Missing Vælg produkt or a first-option pick is not a bind."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def _bind_existing_product")
+    body = bind[start:]
+    assert "product_name" in body
+    assert "return None" not in body.split("async def ", 1)[0]
+    assert "first" not in body or "Opret ny" in body
+    assert "exact" in body or "unique_tag" in body or "product_name" in body
+    assert body.split("return ", 1)[0]
+    assert "UI_CHANGED" in body
+    assert "Opret ny" in body
+    assert "options.nth" not in body
+
+
+def test_live_invoice_cud_seeds_product_before_preview() -> None:
+    """Create and confirm a tagged product before invoice preview. Delete it after."""
+
+    source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
+    start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
+    end = source.index("\nasync def ", start + 1)
+    body = source[start:end]
+    product_preview = body.index("ui_products_create_preview")
+    product_execute = body.index("ui_products_create_execute")
+    product_confirm = body.index('await _list_has_name(observer, slug, "products", product_tag)')
+    invoice_preview = body.index("ui_invoices_create_preview")
+    product_delete = body.index("ui_products_delete_preview")
+    invoice_delete = body.index("ui_invoices_delete_preview")
+    assert product_preview < product_execute < product_confirm < invoice_preview
+    assert invoice_delete < product_delete
+    assert "product_name" in body[invoice_preview : invoice_preview + 400]
+    assert "MCP-UI-PRD-" in body
 
 
 def test_bind_kunde_clicks_chevron_before_type() -> None:

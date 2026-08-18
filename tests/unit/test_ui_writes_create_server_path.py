@@ -35,6 +35,7 @@ def _preview_cases(upload_file: Path) -> list[tuple[str, dict[str, object]]]:
             {
                 "contact_name": "MCP-UI-INV-GATE",
                 "line_description": "MCP-UI-INV line",
+                "product_name": "MCP-UI-PRD-GATE",
                 "unit_price": 1.0,
                 "action": "draft_create",
                 "save_cta": UI_DRAFT_SAVE_CTA,

@@ -100,6 +100,7 @@ def test_invoices_create_execute_uses_route_fields_cta_and_readback(
         {
             "contact_name": "MCP-UI-INV-ACT",
             "line_description": "MCP-UI-INV line",
+            "product_name": "MCP-UI-PRD-ACT",
             "unit_price": 1.0,
             "action": "draft_create",
             "save_cta": DRAFT_SAVE_CTA,

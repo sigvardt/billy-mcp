@@ -43,20 +43,25 @@ sources:
   - radio:56354201
   - radio:C6DA7FC8
   - radio:BF91E28F
+  - radio:65521475
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T18:54:22Z
+updated: 2026-08-18T20:29:32Z
 ---
 
 ## Binding now
 
-`BF91E28F` (saved, P10): persist is proved. Seven leftover
-tagged products are visible on `/products`. Each name is in
-its own `data-cy=table-item` (first row y=201, h=80). Page-wide
-`delete-icon`.first is unrelated chrome at x=20,y=0. Delete
-must scope to the tagged table-item after revealing row
-actions, then **Ja, slet**. Clean all seven in reverse
-creation order and prove **Ingen produkter** before invoice
-CUD. Do not stop. Do not ask the owner.
+`65521475` (done, unsaved, P10): leftover cleanup is finished.
+`MCP-UI-PRD-8CA457EE` and `MCP-UI-PRD-EA28FA6B` were deleted
+through scoped table-item delete. A third fresh `/products`
+session shows **Ingen produkter**. Do not remake leftover
+cleanup. Next family is invoice draft CUD.
+
+`BF91E28F` (saved, P10): persist is proved. Delete must scope
+to the exact tagged `data-cy=table-item` after revealing row
+actions, then **Ja, slet**. Page-wide `delete-icon`.first is
+unrelated chrome at x=20,y=0. Never use it. The seven leftover
+tags named in this message are gone. Keep the scoped-delete
+rule for any later disposable product.
 
 `C6DA7FC8` (saved, P10): B777AA82 is our session/search miss,
 not Billy persist. Owner sequence on the authenticated browser:
@@ -71,8 +76,7 @@ after Gem require the visible modal to close or capture visible
 validation; then hard-navigate a fresh `/products` page and read
 the unfiltered list before any search. Hidden Ember dialog nodes
 are not failure. Do not call independent `NOT_FOUND` Billy
-behavior while this sequence works. Next persist slice: unfiltered
-`/products` read-back, no search first.
+behavior while this sequence works.
 
 `56354201` (saved, P10): product create and hard-delete work in
 the live UI. Owner created `Codex UI Product Probe 20260818T1741Z`
@@ -84,11 +88,11 @@ returned to **Ingen produkter**. Do not treat product as
 `67CBACB6`. FastMCP product actors must compare the live URL
 slug to the ticket organisation before fill or click. A
 still-visible create dialog after **Gem produkt** is
-`UI_CHANGED`, not persist. Live independent list read-back
-after Gem is still `NOT_FOUND`. Persist is not proved. Next:
-prove persist, then delete, then invoice draft CUD with a
-disposable customer + product + positive price. Cleanup invoice,
-product, customer. Prove empty. Do not ask Joakim.
+`UI_CHANGED`, not persist. Live FastMCP product create persist
+and scoped table-item delete are proved. Next is invoice draft
+CUD with a disposable customer + product + positive price.
+Cleanup invoice, product, customer. Prove empty. Do not ask
+Joakim.
 
 `1F1B34F8` (saved, P9): persist 422 is invalid zero-value fixture
 data after the proved Kunde bind, not a Billy UI blocker. Keep the
