@@ -7,7 +7,7 @@ sources:
   - wiki/ui_products_create_open_shell.md
   - wiki/ui_products_get_update_delete_not_applicable.md
 created: 2026-08-16T14:31:10Z
-updated: 2026-08-18T04:32:00Z
+updated: 2026-08-18T12:30:00Z
 ---
 
 # ui_products_writes
@@ -66,6 +66,17 @@ count is 1. Exact **Gem** count is 0. Exact **Arkiveret (skjul
 fra lister)** count is 1. Dialog heading is `opret_produkt`.
 Archive hides from lists (`isArchived`). It is not **Slet**.
 Do not remake this dump. Do not click **Gem produkt**.
+
+Archive-list dump
+`~/.local/share/billy-mcp/inspect-live-products-archive-list.json`
+classifies `/:org_slug/products` as `products_path_class=products`,
+`products_heading_token=produkter`, `search_control_visible=false`,
+exact **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede**
+counts 0, `archived_filter_token=none`,
+`unique_restore_readback=none`, `proved_bind=none`. No product
+created. Do not remake this dump. Do not click those labels. Persist
+stays fail-closed. `67CBACB6` stays open: archive-until-absent still
+cannot be independently read back from list chrome.
 
 Do not click **Gem** or **Gem produkt** in inspect tests.
 `BrowserProductSubmitter` fail-closes when

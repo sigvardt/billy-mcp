@@ -10,7 +10,7 @@ updated: 2026-08-18T10:05:00Z
 ## Open
 
 - Invoice draft CUD is mandatory (`FD39FFE7`) and still unbound. Create-form derivation from closed probes is `unique_normal_action=false`, `next_slice=product_create`, `UI_CHANGED`. `113F1E05` forbids another entry-CTA dump. Stay red. Never send, approve, or email.
-- Product create is mandatory (`FD39FFE7`). Official dialog proved **Gem produkt** and **Arkiveret**. Persist stays fail-closed until the owner answers whether archive-until-absent counts as restored state. Stay red. Do not remake form-contract or delete-chrome. Do not leave an uncleanable product.
+- Product create is mandatory (`FD39FFE7`). Official dialog proved **Gem produkt** and **Arkiveret**. List archive-filter counts are 0 (`unique_restore_readback=none`). Persist stays fail-closed until the owner answers whether archive-until-absent counts as restored state. Stay red. Do not remake form-contract, delete-chrome, or archive-list. Do not leave an uncleanable product.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files and ledger after invoice and product.
 
 ## Done
@@ -55,3 +55,4 @@ updated: 2026-08-18T10:05:00Z
 - Scoped post-validation dump delivered. Contact input and pickerfield present. Two `validation` rows above the input. `unique_action=none`. `proved_bind=none`. Tagged customer deleted. Absence proved. Do not remake.
 - Official invoice-list **Opret faktura** landing delivered. Empty list, one button click, destination `invoices_new`, contact empty, `proved_bind=none`. Tagged customer deleted. Do not remake.
 - Official product dialog contract delivered. Live dump: `proved_submit=gem_produkt`, `unique_cleanup_path=archive_checkbox`. No product created. Persist fail-closed. Do not remake.
+- Product list archive-filter classify delivered. Live dump: named filter counts 0, `unique_restore_readback=none`. No product created. Do not remake.

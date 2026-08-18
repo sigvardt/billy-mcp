@@ -16,13 +16,21 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T11:30:00Z
+updated: 2026-08-18T12:14:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `5e634d2`. Stay red. Do not finish. No children are running.
+HEAD is `b56ee43`. Stay red. Do not finish. No children are running.
+
+Product list archive chrome is classified. Dump
+`inspect-live-products-archive-list.json`:
+`products_path_class=products`, heading `produkter`,
+`search_control_visible=false`, named archive-filter counts 0,
+`unique_restore_readback=none`, `proved_bind=none`. No product
+created. Do not remake this dump. Persist stays fail-closed.
+`67CBACB6` stays open.
 
 Official product create dialog is classified on the live
 Lagermodul form. `inventory_path_class=inventory`.

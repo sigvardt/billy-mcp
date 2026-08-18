@@ -91,7 +91,7 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `113F1E05` (saved, P10, supersedes Tilgodehavender CTA dump): stop enumerating alternate **Opret faktura** entry CTAs. Those entries reach the same empty create form. Do not execute or commit another route-entry diagnostic on assumption. Inspect the loaded create-form customer control locally (scoped DOM/AX plus page-local frontend source or component evidence, no live API). Derive one exact normal existing-customer interaction. Failing fixture first. Then FastMCP draft CUD if that interaction exists. If none, record `UI_CHANGED` and move to product create. Do not accumulate more diagnostic helpers. Stay red. Do not stop the root.
 
-`67CBACB6` (open, sent to parent): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Persist stays fail-closed. Ask whether archive-until-absent counts as restored state. Do not remake the form-contract dump. Do not treat product create as done.
+`67CBACB6` (open, sent to parent): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Product list archive-filter dump proved **Vis arkiverede** / **Arkiverede** / **Skjul arkiverede** counts 0 and `unique_restore_readback=none`. Persist stays fail-closed. Ask whether archive-until-absent counts as restored state even with no list filter. Do not remake the form-contract or archive-list dumps. Do not treat product create as done.
 
 `EE0A0F1B` (in force, not saved): durable TDD invariant is preview+execute twin, not "no ui_* preview/execute exist". Open-only status/tool can never green implemented/live/vision.
 
