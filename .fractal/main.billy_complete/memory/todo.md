@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T06:26:00Z
+updated: 2026-08-18T07:11:30Z
 ---
 
 ## Open
 
-- Invoice draft CUD is mandatory (`FD39FFE7`). Stay red. Find a real existing-customer bind by a new evidence-backed path. Do not remake closed picker probes. Never send, approve, or email.
+- Invoice draft CUD is mandatory (`FD39FFE7`). Stay red. Official **Vælg kunde** is the contact-input placeholder (`hit_is_contact_input=true`). Do not remake that rest dump or the closed picker set. Need a different unused normal-interface path, or an owner decision. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`). Stay red. Prove a normal create submit and a UI cleanup path before persist. Do not remake delete-chrome. Do not leave an uncleanable product.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files and ledger after invoice and product.
 

@@ -16,34 +16,39 @@ sources:
   - radio:23709235
   - radio:FD39FFE7
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T06:58:00Z
+updated: 2026-08-18T07:11:30Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is this commit. Stay red. Do not finish.
+HEAD is `d223c37`. Stay red. Do not finish. No children are running.
 
-`FD39FFE7` is binding. Invoice draft CUD and product create stay
-mandatory. They are not finished as `UI_CHANGED`. After this
-organization remap is reviewed and committed, work invoice first,
-then product, before files or ledger. Honesty 16 stay red. Never
-call the API. Do not remake the closed picker or delete-chrome
-probes. Do not guess selectors. Do not force or evaluate clicks.
+`FD39FFE7` is the next binding. Invoice draft CUD first, then product
+create, then files or ledger. Both stay mandatory and red. They are
+not finished as `UI_CHANGED`. Official first-invoice support names
+**Vælg kunde** then **Opret ny**. Live rest dump: button 0, link 0,
+other 0, `hit_is_contact_input=true`, no click, `proved_bind=none`,
+`UI_CHANGED`. Those words are the contact-input placeholder, not a
+separate named control. Do not remake that rest dump. Do not remake
+the closed picker set. Invoice CUD stays red and is not finished.
+Honesty 16 stay red. Never call the API. Do not guess selectors.
+Do not force or evaluate clicks. If that path cannot bind, ask the
+owner. Do not freeze either as done.
+
+`23709235` organization remap is committed. Live FastMCP tagged set
+plus exact empty restore passed. Independent review accepted
+`run_id=0937a009bf7e496ca2ce15a8af313868`. Frames purged.
+`ui.parity.organizations.update` names
+`ui_organizations_update_preview`. Honesty 16 stay red. Do not
+remake the phone dump.
 
 `D326FFB3` product delete-chrome recapture is closed and unsaved.
 `proved_delete_path=none`. Do not remake that dump. `FD39FFE7`
 keeps product create mandatory and red. Do not treat the closed
 probe as a finished product. Do not create an uncleanable product.
 
-`AD8966F2` phone dump is delivered. Do not remake that dump.
-
-`23709235` empty-phone contract is implemented. Live FastMCP
-tagged set plus exact empty restore passed. Independent review
-accepted `run_id=0937a009bf7e496ca2ce15a8af313868`. Frames purged.
-`ui.parity.organizations.update` names
-`ui_organizations_update_preview`. Honesty 16 stay red. Do not
-remake the phone dump. Ledger is after invoice and product.
+`AD8966F2` phone dump is delivered and unsaved. Do not remake that dump.
 
 `C0721A14` customer-detail **Opret faktura** inspect is delivered
 and closed on `5fa106c`. Path `contacts_customer`. Tagged name
@@ -101,7 +106,8 @@ instrumented post-click dump (`07600147`), the descendant map
 (`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
 the listener contract (`28C8FBC8`), the structure compare, and
 the customer-detail **Opret faktura** inspect (`C0721A14`),
-and the product delete-chrome recapture (`D326FFB3`).
+the product delete-chrome recapture (`D326FFB3`), and the
+**Vælg kunde** named-control rest dump (`hit_is_contact_input=true`).
 Do not type. Do not recapture routes. Do not force or evaluate clicks.
 Do not sweep portals. Do not send a second diagnostic click.
 Do not remake the descendant map. Do not remake the Ember inspect.
@@ -157,7 +163,9 @@ leftover Leverandør slice is closed.
 
 ## Children
 
-Merged with `--no-ff` and parked:
+Parent `main` is already in this branch. No new parent commits.
+
+Merged with `--no-ff` and parked. No new child commits:
 
 - `ui_contacts_writes`
 - `ui_bills_writes`
@@ -167,8 +175,8 @@ Merged with `--no-ff` and parked:
 - `ui_files_writes`
 - `ui_org_writes` (company fields only; fail-closed on users or tokens)
 
-No children are running. Old wave or review descendants stay retired and
-unmerged.
+No children are running. 157 old wave or review descendants stay retired
+and unmerged. Do not continue, reset, or merge them.
 
 Coverage stays red until remaining honesty families prove live FastMCP
 CUD with independent review. Node complete stays false.

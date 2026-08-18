@@ -7,7 +7,7 @@ sources:
   - wiki/ui_write_ticket_protocol.md
   - radio:96908DC6
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T03:30:00Z
+updated: 2026-08-18T07:30:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -344,6 +344,27 @@ proved. Live recapture: path `contacts_customer`, tagged name visible,
 no click, `proved_prebind=none`, `UI_CHANGED`. Customer deleted.
 Absence proved. This alternative route is closed. Do not start another
 identity-only inspector.
+
+## Vælg kunde named control
+
+Official first-invoice support says click **Vælg kunde**, then **Opret
+ny**. Helper: `src/billy_mcp/ui_writes/invoices_vaelg_kunde.py`. Owner
+dump:
+`~/.local/share/billy-mcp/inspect-live-invoices-vaelg-kunde.json`.
+Open `/:org_slug/invoices/new` through FastMCP
+`ui_invoices_create_open`. Persist only button/link/other counts,
+`unique_vaelg_kunde`, `hit_is_contact_input`, `clicked`,
+`opret_ny_count`, `option_role_count`, `proved_bind`, and
+`missing_keys`. Never persist ids, URLs, or names. Click only when
+exactly one named control exists and it is not the contact `INPUT`.
+`proved_bind` is `vaelg_kunde_existing_option` only after that click
+picks a FastMCP-created existing customer. Else `UI_CHANGED`. Live
+recapture: button 0, link 0, other 0, `hit_is_contact_input=true`,
+`unique_vaelg_kunde=false`, no click, `proved_bind=none`,
+`UI_CHANGED`. Official **Vælg kunde** is the input placeholder, not a
+separate named control. Do not remake this rest dump. Do not fall
+back to closed picker probes. Invoice CUD stays red and is not
+finished.
 
 ## Live proof
 
