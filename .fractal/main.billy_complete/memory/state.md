@@ -12,28 +12,36 @@ sources:
   - radio:28C8FBC8
   - radio:C0721A14
   - radio:D326FFB3
+  - radio:AD8966F2
+  - radio:23709235
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T04:02:00Z
+updated: 2026-08-18T05:22:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `5fa106c`. Stay red. Do not finish.
+HEAD is this commit. Stay red. Do not finish.
 
 Invoice CUD is frozen `UI_CHANGED` for this Billy interface version.
 Honesty 16 stay red. Never call the API. Do not remake invoice picker
 diagnostics or alternate invoice routes unless a genuinely new UI
 signal appears. Do not alter invoice coverage.
 
-`D326FFB3` product delete-chrome recapture is closed.
+`D326FFB3` product delete-chrome recapture is closed and unsaved.
 `proved_delete_path=none`. `UI_CHANGED`. No product created.
-Do not remake that dump. Do not Gem.
+Products create is frozen `UI_CHANGED`. Do not remake that dump.
+Do not Gem. Do not create an uncleanable product.
 
-`AD8966F2` binds after this commit. Freeze `products.create` as
-`UI_CHANGED`. Next family is `ui.parity.organizations.update`.
-Company phone only. Restore the original value. Stay red.
-Ledger last.
+`AD8966F2` phone dump is delivered. `proved_phone_only=true`.
+`phone_value_len=0`. No **Gem ændringer**. No company field
+changed. Do not remake that dump.
+
+`23709235` binds after this commit. Empty original is a reversible
+clear, not a freeze. Next: failing fixture that preview can bind
+exact empty phone, then smallest contract repair, then FastMCP
+tagged set plus exact empty restore. Read-back is
+`input[name=phone]`, not page text. Stay red. Ledger last.
 
 `C0721A14` customer-detail **Opret faktura** inspect is delivered
 and closed on `5fa106c`. Path `contacts_customer`. Tagged name

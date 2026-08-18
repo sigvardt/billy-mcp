@@ -4,14 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T04:32:00Z
+updated: 2026-08-18T04:46:00Z
 ---
 
 ## Open
 
 - Invoice CUD is frozen `UI_CHANGED`. Do not remake invoice inspects. Do not alter invoice coverage.
-- Products create is frozen `UI_CHANGED` (`AD8966F2`). Delete-chrome dump is closed. Do not remake. Do not create an uncleanable product.
-- Next after this commit: `ui.parity.organizations.update`. Company phone only. Restore the original value. TDD first. Ledger last.
+- Products create is frozen `UI_CHANGED`. Delete-chrome dump is closed. Do not remake. Do not create an uncleanable product.
+- Organizations update dump is closed. Do not remake. `23709235`: allow exact empty phone as a deliberate clear, then FastMCP tagged set plus empty restore. Keep the coverage row red. Ledger last.
 - After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs.
 
 ## Done
