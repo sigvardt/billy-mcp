@@ -17,17 +17,22 @@ sources:
   - radio:FD39FFE7
   - radio:A337A622
   - radio:113F1E05
+  - radio:D68E402A
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T13:42:00Z
+updated: 2026-08-18T14:30:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `6180222`. Stay red. Do not finish. No children are running.
-`D68E402A` stops further classify dumps. Next is a residual table
-from existing evidence, then one actionable FastMCP write or one
-owner decision.
+HEAD is `a5dcdca`. Stay red. Do not finish. No children are running.
+`D68E402A` residual table is in `wiki/ui_write_residual_table.md`.
+Honesty-16 is the only remaining red owner-scope write set.
+Actionable now: none. Contacts, bills, and organizations are
+already live-proved. Invoice, product, files, and daybooks lack a
+unique control or cleanup. One consolidated owner decision `D02702C5` is in the parent
+inbox and unanswered. Independent review passed. Lint and
+commit-mode tests passed. No more classify dumps.
 
 Daybook create-contract dump is delivered:
 `inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.

@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-18T06:27:43Z
+updated: 2026-08-18T14:31:07Z
 ---
 
 # billy_mcp
@@ -196,6 +196,8 @@ updated: 2026-08-18T06:27:43Z
 [[ui_uploads_list_shell|ui_uploads_list_shell]]: Read-only headless ui_uploads_list Bilag shell; dual-counts special.files_upload, attachments.list, and files.create open only.
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
+
+[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table from existing evidence. No actionable write remains.
 
 [[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
 
