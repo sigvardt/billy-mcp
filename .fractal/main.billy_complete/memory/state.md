@@ -21,30 +21,34 @@ sources:
   - radio:EC676F84
   - radio:802D71CF
   - radio:9310BC17
+  - radio:1F1B34F8
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T15:54:00Z
+updated: 2026-08-18T16:53:30Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `28de432` plus uncommitted 198.36 bind and residual
-fixes, tracking `origin/main.billy_complete`.
+HEAD is `9bbf15a` plus uncommitted priced-line work,
+tracking `origin/main.billy_complete`.
 Stay red. Do not finish. No children are running.
-Continue iteration 36. `9310BC17` still binds: Kunde shows an
-existing customer on a fresh `/invoices/new` after the customer
-exists. `UI_CHANGED` is a stale invoice page. Research brief
-`.fractal/main.billy_complete/tmp/grok-research.md` named the
-slice. Official docs ETag still `"121myuqjdm53603"`; do not
-re-lock. EXECUTE 198.36: new page plus
+Continue from the committed Kunde bind. `9310BC17` still binds:
+Kunde shows an existing customer on a fresh `/invoices/new`
+after the customer exists. `UI_CHANGED` was a stale invoice
+page. Official docs ETag still `"121myuqjdm53603"`; do not
+re-lock. Live FastMCP: new page plus
 `[data-cy='dropdown-icon']` binds the tagged customer
 (`vendor_bind=scoped:existing_option`, GET with `contactId`).
-**Gem som kladde** then `POST /v2/invoices` **422** with
-`grossAmount=0`. Independent review FAIL. Residual intro now
-matches that persist fact. Exact-tag pick is unique-only.
-Do not remake picker dumps. Do not green. Next persist slice
-needs a proved line Billy accepts. Honesty-16 stay red.
-Product, daybook, and files still wait.
+**Gem som kladde** after the priced fill sent GET
+`grossAmount=1` (price landed) then opened **Vælg produkt**.
+No existing product option. Execute returned `UI_CHANGED`.
+**Opret ny** was not clicked. That is `67CBACB6` overlap, not
+another Kunde dump. Create preview requires `unit_price > 0`.
+Honesty-16 stay red. Owner `56354201` now proves product create
+and hard-delete. Do not stop on `67CBACB6`. After this commit:
+product FastMCP CUD, then invoice CUD with a disposable product.
+Do not remake picker dumps. Do not green. Daybook and files
+still wait.
 
 Daybook create-contract dump is delivered:
 `inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.

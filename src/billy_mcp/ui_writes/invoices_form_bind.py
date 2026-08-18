@@ -55,6 +55,16 @@ LINE_SELECTORS = (
     "textarea[name='description']",
     "input[name='description']",
 )
+UNIT_PRICE_LABELS = ("Enhedspris", "Unit price")
+QUANTITY_LABELS = ("Antal", "Quantity")
+UNIT_PRICE_SELECTORS = (
+    "input[name='invoiceLines.0.unitPrice']",
+    "input[name='unitPrice']",
+)
+QUANTITY_SELECTORS = (
+    "input[name='invoiceLines.0.quantity']",
+    "input[name='quantity']",
+)
 
 
 async def capture_kunde_chevron_hit_dump(page: Page, unique_tag: str) -> dict[str, object]:
@@ -831,7 +841,60 @@ async def _click_exact_visible_tag(page: Page, unique_tag: str) -> bool:
 async def fill_line(page: Page, value: str) -> str | None:
     """Fill the first visible invoice line description."""
 
-    for selector in LINE_SELECTORS:
+    return await _fill_first_visible(page, LINE_SELECTORS, value)
+
+
+async def fill_priced_line(page: Page, description: str, unit_price: float) -> ToolError | None:
+    """Fill description, Antal, and Enhedspris. Never create a product."""
+
+    if unit_price <= 0:
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice draft line requires a positive unit price.",
+        )
+    if await fill_line(page, description) is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice line description field is not visible.",
+        )
+    quantity = await _fill_labeled(page, QUANTITY_LABELS, "1")
+    if quantity is None:
+        await _fill_first_visible(page, QUANTITY_SELECTORS, "1")
+    price_text = _price_text(unit_price)
+    filled = await _fill_labeled(page, UNIT_PRICE_LABELS, price_text)
+    if filled is None:
+        filled = await _fill_first_visible(page, UNIT_PRICE_SELECTORS, price_text)
+    if filled is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice unit price field is not visible.",
+        )
+    return await _bind_existing_product(page)
+
+
+def _price_text(unit_price: float) -> str:
+    if unit_price == int(unit_price):
+        return str(int(unit_price))
+    return str(unit_price).replace(".", ",")
+
+
+async def _fill_labeled(page: Page, labels: tuple[str, ...], value: str) -> str | None:
+    for label in labels:
+        field = page.get_by_label(label, exact=True)
+        if await field.count() < 1:
+            field = page.get_by_label(label)
+        if await field.count() < 1:
+            continue
+        target = field.first
+        if not await target.is_visible():
+            continue
+        await target.fill(value)
+        return value
+    return None
+
+
+async def _fill_first_visible(page: Page, selectors: tuple[str, ...], value: str) -> str | None:
+    for selector in selectors:
         field = page.locator(selector)
         if await field.count() < 1:
             continue
@@ -841,3 +904,45 @@ async def fill_line(page: Page, value: str) -> str | None:
         await target.fill(value)
         return value
     return None
+
+
+async def _bind_existing_product(page: Page) -> ToolError | None:
+    """Open Vælg produkt and pick one existing option. Never Opret ny."""
+
+    field = page.get_by_role("textbox", name="Vælg produkt")
+    if await field.count() < 1 or not await field.first.is_visible():
+        return None
+    picker = page.locator(".pickerfield").filter(has=field)
+    icon = picker.locator("[data-cy='dropdown-icon']")
+    if await icon.count() >= 1 and await icon.first.is_visible():
+        box = await icon.first.bounding_box()
+        if box is not None:
+            await page.mouse.click(
+                box["x"] + box["width"] / 2,
+                box["y"] + box["height"] / 2,
+            )
+        else:
+            await icon.first.click(timeout=5000)
+        await asyncio.sleep(0.5)
+    for _ in range(16):
+        if await _pick_visible_existing_product(page):
+            return None
+        await asyncio.sleep(0.25)
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy invoice product existing option is not visible.",
+    )
+
+
+async def _pick_visible_existing_product(page: Page) -> bool:
+    options = page.get_by_role("option")
+    for index in range(min(await options.count(), 9)):
+        node = options.nth(index)
+        if not await node.is_visible():
+            continue
+        text = (await node.inner_text()).strip()
+        if not text or text == "Opret ny" or text.startswith("Opret "):
+            continue
+        await node.click()
+        return True
+    return False

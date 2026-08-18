@@ -8,7 +8,7 @@ from urllib.parse import urlsplit
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.invoices_form_bind import bind_kunde, fill_line
+from billy_mcp.ui_writes.invoices_form_bind import bind_kunde, fill_priced_line
 from billy_mcp.ui_writes.invoices_form_page import (
     CONFIRM_DELETE,
     DELETE,
@@ -37,6 +37,7 @@ async def submit_draft_invoice(
     unique_tag: str,
     contact_name: str,
     line_description: str,
+    unit_price: float,
     organization_id: str,
     invoice_id: str,
     readback_runtime: BrowserRuntime,
@@ -78,6 +79,7 @@ async def submit_draft_invoice(
             action=action,
             contact_name=contact_name,
             line_description=line_description,
+            unit_price=unit_price,
             invoice_id=invoice_id,
         )
         if failed is not None:
@@ -108,13 +110,14 @@ async def _run_action(
     action: str,
     contact_name: str,
     line_description: str,
+    unit_price: float,
     invoice_id: str,
 ) -> ToolError | None:
     match action:
         case "create":
-            return await _create_draft(page, slug, contact_name, line_description)
+            return await _create_draft(page, slug, contact_name, line_description, unit_price)
         case "update":
-            return await _update_draft(page, slug, invoice_id, line_description)
+            return await _update_draft(page, slug, invoice_id, line_description, unit_price)
         case "delete":
             return await _delete_draft(page, slug, invoice_id)
         case unreachable:
@@ -126,7 +129,7 @@ async def _run_action(
 
 
 async def _create_draft(
-    page: Page, slug: str, contact_name: str, line_description: str
+    page: Page, slug: str, contact_name: str, line_description: str, unit_price: float
 ) -> ToolError | None:
     await page.goto(f"{BILLY_ORIGIN}/{slug}/invoices/new", wait_until="domcontentloaded")
     try:
@@ -136,11 +139,9 @@ async def _create_draft(
     bind = await bind_kunde(page, contact_name)
     if isinstance(bind, ToolError):
         return bind
-    if await fill_line(page, line_description) is None:
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy invoice line description field is not visible.",
-        )
+    priced = await fill_priced_line(page, line_description, unit_price)
+    if isinstance(priced, ToolError):
+        return priced
     write_json(
         CREATE_PRE_SUBMIT_DUMP,
         {
@@ -148,6 +149,7 @@ async def _create_draft(
             "unique_tag": contact_name,
             "customer": contact_name,
             "line_description": line_description,
+            "unit_price": unit_price,
             "draft_cta": DRAFT_SAVE,
             "vendor_bind": bind,
         },
@@ -165,17 +167,15 @@ async def _create_draft(
 
 
 async def _update_draft(
-    page: Page, slug: str, invoice_id: str, line_description: str
+    page: Page, slug: str, invoice_id: str, line_description: str, unit_price: float
 ) -> ToolError | None:
     await page.goto(
         f"{BILLY_ORIGIN}/{slug}/invoices/{invoice_id}/edit",
         wait_until="domcontentloaded",
     )
-    if await fill_line(page, line_description) is None:
-        return ToolError(
-            code=StableErrorCode.UI_CHANGED,
-            message="Billy invoice line description field is not visible.",
-        )
+    priced = await fill_priced_line(page, line_description, unit_price)
+    if isinstance(priced, ToolError):
+        return priced
     cta = UPDATE_SAVE if await visible_button(page, UPDATE_SAVE) else DRAFT_SAVE
     seen: list[str] = []
 

@@ -10,6 +10,7 @@ from typing import Literal, cast
 
 import pytest
 from fastmcp import FastMCP
+from fastmcp.exceptions import ValidationError as FastMcpValidationError
 from pydantic import JsonValue, ValidationError
 
 from billy_mcp.confirmations import MAX_TICKET_TTL, ConfirmationBinding, ConfirmationStore
@@ -93,6 +94,7 @@ def _create_args(**overrides: object) -> dict[str, object]:
     payload: dict[str, object] = {
         "contact_name": "MCP-UI-INV-acme",
         "line_description": "MCP-UI-INV line",
+        "unit_price": 1.0,
         "action": "draft_create",
         "save_cta": DRAFT_SAVE_CTA,
         "organization_id": "org-test",
@@ -117,6 +119,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         "ui_invoices_create_preview": {
             "contact_name",
             "line_description",
+            "unit_price",
             "action",
             "save_cta",
             "organization_id",
@@ -125,6 +128,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         "ui_invoices_update_preview": {
             "id",
             "line_description",
+            "unit_price",
             "action",
             "save_cta",
             "organization_id",
@@ -218,6 +222,40 @@ def test_outer_inputs_forbid_extra_fields_and_empty_ids(
         input_model.model_validate(payload)
 
 
+def test_create_preview_rejects_unpriced_line() -> None:
+    """Owner 1F1B34F8: draft create must reject a missing or non-positive unit price."""
+
+    server, recorder, _ = make_server()
+
+    unpriced = _create_args()
+    del unpriced["unit_price"]
+    with pytest.raises(ValidationError):
+        InvoiceCreatePreviewInput.model_validate(unpriced)
+    with pytest.raises(ValidationError):
+        InvoiceCreatePreviewInput.model_validate(_create_args(unit_price=0))
+    with pytest.raises(ValidationError):
+        InvoiceCreatePreviewInput.model_validate(_create_args(unit_price=-1))
+    with pytest.raises(ValidationError):
+        InvoiceUpdatePreviewInput.model_validate(
+            {
+                "id": "inv-1",
+                "line_description": "line",
+                "action": "draft_update",
+                "save_cta": DRAFT_SAVE_CTA,
+                "organization_id": "org-test",
+                "unit_price": 0,
+            }
+        )
+
+    try:
+        missing = call_tool(server, "ui_invoices_create_preview", unpriced)
+    except (ValidationError, FastMcpValidationError, TypeError, ValueError):
+        missing = {"code": StableErrorCode.VALIDATION_ERROR}
+    assert missing.get("code") == StableErrorCode.VALIDATION_ERROR
+    assert recorder.submissions == []
+    assert not missing.get("confirmation_ticket")
+
+
 def test_preview_does_not_submit() -> None:
     server, recorder, _ = make_server()
 
@@ -230,6 +268,7 @@ def test_preview_does_not_submit() -> None:
         "save_cta": DRAFT_SAVE_CTA,
         "contact_name": "MCP-UI-INV-acme",
         "line_description": "MCP-UI-INV line",
+        "unit_price": 1.0,
         "organization_id": "org-test",
     }
     assert recorder.submissions == []
@@ -303,6 +342,7 @@ def test_wrong_tool_mismatch_then_same_ticket_can_expire() -> None:
             {
                 "id": "inv-1",
                 "line_description": "line",
+                "unit_price": 1.0,
                 "action": "send",
                 "save_cta": "Godkend og send",
                 "organization_id": "org-test",
@@ -357,6 +397,7 @@ def test_update_and_delete_draft_execute_once() -> None:
         {
             "id": "inv-1",
             "line_description": "MCP-UI-INV line",
+            "unit_price": 1.0,
             "action": "draft_update",
             "save_cta": DRAFT_SAVE_CTA,
             "organization_id": "org-test",
@@ -521,6 +562,23 @@ def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
     assert create_idx < submitted_idx < confirm_idx < invoice_idx
     assert "asyncio.sleep(2)" not in body[create_idx:invoice_idx]
     assert "independent clients list did not show" in body
+
+
+def test_priced_line_fill_uses_enhedspris_label() -> None:
+    """Owner 1F1B34F8: fill Enhedspris after bind. Never Opret ny product."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    assert "async def fill_priced_line" in bind
+    assert "Enhedspris" in bind
+    assert "Antal" in bind
+    assert "Vælg produkt" in bind
+    start = bind.index("async def fill_priced_line")
+    assert "Opret ny" in bind[start:]
+    assert "fill_priced_line" in form
+    create = form[form.index("async def _create_draft") : form.index("async def _update_draft")]
+    assert "fill_priced_line" in create
+    assert "unit_price" in create
 
 
 def test_invoice_create_opens_new_page_before_bind() -> None:

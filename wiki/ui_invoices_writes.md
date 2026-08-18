@@ -27,9 +27,9 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 
 | Tool | Input | Effect |
 | --- | --- | --- |
-| `ui_invoices_create_preview` | `contact_name`, `line_description`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. |
+| `ui_invoices_create_preview` | `contact_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. |
 | `ui_invoices_create_execute` | `confirmation_ticket` | Consume ticket. Runtime submitter binds Kunde then clicks draft save. |
-| `ui_invoices_update_preview` | `id`, `line_description`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. |
+| `ui_invoices_update_preview` | `id`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. |
 | `ui_invoices_update_execute` | `confirmation_ticket` | Consume ticket. Clicks observed draft save or **Opdater**. |
 | `ui_invoices_delete_preview` | `id`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Slet`. |
 | `ui_invoices_delete_execute` | `confirmation_ticket` | Consume ticket. **Mere** then **Slet**, then **Ja, slet** if shown. |
@@ -47,7 +47,13 @@ customer first, then start a fresh session or hard-navigate `/invoices/new`
 before opening the chevron. `submit_draft_invoice` closes the bootstrap page
 and opens a new Playwright page before create bind. `bind_kunde` clicks `[data-cy='dropdown-icon']` in the contact
 `.pickerfield`, then picks the exact tag. `chevron_offset_from_box` is
-fallback. Type is last.
+fallback. Type is last. After bind, `fill_priced_line` writes
+**Evt. beskrivelse**, confirms **Antal** is 1, and fills **Enhedspris**
+from the ticket `unit_price`. Live GET then showed `grossAmount=1`.
+It opens **Vælg produkt** and picks an existing option only. It never
+clicks **Opret ny**. The dedicated org currently has no existing
+product option (`67CBACB6`). Preview rejects a missing or
+non-positive price (`1F1B34F8`).
 A preloaded invoice page is a stale-session bug, not a missing control. Do
 not ask Joakim to inspect routine UI.
 

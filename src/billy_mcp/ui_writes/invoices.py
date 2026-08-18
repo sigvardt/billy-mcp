@@ -42,6 +42,7 @@ class InvoiceCreatePreviewInput(BaseModel):
 
     contact_name: str = Field(min_length=1)
     line_description: str = Field(min_length=1)
+    unit_price: float = Field(gt=0)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
     organization_id: str = Field(min_length=1)
@@ -54,6 +55,7 @@ class InvoiceUpdatePreviewInput(BaseModel):
 
     id: str = Field(min_length=1)
     line_description: str = Field(min_length=1)
+    unit_price: float = Field(gt=0)
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
     organization_id: str = Field(min_length=1)
@@ -132,6 +134,7 @@ class BrowserInvoiceSubmitter:
             unique_tag=str(request.get("contact_name") or request.get("line_description") or ""),
             contact_name=str(request.get("contact_name") or ""),
             line_description=str(request.get("line_description") or ""),
+            unit_price=_request_unit_price(request),
             organization_id=str(prepared.binding.organization_id or ""),
             invoice_id=str(request.get("id") or ""),
             readback_runtime=self._readback_runtime,
@@ -227,6 +230,7 @@ def register_ui_invoice_write_tools(
     def ui_invoices_create_preview(
         contact_name: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
+        unit_price: float = Field(gt=0),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
         organization_id: str = Field(min_length=1),
@@ -236,6 +240,7 @@ def register_ui_invoice_write_tools(
         payload = InvoiceCreatePreviewInput(
             contact_name=contact_name,
             line_description=line_description,
+            unit_price=unit_price,
             action=action,
             save_cta=save_cta,
             organization_id=organization_id,
@@ -263,6 +268,7 @@ def register_ui_invoice_write_tools(
     def ui_invoices_update_preview(
         id: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
+        unit_price: float = Field(gt=0),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
         organization_id: str = Field(min_length=1),
@@ -272,6 +278,7 @@ def register_ui_invoice_write_tools(
         payload = InvoiceUpdatePreviewInput(
             id=id,
             line_description=line_description,
+            unit_price=unit_price,
             action=action,
             save_cta=save_cta,
             organization_id=organization_id,
@@ -377,12 +384,26 @@ async def _execute(
     return submitted
 
 
+def _request_unit_price(request: dict[str, JsonValue]) -> float:
+    """Read a ticket-bound unit price. Non-numeric values are zero (rejected later)."""
+
+    raw = request.get("unit_price")
+    if isinstance(raw, bool):
+        return 0.0
+    if isinstance(raw, int):
+        return float(raw)
+    if isinstance(raw, float):
+        return raw
+    return 0.0
+
+
 def _create_request(payload: InvoiceCreatePreviewInput) -> dict[str, JsonValue]:
     request: dict[str, JsonValue] = {
         "action": payload.action,
         "save_cta": payload.save_cta,
         "contact_name": payload.contact_name,
         "line_description": payload.line_description,
+        "unit_price": payload.unit_price,
     }
     request["organization_id"] = payload.organization_id
     return request
@@ -394,6 +415,7 @@ def _update_request(payload: InvoiceUpdatePreviewInput) -> dict[str, JsonValue]:
         "save_cta": payload.save_cta,
         "id": payload.id,
         "line_description": payload.line_description,
+        "unit_price": payload.unit_price,
     }
     request["organization_id"] = payload.organization_id
     return request

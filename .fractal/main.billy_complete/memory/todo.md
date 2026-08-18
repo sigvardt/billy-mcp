@@ -4,13 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T15:35:00Z
+updated: 2026-08-18T16:53:30Z
 ---
 
 ## Open
 
-- `1F1B34F8`: after this commit, failing fixture that draft create rejects an unpriced line. Then fill **Antal**, **Enhedspris**, **Evt. beskrivelse**, and **Vælg produkt** with a uniquely tagged reversible positive-price line before **Gem som kladde**. Fresh-session read-back, update/delete, customer last. Inspect the live form if the minimum line is uncertain. Stay red.
-- Residual table invoice rows are `kunde_option_missing_after_proved_customer`. Product, daybook, and files still wait on `67CBACB6` / `D02702C5`. Do not add classify helpers.
+- `56354201`: after this commit, failing fixture then FastMCP product create/delete (`Opret produkt`, **Enhedspris**, row `delete-icon`, **Ja, slet**). Then invoice draft CUD with disposable customer + product + price. Cleanup invoice, product, customer. Do not stop on `67CBACB6`. Stay red.
+- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Invoice persist needs a disposable product from `56354201`, not archive-only. Stay red.
+- Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and fail-closed. Official dialog proved **Gem produkt** and **Arkiveret**. Both `/products` and `/inventory` named archive-filter counts are 0 (`unique_restore_readback=none`). `A337A622` forbids more product list, dialog, or archive probes. Persist stays fail-closed until the owner answers `67CBACB6`. Stay red. Do not remake form-contract, delete-chrome, or either archive dump. Do not leave an uncleanable product.
 - Daybook create persist is not unique (`opret_ny_kassekladde_count=1` and `indstillinger_count=1`). Helper dropped after review. Do not remake that dump. Do not arm `_ledger_write`. Stay red.

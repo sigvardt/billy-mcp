@@ -161,9 +161,15 @@ class FakeBillyPage:
         return None
 
     def get_by_role(
-        self, role: str, *, name: str | re.Pattern[str], exact: bool = False
+        self,
+        role: str,
+        *,
+        name: str | re.Pattern[str] | None = None,
+        exact: bool = False,
     ) -> FakeBillyLocator:
-        del role, exact
+        del exact
+        if name is None:
+            return FakeBillyLocator(self._session, f"role:{role}")
         if isinstance(name, re.Pattern):
             label = name.pattern.strip("^$").replace(r"\ ", " ")
         else:

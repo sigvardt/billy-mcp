@@ -40,11 +40,24 @@ sources:
   - radio:EC676F84
   - radio:9310BC17
   - radio:1F1B34F8
+  - radio:56354201
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T16:52:00Z
+updated: 2026-08-18T17:45:00Z
 ---
 
 ## Binding now
+
+`56354201` (saved, P10): product create and hard-delete work in
+the live UI. Owner created `Codex UI Product Probe 20260818T1741Z`
+via **Opret produkt** (name + **Enhedspris**=1), saw it on a
+fresh `/invoices/new` **Vælg produkt** chevron, then deleted it
+with row `data-cy=delete-icon` and **Ja, slet**. Products list
+returned to **Ingen produkter**. Do not treat product as
+`interface_control_absent` or archive-only. Do not stop on
+`67CBACB6`. Next: failing fixture first, then FastMCP product
+preview/execute plus exact delete, then invoice draft CUD with
+disposable customer + product + positive price. Cleanup invoice,
+product, customer. Prove empty. Do not ask Joakim.
 
 `1F1B34F8` (saved, P9): persist 422 is invalid zero-value fixture
 data after the proved Kunde bind, not a Billy UI blocker. Keep the

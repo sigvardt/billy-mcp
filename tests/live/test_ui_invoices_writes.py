@@ -292,6 +292,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             {
                 "contact_name": tag,
                 "line_description": line,
+                "unit_price": 1.0,
                 "action": "draft_create",
                 "save_cta": "Gem som kladde",
                 "organization_id": slug,
@@ -310,6 +311,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         assert create_dump["unique_tag"] == tag
         assert create_dump["customer"] == tag
         assert create_dump["line_description"] == line
+        assert create_dump["unit_price"] == 1.0
         assert create_dump["draft_cta"] == "Gem som kladde"
         assert create_dump["vendor_bind"] == "scoped:existing_option"
         persist = json.loads(CREATE_PERSIST_DUMP.read_text(encoding="utf-8"))
@@ -328,6 +330,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             {
                 "id": invoice_id,
                 "line_description": updated,
+                "unit_price": 1.0,
                 "action": "draft_update",
                 "save_cta": "Gem som kladde",
                 "organization_id": slug,

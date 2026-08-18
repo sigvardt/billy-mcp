@@ -1,6 +1,6 @@
 ---
 name: ui_write_residual_table
-desc: Residual honesty-16 UI write table. Invoice Kunde bind is proved. Draft persist is POST 422.
+desc: Residual honesty-16 UI write table. Invoice priced line is proved. Persist waits on an existing product.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
@@ -11,6 +11,7 @@ sources:
   - radio:67CBACB6
   - radio:EC676F84
   - radio:9310BC17
+  - radio:1F1B34F8
   - radio:802D71CF
   - wiki/ui_write_ticket_protocol.md
   - wiki/ui_contacts_writes.md
@@ -21,7 +22,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-18T16:40:00Z
+updated: 2026-08-18T17:35:00Z
 ---
 
 # ui_write_residual_table
@@ -38,9 +39,11 @@ FastMCP. Owner fact-check `9310BC17` is applied: a new
 `/invoices/new` plus `[data-cy='dropdown-icon']` binds an existing
 customer (`vendor_bind=scoped:existing_option`, GET with
 `contactId`). Invoice Kunde is not `interface_control_absent`.
-**Gem som kladde** then `POST /v2/invoices` **422** with
-`grossAmount=0`. Next is a proved line Billy accepts. Do not remake
-picker dumps. Do not ask the owner to inspect routine UI.
+Create preview now requires `unit_price > 0`. Live execute fills
+**Enhedspris** (GET `grossAmount=1`) then opens **Vælg produkt**.
+No existing product option. **Opret ny** was not clicked. Persist
+waits on `67CBACB6`. Do not remake picker dumps. Do not create a
+product. Do not ask the owner to inspect routine UI.
 
 `FD39FFE7` still makes invoice draft CUD and product create mandatory
 and red. They are not finished as `UI_CHANGED`.
@@ -49,7 +52,6 @@ and red. They are not finished as `UI_CHANGED`.
 
 - `already_live_proved_honesty_red`
 - `owner_decision_67CBACB6`
-- `stale_invoice_page_after_confirmed_customer`
 - `interface_control_absent_UI_CHANGED`
 - `high_impact_prohibited`
 
@@ -64,9 +66,9 @@ and red. They are not finished as `UI_CHANGED`.
 | `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist offline. Coverage still names `*_open` | Live FastMCP: new page plus `[data-cy='dropdown-icon']` binds `contactId`. **Gem som kladde** POSTs `/v2/invoices` **422**, `grossAmount=0`. Honesty stays red | Draft delete chrome exists. Invoice first, customer second | `stale_invoice_page_after_confirmed_customer` |
-| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Blocked on a tagged draft | Blocked on create | `stale_invoice_page_after_confirmed_customer` |
-| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | **Mere** then **Slet** on open chrome | Blocked on create | `stale_invoice_page_after_confirmed_customer` |
+| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist offline. Coverage still names `*_open` | Kunde bind proved. **Enhedspris** fill proved (`grossAmount=1`). **Vælg produkt** opened. No existing product option. **Opret ny** not clicked. Honesty stays red | Draft delete chrome exists. Invoice first, customer second | `owner_decision_67CBACB6` |
+| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Blocked on a tagged draft | Blocked on create | `owner_decision_67CBACB6` |
+| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | **Mere** then **Slet** on open chrome | Blocked on create | `owner_decision_67CBACB6` |
 | `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` | **Gem produkt** count 1. **Arkiveret** count 1 | **Slet** counts 0. Both list shells archive-filter counts 0. `unique_restore_readback=none` | `owner_decision_67CBACB6` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
@@ -80,12 +82,13 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 
 ## Owner questions
 
-1. Invoice (`9310BC17`, closed): Kunde works on a fresh
-   `/invoices/new` after the customer exists. Do not wait on
-   `802D71CF`. Do not ask the owner to inspect routine UI.
+1. Invoice (`9310BC17` / `1F1B34F8`, bind and price closed): Kunde
+   and **Enhedspris** work. Persist waits on an existing product
+   option (`67CBACB6`). Do not ask the owner to inspect routine UI.
 2. Product: answer `67CBACB6`. Does archive-until-absent count as
-   restored state, or must create stay unbound? `A337A622` forbids more
-   product list, dialog, or archive probes.
+   restored state, or must create stay unbound? The same answer
+   unblocks invoice persist. `A337A622` forbids more product list,
+   dialog, or archive probes.
 3. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
    `_ledger_write`.
 4. Files: accept fail-closed (no UI delete), or name a delete control
