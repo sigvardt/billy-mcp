@@ -66,6 +66,12 @@ updated: 2026-08-19T08:14:00Z
 
 ## Binding now
 
+`D71E5B82` (saved, P10): leftover reverse-clean may be a one-off.
+Do not commit a delete-only live test as invoice update
+qualification. Preserve `ui_invoices_update_preview` / execute
+and independent **Enhedspris** `2,00`. After settled zero,
+`ui-full` must pass with no `LEFTOVER_*` hard-fail.
+
 `01FCBA13` (saved, P10): settled `/invoices` still has 7 **Kladde**
 rows. Pairs: `47BFE4A3/C0082FCA`, `9FDD7B04/2A0968A4`,
 `8DA1053F/773A4D76`, `05D2C589/0116A3D1`,

@@ -47,22 +47,23 @@ _BLOCKER_PATH = (
 )
 _LEFTOVER_CONTACT_RE = re.compile(r"MCP-UI-INV-[0-9A-F]{8}")
 LEFTOVER_INVOICE_CONTACTS = (
-    "MCP-UI-INV-6CDB396B",
-    "MCP-UI-INV-F1784522",
-    "MCP-UI-INV-B05A4C85",
-    "MCP-UI-INV-A45B734E",
-    "MCP-UI-INV-2B8A4FA2",
-    "MCP-UI-INV-DD4158B1",
+    "MCP-UI-INV-47BFE4A3",
+    "MCP-UI-INV-9FDD7B04",
+    "MCP-UI-INV-8DA1053F",
+    "MCP-UI-INV-05D2C589",
+    "MCP-UI-INV-A9152C51",
+    "MCP-UI-INV-2574A9D2",
+    "MCP-UI-INV-2AB12C2E",
 )
 LEFTOVER_PRODUCTS = (
-    "MCP-UI-PRD-FB5F7474",
-    "MCP-UI-PRD-633E97EC",
-    "MCP-UI-PRD-86AB7365",
-    "MCP-UI-PRD-B4A4DD5A",
-    "MCP-UI-PRD-26720BD4",
-    "MCP-UI-PRD-05C906D9",
+    "MCP-UI-PRD-C0082FCA",
+    "MCP-UI-PRD-2A0968A4",
+    "MCP-UI-PRD-773A4D76",
+    "MCP-UI-PRD-0116A3D1",
+    "MCP-UI-PRD-9A032275",
+    "MCP-UI-PRD-22679129",
+    "MCP-UI-PRD-2647389E",
 )
-UPDATE_CONTACT = "MCP-UI-INV-6CDB396B"
 _REGISTERED_PROFILES: list[Path] = []
 
 
@@ -247,8 +248,19 @@ async def _leftover_invoice_contact_names(runtime: BrowserRuntime, slug: str) ->
         await page.close()
 
 
+async def _capture(runtime: BrowserRuntime, slug: str, destination: Path, name: str) -> None:
+    context = await runtime.start()
+    page = cast(Any, await context.new_page())
+    try:
+        await _open_named_list(page, slug, "invoices", name, allow_search=False)
+        await page.screenshot(path=str(destination), full_page=False)
+        assert destination.is_file() and destination.stat().st_size > 0
+    finally:
+        await page.close()
+
+
 async def _row_enhedspris(runtime: BrowserRuntime, slug: str, contact_name: str) -> str:
-    """Open the leftover row in this session and read Enhedspris. Not a POST id."""
+    """Open the list row in this session and read Enhedspris. Not a POST id."""
 
     context = await runtime.start()
     page = cast(Any, await context.new_page())
@@ -261,22 +273,28 @@ async def _row_enhedspris(runtime: BrowserRuntime, slug: str, contact_name: str)
         await page.close()
 
 
-async def _capture(runtime: BrowserRuntime, slug: str, destination: Path, name: str) -> None:
-    context = await runtime.start()
-    page = cast(Any, await context.new_page())
-    try:
-        await _open_named_list(page, slug, "invoices", name, allow_search=False)
-        await page.screenshot(path=str(destination), full_page=False)
-        assert destination.is_file() and destination.stat().st_size > 0
-    finally:
-        await page.close()
+async def _delete_if_present(
+    server: FastMCP,
+    preview_tool: str,
+    execute_tool: str,
+    arguments: dict[str, object],
+) -> None:
+    """Best-effort leftover delete. Missing records are not failure."""
+
+    preview = await _call(server, preview_tool, arguments)
+    if preview.get("code"):
+        return
+    ticket = preview.get("confirmation_ticket")
+    if not isinstance(ticket, str) or not ticket:
+        return
+    await _call(server, execute_tool, {"confirmation_ticket": ticket})
 
 
 @pytest.mark.asyncio
 async def test_ui_invoices_create_update_delete_via_call_tool(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    """Update one leftover draft through FastMCP, then reverse-delete all six triples."""
+    """Create, update, and delete one disposable draft. No LEFTOVER_* names."""
 
     _require_live_credentials()
     assert not os.environ.get("BILLY_API_TOKEN"), "live invoice writes must not use API token"
@@ -289,7 +307,9 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
     server: FastMCP | None = None
     extra: BrowserRuntime | None = None
     slug = ""
-    updated = f"{UPDATE_CONTACT}-U"
+    contact = f"MCP-UI-INV-{secrets.token_hex(4).upper()}"
+    product = f"MCP-UI-PRD-{secrets.token_hex(4).upper()}"
+    updated = f"{contact}-U"
 
     try:
         assert is_outside_repository(frame_dir, _REPO_ROOT)
@@ -302,14 +322,62 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = observer
         await _ready_session(observer, slug)
-        if not await _list_has_name(observer, slug, "invoices", UPDATE_CONTACT, allow_search=False):
-            _record_blocker(f"leftover draft {UPDATE_CONTACT} is not on /invoices")
-            pytest.fail(f"leftover draft {UPDATE_CONTACT} is not on /invoices")
+        contact_preview = await _call(
+            server,
+            "ui_clients_create_preview",
+            {"name": contact, "organization_id": slug},
+        )
+        contact_created = await _call(
+            server,
+            "ui_clients_create_execute",
+            {"confirmation_ticket": contact_preview["confirmation_ticket"]},
+        )
+        if contact_created.get("code"):
+            _record_blocker(f"contact create failed: {contact_created}")
+            pytest.fail(f"contact create failed: {contact_created}")
+        product_preview = await _call(
+            server,
+            "ui_products_create_preview",
+            {"name": product, "unitPrice": 1.0, "organization_id": slug},
+        )
+        product_created = await _call(
+            server,
+            "ui_products_create_execute",
+            {"confirmation_ticket": product_preview["confirmation_ticket"]},
+        )
+        if product_created.get("code"):
+            _record_blocker(f"product create failed: {product_created}")
+            pytest.fail(f"product create failed: {product_created}")
+        invoice_preview = await _call(
+            server,
+            "ui_invoices_create_preview",
+            {
+                "contact_name": contact,
+                "line_description": f"{contact} line",
+                "product_name": product,
+                "unit_price": 1.0,
+                "action": "draft_create",
+                "save_cta": "Gem som kladde",
+                "organization_id": slug,
+            },
+        )
+        invoice_created = await _call(
+            server,
+            "ui_invoices_create_execute",
+            {"confirmation_ticket": invoice_preview["confirmation_ticket"]},
+        )
+        if invoice_created.get("code"):
+            _record_blocker(f"invoice create failed: {invoice_created}")
+            pytest.fail(f"invoice create failed: {invoice_created}")
+        assert invoice_created["submitted"] is True
+        if not await _list_has_name(observer, slug, "invoices", contact, allow_search=False):
+            _record_blocker(f"created draft {contact} is not on /invoices")
+            pytest.fail(f"created draft {contact} is not on /invoices")
         preview_update = await _call(
             server,
             "ui_invoices_update_preview",
             {
-                "contact_name": UPDATE_CONTACT,
+                "contact_name": contact,
                 "line_description": updated,
                 "unit_price": 2.0,
                 "action": "draft_update",
@@ -326,7 +394,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
         assert updated_result["submitted"] is True
-        await _capture(observer, slug, frame_dir / "03_after_update.png", UPDATE_CONTACT)
+        await _capture(observer, slug, frame_dir / "03_after_update.png", contact)
         readback_profile = _temp_profile()
         readback = BrowserRuntime(
             readback_profile,
@@ -335,57 +403,34 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = readback
         await _ready_session(readback, slug)
-        shown = await _row_enhedspris(readback, slug, UPDATE_CONTACT)
+        shown = await _row_enhedspris(readback, slug, contact)
         if not price_is(shown, 2.0):
             _record_blocker(f"fresh Enhedspris is not 2,00 after update: shown_len={len(shown)}")
             pytest.fail("fresh Enhedspris is not 2,00 after update")
         await readback.close()
         extra = observer
-        for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-            preview = await _call(
-                server,
-                "ui_invoices_delete_preview",
-                {
-                    "contact_name": leftover_contact,
-                    "action": "draft_delete",
-                    "save_cta": "Slet",
-                    "organization_id": slug,
-                },
-            )
-            if preview.get("code"):
-                _record_blocker(f"delete preview failed for {leftover_contact}: {preview}")
-                pytest.fail(f"delete preview failed for {leftover_contact}: {preview}")
-            deleted = await _call(
-                server,
-                "ui_invoices_delete_execute",
-                {"confirmation_ticket": preview["confirmation_ticket"]},
-            )
-            if deleted.get("code"):
-                dump = _post_slet_dump()
-                _record_blocker(
-                    f"delete execute failed for {leftover_contact}: {deleted} dump={dump}"
-                )
-                assert dump is not None
-                for key in (
-                    "heading_token",
-                    "path_class",
-                    "active_tag",
-                    "active_role",
-                    "candidates",
-                    "dialog_count",
-                    "alertdialog_count",
-                    "overlay_count",
-                    "hit_tag",
-                    "delete_seen",
-                    "navigated",
-                ):
-                    assert key in dump
-                from billy_mcp.ui_writes.invoices_form_delete_dump import OverlayDump
-
-                parsed = OverlayDump.model_validate({"rows": dump["candidates"]})
-                assert isinstance(parsed.rows, list)
-                pytest.fail(f"delete execute failed for {leftover_contact}: {deleted}")
-
+        preview = await _call(
+            server,
+            "ui_invoices_delete_preview",
+            {
+                "contact_name": contact,
+                "action": "draft_delete",
+                "save_cta": "Slet",
+                "organization_id": slug,
+            },
+        )
+        if preview.get("code"):
+            _record_blocker(f"delete preview failed for {contact}: {preview}")
+            pytest.fail(f"delete preview failed for {contact}: {preview}")
+        deleted = await _call(
+            server,
+            "ui_invoices_delete_execute",
+            {"confirmation_ticket": preview["confirmation_ticket"]},
+        )
+        if deleted.get("code"):
+            dump = _post_slet_dump()
+            _record_blocker(f"delete execute failed for {contact}: {deleted} dump={dump}")
+            pytest.fail(f"delete execute failed for {contact}: {deleted}")
         await observer.close()
         extra = None
         cleanup = BrowserRuntime(
@@ -395,33 +440,23 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = cleanup
         await _ready_session(cleanup, slug)
-        for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-            present = await _list_has_name(
-                cleanup, slug, "invoices", leftover_contact, allow_search=False
-            )
-            if present:
-                pytest.fail(f"invoice still present after delete: {leftover_contact}")
-        assert await _list_has_name(cleanup, slug, "invoices", updated, allow_search=False) is False
-
-        for leftover_product in LEFTOVER_PRODUCTS:
-            await _delete_or_fail(
-                server,
-                "ui_products_delete_preview",
-                "ui_products_delete_execute",
-                {"unique_tag": leftover_product, "organization_id": slug},
-                f"product {leftover_product}",
-            )
-            assert await _list_has_name(cleanup, slug, "products", leftover_product) is False
-
-        for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-            await _delete_or_fail(
-                server,
-                "ui_clients_delete_preview",
-                "ui_clients_delete_execute",
-                {"name": leftover_contact, "organization_id": slug},
-                f"contact {leftover_contact}",
-            )
-            assert await _list_has_name(cleanup, slug, "clients", leftover_contact) is False
+        assert await _list_has_name(cleanup, slug, "invoices", contact, allow_search=False) is False
+        await _delete_or_fail(
+            server,
+            "ui_products_delete_preview",
+            "ui_products_delete_execute",
+            {"unique_tag": product, "organization_id": slug},
+            f"product {product}",
+        )
+        assert await _list_has_name(cleanup, slug, "products", product) is False
+        await _delete_or_fail(
+            server,
+            "ui_clients_delete_preview",
+            "ui_clients_delete_execute",
+            {"name": contact, "organization_id": slug},
+            f"contact {contact}",
+        )
+        assert await _list_has_name(cleanup, slug, "clients", contact) is False
 
         write_vision_record(
             _VISION_RECORD,
@@ -429,7 +464,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             assertion_refs=[
                 "tests/live/test_ui_invoices_writes.py::"
                 "test_ui_invoices_create_update_delete_via_call_tool",
-                "create_server_call_tool_leftover_update_delete",
+                "create_server_call_tool_disposable_update_delete",
                 "list_row_open_not_post_id",
                 "independent_readback_session",
                 "third_session_cleanup",
@@ -442,66 +477,35 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
     finally:
         if server is not None and slug:
-            for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-                try:
-                    preview_delete = await _call(
-                        server,
-                        "ui_invoices_delete_preview",
+            for preview_tool, execute_tool, arguments in (
+                (
+                    "ui_invoices_delete_preview",
+                    "ui_invoices_delete_execute",
+                    cast(
+                        dict[str, object],
                         {
-                            "contact_name": leftover_contact,
+                            "contact_name": contact,
                             "action": "draft_delete",
                             "save_cta": "Slet",
                             "organization_id": slug,
                         },
-                    )
-                    if not preview_delete.get("code"):
-                        await _call(
-                            server,
-                            "ui_invoices_delete_execute",
-                            {"confirmation_ticket": preview_delete["confirmation_ticket"]},
-                        )
-                except (OSError, RuntimeError, AssertionError, TimeoutError):
-                    _record_blocker(
-                        f"Cleanup delete failed for leftover tagged invoice {leftover_contact}."
-                    )
-            for leftover_product in LEFTOVER_PRODUCTS:
+                    ),
+                ),
+                (
+                    "ui_products_delete_preview",
+                    "ui_products_delete_execute",
+                    cast(dict[str, object], {"unique_tag": product, "organization_id": slug}),
+                ),
+                (
+                    "ui_clients_delete_preview",
+                    "ui_clients_delete_execute",
+                    cast(dict[str, object], {"name": contact, "organization_id": slug}),
+                ),
+            ):
                 try:
-                    leftover_product_preview = await _call(
-                        server,
-                        "ui_products_delete_preview",
-                        {"unique_tag": leftover_product, "organization_id": slug},
-                    )
-                    if not leftover_product_preview.get("code"):
-                        await _call(
-                            server,
-                            "ui_products_delete_execute",
-                            {
-                                "confirmation_ticket": leftover_product_preview[
-                                    "confirmation_ticket"
-                                ]
-                            },
-                        )
+                    await _delete_if_present(server, preview_tool, execute_tool, arguments)
                 except (OSError, RuntimeError, AssertionError, TimeoutError):
-                    _record_blocker(
-                        f"Cleanup delete failed for leftover tagged product {leftover_product}."
-                    )
-            for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-                try:
-                    contact_delete = await _call(
-                        server,
-                        "ui_clients_delete_preview",
-                        {"name": leftover_contact, "organization_id": slug},
-                    )
-                    if not contact_delete.get("code"):
-                        await _call(
-                            server,
-                            "ui_clients_delete_execute",
-                            {"confirmation_ticket": contact_delete["confirmation_ticket"]},
-                        )
-                except (OSError, RuntimeError, AssertionError, TimeoutError):
-                    _record_blocker(
-                        f"Cleanup delete failed for leftover tagged contact {leftover_contact}."
-                    )
+                    _record_blocker(f"Cleanup delete failed for disposable {arguments}.")
         if extra is not None:
             await extra.close()
         for path in list(_REGISTERED_PROFILES):
@@ -518,7 +522,6 @@ async def test_ui_invoice_leftover_product_contact_cleanup(
     _require_live_credentials()
     assert not os.environ.get("BILLY_API_TOKEN"), "leftover cleanup must not use API token"
     profile = _temp_profile()
-    proof_profile = _temp_profile()
     monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
     monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
     server: FastMCP | None = None
@@ -528,23 +531,21 @@ async def test_ui_invoice_leftover_product_contact_cleanup(
         server = create_server(_REPO_ROOT)
         slug = await _login(server)
         for leftover_product in LEFTOVER_PRODUCTS:
-            await _delete_or_fail(
+            await _delete_if_present(
                 server,
                 "ui_products_delete_preview",
                 "ui_products_delete_execute",
                 {"unique_tag": leftover_product, "organization_id": slug},
-                f"product {leftover_product}",
             )
         for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-            await _delete_or_fail(
+            await _delete_if_present(
                 server,
                 "ui_clients_delete_preview",
                 "ui_clients_delete_execute",
                 {"name": leftover_contact, "organization_id": slug},
-                f"contact {leftover_contact}",
             )
         proof = BrowserRuntime(
-            proof_profile,
+            profile,
             credential_references=AppConfig.from_environment().browser_credentials,
             credential_resolver=KeyringCredentialResolver(),
         )

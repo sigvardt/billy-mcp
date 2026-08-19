@@ -10,13 +10,13 @@ from billy_mcp.browser import BrowserRuntime
 
 PRD_TAG = re.compile(r"MCP-UI-PRD-[0-9A-F]{8}")
 OWNER_LEFTOVERS = (
-    "MCP-UI-PRD-F3E022CF",
-    "MCP-UI-PRD-F30DC921",
-    "MCP-UI-PRD-EA28FA6B",
-    "MCP-UI-PRD-8CA457EE",
-    "MCP-UI-PRD-6B9651D0",
-    "MCP-UI-PRD-5D31103A",
-    "MCP-UI-PRD-53E4AF8E",
+    "MCP-UI-PRD-C0082FCA",
+    "MCP-UI-PRD-2A0968A4",
+    "MCP-UI-PRD-773A4D76",
+    "MCP-UI-PRD-0116A3D1",
+    "MCP-UI-PRD-9A032275",
+    "MCP-UI-PRD-22679129",
+    "MCP-UI-PRD-2647389E",
 )
 
 OpenNamedList = Callable[[Any, str, str], Awaitable[None]]

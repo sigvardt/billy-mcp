@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import asyncio
 from typing import Final
+from urllib.parse import parse_qs, urlsplit
 
 from billy_mcp.browser import BrowserRuntime, LoginPage
 from billy_mcp.models import StableErrorCode, ToolError
@@ -13,6 +14,68 @@ CONFIRM: Final = "Ja, slet"
 DELETE_ICON: Final = "[data-cy='delete-icon']"
 TABLE_ITEM: Final = "[data-cy='table-item']"
 LIST_PATHS: Final = ("products", "inventory")
+_OK_STATUS: Final = frozenset({"200", "201", "204"})
+
+
+def watch_product_response(event: object, seen: list[str]) -> None:
+    """Record product DELETE responses. Ignore events with no status."""
+
+    url = str(getattr(event, "url", ""))
+    method = str(getattr(event, "method", "") or "")
+    request = getattr(event, "request", None)
+    if request is not None:
+        method = str(getattr(request, "method", "") or method)
+    raw_status = getattr(event, "status", None)
+    if raw_status is None or raw_status == "":
+        return
+    if method != "DELETE":
+        return
+    if "/v2/products" not in urlsplit(url).path:
+        return
+    seen.append(f"{method} {raw_status} {url}")
+
+
+def product_delete_hit(item: str) -> bool:
+    """True only for DELETE /v2/products/:id with a 2xx status."""
+
+    if not item.startswith("DELETE "):
+        return False
+    parts = item.split()
+    if len(parts) < 3:
+        return False
+    status, url = parts[1], parts[2]
+    if status not in _OK_STATUS:
+        return False
+    parsed = urlsplit(url)
+    if "ids[]" in parsed.query or parse_qs(parsed.query).get("ids[]"):
+        return False
+    path = parsed.path.rstrip("/")
+    marker = "/v2/products/"
+    if marker not in path:
+        return False
+    rest = path.split(marker, 1)[1]
+    return bool(rest) and "/" not in rest
+
+
+async def wait_product_delete(seen: list[str]) -> ToolError | None:
+    """Wait for exactly one singular product DELETE 2xx."""
+
+    for _ in range(40):
+        hits = [item for item in seen if product_delete_hit(item)]
+        if len(hits) == 1:
+            return None
+        if len(hits) > 1:
+            return ToolError(
+                code=StableErrorCode.BILLY_ERROR,
+                message="Billy product delete persisted more than once.",
+                details={"watched": list(seen)},
+            )
+        await asyncio.sleep(0.25)
+    return ToolError(
+        code=StableErrorCode.BILLY_ERROR,
+        message="Billy product delete did not persist.",
+        details={"watched": list(seen)},
+    )
 
 
 async def delete_tagged_row(
@@ -21,8 +84,8 @@ async def delete_tagged_row(
     organization_id: str,
     path: str,
     tag: str,
-) -> bool:
-    """Click the tagged row delete-icon and confirm. True when both clicks ran."""
+) -> ToolError | bool:
+    """Click the tagged row delete-icon and confirm. True after DELETE 2xx."""
 
     await page.goto(
         f"{BILLY_ORIGIN}/{organization_id}/{path}",
@@ -53,7 +116,16 @@ async def delete_tagged_row(
         confirm = page.get_by_text(CONFIRM, exact=True)
     if await confirm.count() < 1 or not await confirm.first.is_visible():
         return False
+    seen: list[str] = []
+
+    def _watch(event: object) -> None:
+        watch_product_response(event, seen)
+
+    page.on("response", _watch)
     await confirm.first.click()
+    persisted = await wait_product_delete(seen)
+    if persisted is not None:
+        return persisted
     await _wait_row_gone(page, tag)
     return True
 
@@ -78,20 +150,32 @@ async def prove_unfiltered_row_absent(
         slug = await require_matching_org_slug(page, organization_id, "products")
         if isinstance(slug, ToolError):
             return slug
-        await page.goto(
-            f"{BILLY_ORIGIN}/{slug}/products",
-            wait_until="domcontentloaded",
+        for attempt in range(40):
+            if attempt == 0 or attempt % 8 == 0:
+                await page.goto(
+                    f"{BILLY_ORIGIN}/{slug}/products",
+                    wait_until="domcontentloaded",
+                )
+                try:
+                    await page.wait_for_load_state("networkidle", timeout=15000)
+                except TimeoutError:
+                    pass
+            if await _visible_tagged_rows(page, tag) < 1 and attempt > 0:
+                await page.goto(
+                    f"{BILLY_ORIGIN}/{slug}/products",
+                    wait_until="domcontentloaded",
+                )
+                try:
+                    await page.wait_for_load_state("networkidle", timeout=15000)
+                except TimeoutError:
+                    pass
+                if await _visible_tagged_rows(page, tag) < 1:
+                    return None
+            await asyncio.sleep(0.25)
+        return ToolError(
+            code=StableErrorCode.CONFLICT,
+            message="Independent interface read-back still shows the deleted record.",
         )
-        try:
-            await page.wait_for_load_state("networkidle", timeout=15000)
-        except TimeoutError:
-            pass
-        if await _visible_tagged_rows(page, tag) >= 1:
-            return ToolError(
-                code=StableErrorCode.CONFLICT,
-                message="Independent interface read-back still shows the deleted record.",
-            )
-        return None
     finally:
         await page.close()
 

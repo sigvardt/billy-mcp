@@ -9,7 +9,7 @@ updated: 2026-08-19T07:10:00Z
 
 ## Open
 
-- Owner `01FCBA13`: seven leftover triples still live. Delete invoices first with **Ja, slet faktura**, then products with scoped `DELETE /v2/products/:id` 2xx (`A0633A17`), then customers. Prove settled zero tagged rows. Do not claim clean-org. Stay red.
+- Owner `D71E5B82`: reusable invoice CUD must pass after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof. Stay red.
 - Invoice draft CUD remains mandatory (`FD39FFE7` / `1F1B34F8`). Product create persist and scoped table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Persist of priced drafts is now interface-proved. Remaining work is FastMCP update plus leftover cleanup, not another create probe. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.

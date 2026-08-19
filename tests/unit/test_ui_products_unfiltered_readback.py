@@ -91,6 +91,87 @@ def test_product_delete_absence_uses_table_item_not_body() -> None:
     assert "_wait_row_gone" in delete
 
 
+def test_product_delete_watches_singular_delete_before_confirm() -> None:
+    """Owner A0633A17: watch DELETE /v2/products/:id 2xx before Ja, slet returns."""
+
+    from billy_mcp.ui_writes import products_delete, products_delete_row
+
+    row = Path(products_delete_row.__file__).read_text(encoding="utf-8")
+    delete = Path(products_delete.__file__).read_text(encoding="utf-8")
+    body = row[row.index("async def delete_tagged_row") :]
+    confirm_idx = body.index("confirm.first.click")
+    on_idx = body.index('page.on("response"')
+    wait_idx = body.index("wait_product_delete")
+    assert on_idx < confirm_idx < wait_idx
+    assert "watch_product_response" in body
+    assert "_wait_row_gone" in body
+    assert "force=True" not in row
+    hit_src = row[row.index("def product_delete_hit") :]
+    assert "ids[]" in hit_src
+    actor = delete[delete.index("async def submit_delete") :]
+    loop = actor[actor.index("for path in LIST_PATHS") : actor.index("if not clicked")]
+    assert "isinstance(result, ToolError)" in loop
+    assert "prove_unfiltered_row_absent" in actor
+
+
+def test_product_delete_hit_requires_singular_2xx() -> None:
+    """Singular DELETE /v2/products/:id 2xx counts. Collection, bulk, and empty status do not."""
+
+    from billy_mcp.ui_writes.products_delete_row import (
+        product_delete_hit,
+        watch_product_response,
+    )
+
+    class _NoStatus:
+        url = "https://api.billysbilling.com/v2/products/abc"
+        method = "DELETE"
+        status = ""
+        request = None
+
+    class _Singular:
+        url = "https://api.billysbilling.com/v2/products/abc"
+        method = "DELETE"
+        status = 200
+        request = _NoStatus()
+
+    class _Collection:
+        url = "https://api.billysbilling.com/v2/products"
+        method = "DELETE"
+        status = 200
+        request = None
+
+    class _Bulk:
+        url = "https://api.billysbilling.com/v2/products?ids[]=abc"
+        method = "DELETE"
+        status = 200
+        request = None
+
+    class _Failed:
+        url = "https://api.billysbilling.com/v2/products/abc"
+        method = "DELETE"
+        status = 422
+        request = None
+
+    seen: list[str] = []
+    watch_product_response(_NoStatus(), seen)
+    assert seen == []
+    watch_product_response(_Singular(), seen)
+    watch_product_response(_Collection(), seen)
+    watch_product_response(_Bulk(), seen)
+    watch_product_response(_Failed(), seen)
+    assert product_delete_hit("DELETE 200 https://api.billysbilling.com/v2/products/abc") is True
+    assert product_delete_hit("DELETE 201 https://api.billysbilling.com/v2/products/abc") is True
+    assert product_delete_hit("DELETE 204 https://api.billysbilling.com/v2/products/abc") is True
+    assert product_delete_hit("DELETE 200 https://api.billysbilling.com/v2/products") is False
+    assert (
+        product_delete_hit("DELETE 200 https://api.billysbilling.com/v2/products?ids[]=abc")
+        is False
+    )
+    assert product_delete_hit("DELETE 422 https://api.billysbilling.com/v2/products/abc") is False
+    hits = [item for item in seen if product_delete_hit(item)]
+    assert hits == ["DELETE 200 https://api.billysbilling.com/v2/products/abc"]
+
+
 def test_hidden_ember_dialog_wrapper_is_not_leftover() -> None:
     """Owner C6DA7FC8: leftover heading/name without validation is not UI_CHANGED."""
 

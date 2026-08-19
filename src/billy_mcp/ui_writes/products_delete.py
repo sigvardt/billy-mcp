@@ -95,7 +95,10 @@ class BrowserProductDeleter:
                 return slug
             clicked = False
             for path in LIST_PATHS:
-                if await delete_tagged_row(page, organization_id=slug, path=path, tag=tag):
+                result = await delete_tagged_row(page, organization_id=slug, path=path, tag=tag)
+                if isinstance(result, ToolError):
+                    return result
+                if result:
                     clicked = True
                     break
             if not clicked:

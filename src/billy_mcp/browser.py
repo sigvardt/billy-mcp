@@ -639,6 +639,8 @@ class LoginPage(Protocol):
         timeout: float | None = None,
     ) -> None: ...
 
+    def on(self, event: str, handler: object) -> None: ...
+
 
 class AuthStatusChecker(Protocol):
     """Injectable, auth-status-only seam for deterministic server tests."""

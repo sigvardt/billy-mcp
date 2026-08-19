@@ -50,7 +50,9 @@ and proves the tag in visible body text (`allow_search=False`,
 `visible_body=True`). Hidden Ember `get_by_text` hits are not
 persist. Inventory is only the second attempt. Delete scopes to the tagged `[data-cy='table-item']`, reveals
 row actions, then clicks that row's `delete-icon` and **Ja,
-slet**. Never a page-wide `delete-icon`.first. No `force=True`.
+slet**. Watch `DELETE /v2/products/:id` 2xx before independent
+`/products` row absence. Collection and `ids[]` bulk do not
+count. Never a page-wide `delete-icon`.first. No `force=True`.
 Stay red.
 
 Qualify through FastMCP `call_tool`. Do not treat BrowserRuntime as the pass

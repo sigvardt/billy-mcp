@@ -566,23 +566,26 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "test_ui_invoices_create_update_delete_via_call_tool" in source
     assert "create_server" in source
     assert "ui_invoices_update_preview" in source
+    assert "ui_invoices_create_preview" in source
+    assert "ui_invoices_delete_preview" in source
     assert "LEFTOVER_INVOICE_CONTACTS" in source
     assert "Godkend" in source
     assert "pending_review" in source
 
 
 def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
-    """Owner 59A3A933: leftover list row is proved before FastMCP update."""
+    """Owner D71E5B82: disposable draft is proved on /invoices before FastMCP update."""
 
     source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
     start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
     end = source.index("\nasync def ", start + 1)
     body = source[start:end]
-    list_idx = body.index('await _list_has_name(observer, slug, "invoices", UPDATE_CONTACT')
+    list_idx = body.index('await _list_has_name(observer, slug, "invoices", contact')
     update_idx = body.index("ui_invoices_update_preview")
     assert list_idx < update_idx
     assert "asyncio.sleep(2)" not in body[list_idx:update_idx]
-    assert "leftover draft" in body
+    assert "created draft" in body
+    assert "LEFTOVER_INVOICE_CONTACTS" not in body
 
 
 def test_priced_line_fill_uses_enhedspris_label() -> None:
@@ -669,22 +672,22 @@ def test_bind_existing_product_requires_exact_tag() -> None:
 
 
 def test_live_invoice_cud_seeds_product_before_preview() -> None:
-    """Leftover sweep names owner tags and updates before delete."""
+    """Disposable CUD creates contact and product, then update, then delete."""
 
     source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
     start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
     end = source.index("\nasync def ", start + 1)
     body = source[start:end]
-    assert "UPDATE_CONTACT" in body
+    create = body.index("ui_invoices_create_preview")
     update = body.index("ui_invoices_update_preview")
     delete = body.index("ui_invoices_delete_preview")
     product_delete = body.index("ui_products_delete_preview")
-    assert update < delete < product_delete
-    assert "contact_name" in body[update : update + 400]
-    assert "_row_enhedspris" in body
+    assert create < update < delete < product_delete
     assert "price_is(shown, 2.0)" in body
+    assert "_row_enhedspris" in body
     assert body.index("_row_enhedspris") < delete
     assert "for leftover_id in await _invoice_ids" not in body
+    assert "LEFTOVER_INVOICE_CONTACTS" not in body
 
 
 def test_bind_kunde_clicks_chevron_before_type() -> None:
@@ -1715,21 +1718,14 @@ def test_update_and_delete_open_list_row() -> None:
 
 
 def test_live_leftover_sweep_uses_owner_contact_tags() -> None:
-    """Owner 59A3A933: leftover sweep names the six customer tags, not href scrape."""
+    """Owner D71E5B82: leftover names stay in the isolated cleanup test, not CUD."""
 
     source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
     start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
     end = source.index("\nasync def ", start + 1)
-    body = source[start:end]
-    for tag in (
-        "MCP-UI-INV-6CDB396B",
-        "MCP-UI-INV-F1784522",
-        "MCP-UI-INV-B05A4C85",
-        "MCP-UI-INV-A45B734E",
-        "MCP-UI-INV-2B8A4FA2",
-        "MCP-UI-INV-DD4158B1",
-    ):
-        assert tag in source
-        assert tag in body or "LEFTOVER_INVOICE_CONTACTS" in source
-    assert "contact_name" in body
-    assert "for leftover_id in await _invoice_ids" not in body
+    cud = source[start:end]
+    cleanup = source[source.index("async def test_ui_invoice_leftover_product_contact_cleanup") :]
+    assert "LEFTOVER_INVOICE_CONTACTS" not in cud
+    assert "_delete_if_present" in cleanup
+    assert "secrets.token_hex" in cud
+    assert "for leftover_id in await _invoice_ids" not in cud
