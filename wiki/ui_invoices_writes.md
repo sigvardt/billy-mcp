@@ -11,7 +11,7 @@ sources:
   - radio:B9C4FA7C
   - radio:DECEA79B
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T23:10:00Z
+updated: 2026-08-19T04:10:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -66,7 +66,8 @@ textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not
 patch or probe the dropdown. Owner `9310BC17`: create and confirm the
 customer first, then start a fresh session or hard-navigate `/invoices/new`
 before opening the chevron. `submit_draft_invoice` closes the bootstrap page
-and opens a new Playwright page before create bind. `bind_kunde` clicks `[data-cy='dropdown-icon']` in the contact
+and opens a new Playwright page before create, update, and delete.
+`bind_kunde` clicks `[data-cy='dropdown-icon']` in the contact
 `.pickerfield`, then picks the exact tag. `chevron_offset_from_box` is
 fallback. Type is last. After bind, `fill_priced_line` writes
 **Evt. beskrivelse**, confirms **Antal** is 1, and fills **Enhedspris**
@@ -75,8 +76,17 @@ It opens **Vælg produkt** and picks the exact ticket
 `product_name`. It never clicks **Opret ny**. A missing picker or
 missing tag is `UI_CHANGED`. Preview rejects a missing product name
 and a missing or non-positive price (`1F1B34F8`).
-A preloaded invoice page is a stale-session bug, not a missing control. Do
-not ask Joakim to inspect routine UI.
+A preloaded invoice page is a stale-session bug, not a missing control.
+`submit_draft_invoice` closes the bootstrap page and opens a new Playwright
+page before create, update, and delete (`9310BC17`, `32662804`). Browser
+egress allows PUT prefix `/v2/invoices/` for the SPA draft save (never
+collection PUT, never PATCH, never emails) and GET prefix `/v2/invoiceLines`
+so the line editor can render. Do not allow PUT `/v2/invoiceLines/` unless a
+captured blocked XHR names that path (`D859572B`). A 2xx PUT `/v2/invoices/:id`
+means the SPA save ran. Header PUT 2xx is still not Enhedspris persist.
+Fresh-session **Enhedspris** `2,00` is. Delete uses unique **Mere**, exact
+**Slet**, then **Ja, slet**, then DELETE 2xx (`70DB45E6`). Do not ask Joakim
+to inspect routine UI.
 
 Kunde bind is an existing-option pick after a named opener. The live
 `input[name=contact]` field is typeable (250x40) and is **not** the bills

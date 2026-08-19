@@ -2561,6 +2561,29 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )
     assert any(
+        "PUT" in rule.get("methods", []) and str(rule.get("path") or "").startswith("/v2/invoices/")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PUT" in rule.get("methods", []) and rule.get("path") == "/v2/invoices"
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PATCH" in rule.get("methods", [])
+        and str(rule.get("path") or "").startswith("/v2/invoices")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/invoiceLines" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        method in rule.get("methods", [])
+        and str(rule.get("path") or "").startswith("/v2/invoiceLines")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+        for method in ("POST", "PUT", "PATCH", "DELETE")
+    )
+    assert any(
         rule.get("path") == "/v2/bills" and "POST" in rule.get("methods", [])
         for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
     )

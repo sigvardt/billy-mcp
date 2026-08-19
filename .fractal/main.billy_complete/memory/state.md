@@ -32,8 +32,11 @@ sources:
   - radio:F1A2EFC2
   - radio:3CB4D807
   - radio:3D5A9B9C
+  - radio:32662804
+  - radio:D859572B
+  - radio:70DB45E6
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T02:46:00Z
+updated: 2026-08-19T05:20:00Z
 ---
 
 ## Now
@@ -42,14 +45,12 @@ Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 HEAD is clean. Line persist watch is committed: `persist_hit` for
 update is a 2xx `PUT /v2/invoiceLines/:id`. A header
 `PUT /v2/invoices/:id` is not line-price persist.
-Owner `F1A2EFC2` / `3CB4D807`: the exact **Enhedspris** control
-is a visible main-frame INPUT `name=unitPrice`
-`placeholder=Enhedspris` on
-`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit`, value `1,00`. Headless
-leftover edit heading is `Rediger fakturakladde` with
-`exact_count=0` after wait. `3D5A9B9C` removed
-`reveal_line_editor` and frame search. Recapture heading and URL
-before changing locators. Stay red.
+Owner `D859572B`: PUT prefix `/v2/invoiceLines/` is removed.
+GET `/v2/invoiceLines` and PUT prefix `/v2/invoices/` stay.
+Live FastMCP update of `MCP-UI-INV-6CDB396B` still reads
+**Enhedspris** `2,00` in a second session. Delete reaches unique
+**Mere** and exact **Slet**, then **Ja, slet** is not visible and
+no DELETE is recorded. Six leftover triples remain. Stay red.
 Do not finish.
 No children are running. Seven write children stay completed and merged.
 `59A3A933` now binds leftover cleanup. A fresh `/invoices` page

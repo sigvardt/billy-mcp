@@ -467,6 +467,16 @@ def test_browser_policy_real_manifest_allows_contacts_data_plane() -> None:
     assert not policy.allows("https://api.billysbilling.com/v2/invoices/x/emails", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices", "POST")
     assert policy.allows("https://api.billysbilling.com/v2/invoices/abc", "DELETE")
+    assert policy.allows("https://api.billysbilling.com/v2/invoices/abc", "PUT")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoices", "PUT")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoices/abc", "PATCH")
+    assert policy.allows("https://api.billysbilling.com/v2/invoiceLines", "GET")
+    assert policy.allows("https://api.billysbilling.com/v2/invoiceLines/abc", "GET")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoiceLines", "POST")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoiceLines", "PUT")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoiceLines/abc", "PUT")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoiceLines/abc", "PATCH")
+    assert not policy.allows("https://api.billysbilling.com/v2/invoiceLines/abc", "DELETE")
 
 
 def test_browser_policy_rejects_missing_manifest(tmp_path: Path) -> None:

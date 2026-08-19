@@ -603,18 +603,19 @@ def test_priced_line_fill_uses_enhedspris_label() -> None:
 
 
 def test_invoice_create_opens_new_page_before_bind() -> None:
-    """Owner 9310BC17: do not bind Kunde on a preloaded invoices/new page."""
+    """Owner 9310BC17 / 32662804: never reuse the bootstrap page for draft writes."""
 
     form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
     start = form.index("async def submit_draft_invoice")
     create = form.index("async def _create_draft")
     submit = form[start:create]
     body = form[create : form.index("async def _update_draft")]
-    assert 'action == "create"' in submit
-    create_idx = submit.index('action == "create"')
-    new_page_idx = submit.index("new_page", create_idx)
-    run_idx = submit.index("_run_action", create_idx)
-    assert new_page_idx < run_idx
+    slug_idx = submit.index("slug != bound")
+    run_idx = submit.index("_run_action")
+    chunk = submit[slug_idx:run_idx]
+    assert "new_page" in chunk
+    assert "page.close" in chunk
+    assert 'if action == "create":' not in chunk
     assert "bind_kunde" in body
     assert "invoices/new" in body
 
@@ -1409,6 +1410,21 @@ def test_persist_hit_rejects_put_request_without_status() -> None:
     assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is True
     assert persist_hit("PUT 201 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is True
     assert persist_hit("PUT 422 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is False
+    assert (
+        persist_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc/emails", "PUT") is False
+    )
+
+
+def test_invoice_save_hit_accepts_spa_header_put() -> None:
+    """Owner 32662804: SPA draft save is PUT /v2/invoices/:id. Fresh Enhedspris is persist."""
+
+    from billy_mcp.ui_writes.invoices_form_page import invoice_save_hit, persist_hit
+
+    assert invoice_save_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc") is True
+    assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert invoice_save_hit("PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc") is True
+    assert invoice_save_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc/emails") is False
+    assert invoice_save_hit("PUT 422 https://api.billysbilling.com/v2/invoices/abc") is False
     assert persist_hit("POST  https://api.billysbilling.com/v2/invoices", "PUT") is False
     assert persist_hit("POST 200 https://api.billysbilling.com/v2/invoices", "POST") is True
 
@@ -1442,7 +1458,10 @@ def test_watch_invoice_response_ignores_request_without_status() -> None:
     watch_invoice_response(_Response(), seen)
     assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc"]
     watch_invoice_response(_HeaderPut(), seen)
-    assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc"]
+    assert seen == [
+        "PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc",
+        "PUT 200 https://api.billysbilling.com/v2/invoices/abc",
+    ]
 
 
 def test_invoice_id_from_payload_reads_first_invoice_id() -> None:
@@ -1482,6 +1501,24 @@ def test_update_execute_proves_fresh_enhedspris() -> None:
     assert fill_idx < tab_idx
     assert "await field.input_value()" in commit
     assert commit.index("await field.input_value()") < tab_idx
+
+
+def test_invoice_delete_waits_for_confirm() -> None:
+    """Owner 70DB45E6: unique Mere, exact Slet, wait Ja, slet, then DELETE."""
+
+    delete = Path("src/billy_mcp/ui_writes/invoices_form_delete.py").read_text(encoding="utf-8")
+    body = delete[delete.index("async def delete_draft_invoice") :]
+    assert "_click_unique_mere" in body
+    assert "_click_unique_text" in body
+    assert "_click_confirm" in body
+    assert "_click_last_more" not in delete
+    assert 'page.on("request"' not in body
+    mere_idx = body.index("_click_unique_mere")
+    slet_idx = body.index("_click_unique_text")
+    confirm_idx = body.index("_click_confirm")
+    persist_idx = body.index('wait_persist(seen, method="DELETE")')
+    assert mere_idx < slet_idx < confirm_idx < persist_idx
+    assert 'persist_hit(item, "DELETE")' in delete
 
 
 def test_price_is_two_accepts_danish_decimals() -> None:

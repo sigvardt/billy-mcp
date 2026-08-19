@@ -238,6 +238,20 @@
         {
           "match": "prefix",
           "methods": [
+            "PUT"
+          ],
+          "path": "/v2/invoices/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/invoiceLines"
+        },
+        {
+          "match": "prefix",
+          "methods": [
             "GET"
           ],
           "path": "/v2/bills"
@@ -293,7 +307,7 @@
         }
       ],
       "condition": "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, and bills data-planes (research164/165/168/169/170); never full API browse",
-      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; F3F318A2 PUT prefix /v2/contacts/ for SPA contact update only (no collection PUT, no PATCH); research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); 31F6E753 PUT prefix /v2/bills/ for SPA draft bill update only (no collection PUT, no PATCH); research179 dual: GET/POST/DELETE /v2/daybooks for daybook get-open SPA list and disposable seed/cleanup",
+      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; F3F318A2 PUT prefix /v2/contacts/ for SPA contact update only (no collection PUT, no PATCH); research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); 31F6E753 PUT prefix /v2/bills/ for SPA draft bill update only (no collection PUT, no PATCH); 32662804 PUT prefix /v2/invoices/ for SPA draft invoice update only (no collection PUT, no PATCH, no emails); leftover edit after fresh page still exact_count=0 input_count=8 product_text_count=0 while GET /v2/invoiceLines was denied, so GET prefix /v2/invoiceLines is allowed for line-editor render only (no POST/PUT/PATCH/DELETE); D859572B forbids PUT /v2/invoiceLines/ unless a captured blocked XHR names that path; research179 dual: GET/POST/DELETE /v2/daybooks for daybook get-open SPA list and disposable seed/cleanup",
       "host": "api.billysbilling.com",
       "owner": "ui_auth",
       "purpose": "Path-scoped browser XHR for headless login, shell settle, contacts UI, products UI, invoices list/get seed+cleanup, and bills list/get seed+cleanup data-plane",

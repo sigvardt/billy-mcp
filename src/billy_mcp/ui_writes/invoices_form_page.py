@@ -120,7 +120,7 @@ async def visible_button(page: Page, label: str) -> bool:
 
 
 def watch_invoice_response(event: object, seen: list[str]) -> None:
-    """Record create POST, line PUT, and invoice DELETE. Header PUT is not persist."""
+    """Record create POST, SPA invoice PUT, line PUT, and invoice DELETE."""
 
     url = str(getattr(event, "url", ""))
     method = str(getattr(event, "method", "") or "")
@@ -136,6 +136,14 @@ def watch_invoice_response(event: object, seen: list[str]) -> None:
         seen.append(f"{method} {status} {url}")
         return
     if method == "PUT" and "/v2/invoiceLines/" in path:
+        seen.append(f"{method} {status} {url}")
+        return
+    if (
+        method == "PUT"
+        and "/v2/invoices/" in path
+        and "/invoiceLines/" not in path
+        and "/emails" not in path
+    ):
         seen.append(f"{method} {status} {url}")
         return
     if method == "DELETE" and "/v2/invoices/" in path and "/invoiceLines/" not in path:
@@ -214,11 +222,32 @@ def persist_hit(item: str, method: str) -> bool:
     return False
 
 
+def invoice_save_hit(item: str) -> bool:
+    """True for a 2xx SPA draft save PUT. Line-price persist is still a fresh session."""
+
+    if not item.startswith("PUT "):
+        return False
+    parts = item.split()
+    if len(parts) < 3:
+        return False
+    status, url = parts[1], parts[2]
+    if status not in _OK_STATUS:
+        return False
+    path = urlsplit(url).path
+    if "/v2/invoiceLines/" in path:
+        return True
+    return "/v2/invoices/" in path and "/invoiceLines/" not in path and "/emails" not in path
+
+
 async def wait_persist(seen: list[str], *, method: str) -> ToolError | None:
     """Wait for a 2xx persist XHR of the named method."""
 
     for _ in range(40):
-        if any(persist_hit(item, method) for item in seen):
+        if method == "PUT":
+            hit = any(invoice_save_hit(item) for item in seen)
+        else:
+            hit = any(persist_hit(item, method) for item in seen)
+        if hit:
             write_json(CREATE_PERSIST_DUMP, {"watched": list(seen), "method": method})
             return None
         await asyncio.sleep(0.25)

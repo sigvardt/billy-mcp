@@ -51,11 +51,36 @@ sources:
   - radio:F1A2EFC2
   - radio:3CB4D807
   - radio:3D5A9B9C
+  - radio:32662804
+  - radio:D859572B
+  - radio:70DB45E6
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T02:46:00Z
+updated: 2026-08-19T05:20:00Z
 ---
 
 ## Binding now
+
+`D859572B` (saved, P10): remove PUT prefix `/v2/invoiceLines/`.
+`watched=[]` does not name a path. Keep GET prefix `/v2/invoiceLines`
+for line render and PUT prefix `/v2/invoices/` for save.
+
+`70DB45E6` (saved, P9): leftover edit **Mere** button count=1.
+One Mere click reveals exact text **Slet** count=1. Do not click
+**Slet** in a recapture. `watched=[]` is confirm or persist timing,
+not missing chrome. Unique Mere, exact Slet, wait **Ja, slet**,
+DELETE 2xx, then fresh-session absence.
+
+`32662804` (saved, P10): leftover
+`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit` at 1280x720, DPR 1 has
+heading `Rediger fakturakladde`, exact main-frame
+`input[name=unitPrice][placeholder=Enhedspris]` count=1, input
+count=11. Headless `exact_count=0` / `input_count=8` is a stale
+or incomplete headless session, not viewport drift. Start a
+fresh authenticated runtime and page, then wait for the exact
+input. Invoice update cannot qualify until a focused failing
+egress test lands, then only PUT prefix `/v2/invoices/` (never
+collection PUT). FastMCP, fresh read-back, reverse-clean.
+No guessed clicks, frames, APIs, or BrowserRuntime-only proof.
 
 `3D5A9B9C` (saved, P10): remove `reveal_line_editor`. Do not click
 the product tag or a guessed row. The leftover edit page already
