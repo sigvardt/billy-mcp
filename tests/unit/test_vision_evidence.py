@@ -5,9 +5,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from billy_mcp.vision_evidence import (
     allowed_vision_frame_dir,
     is_outside_repository,
+    live_allowed_vision_frame_dir,
     mark_purge_verified,
     owner_only_frame_dir,
     purge_frame_dir,
@@ -40,13 +43,62 @@ def test_allowed_vision_frame_dir_accepts_owner_run_dir(tmp_path: Path) -> None:
     assert allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") == frames.resolve()
 
 
+def test_live_allowed_vision_frame_dir_rejects_or_only_hooks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Owner 02CB47D8: PYTEST /live/ or BILLY_TEST_MODE alone must not write frames."""
+
+    frames = owner_only_frame_dir(base=tmp_path / "vision-tmp")
+    assert allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") == frames.resolve()
+    live = (
+        "tests/live/test_ui_invoices_writes.py::test_ui_invoices_create_update_delete_via_call_tool"
+    )
+    unit = "tests/unit/test_vision_evidence.py::probe"
+    monkeypatch.delenv("BILLY_TEST_MODE", raising=False)
+    monkeypatch.setenv("PYTEST_CURRENT_TEST", unit)
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+    monkeypatch.setenv("BILLY_TEST_MODE", "commit")
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+    monkeypatch.setenv("PYTEST_CURRENT_TEST", live)
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+    monkeypatch.delenv("BILLY_TEST_MODE", raising=False)
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+    monkeypatch.setenv("PYTEST_CURRENT_TEST", unit)
+    monkeypatch.setenv("BILLY_TEST_MODE", "ui-full")
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+    monkeypatch.setenv("BILLY_TEST_MODE", "full")
+    assert live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") is None
+
+
+def test_live_allowed_vision_frame_dir_accepts_conjunctive_live_hooks(
+    tmp_path: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    """Approved live mode and pytest /live/ together may write to an allowed run-* dest."""
+
+    frames = owner_only_frame_dir(base=tmp_path / "vision-tmp")
+    live = (
+        "tests/live/test_ui_invoices_writes.py::test_ui_invoices_create_update_delete_via_call_tool"
+    )
+    monkeypatch.setenv("PYTEST_CURRENT_TEST", live)
+    monkeypatch.setenv("BILLY_TEST_MODE", "ui-full")
+    assert (
+        live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") == frames.resolve()
+    )
+    monkeypatch.setenv("BILLY_TEST_MODE", "full")
+    assert (
+        live_allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") == frames.resolve()
+    )
+
+
 def test_invoice_create_gates_vision_frame_dir() -> None:
-    """Owner 48ABEEB7: _create_draft must not write Path(env) without the allow gate."""
+    """Owner 48ABEEB7: _create_draft must not write Path(env) without the live allow gate."""
 
     form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
     create = form[form.index("async def _create_draft") : form.index("async def _update_draft")]
-    assert "allowed_vision_frame_dir" in create
+    assert "live_allowed_vision_frame_dir" in create
+    assert "dest = allowed_vision_frame_dir" not in create
     assert "BILLY_VISION_FRAME_DIR" in create
+    assert "Path(os.environ" not in create
     assert 'Path(dest) / "02_before_submit.png"' in create
 
 

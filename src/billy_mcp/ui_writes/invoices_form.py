@@ -34,7 +34,7 @@ from billy_mcp.ui_writes.invoices_form_page import (
 from billy_mcp.ui_writes.invoices_form_price import prove_fresh_unit_price
 from billy_mcp.ui_writes.invoices_form_row import open_invoice_row
 from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN, prove_text_on_fresh_page
-from billy_mcp.vision_evidence import allowed_vision_frame_dir
+from billy_mcp.vision_evidence import live_allowed_vision_frame_dir
 
 CREATE_PRE_SUBMIT_DUMP = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-create-presubmit.json"
@@ -166,7 +166,7 @@ async def _create_draft(
     priced = await fill_priced_line(page, line_description, unit_price, product_name)
     if isinstance(priced, ToolError):
         return priced
-    dest = allowed_vision_frame_dir(os.environ.get("BILLY_VISION_FRAME_DIR", ""))
+    dest = live_allowed_vision_frame_dir(os.environ.get("BILLY_VISION_FRAME_DIR", ""))
     if dest:
         contact_input = await kunde_field(page)
         contact_value = ""

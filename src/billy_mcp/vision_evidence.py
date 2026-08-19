@@ -8,6 +8,7 @@ redacted review record, and delete the frames after review.
 from __future__ import annotations
 
 import json
+import os
 import shutil
 import uuid
 from datetime import UTC, datetime
@@ -65,6 +66,19 @@ def allowed_vision_frame_dir(raw: str, *, base: Path | None = None) -> Path | No
     if not dest.is_dir():
         return None
     return dest
+
+
+def live_allowed_vision_frame_dir(raw: str, *, base: Path | None = None) -> Path | None:
+    """Allow screenshot writes only in live tests, under owner-only run-* dirs.
+
+    Both an approved live-test mode and a pytest /live/ context are required.
+    """
+
+    mode = os.environ.get("BILLY_TEST_MODE", "").strip()
+    current = os.environ.get("PYTEST_CURRENT_TEST", "").replace("\\", "/")
+    if mode not in {"ui-full", "full"} or "/live/" not in current:
+        return None
+    return allowed_vision_frame_dir(raw, base=base)
 
 
 def write_live_pending_unless_accepted(

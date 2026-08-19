@@ -42,8 +42,11 @@ sources:
   - radio:31BAF1FF
   - radio:D71E5B82
   - radio:A0633A17
+  - radio:A342BBDC
+  - radio:48ABEEB7
+  - radio:330C5913
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T10:33:00Z
+updated: 2026-08-19T13:22:00Z
 ---
 
 ## Now
@@ -74,8 +77,13 @@ Owner `A342BBDC`: create execute now captures
 `02_before_submit.png` after fill and before **Gem som kladde**,
 then proves customer, product, description, and unit price.
 Live CUD passed (`run_id=60b6d620772644f3bca9609c8ae53846`) with
-`pending_review`. Independent review of that frame is still
-required. Stay red.
+`pending_review`. Owner `330C5913` independently proved empty
+`/invoices`, `/products`, and `/clients` after that five-frame
+run. Do not remake leftover reverse-clean. `48ABEEB7` / `02CB47D8` conjunctive gate is in
+`live_allowed_vision_frame_dir`: approved live-test mode
+and pytest `/live/`. Production without both writes no
+frame. Independent five-frame accept of run
+`60b6d620772644f3bca9609c8ae53846` is next. Stay red.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
 ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:

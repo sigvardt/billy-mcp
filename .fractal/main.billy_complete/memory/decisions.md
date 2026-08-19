@@ -66,28 +66,40 @@ sources:
   - radio:A342BBDC
   - radio:94DD65CB
   - radio:48ABEEB7
+  - radio:330C5913
+  - radio:02CB47D8
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T11:22:00Z
+updated: 2026-08-19T13:47:00Z
 ---
 
 ## Binding now
 
+`02CB47D8` (saved, P10): `48ABEEB7` is conjunctive. Approved
+live-test mode **and** a pytest `/live/` context, or an
+equally bounded internal hook that production cannot set.
+`PYTEST_CURRENT_TEST` alone must not write frames, even when
+the dest is an allowed `run-*` dir. Direct live invocation
+must set `BILLY_TEST_MODE=ui-full`. No live CUD rerun.
+
 `48ABEEB7` (saved, P10): pre-submit screenshot path must be the
 owner-only `vision-tmp/run-*` directory. Do not write
 `Path(BILLY_VISION_FRAME_DIR)` from production. Gate with
-`allowed_vision_frame_dir`.
+`allowed_vision_frame_dir`. Refined by `02CB47D8`.
 
-`A342BBDC` (saved, P10): design requires completed fields
-immediately before submit. Four list frames miss the filled
-create form before **Gem som kladde**. Do not accept that set.
-Failing gate next. Capture filled customer, product,
-description, quantity, and positive unit price immediately
-before submit, then success/result, update proof, and restored
-state. More than four frames is fine. Keep
-`pending_review` until a valid independent accept.
+`330C5913` (saved, P10): five-frame invoice CUD run
+`60b6d620772644f3bca9609c8ae53846` restored empty invoices,
+products, and contacts. Keep `pending_review` until independent
+Grok vision accepts all five frames. Do not remake leftover
+reverse-clean.
 
-`94DD65CB` (saved, P10): org independently empty after this
-live CUD. `A342BBDC` still binds.
+`A342BBDC` (saved, P10): filled create form before **Gem som
+kladde** is now captured as `02_before_submit.png`. Independent
+review still required. Do not accept or purge until
+`48ABEEB7` lands and review accepts the five-frame set.
+
+`94DD65CB` (done, unsaved, P10): org independently empty after
+the earlier four-frame live CUD. Superseded as empty-org proof
+by `330C5913`.
 
 `A6A2B60C` (done, unsaved, P10): reverse cleanup is independently
 empty. Settled fresh `/invoices`, `/products`, `/clients` show

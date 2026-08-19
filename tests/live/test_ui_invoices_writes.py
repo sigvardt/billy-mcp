@@ -304,6 +304,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
     monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
     monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
     frame_dir = owner_only_frame_dir()
+    monkeypatch.setenv("BILLY_TEST_MODE", "ui-full")
     monkeypatch.setenv("BILLY_VISION_FRAME_DIR", str(frame_dir))
     server: FastMCP | None = None
     extra: BrowserRuntime | None = None

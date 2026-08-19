@@ -4,14 +4,15 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T10:33:00Z
+updated: 2026-08-19T13:22:00Z
 ---
 
 ## Open
 
-- Owner `A342BBDC`: filled-form capture before **Gem som kladde** is now in create execute. Independent review still required. Stay red. Stay `pending_review`.
-- Owner `94DD65CB`: org independently empty after this live CUD. Do not remake leftover reverse-clean.
-- Independent Grok review of self-contained invoice create/update/delete stays red until the pre-submit filled-form frame exists and is accepted. Stay red.
+- Owner `02CB47D8` / `48ABEEB7`: conjunctive live-test gate landed. Independent five-frame accept and purge still required. Stay red.
+- Owner `A342BBDC`: filled-form capture before **Gem som kladde** is now in create execute. Independent five-frame review still required after `48ABEEB7`. Stay red. Stay `pending_review`.
+- Owner `330C5913`: org independently empty after the five-frame CUD. Do not remake leftover reverse-clean.
+- Independent Grok review of the five-frame invoice CUD stays red until `48ABEEB7` lands and review accepts the set. Stay red.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof.
 - Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Honesty stays red until independent accept and purge. Stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved. Leftover reverse-clean is done. Do not remake leftover lists.

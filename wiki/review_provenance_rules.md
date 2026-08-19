@@ -7,7 +7,7 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - coverage/status.json
 created: 2026-07-30T17:06:27Z
-updated: 2026-07-30T17:06:27Z
+updated: 2026-08-19T13:50:00Z
 ---
 
 # Review evidence provenance rules
@@ -46,3 +46,9 @@ A live test may write a vision record with `author=live_test` and
 frames. `qualifies_for_coverage_vision` is true only when
 `author=independent_review`, `reviewer_verdict=accept`, and `purge_verified`.
 Owner radio `C7DBE974`.
+
+Production UI execute may write owner-only `vision-tmp/run-*`
+frames only when both an approved live-test mode
+(`BILLY_TEST_MODE` is `ui-full` or `full`) and a pytest
+`/live/` context are present. `PYTEST_CURRENT_TEST` alone is
+not enough. Owner radio `48ABEEB7` / `02CB47D8`.

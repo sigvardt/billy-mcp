@@ -583,6 +583,7 @@ def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
     body = live[start:end]
     before = body.index('frame_dir / "01_before.png"')
     env = body.index("BILLY_VISION_FRAME_DIR")
+    mode = body.index('BILLY_TEST_MODE", "ui-full"')
     create_exec = body.index("ui_invoices_create_execute")
     before_submit = body.index("02_before_submit.png")
     after_create = body.index('frame_dir / "03_after_create.png"')
@@ -592,7 +593,7 @@ def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
     after_delete = body.index('frame_dir / "05_after_delete.png"')
     client_gone = body.index('await _list_has_name(cleanup, slug, "clients", contact)')
     vision = body.index("write_vision_record")
-    assert env < create_exec < before_submit
+    assert mode < env < create_exec < before_submit
     assert before < create_exec
     assert create_exec < after_create < update_preview
     assert price < after_update
