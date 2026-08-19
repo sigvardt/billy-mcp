@@ -73,20 +73,32 @@ sources:
   - radio:FE6FA4B1
   - radio:7C9348E1
   - radio:89DEED22
+  - radio:9B979A05
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T20:10:00Z
+updated: 2026-08-19T20:50:00Z
 ---
 
 ## Binding now
 
-`89DEED22` (saved, P9, current): after the `7C9348E1` landing,
-reconcile the official source lock test-first. Live ETag and
-hash differ from the lock. Intro route changed from
-`GET /v2/user/organizations` to `GET /v2/organizations`. Decide
-whether that changes an inventory row, a special route, or only
-prose. Update fingerprint and affected evidence only if the
-captured official document is stable. Then the 121 offline API
-blockers. Never infer bulk schemas. No live API.
+`9B979A05` (saved, P10, current after lock COMMIT): split the 121
+offline blockers by evidence, not one permanent-red bucket. For
+the 25 `method_closed_offline` rows, current official Supports
+tables are the primary contract; an unauthenticated 405 must not
+silently override current official documentation. Then the two
+`readonly_field_map_insufficient` transaction writes and two
+`meta_delete_unqualified` rows from official tables/examples and
+static official assets only. For bulk92, exhaust the official
+page/assets plus static first-party client bundles for exact
+request and response schemas. Never infer a common shape. Never
+live API. Land the smallest proved cohort with independent Grok
+review. Unresolved stay red.
+
+`89DEED22` (saved, P9, lock landed this COMMIT): official lock is
+ETag `tmhc6wpdc835zt` / MD5 `053f755f52e3926b028e29325e3670d4`.
+Intro `GET /v2/organizations` is prose for
+`api.organizations.list`. Special `GET /v2/user/organizations`
+(`api_user_list_organizations`) is kept. The 121 remainder is now
+owned by `9B979A05`. Never infer bulk schemas. No live API.
 
 `7C9348E1` (saved, P10, landed): API `live_tested` stays false
 with `qualification.live_api=out_of_scope_by_user` on every API

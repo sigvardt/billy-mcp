@@ -52,28 +52,29 @@ sources:
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:89DEED22
+  - radio:9B979A05
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T20:10:00Z
+updated: 2026-08-19T20:50:00Z
 ---
 
 ## Now
+
+Binding `89DEED22` lock reconcile is landed. Independent review
+PASS. Official inventory lock is ETag `tmhc6wpdc835zt`, MD5
+`053f755f52e3926b028e29325e3670d4`. Intro
+`GET /v2/organizations` is prose for existing
+`api.organizations.list`. Special `api_user_list_organizations`
+stays on `GET /v2/user/organizations`. Do not drop it. The 121
+offline blockers (92 bulk + 29 residual) stay red. Never infer
+bulk schemas. Owner `9B979A05` splits the next slice by evidence
+cohorts, not one permanent-red bucket. No live API. Do not finish.
 
 Binding `7C9348E1` is landed. Independent review PASS. All 305
 API rows have `live_tested=false` and
 `qualification.live_api=out_of_scope_by_user`. The 184
 implemented rows are `kind=live_api_deferred`. Completeness no
 longer requires API `live_tested=true`. `complete` stays false
-on bulk92. Do not finish.
-
-Next binding `89DEED22`: test-first official lock reconcile.
-Live page ETag `tmhc6wpdc835zt` / MD5
-`053f755f52e3926b028e29325e3670d4` vs lock `wcw4x9hqvu3603` /
-`8b94b0135c91fd15fe54ea33e088a4be`. Exact docs delta is two
-intro sentences: `GET /v2/user/organizations` became
-`GET /v2/organizations`. Decide if that changes a special row
-or is prose only. Update the fingerprint only if the captured
-page is stable. Then the 121 offline blockers. No live API.
-Do not drop `api_user_list_organizations` in this landing.
+on bulk92.
 
 Binding `FE6FA4B1` is landed. Independent review PASS. Godkend
 cite is only on the posting rows. Contacts C/U/D, bills C/U/D,

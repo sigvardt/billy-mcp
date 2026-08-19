@@ -9,8 +9,9 @@ sources:
   - scripts/generate_coverage_report.py
   - scripts/check_coverage.py
   - tests/coverage/test_api_live_qualification_semantics.py
+  - tests/coverage/test_official_docs_lock.py
 created: 2026-08-19T20:10:00Z
-updated: 2026-08-19T20:10:00Z
+updated: 2026-08-19T20:30:00Z
 ---
 
 # API live qualification semantics
@@ -49,10 +50,13 @@ residual-five writes).
 
 ## Lock
 
-Generator `DOCS_ETAG` / `DOCS_MD5` stay the inventory lock until a
-test-first reconcile of the live official page. Live observation
-may be recorded as `docs_etag_observed` on the deferred
-qualification. Do not invent bulk tools from an ETag change.
+Inventory lock is ETag `tmhc6wpdc835zt`, MD5
+`053f755f52e3926b028e29325e3670d4` (captured official page). Intro
+prose cites `GET /v2/organizations` for the existing
+`api.organizations.list` row. Special `GET /v2/user/organizations`
+(`api_user_list_organizations`) is kept though absent from the
+current page. Do not invent bulk tools from the fingerprint
+change.
 
 ## Not this page
 

@@ -16,9 +16,11 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_URL = "https://www.billy.dk/api/"
-# Official docs fingerprint reconfirmed 2026-07-31 (research100 / independent review).
-DOCS_ETAG = "wcw4x9hqvu3603"
-DOCS_MD5 = "8b94b0135c91fd15fe54ea33e088a4be"
+# Official docs fingerprint promoted 2026-08-19 (89DEED22). Live intro cites
+# GET /v2/organizations for the existing list row. Special /user/organizations
+# is kept though absent from the current page.
+DOCS_ETAG = "tmhc6wpdc835zt"
+DOCS_MD5 = "053f755f52e3926b028e29325e3670d4"
 
 # Dual-proved geo/reference UI families (research138 + research139 + research142
 # + research143 + research144 + research147 + research148 + research149 +
@@ -922,9 +924,9 @@ UI_QUALIFICATION_FIELDS = (
 LIVE_API_OUT_OF_SCOPE = "out_of_scope_by_user"
 LIVE_API_DEFERRED_KIND = "live_api_deferred"
 LIVE_API_OWNER_SKIP = "LIVE_API_OWNER_SKIP"
-# Live page observed 2026-08-19; lock stays DOCS_ETAG / DOCS_MD5.
-DOCS_ETAG_OBSERVED = "tmhc6wpdc835zt"
-DOCS_MD5_OBSERVED = "053f755f52e3926b028e29325e3670d4"
+# Lock promoted to the captured 2026-08-19 page; no remaining drift pair.
+DOCS_ETAG_OBSERVED = DOCS_ETAG
+DOCS_MD5_OBSERVED = DOCS_MD5
 
 # Owner 96908DC6 / E004E7D5: open-only chrome is not a finished CUD write.
 # Empty after FE6FA4B1 moved the last five residual writes to owner scope.
@@ -3097,7 +3099,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
 def special_rows() -> list[dict[str, Any]]:
     """Build the six separately documented prose routes without inventing more."""
 
-    return [
+    rows = [
         base_api_row(
             row_id="api.special.files_upload",
             area="files",
@@ -3200,6 +3202,14 @@ def special_rows() -> list[dict[str, Any]]:
             source_kind="special",
         ),
     ]
+    user_organizations = next(row for row in rows if row["id"] == "api.special.user_organizations")
+    user_organizations["evidence"] = (
+        f"{user_organizations['evidence']}; live intro lists user companies "
+        "via GET /v2/organizations (api.organizations.list); "
+        "GET /v2/user/organizations is absent from the current official page; "
+        "tool path kept"
+    )
+    return rows
 
 
 def build_api_manifest() -> dict[str, Any]:

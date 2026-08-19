@@ -1,15 +1,15 @@
 ---
 name: todo
-desc: Open product work after API live_tested semantics.
+desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T20:10:00Z
+updated: 2026-08-19T20:50:00Z
 ---
 
 ## Open
 
-- Binding `89DEED22`: test-first official lock reconcile (`GET /v2/organizations` vs `/v2/user/organizations`), then 121 offline API blockers. No live API. Do not finish.
+- Binding `9B979A05`: after the docs-lock COMMIT, split the 121 offline blockers by evidence. 25 method-closed vs current official Supports (405 must not silently override docs). Then two readonly transaction writes and two meta deletes from official tables/assets only. Then bulk92 from official page/assets plus static first-party clients. Never infer a common bulk shape. Land the smallest proved cohort. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -23,6 +23,7 @@ updated: 2026-08-19T20:10:00Z
 
 ## Done
 
+- Binding `89DEED22` lock: official fingerprint is `tmhc6wpdc835zt` / `053f755f52e3926b028e29325e3670d4`. Intro `GET /v2/organizations` is prose for `api.organizations.list`. Special `api_user_list_organizations` kept. Independent review PASS.
 - Binding `7C9348E1`: every API row has `live_tested=false` and `live_api=out_of_scope_by_user`. Implemented rows are `live_api_deferred`. Completeness no longer requires API `live_tested=true`. Independent review PASS.
 - Binding `FE6FA4B1`: five residual writes are `out_of_scope_by_user`. Flags stay false. Not `not_applicable`.
 - Binding `58D7D0E1`: 11 accepted CUD rows are `preview_execute`. Independent review passed. `complete` stays false.
