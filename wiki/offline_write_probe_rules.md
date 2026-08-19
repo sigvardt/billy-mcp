@@ -1,14 +1,14 @@
 ---
 name: offline_write_probe_rules
 title: Offline write probe rules from official docs and unauth API gates
-desc: Durable rules for when Supports flags may not open offline ticketed-write freezes.
+desc: Durable rules for official Supports, typed nested write payloads, and bulk freeze.
 tags: [billy, api, writes, probes]
 sources:
   - https://www.billy.dk/api/
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-02T19:10:00Z
+updated: 2026-08-20T00:30:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -32,14 +32,25 @@ coverage green.
 2. Unauthenticated **DELETE** of a missing id that returns **200** matches the
    docs' idempotent-delete narrative. It is **not** cleanup proof and not live
    qualification.
-3. Unauthenticated **405** (`METHOD_NOT_ALLOWED`) **overrides** Supports-flag
-   optimism for offline green paths. Do not ship ticketed tools for that method
-   until authenticated non-production evidence or an official docs change
-   proves the method.
+3. Current official Supports tables are the primary contract. An
+   unauthenticated **405** (`METHOD_NOT_ALLOWED`) must not silently
+   override them. When Supports lists a singular write **and** the
+   official property table names at least one non-readonly field,
+   ship the exact typed offline ticketed contract. Keep
+   `live_tested` false (`live_api=out_of_scope_by_user`). When
+   Supports lists the write but the property table has no writable
+   field map, record that contradiction and stay red. Live API
+   proof stays out of scope.
 4. Bulk save/delete remain empty-tool red until a request/response body contract
    exists. Supports bulk mentions alone are not enough. After research137 docs/asset exhaust, treat bulk as **external-contract blocked** (see below), not as
    an open evidence loop.
-5. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
+5. When the official property table names the exact writable fields for a
+   singular write, the FastMCP preview payload is a nested Pydantic model of
+   those fields with `extra=forbid`. Do not use an opaque JSON object for that
+   payload. Enum members stay opaque strings unless the docs list them. Do not
+   infer required fields from live API. `accountNatures` create/update follow
+   this rule: `reportType`, `name`, and `normalBalance` only.
+6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests
    should still deny it.
 
@@ -129,13 +140,17 @@ research136 bulk body probes above.
 
 ## Planning note
 
-Wave-5g through Wave-5s-C offline products are on root (**184** offline
-contract-tested rows). All six specials are offline-producted; live remains
-false. Residual clear **29**, bulk **92**, UI, vision, and completeness stay
-fail-closed. There is no further offline write product slice. Next work is
-Wave-5t live residual/bulk gate harness (token required for product progress).
-Keep residual 405 false friends and `transactions` CUD offline-blocked without
-live samples. Detail: [[wave_fives_residual_specials_research]].
+Wave-5g through Wave-5s-C offline products are on root. Ticketed
+`accountNatures` create/update later left the residual honesty freeze
+(official Supports plus writable `reportType`, `name`, `normalBalance`).
+Current generated snapshot: implemented **525**, contract **530**,
+live/vision **339**, complete **false**. Residual honesty remaining **27**
+(23 method-closed, 2 readonly-map, 2 meta-delete). Bulk **92** stay
+`external_contract_blocker`. Live API stays `out_of_scope_by_user`. Next
+offline slice is the remaining method-closed rows whose official property
+tables still name writable fields. Do not infer bulk schemas. Detail:
+[[wave_fives_residual_specials_research]] and
+[[residual_clear_method_closed_inventory_honesty]].
 
 ## Wave-5s residual clear (research83)
 
@@ -143,12 +158,14 @@ After specials product (files upload + invoice email + invoiceDeliveries), the
 remaining clear not-impl set is **29** rows. Unauth probes against
 `https://api.billysbilling.com/v2` (no token, no persistent records) show:
 
-1. **405 false friends (majority):** `accountNatures`, `balanceModifiers`,
+1. **405 false friends (historical majority):** `accountNatures`, `balanceModifiers`,
    geo/reference create/update (`cities`, `countries`, `currencies`, `states`,
    `zipcodes`, `locales`, `countryGroups`), `contactBalancePostings`,
    `postings`, `invoiceReminderAssociations` create/update, and
-   `bankPayments` singular delete. Supports create/update optimism is overridden
-   offline by rule 3.
+   `bankPayments` singular delete. Rule 3 now forbids using unauth 405 as
+   the contract. `accountNatures` create/update left this freeze as ticketed
+   offline tools. Remaining method-closed rows stay red until their official
+   writable field map is implemented the same way.
 2. **Partial method open only:** `transactions` POST/PUT return **401** but stay
    offline-blocked without live property-table and cleanup evidence.
    `transactions` DELETE and `invoiceReminderAssociations` DELETE of a missing

@@ -74,11 +74,30 @@ sources:
   - radio:7C9348E1
   - radio:89DEED22
   - radio:9B979A05
+  - radio:EAB2F91B
+  - radio:B54A6BFC
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T20:50:00Z
+updated: 2026-08-20T00:45:00Z
 ---
 
 ## Binding now
+
+`B54A6BFC` (saved, P9, next after this COMMIT): implement only
+singular `api.bankPayments.delete` from the current official
+Supports table. Reuse the existing bankPayments ticketed write
+service if ownership stays clear. Non-empty id. Preview makes no
+request. Execute binds DELETE /bankPayments/:id with an exact
+single-use ticket and no invented request body. Keep
+`live_tested=false` with `live_api=out_of_scope_by_user`. Then
+invoiceReminderAssociations create/update. No live API.
+
+`EAB2F91B` (unsaved, P10, landed): official `#v2accountnatures`
+writable fields are exactly `reportType`, `name`, and
+`normalBalance`. Ticketed create/update preview payloads use a
+nested Pydantic model of those optional strings with
+`extra=forbid`. Opaque `dict[str, JsonValue]` is refused for
+this resource. Enum members stay opaque strings. Do not infer
+required fields or live API.
 
 `9B979A05` (saved, P10, current after lock COMMIT): split the 121
 offline blockers by evidence, not one permanent-red bucket. For
@@ -451,7 +470,7 @@ Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI t
 
 ## Not a completion wall by themselves
 
-Official-docs bulk92 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) and residual29 method-closed honesty stay red and deferred. Do not mark them permanently excluded. Do not run live API to green them. UI writes are the current product.
+Official-docs bulk92 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) and residual29 stay red until `9B979A05` proves a cohort. Do not mark them permanently excluded. Do not run live API. An unauthenticated 405 must not silently override current official Supports tables. The current product is the smallest proved offline cohort.
 
 ## Agent routing
 

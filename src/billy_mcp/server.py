@@ -6,6 +6,7 @@ from pathlib import Path
 
 from fastmcp import FastMCP
 
+from billy_mcp.api.account_nature_writes import register_account_nature_write_tools
 from billy_mcp.api.account_reads import register_account_read_tools
 from billy_mcp.api.account_writes import register_account_write_tools
 from billy_mcp.api.attachment_writes import register_attachment_write_tools
@@ -1173,6 +1174,7 @@ def create_server(
     register_catalog_write_tools(server, client, write_protocol)
     register_daybook_write_tools(server, client, write_protocol)
     register_account_write_tools(server, client, write_protocol)
+    register_account_nature_write_tools(server, client, write_protocol)
     register_daybook_balance_account_write_tools(server, client, write_protocol)
     register_daybook_transaction_write_tools(server, client, write_protocol)
     register_daybook_transaction_line_write_tools(server, client, write_protocol)

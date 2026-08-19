@@ -401,6 +401,15 @@ WAVE_FIVESC_API_TOOL_NAMES = frozenset(
     }
 )
 
+ACCOUNT_NATURE_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_account_natures_create_preview",
+        "api_account_natures_create_execute",
+        "api_account_natures_update_preview",
+        "api_account_natures_update_execute",
+    }
+)
+
 
 class FakeAuthStatusChecker:
     def __init__(self) -> None:
@@ -1184,7 +1193,8 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESA_API_TOOL_NAMES) == 1
     assert len(WAVE_FIVESB_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 271
+    assert len(ACCOUNT_NATURE_WRITE_API_TOOL_NAMES) == 4
+    assert len(api_tool_names) == 275
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",
@@ -1299,6 +1309,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | WAVE_FIVESA_API_TOOL_NAMES
         | WAVE_FIVESB_API_TOOL_NAMES
         | WAVE_FIVESC_API_TOOL_NAMES
+        | ACCOUNT_NATURE_WRITE_API_TOOL_NAMES
         | auth_tool_names
         | ui_tool_names
     )

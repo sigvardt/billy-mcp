@@ -6,388 +6,83 @@ sources:
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
   - https://www.billy.dk/api/
   - radio:96908DC6
-  - radio:07600147
-  - radio:E87B6AEF
-  - radio:31B0C7A6
-  - radio:28C8FBC8
-  - radio:C0721A14
-  - radio:D326FFB3
-  - radio:AD8966F2
-  - radio:23709235
-  - radio:FD39FFE7
-  - radio:A337A622
-  - radio:113F1E05
-  - radio:D68E402A
-  - radio:EC676F84
-  - radio:802D71CF
-  - radio:9310BC17
-  - radio:1F1B34F8
-  - radio:C6DA7FC8
-  - radio:BF91E28F
-  - radio:65521475
-  - radio:7BA75272
-  - radio:59A3A933
-  - radio:B9C4FA7C
-  - radio:DECEA79B
-  - radio:F1A2EFC2
-  - radio:3CB4D807
-  - radio:3D5A9B9C
-  - radio:32662804
-  - radio:D859572B
-  - radio:70DB45E6
-  - radio:4EAEAFFD
-  - radio:E8EA9823
-  - radio:D2FD1919
-  - radio:A6A2B60C
-  - radio:31BAF1FF
-  - radio:D71E5B82
-  - radio:A0633A17
-  - radio:A342BBDC
-  - radio:48ABEEB7
-  - radio:330C5913
-  - radio:7C96E1C3
-  - radio:94A4C844
-  - radio:A41C242F
-  - radio:58D7D0E1
+  - radio:9B979A05
+  - radio:EAB2F91B
   - radio:7C9348E1
   - radio:FE6FA4B1
-  - radio:89DEED22
-  - radio:9B979A05
+  - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T20:50:00Z
+updated: 2026-08-20T00:35:00Z
 ---
 
 ## Now
 
-Binding `89DEED22` lock reconcile is landed. Independent review
-PASS. Official inventory lock is ETag `tmhc6wpdc835zt`, MD5
-`053f755f52e3926b028e29325e3670d4`. Intro
-`GET /v2/organizations` is prose for existing
-`api.organizations.list`. Special `api_user_list_organizations`
-stays on `GET /v2/user/organizations`. Do not drop it. The 121
-offline blockers (92 bulk + 29 residual) stay red. Never infer
-bulk schemas. Owner `9B979A05` splits the next slice by evidence
-cohorts, not one permanent-red bucket. No live API. Do not finish.
+Ticketed offline `api.accountNatures.create` and
+`api.accountNatures.update` are landed. Preview tools
+`api_account_natures_create_preview` and
+`api_account_natures_update_preview` take a nested
+`AccountNaturePayload` of only `reportType`, `name`, and
+`normalBalance` (optional strings, `extra=forbid`). Nested extras
+such as `customField` fail at the FastMCP boundary. Enum members
+stay opaque strings. No singular delete tools. Bulk stay red.
+`live_tested` stays false with
+`qualification.live_api=out_of_scope_by_user`.
 
-Binding `7C9348E1` is landed. Independent review PASS. All 305
-API rows have `live_tested=false` and
-`qualification.live_api=out_of_scope_by_user`. The 184
-implemented rows are `kind=live_api_deferred`. Completeness no
-longer requires API `live_tested=true`. `complete` stays false
-on bulk92.
+Generated snapshot: implemented 525, contract 530, live/vision
+339, `complete=false`. Residual honesty remaining is 27 (23
+method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
+`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
+`tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-Binding `FE6FA4B1` is landed. Independent review PASS. Godkend
-cite is only on the posting rows. Contacts C/U/D, bills C/U/D,
-organizations update, invoices C/U/D, and products create are
-`preview_execute` with the three flags true. The five residual
-files and ledger writes are `out_of_scope_by_user` with flags
-false. `complete` is false on bulk92. Do not remake dumps or live
-CUD. Do not edit `coverage/status.json` by hand. Owner `96908DC6`
-still binds the overall finish. API live stays deferred.
-Product delete watches one `DELETE /v2/products/:id` 2xx before
-settled `/products` row-absence (`A0633A17`). Invoice confirm is
-exact **Ja, slet faktura**. Owner `D71E5B82`: leftover reverse-clean
-is isolated from reusable invoice CUD. The live CUD test creates its
-own customer, product, and draft, proves **Enhedspris** `2,00`, then
-deletes that triple. It does not depend on `LEFTOVER_*` names.
-No children are running. Seven write children stay completed and merged.
-Owner `A6A2B60C` independently proved empty invoices, products,
-and contacts after reverse cleanup. Owner `31BAF1FF` proved the
-same empty lists after disposable self-contained CUD. Do not
-remake leftover reverse-clean. Do not map a delete-only test
-as invoice update.
-Update/delete tickets now require `contact_name`. Open is the
-list row, not a POST id. A browser PUT request is not persist
-(`B9C4FA7C`).
-Invoice persist watch now records only responses that have a
-status. `persist_hit` requires a 2xx. Update execute types
-**Enhedspris** as `2,00`, prefers **Opdater**, and fails unless
-a second session reads that price. A request-only PUT or a
-POST fallback is not persist.
-Owner `A342BBDC`: create execute captures
-`02_before_submit.png` after fill and before **Gem som kladde**,
-then proves customer, product, description, and unit price.
-Live CUD `run_id=60b6d620772644f3bca9609c8ae53846` is
-`author=independent_review`, `reviewer_verdict=accept`,
-`purge_verified=true`. Frame folder is gone. Owner `330C5913`
-and `7C96E1C3` independently proved empty lists and the five
-visible states. Do not remake leftover reverse-clean.
-`48ABEEB7` / `02CB47D8` conjunctive gate is in
-`live_allowed_vision_frame_dir`. Invoice CUD coverage names
-`ui_invoices_{create,update,delete}_preview`. Live CUD uses
-`write_live_pending_unless_accepted` so a later `ui-full` run
-keeps the accept. Honesty-16 stay red. Product live CUD
-`run_id=29c1b1de26a14976aaa1b98bfe9de46e` is
-`author=independent_review`, `reviewer_verdict=accept`,
-`purge_verified=true`. Frame folder is gone. Coverage names
-`ui_products_create_preview`. Owner `A41C242F` proved empty
-lists and the four visible states. Capture reads bound
-**Enhedspris** before screenshot (`94A4C844`). Stay red.
-`9310BC17` still binds: Kunde shows an existing customer on a
-fresh `/invoices/new` after the customer exists. Official docs
-ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:
-new page plus `[data-cy='dropdown-icon']` binds the tagged
-customer (`vendor_bind=scoped:existing_option`, GET with
-`contactId`). Create preview requires `unit_price > 0` and
-`product_name`. **Enhedspris** fill proved (`grossAmount=1`).
-Owner `56354201` proves product create and hard-delete:
-**Opret produkt**, **Enhedspris**=1, row `data-cy=delete-icon`,
-**Ja, slet**. Do not stop on `67CBACB6`. Do not treat product
-as archive-only. Create preview now requires `unitPrice > 0`. Delete tools
-`ui_products_delete_{preview,execute}` are registered. The old
-`product_persist_allowed` dump gate is gone. Product create and
-delete execute compare the live URL slug to the ticket
-organisation before fill or click (`CONFIRMATION_MISMATCH`).
-A still-visible create dialog after **Gem produkt** is
-`UI_CHANGED` with any visible validation, not success. Parent
-`C6DA7FC8`: that live `NOT_FOUND` is our session/search miss,
-not Billy persist. Owner proved create on `/:org/products`
-with defaults 1110 Salg, then an unfiltered Products list.
-Live FastMCP product create persist and table-item delete
-passed. Do not remake dumps. Do not green.
-Daybook and files still wait.
+Binding `9B979A05` still owns the rest of the 121 split. Binding
+`B54A6BFC` is the next proved cohort after this COMMIT: only
+singular `api.bankPayments.delete`. Reuse the existing
+bankPayments ticketed write service if ownership stays clear.
+Require a non-empty id. Preview makes no request. Execute binds
+DELETE /bankPayments/:id with an exact single-use ticket and no
+invented request body. Then continue to invoiceReminderAssociations
+create/update. Unauth 405 must not override Supports. Never infer
+bulk schemas. No live API. Do not finish.
 
-Daybook create-contract dump is delivered:
-`inspect-live-daybooks-create-contract.json`. Path `daybooks_new`.
-Heading `none`. `opret_ny_kassekladde_count=1` and
-`indstillinger_count=1`, so `unique_persist_token=none`.
-`name_input_count=0`. **Godkend** / **Bogfør** / **Gem** are 0.
-**Tilføj** and **Mere** are 1. `proved_bind=none`. Independent
-review failed the helper as a redundant permanent diagnostic.
-The helper files are deleted. Wiki keeps the dump fact. Do not
-remake. Do not arm `_ledger_write`. Execute stays fail-closed.
+Owner `96908DC6` still binds overall finish. API live stays
+deferred. Årsrapporter stays `out_of_scope_by_user`
+(`ANNUAL_REPORTS_OWNER_SKIP`). Do not invent `ui_annual_*` or
+`api_annual_*` tools. Do not edit `coverage/status.json` by hand.
 
-`A337A622` stops product archive and list-shell enumeration.
-Independent review failed the Lagermodul helper as a redundant
-permanent diagnostic. The helper files are deleted. Wiki keeps
-the dump fact. Do not remake product list, dialog, or archive
-probes unless new read-only evidence names a different normal
-cleanup control. Persist stays fail-closed.
+## Proved UI writes still in inventory
 
-Product list archive chrome is classified. Dump
-`inspect-live-products-archive-list.json`:
-`products_path_class=products`, heading `produkter`,
-`search_control_visible=false`, named archive-filter counts 0,
-`unique_restore_readback=none`, `proved_bind=none`. No product
-created. Do not remake this dump.
-
-Lagermodul list archive chrome is classified. Dump
-`inspect-live-inventory-archive-list.json`:
-`inventory_path_class=inventory`, heading `lagermodul`,
-`create_form_open=false`, named archive-filter counts 0,
-`unique_restore_readback=none`, `proved_bind=none`. No product
-created. Do not remake this dump. `67CBACB6` stays open: neither
-list shell has a unique restore filter.
-
-Official product create dialog is classified on the live
-Lagermodul form. `inventory_path_class=inventory`.
-`inventory_heading_token=lagermodul`. `create_form_open=true`.
-`dialog_heading_token=opret_produkt`. `gem_produkt_count=1`.
-`gem_count=0`. `save_cta_token=gem_produkt`.
-`proved_submit=gem_produkt`. `arkiveret_count=1`.
-`cleanup_token=archive_checkbox`.
-`unique_cleanup_path=archive_checkbox`. Persist stays
-fail-closed. Archive hides from lists. It is not **Slet**.
-Owner question `67CBACB6` is open. Unbound execute now names
-**Gem produkt**. Persist still fail-closed. Do not remake this
-dump. Do not remake Mere/Slet. Do not click **Gem produkt**.
-
-Official invoice-list **Opret faktura** landing is delivered
-on `880dce8`. `list_path_class=invoices_empty`. One button click.
-Destination `invoices_new` with no query. Contact empty.
-`option_role_count=0`. `proved_bind=none`. Same empty closed
-form as raw create-open. Do not remake that dump. Do not remake
-picker dumps. `113F1E05` forbids another **Opret faktura** entry dump, including
-**Tilgodehavender**. Create-form helper restates closed probes. It
-is not a new scoped DOM/AX or page-local source inspect. Invented
-`arrow_open` is ignored. `unique_normal_action=false`,
-`next_slice=product_create`, `UI_CHANGED`. Product persist is
-fail-closed until a unique UI delete path exists. Invoice CUD stays
-red and is not frozen as done.
-
-`8EBC19D5` is applied. The helper no longer observes
-`document.body`. Row cap stays 16. Allowed recapture:
-`mutation_owned_count=1`, seven pickerfield rows, no option, no
-footer, `unique_action=none`, `proved_bind=none`. Do not remake
-that dump. Do not remake the page-wide draft-save dump.
-
-`2683CE6B` scoped dump is delivered under the contact-owned
-roots. Official list footer did not appear. Next path is a
-different normal-interface route, not another observer dump. `FD39FFE7` still makes invoice draft CUD and
-product create mandatory. Invoice draft CUD first, then product
-create, then files or ledger. Both stay mandatory and red. They are
-not finished as `UI_CHANGED`. Official first-invoice support names
-**Vælg kunde** then **Opret ny**. Live rest dump is committed on
-`e49c8f3`: button 0, link 0, other 0, `hit_is_contact_input=true`,
-no click, `proved_bind=none`, `UI_CHANGED`. Those words are the
-contact-input placeholder, not a separate named control. Do not remake
-that rest dump. Do not remake the closed picker set. Invoice CUD stays
-red and is not finished.
-
-Draft-save validation-open dump is delivered. One **Gem som kladde**
-click: `gem_clicked=true`, `invoice_persisted=false`,
-`validation_message_present=false`, `ingen_kontakter_count=0`,
-`opret_ny_count=1`, `option_role_count=0`, `proved_bind=none`,
-`UI_CHANGED`. Page-wide `opret_ny_count=1` is not a proved list
-open (sidebar decoy). No existing-option bind. Do not remake that
-dump. Do not click **Opret ny**. Leftover tagged customer deleted.
-Absence count 0.
-Honesty 16 stay red. Never call the API. Do not guess selectors.
-Do not force or evaluate clicks. If that path cannot bind, ask the
-owner. Do not freeze either as done.
-
-`23709235` organization remap is committed. Live FastMCP tagged set
-plus exact empty restore passed. Independent review accepted
-`run_id=0937a009bf7e496ca2ce15a8af313868`. Frames purged.
-`ui.parity.organizations.update` names
-`ui_organizations_update_preview`. Honesty 16 stay red. Do not
-remake the phone dump.
-
-`D326FFB3` product delete-chrome recapture is closed and unsaved.
-`proved_delete_path=none`. Do not remake that dump. `FD39FFE7`
-keeps product create mandatory and red. Do not treat the closed
-probe as a finished product. Do not create an uncleanable product.
-
-`AD8966F2` phone dump is delivered and unsaved. Do not remake that dump.
-
-`C0721A14` customer-detail **Opret faktura** inspect is delivered
-and closed on `5fa106c`. Path `contacts_customer`. Tagged name
-visible. **Ret** count 1. Exact **Opret faktura** count 0. Role
-`none`. Href `none`. No click. `proved_prebind=none`. `UI_CHANGED`.
-Customer deleted. Absence proved. This alternative route is closed.
-Do not remake.
-
-`31B0C7A6` Ember inspect is delivered and closed. Ember view is present
-(`view_registry`, `pickerfield`, `ember_digit` id class). No
-allowlisted selection, collection, open state, or methods.
-`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
-Do not remake this inspect. Do not invoke the view.
-
-Fiber inspect is delivered and closed. `fiber_key_class=none`.
-`unique_normal_action=false`. `UI_CHANGED`. Do not remake.
-
-Listener contract (`28C8FBC8`) is delivered, closed, and unsaved.
-Nine sanitized rows. Input `keydown` / `focus` / `blur` / `other` /
-`mouseup`. Overlay `mousedown`. Pickerfield `other` / `other` /
-`click`. All bubble. No property categories. No accepted key. No
-named invoke. `unique_normal_action=false`. `UI_CHANGED`. No click.
-No customer. Do not remake Ember, fiber, or the `452E0773` locator
-dump. Do not infer `click_open`. Stay red.
-
-Structure compare is closed on `8feb636`. Kunde is `pickerfield` plus
-`data-cy` and overlay. Bills is `input_wrapper` plus search plus
-portal list. `same_family=false`. `transferable_action=none`.
-`unique_normal_action=false`. `UI_CHANGED`. No click. No customer.
-Do not copy the bills wrapper. Do not remake Ember, fiber,
-listener, or this compare.
-
-`452E0773` is closed. The loaded control contract names `click_open` on
-the closest `pickerfield` wrapper (`data-cy` name only). Binding
-`token_class=name_quoted_contact`. One wrapper click already ran.
-`option_role_count=0`. `UI_CHANGED`. Role-option zero is not proof the
-picker stayed closed.
-
-`07600147` is closed and committed. One FastMCP tagged customer, fresh
-confirm, scoped observer, one `pickerfield` click. `changed_node_count=0`.
-`exact_match_target=false`. `UI_CHANGED`. Customer deleted. Absence
-proved. Live test verifies the dump without repeating that click.
-
-`E87B6AEF` dump is delivered and review FAIL. Two visible descendants:
-contact `INPUT` and overlay `DIV` at `dx=242`. `unique_target=false`.
-`wrapper_handler_guard=none`. `UI_CHANGED`. No customer. No click.
-Independent review: dump contract met. Invoice CUD still unbound.
-Do not remap. Do not click the overlay or the wrapper.
-
-Closed and not to be repeated: typed-only bind (`51E18E60`), right-edge
-chevron dump (`A3AB03C3`), DIV ownership click (`9F777B8F`), tagged type
-trace (`8EFD0EAD`), event or pageerror dump (`4A5CD1E7`), rest route
-capture (`F12B607E`), the first `pickerfield` click (`452E0773`), the
-instrumented post-click dump (`07600147`), the descendant map
-(`E87B6AEF`), the Ember inspect (`31B0C7A6`), the fiber inspect,
-the listener contract (`28C8FBC8`), the structure compare, and
-the customer-detail **Opret faktura** inspect (`C0721A14`),
-the product delete-chrome recapture (`D326FFB3`), the
-**Vælg kunde** named-control rest dump (`hit_is_contact_input=true`),
-and the draft-save validation-open dump (`opret_ny_count=1`,
-`proved_bind=none`), and the scoped post-validation dump
-(`unique_action=none`, `proved_bind=none`).
-Do not type. Do not recapture routes. Do not force or evaluate clicks.
-Do not sweep portals. Do not send a second diagnostic click.
-Do not remake the descendant map. Do not remake the Ember inspect.
-Do not remake the fiber inspect.
-Do not remake the listener contract.
-Do not remake the structure compare.
-
-## Proved and still red
-
-Contacts CUD through FastMCP is live-proved. Tools are
-`ui_clients_{create,update,delete}_preview`. Vision
-`run_id=3d5b151dfd5342258f8734373597f8c1` is
-`author=independent_review`, `reviewer_verdict=accept`,
-`purge_verified=true`. Frame folder is gone.
-`ui_clients_update_open` and `ui_clients_delete_open` stay on
-`RETAINED_OPEN_SHELL_TOOLS`. Browser egress allows PUT
-`/v2/contacts/:id` only.
-
-Draft bills CUD through FastMCP is live-proved on existing-option bind.
-Tools are `ui_bills_{create,update,delete}_preview`. Vision
-`run_id=9920dd9476474b41aef70e6d66d24638` is accept with purge
-verified. Frame folder is gone. `ui_bills_update_open` and
-`ui_bills_delete_open` stay retained. Never book, approve, pay, or email.
-
-Invoice CUD still names `ui_invoices_*_open`. Offline preview or execute
-helpers exist. Independent review of that family is FAIL. Dummy 15-char
-type is not an existing-customer observation. Existing-customer type
-uses `MCP-UI-INV-` plus 8 hex and matching `value_len`. That is not a
-bind.
+Contacts, draft bills, invoices, products, and organization
+company fields are live FastMCP CUD with independent accept and
+purged frames. Coverage names the `*_preview` tools. Honesty-16
+stay red until remaining families prove the same way. Daybook
+persist is not unique. Files have no UI delete. **Godkend** stays
+prohibited. Product archive probes stay forbidden (`A337A622`).
+Leftover reverse-clean stays isolated from reusable invoice CUD
+(`D71E5B82`).
 
 ## Standing constraints
 
-`auth_login_wait` READY returns `organization_id` from the live URL slug.
-Ticket execute compares that slug to `prepared.binding.organization_id`.
-Read-back starts a second runtime and must authenticate
-(`E1E454F4`). Cleanup needs a third fresh read-back.
-Live write tests may write `author=live_test` and
-`reviewer_verdict=pending_review` only. They must not write `accept` or
-purge frames (`C7DBE974`).
+API token auth is offline only. Live `BILLY_API_TOKEN` is not
+required. Persistent browser profile is MCP-owned and headless.
+`auth_login_wait` READY returns `organization_id` from the live
+URL slug. Ticket execute compares that slug to
+`prepared.binding.organization_id`. Interface read-back starts a
+second runtime and must authenticate. Cleanup needs a third
+fresh read-back. Live write tests may write
+`author=live_test` and `reviewer_verdict=pending_review` only.
+They must not write `accept` or purge frames.
 
-Live refs: keyring service `billy-mcp`, opaque ids `billy-ui-primary`
-and `billy-ui-secondary`. `BILLY_ORGANIZATION_ID` stays unset until the
-dedicated non-production org is proved in the interface.
-Never log values. Never read `/Users/user/Desktop/billy_login.txt`.
-
-`/:org_slug/clients/empty` with heading Kontakter is the empty customers
-page. Exact **Ret** opens edit. **Slet kontakt** is a link. Confirm is
-**Ja, slet**. `{tag}-U` is a different name from `{tag}`. Save is
-`button[data-cy='save-button']` (**Gem**).
-
-`A6FB8FC2` stays a one-close leftover-portal constraint. `91A2C363`
-leftover Leverandør slice is closed.
+Live refs: keyring service `billy-mcp`, opaque ids
+`billy-ui-primary` and `billy-ui-secondary`. Never log values.
+Never read `/Users/user/Desktop/billy_login.txt`.
 
 ## Children
 
-Parent `main` is already in this branch. `git merge main` is already
-up to date. `origin/main` has nothing this branch lacks. No new
-parent commits. The seven write children still have empty logs
-against this branch. Leftover retired descendants stay unmerged.
+No children are running. Seven write children stay completed and
+merged (`ui_contacts_writes`, `ui_bills_writes`,
+`ui_invoices_writes` draft only, `ui_products_writes`,
+`ui_ledger_writes`, `ui_files_writes`, `ui_org_writes` company
+fields only). Leftover retired descendants stay unmerged. Do not
+continue, reset, or merge them.
 
-Merged with `--no-ff` and parked. No new child commits:
-
-- `ui_contacts_writes`
-- `ui_bills_writes`
-- `ui_invoices_writes` (draft only; no send or email)
-- `ui_products_writes`
-- `ui_ledger_writes`
-- `ui_files_writes`
-- `ui_org_writes` (company fields only; fail-closed on users or tokens)
-
-No children are running. 62 leftover descendant branches still have
-commits not in this branch. They stay retired and unmerged. Four have
-leftover project diffs (`ui_auth_status`, two Codex-fallback wiki
-pages, one Codex-fallback research page). Current `auth_status` plus
-login start/wait, and the existing wiki pages, already supersede them.
-Do not continue, reset, or merge them.
-
-Coverage stays red until remaining honesty families prove live FastMCP
-CUD with independent review. Node complete stays false.
 See `decisions.md` and `todo.md`.

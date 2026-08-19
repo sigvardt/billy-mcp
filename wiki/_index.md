@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-19T20:03:33Z
+updated: 2026-08-19T22:34:05Z
 ---
 
 # billy_mcp
@@ -27,11 +27,11 @@ updated: 2026-08-19T20:03:33Z
 
 [[invoices_bills_data_plane_egress|invoices_bills_data_plane_egress]]: Scoped browser path_allow for Billy SPA invoices and bills list GET (research168).
 
-[[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for when Supports flags may not open offline ticketed-write freezes.
+[[offline_write_probe_rules|offline_write_probe_rules]]: Durable rules for official Supports, typed nested write payloads, and bulk freeze.
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
-[[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Research186 inventory honesty for 29 residual clear API write rows — empty tool names and method-gate qualifications; not product ACCEPT, not greening, not completeness.
+[[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Residual clear API write honesty. 27 toolless rows remain after ticketed accountNatures create/update. Not completeness.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 

@@ -1254,6 +1254,16 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_account_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.accountNatures.create": (
+        "tests/api/test_account_nature_writes.py",
+        "tests/api/test_account_nature_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.accountNatures.update": (
+        "tests/api/test_account_nature_writes.py",
+        "tests/api/test_account_nature_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.files.get": (
         "tests/api/test_file_attachment_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
@@ -1803,8 +1813,6 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 # Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES (reconfirmed 2026-08-02).
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
-        "api.accountNatures.create",
-        "api.accountNatures.update",
         "api.balanceModifiers.create",
         "api.balanceModifiers.update",
         "api.bankPayments.delete",

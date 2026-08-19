@@ -4,12 +4,13 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T20:50:00Z
+updated: 2026-08-20T00:35:00Z
 ---
 
 ## Open
 
-- Binding `9B979A05`: after the docs-lock COMMIT, split the 121 offline blockers by evidence. 25 method-closed vs current official Supports (405 must not silently override docs). Then two readonly transaction writes and two meta deletes from official tables/assets only. Then bulk92 from official page/assets plus static first-party clients. Never infer a common bulk shape. Land the smallest proved cohort. Unresolved stay red. No live API. Do not finish.
+- Binding `B54A6BFC` (after this COMMIT): implement only proved singular `api.bankPayments.delete`. Failing contract fixture first. Reuse existing bankPayments ticketed write service if ownership stays clear. Non-empty id. Preview makes no HTTP. Execute binds DELETE /bankPayments/:id with an exact single-use ticket and no invented request body. Cover encoded ids, tamper, replay, expiry, wrong executor, missing auth. Independent Grok review, then invoiceReminderAssociations create/update. live_tested stays false. No live API. Do not finish.
+- Binding `9B979A05`: smallest cohort landed (typed ticketed `accountNatures` create/update). Remaining residual honesty is 23 method-closed + 2 readonly-map + 2 meta-delete = 27 until bankPayments.delete lands. Unauth 405 must not override Supports. Then remaining geo/country-group writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -23,6 +24,8 @@ updated: 2026-08-19T20:50:00Z
 
 ## Done
 
+- Binding `EAB2F91B`: nested `AccountNaturePayload` is only `reportType`, `name`, `normalBalance` with `extra=forbid`. FastMCP preview schema is typed. `customField` and undocumented nested keys fail at the tool boundary. Enum members stay opaque strings. Empty payload is allowed because docs list no required fields.
+- Binding `9B979A05` smallest cohort: ticketed offline `api.accountNatures.create` and `.update`. Residual honesty remaining 27. Independent review PASS on the cohort; typed payload is the FIX-VERIFY lock.
 - Binding `89DEED22` lock: official fingerprint is `tmhc6wpdc835zt` / `053f755f52e3926b028e29325e3670d4`. Intro `GET /v2/organizations` is prose for `api.organizations.list`. Special `api_user_list_organizations` kept. Independent review PASS.
 - Binding `7C9348E1`: every API row has `live_tested=false` and `live_api=out_of_scope_by_user`. Implemented rows are `live_api_deferred`. Completeness no longer requires API `live_tested=true`. Independent review PASS.
 - Binding `FE6FA4B1`: five residual writes are `out_of_scope_by_user`. Flags stay false. Not `not_applicable`.
