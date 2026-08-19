@@ -54,21 +54,54 @@ sources:
   - radio:32662804
   - radio:D859572B
   - radio:70DB45E6
+  - radio:4EAEAFFD
+  - radio:E8EA9823
+  - radio:D2FD1919
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T05:20:00Z
+updated: 2026-08-19T07:10:00Z
 ---
 
 ## Binding now
 
-`D859572B` (saved, P10): remove PUT prefix `/v2/invoiceLines/`.
-`watched=[]` does not name a path. Keep GET prefix `/v2/invoiceLines`
-for line render and PUT prefix `/v2/invoices/` for save.
+`D2FD1919` (saved, P10): leftover edit Mere then Slet shows heading
+**Bekræft**, text **Vil du slette denne kladdefaktura?**, button
+**Annuller**, exact active button **Ja, slet faktura**. Generic
+**Ja, slet** is wrong. Next: failing fixture for that exact
+button after `E8EA9823` capture. Confirm only through FastMCP.
+DELETE 2xx, fresh absence, reverse cleanup. No guessed
+selectors, force, or evaluate-click.
+
+`E8EA9823` (saved, P10): dump must record each exact `dialog`,
+`alertdialog`, and remaining `aria-modal` candidate with `role`,
+allowlisted visible label tokens, geometry, computed z-index, and
+`active_contained`. Empty `candidates` is valid only after those
+locators are counted. No page-wide sweep. No confirm click.
+Live recapture: `candidates=[]`, all three counts 0.
+
+`4EAEAFFD` (saved, P10): after the clean commit, do not wait for
+**Ja, slet**. One read-only FastMCP reproduction clicks exact
+**Mere** then exact **Slet** once, then captures the scoped
+dialog or overlay subtree, accessibility roles and text, active
+element, sanitized URL and heading, exact visible button and
+link labels, geometry and z-index, and whether any navigation or
+DELETE response occurred. Derive the normal confirm action from
+that evidence. Failing fixture first. Direct browser proves
+**Slet** is a SPAN inside `A.link` with `data-ember-action`
+under `LI`. That does not prove the confirm label. Never force
+or evaluate click, sweep portals, guess labels, or delete
+outside FastMCP.
+
+`D859572B` (done, unsaved, P10): PUT prefix `/v2/invoiceLines/`
+is removed. `watched=[]` does not name a path. Keep GET prefix
+`/v2/invoiceLines` for line render and PUT prefix `/v2/invoices/`
+for save.
 
 `70DB45E6` (saved, P9): leftover edit **Mere** button count=1.
 One Mere click reveals exact text **Slet** count=1. Do not click
 **Slet** in a recapture. `watched=[]` is confirm or persist timing,
-not missing chrome. Unique Mere, exact Slet, wait **Ja, slet**,
-DELETE 2xx, then fresh-session absence.
+not missing chrome. Unique Mere and exact Slet are proved.
+`4EAEAFFD` now owns the post-Slet capture. Do not wait for
+**Ja, slet** as the next probe.
 
 `32662804` (saved, P10): leftover
 `/invoices/03dvBZm9QHuYt8jGMM8TNw/edit` at 1280x720, DPR 1 has

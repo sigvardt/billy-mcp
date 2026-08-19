@@ -34,7 +34,7 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 | `ui_invoices_update_preview` | `contact_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. Open is the exact `li[role=row]`, not a POST id. |
 | `ui_invoices_update_execute` | `confirmation_ticket` | Consume ticket. Types **Enhedspris** `2,00` once, clicks **Opdater** if shown, then a second session must read that price. A header `PUT /v2/invoices/:id` is not persist. Line persist is `PUT /v2/invoiceLines/:id`. |
 | `ui_invoices_delete_preview` | `contact_name`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Slet`. Open is the exact `li[role=row]`. |
-| `ui_invoices_delete_execute` | `confirmation_ticket` | Consume ticket. **Mere** then **Slet**, then **Ja, slet** if shown. |
+| `ui_invoices_delete_execute` | `confirmation_ticket` | Consume ticket. Unique **Mere**, exact **Slet**, then a post-Slet dump. Do not wait for **Ja, slet**. |
 
 `action` must be `draft_create`, `draft_update`, or `draft_delete`. Use unique
 tagged names such as `MCP-UI-INV-...`. Create a tagged customer first with
@@ -84,9 +84,21 @@ collection PUT, never PATCH, never emails) and GET prefix `/v2/invoiceLines`
 so the line editor can render. Do not allow PUT `/v2/invoiceLines/` unless a
 captured blocked XHR names that path (`D859572B`). A 2xx PUT `/v2/invoices/:id`
 means the SPA save ran. Header PUT 2xx is still not Enhedspris persist.
-Fresh-session **Enhedspris** `2,00` is. Delete uses unique **Mere**, exact
-**Slet**, then **Ja, slet**, then DELETE 2xx (`70DB45E6`). Do not ask Joakim
-to inspect routine UI.
+Fresh-session **Enhedspris** `2,00` is. Delete uses unique **Mere**, then
+exact **Slet** (`70DB45E6`). Owner `4EAEAFFD`: do not wait for **Ja, slet**.
+After one **Slet** click, write
+`inspect-live-invoices-post-slet.json` with heading, path class, active
+element, `candidates`, dialog counts, `hit_tag`, `delete_seen`, and
+`navigated`. Owner `E8EA9823`: each `dialog`, `alertdialog`, and
+remaining `aria-modal` candidate records `role`, allowlisted labels,
+geometry, `z_index`, and `active_contained`. Prefer the `A` ancestor
+of the unique **Slet** text. Live FastMCP leftover recapture:
+`hit_tag=a`, `candidates=[]`, `dialog_count=0`,
+`alertdialog_count=0`, `overlay_count=0`, `delete_seen=false`,
+`navigated=false`. Empty `candidates` is valid after those
+locators are counted. No **Ja, slet**. Execute returns
+`UI_CHANGED`. Do not guess a second click. Do not page-wide
+sweep. Do not ask Joakim to inspect routine UI.
 
 Kunde bind is an existing-option pick after a named opener. The live
 `input[name=contact]` field is typeable (250x40) and is **not** the bills

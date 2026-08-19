@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T03:52:00Z
+updated: 2026-08-19T05:49:00Z
 ---
 
 ## Open
 
-- Leftover update to **Enhedspris** `2,00` is proved. Delete: unique Mere and exact Slet work; **Ja, slet** is not visible and DELETE is not recorded (`70DB45E6`). Reverse-clean six triples next. Stay red.
+- Leftover update to **Enhedspris** `2,00` is proved. Post-Slet candidate dump is live and empty (`E8EA9823`). Owner `D2FD1919` names confirm **Ja, slet faktura**. Bind that exact button next. Stay red.
 - Invoice draft CUD remains mandatory (`FD39FFE7` / `1F1B34F8`). Product create persist and scoped table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Persist of priced drafts is now interface-proved. Remaining work is FastMCP update plus leftover cleanup, not another create probe. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.

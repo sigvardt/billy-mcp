@@ -5,23 +5,35 @@ from __future__ import annotations
 import asyncio
 
 from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.invoices_form_delete_dump import (
+    POST_SLET_DUMP,
+    allowlisted_label,
+    capture_post_slet,
+    heading_token,
+    path_class_from_url,
+    ui_path,
+)
 from billy_mcp.ui_writes.invoices_form_page import (
-    CONFIRM_DELETE,
     DELETE,
     MORE,
     Locator,
     Page,
-    click_exact,
-    persist_hit,
-    visible_button,
     wait_persist,
     watch_invoice_response,
 )
 from billy_mcp.ui_writes.invoices_form_row import open_invoice_row
 
+__all__ = [
+    "POST_SLET_DUMP",
+    "allowlisted_label",
+    "delete_draft_invoice",
+    "heading_token",
+    "path_class_from_url",
+]
+
 
 async def delete_draft_invoice(page: Page, slug: str, contact_name: str) -> ToolError | None:
-    """Open the list row, then unique Mere / exact Slet / Ja, slet. Wait for DELETE."""
+    """Open the list row, unique Mere, exact Slet, then capture post-Slet state."""
 
     opened = await open_invoice_row(page, slug, contact_name)
     if opened is not None:
@@ -35,13 +47,18 @@ async def delete_draft_invoice(page: Page, slug: str, contact_name: str) -> Tool
     more = await _click_unique_mere(page)
     if more is not None:
         return more
-    slet = await _click_unique_text(page, DELETE)
+    start_path = ui_path(page.url)
+    hit_tag, slet = await _click_slet(page)
     if slet is not None:
         return slet
-    confirm = await _click_confirm(page, seen)
-    if confirm is not None:
-        return confirm
-    return await wait_persist(seen, method="DELETE")
+    dump = await capture_post_slet(page, seen, start_path, hit_tag)
+    if dump["delete_seen"] is True:
+        return await wait_persist(seen, method="DELETE")
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy invoice delete confirm is not named.",
+        details=dump,
+    )
 
 
 async def _click_unique_mere(page: Page) -> ToolError | None:
@@ -63,41 +80,31 @@ async def _click_unique_mere(page: Page) -> ToolError | None:
     return None
 
 
-async def _click_unique_text(page: Page, label: str) -> ToolError | None:
-    """Click the unique visible exact text. Owner 70DB45E6: Slet count is 1 after Mere."""
+async def _click_slet(page: Page) -> tuple[str, ToolError | None]:
+    """Click the A ancestor of unique Slet text. Else the unique text."""
 
     for _ in range(20):
-        hits: list[Locator] = []
-        labels = page.get_by_text(label, exact=True)
-        for index in range(await labels.count()):
-            target = labels.nth(index)
-            if await target.is_visible():
-                hits.append(target)
-        if len(hits) == 1:
-            await hits[0].click()
-            return None
+        texts = await _visible_named(page.get_by_text(DELETE, exact=True))
+        if len(texts) == 1:
+            ancestor = texts[0].locator("xpath=ancestor::a[1]")
+            if await ancestor.count() == 1 and await ancestor.first.is_visible():
+                await ancestor.first.click()
+                return "a", None
+            await texts[0].click()
+            return "span", None
         await asyncio.sleep(0.25)
-    return ToolError(
+    return "none", ToolError(
         code=StableErrorCode.UI_CHANGED,
-        message=f"Billy control {label} is not unique.",
+        message="Billy Slet control is not unique.",
     )
 
 
-async def _click_confirm(page: Page, seen: list[str]) -> ToolError | None:
-    """Wait for Ja, slet or an already-finished DELETE. Timing miss is not missing chrome."""
+async def _visible_named(labels: Locator) -> list[Locator]:
+    """Visible locators for one exact name."""
 
-    for _ in range(40):
-        if any(persist_hit(item, "DELETE") for item in seen):
-            return None
-        if await visible_button(page, CONFIRM_DELETE):
-            return await click_exact(page, CONFIRM_DELETE)
-        text = page.get_by_text(CONFIRM_DELETE, exact=True)
-        if await text.count() >= 1 and await text.first.is_visible():
-            return await click_exact(page, CONFIRM_DELETE)
-        await asyncio.sleep(0.25)
-    if any(persist_hit(item, "DELETE") for item in seen):
-        return None
-    return ToolError(
-        code=StableErrorCode.UI_CHANGED,
-        message="Billy Ja, slet control is not visible.",
-    )
+    hits: list[Locator] = []
+    for index in range(await labels.count()):
+        target = labels.nth(index)
+        if await target.is_visible():
+            hits.append(target)
+    return hits

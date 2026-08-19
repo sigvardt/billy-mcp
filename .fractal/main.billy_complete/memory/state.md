@@ -35,23 +35,28 @@ sources:
   - radio:32662804
   - radio:D859572B
   - radio:70DB45E6
+  - radio:4EAEAFFD
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T05:20:00Z
+updated: 2026-08-19T05:49:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is clean. Line persist watch is committed: `persist_hit` for
-update is a 2xx `PUT /v2/invoiceLines/:id`. A header
-`PUT /v2/invoices/:id` is not line-price persist.
-Owner `D859572B`: PUT prefix `/v2/invoiceLines/` is removed.
-GET `/v2/invoiceLines` and PUT prefix `/v2/invoices/` stay.
-Live FastMCP update of `MCP-UI-INV-6CDB396B` still reads
-**Enhedspris** `2,00` in a second session. Delete reaches unique
-**Mere** and exact **Slet**, then **Ja, slet** is not visible and
-no DELETE is recorded. Six leftover triples remain. Stay red.
-Do not finish.
+HEAD is clean on origin. `D859572B` is done: PUT prefix
+`/v2/invoiceLines/` is gone. GET `/v2/invoiceLines` and PUT
+prefix `/v2/invoices/` stay. Live FastMCP update of
+`MCP-UI-INV-6CDB396B` reads **Enhedspris** `2,00` in a second
+session. Delete reaches unique **Mere** and exact **Slet**.
+**Ja, slet** is not visible and no DELETE is recorded.
+Owner `E8EA9823` dump keys are live. FastMCP leftover delete
+clicks unique **Mere**, then the `A` ancestor of unique **Slet**.
+Recapture: `hit_tag=a`, `candidates=[]`, `dialog_count=0`,
+`alertdialog_count=0`, `overlay_count=0`, `delete_seen=false`,
+`navigated=false`. Empty candidates after those locators is
+valid. No named confirm. Execute returns `UI_CHANGED`. Do not
+guess a second click. Do not portal-sweep. Six leftover triples
+remain. Stay red. Do not finish.
 No children are running. Seven write children stay completed and merged.
 `59A3A933` now binds leftover cleanup. A fresh `/invoices` page
 shows 6 real **Kladde** rows at 1,00 DKK. Persist is proved by

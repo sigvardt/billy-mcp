@@ -1503,22 +1503,87 @@ def test_update_execute_proves_fresh_enhedspris() -> None:
     assert commit.index("await field.input_value()") < tab_idx
 
 
-def test_invoice_delete_waits_for_confirm() -> None:
-    """Owner 70DB45E6: unique Mere, exact Slet, wait Ja, slet, then DELETE."""
+def test_invoice_delete_captures_post_slet_before_confirm() -> None:
+    """Owner 4EAEAFFD: capture post-Slet state. Do not wait for Ja, slet."""
 
     delete = Path("src/billy_mcp/ui_writes/invoices_form_delete.py").read_text(encoding="utf-8")
     body = delete[delete.index("async def delete_draft_invoice") :]
     assert "_click_unique_mere" in body
-    assert "_click_unique_text" in body
-    assert "_click_confirm" in body
+    assert "_click_slet" in body
+    assert "capture_post_slet" in body
     assert "_click_last_more" not in delete
     assert 'page.on("request"' not in body
     mere_idx = body.index("_click_unique_mere")
-    slet_idx = body.index("_click_unique_text")
-    confirm_idx = body.index("_click_confirm")
-    persist_idx = body.index('wait_persist(seen, method="DELETE")')
-    assert mere_idx < slet_idx < confirm_idx < persist_idx
-    assert 'persist_hit(item, "DELETE")' in delete
+    slet_idx = body.index("_click_slet")
+    capture_idx = body.index("capture_post_slet")
+    assert mere_idx < slet_idx < capture_idx
+    before_capture = body[:capture_idx]
+    assert "_click_confirm" not in before_capture
+    assert "CONFIRM_DELETE" not in before_capture
+    assert "Ja, slet" not in before_capture
+    assert "xpath=ancestor::a[1]" in delete
+    dump_src = "\n".join(
+        Path(path).read_text(encoding="utf-8")
+        for path in (
+            "src/billy_mcp/ui_writes/invoices_form_delete.py",
+            "src/billy_mcp/ui_writes/invoices_form_delete_dump.py",
+        )
+        if Path(path).is_file()
+    )
+    assert "inspect-live-invoices-post-slet.json" in dump_src
+    assert "heading_token" in dump_src
+    assert "hit_tag" in dump_src
+    assert "delete_seen" in dump_src
+    assert "navigated" in dump_src
+    assert '"candidates"' in dump_src or "candidates" in dump_src
+    for key in ("role", "labels", "geometry", "z_index", "active_contained"):
+        assert key in dump_src
+    assert "alertdialog" in dump_src
+    assert "aria-modal" in dump_src
+    assert "button_labels" not in dump_src.split("async def delete_draft_invoice")[-1]
+
+
+def test_post_slet_path_and_labels_are_allowlisted() -> None:
+    """Post-Slet dump stores tokens, never org slugs or customer text."""
+
+    from billy_mcp.ui_writes.invoices_form_delete import (
+        allowlisted_label,
+        heading_token,
+        path_class_from_url,
+    )
+
+    assert path_class_from_url(
+        "https://mit.billy.dk/acme/invoices/03dvBZm9QHuYt8jGMM8TNw/edit"
+    ) == ("invoices_edit")
+    assert path_class_from_url("https://mit.billy.dk/acme/invoices") == "invoices"
+    assert path_class_from_url("https://mit.billy.dk/login") == "other"
+    assert heading_token("Rediger fakturakladde") == "rediger_fakturakladde"
+    assert heading_token("") == "none"
+    assert heading_token("MCP-UI-INV-6CDB396B") == "other"
+    assert allowlisted_label("Ja, slet") == "ja, slet"
+    assert allowlisted_label("Slet") == "slet"
+    assert allowlisted_label("MCP-UI-INV-6CDB396B") == "other"
+
+
+def test_overlay_candidate_parses_scoped_keys() -> None:
+    """Owner E8EA9823: each overlay row has role, labels, geometry, z-index."""
+
+    from billy_mcp.ui_writes.invoices_form_delete_dump import OverlayCandidate
+
+    row = OverlayCandidate.model_validate(
+        {
+            "role": "dialog",
+            "labels": ["ja, slet", "annuller"],
+            "geometry": {"x": 10, "y": 20, "w": 300, "h": 120},
+            "z_index": 40,
+            "active_contained": True,
+        }
+    )
+    assert row.role == "dialog"
+    assert row.labels == ["ja, slet", "annuller"]
+    assert row.geometry.w == 300
+    assert row.z_index == 40
+    assert row.active_contained is True
 
 
 def test_price_is_two_accepts_danish_decimals() -> None:

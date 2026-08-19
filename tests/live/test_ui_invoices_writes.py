@@ -28,6 +28,7 @@ from billy_mcp.credentials import KeyringCredentialResolver
 from billy_mcp.models import AuthLoginWaitSuccess, StableErrorCode, ToolError
 from billy_mcp.server import create_server
 from billy_mcp.ui_writes.invoices_form_bind import price_is, read_unit_price
+from billy_mcp.ui_writes.invoices_form_delete import POST_SLET_DUMP
 from billy_mcp.ui_writes.invoices_form_row import open_invoice_row
 from billy_mcp.ui_writes.page_flow import exact_name_in_text
 from billy_mcp.vision_evidence import (
@@ -75,6 +76,15 @@ def _credentials_configured() -> bool:
 def _record_blocker(reason: str) -> None:
     _BLOCKER_PATH.parent.mkdir(parents=True, exist_ok=True)
     _BLOCKER_PATH.write_text(reason.strip() + "\n", encoding="utf-8")
+
+
+def _post_slet_dump() -> dict[str, object] | None:
+    if not POST_SLET_DUMP.is_file():
+        return None
+    payload = json.loads(POST_SLET_DUMP.read_text(encoding="utf-8"))
+    if not isinstance(payload, dict):
+        return None
+    return cast(dict[str, object], payload)
 
 
 def _require_live_credentials() -> None:
@@ -326,7 +336,29 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                 {"confirmation_ticket": preview["confirmation_ticket"]},
             )
             if deleted.get("code"):
-                _record_blocker(f"delete execute failed for {leftover_contact}: {deleted}")
+                dump = _post_slet_dump()
+                _record_blocker(
+                    f"delete execute failed for {leftover_contact}: {deleted} dump={dump}"
+                )
+                assert dump is not None
+                for key in (
+                    "heading_token",
+                    "path_class",
+                    "active_tag",
+                    "active_role",
+                    "candidates",
+                    "dialog_count",
+                    "alertdialog_count",
+                    "overlay_count",
+                    "hit_tag",
+                    "delete_seen",
+                    "navigated",
+                ):
+                    assert key in dump
+                from billy_mcp.ui_writes.invoices_form_delete_dump import OverlayDump
+
+                parsed = OverlayDump.model_validate({"rows": dump["candidates"]})
+                assert isinstance(parsed.rows, list)
                 pytest.fail(f"delete execute failed for {leftover_contact}: {deleted}")
 
         await observer.close()
