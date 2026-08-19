@@ -4,14 +4,15 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T16:45:00Z
+updated: 2026-08-19T18:20:00Z
 ---
 
 ## Open
 
-- Product create vision is accept+purged. `ui.parity.products.create` names `ui_products_create_preview`. `C7DBE974` now locks `tests/live/test_ui_products_writes.py`. Stay red. `A337A622` still forbids more product list, dialog, or archive probes.
-- Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof.
-- Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Invoice vision is accept+purged. Honesty-16 stay red.
+- Remaining honesty red: files create, daybooks create/delete, daybookTransactions create, transactions create. Do not remake dumps. Do not arm `_ledger_write`. Do not finish.
+- Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
+- `A337A622` still forbids more product list, dialog, or archive probes.
+- Daybook persist is not unique. Files have no UI delete. **Godkend** stays prohibited.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved. Leftover reverse-clean is done. Do not remake leftover lists.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
@@ -21,7 +22,8 @@ updated: 2026-08-19T16:45:00Z
 
 ## Done
 
-- Independent accept and purge of product CUD run `29c1b1de26a14976aaa1b98bfe9de46e`. Coverage names `ui_products_create_preview`. Honesty-16 still red.
+- Binding `58D7D0E1`: 11 accepted CUD rows are `preview_execute`. Honesty is the five files and ledger rows. Independent review passed. `complete` stays false.
+- Independent accept and purge of product CUD run `29c1b1de26a14976aaa1b98bfe9de46e`. Coverage names `ui_products_create_preview`.
 - Independent accept and purge of invoice CUD run `60b6d620772644f3bca9609c8ae53846`. Coverage names `ui_invoices_{create,update,delete}_preview`. Live CUD uses `write_live_pending_unless_accepted`. Honesty-16 still red.
 - 16-row gate, honesty, shared protocol, durable preview/execute invariant, `ui-full` mode.
 - Seven family children landed offline preview/execute tools and are merged.

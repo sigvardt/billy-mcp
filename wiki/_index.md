@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-19T16:46:48Z
+updated: 2026-08-19T18:03:49Z
 ---
 
 # billy_mcp
@@ -197,7 +197,7 @@ updated: 2026-08-19T16:46:48Z
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
 
-[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table. Invoice and product CUD are accepted and purged. Stay red.
+[[ui_write_residual_table|ui_write_residual_table]]: Residual UI write table. Eleven accepted CUD rows are preview_execute. Five files and ledger rows stay red.
 
 [[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
 

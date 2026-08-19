@@ -5452,16 +5452,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research154 dual-session headless observation + ui_bills_create_open product; form open only (path class /:org_slug/bills/new, h1 Opret k\u00f8b, shell_kind=bills_create, Gem som kladde + line chrome; never submit; distinct from list shell ui_bills_list and special invoice_email); soft /emails empty dual; vision record tmp/vision-records/ui_bills_create_open.json (Opret k\u00f8b form frames, accept); maps api.bills.create to UI create-form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research154 dual-session headless observation + ui_bills_create_open product; form open only (path class /:org_slug/bills/new, h1 Opret k\u00f8b, shell_kind=bills_create, Gem som kladde + line chrome; never submit; distinct from list shell ui_bills_list and special invoice_email); soft /emails empty dual; vision record tmp/vision-records/ui_bills_create_open.json (Opret k\u00f8b form frames, accept); maps api.bills.create to UI create-form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_bills_writes.json",
       "filters": [],
       "id": "ui.parity.bills.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/bills/new (read-only bill create form open; never Godkend/Gem som kladde/Upload fil/Tr\u00e6k/Tilf\u00f8j linje/Slet)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -5482,7 +5482,7 @@
       ],
       "tool_name": "ui_bills_create_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -5498,16 +5498,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research172 dual-session headless observation + ui_bills_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); form open only (path class /:org_slug/bills/:id/edit, shell_kind=bills_update, Ret regning/Opdater/Leverand\u00f8r/Bilagsdato chrome; never write submit; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, and get detail ui_bills_get_open); vision record tmp/vision-records/ui_bills_update_open.json (bill edit form frames, accept); maps api.bills.update to UI edit form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research172 dual-session headless observation + ui_bills_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); form open only (path class /:org_slug/bills/:id/edit, shell_kind=bills_update, Ret regning/Opdater/Leverand\u00f8r/Bilagsdato chrome; never write submit; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, and get detail ui_bills_get_open); vision record tmp/vision-records/ui_bills_update_open.json (bill edit form frames, accept); maps api.bills.update to UI edit form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_bills_writes.json",
       "filters": [],
       "id": "ui.parity.bills.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/bills + first non-header bill edit form (read-only bills update form open; never Opdater/Godkend/Slet/Tr\u00e6k submit; /bills/new and read /bills/:id not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -5530,7 +5530,7 @@
       ],
       "tool_name": "ui_bills_update_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -5546,16 +5546,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research173 dual-session headless observation + ui_bills_delete_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); delete chrome only (path class /:org_slug/bills/:id/edit, shell_kind=bills_delete, primary Slet, confirm Slet\u22652+Annuller, Annuller dismiss; never permanent delete; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, get detail ui_bills_get_open, and update form_open ui_bills_update_open); vision record tmp/vision-records/ui_bills_delete_open.json (bill delete chrome frames, accept); maps api.bills.delete to UI delete chrome open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research173 dual-session headless observation + ui_bills_delete_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/bills and GET /v2/taxRates (disposable draft seed with nested accountId+taxRateId+description+amount, no paymentDate; emails still denied); delete chrome only (path class /:org_slug/bills/:id/edit, shell_kind=bills_delete, primary Slet, confirm Slet\u22652+Annuller, Annuller dismiss; never permanent delete; distinct from list shell ui_bills_list, create form_open ui_bills_create_open, get detail ui_bills_get_open, and update form_open ui_bills_update_open); vision record tmp/vision-records/ui_bills_delete_open.json (bill delete chrome frames, accept); maps api.bills.delete to UI delete chrome open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_bills_writes.json",
       "filters": [],
       "id": "ui.parity.bills.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/bills + first non-header bill edit delete chrome (read-only: Slet confirm open + Annuller dismiss; never permanent delete; /bills/new and read /bills/:id without Slet not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "delete_chrome_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -5578,7 +5578,7 @@
       ],
       "tool_name": "ui_bills_delete_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -7161,16 +7161,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research160 dual-session headless observation + ui_clients_create_open product; form open only (path class /:org_slug/clients, h1 Kunder, shell_kind=clients_create, CTA Opret kontakt dialog with name+registrationNo+street/person fields; never submit; soft /clients/new chrome-only rejected; distinct from list shell ui_clients_list and special POST /invoices/:id/emails); vision record tmp/vision-records/ui_clients_create_open.json (Opret kontakt create dialog frames, accept); maps api.contacts.create to UI create-form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research160 dual-session headless observation + ui_clients_create_open product; form open only (path class /:org_slug/clients, h1 Kunder, shell_kind=clients_create, CTA Opret kontakt dialog with name+registrationNo+street/person fields; never submit; soft /clients/new chrome-only rejected; distinct from list shell ui_clients_list and special POST /invoices/:id/emails); vision record tmp/vision-records/ui_clients_create_open.json (Opret kontakt create dialog frames, accept); maps api.contacts.create to UI create-form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_contacts_writes.json",
       "filters": [],
       "id": "ui.parity.contacts.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/clients + Opret kontakt dialog (read-only clients create form open; never Gem/Opret/Save submit; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -7193,7 +7193,7 @@
       ],
       "tool_name": "ui_clients_create_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -7209,16 +7209,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research166 dual-session headless observation + ui_clients_update_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Ret edit form open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_update, name input valued + address/country content fields; never Gem/Slet submit; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, and get overview ui_clients_get_open); vision record tmp/vision-records/ui_clients_update_open.json (client edit form frames, accept); maps api.contacts.update to UI Ret edit form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research166 dual-session headless observation + ui_clients_update_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Ret edit form open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_update, name input valued + address/country content fields; never Gem/Slet submit; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, and get overview ui_clients_get_open); vision record tmp/vision-records/ui_clients_update_open.json (client edit form frames, accept); maps api.contacts.update to UI Ret edit form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_contacts_writes.json",
       "filters": [],
       "id": "ui.parity.contacts.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Ret edit form (read-only clients update open; never Gem/Slet/Save submit; get overview without Ret not success; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -7241,7 +7241,7 @@
       ],
       "tool_name": "ui_clients_update_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -7257,16 +7257,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research167 dual-session headless observation + ui_clients_delete_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Mere delete chrome open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_delete, Slet kontakt visible after Mere; never confirm delete; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, get overview ui_clients_get_open, and Ret form ui_clients_update_open); vision record tmp/vision-records/ui_clients_delete_open.json (client delete chrome frames, accept); maps api.contacts.delete to UI Mere delete chrome open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research167 dual-session headless observation + ui_clients_delete_open product; scoped api.billysbilling.com path_allow for contacts data-plane (from research164); Mere delete chrome open only (path class /:org_slug/contacts/:id/customer, shell_kind=clients_delete, Slet kontakt visible after Mere; never confirm delete; distinct from list shell ui_clients_list, create form_open ui_clients_create_open, get overview ui_clients_get_open, and Ret form ui_clients_update_open); vision record tmp/vision-records/ui_clients_delete_open.json (client delete chrome frames, accept); maps api.contacts.delete to UI Mere delete chrome open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_contacts_writes.json",
       "filters": [],
       "id": "ui.parity.contacts.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/clients + contacts/:id/customer + Mere menu (read-only clients delete chrome open; never confirm Slet/Arkiv\u00e9r; primary Slet absent; soft /clients/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "delete_chrome_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -7289,7 +7289,7 @@
       ],
       "tool_name": "ui_clients_delete_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -11489,16 +11489,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research153 dual-session headless observation + ui_invoices_create_open product; form open only (path class /:org_slug/invoices/new, h1 Opret faktura, shell_kind=invoices_create, Gem som kladde + line chrome; never submit; distinct from list shell and special POST /invoices/:id/emails; Levering settings not this form); soft /emails empty dual; vision record tmp/vision-records/ui_invoices_create_open.json (Opret faktura form frames, accept); maps api.invoices.create to UI create-form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research153 dual-session headless observation + ui_invoices_create_open product; form open only (path class /:org_slug/invoices/new, h1 Opret faktura, shell_kind=invoices_create, Gem som kladde + line chrome; never submit; distinct from list shell and special POST /invoices/:id/emails; Levering settings not this form); soft /emails empty dual; vision record tmp/vision-records/ui_invoices_create_open.json (Opret faktura form frames, accept); maps api.invoices.create to UI create-form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_invoices_writes.json",
       "filters": [],
       "id": "ui.parity.invoices.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/invoices/new (read-only invoice create form open; never Godkend/Send/Gem som kladde/Vis preview/Tilf\u00f8j linje/Vedh\u00e6ft/Slet)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -11519,7 +11519,7 @@
       ],
       "tool_name": "ui_invoices_create_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -11535,16 +11535,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research174 dual-session headless observation + ui_invoices_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices and products/contacts seed (disposable draft invoice; emails still denied); form open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_update, Gem som kladde + Fakturanr/Dato/Betalingsfrist chrome + inputs\u22653; never write submit; distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, and get detail_open ui_invoices_get_open); vision record tmp/vision-records/ui_invoices_update_open.json (invoice edit form frames, accept); maps api.invoices.update to UI edit form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research174 dual-session headless observation + ui_invoices_update_open product; committed api.billysbilling.com path_allow for GET/POST/DELETE /v2/invoices and products/contacts seed (disposable draft invoice; emails still denied); form open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_update, Gem som kladde + Fakturanr/Dato/Betalingsfrist chrome + inputs\u22653; never write submit; distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, and get detail_open ui_invoices_get_open); vision record tmp/vision-records/ui_invoices_update_open.json (invoice edit form frames, accept); maps api.invoices.update to UI edit form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_invoices_writes.json",
       "filters": [],
       "id": "ui.parity.invoices.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/invoices + first non-header invoice edit form (read-only invoices update form open; never Gem/Gem som kladde/Godkend/Send/Slet submit; /invoices/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -11567,7 +11567,7 @@
       ],
       "tool_name": "ui_invoices_update_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -11583,16 +11583,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research175 dual-session headless observation + ui_invoices_delete_open product; scoped api.billysbilling.com path_allow for invoices data-plane; Mere delete chrome open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_delete, Slet text visible after Mere; never confirm delete; distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, get ui_invoices_get_open, and form_open ui_invoices_update_open); vision record tmp/vision-records/ui_invoices_delete_open.json (invoice delete chrome frames, accept); maps api.invoices.delete to UI Mere delete chrome open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research175 dual-session headless observation + ui_invoices_delete_open product; scoped api.billysbilling.com path_allow for invoices data-plane; Mere delete chrome open only (path class /:org_slug/invoices/:id/edit, shell_kind=invoices_delete, Slet text visible after Mere; never confirm delete; distinct from list shell ui_invoices_list, create form_open ui_invoices_create_open, get ui_invoices_get_open, and form_open ui_invoices_update_open); vision record tmp/vision-records/ui_invoices_delete_open.json (invoice delete chrome frames, accept); maps api.invoices.delete to UI Mere delete chrome open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_invoices_writes.json",
       "filters": [],
       "id": "ui.parity.invoices.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/invoices/:id/edit + Mere menu (read-only invoices delete chrome open; never confirm Slet; primary Slet button absent; soft /invoices/new not success)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "delete_chrome_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -11615,7 +11615,7 @@
       ],
       "tool_name": "ui_invoices_delete_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -12191,16 +12191,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research177 dual-session reconfirm; maps api.organizations.update to UI settings company update form open only (form_open_only; Gem \u00e6ndringer dual present; never submits); owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research126 dual-session headless observation + ui_settings_company_open product; shell open only (path class /:org_slug/settings, h1 Indstillinger, shell_kind=settings_company, company panel markers); soft aliases rejected; no invent api_settings_*; never click Gem/Tilf\u00f8j ejer; does not green other settings_* or annual_reports or organizations create/bulk UI parity; API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_settings_company_open.json (Indstillinger company frames, accept); research177 dual-session reconfirm; maps api.organizations.update to UI settings company update form open only (form_open_only; Gem \u00e6ndringer dual present; never submits); 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_organizations_writes.json",
       "filters": [],
       "id": "ui.parity.organizations.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/settings (read-only Indstillinger company/Virksomhed update form open only; Gem \u00e6ndringer present; never click Gem/Tilf\u00f8j ejer/upload)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -12219,7 +12219,7 @@
       ],
       "tool_name": "ui_organizations_update_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {
@@ -13150,16 +13150,16 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research163 dual-session headless observation + ui_products_create_open product; form open only (path class /:org_slug/inventory, h1 Lagermodul, shell_kind=products_create, CTA Opret produkt form with name+account+salesTaxRuleset+unitPrice fields; never submit; soft /products/new chrome-only rejected; catalog /products Mere export/import only; distinct from list shell ui_products_list and shell-only ui_inventory_open; unitPrice is create embed chrome not productPrices resource \u2014 productPrices dual-NA research162); vision record tmp/vision-records/ui_products_create_open.json (Opret produkt create form frames, accept); maps api.products.create to UI create-form open only; owner 96908DC6 / E004E7D5 CUD parity honesty: open-only chrome is not a finished create/update/delete write; implemented and live_tested stay false until ui_*_preview + ui_*_execute exist",
+      "evidence": "research163 dual-session headless observation + ui_products_create_open product; form open only (path class /:org_slug/inventory, h1 Lagermodul, shell_kind=products_create, CTA Opret produkt form with name+account+salesTaxRuleset+unitPrice fields; never submit; soft /products/new chrome-only rejected; catalog /products Mere export/import only; distinct from list shell ui_products_list and shell-only ui_inventory_open; unitPrice is create embed chrome not productPrices resource \u2014 productPrices dual-NA research162); vision record tmp/vision-records/ui_products_create_open.json (Opret produkt create form frames, accept); maps api.products.create to UI create-form open only; 58D7D0E1 proved preview_execute; vision tmp/vision-records/ui_products_writes.json",
       "filters": [],
       "id": "ui.parity.products.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "ui",
-      "live_tested": false,
+      "live_tested": true,
       "method_or_route": "mit.billy.dk /:org_slug/inventory + Opret produkt form (read-only products create form open; never Gem/Opret/Save submit; soft /products/new not success; catalog /products list has no create CTA)",
       "operation": "api_parity",
       "pagination": null,
-      "parity_status": "form_open_only",
+      "parity_status": "preview_execute",
       "request_fields": [],
       "response_fields": [
         "path_class",
@@ -13183,7 +13183,7 @@
       ],
       "tool_name": "ui_products_create_preview",
       "vision_evidence": null,
-      "vision_verified": false,
+      "vision_verified": true,
       "workflow_kind": "api_parity"
     },
     {

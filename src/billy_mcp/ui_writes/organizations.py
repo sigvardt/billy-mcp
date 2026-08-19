@@ -192,13 +192,13 @@ def register_ui_organization_write_tools(
         return submitted
 
     server.tool(
-        name=PREVIEW_TOOL_NAME,
+        name="ui_organizations_update_preview",
         description=(
             "Preview a reversible Billy company-phone update without submitting. "
             "Users, access tokens, and subscription are rejected."
         ),
     )(ui_organizations_update_preview)
     server.tool(
-        name=EXECUTE_TOOL_NAME,
+        name="ui_organizations_update_execute",
         description="Execute a previewed Billy company-phone update with its ticket.",
     )(ui_organizations_update_execute)

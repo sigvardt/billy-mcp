@@ -48,12 +48,20 @@ sources:
   - radio:7C96E1C3
   - radio:94A4C844
   - radio:A41C242F
+  - radio:58D7D0E1
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T16:45:00Z
+updated: 2026-08-19T18:20:00Z
 ---
 
 ## Now
 
+Binding `58D7D0E1` is landed. Contacts C/U/D, bills C/U/D,
+organizations update, invoices C/U/D, and products create are
+`preview_execute` with the three flags true. Honesty now covers
+only files create, daybooks create/delete, daybookTransactions
+create, and transactions create. Those stay red. Independent
+review passed. `complete` is false. Do not finish. Do not remake
+dumps or live CUD. Do not edit `coverage/status.json` by hand.
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 Product delete watches one `DELETE /v2/products/:id` 2xx before
 settled `/products` row-absence (`A0633A17`). Invoice confirm is
@@ -61,7 +69,6 @@ exact **Ja, slet faktura**. Owner `D71E5B82`: leftover reverse-clean
 is isolated from reusable invoice CUD. The live CUD test creates its
 own customer, product, and draft, proves **Enhedspris** `2,00`, then
 deletes that triple. It does not depend on `LEFTOVER_*` names.
-Honesty-16 stay red. Do not finish.
 No children are running. Seven write children stay completed and merged.
 Owner `A6A2B60C` independently proved empty invoices, products,
 and contacts after reverse cleanup. Owner `31BAF1FF` proved the

@@ -917,24 +917,62 @@ UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
 # Owner 96908DC6 / E004E7D5: open-only chrome is not a finished CUD write.
 UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS: frozenset[str] = frozenset(
     {
-        "ui.parity.bills.create",
-        "ui.parity.bills.update",
-        "ui.parity.bills.delete",
-        "ui.parity.contacts.create",
-        "ui.parity.contacts.update",
-        "ui.parity.contacts.delete",
         "ui.parity.daybooks.create",
         "ui.parity.daybooks.delete",
         "ui.parity.daybookTransactions.create",
         "ui.parity.files.create",
-        "ui.parity.invoices.create",
-        "ui.parity.invoices.update",
-        "ui.parity.invoices.delete",
-        "ui.parity.organizations.update",
-        "ui.parity.products.create",
         "ui.parity.transactions.create",
     }
 )
+# Owner 58D7D0E1: accepted independent vision plus live FastMCP preview/execute.
+# Family records cover sibling CUD rows. Do not green files or ledger.
+UI_CUD_PARITY_PROVED_WRITE: dict[str, tuple[str, str]] = {
+    "ui.parity.contacts.create": (
+        "ui_clients_create_preview",
+        "tmp/vision-records/ui_contacts_writes.json",
+    ),
+    "ui.parity.contacts.update": (
+        "ui_clients_update_preview",
+        "tmp/vision-records/ui_contacts_writes.json",
+    ),
+    "ui.parity.contacts.delete": (
+        "ui_clients_delete_preview",
+        "tmp/vision-records/ui_contacts_writes.json",
+    ),
+    "ui.parity.bills.create": (
+        "ui_bills_create_preview",
+        "tmp/vision-records/ui_bills_writes.json",
+    ),
+    "ui.parity.bills.update": (
+        "ui_bills_update_preview",
+        "tmp/vision-records/ui_bills_writes.json",
+    ),
+    "ui.parity.bills.delete": (
+        "ui_bills_delete_preview",
+        "tmp/vision-records/ui_bills_writes.json",
+    ),
+    "ui.parity.organizations.update": (
+        "ui_organizations_update_preview",
+        "tmp/vision-records/ui_organizations_writes.json",
+    ),
+    "ui.parity.invoices.create": (
+        "ui_invoices_create_preview",
+        "tmp/vision-records/ui_invoices_writes.json",
+    ),
+    "ui.parity.invoices.update": (
+        "ui_invoices_update_preview",
+        "tmp/vision-records/ui_invoices_writes.json",
+    ),
+    "ui.parity.invoices.delete": (
+        "ui_invoices_delete_preview",
+        "tmp/vision-records/ui_invoices_writes.json",
+    ),
+    "ui.parity.products.create": (
+        "ui_products_create_preview",
+        "tmp/vision-records/ui_products_writes.json",
+    ),
+}
+UI_CUD_PROVED_PARITY_STATUS = "preview_execute"
 OPEN_ONLY_PARITY_STATUSES: frozenset[str] = frozenset(
     {
         "form_open_only",
@@ -942,34 +980,34 @@ OPEN_ONLY_PARITY_STATUSES: frozenset[str] = frozenset(
         "delete_chrome_open_only",
     }
 )
-# After 93D7A063 accept+purge: CUD parity names preview tools. Honesty
-# still keeps implemented/live/vision false. Discovery/get-open stay *_open.
+# After 93D7A063 accept+purge: CUD parity names preview tools.
+# 58D7D0E1 proved apply greens these rows. Discovery/get-open stay *_open.
 UI_CONTACTS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.contacts.create": "ui_clients_create_preview",
     "ui.parity.contacts.update": "ui_clients_update_preview",
     "ui.parity.contacts.delete": "ui_clients_delete_preview",
 }
-# After bills CUD accept+purge: CUD parity names preview tools. Honesty
-# still keeps implemented/live/vision false. Discovery/get-open stay *_open.
+# After bills CUD accept+purge: CUD parity names preview tools.
+# 58D7D0E1 proved apply greens these rows. Discovery/get-open stay *_open.
 UI_BILLS_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.bills.create": "ui_bills_create_preview",
     "ui.parity.bills.update": "ui_bills_update_preview",
     "ui.parity.bills.delete": "ui_bills_delete_preview",
 }
-# After 23709235 accept+purge: update CUD names the preview tool. Honesty
-# still keeps implemented/live/vision false. Discovery/list/get stay *_open.
+# After 23709235 accept+purge: update CUD names the preview tool.
+# 58D7D0E1 proved apply greens this row. Discovery/list/get stay *_open.
 UI_ORGANIZATIONS_UPDATE_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.organizations.update": "ui_organizations_update_preview",
 }
-# After 60b6d620 accept+purge: invoice CUD names preview tools. Honesty
-# still keeps implemented/live/vision false. Discovery/list/get stay *_open.
+# After 60b6d620 accept+purge: invoice CUD names preview tools.
+# 58D7D0E1 proved apply greens these rows. Discovery/list/get stay *_open.
 UI_INVOICES_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.invoices.create": "ui_invoices_create_preview",
     "ui.parity.invoices.update": "ui_invoices_update_preview",
     "ui.parity.invoices.delete": "ui_invoices_delete_preview",
 }
 # After 29c1b1de accept+purge: product create names the preview tool.
-# Honesty still keeps implemented/live/vision false. Discovery stays *_open.
+# 58D7D0E1 proved apply greens this row. Discovery stays *_open.
 UI_PRODUCTS_CREATE_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.products.create": "ui_products_create_preview",
 }
@@ -1965,9 +2003,9 @@ def apply_ui_cud_parity_open_only_honesty(workflows: list[dict[str, Any]]) -> No
     existing *_open / list / shell tool until a preview tool exists.
     """
 
-    if len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS) != 16:
+    if len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS) != 5:
         raise RuntimeError(
-            "UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS must be exactly 16 "
+            "UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS must be exactly 5 "
             f"(got {len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)})"
         )
     seen: set[str] = set()
@@ -2000,8 +2038,8 @@ def apply_ui_cud_parity_open_only_honesty(workflows: list[dict[str, Any]]) -> No
 def apply_ui_contacts_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> None:
     """Point contacts CUD parity rows at preview tools after honesty.
 
-    Leaves ``parity_status`` open-only. Honesty still forces implemented,
-    live_tested, and vision_verified false. Discovery and get-open stay on
+    Leaves ``parity_status`` open-only. Proved apply later sets
+    ``preview_execute``. Discovery and get-open stay on
     ``ui_clients_*_open``.
     """
 
@@ -2021,8 +2059,8 @@ def apply_ui_contacts_cud_preview_tool_names(workflows: list[dict[str, Any]]) ->
 def apply_ui_bills_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> None:
     """Point bills CUD parity rows at preview tools after honesty.
 
-    Leaves ``parity_status`` open-only. Honesty still forces implemented,
-    live_tested, and vision_verified false. Discovery and get-open stay on
+    Leaves ``parity_status`` open-only. Proved apply later sets
+    ``preview_execute``. Discovery and get-open stay on
     ``ui_bills_*_open``.
     """
 
@@ -2042,8 +2080,8 @@ def apply_ui_bills_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> No
 def apply_ui_organizations_update_preview_tool_name(workflows: list[dict[str, Any]]) -> None:
     """Point organizations update CUD at the preview tool after honesty.
 
-    Leaves ``parity_status`` open-only. Honesty still forces implemented,
-    live_tested, and vision_verified false. Discovery, list, and get stay on
+    Leaves ``parity_status`` open-only. Proved apply later sets
+    ``preview_execute``. Discovery, list, and get stay on
     ``ui_settings_company_open``.
     """
 
@@ -2063,8 +2101,8 @@ def apply_ui_organizations_update_preview_tool_name(workflows: list[dict[str, An
 def apply_ui_invoices_cud_preview_tool_names(workflows: list[dict[str, Any]]) -> None:
     """Point invoices CUD parity rows at preview tools after honesty.
 
-    Leaves ``parity_status`` open-only. Honesty still forces implemented,
-    live_tested, and vision_verified false. Discovery, list, and get stay on
+    Leaves ``parity_status`` open-only. Proved apply later sets
+    ``preview_execute``. Discovery, list, and get stay on
     ``ui_invoices_*_open`` / ``ui_invoices_list``.
     """
 
@@ -2084,10 +2122,9 @@ def apply_ui_invoices_cud_preview_tool_names(workflows: list[dict[str, Any]]) ->
 def apply_ui_products_create_preview_tool_name(workflows: list[dict[str, Any]]) -> None:
     """Point products.create parity at the preview tool after honesty.
 
-    Leaves ``parity_status`` open-only. Honesty still forces implemented,
-    live_tested, and vision_verified false. Discovery stays
-    ``ui_products_create_open``. research176 get/update/delete stay
-    toolless ``not_applicable``.
+    Leaves ``parity_status`` open-only. Proved apply later sets
+    ``preview_execute``. Discovery stays ``ui_products_create_open``.
+    research176 get/update/delete stay toolless ``not_applicable``.
     """
 
     seen: set[str] = set()
@@ -2101,6 +2138,63 @@ def apply_ui_products_create_preview_tool_name(workflows: list[dict[str, Any]]) 
     missing = set(UI_PRODUCTS_CREATE_PREVIEW_TOOL_NAMES) - seen
     if missing:
         raise RuntimeError(f"products create preview mapping missing rows: {sorted(missing)}")
+
+
+def _vision_record_qualifies(root: Path, relative: str) -> bool:
+    """True when the durable record is an independent accept with purge verified."""
+
+    payload = json.loads((root / relative).read_text(encoding="utf-8"))
+    return (
+        payload.get("author") == "independent_review"
+        and payload.get("reviewer_verdict") == "accept"
+        and payload.get("purge_verified") is True
+    )
+
+
+def apply_ui_cud_proved_preview_execute(
+    workflows: list[dict[str, Any]], *, root: Path = ROOT
+) -> None:
+    """Green the 11 accepted CUD rows after honesty and preview remaps.
+
+    Requires a qualifying vision record and a preview tool name. Leaves
+    ``vision_evidence`` null. Files and ledger stay on the honesty set.
+    """
+
+    overlap = set(UI_CUD_PARITY_PROVED_WRITE) & UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS
+    if overlap:
+        raise RuntimeError(f"proved CUD ids still on honesty: {sorted(overlap)}")
+    if len(UI_CUD_PARITY_PROVED_WRITE) != 11:
+        raise RuntimeError(
+            f"UI_CUD_PARITY_PROVED_WRITE must be exactly 11 (got {len(UI_CUD_PARITY_PROVED_WRITE)})"
+        )
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        mapping = UI_CUD_PARITY_PROVED_WRITE.get(row_id)
+        if mapping is None:
+            continue
+        preview, record_rel = mapping
+        seen.add(row_id)
+        if not _vision_record_qualifies(root, record_rel):
+            raise RuntimeError(
+                f"{row_id} proved write missing qualifying vision record {record_rel}"
+            )
+        if row.get("tool_name") != preview:
+            raise RuntimeError(
+                f"{row_id} proved write requires tool_name {preview!r}, "
+                f"got {row.get('tool_name')!r}"
+            )
+        row["parity_status"] = UI_CUD_PROVED_PARITY_STATUS
+        row["implemented"] = True
+        row["live_tested"] = True
+        row["vision_verified"] = True
+        cite = f"58D7D0E1 proved preview_execute; vision {record_rel}"
+        prior = str(row.get("evidence") or "").strip()
+        if cite not in prior:
+            row["evidence"] = f"{prior}; {cite}" if prior else cite
+    missing = set(UI_CUD_PARITY_PROVED_WRITE) - seen
+    if missing:
+        raise RuntimeError(f"proved CUD mapping missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7956,6 +8050,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_organizations_update_preview_tool_name(workflows)
     apply_ui_invoices_cud_preview_tool_names(workflows)
     apply_ui_products_create_preview_tool_name(workflows)
+    apply_ui_cud_proved_preview_execute(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",

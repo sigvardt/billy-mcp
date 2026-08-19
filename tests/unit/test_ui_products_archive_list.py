@@ -144,8 +144,8 @@ def test_product_persist_stays_closed_when_archive_list_is_unique(tmp_path: Path
     assert product_persist_allowed(tmp_path / "archive.json") is False
 
 
-def test_products_create_honesty_row_names_preview_and_stays_red() -> None:
-    """Given the honesty row, When reading the manifest, Then it names preview and stays red."""
+def test_products_create_honesty_row_names_preview_and_is_proved() -> None:
+    """Given the proved product create row, When reading the manifest, Then it is green."""
 
     import yaml
 
@@ -154,9 +154,10 @@ def test_products_create_honesty_row_names_preview_and_stays_red() -> None:
     rows = {str(row["id"]): row for row in document["workflows"]}
     row = rows["ui.parity.products.create"]
     assert row["tool_name"] == "ui_products_create_preview"
-    assert row["implemented"] is False
-    assert row["live_tested"] is False
-    assert row["vision_verified"] is False
+    assert row["parity_status"] == "preview_execute"
+    assert row["implemented"] is True
+    assert row["live_tested"] is True
+    assert row["vision_verified"] is True
 
 
 def test_archive_list_helper_has_no_identity_inspectors() -> None:

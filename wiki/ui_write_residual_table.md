@@ -1,6 +1,6 @@
 ---
 name: ui_write_residual_table
-desc: Residual honesty-16 UI write table. Invoice and product CUD are accepted and purged. Stay red.
+desc: Residual UI write table. Eleven accepted CUD rows are preview_execute. Five files and ledger rows stay red.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
@@ -18,6 +18,7 @@ sources:
   - radio:31BAF1FF
   - radio:D71E5B82
   - radio:A0633A17
+  - radio:58D7D0E1
   - wiki/ui_write_ticket_protocol.md
   - wiki/ui_contacts_writes.md
   - wiki/ui_bills_writes.md
@@ -27,16 +28,17 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-19T16:45:00Z
+updated: 2026-08-19T18:05:00Z
 ---
 
 # ui_write_residual_table
 
-Owner-scope UI write residual after `D68E402A` and `EC676F84`.
-Shared ticket rules live in [[ui_write_ticket_protocol]].
+Owner-scope UI write residual after `D68E402A`, `EC676F84`, and
+`58D7D0E1`. Shared ticket rules live in [[ui_write_ticket_protocol]].
 
-The honesty-16 gate still keeps every row red
-(`implemented=false`, `live_tested=false`, `vision_verified=false`).
+The 11 accepted rows are `preview_execute` with
+`implemented=live_tested=vision_verified=true`. Honesty now covers
+only the five files and ledger rows. `complete` stays false.
 The manifest has no other unimplemented write-like UI parity row.
 
 Contacts, bills, and organizations are already live-proved through
@@ -63,12 +65,11 @@ verified. Product create vision
 verified. Do not remake picker, archive, leftover, or Kunde dumps.
 
 `FD39FFE7` still makes invoice draft CUD and product create mandatory
-and red. They are not finished as `UI_CHANGED`.
+MCP capabilities. They are now `preview_execute`, not `UI_CHANGED`.
 
 ## Categories
 
-- `already_live_proved_honesty_red`
-- `owner_proved_pending_fastmcp`
+- `proved_preview_execute`
 - `interface_control_absent_UI_CHANGED`
 - `high_impact_prohibited`
 
@@ -76,17 +77,17 @@ and red. They are not finished as `UI_CHANGED`.
 
 | ID | Coverage tool | Registered preview / execute | Mutation control | Cleanup / read-back | Category |
 | --- | --- | --- | --- | --- | --- |
-| `ui.parity.contacts.create` | `ui_clients_create_preview` | `ui_clients_create_{preview,execute}` | **Gem** `data-cy=save-button`. Live FastMCP | Fresh-session name read-back. **Ja, slet**. Absence 0. Vision `3d5b151dfd5342258f8734373597f8c1` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.contacts.update` | `ui_clients_update_preview` | `ui_clients_update_{preview,execute}` | Exact **Ret**, then **Gem** | `{tag}-U` is a different name. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.contacts.delete` | `ui_clients_delete_preview` | `ui_clients_delete_{preview,execute}` | **Slet kontakt** link, **Ja, slet** | Fresh-session absence. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.bills.create` | `ui_bills_create_preview` | `ui_bills_create_{preview,execute}` | Existing-option vendor bind. **Gem som kladde** | Fresh-session draft read-back. Vision `9920dd9476474b41aef70e6d66d24638` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.create` | `ui_invoices_create_preview` | `ui_invoices_create_{preview,execute}` | Self-contained FastMCP CUD. Pre-submit `02_before_submit.png` before **Gem som kladde** (`A342BBDC`) | Reverse-clean invoice, product, customer. Vision `60b6d620772644f3bca9609c8ae53846` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.update` | `ui_invoices_update_preview` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00`. List result `2,00 DKK` | Independent read-back. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.delete` | `ui_invoices_delete_preview` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | Owner independently empty after reverse cleanup and after disposable CUD. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.products.create` | `ui_products_create_preview` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Reverse-clean used singular DELETE 2xx then settled `/products` **Ingen produkter**. Vision `29c1b1de26a14976aaa1b98bfe9de46e` accept, purged | `already_live_proved_honesty_red` |
+| `ui.parity.contacts.create` | `ui_clients_create_preview` | `ui_clients_create_{preview,execute}` | **Gem** `data-cy=save-button`. Live FastMCP | Fresh-session name read-back. **Ja, slet**. Absence 0. Vision `3d5b151dfd5342258f8734373597f8c1` accept, purged | `proved_preview_execute` |
+| `ui.parity.contacts.update` | `ui_clients_update_preview` | `ui_clients_update_{preview,execute}` | Exact **Ret**, then **Gem** | `{tag}-U` is a different name. Same vision | `proved_preview_execute` |
+| `ui.parity.contacts.delete` | `ui_clients_delete_preview` | `ui_clients_delete_{preview,execute}` | **Slet kontakt** link, **Ja, slet** | Fresh-session absence. Same vision | `proved_preview_execute` |
+| `ui.parity.bills.create` | `ui_bills_create_preview` | `ui_bills_create_{preview,execute}` | Existing-option vendor bind. **Gem som kladde** | Fresh-session draft read-back. Vision `9920dd9476474b41aef70e6d66d24638` accept, purged | `proved_preview_execute` |
+| `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `proved_preview_execute` |
+| `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `proved_preview_execute` |
+| `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `proved_preview_execute` |
+| `ui.parity.invoices.create` | `ui_invoices_create_preview` | `ui_invoices_create_{preview,execute}` | Self-contained FastMCP CUD. Pre-submit `02_before_submit.png` before **Gem som kladde** (`A342BBDC`) | Reverse-clean invoice, product, customer. Vision `60b6d620772644f3bca9609c8ae53846` accept, purged | `proved_preview_execute` |
+| `ui.parity.invoices.update` | `ui_invoices_update_preview` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00`. List result `2,00 DKK` | Independent read-back. Same vision | `proved_preview_execute` |
+| `ui.parity.invoices.delete` | `ui_invoices_delete_preview` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | Owner independently empty after reverse cleanup and after disposable CUD. Same vision | `proved_preview_execute` |
+| `ui.parity.products.create` | `ui_products_create_preview` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Reverse-clean used singular DELETE 2xx then settled `/products` **Ingen produkter**. Vision `29c1b1de26a14976aaa1b98bfe9de46e` accept, purged | `proved_preview_execute` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.delete` | `ui_daybooks_delete_open` | `ui_daybooks_delete_{preview,execute}` | **Mere** then menu **Slet** on disposable journals. Primary **Slet** absent | No tagged create, so no tagged cleanup | `interface_control_absent_UI_CHANGED` |
@@ -99,27 +100,19 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 
 ## Owner questions
 
-1. Invoice (`9310BC17` / `1F1B34F8` / `56354201` / `A6A2B60C` /
-   `31BAF1FF` / `60b6d620`): Kunde and **Enhedspris** work.
-   Self-contained FastMCP CUD restored empty lists. Independent
-   accept and purge are done. Honesty still red. Do not remake
-   leftover reverse-clean.
-2. Product (`56354201` / `A0633A17` / `29c1b1de`): hard-delete is
-   owner-proved. FastMCP create/delete watches singular
-   `DELETE /v2/products/:id` 2xx. Independent accept and purge
-   are done. Honesty still red. Do not remake archive or dialog
-   dumps (`A337A622`). Do not treat archive-only as the cleanup path.
-3. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
+1. Invoice and product CUD are `preview_execute` after `58D7D0E1`.
+   Do not remake leftover reverse-clean or product dumps (`A337A622`).
+2. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
    `_ledger_write`.
-4. Files: accept fail-closed (no UI delete), or name a delete control
+3. Files: accept fail-closed (no UI delete), or name a delete control
    not already counted 0.
-5. Postings / **Godkend** stay prohibited unless a separately safe
+4. Postings / **Godkend** stay prohibited unless a separately safe
    fixture proves no external consequence.
 
-Do not remake closed invoice, product, daybook, or Bilag dumps. Do not
-green honesty-16 from this page.
+Do not remake closed invoice, product, daybook, or Bilag dumps.
 
 ## Coverage
 
-This page does not green any row. `complete` stays false until a later
-live FastMCP write plus independent accept plus purge exists.
+The generator greens only the 11 proved rows from vision records.
+This page does not hand-edit coverage. `complete` stays false while
+files, daybook, **Godkend**, bulk92, and API live stay out of green.

@@ -415,10 +415,10 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
 
     # Honesty freeze does not change green counts or complete.
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
 
 
@@ -481,10 +481,10 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
     assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
@@ -586,10 +586,10 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
     assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
@@ -683,10 +683,10 @@ def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
     assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
@@ -758,10 +758,10 @@ def test_ui_product_plane_bulk_chrome_dual_na_empty_list_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
     assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
@@ -1132,8 +1132,8 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     ]
     assert len(products_create_parity) == 1
     assert products_create_parity[0]["tool_name"] == "ui_products_create_preview"
-    assert products_create_parity[0]["live_tested"] is False
-    assert products_create_parity[0]["parity_status"] == "form_open_only"
+    assert products_create_parity[0]["live_tested"] is True
+    assert products_create_parity[0]["parity_status"] == "preview_execute"
     assert "research163" in (products_create_parity[0].get("evidence") or "")
     products_create_discovery = [
         row for row in ui_manifest["workflows"] if row["id"] == "ui.discovery.products_create"
@@ -1508,7 +1508,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         + 2
         - len(generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)
     )
-    assert status["qualification"]["live_tested_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
 
 
@@ -1599,8 +1599,8 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
 
 
 def test_research184_attachments_list_files_create_dualcount_and_files_list_get_na() -> None:
@@ -1677,9 +1677,9 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
         )
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
 
 
@@ -1752,9 +1752,9 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
     assert workflows["ui.discovery.annual_reports"]["live_tested"] is not True
 
     assert status["complete"] is False
-    assert status["qualification"]["live_tested_rows"] == 328
-    assert status["qualification"]["vision_verified_rows"] == 328
-    assert status["qualification"]["implemented_rows"] == 512
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["qualification"]["implemented_rows"] == 523
     assert status["qualification"]["contract_tested_rows"] == 528
     assert status["qualification"]["live_tested_rows"] == (
         74
@@ -1974,6 +1974,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
             "delete_chrome_open_only",
             "create_chrome_open_only",
             "soft_empty_shell_observed",
+            "preview_execute",
         }
     invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
     assert "api.invoices.list" in invoices_parity["evidence"]
@@ -2148,7 +2149,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert organizations_update["api_row_id"] == "api.organizations.update"
     assert organizations_update["tool_name"] == "ui_organizations_update_preview"
-    assert organizations_update["parity_status"] == "form_open_only"
+    assert organizations_update["parity_status"] == "preview_execute"
     assert "api.organizations.update" in organizations_update["evidence"]
     assert "research177" in organizations_update["evidence"]
     assert organizations_update["sensitivity"] == "medium"
@@ -2274,7 +2275,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert invoices_create_parity["api_row_id"] == "api.invoices.create"
     assert invoices_create_parity["tool_name"] == "ui_invoices_create_preview"
-    assert invoices_create_parity["parity_status"] == "form_open_only"
+    assert invoices_create_parity["parity_status"] == "preview_execute"
     assert "api.invoices.create" in invoices_create_parity["evidence"]
     assert "research153" in invoices_create_parity["evidence"]
     invoices_create_discovery = next(
@@ -2298,9 +2299,9 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert invoices_update_parity["api_row_id"] == "api.invoices.update"
     assert invoices_update_parity["tool_name"] == "ui_invoices_update_preview"
 
-    assert invoices_update_parity["parity_status"] == "form_open_only"
-    assert invoices_update_parity["live_tested"] is False
-    assert invoices_update_parity["vision_verified"] is False
+    assert invoices_update_parity["parity_status"] == "preview_execute"
+    assert invoices_update_parity["live_tested"] is True
+    assert invoices_update_parity["vision_verified"] is True
     assert "research174" in invoices_update_parity["evidence"]
     assert "api.invoices.update" in invoices_update_parity["evidence"]
 
@@ -2309,9 +2310,9 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert invoices_delete_parity["api_row_id"] == "api.invoices.delete"
     assert invoices_delete_parity["tool_name"] == "ui_invoices_delete_preview"
-    assert invoices_delete_parity["parity_status"] == "delete_chrome_open_only"
-    assert invoices_delete_parity["live_tested"] is False
-    assert invoices_delete_parity["vision_verified"] is False
+    assert invoices_delete_parity["parity_status"] == "preview_execute"
+    assert invoices_delete_parity["live_tested"] is True
+    assert invoices_delete_parity["vision_verified"] is True
     assert "research175" in invoices_delete_parity["evidence"]
     assert "api.invoices.delete" in invoices_delete_parity["evidence"]
 
@@ -2327,25 +2328,25 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     bills_update_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.update")
     assert bills_update_parity["api_row_id"] == "api.bills.update"
     assert bills_update_parity["tool_name"] == "ui_bills_update_preview"
-    assert bills_update_parity["parity_status"] == "form_open_only"
-    assert bills_update_parity["live_tested"] is False
-    assert bills_update_parity["vision_verified"] is False
+    assert bills_update_parity["parity_status"] == "preview_execute"
+    assert bills_update_parity["live_tested"] is True
+    assert bills_update_parity["vision_verified"] is True
     assert "research172" in bills_update_parity["evidence"]
     assert "api.bills.update" in bills_update_parity["evidence"]
 
     bills_delete_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.delete")
     assert bills_delete_parity["api_row_id"] == "api.bills.delete"
     assert bills_delete_parity["tool_name"] == "ui_bills_delete_preview"
-    assert bills_delete_parity["parity_status"] == "delete_chrome_open_only"
-    assert bills_delete_parity["live_tested"] is False
-    assert bills_delete_parity["vision_verified"] is False
+    assert bills_delete_parity["parity_status"] == "preview_execute"
+    assert bills_delete_parity["live_tested"] is True
+    assert bills_delete_parity["vision_verified"] is True
     assert "research173" in bills_delete_parity["evidence"]
     assert "api.bills.delete" in bills_delete_parity["evidence"]
 
     bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
     assert bills_create_parity["api_row_id"] == "api.bills.create"
     assert bills_create_parity["tool_name"] == "ui_bills_create_preview"
-    assert bills_create_parity["parity_status"] == "form_open_only"
+    assert bills_create_parity["parity_status"] == "preview_execute"
     assert "api.bills.create" in bills_create_parity["evidence"]
     assert "research154" in bills_create_parity["evidence"]
     bills_create_discovery = next(
@@ -2359,7 +2360,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert contacts_create_parity["api_row_id"] == "api.contacts.create"
     assert contacts_create_parity["tool_name"] == "ui_clients_create_preview"
-    assert contacts_create_parity["parity_status"] == "form_open_only"
+    assert contacts_create_parity["parity_status"] == "preview_execute"
     assert "api.contacts.create" in contacts_create_parity["evidence"]
     assert "research160" in contacts_create_parity["evidence"]
     contacts_get_parity = next(row for row in qualified if row["id"] == "ui.parity.contacts.get")
@@ -2373,7 +2374,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert contacts_update_parity["api_row_id"] == "api.contacts.update"
     assert contacts_update_parity["tool_name"] == "ui_clients_update_preview"
-    assert contacts_update_parity["parity_status"] == "form_open_only"
+    assert contacts_update_parity["parity_status"] == "preview_execute"
     assert "api.contacts.update" in contacts_update_parity["evidence"]
     assert "research166" in contacts_update_parity["evidence"]
     contacts_delete_parity = next(
@@ -2381,7 +2382,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert contacts_delete_parity["api_row_id"] == "api.contacts.delete"
     assert contacts_delete_parity["tool_name"] == "ui_clients_delete_preview"
-    assert contacts_delete_parity["parity_status"] == "delete_chrome_open_only"
+    assert contacts_delete_parity["parity_status"] == "preview_execute"
     assert "api.contacts.delete" in contacts_delete_parity["evidence"]
     assert "research167" in contacts_delete_parity["evidence"]
     clients_create_discovery = next(
