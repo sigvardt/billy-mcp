@@ -29,20 +29,27 @@ sources:
   - radio:59A3A933
   - radio:B9C4FA7C
   - radio:DECEA79B
+  - radio:F1A2EFC2
+  - radio:3CB4D807
+  - radio:3D5A9B9C
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T01:20:00Z
+updated: 2026-08-19T02:46:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-Worktree has uncommitted line-persist gates on `8b2144d`.
-`persist_hit` for update is a 2xx `PUT /v2/invoiceLines/:id`.
-A header `PUT /v2/invoices/:id` is not line-price persist.
-Owner `F1A2EFC2`: the exact **Enhedspris** control is INPUT
-`type=text` `inputmode=numeric` `name=unitPrice`
-`placeholder=Enhedspris`. A normal `fill('2,00')` on that input
-sets value `2,00`. `shown_len=3` is a wrong locator. Stay red.
+HEAD is clean. Line persist watch is committed: `persist_hit` for
+update is a 2xx `PUT /v2/invoiceLines/:id`. A header
+`PUT /v2/invoices/:id` is not line-price persist.
+Owner `F1A2EFC2` / `3CB4D807`: the exact **Enhedspris** control
+is a visible main-frame INPUT `name=unitPrice`
+`placeholder=Enhedspris` on
+`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit`, value `1,00`. Headless
+leftover edit heading is `Rediger fakturakladde` with
+`exact_count=0` after wait. `3D5A9B9C` removed
+`reveal_line_editor` and frame search. Recapture heading and URL
+before changing locators. Stay red.
 Do not finish.
 No children are running. Seven write children stay completed and merged.
 `59A3A933` now binds leftover cleanup. A fresh `/invoices` page

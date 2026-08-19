@@ -48,11 +48,41 @@ sources:
   - radio:59A3A933
   - radio:B9C4FA7C
   - radio:DECEA79B
+  - radio:F1A2EFC2
+  - radio:3CB4D807
+  - radio:3D5A9B9C
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T23:10:00Z
+updated: 2026-08-19T02:46:00Z
 ---
 
 ## Binding now
+
+`3D5A9B9C` (saved, P10): remove `reveal_line_editor`. Do not click
+the product tag or a guessed row. The leftover edit page already
+renders the visible main-frame **Enhedspris** input with no click.
+If the headless session still lacks it, return sanitized URL,
+heading, exact-input count, product-text count, and input count.
+Do not search frames. Do not treat absence as a missing control
+until those counts are recorded.
+
+`3CB4D807` (saved, P10): on
+`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit` the main frame has
+exactly one visible INPUT `name=unitPrice` `placeholder=Enhedspris`
+`type=text` `inputmode=numeric` with value `1,00`. No iframe.
+Headless zero-input is a session or render miss. Keep the exact
+selector. Wait for that visible input after the edit page is
+fully rendered, then fill `2,00` once.
+
+`F1A2EFC2` (saved, P10): exact **Enhedspris** is INPUT
+`type=text` `inputmode=numeric` `name=unitPrice`
+`placeholder=Enhedspris` class `ember-view ember-text-field`.
+A normal locator `fill('2,00')` on that input sets value
+exactly `2,00`. Reload restored `1,00` because the owner did
+not save. `shown_len=3` is a wrong node, not Billy rejecting
+`2,00`. Bind that exact selector. Assert `2,00` before
+**Gem som kladde**. Then require `PUT /v2/invoiceLines/:id`
+2xx and fresh-session `2,00`. No guessed selector. No blind
+keys.
 
 `DECEA79B` (saved, P10): fresh authenticated edit of
 `MCP-UI-INV-6CDB396B` still shows **Enhedspris** 1,00 and totals

@@ -51,12 +51,15 @@ is `PUT /v2/invoiceLines/:id` `unitPrice`. Persist is that 2xx plus a
 fresh row-open that shows the ticket **Enhedspris**. Owner `DECEA79B`
 still has 1,00 on `MCP-UI-INV-6CDB396B`. Update stays red until a fresh
 session shows 2,00. Then delete the six leftover triples. Do not treat
-an unchanged Ember dirty-check as success. Live FastMCP update still
-returns `UI_CHANGED` after fill: the line field keeps a 3-character
-value that is not ticket `2`. Owner `F1A2EFC2`: the exact control is INPUT `name=unitPrice`
-`placeholder=Enhedspris`. A normal `fill('2,00')` sets value `2,00`.
-Read happens before Tab. No seventh
-invoice was created.
+an unchanged Ember dirty-check as success. Owner `F1A2EFC2` /
+`3CB4D807`: the exact control is a visible main-frame INPUT
+`name=unitPrice` `placeholder=Enhedspris` on the leftover edit
+URL. Update waits for that input, fills `2,00` once, and reads
+the same locator before Tab. Owner `3D5A9B9C`: do not click a
+product tag or guessed row. Headless zero-input is a render miss.
+If the input is still absent, return sanitized URL, heading,
+exact-input count, product-text count, and input count. No
+seventh invoice was created.
 
 Owner `EC676F84`: the Kunde control works. An empty customer dataset shows
 textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not

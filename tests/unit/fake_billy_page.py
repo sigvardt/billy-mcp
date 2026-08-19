@@ -140,7 +140,9 @@ class FakeBillyPage:
         self._session.gotos.append(url)
 
     def locator(self, selector: str) -> FakeBillyLocator:
-        if "type='search'" in selector or "placeholder" in selector:
+        if "type='search'" in selector:
+            return FakeBillyLocator(self._session, selector, query_text="__no_search__")
+        if "placeholder" in selector and "placeholder='Enhedspris'" not in selector:
             return FakeBillyLocator(self._session, selector, query_text="__no_search__")
         query = selector.removeprefix("text=") if selector.startswith("text=") else None
         return FakeBillyLocator(
@@ -187,9 +189,10 @@ class FakeBillyPage:
             )
         return FakeBillyLocator(self._session, f"role:{label}", query_text=label, click_name=label)
 
-    def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
+    def get_by_text(self, text: str | re.Pattern[str], *, exact: bool = False) -> FakeBillyLocator:
         del exact
-        return FakeBillyLocator(self._session, f"text={text}", query_text=text, click_name=text)
+        label = text.pattern if isinstance(text, re.Pattern) else text
+        return FakeBillyLocator(self._session, f"text={label}", query_text=label, click_name=label)
 
     def get_by_label(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
         del exact
@@ -285,13 +288,14 @@ class FakeBillyLocator:
         del exact
         return FakeBillyPage(self._session, 0).get_by_role(role, name=name)
 
-    def get_by_text(self, text: str, *, exact: bool = False) -> FakeBillyLocator:
+    def get_by_text(self, text: str | re.Pattern[str], *, exact: bool = False) -> FakeBillyLocator:
         del exact
+        label = text.pattern if isinstance(text, re.Pattern) else text
         return FakeBillyLocator(
             self._session,
-            f"{self._selector} >> text={text}",
-            query_text=text,
-            click_name=text,
+            f"{self._selector} >> text={label}",
+            query_text=label,
+            click_name=label,
             scope=self._selector,
         )
 
@@ -326,6 +330,11 @@ class FakeBillyLocator:
                 handler(FakeResponse("POST", "https://api.billysbilling.com/v2/invoices"))
                 handler(
                     FakeResponse("PUT", "https://api.billysbilling.com/v2/invoices/fake-invoice-id")
+                )
+                handler(
+                    FakeResponse(
+                        "PUT", "https://api.billysbilling.com/v2/invoiceLines/fake-line-id"
+                    )
                 )
         if any(token in folded for token in ("slet", "delete", "bekræft")):
             self._session.records.clear()

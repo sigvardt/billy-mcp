@@ -55,15 +55,8 @@ LINE_SELECTORS = (
     "textarea[name='description']",
     "input[name='description']",
 )
-UNIT_PRICE_LABELS = ("Enhedspris", "Unit price")
 QUANTITY_LABELS = ("Antal", "Quantity")
-UNIT_PRICE_SELECTORS = (
-    "input[name='unitPrice'][placeholder='Enhedspris']",
-    "input[name='invoiceLines.0.unitPrice']",
-    "input[name='invoice.lines.0.unitPrice']",
-    "input[name*='invoiceLines'][name*='unitPrice']",
-    "input[name*='lines'][name*='unitPrice']",
-)
+UNIT_PRICE_SELECTORS = ("input[name='unitPrice'][placeholder='Enhedspris']",)
 QUANTITY_SELECTORS = (
     "input[name='invoiceLines.0.quantity']",
     "input[name='quantity']",
@@ -876,6 +869,7 @@ async def fill_priced_line(
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy invoice unit price field is not visible.",
+            details=await enhedspris_missing_details(page),
         )
     from billy_mcp.ui_writes.invoices_form_price import commit_unit_price
 
@@ -910,29 +904,58 @@ async def read_unit_price(page: Page) -> str:
         return ""
 
 
+async def enhedspris_missing_details(page: Page) -> dict[str, object]:
+    """Sanitized URL, heading, and counts when the exact Enhedspris input is missing."""
+
+    from urllib.parse import urlsplit
+
+    details: dict[str, object] = {
+        "path": "",
+        "heading": "",
+        "exact_count": -1,
+        "product_text_count": -1,
+        "input_count": -1,
+    }
+    try:
+        details["path"] = urlsplit(page.url).path
+    except (AttributeError, RuntimeError):
+        pass
+    try:
+        heading = page.locator("h1")
+        if await heading.count() >= 1:
+            details["heading"] = (await heading.first.inner_text()).strip()[:80]
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["exact_count"] = await page.locator(UNIT_PRICE_SELECTORS[0]).count()
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["product_text_count"] = await page.get_by_text("MCP-UI-PRD-").count()
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["input_count"] = await page.locator("input").count()
+    except (TimeoutError, RuntimeError):
+        pass
+    return details
+
+
 async def unit_price_field(page: Page) -> Locator | None:
-    for selector in UNIT_PRICE_SELECTORS:
-        field = page.locator(selector)
-        if await field.count() >= 1 and await field.first.is_visible():
-            return field.first
-    for label in UNIT_PRICE_LABELS:
-        field = page.get_by_label(label, exact=True)
-        if await field.count() < 1:
-            field = page.get_by_label(label)
-        if await field.count() >= 1 and await field.first.is_visible():
-            return field.first
-    for label in UNIT_PRICE_LABELS:
-        named = page.get_by_text(label, exact=True)
-        for index in range(await named.count()):
-            text = named.nth(index)
-            if not await text.is_visible():
-                continue
-            following = text.locator("xpath=following::input[1]")
-            try:
-                if await following.count() >= 1 and await following.first.is_visible():
-                    return following.first
-            except (TimeoutError, RuntimeError):
-                continue
+    """Owner 3CB4D807: wait for the exact main-frame Enhedspris input."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    for _ in range(80):
+        field = page.locator(UNIT_PRICE_SELECTORS[0])
+        try:
+            if await field.count() >= 1 and await field.first.is_visible():
+                return field.first
+        except (TimeoutError, RuntimeError):
+            pass
+        await asyncio.sleep(0.25)
     return None
 
 

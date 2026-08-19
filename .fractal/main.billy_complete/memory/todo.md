@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T01:20:00Z
+updated: 2026-08-19T01:34:00Z
 ---
 
 ## Open
 
-- `F1A2EFC2` / `DECEA79B`: exact INPUT `name=unitPrice` `placeholder=Enhedspris` accepts `fill('2,00')` to value `2,00`. Live `shown_len=3` is a wrong locator. Bind that exact selector, assert `2,00` before **Gem som kladde**, then `PUT /v2/invoiceLines/:id` 2xx and fresh-session 2,00. Reverse-delete six triples. Stay red.
+- `3CB4D807` / `3D5A9B9C`: guessed reveal and frames are gone. Live leftover edit heading `Rediger fakturakladde` still has `exact_count=0` after wait. Recapture heading and URL before changing locators. Then fill `2,00`, line PUT, reverse-delete. Stay red.
 - Invoice draft CUD remains mandatory (`FD39FFE7` / `1F1B34F8`). Product create persist and scoped table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Persist of priced drafts is now interface-proved. Remaining work is FastMCP update plus leftover cleanup, not another create probe. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.

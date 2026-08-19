@@ -1476,11 +1476,12 @@ def test_update_execute_proves_fresh_enhedspris() -> None:
     ]
     assert 'await field.fill("")' not in commit
     assert "danish_price" in commit
-    assert "str(int(unit_price))" in commit
-    fill_idx = commit.index("await field.fill(text)")
+    assert "str(int(unit_price))" not in commit
+    fill_idx = commit.index("await field.fill(")
     tab_idx = commit.index('await field.press("Tab")')
     assert fill_idx < tab_idx
-    assert commit.index("read_unit_price") < tab_idx
+    assert "await field.input_value()" in commit
+    assert commit.index("await field.input_value()") < tab_idx
 
 
 def test_price_is_two_accepts_danish_decimals() -> None:
@@ -1499,12 +1500,10 @@ def test_price_is_two_accepts_danish_decimals() -> None:
     start = bind.index("async def unit_price_field")
     end = bind.index("async def _fill_labeled", start)
     body = bind[start:end]
-    assert body.index("UNIT_PRICE_SELECTORS") < body.index("UNIT_PRICE_LABELS")
-    assert "invoiceLines.0.unitPrice" in bind
+    assert "UNIT_PRICE_SELECTORS" in body
     assert "input[name='unitPrice'][placeholder='Enhedspris']" in bind
     assert "\"input[name='unitPrice']\"" not in bind
     assert "\"input[name*='unitPrice']\"" not in bind
-    assert "invoice.lines.0.unitPrice" in bind
     bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
     start = bind.index("async def fill_priced_line")
     end = bind.index("\ndef price_is", start)
@@ -1512,10 +1511,62 @@ def test_price_is_two_accepts_danish_decimals() -> None:
     assert "commit_unit_price" in fill
     price = Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(encoding="utf-8")
     assert "return str(int(unit_price))" not in bind
-    danish_idx = price.index("danish_price(unit_price)")
-    integer_idx = price.index("str(int(unit_price))")
-    assert danish_idx < integer_idx
+    assert "str(int(unit_price))" not in price
     assert 'f"{unit_price:.2f}".replace(".", ",")' in price
+
+
+def test_unit_price_field_binds_exact_enhedspris_input() -> None:
+    """Owner F1A2EFC2: only name=unitPrice placeholder=Enhedspris."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def unit_price_field")
+    end = bind.index("async def _fill_labeled", start)
+    body = bind[start:end]
+    assert "input[name='unitPrice'][placeholder='Enhedspris']" in bind
+    assert "following::input" not in body
+    assert "get_by_label" not in body
+    assert "get_by_text" not in body
+    assert "get_by_role" not in body
+    assert "frames" not in body
+    assert "\"input[name='unitPrice']\"" not in bind
+
+
+def test_commit_unit_price_fills_danish_once_on_bound_locator() -> None:
+    """Fill 2,00 once on the bound locator. Do not re-resolve a steal node."""
+
+    price = Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(encoding="utf-8")
+    commit = price[
+        price.index("async def commit_unit_price") : price.index("async def prove_fresh")
+    ]
+    assert "danish_price(unit_price)" in commit
+    assert "str(int(unit_price))" not in commit
+    assert "press_sequentially" not in commit
+    assert "read_unit_price" not in commit
+    assert "await field.fill(" in commit
+    assert "await field.input_value()" in commit
+    fill_idx = commit.index("await field.fill(")
+    read_idx = commit.index("await field.input_value()")
+    tab_idx = commit.index('await field.press("Tab")')
+    assert fill_idx < read_idx < tab_idx
+
+
+def test_fill_priced_line_does_not_guess_line_reveal() -> None:
+    """Owner 3D5A9B9C: do not click a product tag or guessed row to invent Enhedspris."""
+
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    fill = bind[bind.index("async def fill_priced_line") : bind.index("\ndef price_is")]
+    assert "reveal_line_editor" not in bind
+    assert "_visible_line_product" not in bind
+    assert "reveal_line_editor" not in fill
+    missing = bind[
+        bind.index("async def enhedspris_missing_details") : bind.index(
+            "async def unit_price_field"
+        )
+    ]
+    assert '"heading"' in missing
+    assert '"exact_count"' in missing
+    assert '"product_text_count"' in missing
+    assert '"input_count"' in missing
 
 
 def test_edit_url_opened_rejects_list_and_create() -> None:
