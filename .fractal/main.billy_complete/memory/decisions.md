@@ -70,15 +70,21 @@ sources:
   - radio:02CB47D8
   - radio:7C96E1C3
   - radio:58D7D0E1
+  - radio:FE6FA4B1
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T17:45:00Z
+updated: 2026-08-19T18:55:00Z
 ---
 
 ## Binding now
 
+`FE6FA4B1` (saved, P10, landed): residual five files and ledger
+writes are `out_of_scope_by_user`. Green flags stay false.
+`tools_allowed=false`. `not_applicable` rejected. No live write.
+No dump. Do not finish.
+
 `58D7D0E1` (saved, P9, landed): honesty-16 is a false-green stop,
 not a permanent-red rule. The 11 accepted rows are
-`preview_execute`. Honesty is the five files and ledger rows.
+`preview_execute`. Residual five moved to `FE6FA4B1`.
 No live write. No UI dump. Do not edit `coverage/status.json` by
 hand. Do not finish.
 

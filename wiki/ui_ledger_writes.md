@@ -56,7 +56,8 @@ Both named persist counts are 1, so persist is not unique. **Indstillinger**
 also matches global nav. Independent review failed the classify helper as a
 redundant permanent diagnostic. The helper is not in the tree. Do not treat
 **Opret ny kassekladde** as a unique create submit. Do not arm
-`_ledger_write`. Do not remake this dump. Honesty rows stay on
+`_ledger_write`. Do not remake this dump. Coverage rows are
+`out_of_scope_by_user` (`FE6FA4B1`). Shell tools stay
 `ui_daybooks_open` / `ui_daybooks_delete_open`.
 
 ## Fail closed

@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T18:20:00Z
+updated: 2026-08-19T18:55:00Z
 ---
 
 ## Open
 
-- Remaining honesty red: files create, daybooks create/delete, daybookTransactions create, transactions create. Do not remake dumps. Do not arm `_ledger_write`. Do not finish.
+- Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92. Do not finish.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
 - Daybook persist is not unique. Files have no UI delete. **Godkend** stays prohibited.
@@ -22,7 +22,8 @@ updated: 2026-08-19T18:20:00Z
 
 ## Done
 
-- Binding `58D7D0E1`: 11 accepted CUD rows are `preview_execute`. Honesty is the five files and ledger rows. Independent review passed. `complete` stays false.
+- Binding `FE6FA4B1`: five residual writes are `out_of_scope_by_user`. Flags stay false. Not `not_applicable`.
+- Binding `58D7D0E1`: 11 accepted CUD rows are `preview_execute`. Independent review passed. `complete` stays false.
 - Independent accept and purge of product CUD run `29c1b1de26a14976aaa1b98bfe9de46e`. Coverage names `ui_products_create_preview`.
 - Independent accept and purge of invoice CUD run `60b6d620772644f3bca9609c8ae53846`. Coverage names `ui_invoices_{create,update,delete}_preview`. Live CUD uses `write_live_pending_unless_accepted`. Honesty-16 still red.
 - 16-row gate, honesty, shared protocol, durable preview/execute invariant, `ui-full` mode.

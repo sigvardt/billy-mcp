@@ -915,15 +915,25 @@ API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested", "liv
 UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
 
 # Owner 96908DC6 / E004E7D5: open-only chrome is not a finished CUD write.
-UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS: frozenset[str] = frozenset(
-    {
-        "ui.parity.daybooks.create",
-        "ui.parity.daybooks.delete",
-        "ui.parity.daybookTransactions.create",
-        "ui.parity.files.create",
-        "ui.parity.transactions.create",
-    }
-)
+# Empty after FE6FA4B1 moved the last five residual writes to owner scope.
+UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS: frozenset[str] = frozenset()
+# Owner FE6FA4B1: residual writes with no unique safe CUD cycle, or Godkend persist.
+UI_RESIDUAL_WRITE_OWNER_SCOPE: dict[str, str] = {
+    "ui.parity.daybookTransactions.create": "GODKEND_HIGH_IMPACT_PROHIBITED",
+    "ui.parity.transactions.create": "GODKEND_HIGH_IMPACT_PROHIBITED",
+    "ui.parity.files.create": "FILES_NO_UI_DELETE",
+    "ui.parity.daybooks.create": "DAYBOOKS_UNIQUE_PERSIST_ABSENT",
+    "ui.parity.daybooks.delete": "DAYBOOKS_UNIQUE_PERSIST_ABSENT",
+}
+UI_RESIDUAL_WRITE_OWNER_SCOPE_REASON: dict[str, str] = {
+    "GODKEND_HIGH_IMPACT_PROHIBITED": (
+        "Godkend / Bogfoer / posting is prohibited (radio:96908DC6); posting is irreversible"
+    ),
+    "FILES_NO_UI_DELETE": ("Bilag Slet count 0 dual; no uniquely verifiable file delete cycle"),
+    "DAYBOOKS_UNIQUE_PERSIST_ABSENT": (
+        "unique_persist_token=none; no tagged create so no tagged delete cycle"
+    ),
+}
 # Owner 58D7D0E1: accepted independent vision plus live FastMCP preview/execute.
 # Family records cover sibling CUD rows. Do not green files or ledger.
 UI_CUD_PARITY_PROVED_WRITE: dict[str, tuple[str, str]] = {
@@ -2003,11 +2013,8 @@ def apply_ui_cud_parity_open_only_honesty(workflows: list[dict[str, Any]]) -> No
     existing *_open / list / shell tool until a preview tool exists.
     """
 
-    if len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS) != 5:
-        raise RuntimeError(
-            "UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS must be exactly 5 "
-            f"(got {len(UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)})"
-        )
+    if not UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS:
+        return
     seen: set[str] = set()
     for row in workflows:
         row_id = str(row.get("id", ""))
@@ -2157,7 +2164,8 @@ def apply_ui_cud_proved_preview_execute(
     """Green the 11 accepted CUD rows after honesty and preview remaps.
 
     Requires a qualifying vision record and a preview tool name. Leaves
-    ``vision_evidence`` null. Files and ledger stay on the honesty set.
+    ``vision_evidence`` null. Residual files and ledger writes are owner-scoped
+    after this apply.
     """
 
     overlap = set(UI_CUD_PARITY_PROVED_WRITE) & UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS
@@ -2195,6 +2203,77 @@ def apply_ui_cud_proved_preview_execute(
     missing = set(UI_CUD_PARITY_PROVED_WRITE) - seen
     if missing:
         raise RuntimeError(f"proved CUD mapping missing rows: {sorted(missing)}")
+
+
+def apply_ui_residual_write_out_of_scope_by_user(workflows: list[dict[str, Any]]) -> None:
+    """Record FE6FA4B1 owner scope on residual files and ledger CUD rows.
+
+    Keeps discovered and open-form contract_tested. Forces implemented, live,
+    and vision false. Rejects not_applicable because nav and routes exist.
+    Does not green. Does not invent ui_annual_* tools.
+    """
+
+    if len(UI_RESIDUAL_WRITE_OWNER_SCOPE) != 5:
+        raise RuntimeError(
+            "UI_RESIDUAL_WRITE_OWNER_SCOPE must be exactly 5 "
+            f"(got {len(UI_RESIDUAL_WRITE_OWNER_SCOPE)})"
+        )
+    overlap_proved = set(UI_RESIDUAL_WRITE_OWNER_SCOPE) & set(UI_CUD_PARITY_PROVED_WRITE)
+    if overlap_proved:
+        raise RuntimeError(f"residual owner-scope ids still proved: {sorted(overlap_proved)}")
+    overlap_honesty = set(UI_RESIDUAL_WRITE_OWNER_SCOPE) & UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS
+    if overlap_honesty:
+        raise RuntimeError(f"residual owner-scope ids still on honesty: {sorted(overlap_honesty)}")
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        scope_code = UI_RESIDUAL_WRITE_OWNER_SCOPE.get(row_id)
+        if scope_code is None:
+            continue
+        seen.add(row_id)
+        reason = UI_RESIDUAL_WRITE_OWNER_SCOPE_REASON[scope_code]
+        row["discovered"] = True
+        row["contract_tested"] = True
+        row["implemented"] = False
+        row["live_tested"] = False
+        row["vision_verified"] = False
+        row["vision_evidence"] = None
+        row["parity_status"] = "out_of_scope_by_user"
+        row["qualification"] = {
+            "kind": "out_of_scope_by_user",
+            "scope_code": scope_code,
+            "owner_decision_ref": "radio:FE6FA4B1",
+            "owner_decision_date": "2026-08-19",
+            "tools_allowed": False,
+            "reason": reason,
+            "not_applicable_decision": "rejected",
+            "not_applicable_reason": (
+                "nav and route exist; owner skip is safety or cleanup scope, "
+                "not absence of a Billy UI workflow"
+            ),
+        }
+        godkend = ""
+        if scope_code == "GODKEND_HIGH_IMPACT_PROHIBITED":
+            godkend = " radio:96908DC6 high-impact Godkend/Bogfoer prohibition;"
+        cite = (
+            "owner decision radio:FE6FA4B1 (2026-08-19): qualification.kind="
+            f"out_of_scope_by_user scope_code={scope_code} tools_allowed=false; "
+            f"not_applicable rejected;{godkend} {reason}; "
+            "implemented/live/vision stay false"
+        )
+        prior = str(row.get("evidence") or "").strip()
+        if "radio:FE6FA4B1" not in prior:
+            row["evidence"] = f"{prior}; {cite}" if prior else cite
+        route = str(row.get("method_or_route") or "")
+        marker = "owner out_of_scope_by_user"
+        if marker not in route:
+            row["method_or_route"] = (
+                f"{route} ({marker} scope_code={scope_code} radio:FE6FA4B1; "
+                "not_applicable rejected)"
+            )
+    missing = set(UI_RESIDUAL_WRITE_OWNER_SCOPE) - seen
+    if missing:
+        raise RuntimeError(f"residual owner-scope missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -8051,6 +8130,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_invoices_cud_preview_tool_names(workflows)
     apply_ui_products_create_preview_tool_name(workflows)
     apply_ui_cud_proved_preview_execute(workflows)
+    apply_ui_residual_write_out_of_scope_by_user(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",

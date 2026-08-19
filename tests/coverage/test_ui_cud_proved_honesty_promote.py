@@ -78,14 +78,6 @@ REMAINING_HONESTY_IDS: Final[frozenset[str]] = frozenset(
     }
 )
 
-OPEN_ONLY_STATUSES: Final[frozenset[str]] = frozenset(
-    {
-        "form_open_only",
-        "create_chrome_open_only",
-        "delete_chrome_open_only",
-    }
-)
-
 
 def _load_script_module(name: str) -> ModuleType:
     spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
@@ -128,15 +120,16 @@ def test_proved_honesty_rows_are_preview_execute_and_green() -> None:
         assert row["vision_evidence"] is None
 
 
-def test_remaining_honesty_rows_stay_open_only_and_red() -> None:
-    """Given files and ledger honesty, When reading coverage, Then those five stay red."""
+def test_remaining_honesty_set_is_empty_after_owner_scope() -> None:
+    """Given FE6FA4B1, When reading the honesty set, Then the five moved to owner scope."""
 
+    generator = _load_script_module("generate_coverage_report")
+    assert generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS == frozenset()
+    assert set(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE) == set(REMAINING_HONESTY_IDS)
     rows = _rows()
-    missing = sorted(REMAINING_HONESTY_IDS - set(rows))
-    assert missing == [], f"remaining honesty missing: {missing}"
     for row_id in sorted(REMAINING_HONESTY_IDS):
         row = rows[row_id]
-        assert row["parity_status"] in OPEN_ONLY_STATUSES
+        assert row["parity_status"] == "out_of_scope_by_user"
         for field in GREEN_FIELDS:
             assert row[field] is False, f"{row_id}: {field} greened"
 

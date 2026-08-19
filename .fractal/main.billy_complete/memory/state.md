@@ -50,17 +50,17 @@ sources:
   - radio:A41C242F
   - radio:58D7D0E1
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T18:20:00Z
+updated: 2026-08-19T18:55:00Z
 ---
 
 ## Now
 
-Binding `58D7D0E1` is landed. Contacts C/U/D, bills C/U/D,
+Binding `FE6FA4B1` is landed. Independent review PASS. Godkend
+cite is only on the posting rows. Contacts C/U/D, bills C/U/D,
 organizations update, invoices C/U/D, and products create are
-`preview_execute` with the three flags true. Honesty now covers
-only files create, daybooks create/delete, daybookTransactions
-create, and transactions create. Those stay red. Independent
-review passed. `complete` is false. Do not finish. Do not remake
+`preview_execute` with the three flags true. The five residual
+files and ledger writes are `out_of_scope_by_user` with flags
+false. `complete` is false on bulk92. Do not finish. Do not remake
 dumps or live CUD. Do not edit `coverage/status.json` by hand.
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
 Product delete watches one `DELETE /v2/products/:id` 2xx before

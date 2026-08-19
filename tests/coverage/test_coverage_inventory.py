@@ -176,17 +176,17 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     # Prior 74 greened shells/parity + research184 attachments.list + files.create dual-count.
     ui_shell_green = 76
-    cud_open_only = len(generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)
+    residual_scope = len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
     assert status["qualification"]["implemented_rows"] == (
-        len(offline_evidence) + ui_shell_green + geo_na - cud_open_only
+        len(offline_evidence) + ui_shell_green + geo_na - residual_scope
     )
     assert status["qualification"]["contract_tested_rows"] == (
         len(offline_evidence) + ui_shell_green + geo_na
     )
     # API live remains 0 (out of scope); UI shell rows + geo NA dual-session freezes.
-    assert status["qualification"]["live_tested_rows"] == (ui_shell_green + geo_na - cud_open_only)
+    assert status["qualification"]["live_tested_rows"] == (ui_shell_green + geo_na - residual_scope)
     assert status["qualification"]["vision_verified_rows"] == (
-        ui_shell_green + geo_na - cud_open_only
+        ui_shell_green + geo_na - residual_scope
     )
     assert '"bankLineMatche"' not in json.dumps(api_manifest)
 
@@ -1387,7 +1387,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     files_by_id = {str(row.get("api_row_id")): row for row in files_rows}
     assert files_by_id["api.files.create"]["tool_name"] == "ui_uploads_list"
     assert files_by_id["api.files.create"]["live_tested"] is False
-    assert files_by_id["api.files.create"]["parity_status"] == "create_chrome_open_only"
+    assert files_by_id["api.files.create"]["parity_status"] == "out_of_scope_by_user"
     for na_id in ("api.files.list", "api.files.get"):
         assert files_by_id[na_id]["parity_status"] == "not_applicable"
         assert files_by_id[na_id]["live_tested"] is True
@@ -1501,12 +1501,12 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all("research181" in (row.get("method_or_route") or "") for row in rulesets_residual)
     assert status["complete"] is False
     # 74 baseline tool/dual-count greens + GEO NA rows + research184 dual-counts
-    # (attachments.list + files.create) beyond pure NA, minus CUD open-only honesty.
+    # (attachments.list + files.create) beyond pure NA, minus residual owner scope.
     assert status["qualification"]["live_tested_rows"] == (
         74
         + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
         + 2
-        - len(generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)
+        - len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
     )
     assert status["qualification"]["live_tested_rows"] == 339
     assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
@@ -1628,10 +1628,11 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
     files_create = workflows["ui.parity.files.create"]
     assert files_create["tool_name"] == "ui_uploads_list"
     assert files_create["api_row_id"] == "api.files.create"
-    assert files_create["parity_status"] == "create_chrome_open_only"
+    assert files_create["parity_status"] == "out_of_scope_by_user"
     assert files_create["live_tested"] is False
     assert files_create["vision_verified"] is False
     assert "research184" in (files_create.get("evidence") or "")
+    assert "radio:FE6FA4B1" in (files_create.get("evidence") or "")
 
     for row_id, api_id in (
         ("ui.parity.files.list", "api.files.list"),
@@ -1760,7 +1761,7 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
         74
         + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
         + 2
-        - len(generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS)
+        - len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
     )
 
 
@@ -1948,16 +1949,21 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert len(qualified) == 76
     assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
     honesty_ids = generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS
+    residual_scope_ids = set(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
     for row in qualified:
         assert row["tool_name"] == tool_by_id[row["id"]]
         assert row["discovered"] is True
         assert row["contract_tested"] is True
         assert row["vision_evidence"] is None
-        if row["id"] in honesty_ids:
+        if row["id"] in honesty_ids or row["id"] in residual_scope_ids:
             assert row["implemented"] is False
             assert row["live_tested"] is False
             assert row["vision_verified"] is False
-            assert row["parity_status"] in generator.OPEN_ONLY_PARITY_STATUSES
+            if row["id"] in residual_scope_ids:
+                assert row["parity_status"] == "out_of_scope_by_user"
+                assert generator.is_owner_out_of_scope(row) is True
+            else:
+                assert row["parity_status"] in generator.OPEN_ONLY_PARITY_STATUSES
             continue
         assert row["implemented"] is True
         assert row["live_tested"] is True
@@ -2182,9 +2188,10 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert daybooks_create_parity["api_row_id"] == "api.daybooks.create"
     assert daybooks_create_parity["tool_name"] == "ui_daybooks_open"
-    assert daybooks_create_parity["parity_status"] == "form_open_only"
+    assert daybooks_create_parity["parity_status"] == "out_of_scope_by_user"
     assert "api.daybooks.create" in daybooks_create_parity["evidence"]
     assert "research157" in daybooks_create_parity["evidence"]
+    assert "radio:FE6FA4B1" in daybooks_create_parity["evidence"]
     assert daybooks_create_parity["sensitivity"] == "medium"
     daybooks_get_parity = next(row for row in qualified if row["id"] == "ui.parity.daybooks.get")
     assert daybooks_get_parity["api_row_id"] == "api.daybooks.get"
@@ -2200,17 +2207,19 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     )
     assert daybooks_delete_parity["api_row_id"] == "api.daybooks.delete"
     assert daybooks_delete_parity["tool_name"] == "ui_daybooks_delete_open"
-    assert daybooks_delete_parity["parity_status"] == "delete_chrome_open_only"
+    assert daybooks_delete_parity["parity_status"] == "out_of_scope_by_user"
     assert "api.daybooks.delete" in daybooks_delete_parity["evidence"]
     assert "research180" in daybooks_delete_parity["evidence"]
+    assert "radio:FE6FA4B1" in daybooks_delete_parity["evidence"]
     dtx_create_parity = next(
         row for row in qualified if row["id"] == "ui.parity.daybookTransactions.create"
     )
     assert dtx_create_parity["api_row_id"] == "api.daybookTransactions.create"
     assert dtx_create_parity["tool_name"] == "ui_daybook_transactions_create_open"
-    assert dtx_create_parity["parity_status"] == "create_chrome_open_only"
+    assert dtx_create_parity["parity_status"] == "out_of_scope_by_user"
     assert "api.daybookTransactions.create" in dtx_create_parity["evidence"]
     assert "research181" in dtx_create_parity["evidence"]
+    assert "radio:FE6FA4B1" in dtx_create_parity["evidence"]
     for na_id in (
         "ui.parity.daybookTransactions.get",
         "ui.parity.daybookTransactions.list",

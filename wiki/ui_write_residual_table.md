@@ -1,10 +1,11 @@
 ---
 name: ui_write_residual_table
-desc: Residual UI write table. Eleven accepted CUD rows are preview_execute. Five files and ledger rows stay red.
+desc: Residual UI write table. Eleven accepted CUD rows are preview_execute. Five files and ledger rows are owner out_of_scope_by_user.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
   - radio:D68E402A
+  - radio:FE6FA4B1
   - radio:FD39FFE7
   - radio:113F1E05
   - radio:A337A622
@@ -28,7 +29,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-19T18:05:00Z
+updated: 2026-08-19T18:55:00Z
 ---
 
 # ui_write_residual_table
@@ -37,9 +38,11 @@ Owner-scope UI write residual after `D68E402A`, `EC676F84`, and
 `58D7D0E1`. Shared ticket rules live in [[ui_write_ticket_protocol]].
 
 The 11 accepted rows are `preview_execute` with
-`implemented=live_tested=vision_verified=true`. Honesty now covers
-only the five files and ledger rows. `complete` stays false.
-The manifest has no other unimplemented write-like UI parity row.
+`implemented=live_tested=vision_verified=true`. `FE6FA4B1` encodes
+the five files and ledger rows as `out_of_scope_by_user`. Green
+flags stay false. `not_applicable` is rejected. `complete` stays
+false on bulk92. The manifest has no other unimplemented
+write-like UI parity row.
 
 Contacts, bills, and organizations are already live-proved through
 FastMCP. Owner fact-check `9310BC17` is applied: a new
@@ -70,8 +73,7 @@ MCP capabilities. They are now `preview_execute`, not `UI_CHANGED`.
 ## Categories
 
 - `proved_preview_execute`
-- `interface_control_absent_UI_CHANGED`
-- `high_impact_prohibited`
+- `out_of_scope_by_user`
 
 ## Table
 
@@ -88,11 +90,11 @@ MCP capabilities. They are now `preview_execute`, not `UI_CHANGED`.
 | `ui.parity.invoices.update` | `ui_invoices_update_preview` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00`. List result `2,00 DKK` | Independent read-back. Same vision | `proved_preview_execute` |
 | `ui.parity.invoices.delete` | `ui_invoices_delete_preview` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | Owner independently empty after reverse cleanup and after disposable CUD. Same vision | `proved_preview_execute` |
 | `ui.parity.products.create` | `ui_products_create_preview` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Reverse-clean used singular DELETE 2xx then settled `/products` **Ingen produkter**. Vision `29c1b1de26a14976aaa1b98bfe9de46e` accept, purged | `proved_preview_execute` |
-| `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
-| `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
-| `ui.parity.daybooks.delete` | `ui_daybooks_delete_open` | `ui_daybooks_delete_{preview,execute}` | **Mere** then menu **Slet** on disposable journals. Primary **Slet** absent | No tagged create, so no tagged cleanup | `interface_control_absent_UI_CHANGED` |
-| `ui.parity.daybookTransactions.create` | `ui_daybook_transactions_create_open` | `ui_daybook_transactions_create_{preview,execute}` | Line chrome / **Tilføj**. Official persist is **Godkend** | Needs a tagged journal that can be deleted | `high_impact_prohibited` |
-| `ui.parity.transactions.create` | `ui_transactions_create_open` | `ui_transactions_create_{preview,execute}` | **Godkend** / **Godkend alle** | Posting is irreversible | `high_impact_prohibited` |
+| `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` fail-closed | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. `FILES_NO_UI_DELETE` | `out_of_scope_by_user` |
+| `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` fail-closed | `unique_persist_token=none` | No tagged journal. `DAYBOOKS_UNIQUE_PERSIST_ABSENT` | `out_of_scope_by_user` |
+| `ui.parity.daybooks.delete` | `ui_daybooks_delete_open` | `ui_daybooks_delete_{preview,execute}` fail-closed | **Mere** then menu **Slet** | No tagged create. Same scope code | `out_of_scope_by_user` |
+| `ui.parity.daybookTransactions.create` | `ui_daybook_transactions_create_open` | `ui_daybook_transactions_create_{preview,execute}` fail-closed | Persist is **Godkend** | `GODKEND_HIGH_IMPACT_PROHIBITED` | `out_of_scope_by_user` |
+| `ui.parity.transactions.create` | `ui_transactions_create_open` | `ui_transactions_create_{preview,execute}` fail-closed | **Godkend** / **Godkend alle** | Irreversible. Same scope code | `out_of_scope_by_user` |
 
 Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 [[ui_organizations_writes]], [[ui_invoices_writes]],
@@ -100,19 +102,14 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 
 ## Owner questions
 
-1. Invoice and product CUD are `preview_execute` after `58D7D0E1`.
-   Do not remake leftover reverse-clean or product dumps (`A337A622`).
-2. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
-   `_ledger_write`.
-3. Files: accept fail-closed (no UI delete), or name a delete control
-   not already counted 0.
-4. Postings / **Godkend** stay prohibited unless a separately safe
-   fixture proves no external consequence.
+`FE6FA4B1` closed the residual-five wait. Do not remake dumps. Do
+not arm `_ledger_write`. Do not green the five.
 
 Do not remake closed invoice, product, daybook, or Bilag dumps.
 
 ## Coverage
 
 The generator greens only the 11 proved rows from vision records.
-This page does not hand-edit coverage. `complete` stays false while
-files, daybook, **Godkend**, bulk92, and API live stay out of green.
+The five residual writes are `qualification.kind=out_of_scope_by_user`
+with flags false. This page does not hand-edit coverage. `complete`
+stays false on bulk92 and API live.
