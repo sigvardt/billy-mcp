@@ -128,6 +128,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         },
         "ui_invoices_create_execute": {"confirmation_ticket"},
         "ui_invoices_update_preview": {
+            "contact_name",
             "id",
             "line_description",
             "unit_price",
@@ -136,7 +137,13 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
             "organization_id",
         },
         "ui_invoices_update_execute": {"confirmation_ticket"},
-        "ui_invoices_delete_preview": {"id", "action", "save_cta", "organization_id"},
+        "ui_invoices_delete_preview": {
+            "contact_name",
+            "id",
+            "action",
+            "save_cta",
+            "organization_id",
+        },
         "ui_invoices_delete_execute": {"confirmation_ticket"},
     }
     for name, fields in expected_properties.items():
@@ -172,6 +179,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         (
             InvoiceUpdatePreviewInput,
             {
+                "contact_name": "MCP-UI-INV-acme",
                 "id": "inv-1",
                 "line_description": "line",
                 "action": "draft_update",
@@ -182,6 +190,7 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         (
             InvoiceDeletePreviewInput,
             {
+                "contact_name": "MCP-UI-INV-acme",
                 "id": "inv-1",
                 "action": "draft_delete",
                 "save_cta": DRAFT_DELETE_CTA,
@@ -201,7 +210,8 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         (
             InvoiceUpdatePreviewInput,
             {
-                "id": "",
+                "contact_name": "",
+                "id": "inv-1",
                 "line_description": "line",
                 "action": "draft_update",
                 "save_cta": DRAFT_SAVE_CTA,
@@ -209,7 +219,12 @@ def test_registers_exactly_six_flat_typed_invoice_ui_write_tools() -> None:
         ),
         (
             InvoiceDeletePreviewInput,
-            {"id": "", "action": "draft_delete", "save_cta": DRAFT_DELETE_CTA},
+            {
+                "contact_name": "",
+                "id": "inv-1",
+                "action": "draft_delete",
+                "save_cta": DRAFT_DELETE_CTA,
+            },
         ),
     ],
 )
@@ -240,6 +255,7 @@ def test_create_preview_rejects_unpriced_line() -> None:
     with pytest.raises(ValidationError):
         InvoiceUpdatePreviewInput.model_validate(
             {
+                "contact_name": "MCP-UI-INV-acme",
                 "id": "inv-1",
                 "line_description": "line",
                 "action": "draft_update",
@@ -343,6 +359,7 @@ def test_wrong_tool_mismatch_then_same_ticket_can_expire() -> None:
         (
             "ui_invoices_update_preview",
             {
+                "contact_name": "MCP-UI-INV-acme",
                 "id": "inv-1",
                 "line_description": "line",
                 "unit_price": 1.0,
@@ -354,6 +371,7 @@ def test_wrong_tool_mismatch_then_same_ticket_can_expire() -> None:
         (
             "ui_invoices_delete_preview",
             {
+                "contact_name": "MCP-UI-INV-acme",
                 "id": "inv-1",
                 "action": "send",
                 "save_cta": "Send",
@@ -398,6 +416,7 @@ def test_update_and_delete_draft_execute_once() -> None:
         server,
         "ui_invoices_update_preview",
         {
+            "contact_name": "MCP-UI-INV-acme",
             "id": "inv-1",
             "line_description": "MCP-UI-INV line",
             "unit_price": 1.0,
@@ -415,6 +434,7 @@ def test_update_and_delete_draft_execute_once() -> None:
         server,
         "ui_invoices_delete_preview",
         {
+            "contact_name": "MCP-UI-INV-acme",
             "id": "inv-1",
             "action": "draft_delete",
             "save_cta": DRAFT_DELETE_CTA,
@@ -545,26 +565,24 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "30D194C8" not in source
     assert "test_ui_invoices_create_update_delete_via_call_tool" in source
     assert "create_server" in source
-    assert "ui_invoices_create_preview" in source
-    assert "ui_clients_create_preview" in source
+    assert "ui_invoices_update_preview" in source
+    assert "LEFTOVER_INVOICE_CONTACTS" in source
     assert "Godkend" in source
     assert "pending_review" in source
 
 
 def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
-    """Owner EC676F84: prove the tagged customer in a second session first."""
+    """Owner 59A3A933: leftover list row is proved before FastMCP update."""
 
     source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
     start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
     end = source.index("\nasync def ", start + 1)
     body = source[start:end]
-    create_idx = body.index("ui_clients_create_execute")
-    submitted_idx = body.index('contact_created.get("submitted") is not True')
-    confirm_idx = body.index('await _list_has_name(observer, slug, "clients", tag)')
-    invoice_idx = body.index("ui_invoices_create_preview")
-    assert create_idx < submitted_idx < confirm_idx < invoice_idx
-    assert "asyncio.sleep(2)" not in body[create_idx:invoice_idx]
-    assert "independent clients list did not show" in body
+    list_idx = body.index('await _list_has_name(observer, slug, "invoices", UPDATE_CONTACT')
+    update_idx = body.index("ui_invoices_update_preview")
+    assert list_idx < update_idx
+    assert "asyncio.sleep(2)" not in body[list_idx:update_idx]
+    assert "leftover draft" in body
 
 
 def test_priced_line_fill_uses_enhedspris_label() -> None:
@@ -650,22 +668,22 @@ def test_bind_existing_product_requires_exact_tag() -> None:
 
 
 def test_live_invoice_cud_seeds_product_before_preview() -> None:
-    """Create and confirm a tagged product before invoice preview. Delete it after."""
+    """Leftover sweep names owner tags and updates before delete."""
 
     source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
     start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
     end = source.index("\nasync def ", start + 1)
     body = source[start:end]
-    product_preview = body.index("ui_products_create_preview")
-    product_execute = body.index("ui_products_create_execute")
-    product_confirm = body.index('await _list_has_name(observer, slug, "products", product_tag)')
-    invoice_preview = body.index("ui_invoices_create_preview")
+    assert "UPDATE_CONTACT" in body
+    update = body.index("ui_invoices_update_preview")
+    delete = body.index("ui_invoices_delete_preview")
     product_delete = body.index("ui_products_delete_preview")
-    invoice_delete = body.index("ui_invoices_delete_preview")
-    assert product_preview < product_execute < product_confirm < invoice_preview
-    assert invoice_delete < product_delete
-    assert "product_name" in body[invoice_preview : invoice_preview + 400]
-    assert "MCP-UI-PRD-" in body
+    assert update < delete < product_delete
+    assert "contact_name" in body[update : update + 400]
+    assert "_row_enhedspris" in body
+    assert "price_is(shown, 2.0)" in body
+    assert body.index("_row_enhedspris") < delete
+    assert "for leftover_id in await _invoice_ids" not in body
 
 
 def test_bind_kunde_clicks_chevron_before_type() -> None:
@@ -1343,3 +1361,166 @@ def test_trace_sink_keeps_contacts_when_cap_is_full() -> None:
     classes = [row.get("path_class") for row in sink.requests]
     assert "contacts" in classes
     assert len(sink.requests) == TRACE_REQUEST_CAP
+
+
+def test_update_and_delete_preview_require_contact_name() -> None:
+    """Owner 59A3A933: update/delete tickets name the visible list row."""
+
+    server, recorder, _ = make_server()
+    missing_update: dict[str, object] = {
+        "id": "inv-1",
+        "line_description": "line",
+        "unit_price": 1.0,
+        "action": "draft_update",
+        "save_cta": DRAFT_SAVE_CTA,
+        "organization_id": "org-test",
+    }
+    missing_delete: dict[str, object] = {
+        "id": "inv-1",
+        "action": "draft_delete",
+        "save_cta": DRAFT_DELETE_CTA,
+        "organization_id": "org-test",
+    }
+    with pytest.raises(ValidationError):
+        InvoiceUpdatePreviewInput.model_validate(missing_update)
+    with pytest.raises(ValidationError):
+        InvoiceUpdatePreviewInput.model_validate({**missing_update, "contact_name": ""})
+    with pytest.raises(ValidationError):
+        InvoiceDeletePreviewInput.model_validate(missing_delete)
+    with pytest.raises(ValidationError):
+        InvoiceDeletePreviewInput.model_validate({**missing_delete, "contact_name": ""})
+    try:
+        preview = call_tool(server, "ui_invoices_update_preview", missing_update)
+    except (ValidationError, FastMcpValidationError, TypeError, ValueError):
+        preview = {"code": StableErrorCode.VALIDATION_ERROR}
+    assert preview.get("code") == StableErrorCode.VALIDATION_ERROR
+    assert recorder.submissions == []
+    assert not preview.get("confirmation_ticket")
+
+
+def test_persist_hit_rejects_put_request_without_status() -> None:
+    """Parent B9C4FA7C: a PUT request with no 2xx status is not persist."""
+
+    from billy_mcp.ui_writes.invoices_form_page import persist_hit
+
+    assert persist_hit("PUT  https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc", "PUT") is True
+    assert persist_hit("PUT 201 https://api.billysbilling.com/v2/invoices/abc", "PUT") is True
+    assert persist_hit("PUT 422 https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert persist_hit("POST  https://api.billysbilling.com/v2/invoices", "PUT") is False
+
+
+def test_watch_invoice_response_ignores_request_without_status() -> None:
+    """A request line with no status must not enter the persist watch list."""
+
+    from billy_mcp.ui_writes.invoices_form_page import watch_invoice_response
+
+    class _Request:
+        url = "https://api.billysbilling.com/v2/invoices/abc"
+        method = "PUT"
+        status = ""
+        request = None
+
+    class _Response:
+        url = "https://api.billysbilling.com/v2/invoices/abc"
+        method = "PUT"
+        status = 200
+        request = _Request()
+
+    seen: list[str] = []
+    watch_invoice_response(_Request(), seen)
+    assert seen == []
+    watch_invoice_response(_Response(), seen)
+    assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoices/abc"]
+
+
+def test_invoice_id_from_payload_reads_first_invoice_id() -> None:
+    """Create persist reads invoices.0.id and ignores other JSON shapes."""
+
+    from billy_mcp.ui_writes.invoices_form_page import invoice_id_from_payload
+
+    assert invoice_id_from_payload({"invoices": [{"id": "03dvBZm9QHuYt8jGMM8TNw"}]}) == (
+        "03dvBZm9QHuYt8jGMM8TNw"
+    )
+    assert invoice_id_from_payload({"invoices": []}) is None
+    assert invoice_id_from_payload({"invoices": [{"name": "no-id"}]}) is None
+    assert invoice_id_from_payload("not-json-object") is None
+
+
+def test_update_execute_proves_fresh_enhedspris() -> None:
+    """Independent update read-back must open the row and read Enhedspris."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    submit = form[
+        form.index("async def submit_draft_invoice") : form.index("async def _run_action")
+    ]
+    update = form[form.index("async def _update_draft") :]
+    assert "prove_fresh_unit_price" in submit
+    assert 'action == "update"' in submit
+    assert 'page.on("request"' not in update
+    assert 'wait_persist(seen, method="POST")' not in update
+    assert "press_sequentially" in Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(
+        encoding="utf-8"
+    )
+
+
+def test_price_is_two_accepts_danish_decimals() -> None:
+    """Fresh read-back of Enhedspris 2,00 must match ticket unit_price 2."""
+
+    from billy_mcp.ui_writes.invoices_form_bind import price_is
+    from billy_mcp.ui_writes.invoices_form_price import danish_price
+
+    assert price_is("2,00", 2.0) is True
+    assert price_is("2", 2.0) is True
+    assert price_is("1,00", 2.0) is False
+    assert price_is("", 2.0) is False
+    assert danish_price(2.0) == "2,00"
+    assert danish_price(1.0) == "1,00"
+
+
+def test_edit_url_opened_rejects_list_and_create() -> None:
+    """List /invoices and /invoices/new are not an edit open."""
+
+    from billy_mcp.ui_writes.invoices_form_row import edit_url_opened
+
+    assert edit_url_opened("https://mit.billy.dk/org/invoices") is False
+    assert edit_url_opened("https://mit.billy.dk/org/invoices/new") is False
+    assert edit_url_opened("https://mit.billy.dk/org/invoices/03dvBZm9QHuYt8jGMM8TNw/edit") is True
+
+
+def test_update_and_delete_open_list_row() -> None:
+    """Owner 59A3A933: open the exact li[role=row]. Do not goto a POST id."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    row = Path("src/billy_mcp/ui_writes/invoices_form_row.py")
+    helpers = form
+    if row.is_file():
+        helpers = f"{form}\n{row.read_text(encoding='utf-8')}"
+    update = form[form.index("async def _update_draft") :]
+    delete = Path("src/billy_mcp/ui_writes/invoices_form_delete.py").read_text(encoding="utf-8")
+    assert "li[role=row]" in helpers
+    assert "open_invoice_row" in update
+    assert "open_invoice_row" in delete
+    assert 'f"{BILLY_ORIGIN}/{slug}/invoices/{invoice_id}/edit"' not in update
+    assert 'f"{BILLY_ORIGIN}/{slug}/invoices/{invoice_id}/edit"' not in delete
+
+
+def test_live_leftover_sweep_uses_owner_contact_tags() -> None:
+    """Owner 59A3A933: leftover sweep names the six customer tags, not href scrape."""
+
+    source = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
+    start = source.index("async def test_ui_invoices_create_update_delete_via_call_tool")
+    end = source.index("\nasync def ", start + 1)
+    body = source[start:end]
+    for tag in (
+        "MCP-UI-INV-6CDB396B",
+        "MCP-UI-INV-F1784522",
+        "MCP-UI-INV-B05A4C85",
+        "MCP-UI-INV-A45B734E",
+        "MCP-UI-INV-2B8A4FA2",
+        "MCP-UI-INV-DD4158B1",
+    ):
+        assert tag in source
+        assert tag in body or "LEFTOVER_INVOICE_CONTACTS" in source
+    assert "contact_name" in body
+    assert "for leftover_id in await _invoice_ids" not in body

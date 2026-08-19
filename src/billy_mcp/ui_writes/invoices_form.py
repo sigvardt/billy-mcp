@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import asyncio
 from pathlib import Path
 from typing import cast
 from urllib.parse import urlsplit
@@ -9,12 +10,10 @@ from urllib.parse import urlsplit
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
 from billy_mcp.ui_writes.invoices_form_bind import bind_kunde, fill_priced_line
+from billy_mcp.ui_writes.invoices_form_delete import delete_draft_invoice
 from billy_mcp.ui_writes.invoices_form_page import (
-    CONFIRM_DELETE,
     CREATE_PERSIST_DUMP,
-    DELETE,
     DRAFT_SAVE,
-    MORE,
     UPDATE_SAVE,
     Page,
     click_exact,
@@ -25,6 +24,8 @@ from billy_mcp.ui_writes.invoices_form_page import (
     watch_invoice_response,
     write_json,
 )
+from billy_mcp.ui_writes.invoices_form_price import prove_fresh_unit_price
+from billy_mcp.ui_writes.invoices_form_row import open_invoice_row
 from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN, prove_text_on_fresh_page
 
 CREATE_PRE_SUBMIT_DUMP = (
@@ -88,6 +89,8 @@ async def submit_draft_invoice(
         )
         if failed is not None:
             return failed
+        if action == "update":
+            return await prove_fresh_unit_price(readback_runtime, bound, contact_name, unit_price)
         marker = unique_tag
         return await prove_text_on_fresh_page(
             readback_runtime,
@@ -126,9 +129,9 @@ async def _run_action(
                 page, slug, contact_name, line_description, product_name, unit_price
             )
         case "update":
-            return await _update_draft(page, slug, invoice_id, line_description, unit_price)
+            return await _update_draft(page, slug, contact_name, line_description, unit_price)
         case "delete":
-            return await _delete_draft(page, slug, invoice_id)
+            return await delete_draft_invoice(page, slug, contact_name)
         case unreachable:
             return ToolError(
                 code=StableErrorCode.VALIDATION_ERROR,
@@ -194,50 +197,36 @@ async def _create_draft(
 
 
 async def _update_draft(
-    page: Page, slug: str, invoice_id: str, line_description: str, unit_price: float
+    page: Page, slug: str, contact_name: str, line_description: str, unit_price: float
 ) -> ToolError | None:
-    await page.goto(
-        f"{BILLY_ORIGIN}/{slug}/invoices/{invoice_id}/edit",
-        wait_until="domcontentloaded",
-    )
-    priced = await fill_priced_line(page, line_description, unit_price)
-    if isinstance(priced, ToolError) and priced.code != StableErrorCode.UI_CHANGED:
-        return priced
+    opened = await open_invoice_row(page, slug, contact_name)
+    if opened is not None:
+        return opened
     seen: list[str] = []
 
     def _watch_update(event: object) -> None:
         watch_invoice_response(event, seen)
 
     page.on("response", _watch_update)
-    save = page.locator("button[data-cy='save-button']")
-    if await save.count() >= 1 and await save.first.is_visible():
-        await save.first.click()
+    for _ in range(40):
+        if await visible_button(page, DRAFT_SAVE) or await visible_button(page, UPDATE_SAVE):
+            break
+        await asyncio.sleep(0.25)
+    priced = await fill_priced_line(page, line_description, unit_price)
+    if isinstance(priced, ToolError):
+        return priced
+    last_error: ToolError | None = None
+    for cta in (UPDATE_SAVE, "Gem ændringer", DRAFT_SAVE):
+        if not await visible_button(page, cta):
+            continue
+        clicked = await click_exact(page, cta)
+        if clicked is not None:
+            return clicked
         put = await wait_persist(seen, method="PUT")
         if put is None:
             return None
-        return await wait_persist(seen, method="POST")
-    clicked: ToolError | None = None
-    for cta in (UPDATE_SAVE, "Gem ændringer", "Gem", DRAFT_SAVE):
-        clicked = await click_exact(page, cta)
-        if clicked is None:
-            put = await wait_persist(seen, method="PUT")
-            if put is None:
-                return None
-            return await wait_persist(seen, method="POST")
-    return clicked
-
-
-async def _delete_draft(page: Page, slug: str, invoice_id: str) -> ToolError | None:
-    await page.goto(
-        f"{BILLY_ORIGIN}/{slug}/invoices/{invoice_id}/edit",
-        wait_until="domcontentloaded",
+        last_error = put
+    return last_error or ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy draft invoice save control is not visible.",
     )
-    more = await click_exact(page, MORE)
-    if more is not None:
-        return more
-    slet = await click_exact(page, DELETE)
-    if slet is not None:
-        return slet
-    if await visible_button(page, CONFIRM_DELETE):
-        return await click_exact(page, CONFIRM_DELETE)
-    return None

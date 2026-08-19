@@ -44,11 +44,47 @@ sources:
   - radio:C6DA7FC8
   - radio:BF91E28F
   - radio:65521475
+  - radio:7BA75272
+  - radio:59A3A933
+  - radio:B9C4FA7C
+  - radio:DECEA79B
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-18T20:29:32Z
+updated: 2026-08-18T23:10:00Z
 ---
 
 ## Binding now
+
+`DECEA79B` (saved, P10): fresh authenticated edit of
+`MCP-UI-INV-6CDB396B` still shows **Enhedspris** 1,00 and totals
+1,00 / 1,25 DKK. The observed PUT did not persist. Keep update
+red. Failing fixture for save completion first. Count update
+only after a new fresh session shows 2,00. Then reverse-clean
+all six triples.
+
+`B9C4FA7C` (saved, P10): a PUT request is not persistence proof.
+Do not mark update live-tested from the request event. Fresh
+session must open the exact `li[role=row]` and prove
+**Enhedspris** 2,00. If it is still 1,00 or absent, record
+`UI_CHANGED`. No API qualification. No POST/PUT id as proof.
+The persist watcher now drops events with no status. Update
+execute must not treat a later POST as the update persist.
+
+`59A3A933` (saved, P10): six leftover invoice drafts persist.
+Fresh `/invoices` shows 6 **Kladde** rows at 1,00 DKK. Exact
+pairs: `6CDB396B/FB5F7474`, `F1784522/633E97EC`,
+`B05A4C85/86AB7365`, `A45B734E/B4A4DD5A`,
+`2B8A4FA2/26720BD4`, `DD4158B1/05C906D9`. Persist is proved
+by the interface. Do not use POST id as qualification proof.
+Row open: exact visible customer text, ancestor
+`li[role=row]`, normal click. `MCP-UI-INV-6CDB396B` opened
+`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit`. **Mere** exposes
+**Slet**. Next: one FastMCP update, then delete all 6 drafts,
+6 products, and 6 customers in reverse order. Fresh proof of
+empty lists. No owner input.
+
+`7BA75272` (unsaved, P8, superseded as empty-list proof): a
+fresh `/products` session then showed **Ingen produkter**.
+That empty state is stale after the later leftover drafts.
 
 `65521475` (done, unsaved, P10): leftover cleanup is finished.
 `MCP-UI-PRD-8CA457EE` and `MCP-UI-PRD-EA28FA6B` were deleted

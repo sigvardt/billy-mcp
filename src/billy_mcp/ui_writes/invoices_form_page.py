@@ -3,11 +3,13 @@
 from __future__ import annotations
 
 import asyncio
-import json
 import inspect
+import json
 from pathlib import Path
 from typing import Protocol
 from urllib.parse import urlsplit
+
+from pydantic import BaseModel, ConfigDict, ValidationError
 
 from billy_mcp.models import StableErrorCode, ToolError
 
@@ -46,7 +48,7 @@ class Locator(Protocol):
 
     async def input_value(self) -> str: ...
 
-    async def bounding_box(self) -> dict[str, float] | None: ...
+    async def bounding_box(self, **kwargs: object) -> dict[str, float] | None: ...
 
     def nth(self, index: int) -> Locator: ...
 
@@ -117,12 +119,17 @@ async def visible_button(page: Page, label: str) -> bool:
 
 
 def watch_invoice_response(event: object, seen: list[str]) -> None:
-    """Record browser invoice XHR lines. Never stores bodies."""
+    """Record invoice responses that have a status. Requests are not persist."""
 
     url = str(getattr(event, "url", ""))
+    method = str(getattr(event, "method", "") or "")
     request = getattr(event, "request", None)
-    method = str(getattr(request, "method", "") if request is not None else "")
-    status = str(getattr(event, "status", ""))
+    if request is not None:
+        method = str(getattr(request, "method", "") or method)
+    raw_status = getattr(event, "status", None)
+    if raw_status is None or raw_status == "":
+        return
+    status = str(raw_status)
     if "/v2/invoices" in url:
         seen.append(f"{method} {status} {url}")
 
@@ -140,31 +147,60 @@ async def persist_created_invoice_id(events: list[object]) -> str | None:
         reader = getattr(event, "json", None)
         if reader is None:
             continue
-        payload = reader()
+        payload: object = reader()
         if inspect.isawaitable(payload):
             payload = await payload
-        if not isinstance(payload, dict):
-            continue
-        records = payload.get("invoices")
-        if not isinstance(records, list) or not records:
-            continue
-        first = records[0]
-        if not isinstance(first, dict):
-            continue
-        ident = first.get("id")
-        if isinstance(ident, str) and ident.strip():
-            return ident.strip()
+        found = invoice_id_from_payload(payload)
+        if found is not None:
+            return found
     return None
+
+
+class _InvoiceIdRow(BaseModel):
+    """One invoices[] row. Extra Billy fields are ignored."""
+
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    id: str
+
+
+class _InvoiceCreateBody(BaseModel):
+    """Create POST body. Only invoices[].id is kept."""
+
+    model_config = ConfigDict(frozen=True, extra="ignore")
+
+    invoices: list[_InvoiceIdRow]
+
+
+def invoice_id_from_payload(payload: object) -> str | None:
+    """Parse invoices.0.id from a create POST body."""
+
+    try:
+        parsed = _InvoiceCreateBody.model_validate(payload)
+    except ValidationError:
+        return None
+    if not parsed.invoices:
+        return None
+    found = parsed.invoices[0].id.strip()
+    return found or None
+
+
+def persist_hit(item: str, method: str) -> bool:
+    """True only for a named invoice write with a 2xx status."""
+
+    if not item.startswith(f"{method} ") or "/v2/invoices" not in item:
+        return False
+    parts = item.split()
+    if len(parts) < 2:
+        return False
+    return parts[1] in _OK_STATUS
 
 
 async def wait_persist(seen: list[str], *, method: str) -> ToolError | None:
     """Wait for a 2xx invoice XHR of the named method."""
 
     for _ in range(40):
-        if any(
-            item.startswith(f"{method} ") and any(code in item for code in _OK_STATUS)
-            for item in seen
-        ):
+        if any(persist_hit(item, method) for item in seen):
             write_json(CREATE_PERSIST_DUMP, {"watched": list(seen), "method": method})
             return None
         await asyncio.sleep(0.25)

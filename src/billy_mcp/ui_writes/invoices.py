@@ -54,7 +54,8 @@ class InvoiceUpdatePreviewInput(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(min_length=1)
+    contact_name: str = Field(min_length=1)
+    id: str = ""
     line_description: str = Field(min_length=1)
     unit_price: float = Field(gt=0)
     action: str = Field(min_length=1)
@@ -67,7 +68,8 @@ class InvoiceDeletePreviewInput(BaseModel):
 
     model_config = ConfigDict(extra="forbid")
 
-    id: str = Field(min_length=1)
+    contact_name: str = Field(min_length=1)
+    id: str = ""
     action: str = Field(min_length=1)
     save_cta: str = Field(min_length=1)
     organization_id: str = Field(min_length=1)
@@ -270,16 +272,18 @@ def register_ui_invoice_write_tools(
         return await _execute(protocol, active, confirmation_ticket, CREATE_EXECUTE)
 
     def ui_invoices_update_preview(
-        id: str = Field(min_length=1),
+        contact_name: str = Field(min_length=1),
         line_description: str = Field(min_length=1),
         unit_price: float = Field(gt=0),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
         organization_id: str = Field(min_length=1),
+        id: str = "",
     ) -> UiWritePreviewResult | ToolError:
         """Preview one draft invoice update. Does not click Gem som kladde."""
 
         payload = InvoiceUpdatePreviewInput(
+            contact_name=contact_name,
             id=id,
             line_description=line_description,
             unit_price=unit_price,
@@ -294,9 +298,9 @@ def register_ui_invoice_write_tools(
         return protocol.preview(
             execute_tool_name=UPDATE_EXECUTE,
             organization_id=payload.organization_id,
-            target=payload.id,
+            target=payload.contact_name,
             canonical_request=request,
-            expected_effect_state=_effect("update", payload.save_cta, payload.id),
+            expected_effect_state=_effect("update", payload.save_cta, payload.contact_name),
             summary="Update one Billy invoice draft in the interface.",
         )
 
@@ -308,14 +312,16 @@ def register_ui_invoice_write_tools(
         return await _execute(protocol, active, confirmation_ticket, UPDATE_EXECUTE)
 
     def ui_invoices_delete_preview(
-        id: str = Field(min_length=1),
+        contact_name: str = Field(min_length=1),
         action: str = Field(min_length=1),
         save_cta: str = Field(min_length=1),
         organization_id: str = Field(min_length=1),
+        id: str = "",
     ) -> UiWritePreviewResult | ToolError:
         """Preview one draft invoice delete. Does not confirm Slet."""
 
         payload = InvoiceDeletePreviewInput(
+            contact_name=contact_name,
             id=id,
             action=action,
             save_cta=save_cta,
@@ -328,9 +334,9 @@ def register_ui_invoice_write_tools(
         return protocol.preview(
             execute_tool_name=DELETE_EXECUTE,
             organization_id=payload.organization_id,
-            target=payload.id,
+            target=payload.contact_name,
             canonical_request=request,
-            expected_effect_state=_effect("delete", payload.save_cta, payload.id),
+            expected_effect_state=_effect("delete", payload.save_cta, payload.contact_name),
             summary="Delete one Billy invoice draft in the interface.",
         )
 
@@ -418,6 +424,7 @@ def _update_request(payload: InvoiceUpdatePreviewInput) -> dict[str, JsonValue]:
     request: dict[str, JsonValue] = {
         "action": payload.action,
         "save_cta": payload.save_cta,
+        "contact_name": payload.contact_name,
         "id": payload.id,
         "line_description": payload.line_description,
         "unit_price": payload.unit_price,
@@ -430,6 +437,7 @@ def _delete_request(payload: InvoiceDeletePreviewInput) -> dict[str, JsonValue]:
     request: dict[str, JsonValue] = {
         "action": payload.action,
         "save_cta": payload.save_cta,
+        "contact_name": payload.contact_name,
         "id": payload.id,
     }
     request["organization_id"] = payload.organization_id

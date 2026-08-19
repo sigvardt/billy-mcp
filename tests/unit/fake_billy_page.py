@@ -303,6 +303,9 @@ class FakeBillyLocator:
             self._session.focused = self
         label = self._click_name or _click_label(self._selector)
         self._session.clicks.append(label)
+        if label.startswith("MCP-UI-PRD-"):
+            self._session.fills.append(("Vælg produkt", label))
+            self._session.records.add(label)
         folded = label.casefold()
         if "opret" in folded:
             self._session.modal_open = True
@@ -350,6 +353,10 @@ class FakeBillyLocator:
         return self._click_name or self._query_text or ""
 
     async def input_value(self) -> str:
+        if self._query_text == "Vælg produkt" or self._selector == "role:Vælg produkt":
+            for field, value in reversed(self._session.fills):
+                if field == "Vælg produkt" or value.startswith("MCP-UI-PRD-"):
+                    return value
         name = _field_name(self._selector)
         for field, value in reversed(self._session.fills):
             if field == name:
@@ -374,6 +381,9 @@ class FakeBillyLocator:
 
     async def press(self, key: str) -> None:
         del key
+
+    async def dispatch_event(self, event_type: str, **kwargs: object) -> None:
+        del event_type, kwargs
 
     async def press_sequentially(self, text: str) -> None:
         self._session.fills.append((_field_name(self._selector), text))

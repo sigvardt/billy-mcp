@@ -4,13 +4,14 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T20:29:32Z
+updated: 2026-08-18T23:10:00Z
 ---
 
 ## Open
 
-- Invoice draft CUD is next (`FD39FFE7` / `1F1B34F8` / `65521475`). Product create persist and scoped table-item hard-delete are live-proved. Leftover tagged products are gone. Honesty stays red until independent accept and purge. Stay red.
-- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Invoice persist needs a disposable product from the proved FastMCP product tools, not archive-only. Stay red.
+- `B9C4FA7C` / `DECEA79B`: persist watch ignores request-only PUT. Execute now types `2,00`, prefers **Opdater**, and fails unless a second session reads that **Enhedspris**. Live leftover `MCP-UI-INV-6CDB396B` is still 1,00. Reverse-delete only after a fresh 2,00. Stay red.
+- Invoice draft CUD remains mandatory (`FD39FFE7` / `1F1B34F8`). Product create persist and scoped table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
+- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Persist of priced drafts is now interface-proved. Remaining work is FastMCP update plus leftover cleanup, not another create probe. Stay red.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and live-proved. `56354201` / `BF91E28F` cleanup is scoped table-item `delete-icon` then **Ja, slet**. `A337A622` still forbids more product list, dialog, or archive probes. Do not remake form-contract, delete-chrome, leftover-cleanup, or either archive dump.

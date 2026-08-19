@@ -261,6 +261,7 @@ async def test_ui_invoices_list_opret_faktura(
                 server,
                 "ui_invoices_delete_preview",
                 {
+                    "contact_name": tag,
                     "id": leftover_invoice,
                     "action": "draft_delete",
                     "save_cta": "Slet",

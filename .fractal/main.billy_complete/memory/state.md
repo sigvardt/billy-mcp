@@ -25,24 +25,58 @@ sources:
   - radio:C6DA7FC8
   - radio:BF91E28F
   - radio:65521475
+  - radio:7BA75272
+  - radio:59A3A933
+  - radio:B9C4FA7C
+  - radio:DECEA79B
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T20:29:32Z
+updated: 2026-08-18T23:10:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `3101495`, clean, tracking `origin/main.billy_complete`.
-Slug compare and still-open dialog `UI_CHANGED` are in. Stay red. Do not finish.
+HEAD is `0ded1e7`, clean, tracking `origin/main.billy_complete`.
+The last execute died mid-run after adding required `product_name`
+and exact **Vælg produkt** bind. Stay red. Do not finish.
 No children are running.
+`59A3A933` now binds leftover cleanup. A fresh `/invoices` page
+shows 6 real **Kladde** rows at 1,00 DKK. Persist is proved by
+the interface. Do not use a POST id as qualification proof.
+Update/delete tickets now require `contact_name`. Open is the
+list row, not a POST id. A browser PUT request is not persist
+(`B9C4FA7C`). Fresh session `DECEA79B` opened
+`MCP-UI-INV-6CDB396B` at `/invoices/03dvBZm9QHuYt8jGMM8TNw/edit`
+and **Enhedspris** is still 1,00. Update stays red.
+Invoice persist watch now records only responses that have a
+status. `persist_hit` requires a 2xx. Update execute types
+**Enhedspris** as `2,00`, prefers **Opdater**, and fails unless
+a second session reads that price. A request-only PUT or a
+POST fallback is not persist. Six leftover triples remain.
+Stay red.
+Exact pairs (customer tag / product tag): `6CDB396B/FB5F7474`,
+`F1784522/633E97EC`, `B05A4C85/86AB7365`, `A45B734E/B4A4DD5A`,
+`2B8A4FA2/26720BD4`, `DD4158B1/05C906D9`. Full names are
+`MCP-UI-INV-*` and `MCP-UI-PRD-*`. Row open: get the exact
+visible customer text, scope to ancestor `li[role=row]`,
+normal click. `MCP-UI-INV-6CDB396B` opened
+`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit` with that customer,
+product `MCP-UI-PRD-FB5F7474`, quantity 1, unit price 1,00.
+**Mere** exposes normal **Slet**. Products and clients lists
+hold the matching 6 tags. Next: one FastMCP update, then
+delete all 6 drafts, all 6 products, all 6 customers in
+reverse dependency order. Fresh session must prove no drafts,
+products, or contacts. No owner input.
+`7BA75272` earlier proved **Ingen produkter** after leftover
+product cleanup. That empty list is now stale: the failed
+invoice execute recreated 6 products with the 6 drafts.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
 ETag still `"121myuqjdm53603"`; do not re-lock. Live FastMCP:
 new page plus `[data-cy='dropdown-icon']` binds the tagged
 customer (`vendor_bind=scoped:existing_option`, GET with
-`contactId`). Create preview requires `unit_price > 0`.
-**Enhedspris** fill proved (`grossAmount=1`). **Vælg produkt**
-then had no existing option. **Opret ny** was not clicked.
+`contactId`). Create preview requires `unit_price > 0` and
+`product_name`. **Enhedspris** fill proved (`grossAmount=1`).
 Owner `56354201` proves product create and hard-delete:
 **Opret produkt**, **Enhedspris**=1, row `data-cy=delete-icon`,
 **Ja, slet**. Do not stop on `67CBACB6`. Do not treat product
@@ -57,11 +91,7 @@ A still-visible create dialog after **Gem produkt** is
 not Billy persist. Owner proved create on `/:org/products`
 with defaults 1110 Salg, then an unfiltered Products list.
 Live FastMCP product create persist and table-item delete
-passed. Owner `65521475` leftovers `MCP-UI-PRD-8CA457EE` and
-`MCP-UI-PRD-EA28FA6B` were deleted. A third fresh `/products`
-session shows **Ingen produkter**. Honesty stays red. Next
-family is invoice draft CUD.
-Do not remake dumps. Do not green.
+passed. Do not remake dumps. Do not green.
 Daybook and files still wait.
 
 Daybook create-contract dump is delivered:
@@ -285,7 +315,8 @@ leftover Leverandør slice is closed.
 
 Parent `main` is already in this branch. `git merge main` is already
 up to date. `origin/main` has nothing this branch lacks. No new
-parent commits.
+parent commits. The seven write children still have empty logs
+against this branch. Leftover retired descendants stay unmerged.
 
 Merged with `--no-ff` and parked. No new child commits:
 

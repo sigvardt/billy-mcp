@@ -23,7 +23,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-18T17:46:25Z
+updated: 2026-08-18T22:40:00Z
 ---
 
 # ui_write_residual_table
@@ -40,9 +40,9 @@ FastMCP. Owner fact-check `9310BC17` is applied: a new
 `/invoices/new` plus `[data-cy='dropdown-icon']` binds an existing
 customer (`vendor_bind=scoped:existing_option`, GET with
 `contactId`). Invoice Kunde is not `interface_control_absent`.
-Create preview now requires `unit_price > 0`. Live execute fills
-**Enhedspris** (GET `grossAmount=1`) then opens **Vælg produkt**.
-No existing product option. **Opret ny** was not clicked.
+Create preview now requires `unit_price > 0`. Six leftover priced
+drafts persist. Update and delete open the exact `li[role=row]`.
+Do not use a POST id as persist proof.
 
 Owner `56354201` proves product create and hard-delete in the
 normal UI: **Opret produkt**, **Enhedspris**=1, visible on a
@@ -76,9 +76,9 @@ and red. They are not finished as `UI_CHANGED`.
 | `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist. Coverage still names `*_open` | Kunde bind proved. Create preview requires `product_name`. Exact **Vælg produkt** bind. Persist waits on live FastMCP CUD | Draft delete chrome exists. Invoice first, product second, customer last | `owner_proved_pending_fastmcp` |
-| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Blocked on a tagged draft | Blocked on create | `owner_proved_pending_fastmcp` |
-| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | **Mere** then **Slet** on open chrome | Blocked on create | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist. Coverage still names `*_open` | Six leftover **Kladde** rows already persist. Stay red until independent accept | Reverse cleanup after one FastMCP update | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | List-row open then **Gem som kladde**. A PUT request is not persist. Fresh **Enhedspris** is still 1,00 (`DECEA79B`) | Fresh-session row open must show 2,00 before delete | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | Same list-row open. **Mere** / **Slet** still fires no DELETE XHR | Six leftover drafts still present | `owner_proved_pending_fastmcp` |
 | `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete now scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**. Stay red until leftover cleanup and independent accept | Cleanup: tagged table-item `delete-icon` then **Ja, slet**. Live FastMCP leftover sweep proved **Ingen produkter**. Stay red until independent accept and purge | `owner_proved_pending_fastmcp` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |

@@ -264,6 +264,7 @@ async def test_ui_invoices_draft_save_scoped(
                 server,
                 "ui_invoices_delete_preview",
                 {
+                    "contact_name": tag,
                     "id": leftover_invoice,
                     "action": "draft_delete",
                     "save_cta": "Slet",

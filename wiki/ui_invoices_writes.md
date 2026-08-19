@@ -8,8 +8,10 @@ sources:
   - radio:96908DC6
   - radio:EC676F84
   - radio:9310BC17
+  - radio:B9C4FA7C
+  - radio:DECEA79B
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-18T15:54:00Z
+updated: 2026-08-18T23:10:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -29,9 +31,9 @@ Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 | --- | --- | --- |
 | `ui_invoices_create_preview` | `contact_name`, `product_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. `product_name` must name an existing product. |
 | `ui_invoices_create_execute` | `confirmation_ticket` | Consume ticket. Runtime submitter binds Kunde then clicks draft save. |
-| `ui_invoices_update_preview` | `id`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. |
-| `ui_invoices_update_execute` | `confirmation_ticket` | Consume ticket. Clicks observed draft save or **Opdater**. |
-| `ui_invoices_delete_preview` | `id`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Slet`. |
+| `ui_invoices_update_preview` | `contact_name`, `line_description`, `unit_price`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Gem som kladde`. `unit_price` must be `> 0`. Open is the exact `li[role=row]`, not a POST id. |
+| `ui_invoices_update_execute` | `confirmation_ticket` | Consume ticket. Types **Enhedspris**, clicks **Opdater** if shown, then a second session must read that price. A PUT request is not persist. |
+| `ui_invoices_delete_preview` | `contact_name`, `action`, `save_cta`, `organization_id` | Issue ticket. CTA must be `Slet`. Open is the exact `li[role=row]`. |
 | `ui_invoices_delete_execute` | `confirmation_ticket` | Consume ticket. **Mere** then **Slet**, then **Ja, slet** if shown. |
 
 `action` must be `draft_create`, `draft_update`, or `draft_delete`. Use unique
@@ -40,6 +42,14 @@ tagged names such as `MCP-UI-INV-...`. Create a tagged customer first with
 Confirm both names in a fresh interface session before any invoice preview
 (`EC676F84`, `56354201`). Do not use a leftover supplier as Kunde.
 Delete the draft invoice first, then the product, then the customer.
+Owner `59A3A933`: update and delete open `/invoices`, find the exact
+visible customer text, scope to ancestor `li[role=row]`, and click.
+Do not `goto` a create POST id. A browser PUT request is not persist
+(`B9C4FA7C`). Persist is a 2xx invoice response plus a fresh row-open
+that shows the ticket **Enhedspris**. Owner `DECEA79B` still has 1,00
+on `MCP-UI-INV-6CDB396B`. Update stays red until a fresh session shows
+2,00. Then delete the six leftover triples. Do not treat an unchanged
+Ember dirty-check as success.
 
 Owner `EC676F84`: the Kunde control works. An empty customer dataset shows
 textbox **Vælg kunde**, **Ingen kontakter fundet**, and **Opret ny**. Do not
