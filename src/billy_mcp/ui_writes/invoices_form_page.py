@@ -119,7 +119,7 @@ async def visible_button(page: Page, label: str) -> bool:
 
 
 def watch_invoice_response(event: object, seen: list[str]) -> None:
-    """Record invoice responses that have a status. Requests are not persist."""
+    """Record create POST, line PUT, and invoice DELETE. Header PUT is not persist."""
 
     url = str(getattr(event, "url", ""))
     method = str(getattr(event, "method", "") or "")
@@ -130,7 +130,14 @@ def watch_invoice_response(event: object, seen: list[str]) -> None:
     if raw_status is None or raw_status == "":
         return
     status = str(raw_status)
-    if "/v2/invoices" in url:
+    path = urlsplit(url).path
+    if method == "POST" and path.rstrip("/").endswith("/v2/invoices"):
+        seen.append(f"{method} {status} {url}")
+        return
+    if method == "PUT" and "/v2/invoiceLines/" in path:
+        seen.append(f"{method} {status} {url}")
+        return
+    if method == "DELETE" and "/v2/invoices/" in path and "/invoiceLines/" not in path:
         seen.append(f"{method} {status} {url}")
 
 
@@ -186,18 +193,28 @@ def invoice_id_from_payload(payload: object) -> str | None:
 
 
 def persist_hit(item: str, method: str) -> bool:
-    """True only for a named invoice write with a 2xx status."""
+    """True only for a named write with a 2xx status on the persist path."""
 
-    if not item.startswith(f"{method} ") or "/v2/invoices" not in item:
+    if not item.startswith(f"{method} "):
         return False
     parts = item.split()
-    if len(parts) < 2:
+    if len(parts) < 3:
         return False
-    return parts[1] in _OK_STATUS
+    status, url = parts[1], parts[2]
+    if status not in _OK_STATUS:
+        return False
+    path = urlsplit(url).path
+    if method == "POST":
+        return path.rstrip("/").endswith("/v2/invoices")
+    if method == "PUT":
+        return "/v2/invoiceLines/" in path
+    if method == "DELETE":
+        return "/v2/invoices/" in path and "/invoiceLines/" not in path
+    return False
 
 
 async def wait_persist(seen: list[str], *, method: str) -> ToolError | None:
-    """Wait for a 2xx invoice XHR of the named method."""
+    """Wait for a 2xx persist XHR of the named method."""
 
     for _ in range(40):
         if any(persist_hit(item, method) for item in seen):

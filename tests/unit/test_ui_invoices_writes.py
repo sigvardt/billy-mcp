@@ -1399,15 +1399,18 @@ def test_update_and_delete_preview_require_contact_name() -> None:
 
 
 def test_persist_hit_rejects_put_request_without_status() -> None:
-    """Parent B9C4FA7C: a PUT request with no 2xx status is not persist."""
+    """Parent DECEA79B: a header PUT /v2/invoices 2xx is not line-price persist."""
 
     from billy_mcp.ui_writes.invoices_form_page import persist_hit
 
     assert persist_hit("PUT  https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
-    assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc", "PUT") is True
-    assert persist_hit("PUT 201 https://api.billysbilling.com/v2/invoices/abc", "PUT") is True
-    assert persist_hit("PUT 422 https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert persist_hit("PUT 201 https://api.billysbilling.com/v2/invoices/abc", "PUT") is False
+    assert persist_hit("PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is True
+    assert persist_hit("PUT 201 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is True
+    assert persist_hit("PUT 422 https://api.billysbilling.com/v2/invoiceLines/abc", "PUT") is False
     assert persist_hit("POST  https://api.billysbilling.com/v2/invoices", "PUT") is False
+    assert persist_hit("POST 200 https://api.billysbilling.com/v2/invoices", "POST") is True
 
 
 def test_watch_invoice_response_ignores_request_without_status() -> None:
@@ -1416,12 +1419,18 @@ def test_watch_invoice_response_ignores_request_without_status() -> None:
     from billy_mcp.ui_writes.invoices_form_page import watch_invoice_response
 
     class _Request:
-        url = "https://api.billysbilling.com/v2/invoices/abc"
+        url = "https://api.billysbilling.com/v2/invoiceLines/abc"
         method = "PUT"
         status = ""
         request = None
 
     class _Response:
+        url = "https://api.billysbilling.com/v2/invoiceLines/abc"
+        method = "PUT"
+        status = 200
+        request = _Request()
+
+    class _HeaderPut:
         url = "https://api.billysbilling.com/v2/invoices/abc"
         method = "PUT"
         status = 200
@@ -1431,7 +1440,9 @@ def test_watch_invoice_response_ignores_request_without_status() -> None:
     watch_invoice_response(_Request(), seen)
     assert seen == []
     watch_invoice_response(_Response(), seen)
-    assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoices/abc"]
+    assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc"]
+    watch_invoice_response(_HeaderPut(), seen)
+    assert seen == ["PUT 200 https://api.billysbilling.com/v2/invoiceLines/abc"]
 
 
 def test_invoice_id_from_payload_reads_first_invoice_id() -> None:
@@ -1459,9 +1470,17 @@ def test_update_execute_proves_fresh_enhedspris() -> None:
     assert 'action == "update"' in submit
     assert 'page.on("request"' not in update
     assert 'wait_persist(seen, method="POST")' not in update
-    assert "press_sequentially" in Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(
-        encoding="utf-8"
-    )
+    price = Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(encoding="utf-8")
+    commit = price[
+        price.index("async def commit_unit_price") : price.index("async def prove_fresh")
+    ]
+    assert 'await field.fill("")' not in commit
+    assert "danish_price" in commit
+    assert "str(int(unit_price))" in commit
+    fill_idx = commit.index("await field.fill(text)")
+    tab_idx = commit.index('await field.press("Tab")')
+    assert fill_idx < tab_idx
+    assert commit.index("read_unit_price") < tab_idx
 
 
 def test_price_is_two_accepts_danish_decimals() -> None:
@@ -1476,6 +1495,27 @@ def test_price_is_two_accepts_danish_decimals() -> None:
     assert price_is("", 2.0) is False
     assert danish_price(2.0) == "2,00"
     assert danish_price(1.0) == "1,00"
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def unit_price_field")
+    end = bind.index("async def _fill_labeled", start)
+    body = bind[start:end]
+    assert body.index("UNIT_PRICE_SELECTORS") < body.index("UNIT_PRICE_LABELS")
+    assert "invoiceLines.0.unitPrice" in bind
+    assert "input[name='unitPrice'][placeholder='Enhedspris']" in bind
+    assert "\"input[name='unitPrice']\"" not in bind
+    assert "\"input[name*='unitPrice']\"" not in bind
+    assert "invoice.lines.0.unitPrice" in bind
+    bind = Path("src/billy_mcp/ui_writes/invoices_form_bind.py").read_text(encoding="utf-8")
+    start = bind.index("async def fill_priced_line")
+    end = bind.index("\ndef price_is", start)
+    fill = bind[start:end]
+    assert "commit_unit_price" in fill
+    price = Path("src/billy_mcp/ui_writes/invoices_form_price.py").read_text(encoding="utf-8")
+    assert "return str(int(unit_price))" not in bind
+    danish_idx = price.index("danish_price(unit_price)")
+    integer_idx = price.index("str(int(unit_price))")
+    assert danish_idx < integer_idx
+    assert 'f"{unit_price:.2f}".replace(".", ",")' in price
 
 
 def test_edit_url_opened_rejects_list_and_create() -> None:

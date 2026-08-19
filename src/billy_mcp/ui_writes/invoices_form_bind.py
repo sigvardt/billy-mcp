@@ -58,10 +58,11 @@ LINE_SELECTORS = (
 UNIT_PRICE_LABELS = ("Enhedspris", "Unit price")
 QUANTITY_LABELS = ("Antal", "Quantity")
 UNIT_PRICE_SELECTORS = (
+    "input[name='unitPrice'][placeholder='Enhedspris']",
     "input[name='invoiceLines.0.unitPrice']",
-    "input[name='unitPrice']",
-    "input[name*='unitPrice']",
-    "input[name*='UnitPrice']",
+    "input[name='invoice.lines.0.unitPrice']",
+    "input[name*='invoiceLines'][name*='unitPrice']",
+    "input[name*='lines'][name*='unitPrice']",
 )
 QUANTITY_SELECTORS = (
     "input[name='invoiceLines.0.quantity']",
@@ -871,13 +872,7 @@ async def fill_priced_line(
     quantity = await _fill_labeled(page, QUANTITY_LABELS, "1")
     if quantity is None:
         await _fill_first_visible(page, QUANTITY_SELECTORS, "1")
-    price_text = _price_text(unit_price)
-    filled = await _fill_labeled(page, UNIT_PRICE_LABELS, price_text)
-    if filled is None:
-        filled = await _fill_first_visible(page, UNIT_PRICE_SELECTORS, price_text)
-    if filled is None:
-        filled = await _fill_following_input(page, UNIT_PRICE_LABELS, price_text)
-    if filled is None:
+    if await unit_price_field(page) is None:
         return ToolError(
             code=StableErrorCode.UI_CHANGED,
             message="Billy invoice unit price field is not visible.",
@@ -916,14 +911,14 @@ async def read_unit_price(page: Page) -> str:
 
 
 async def unit_price_field(page: Page) -> Locator | None:
+    for selector in UNIT_PRICE_SELECTORS:
+        field = page.locator(selector)
+        if await field.count() >= 1 and await field.first.is_visible():
+            return field.first
     for label in UNIT_PRICE_LABELS:
         field = page.get_by_label(label, exact=True)
         if await field.count() < 1:
             field = page.get_by_label(label)
-        if await field.count() >= 1 and await field.first.is_visible():
-            return field.first
-    for selector in UNIT_PRICE_SELECTORS:
-        field = page.locator(selector)
         if await field.count() >= 1 and await field.first.is_visible():
             return field.first
     for label in UNIT_PRICE_LABELS:
@@ -941,12 +936,6 @@ async def unit_price_field(page: Page) -> Locator | None:
     return None
 
 
-def _price_text(unit_price: float) -> str:
-    if unit_price == int(unit_price):
-        return str(int(unit_price))
-    return str(unit_price).replace(".", ",")
-
-
 async def _fill_labeled(page: Page, labels: tuple[str, ...], value: str) -> str | None:
     for label in labels:
         field = page.get_by_label(label, exact=True)
@@ -959,26 +948,6 @@ async def _fill_labeled(page: Page, labels: tuple[str, ...], value: str) -> str 
             continue
         await target.fill(value)
         return value
-    return None
-
-
-async def _fill_following_input(page: Page, labels: tuple[str, ...], value: str) -> str | None:
-    """Fill the first input after a visible Ember field label."""
-
-    for label in labels:
-        named = page.get_by_text(label, exact=True)
-        for index in range(await named.count()):
-            text = named.nth(index)
-            if not await text.is_visible():
-                continue
-            field = text.locator("xpath=following::input[1]")
-            try:
-                if await field.count() < 1 or not await field.first.is_visible():
-                    continue
-                await field.first.fill(value)
-            except (TimeoutError, RuntimeError):
-                continue
-            return value
     return None
 
 

@@ -30,16 +30,21 @@ sources:
   - radio:B9C4FA7C
   - radio:DECEA79B
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-18T23:10:00Z
+updated: 2026-08-19T01:20:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is `0ded1e7`, clean, tracking `origin/main.billy_complete`.
-The last execute died mid-run after adding required `product_name`
-and exact **Vælg produkt** bind. Stay red. Do not finish.
-No children are running.
+Worktree has uncommitted line-persist gates on `8b2144d`.
+`persist_hit` for update is a 2xx `PUT /v2/invoiceLines/:id`.
+A header `PUT /v2/invoices/:id` is not line-price persist.
+Owner `F1A2EFC2`: the exact **Enhedspris** control is INPUT
+`type=text` `inputmode=numeric` `name=unitPrice`
+`placeholder=Enhedspris`. A normal `fill('2,00')` on that input
+sets value `2,00`. `shown_len=3` is a wrong locator. Stay red.
+Do not finish.
+No children are running. Seven write children stay completed and merged.
 `59A3A933` now binds leftover cleanup. A fresh `/invoices` page
 shows 6 real **Kladde** rows at 1,00 DKK. Persist is proved by
 the interface. Do not use a POST id as qualification proof.
@@ -72,7 +77,7 @@ product cleanup. That empty list is now stale: the failed
 invoice execute recreated 6 products with the 6 drafts.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
-ETag still `"121myuqjdm53603"`; do not re-lock. Live FastMCP:
+ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:
 new page plus `[data-cy='dropdown-icon']` binds the tagged
 customer (`vendor_bind=scoped:existing_option`, GET with
 `contactId`). Create preview requires `unit_price > 0` and

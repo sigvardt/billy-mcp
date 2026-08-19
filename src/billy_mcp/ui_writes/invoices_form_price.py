@@ -30,26 +30,31 @@ async def commit_unit_price(page: Page, unit_price: float) -> ToolError | None:
             code=StableErrorCode.UI_CHANGED,
             message="Billy invoice unit price field is not visible.",
         )
-    text = danish_price(unit_price)
-    await field.click()
-    await field.fill("")
-    sequential = getattr(field, "press_sequentially", None)
-    if sequential is not None:
-        try:
-            await sequential(text, delay=30)
-        except TypeError:
-            await sequential(text)
-    else:
+    candidates = [danish_price(unit_price)]
+    if unit_price == int(unit_price):
+        candidates.append(str(int(unit_price)))
+    shown = ""
+    for text in candidates:
+        await field.click()
         await field.fill(text)
-    try:
-        await field.dispatch_event("input")
-        await field.dispatch_event("change")
-        await field.press("Tab")
-    except (TimeoutError, RuntimeError, AttributeError):
-        pass
-    shown = await read_unit_price(page)
-    if price_is(shown, unit_price):
-        return None
+        shown = await read_unit_price(page)
+        if not price_is(shown, unit_price):
+            sequential = getattr(field, "press_sequentially", None)
+            if sequential is not None:
+                try:
+                    await sequential(text, delay=30)
+                except TypeError:
+                    await sequential(text)
+            shown = await read_unit_price(page)
+        if not price_is(shown, unit_price):
+            continue
+        try:
+            await field.press("Tab")
+        except (TimeoutError, RuntimeError, AttributeError):
+            pass
+        shown = await read_unit_price(page)
+        if price_is(shown, unit_price):
+            return None
     return ToolError(
         code=StableErrorCode.UI_CHANGED,
         message="Billy invoice unit price did not keep the filled value.",
