@@ -113,6 +113,8 @@ def test_contacts_and_bills_update_delete_open_shells_stay_registered() -> None:
             "ui_clients_delete_open",
             "ui_bills_update_open",
             "ui_bills_delete_open",
+            "ui_invoices_update_open",
+            "ui_invoices_delete_open",
         }
     )
     registered = checker.registered_domain_tools(ROOT)

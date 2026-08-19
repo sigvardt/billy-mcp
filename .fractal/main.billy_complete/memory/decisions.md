@@ -68,13 +68,19 @@ sources:
   - radio:48ABEEB7
   - radio:330C5913
   - radio:02CB47D8
+  - radio:7C96E1C3
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T13:47:00Z
+updated: 2026-08-19T14:18:00Z
 ---
 
 ## Binding now
 
-`02CB47D8` (saved, P10): `48ABEEB7` is conjunctive. Approved
+`7C96E1C3` (saved, P10): operator inspected all five PNGs for
+run `60b6d620772644f3bca9609c8ae53846`. They match `A342BBDC`.
+Independent Grok accept and purge of that exact run are done.
+Does not replace `330C5913` empty-org proof.
+
+`02CB47D8` (unsaved, P10, done): `48ABEEB7` is conjunctive. Approved
 live-test mode **and** a pytest `/live/` context, or an
 equally bounded internal hook that production cannot set.
 `PYTEST_CURRENT_TEST` alone must not write frames, even when

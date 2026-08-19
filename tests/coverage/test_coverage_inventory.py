@@ -1853,10 +1853,10 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.invoices": "ui_invoices_list",
         "ui.parity.invoices.list": "ui_invoices_list",
         "ui.discovery.invoices_create": "ui_invoices_create_open",
-        "ui.parity.invoices.create": "ui_invoices_create_open",
+        "ui.parity.invoices.create": "ui_invoices_create_preview",
         "ui.parity.invoices.get": "ui_invoices_get_open",
-        "ui.parity.invoices.update": "ui_invoices_update_open",
-        "ui.parity.invoices.delete": "ui_invoices_delete_open",
+        "ui.parity.invoices.update": "ui_invoices_update_preview",
+        "ui.parity.invoices.delete": "ui_invoices_delete_preview",
         "ui.parity.bills.get": "ui_bills_get_open",
         "ui.parity.bills.update": "ui_bills_update_preview",
         "ui.parity.bills.delete": "ui_bills_delete_preview",
@@ -2273,7 +2273,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.invoices.create"
     )
     assert invoices_create_parity["api_row_id"] == "api.invoices.create"
-    assert invoices_create_parity["tool_name"] == "ui_invoices_create_open"
+    assert invoices_create_parity["tool_name"] == "ui_invoices_create_preview"
     assert invoices_create_parity["parity_status"] == "form_open_only"
     assert "api.invoices.create" in invoices_create_parity["evidence"]
     assert "research153" in invoices_create_parity["evidence"]
@@ -2296,7 +2296,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.invoices.update"
     )
     assert invoices_update_parity["api_row_id"] == "api.invoices.update"
-    assert invoices_update_parity["tool_name"] == "ui_invoices_update_open"
+    assert invoices_update_parity["tool_name"] == "ui_invoices_update_preview"
 
     assert invoices_update_parity["parity_status"] == "form_open_only"
     assert invoices_update_parity["live_tested"] is False
@@ -2308,7 +2308,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         row for row in qualified if row["id"] == "ui.parity.invoices.delete"
     )
     assert invoices_delete_parity["api_row_id"] == "api.invoices.delete"
-    assert invoices_delete_parity["tool_name"] == "ui_invoices_delete_open"
+    assert invoices_delete_parity["tool_name"] == "ui_invoices_delete_preview"
     assert invoices_delete_parity["parity_status"] == "delete_chrome_open_only"
     assert invoices_delete_parity["live_tested"] is False
     assert invoices_delete_parity["vision_verified"] is False

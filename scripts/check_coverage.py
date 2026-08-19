@@ -36,6 +36,8 @@ RETAINED_OPEN_SHELL_TOOLS: frozenset[str] = frozenset(
         "ui_clients_delete_open",
         "ui_bills_update_open",
         "ui_bills_delete_open",
+        "ui_invoices_update_open",
+        "ui_invoices_delete_open",
     }
 )
 REQUIRED_ROW_FIELDS = {

@@ -10,8 +10,11 @@ sources:
   - radio:9310BC17
   - radio:B9C4FA7C
   - radio:DECEA79B
+  - radio:A342BBDC
+  - radio:330C5913
+  - radio:7C96E1C3
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-19T10:55:00Z
+updated: 2026-08-19T14:18:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -25,14 +28,20 @@ Preview performs no Billy mutation. Execute accepts only `confirmation_ticket`.
 The UI lane never calls `https://api.billysbilling.com/v2` with an API token.
 Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
 
-Live CUD captures `01_before.png`, filled-form
+Live CUD captured `01_before.png`, filled-form
 `02_before_submit.png` immediately before **Gem som kladde**,
 `03_after_create.png`, `04_after_update.png` after **Enhedspris**
 `2,00`, and `05_after_delete.png`. Create execute asserts
 customer, product, description, and unit price in the DOM
-before submit (`A342BBDC`). Vision stays
-`author=live_test` / `pending_review` until independent accept.
-Honesty-16 stay red.
+before submit (`A342BBDC`). Vision
+`run_id=60b6d620772644f3bca9609c8ae53846` is
+`author=independent_review`, `reviewer_verdict=accept`,
+`purge_verified=true`. Frame folder is gone. CUD parity
+`tool_name` values are `ui_invoices_{create,update,delete}_preview`.
+`ui_invoices_update_open` and `ui_invoices_delete_open` stay on
+`RETAINED_OPEN_SHELL_TOOLS`. Live CUD writes through
+`write_live_pending_unless_accepted`, so a later `ui-full` run
+keeps the accepted record. Honesty-16 stay red.
 
 ## Tools
 

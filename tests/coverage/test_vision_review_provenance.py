@@ -21,6 +21,7 @@ _WRITE_LIVE_TESTS = (
     _REPO / "tests/live/test_ui_bills_writes.py",
     _REPO / "tests/live/test_ui_files_writes.py",
     _REPO / "tests/live/test_ui_organizations_writes.py",
+    _REPO / "tests/live/test_ui_invoices_writes.py",
 )
 
 

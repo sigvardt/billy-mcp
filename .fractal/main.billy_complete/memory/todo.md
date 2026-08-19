@@ -4,26 +4,24 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T13:22:00Z
+updated: 2026-08-19T14:18:00Z
 ---
 
 ## Open
 
-- Owner `02CB47D8` / `48ABEEB7`: conjunctive live-test gate landed. Independent five-frame accept and purge still required. Stay red.
-- Owner `A342BBDC`: filled-form capture before **Gem som kladde** is now in create execute. Independent five-frame review still required after `48ABEEB7`. Stay red. Stay `pending_review`.
-- Owner `330C5913`: org independently empty after the five-frame CUD. Do not remake leftover reverse-clean.
-- Independent Grok review of the five-frame invoice CUD stays red until `48ABEEB7` lands and review accepts the set. Stay red.
+- Product independent accept of `b1597ed1` is next. Stay red. `A337A622` still forbids more product list, dialog, or archive probes.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof.
-- Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Honesty stays red until independent accept and purge. Stay red.
+- Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Invoice vision is accept+purged. Honesty-16 stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved. Leftover reverse-clean is done. Do not remake leftover lists.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and live-proved. `56354201` / `BF91E28F` cleanup is scoped table-item `delete-icon` then **Ja, slet**. `A337A622` still forbids more product list, dialog, or archive probes. Do not remake form-contract, delete-chrome, leftover-cleanup, or either archive dump.
 - Daybook create persist is not unique (`opret_ny_kassekladde_count=1` and `indstillinger_count=1`). Helper dropped after review. Do not remake that dump. Do not arm `_ledger_write`. Stay red.
-- After live MCP proof: point remaining CUD parity rows at preview tools. Do not green from stubs. Files stay fail-closed (research185 **Slet** 0).
+- After live MCP proof: point remaining CUD parity rows at preview tools. Invoice remap is done. Product still names `*_open`. Do not green from stubs. Files stay fail-closed (research185 **Slet** 0).
 
 ## Done
 
+- Independent accept and purge of invoice CUD run `60b6d620772644f3bca9609c8ae53846`. Coverage names `ui_invoices_{create,update,delete}_preview`. Live CUD uses `write_live_pending_unless_accepted`. Honesty-16 still red.
 - 16-row gate, honesty, shared protocol, durable preview/execute invariant, `ui-full` mode.
 - Seven family children landed offline preview/execute tools and are merged.
 - `create_server` requires `organization_id` and reaches a shared `BrowserRuntime` actor. Commit-mode suite and lint pass. No greening.

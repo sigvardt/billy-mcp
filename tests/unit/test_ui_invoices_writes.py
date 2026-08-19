@@ -570,7 +570,8 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "ui_invoices_delete_preview" in source
     assert "LEFTOVER_INVOICE_CONTACTS" in source
     assert "Godkend" in source
-    assert "pending_review" in source
+    assert "write_live_pending_unless_accepted" in source
+    assert "write_vision_record" not in source
 
 
 def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
@@ -592,7 +593,7 @@ def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
     price = body.index("fresh Enhedspris is not 2,00")
     after_delete = body.index('frame_dir / "05_after_delete.png"')
     client_gone = body.index('await _list_has_name(cleanup, slug, "clients", contact)')
-    vision = body.index("write_vision_record")
+    vision = body.index("write_live_pending_unless_accepted")
     assert mode < env < create_exec < before_submit
     assert before < create_exec
     assert create_exec < after_create < update_preview
@@ -600,8 +601,9 @@ def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
     assert client_gone < after_delete < vision
     assert 'assert (frame_dir / "02_before_submit.png").is_file()' in body
     assert "LEFTOVER_INVOICE_CONTACTS" not in body
-    assert 'reviewer_verdict="pending_review"' in body
-    assert 'author="live_test"' in body
+    assert "write_vision_record" not in body
+    assert 'reviewer_verdict="pending_review"' not in body
+    assert 'author="live_test"' not in body
     create = form[form.index("async def _create_draft") : form.index("async def _update_draft")]
     fill = create.index("fill_priced_line")
     shot = create.index("02_before_submit.png")

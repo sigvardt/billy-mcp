@@ -34,7 +34,7 @@ from billy_mcp.ui_writes.page_flow import exact_name_in_text
 from billy_mcp.vision_evidence import (
     is_outside_repository,
     owner_only_frame_dir,
-    write_vision_record,
+    write_live_pending_unless_accepted,
 )
 
 pytestmark = pytest.mark.live
@@ -469,7 +469,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         assert (frame_dir / "04_after_update.png").is_file()
         assert (frame_dir / "05_after_delete.png").is_file()
 
-        write_vision_record(
+        write_live_pending_unless_accepted(
             _VISION_RECORD,
             workflow_ref="ui.parity.invoices.update",
             assertion_refs=[
@@ -479,11 +479,9 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                 "list_row_open_not_post_id",
                 "independent_readback_session",
                 "third_session_cleanup",
+                ".fractal/main.billy_complete/tmp/grok-review.md",
             ],
             second_interface_ref="create_server_readback_plus_third_profile",
-            reviewer_verdict="pending_review",
-            purge_verified=False,
-            author="live_test",
             run_id=frame_dir.name.removeprefix("run-"),
         )
     finally:

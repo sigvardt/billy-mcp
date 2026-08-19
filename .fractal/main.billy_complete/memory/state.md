@@ -45,8 +45,9 @@ sources:
   - radio:A342BBDC
   - radio:48ABEEB7
   - radio:330C5913
+  - radio:7C96E1C3
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T13:22:00Z
+updated: 2026-08-19T14:18:00Z
 ---
 
 ## Now
@@ -73,17 +74,20 @@ status. `persist_hit` requires a 2xx. Update execute types
 **Enhedspris** as `2,00`, prefers **Opdater**, and fails unless
 a second session reads that price. A request-only PUT or a
 POST fallback is not persist.
-Owner `A342BBDC`: create execute now captures
+Owner `A342BBDC`: create execute captures
 `02_before_submit.png` after fill and before **Gem som kladde**,
 then proves customer, product, description, and unit price.
-Live CUD passed (`run_id=60b6d620772644f3bca9609c8ae53846`) with
-`pending_review`. Owner `330C5913` independently proved empty
-`/invoices`, `/products`, and `/clients` after that five-frame
-run. Do not remake leftover reverse-clean. `48ABEEB7` / `02CB47D8` conjunctive gate is in
-`live_allowed_vision_frame_dir`: approved live-test mode
-and pytest `/live/`. Production without both writes no
-frame. Independent five-frame accept of run
-`60b6d620772644f3bca9609c8ae53846` is next. Stay red.
+Live CUD `run_id=60b6d620772644f3bca9609c8ae53846` is
+`author=independent_review`, `reviewer_verdict=accept`,
+`purge_verified=true`. Frame folder is gone. Owner `330C5913`
+and `7C96E1C3` independently proved empty lists and the five
+visible states. Do not remake leftover reverse-clean.
+`48ABEEB7` / `02CB47D8` conjunctive gate is in
+`live_allowed_vision_frame_dir`. Invoice CUD coverage names
+`ui_invoices_{create,update,delete}_preview`. Live CUD uses
+`write_live_pending_unless_accepted` so a later `ui-full` run
+keeps the accept. Honesty-16 stay red. Product accept of
+`b1597ed1` is next. Stay red.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
 ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:
