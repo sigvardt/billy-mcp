@@ -13181,7 +13181,7 @@
         "tests/live/test_ui_products_create_open.py",
         "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "ui_products_create_open",
+      "tool_name": "ui_products_create_preview",
       "vision_evidence": null,
       "vision_verified": false,
       "workflow_kind": "api_parity"

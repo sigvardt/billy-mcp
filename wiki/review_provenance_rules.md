@@ -45,7 +45,9 @@ A live test may write a vision record with `author=live_test` and
 `reviewer_verdict=pending_review` only. It must not write `accept` or purge
 frames. `qualifies_for_coverage_vision` is true only when
 `author=independent_review`, `reviewer_verdict=accept`, and `purge_verified`.
-Owner radio `C7DBE974`.
+Owner radio `C7DBE974`. The write-test lock in
+`tests/coverage/test_vision_review_provenance.py` includes contacts,
+bills, files, organizations, invoices, and products CUD live tests.
 
 Production UI execute may write owner-only `vision-tmp/run-*`
 frames only when both an approved live-test mode

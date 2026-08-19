@@ -1,6 +1,6 @@
 ---
 name: ui_write_residual_table
-desc: Residual honesty-16 UI write table. Invoice CUD is accepted and purged. Product still waits. Stay red.
+desc: Residual honesty-16 UI write table. Invoice and product CUD are accepted and purged. Stay red.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
@@ -27,7 +27,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-19T14:18:00Z
+updated: 2026-08-19T16:45:00Z
 ---
 
 # ui_write_residual_table
@@ -58,8 +58,9 @@ to **Ingen produkter**. Do not treat product as
 `interface_control_absent` or archive-only. Do not stop on
 `67CBACB6`. Invoice CUD vision
 `run_id=60b6d620772644f3bca9609c8ae53846` is accept with purge
-verified. Product still waits independent accept. Do not remake
-picker, archive, leftover, or Kunde dumps.
+verified. Product create vision
+`run_id=29c1b1de26a14976aaa1b98bfe9de46e` is accept with purge
+verified. Do not remake picker, archive, leftover, or Kunde dumps.
 
 `FD39FFE7` still makes invoice draft CUD and product create mandatory
 and red. They are not finished as `UI_CHANGED`.
@@ -85,7 +86,7 @@ and red. They are not finished as `UI_CHANGED`.
 | `ui.parity.invoices.create` | `ui_invoices_create_preview` | `ui_invoices_create_{preview,execute}` | Self-contained FastMCP CUD. Pre-submit `02_before_submit.png` before **Gem som kladde** (`A342BBDC`) | Reverse-clean invoice, product, customer. Vision `60b6d620772644f3bca9609c8ae53846` accept, purged | `already_live_proved_honesty_red` |
 | `ui.parity.invoices.update` | `ui_invoices_update_preview` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00`. List result `2,00 DKK` | Independent read-back. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.invoices.delete` | `ui_invoices_delete_preview` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | Owner independently empty after reverse cleanup and after disposable CUD. Same vision | `already_live_proved_honesty_red` |
-| `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Four owner-only frames on `run_id=29c1b1de26a14976aaa1b98bfe9de46e` (`author=live_test`, `pending_review`). Reverse-clean used singular DELETE 2xx then settled `/products` **Ingen produkter**. Stay red until independent accept and purge | `owner_proved_pending_fastmcp` |
+| `ui.parity.products.create` | `ui_products_create_preview` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Reverse-clean used singular DELETE 2xx then settled `/products` **Ingen produkter**. Vision `29c1b1de26a14976aaa1b98bfe9de46e` accept, purged | `already_live_proved_honesty_red` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.delete` | `ui_daybooks_delete_open` | `ui_daybooks_delete_{preview,execute}` | **Mere** then menu **Slet** on disposable journals. Primary **Slet** absent | No tagged create, so no tagged cleanup | `interface_control_absent_UI_CHANGED` |
@@ -103,12 +104,11 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
    Self-contained FastMCP CUD restored empty lists. Independent
    accept and purge are done. Honesty still red. Do not remake
    leftover reverse-clean.
-2. Product (`56354201` / `A0633A17`): hard-delete is
+2. Product (`56354201` / `A0633A17` / `29c1b1de`): hard-delete is
    owner-proved. FastMCP create/delete watches singular
-   `DELETE /v2/products/:id` 2xx. Four write frames exist for
-   `run_id=29c1b1de26a14976aaa1b98bfe9de46e` and stay
-   `pending_review`. Do not remake archive or dialog dumps
-   (`A337A622`). Do not treat archive-only as the cleanup path.
+   `DELETE /v2/products/:id` 2xx. Independent accept and purge
+   are done. Honesty still red. Do not remake archive or dialog
+   dumps (`A337A622`). Do not treat archive-only as the cleanup path.
 3. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
    `_ledger_write`.
 4. Files: accept fail-closed (no UI delete), or name a delete control

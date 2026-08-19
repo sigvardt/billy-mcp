@@ -968,6 +968,11 @@ UI_INVOICES_CUD_PREVIEW_TOOL_NAMES: dict[str, str] = {
     "ui.parity.invoices.update": "ui_invoices_update_preview",
     "ui.parity.invoices.delete": "ui_invoices_delete_preview",
 }
+# After 29c1b1de accept+purge: product create names the preview tool.
+# Honesty still keeps implemented/live/vision false. Discovery stays *_open.
+UI_PRODUCTS_CREATE_PREVIEW_TOOL_NAMES: dict[str, str] = {
+    "ui.parity.products.create": "ui_products_create_preview",
+}
 
 
 # The inventory is generated from this narrow, source-controlled map rather
@@ -2074,6 +2079,28 @@ def apply_ui_invoices_cud_preview_tool_names(workflows: list[dict[str, Any]]) ->
     missing = set(UI_INVOICES_CUD_PREVIEW_TOOL_NAMES) - seen
     if missing:
         raise RuntimeError(f"invoices CUD preview mapping missing rows: {sorted(missing)}")
+
+
+def apply_ui_products_create_preview_tool_name(workflows: list[dict[str, Any]]) -> None:
+    """Point products.create parity at the preview tool after honesty.
+
+    Leaves ``parity_status`` open-only. Honesty still forces implemented,
+    live_tested, and vision_verified false. Discovery stays
+    ``ui_products_create_open``. research176 get/update/delete stay
+    toolless ``not_applicable``.
+    """
+
+    seen: set[str] = set()
+    for row in workflows:
+        row_id = str(row.get("id", ""))
+        preview = UI_PRODUCTS_CREATE_PREVIEW_TOOL_NAMES.get(row_id)
+        if preview is None:
+            continue
+        seen.add(row_id)
+        row["tool_name"] = preview
+    missing = set(UI_PRODUCTS_CREATE_PREVIEW_TOOL_NAMES) - seen
+    if missing:
+        raise RuntimeError(f"products create preview mapping missing rows: {sorted(missing)}")
 
 
 def apply_ui_product_plane_bulk_parity_honesty(workflows: list[dict[str, Any]]) -> None:
@@ -7928,6 +7955,7 @@ def build_ui_manifest(api_manifest: dict[str, Any]) -> dict[str, Any]:
     apply_ui_bills_cud_preview_tool_names(workflows)
     apply_ui_organizations_update_preview_tool_name(workflows)
     apply_ui_invoices_cud_preview_tool_names(workflows)
+    apply_ui_products_create_preview_tool_name(workflows)
 
     return {
         "manifest": "billy_ui_workflows_phase_0",

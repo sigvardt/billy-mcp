@@ -1131,7 +1131,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
         if str(row.get("api_row_id") or "") == "api.products.create"
     ]
     assert len(products_create_parity) == 1
-    assert products_create_parity[0]["tool_name"] == "ui_products_create_open"
+    assert products_create_parity[0]["tool_name"] == "ui_products_create_preview"
     assert products_create_parity[0]["live_tested"] is False
     assert products_create_parity[0]["parity_status"] == "form_open_only"
     assert "research163" in (products_create_parity[0].get("evidence") or "")
@@ -1863,7 +1863,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
         "ui.discovery.products": "ui_products_list",
         "ui.parity.products.list": "ui_products_list",
         "ui.discovery.products_create": "ui_products_create_open",
-        "ui.parity.products.create": "ui_products_create_open",
+        "ui.parity.products.create": "ui_products_create_preview",
         "ui.discovery.customers": "ui_clients_list",
         "ui.parity.contacts.list": "ui_clients_list",
         "ui.discovery.clients_create": "ui_clients_create_open",

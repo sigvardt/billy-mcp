@@ -49,7 +49,7 @@ sources:
   - radio:94A4C844
   - radio:A41C242F
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T16:00:00Z
+updated: 2026-08-19T16:45:00Z
 ---
 
 ## Now
@@ -89,11 +89,12 @@ visible states. Do not remake leftover reverse-clean.
 `ui_invoices_{create,update,delete}_preview`. Live CUD uses
 `write_live_pending_unless_accepted` so a later `ui-full` run
 keeps the accept. Honesty-16 stay red. Product live CUD
-`run_id=29c1b1de26a14976aaa1b98bfe9de46e` is `author=live_test`,
-`pending_review`, four frames outside git. Owner `A41C242F`
-proved empty lists and the four visible states. Capture now
-reads bound **Enhedspris** before screenshot (`94A4C844`).
-Independent accept of that run is next. Stay red.
+`run_id=29c1b1de26a14976aaa1b98bfe9de46e` is
+`author=independent_review`, `reviewer_verdict=accept`,
+`purge_verified=true`. Frame folder is gone. Coverage names
+`ui_products_create_preview`. Owner `A41C242F` proved empty
+lists and the four visible states. Capture reads bound
+**Enhedspris** before screenshot (`94A4C844`). Stay red.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
 ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:

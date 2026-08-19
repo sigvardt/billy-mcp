@@ -144,8 +144,8 @@ def test_product_persist_stays_closed_when_archive_list_is_unique(tmp_path: Path
     assert product_persist_allowed(tmp_path / "archive.json") is False
 
 
-def test_products_create_honesty_row_still_names_open_shell() -> None:
-    """Given the honesty row, When reading the manifest, Then it still names create open."""
+def test_products_create_honesty_row_names_preview_and_stays_red() -> None:
+    """Given the honesty row, When reading the manifest, Then it names preview and stays red."""
 
     import yaml
 
@@ -153,7 +153,7 @@ def test_products_create_honesty_row_still_names_open_shell() -> None:
     document = yaml.safe_load((root / "coverage" / "ui_workflows_manifest.yaml").read_text())
     rows = {str(row["id"]): row for row in document["workflows"]}
     row = rows["ui.parity.products.create"]
-    assert row["tool_name"] == "ui_products_create_open"
+    assert row["tool_name"] == "ui_products_create_preview"
     assert row["implemented"] is False
     assert row["live_tested"] is False
     assert row["vision_verified"] is False

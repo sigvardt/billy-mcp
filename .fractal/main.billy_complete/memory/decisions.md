@@ -70,10 +70,15 @@ sources:
   - radio:02CB47D8
   - radio:7C96E1C3
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T14:18:00Z
+updated: 2026-08-19T16:45:00Z
 ---
 
 ## Binding now
+
+`A41C242F` (saved, P10): operator inspected all four product
+PNGs for run `29c1b1de26a14976aaa1b98bfe9de46e`. Independent
+Grok accept and purge of that exact run are done. Coverage
+names `ui_products_create_preview`. Honesty stays red.
 
 `7C96E1C3` (saved, P10): operator inspected all five PNGs for
 run `60b6d620772644f3bca9609c8ae53846`. They match `A342BBDC`.
