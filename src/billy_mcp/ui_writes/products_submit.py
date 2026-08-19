@@ -13,6 +13,7 @@ from billy_mcp.ui_writes.page_flow import (
     prove_text_on_fresh_page,
     require_matching_org_slug,
 )
+from billy_mcp.ui_writes.products_submit_frame import capture_filled_create_form
 
 _OPRET: str = "Opret produkt"
 _OPRET_LIST: str = "Opret produkter"
@@ -123,6 +124,9 @@ async def _fill_and_save(
             code=StableErrorCode.UI_CHANGED,
             message="Billy field Enhedspris is not visible.",
         )
+    captured = await capture_filled_create_form(page, name=name, price=price)
+    if isinstance(captured, ToolError):
+        return captured
     await asyncio.sleep(0.3)
     if not await _click_visible(page, _GEM):
         return ToolError(

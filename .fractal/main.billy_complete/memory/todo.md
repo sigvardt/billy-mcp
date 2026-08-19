@@ -4,12 +4,12 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T14:18:00Z
+updated: 2026-08-19T16:00:00Z
 ---
 
 ## Open
 
-- Product independent accept of `b1597ed1` is next. Stay red. `A337A622` still forbids more product list, dialog, or archive probes.
+- Product independent accept of `29c1b1de26a14976aaa1b98bfe9de46e` is next. Price read-back is in `capture_filled_create_form`. Stay red. `A337A622` still forbids more product list, dialog, or archive probes.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof.
 - Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Invoice vision is accept+purged. Honesty-16 stay red.
 - `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved. Leftover reverse-clean is done. Do not remake leftover lists.

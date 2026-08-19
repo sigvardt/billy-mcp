@@ -28,9 +28,14 @@ from billy_mcp.ui_writes.page_flow import exact_name_in_text
 from billy_mcp.vision_evidence import (
     is_outside_repository,
     owner_only_frame_dir,
-    write_vision_record,
+    write_live_pending_unless_accepted,
 )
 from tests.live.product_leftover_sweep import OWNER_LEFTOVERS, visible_prd_tags
+from tests.live.product_write_frames import (
+    capture_products_list,
+    list_has_name,
+    open_named_list,
+)
 
 pytestmark = pytest.mark.live
 
@@ -130,34 +135,6 @@ async def _ready_session(runtime: BrowserRuntime, slug: str) -> None:
     assert waited.organization_id == slug
 
 
-async def _open_named_list(page: Any, slug: str, path: str) -> None:
-    await page.goto(f"https://mit.billy.dk/{slug}/{path}", wait_until="domcontentloaded")
-    try:
-        await page.wait_for_load_state("networkidle", timeout=20000)
-    except TimeoutError:
-        pass
-
-
-async def _list_has_name(runtime: BrowserRuntime, slug: str, name: str) -> bool:
-    context = await runtime.start()
-    page = cast(Any, await context.new_page())
-    try:
-        for path in ("products", "inventory"):
-            await _open_named_list(page, slug, path)
-            body = await page.locator("body").inner_text()
-            if exact_name_in_text(body, name):
-                return True
-            search = page.locator("input[type='search'], input[placeholder*='øg' i]")
-            if await search.count() >= 1:
-                await search.first.fill(name)
-                body = await page.locator("body").inner_text()
-                if exact_name_in_text(body, name):
-                    return True
-        return False
-    finally:
-        await page.close()
-
-
 async def _delete_tagged(server: FastMCP, slug: str, name: str) -> None:
     preview = await _call(
         server,
@@ -180,12 +157,15 @@ async def test_ui_products_create_delete_via_call_tool(
     """Create and delete one tagged product through create_server."""
 
     _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "live product writes must not use API token"
     profile = _temp_profile()
     observer_profile = _temp_profile()
     cleanup_profile = _temp_profile()
     monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
     monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
     frame_dir = owner_only_frame_dir()
+    monkeypatch.setenv("BILLY_TEST_MODE", "ui-full")
+    monkeypatch.setenv("BILLY_VISION_FRAME_DIR", str(frame_dir))
     server: FastMCP | None = None
     extra: BrowserRuntime | None = None
     slug = ""
@@ -203,13 +183,14 @@ async def test_ui_products_create_delete_via_call_tool(
         extra = observer
         await _ready_session(observer, slug)
         for leftover in OWNER_LEFTOVERS:
-            if await _list_has_name(observer, slug, leftover):
+            if await list_has_name(observer, slug, leftover):
                 await _delete_tagged(server, slug, leftover)
-        extras = await visible_prd_tags(observer, slug, _open_named_list)
+        extras = await visible_prd_tags(observer, slug, open_named_list)
         for leftover in reversed(extras):
             await _delete_tagged(server, slug, leftover)
         tag = f"MCP-UI-PRD-{secrets.token_hex(4).upper()}"
-        assert await _list_has_name(observer, slug, tag) is False
+        assert await list_has_name(observer, slug, tag) is False
+        await capture_products_list(observer, slug, frame_dir / "01_before.png")
 
         preview_create = await _call(
             server,
@@ -225,7 +206,9 @@ async def test_ui_products_create_delete_via_call_tool(
             _record_blocker(f"create execute failed: {created_result}")
             pytest.fail(f"create execute failed: {created_result}")
         assert created_result["submitted"] is True
-        assert await _list_has_name(observer, slug, tag) is True
+        assert (frame_dir / "02_before_submit.png").is_file()
+        assert await list_has_name(observer, slug, tag) is True
+        await capture_products_list(observer, slug, frame_dir / "03_after_create.png")
 
         preview_delete = await _call(
             server,
@@ -250,17 +233,22 @@ async def test_ui_products_create_delete_via_call_tool(
         )
         extra = cleanup
         await _ready_session(cleanup, slug)
-        assert await _list_has_name(cleanup, slug, tag) is False
+        assert await list_has_name(cleanup, slug, tag) is False
         empty = await cleanup.start()
         empty_page = cast(Any, await empty.new_page())
         try:
-            await _open_named_list(empty_page, slug, "products")
+            await open_named_list(empty_page, slug, "products")
             body = await empty_page.locator("body").inner_text()
             assert "Ingen produkter" in body or exact_name_in_text(body, tag) is False
         finally:
             await empty_page.close()
+        await capture_products_list(cleanup, slug, frame_dir / "04_after_delete.png")
+        assert (frame_dir / "01_before.png").is_file()
+        assert (frame_dir / "02_before_submit.png").is_file()
+        assert (frame_dir / "03_after_create.png").is_file()
+        assert (frame_dir / "04_after_delete.png").is_file()
 
-        write_vision_record(
+        write_live_pending_unless_accepted(
             _VISION_RECORD,
             workflow_ref="ui.parity.products.create",
             assertion_refs=[
@@ -271,9 +259,6 @@ async def test_ui_products_create_delete_via_call_tool(
                 "third_session_cleanup",
             ],
             second_interface_ref="create_server_readback_plus_third_profile",
-            reviewer_verdict="pending_review",
-            purge_verified=False,
-            author="live_test",
             run_id=frame_dir.name.removeprefix("run-"),
         )
     finally:

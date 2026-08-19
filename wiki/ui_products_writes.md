@@ -7,7 +7,7 @@ sources:
   - wiki/ui_products_create_open_shell.md
   - wiki/ui_products_get_update_delete_not_applicable.md
 created: 2026-08-16T14:31:10Z
-updated: 2026-08-18T19:20:00Z
+updated: 2026-08-19T15:30:00Z
 ---
 
 # ui_products_writes
@@ -124,4 +124,14 @@ BrowserRuntime as the pass proof. Do not API-delete.
 
 Cleanup: delete the tagged product through the owner-proved
 row delete, then prove **Ingen produkter** on a fresh session.
-Honesty stays red until independent accept and purge.
+
+Live FastMCP create/delete now captures four owner-only frames
+(`01_before.png`, `02_before_submit.png` filled **Opret produkt**
+dialog before **Gem produkt**, `03_after_create.png`,
+`04_after_delete.png`). Before screenshot, capture reads the name
+field and **Enhedspris** / `input[name=unitPrice]` and requires
+normalized equality with the bound price (`94A4C844`). The durable
+record is `tmp/vision-records/ui_products_writes.json`,
+`run_id=29c1b1de26a14976aaa1b98bfe9de46e`, `author=live_test`,
+`pending_review`. Frames stay outside git. Do not accept or purge
+in this slice. Honesty stays red until independent accept and purge.
