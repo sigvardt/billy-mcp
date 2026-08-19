@@ -4,10 +4,12 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-19T18:54:10Z
+updated: 2026-08-19T20:03:33Z
 ---
 
 # billy_mcp
+
+[[api_live_qualification_semantics|api_live_qualification_semantics]]: Owner-scoped live API skip. Completeness uses discovered, implemented, and contract_tested. live_tested stays false with live_api=out_of_scope_by_user. Not a completeness claim.
 
 [[auth_credentials_pre_submit_research|auth_credentials_pre_submit_research]]: Grok research92 freeze plus research93 reconfirm for the offline credential-reference and fail-closed Billy login slice; it does not qualify live UI or API coverage.
 

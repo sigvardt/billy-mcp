@@ -200,7 +200,8 @@ def test_status_completeness_is_derived_from_row_evidence() -> None:
             "discovered": True,
             "implemented": True,
             "contract_tested": True,
-            "live_tested": True,
+            "live_tested": False,
+            "qualification": {"live_api": "out_of_scope_by_user"},
         }
     ]
     green_ui = [
@@ -237,7 +238,8 @@ def test_require_complete_checks_each_row_state_and_bulk_resolution() -> None:
             "discovered": True,
             "implemented": True,
             "contract_tested": True,
-            "live_tested": True,
+            "live_tested": False,
+            "qualification": {"live_api": "out_of_scope_by_user"},
         }
     ]
     qualified_ui = [

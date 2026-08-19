@@ -911,8 +911,20 @@ UI_DISCOVERY_FAMILIES: tuple[str, ...] = (
 SINGULAR_ROOT_KEY_OVERRIDES = {
     "bankLineMatches": "bankLineMatch",
 }
-API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested", "live_tested")
-UI_QUALIFICATION_FIELDS = (*API_QUALIFICATION_FIELDS, "vision_verified")
+API_QUALIFICATION_FIELDS = ("discovered", "implemented", "contract_tested")
+UI_QUALIFICATION_FIELDS = (
+    "discovered",
+    "implemented",
+    "contract_tested",
+    "live_tested",
+    "vision_verified",
+)
+LIVE_API_OUT_OF_SCOPE = "out_of_scope_by_user"
+LIVE_API_DEFERRED_KIND = "live_api_deferred"
+LIVE_API_OWNER_SKIP = "LIVE_API_OWNER_SKIP"
+# Live page observed 2026-08-19; lock stays DOCS_ETAG / DOCS_MD5.
+DOCS_ETAG_OBSERVED = "tmhc6wpdc835zt"
+DOCS_MD5_OBSERVED = "053f755f52e3926b028e29325e3670d4"
 
 # Owner 96908DC6 / E004E7D5: open-only chrome is not a finished CUD write.
 # Empty after FE6FA4B1 moved the last five residual writes to owner scope.
@@ -1929,6 +1941,35 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
         # Hard honesty: residual must stay red and toolless.
         row["implemented"] = False
         row["contract_tested"] = False
+        row["live_tested"] = False
+
+
+def live_api_deferred_qualification() -> dict[str, Any]:
+    """Live-API-only skip for implemented offline API rows (NODE.md requirement 2).
+
+    Does not classify the operation itself out of scope. Does not green
+    live_tested. tools_allowed is omitted so existing tools stay.
+    """
+
+    return {
+        "kind": LIVE_API_DEFERRED_KIND,
+        "scope_code": LIVE_API_OWNER_SKIP,
+        "live_api": LIVE_API_OUT_OF_SCOPE,
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "docs_etag_observed": DOCS_ETAG_OBSERVED,
+        "docs_md5_observed": DOCS_MD5_OBSERVED,
+    }
+
+
+def apply_api_live_api_deferred(operations: list[dict[str, Any]]) -> None:
+    """Attach live_api_deferred only where no qualification exists yet."""
+
+    qualification = live_api_deferred_qualification()
+    for row in operations:
+        if row.get("qualification"):
+            continue
+        row["qualification"] = dict(qualification)
         row["live_tested"] = False
 
 
@@ -3170,6 +3211,7 @@ def build_api_manifest() -> dict[str, Any]:
         operations.extend(bulk_rows(resource))
     operations.extend(special_rows())
     apply_residual_clear_honesty(operations)
+    apply_api_live_api_deferred(operations)
     return {
         "manifest": "billy_api_v2_phase_0",
         "schema_version": 1,
@@ -8371,6 +8413,26 @@ def row_is_qualified(row: dict[str, Any], fields: tuple[str, ...]) -> bool:
     return all(row.get(field) is True for field in fields)
 
 
+def api_qualification_live_api(row: dict[str, Any]) -> str | None:
+    """Return the machine-readable live-API scope marker, if present."""
+
+    qualification = row.get("qualification")
+    if not isinstance(qualification, dict):
+        return None
+    live_api = qualification.get("live_api")
+    return live_api if isinstance(live_api, str) else None
+
+
+def api_row_is_qualified(row: dict[str, Any]) -> bool:
+    """API completeness: offline flags true, live_tested false, live_api set."""
+
+    return (
+        all(row.get(field) is True for field in API_QUALIFICATION_FIELDS)
+        and row.get("live_tested") is False
+        and api_qualification_live_api(row) == LIVE_API_OUT_OF_SCOPE
+    )
+
+
 def coverage_is_complete(api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]]) -> bool:
     """Derive a completeness claim from row evidence and unresolved bulk contracts."""
 
@@ -8378,7 +8440,7 @@ def coverage_is_complete(api_rows: list[dict[str, Any]], ui_rows: list[dict[str,
         bool(api_rows)
         and bool(ui_rows)
         and not any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows)
-        and all(row_is_qualified(row, API_QUALIFICATION_FIELDS) for row in api_rows)
+        and all(api_row_is_qualified(row) for row in api_rows)
         and all(row_is_qualified(row, UI_QUALIFICATION_FIELDS) for row in ui_rows)
     )
 

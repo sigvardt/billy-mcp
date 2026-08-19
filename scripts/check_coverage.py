@@ -19,8 +19,11 @@ from generate_coverage_report import (
     FILES_UPLOAD_REQUEST_FIELDS,
     FILES_UPLOAD_TOOL_NAME,
     INVOICE_FILTERS,
+    LIVE_API_OUT_OF_SCOPE,
     PAGING,
     UI_QUALIFICATION_FIELDS,
+    api_qualification_live_api,
+    api_row_is_qualified,
     build_api_manifest,
     build_status,
     coverage_is_complete,
@@ -105,7 +108,7 @@ def row_errors(rows: list[dict[str, Any]], lane: str) -> list[str]:
         seen_ids.add(row_id)
         if row["lane"] != lane:
             errors.append(f"{row_id}: lane must be {lane}")
-        for field in API_QUALIFICATION_FIELDS:
+        for field in (*API_QUALIFICATION_FIELDS, "live_tested"):
             if not isinstance(row[field], bool):
                 errors.append(f"{row_id}: {field} must be a boolean")
         if lane == "ui":
@@ -437,14 +440,30 @@ def require_complete_errors(
             f"--require-complete requires no ambiguous_bulk rows ({len(ambiguous_rows)} remain)"
         )
     incomplete_api = [
+        str(row.get("id", "<missing-id>")) for row in api_rows if not api_row_is_qualified(row)
+    ]
+    live_tested_true = [
+        str(row.get("id", "<missing-id>")) for row in api_rows if row.get("live_tested") is True
+    ]
+    missing_live_api = [
         str(row.get("id", "<missing-id>"))
         for row in api_rows
-        if not all(row.get(field) is True for field in API_QUALIFICATION_FIELDS)
+        if api_qualification_live_api(row) != LIVE_API_OUT_OF_SCOPE
     ]
+    if live_tested_true:
+        errors.append(
+            "--require-complete requires API live_tested must stay false "
+            f"({len(live_tested_true)} greened)"
+        )
+    if missing_live_api:
+        errors.append(
+            "--require-complete requires qualification.live_api=out_of_scope_by_user "
+            f"for every API row ({len(missing_live_api)} missing live_api)"
+        )
     if incomplete_api:
         errors.append(
-            "--require-complete requires discovered, implemented, contract_tested, and "
-            f"live_tested for every API row ({len(incomplete_api)} incomplete)"
+            "--require-complete requires discovered, implemented, and contract_tested "
+            f"for every API row ({len(incomplete_api)} incomplete)"
         )
     incomplete_ui = [
         str(row.get("id", "<missing-id>"))

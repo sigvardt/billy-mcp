@@ -64,6 +64,9 @@ Supports create/update (or bankPayments singular delete) is overridden by unauth
 
 `api.transactions.delete` and `api.invoiceReminderAssociations.delete` return unauth 200 meta-only for a missing id. That matches the docs' idempotent-delete narrative and is **not** cleanup proof.
 
+API live-test cells stay false with `live_api=out_of_scope_by_user`
+([[api_live_qualification_semantics]]). That is not this freeze.
+
 ## Completeness walls still open
 
 | Blocker | Rows |

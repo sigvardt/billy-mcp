@@ -71,13 +71,32 @@ sources:
   - radio:7C96E1C3
   - radio:58D7D0E1
   - radio:FE6FA4B1
+  - radio:7C9348E1
+  - radio:89DEED22
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T18:55:00Z
+updated: 2026-08-19T20:10:00Z
 ---
 
 ## Binding now
 
-`FE6FA4B1` (saved, P10, landed): residual five files and ledger
+`89DEED22` (saved, P9, current): after the `7C9348E1` landing,
+reconcile the official source lock test-first. Live ETag and
+hash differ from the lock. Intro route changed from
+`GET /v2/user/organizations` to `GET /v2/organizations`. Decide
+whether that changes an inventory row, a special route, or only
+prose. Update fingerprint and affected evidence only if the
+captured official document is stable. Then the 121 offline API
+blockers. Never infer bulk schemas. No live API.
+
+`7C9348E1` (saved, P10, landed): API `live_tested` stays false
+with `qualification.live_api=out_of_scope_by_user` on every API
+row. Completeness is `discovered`, `implemented`, and
+`contract_tested`. Do not classify the API operation itself
+`kind=out_of_scope_by_user`. Do not green `live_tested`. Live
+API tests stay forbidden. Docs lock reconcile moved to
+`89DEED22`.
+
+`FE6FA4B1` (unsaved, P10, landed): residual five files and ledger
 writes are `out_of_scope_by_user`. Green flags stay false.
 `tools_allowed=false`. `not_applicable` rejected. No live write.
 No dump. Do not finish.
@@ -325,7 +344,7 @@ browser. Do not escalate to Joakim.
 
 `96908DC6` (saved): complete UI writes and finish the MCP. Interface first. API live testing still deferred. Supersedes `9FD3042F` (read/open-only) and `3F11A9DF` (stop until explicit start).
 
-`728BD2E4` (saved): no API-doc detour. Record the new docs fingerprint only. PLAN starts with the failing coverage test, then splits Grok-only children by independent UI write family. No HOLD. No BrowserRuntime-only qualification.
+`728BD2E4` (unsaved, superseded for this slice by `7C9348E1`): no API-doc detour while UI writes were the gap. Live API still deferred. Offline API semantics and official-docs comparison are now in force under `7C9348E1`. No HOLD. No BrowserRuntime-only qualification.
 
 `E004E7D5` (saved): minimum failing-gate set is the 16 false-green parity rows (bills CUD, contacts CUD, daybooks create/delete, daybookTransactions create, files create, invoices CUD, organizations update, products create, transactions create). Still catch any other write row wrongly treated as complete.
 
@@ -375,7 +394,7 @@ Structure compare (done, closed on `8feb636`): Kunde `pickerfield` versus bills 
 
 `A337A622` (saved, P10): stop product archive and list-shell enumeration. `/products` and Lagermodul `/inventory` both have named filter counts 0. Independent review failed the Lagermodul helper as a redundant permanent diagnostic. Drop the helper. Keep the wiki fact. Do not persist. Do not remap. Do not treat archive as restored state without an answer to `67CBACB6`. Record product create `UI_CHANGED` / fail-closed. No more product list, dialog, or archive probes unless new read-only evidence names a different normal cleanup control.
 
-`D68E402A` (saved, P10): stop read-only classify churn on ledger and files. Do not commit another helper or dump unless it enables a safe write or fixes a production bug. Residual table is in `wiki/ui_write_residual_table.md`. `EC676F84` makes invoice draft CUD actionable after a tagged customer. Product, daybook, and files still wait. Stay red. Keep the root active.
+`D68E402A` (unsaved, P10, landed): stop read-only classify churn on ledger and files. Do not commit another helper or dump unless it enables a safe write or fixes a production bug. Residual table is in `wiki/ui_write_residual_table.md`. Residual five are now `FE6FA4B1`. Stay red. Keep the root active.
 
 `67CBACB6` (superseded as a stop, not unsaved as a dump ban): live official product dialog proved **Gem produkt** and **Arkiveret (skjul fra lister)**. Archive-list dumps still have named filter counts 0. `56354201` now names the unique cleanup path (row `delete-icon` + **Ja, slet**). Do not remake the form-contract or archive-list dumps. Do not wait on an archive-as-restore answer.
 

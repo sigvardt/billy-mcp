@@ -25,6 +25,15 @@
       "method_or_route": "GET /v2/accountGroups/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -80,6 +89,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -122,6 +140,15 @@
       "method_or_route": "POST /v2/accountGroups",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "accountGroup"
       ],
@@ -160,6 +187,15 @@
       "method_or_route": "PUT /v2/accountGroups/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "accountGroup"
@@ -199,6 +235,15 @@
       "method_or_route": "DELETE /v2/accountGroups/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -327,6 +372,15 @@
       "method_or_route": "GET /v2/accountNatures/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -381,6 +435,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -607,6 +670,15 @@
       "method_or_route": "GET /v2/accounts/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -662,6 +734,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -704,6 +785,15 @@
       "method_or_route": "POST /v2/accounts",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "account"
       ],
@@ -742,6 +832,15 @@
       "method_or_route": "PUT /v2/accounts/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "account"
@@ -781,6 +880,15 @@
       "method_or_route": "DELETE /v2/accounts/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -909,6 +1017,15 @@
       "method_or_route": "GET /v2/attachments/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -964,6 +1081,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -1006,6 +1132,15 @@
       "method_or_route": "POST /v2/attachments",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "attachment"
       ],
@@ -1045,6 +1180,15 @@
       "method_or_route": "PUT /v2/attachments/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "attachment"
@@ -1085,6 +1229,15 @@
       "method_or_route": "DELETE /v2/attachments/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -1214,6 +1367,15 @@
       "method_or_route": "GET /v2/balanceModifiers/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -1268,6 +1430,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -1494,6 +1665,15 @@
       "method_or_route": "GET /v2/bankLineMatches/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -1549,6 +1729,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -1591,6 +1780,15 @@
       "method_or_route": "POST /v2/bankLineMatches",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "bankLineMatch"
       ],
@@ -1630,6 +1828,15 @@
       "method_or_route": "PUT /v2/bankLineMatches/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "bankLineMatch"
@@ -1670,6 +1877,15 @@
       "method_or_route": "DELETE /v2/bankLineMatches/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -1799,6 +2015,15 @@
       "method_or_route": "GET /v2/bankLines/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -1854,6 +2079,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -1896,6 +2130,15 @@
       "method_or_route": "POST /v2/bankLines",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "bankLine"
       ],
@@ -1935,6 +2178,15 @@
       "method_or_route": "PUT /v2/bankLines/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "bankLine"
@@ -1975,6 +2227,15 @@
       "method_or_route": "DELETE /v2/bankLines/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -2104,6 +2365,15 @@
       "method_or_route": "GET /v2/bankLineSubjectAssociations/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -2159,6 +2429,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -2201,6 +2480,15 @@
       "method_or_route": "POST /v2/bankLineSubjectAssociations",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "bankLineSubjectAssociation"
       ],
@@ -2240,6 +2528,15 @@
       "method_or_route": "PUT /v2/bankLineSubjectAssociations/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "bankLineSubjectAssociation"
@@ -2280,6 +2577,15 @@
       "method_or_route": "DELETE /v2/bankLineSubjectAssociations/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -2409,6 +2715,15 @@
       "method_or_route": "GET /v2/bankPayments/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -2464,6 +2779,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -2506,6 +2830,15 @@
       "method_or_route": "POST /v2/bankPayments",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "bankPayment"
       ],
@@ -2544,6 +2877,15 @@
       "method_or_route": "PUT /v2/bankPayments/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "bankPayment"
@@ -2719,6 +3061,15 @@
       "method_or_route": "GET /v2/billLines/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -2774,6 +3125,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -2816,6 +3176,15 @@
       "method_or_route": "POST /v2/billLines",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "billLine"
       ],
@@ -2854,6 +3223,15 @@
       "method_or_route": "PUT /v2/billLines/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "billLine"
@@ -2893,6 +3271,15 @@
       "method_or_route": "DELETE /v2/billLines/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -3021,6 +3408,15 @@
       "method_or_route": "GET /v2/bills/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -3120,6 +3516,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -3177,6 +3582,15 @@
       "method_or_route": "POST /v2/bills",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "bill"
       ],
@@ -3215,6 +3629,15 @@
       "method_or_route": "PUT /v2/bills/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "bill"
@@ -3254,6 +3677,15 @@
       "method_or_route": "DELETE /v2/bills/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -3382,6 +3814,15 @@
       "method_or_route": "GET /v2/cities/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -3441,6 +3882,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -3668,6 +4118,15 @@
       "method_or_route": "GET /v2/contactBalancePayments/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -3723,6 +4182,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -3765,6 +4233,15 @@
       "method_or_route": "POST /v2/contactBalancePayments",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "contactBalancePayment"
       ],
@@ -3803,6 +4280,15 @@
       "method_or_route": "PUT /v2/contactBalancePayments/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "contactBalancePayment"
@@ -3932,6 +4418,15 @@
       "method_or_route": "GET /v2/contactBalancePostings/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -3986,6 +4481,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -4212,6 +4716,15 @@
       "method_or_route": "GET /v2/contactPersons/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -4267,6 +4780,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -4309,6 +4831,15 @@
       "method_or_route": "POST /v2/contactPersons",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "contactPerson"
       ],
@@ -4347,6 +4878,15 @@
       "method_or_route": "PUT /v2/contactPersons/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "contactPerson"
@@ -4386,6 +4926,15 @@
       "method_or_route": "DELETE /v2/contactPersons/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -4514,6 +5063,15 @@
       "method_or_route": "GET /v2/contacts/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -4569,6 +5127,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -4611,6 +5178,15 @@
       "method_or_route": "POST /v2/contacts",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "contact"
       ],
@@ -4649,6 +5225,15 @@
       "method_or_route": "PUT /v2/contacts/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "contact"
@@ -4688,6 +5273,15 @@
       "method_or_route": "DELETE /v2/contacts/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -4816,6 +5410,15 @@
       "method_or_route": "GET /v2/countryGroups/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -4870,6 +5473,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -5096,6 +5708,15 @@
       "method_or_route": "GET /v2/countries/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -5150,6 +5771,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -5376,6 +6006,15 @@
       "method_or_route": "GET /v2/currencies/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -5430,6 +6069,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -5656,6 +6304,15 @@
       "method_or_route": "GET /v2/daybookBalanceAccounts/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -5711,6 +6368,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -5753,6 +6419,15 @@
       "method_or_route": "POST /v2/daybookBalanceAccounts",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "daybookBalanceAccount"
       ],
@@ -5791,6 +6466,15 @@
       "method_or_route": "PUT /v2/daybookBalanceAccounts/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "daybookBalanceAccount"
@@ -5830,6 +6514,15 @@
       "method_or_route": "DELETE /v2/daybookBalanceAccounts/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -5958,6 +6651,15 @@
       "method_or_route": "GET /v2/daybooks/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -6013,6 +6715,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -6055,6 +6766,15 @@
       "method_or_route": "POST /v2/daybooks",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "daybook"
       ],
@@ -6093,6 +6813,15 @@
       "method_or_route": "PUT /v2/daybooks/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "daybook"
@@ -6132,6 +6861,15 @@
       "method_or_route": "DELETE /v2/daybooks/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -6260,6 +6998,15 @@
       "method_or_route": "GET /v2/daybookTransactionLines/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -6315,6 +7062,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -6357,6 +7113,15 @@
       "method_or_route": "POST /v2/daybookTransactionLines",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "daybookTransactionLine"
       ],
@@ -6395,6 +7160,15 @@
       "method_or_route": "PUT /v2/daybookTransactionLines/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "daybookTransactionLine"
@@ -6434,6 +7208,15 @@
       "method_or_route": "DELETE /v2/daybookTransactionLines/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -6562,6 +7345,15 @@
       "method_or_route": "GET /v2/daybookTransactions/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -6642,6 +7434,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -6691,6 +7492,15 @@
       "method_or_route": "POST /v2/daybookTransactions",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "daybookTransaction"
       ],
@@ -6729,6 +7539,15 @@
       "method_or_route": "PUT /v2/daybookTransactions/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "daybookTransaction"
@@ -6768,6 +7587,15 @@
       "method_or_route": "DELETE /v2/daybookTransactions/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -6896,6 +7724,15 @@
       "method_or_route": "GET /v2/files/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -6951,6 +7788,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -6994,6 +7840,15 @@
       "method_or_route": "POST /v2/files",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "file_bytes",
         "X-Access-Token",
@@ -7129,6 +7984,15 @@
       "method_or_route": "GET /v2/invoiceLateFees/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -7184,6 +8048,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -7226,6 +8099,15 @@
       "method_or_route": "POST /v2/invoiceLateFees",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceLateFee"
       ],
@@ -7264,6 +8146,15 @@
       "method_or_route": "PUT /v2/invoiceLateFees/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "invoiceLateFee"
@@ -7393,6 +8284,15 @@
       "method_or_route": "GET /v2/invoiceLines/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -7448,6 +8348,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -7490,6 +8399,15 @@
       "method_or_route": "POST /v2/invoiceLines",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceLine"
       ],
@@ -7528,6 +8446,15 @@
       "method_or_route": "PUT /v2/invoiceLines/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "invoiceLine"
@@ -7567,6 +8494,15 @@
       "method_or_route": "DELETE /v2/invoiceLines/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -7695,6 +8631,15 @@
       "method_or_route": "GET /v2/invoiceReminderAssociations/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -7749,6 +8694,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -8021,6 +8975,15 @@
       "method_or_route": "GET /v2/invoiceReminders/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -8076,6 +9039,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -8118,6 +9090,15 @@
       "method_or_route": "POST /v2/invoiceReminders",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceReminder"
       ],
@@ -8245,6 +9226,15 @@
       "method_or_route": "GET /v2/invoices/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -8369,6 +9359,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -8431,6 +9430,15 @@
       "method_or_route": "POST /v2/invoices",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoice"
       ],
@@ -8469,6 +9477,15 @@
       "method_or_route": "PUT /v2/invoices/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "invoice"
@@ -8508,6 +9525,15 @@
       "method_or_route": "DELETE /v2/invoices/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -8636,6 +9662,15 @@
       "method_or_route": "GET /v2/locales/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -8690,6 +9725,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -8916,6 +9960,15 @@
       "method_or_route": "GET /v2/organizations/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -8971,6 +10024,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -9013,6 +10075,15 @@
       "method_or_route": "POST /v2/organizations",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "organization"
       ],
@@ -9050,6 +10121,15 @@
       "method_or_route": "PUT /v2/organizations/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "organization"
@@ -9179,6 +10259,15 @@
       "method_or_route": "GET /v2/postings/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -9233,6 +10322,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -9459,6 +10557,15 @@
       "method_or_route": "GET /v2/productPrices/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -9514,6 +10621,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -9556,6 +10672,15 @@
       "method_or_route": "POST /v2/productPrices",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "productPrice"
       ],
@@ -9594,6 +10719,15 @@
       "method_or_route": "PUT /v2/productPrices/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "productPrice"
@@ -9633,6 +10767,15 @@
       "method_or_route": "DELETE /v2/productPrices/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -9761,6 +10904,15 @@
       "method_or_route": "GET /v2/products/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -9816,6 +10968,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -9858,6 +11019,15 @@
       "method_or_route": "POST /v2/products",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "product"
       ],
@@ -9896,6 +11066,15 @@
       "method_or_route": "PUT /v2/products/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "product"
@@ -9935,6 +11114,15 @@
       "method_or_route": "DELETE /v2/products/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -10063,6 +11251,15 @@
       "method_or_route": "GET /v2/salesTaxAccounts/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -10118,6 +11315,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -10160,6 +11366,15 @@
       "method_or_route": "POST /v2/salesTaxAccounts",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "salesTaxAccount"
       ],
@@ -10199,6 +11414,15 @@
       "method_or_route": "PUT /v2/salesTaxAccounts/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxAccount"
@@ -10239,6 +11463,15 @@
       "method_or_route": "DELETE /v2/salesTaxAccounts/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -10368,6 +11601,15 @@
       "method_or_route": "GET /v2/salesTaxMetaFields/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -10423,6 +11665,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -10465,6 +11716,15 @@
       "method_or_route": "POST /v2/salesTaxMetaFields",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "salesTaxMetaField"
       ],
@@ -10504,6 +11764,15 @@
       "method_or_route": "PUT /v2/salesTaxMetaFields/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxMetaField"
@@ -10544,6 +11813,15 @@
       "method_or_route": "DELETE /v2/salesTaxMetaFields/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -10673,6 +11951,15 @@
       "method_or_route": "GET /v2/salesTaxPayments/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -10728,6 +12015,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -10770,6 +12066,15 @@
       "method_or_route": "POST /v2/salesTaxPayments",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "salesTaxPayment"
       ],
@@ -10808,6 +12113,15 @@
       "method_or_route": "PUT /v2/salesTaxPayments/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxPayment"
@@ -10937,6 +12251,15 @@
       "method_or_route": "GET /v2/salesTaxReturns/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -10992,6 +12315,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -11034,6 +12366,15 @@
       "method_or_route": "PUT /v2/salesTaxReturns/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxReturn"
@@ -11163,6 +12504,15 @@
       "method_or_route": "GET /v2/salesTaxRules/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -11218,6 +12568,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -11260,6 +12619,15 @@
       "method_or_route": "POST /v2/salesTaxRules",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "salesTaxRule"
       ],
@@ -11299,6 +12667,15 @@
       "method_or_route": "PUT /v2/salesTaxRules/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxRule"
@@ -11339,6 +12716,15 @@
       "method_or_route": "DELETE /v2/salesTaxRules/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -11468,6 +12854,15 @@
       "method_or_route": "GET /v2/salesTaxRulesets/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -11523,6 +12918,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -11565,6 +12969,15 @@
       "method_or_route": "POST /v2/salesTaxRulesets",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "salesTaxRuleset"
       ],
@@ -11604,6 +13017,15 @@
       "method_or_route": "PUT /v2/salesTaxRulesets/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "salesTaxRuleset"
@@ -11644,6 +13066,15 @@
       "method_or_route": "DELETE /v2/salesTaxRulesets/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -11773,6 +13204,15 @@
       "method_or_route": "GET /v2/states/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -11832,6 +13272,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -12059,6 +13508,15 @@
       "method_or_route": "GET /v2/taxRateDeductionComponents/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -12114,6 +13572,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -12156,6 +13623,15 @@
       "method_or_route": "POST /v2/taxRateDeductionComponents",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "taxRateDeductionComponent"
       ],
@@ -12194,6 +13670,15 @@
       "method_or_route": "PUT /v2/taxRateDeductionComponents/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "taxRateDeductionComponent"
@@ -12233,6 +13718,15 @@
       "method_or_route": "DELETE /v2/taxRateDeductionComponents/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -12361,6 +13855,15 @@
       "method_or_route": "GET /v2/taxRates/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -12416,6 +13919,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -12458,6 +13970,15 @@
       "method_or_route": "POST /v2/taxRates",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "taxRate"
       ],
@@ -12496,6 +14017,15 @@
       "method_or_route": "PUT /v2/taxRates/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "taxRate"
@@ -12535,6 +14065,15 @@
       "method_or_route": "DELETE /v2/taxRates/:id",
       "operation": "delete",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id"
       ],
@@ -12663,6 +14202,15 @@
       "method_or_route": "GET /v2/transactions/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -12717,6 +14265,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -12989,6 +14546,15 @@
       "method_or_route": "GET /v2/users/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -13044,6 +14610,15 @@
           "meta.paging.lastUrl"
         ]
       },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "page",
         "pageSize",
@@ -13086,6 +14661,15 @@
       "method_or_route": "PUT /v2/users/:id",
       "operation": "update",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "user"
@@ -13215,6 +14799,15 @@
       "method_or_route": "GET /v2/zipcodes/:id",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "id",
         "include"
@@ -13274,6 +14867,15 @@
           "meta.paging.nextUrl",
           "meta.paging.lastUrl"
         ]
+      },
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "page",
@@ -13501,6 +15103,15 @@
       "method_or_route": "POST /v2/files",
       "operation": "upload",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "file_bytes",
         "X-Access-Token",
@@ -13546,6 +15157,15 @@
       "method_or_route": "POST /v2/invoices/:invoiceId/emails",
       "operation": "send_email",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceId",
         "email.contactPersonId",
@@ -13587,6 +15207,15 @@
       "method_or_route": "POST /v2/invoiceDeliveries",
       "operation": "create",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceDelivery.invoiceId",
         "invoiceDelivery.organizationId",
@@ -13636,6 +15265,15 @@
       "method_or_route": "GET /v2/invoiceLogs",
       "operation": "list",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [
         "invoiceId",
         "organizationId",
@@ -13676,6 +15314,15 @@
       "method_or_route": "GET /v2/user",
       "operation": "get",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [],
       "response_fields": [
         "user"
@@ -13711,6 +15358,15 @@
       "method_or_route": "GET /v2/user/organizations",
       "operation": "list",
       "pagination": null,
+      "qualification": {
+        "docs_etag": "wcw4x9hqvu3603",
+        "docs_etag_observed": "tmhc6wpdc835zt",
+        "docs_md5": "8b94b0135c91fd15fe54ea33e088a4be",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
+        "live_api": "out_of_scope_by_user",
+        "scope_code": "LIVE_API_OWNER_SKIP"
+      },
       "request_fields": [],
       "response_fields": [
         "organizations[]"

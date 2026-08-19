@@ -49,20 +49,40 @@ sources:
   - radio:94A4C844
   - radio:A41C242F
   - radio:58D7D0E1
+  - radio:7C9348E1
+  - radio:FE6FA4B1
+  - radio:89DEED22
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T18:55:00Z
+updated: 2026-08-19T20:10:00Z
 ---
 
 ## Now
+
+Binding `7C9348E1` is landed. Independent review PASS. All 305
+API rows have `live_tested=false` and
+`qualification.live_api=out_of_scope_by_user`. The 184
+implemented rows are `kind=live_api_deferred`. Completeness no
+longer requires API `live_tested=true`. `complete` stays false
+on bulk92. Do not finish.
+
+Next binding `89DEED22`: test-first official lock reconcile.
+Live page ETag `tmhc6wpdc835zt` / MD5
+`053f755f52e3926b028e29325e3670d4` vs lock `wcw4x9hqvu3603` /
+`8b94b0135c91fd15fe54ea33e088a4be`. Exact docs delta is two
+intro sentences: `GET /v2/user/organizations` became
+`GET /v2/organizations`. Decide if that changes a special row
+or is prose only. Update the fingerprint only if the captured
+page is stable. Then the 121 offline blockers. No live API.
+Do not drop `api_user_list_organizations` in this landing.
 
 Binding `FE6FA4B1` is landed. Independent review PASS. Godkend
 cite is only on the posting rows. Contacts C/U/D, bills C/U/D,
 organizations update, invoices C/U/D, and products create are
 `preview_execute` with the three flags true. The five residual
 files and ledger writes are `out_of_scope_by_user` with flags
-false. `complete` is false on bulk92. Do not finish. Do not remake
-dumps or live CUD. Do not edit `coverage/status.json` by hand.
-Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
+false. `complete` is false on bulk92. Do not remake dumps or live
+CUD. Do not edit `coverage/status.json` by hand. Owner `96908DC6`
+still binds the overall finish. API live stays deferred.
 Product delete watches one `DELETE /v2/products/:id` 2xx before
 settled `/products` row-absence (`A0633A17`). Invoice confirm is
 exact **Ja, slet faktura**. Owner `D71E5B82`: leftover reverse-clean

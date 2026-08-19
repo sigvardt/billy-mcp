@@ -164,10 +164,17 @@ def _records_from(raw: object, key: str) -> object:
 
 def _is_green(row: CoverageRow) -> bool:
     status = row.status
+    if row.lane == "api":
+        return (
+            status.discovered
+            and status.implemented
+            and status.contract_tested
+            and status.live_tested is False
+        )
     return (
         status.discovered
         and status.implemented
         and status.contract_tested
         and status.live_tested
-        and (row.lane == "api" or status.vision_verified is True)
+        and status.vision_verified is True
     )
