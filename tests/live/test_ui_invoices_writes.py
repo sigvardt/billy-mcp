@@ -304,6 +304,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
     monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
     monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
     frame_dir = owner_only_frame_dir()
+    monkeypatch.setenv("BILLY_VISION_FRAME_DIR", str(frame_dir))
     server: FastMCP | None = None
     extra: BrowserRuntime | None = None
     slug = ""
@@ -322,6 +323,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         )
         extra = observer
         await _ready_session(observer, slug)
+        await _capture(observer, slug, frame_dir / "01_before.png", "")
         contact_preview = await _call(
             server,
             "ui_clients_create_preview",
@@ -370,9 +372,11 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             _record_blocker(f"invoice create failed: {invoice_created}")
             pytest.fail(f"invoice create failed: {invoice_created}")
         assert invoice_created["submitted"] is True
+        assert (frame_dir / "02_before_submit.png").is_file()
         if not await _list_has_name(observer, slug, "invoices", contact, allow_search=False):
             _record_blocker(f"created draft {contact} is not on /invoices")
             pytest.fail(f"created draft {contact} is not on /invoices")
+        await _capture(observer, slug, frame_dir / "03_after_create.png", contact)
         preview_update = await _call(
             server,
             "ui_invoices_update_preview",
@@ -394,7 +398,6 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             _record_blocker(f"update execute failed: {updated_result}")
             pytest.fail(f"update execute failed: {updated_result}")
         assert updated_result["submitted"] is True
-        await _capture(observer, slug, frame_dir / "03_after_update.png", contact)
         readback_profile = _temp_profile()
         readback = BrowserRuntime(
             readback_profile,
@@ -409,6 +412,7 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             pytest.fail("fresh Enhedspris is not 2,00 after update")
         await readback.close()
         extra = observer
+        await _capture(observer, slug, frame_dir / "04_after_update.png", contact)
         preview = await _call(
             server,
             "ui_invoices_delete_preview",
@@ -457,6 +461,12 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
             f"contact {contact}",
         )
         assert await _list_has_name(cleanup, slug, "clients", contact) is False
+        await _capture(cleanup, slug, frame_dir / "05_after_delete.png", "")
+        assert (frame_dir / "01_before.png").is_file()
+        assert (frame_dir / "02_before_submit.png").is_file()
+        assert (frame_dir / "03_after_create.png").is_file()
+        assert (frame_dir / "04_after_update.png").is_file()
+        assert (frame_dir / "05_after_delete.png").is_file()
 
         write_vision_record(
             _VISION_RECORD,

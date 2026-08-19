@@ -38,8 +38,12 @@ sources:
   - radio:4EAEAFFD
   - radio:E8EA9823
   - radio:D2FD1919
+  - radio:A6A2B60C
+  - radio:31BAF1FF
+  - radio:D71E5B82
+  - radio:A0633A17
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T07:10:00Z
+updated: 2026-08-19T10:33:00Z
 ---
 
 ## Now
@@ -53,36 +57,25 @@ own customer, product, and draft, proves **Enhedspris** `2,00`, then
 deletes that triple. It does not depend on `LEFTOVER_*` names.
 Honesty-16 stay red. Do not finish.
 No children are running. Seven write children stay completed and merged.
-`59A3A933` now binds leftover cleanup. A fresh `/invoices` page
-shows 6 real **Kladde** rows at 1,00 DKK. Persist is proved by
-the interface. Do not use a POST id as qualification proof.
+Owner `A6A2B60C` independently proved empty invoices, products,
+and contacts after reverse cleanup. Owner `31BAF1FF` proved the
+same empty lists after disposable self-contained CUD. Do not
+remake leftover reverse-clean. Do not map a delete-only test
+as invoice update.
 Update/delete tickets now require `contact_name`. Open is the
 list row, not a POST id. A browser PUT request is not persist
-(`B9C4FA7C`). Fresh session `DECEA79B` opened
-`MCP-UI-INV-6CDB396B` at `/invoices/03dvBZm9QHuYt8jGMM8TNw/edit`
-and **Enhedspris** is still 1,00. Update stays red.
+(`B9C4FA7C`).
 Invoice persist watch now records only responses that have a
 status. `persist_hit` requires a 2xx. Update execute types
 **Enhedspris** as `2,00`, prefers **Opdater**, and fails unless
 a second session reads that price. A request-only PUT or a
-POST fallback is not persist. Six leftover triples remain.
-Stay red.
-Exact pairs (customer tag / product tag): `6CDB396B/FB5F7474`,
-`F1784522/633E97EC`, `B05A4C85/86AB7365`, `A45B734E/B4A4DD5A`,
-`2B8A4FA2/26720BD4`, `DD4158B1/05C906D9`. Full names are
-`MCP-UI-INV-*` and `MCP-UI-PRD-*`. Row open: get the exact
-visible customer text, scope to ancestor `li[role=row]`,
-normal click. `MCP-UI-INV-6CDB396B` opened
-`/invoices/03dvBZm9QHuYt8jGMM8TNw/edit` with that customer,
-product `MCP-UI-PRD-FB5F7474`, quantity 1, unit price 1,00.
-**Mere** exposes normal **Slet**. Products and clients lists
-hold the matching 6 tags. Next: one FastMCP update, then
-delete all 6 drafts, all 6 products, all 6 customers in
-reverse dependency order. Fresh session must prove no drafts,
-products, or contacts. No owner input.
-`7BA75272` earlier proved **Ingen produkter** after leftover
-product cleanup. That empty list is now stale: the failed
-invoice execute recreated 6 products with the 6 drafts.
+POST fallback is not persist.
+Owner `A342BBDC`: create execute now captures
+`02_before_submit.png` after fill and before **Gem som kladde**,
+then proves customer, product, description, and unit price.
+Live CUD passed (`run_id=60b6d620772644f3bca9609c8ae53846`) with
+`pending_review`. Independent review of that frame is still
+required. Stay red.
 `9310BC17` still binds: Kunde shows an existing customer on a
 fresh `/invoices/new` after the customer exists. Official docs
 ETag in `coverage/status.json` is `wcw4x9hqvu3603`; do not re-lock. Live FastMCP:

@@ -1,6 +1,6 @@
 ---
 name: ui_write_residual_table
-desc: Residual honesty-16 UI write table. Product hard-delete is owner-proved. FastMCP product CUD is next.
+desc: Residual honesty-16 UI write table. Invoice CUD and product DELETE watch are live-proved and independently empty. Stay red until accept.
 tags: [billy, ui, writes, residual, honesty]
 sources:
   - radio:96908DC6
@@ -14,6 +14,10 @@ sources:
   - radio:9310BC17
   - radio:1F1B34F8
   - radio:802D71CF
+  - radio:A6A2B60C
+  - radio:31BAF1FF
+  - radio:D71E5B82
+  - radio:A0633A17
   - wiki/ui_write_ticket_protocol.md
   - wiki/ui_contacts_writes.md
   - wiki/ui_bills_writes.md
@@ -23,7 +27,7 @@ sources:
   - wiki/ui_files_writes.md
   - wiki/ui_ledger_writes.md
 created: 2026-08-18T14:30:00Z
-updated: 2026-08-18T22:40:00Z
+updated: 2026-08-19T10:33:00Z
 ---
 
 # ui_write_residual_table
@@ -40,9 +44,11 @@ FastMCP. Owner fact-check `9310BC17` is applied: a new
 `/invoices/new` plus `[data-cy='dropdown-icon']` binds an existing
 customer (`vendor_bind=scoped:existing_option`, GET with
 `contactId`). Invoice Kunde is not `interface_control_absent`.
-Create preview now requires `unit_price > 0`. Six leftover priced
-drafts persist. Update and delete open the exact `li[role=row]`.
-Do not use a POST id as persist proof.
+Create preview now requires `unit_price > 0`. Owner `A6A2B60C`
+and `31BAF1FF` independently proved empty invoices, products,
+and contacts after reverse cleanup and after disposable CUD.
+Update and delete open the exact `li[role=row]`. Do not use a
+POST id as persist proof. Do not remake leftover reverse-clean.
 
 Owner `56354201` proves product create and hard-delete in the
 normal UI: **Opret produkt**, **Enhedspris**=1, visible on a
@@ -50,10 +56,10 @@ fresh `/invoices/new` **Vælg produkt**, then row
 `data-cy=delete-icon` and **Ja, slet**. Products list returned
 to **Ingen produkter**. Do not treat product as
 `interface_control_absent` or archive-only. Do not stop on
-`67CBACB6`. Next is FastMCP product create/delete, then invoice
-draft CUD with that disposable product. Do not remake picker,
-archive, or Kunde dumps. Do not ask the owner to inspect
-routine UI.
+`67CBACB6`. FastMCP product create/delete and self-contained
+invoice CUD already ran. Stay red until independent accept
+and purge. Do not remake picker, archive, leftover, or Kunde
+dumps. Do not ask the owner to inspect routine UI.
 
 `FD39FFE7` still makes invoice draft CUD and product create mandatory
 and red. They are not finished as `UI_CHANGED`.
@@ -76,9 +82,9 @@ and red. They are not finished as `UI_CHANGED`.
 | `ui.parity.bills.update` | `ui_bills_update_preview` | `ui_bills_update_{preview,execute}` | Draft edit + draft save | Independent read-back. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.bills.delete` | `ui_bills_delete_preview` | `ui_bills_delete_{preview,execute}` | Delete chrome + confirm | Reverse cleanup. Same vision | `already_live_proved_honesty_red` |
 | `ui.parity.organizations.update` | `ui_organizations_update_preview` | `ui_organizations_update_{preview,execute}` | Company phone field + **Gem** | Tagged set then exact empty restore. Vision `0937a009bf7e496ca2ce15a8af313868` accept, purged | `already_live_proved_honesty_red` |
-| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist. Coverage still names `*_open` | Seven leftover **Kladde** rows (`01FCBA13`). Stay red until independent accept | Reverse-clean invoices, products, customers | `owner_proved_pending_fastmcp` |
-| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00` on a disposable draft the CUD test creates. Owner `D71E5B82` forbids leftover-only mapping | Independent read-back. Honesty still red | `owner_proved_pending_fastmcp` |
-| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | FastMCP reverse-clean of the seven `01FCBA13` triples ran. Stay red until independent accept. Do not claim clean-org | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.create` | `ui_invoices_create_open` | `ui_invoices_create_{preview,execute}` exist. Coverage still names `*_open` | Self-contained FastMCP CUD. Pre-submit `02_before_submit.png` before **Gem som kladde** (`A342BBDC`). Stay red until independent accept | Reverse-clean invoice, product, customer. No leftover names | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.update` | `ui_invoices_update_open` | `ui_invoices_update_{preview,execute}` | Fresh page. Exact **Enhedspris** fill `2,00` on a disposable draft the CUD test creates. Four write frames. Owner `D71E5B82` forbids leftover-only mapping | Independent read-back. Honesty still red | `owner_proved_pending_fastmcp` |
+| `ui.parity.invoices.delete` | `ui_invoices_delete_open` | `ui_invoices_delete_{preview,execute}` | Unique **Mere**, `A` **Slet**, dump, exact **Ja, slet faktura** | Owner independently empty after reverse cleanup and after disposable CUD. Stay red until independent accept | `owner_proved_pending_fastmcp` |
 | `ui.parity.products.create` | `ui_products_create_open` | `ui_products_create_{preview,execute}` and `ui_products_delete_{preview,execute}` | Live FastMCP create persist is proved on unfiltered visible `/products`. Delete scopes to tagged `data-cy=table-item` then row `delete-icon` and **Ja, slet**, then one `DELETE /v2/products/:id` 2xx | Reverse-clean used singular DELETE 2xx then settled `/products` row absence. Stay red until independent accept and purge | `owner_proved_pending_fastmcp` |
 | `ui.parity.files.create` | `ui_uploads_list` | `ui_files_create_{preview,execute}` | **Upload filer** + `input[type=file]` | Bilag **Slet** 0 dual. No singular file DELETE | `interface_control_absent_UI_CHANGED` |
 | `ui.parity.daybooks.create` | `ui_daybooks_open` | `ui_daybooks_create_{preview,execute}` | Both persist counts are 1. `name_input_count=0`. `unique_persist_token=none` | **Mere** then menu **Slet**. No tagged journal | `interface_control_absent_UI_CHANGED` |
@@ -92,14 +98,16 @@ Family contracts: [[ui_contacts_writes]], [[ui_bills_writes]],
 
 ## Owner questions
 
-1. Invoice (`9310BC17` / `1F1B34F8` / `56354201`): Kunde and
-   **Enhedspris** work. Create ticket now requires `product_name`.
-   Live FastMCP CUD is the remaining proof. Do not ask the owner
-   to inspect routine UI.
-2. Product (`56354201`): hard-delete is owner-proved. Do not
-   remake archive or dialog dumps (`A337A622`). Implement
-   FastMCP create/delete. Do not treat archive-only as the
-   cleanup path.
+1. Invoice (`9310BC17` / `1F1B34F8` / `56354201` / `A6A2B60C` /
+   `31BAF1FF`): Kunde and **Enhedspris** work. Self-contained
+   FastMCP CUD restored empty lists. Remaining work is
+   independent accept plus purge. Do not ask the owner to
+   inspect routine UI.
+2. Product (`56354201` / `A0633A17`): hard-delete is
+   owner-proved. FastMCP create/delete watches singular
+   `DELETE /v2/products/:id` 2xx. Do not remake archive or
+   dialog dumps (`A337A622`). Do not treat archive-only as
+   the cleanup path.
 3. Daybook: accept `UI_CHANGED`, or name the persist token. Do not arm
    `_ledger_write`.
 4. Files: accept fail-closed (no UI delete), or name a delete control

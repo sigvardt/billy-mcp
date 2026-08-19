@@ -60,33 +60,61 @@ sources:
   - radio:A0633A17
   - radio:3377FB3C
   - radio:01FCBA13
+  - radio:A6A2B60C
+  - radio:31BAF1FF
+  - radio:D71E5B82
+  - radio:A342BBDC
+  - radio:94DD65CB
+  - radio:48ABEEB7
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T08:14:00Z
+updated: 2026-08-19T11:22:00Z
 ---
 
 ## Binding now
 
-`D71E5B82` (saved, P10): leftover reverse-clean may be a one-off.
-Do not commit a delete-only live test as invoice update
-qualification. Preserve `ui_invoices_update_preview` / execute
-and independent **Enhedspris** `2,00`. After settled zero,
-`ui-full` must pass with no `LEFTOVER_*` hard-fail.
+`48ABEEB7` (saved, P10): pre-submit screenshot path must be the
+owner-only `vision-tmp/run-*` directory. Do not write
+`Path(BILLY_VISION_FRAME_DIR)` from production. Gate with
+`allowed_vision_frame_dir`.
 
-`01FCBA13` (saved, P10): settled `/invoices` still has 7 **Kladde**
-rows. Pairs: `47BFE4A3/C0082FCA`, `9FDD7B04/2A0968A4`,
-`8DA1053F/773A4D76`, `05D2C589/0116A3D1`,
-`A9152C51/9A032275`, `2574A9D2/22679129`,
-`2AB12C2E/2647389E`. Reverse-clean invoices first, then
-products, then customers. Do not commit clean-org.
+`A342BBDC` (saved, P10): design requires completed fields
+immediately before submit. Four list frames miss the filled
+create form before **Gem som kladde**. Do not accept that set.
+Failing gate next. Capture filled customer, product,
+description, quantity, and positive unit price immediately
+before submit, then success/result, update proof, and restored
+state. More than four frames is fine. Keep
+`pending_review` until a valid independent accept.
 
-`3377FB3C` (saved, P10): settled `/products` still has 7 tagged
-rows. Same seven `MCP-UI-PRD-*` tags as `01FCBA13`. Earlier
-empty-list read-back was unsettled.
+`94DD65CB` (saved, P10): org independently empty after this
+live CUD. `A342BBDC` still binds.
 
-`A0633A17` (saved, P10): product delete must watch one
+`A6A2B60C` (done, unsaved, P10): reverse cleanup is independently
+empty. Settled fresh `/invoices`, `/products`, `/clients` show
+**Ingen fakturaer**, **Ingen produkter**, **Ingen kontakter**.
+No `MCP-UI-INV-*` or `MCP-UI-PRD-*`. Do not remake leftover
+reverse-clean.
+
+`31BAF1FF` (done, unsaved, P10): disposable self-contained
+invoice CUD restored the same empty lists. Keep that CUD
+rerunnable. Do not hard-fail on leftover names.
+
+`D71E5B82` (in force, unsaved, P10): leftover reverse-clean may
+be a one-off. Do not commit a delete-only live test as invoice
+update qualification. Preserve `ui_invoices_update_preview` /
+execute and independent **Enhedspris** `2,00`. After settled
+zero, `ui-full` must pass with no `LEFTOVER_*` hard-fail.
+
+`01FCBA13` (done, unsaved, P10): the seven leftover **Kladde**
+triples are gone (`A6A2B60C`). Do not rebuild that list.
+
+`3377FB3C` (done, unsaved, P10): the seven leftover products
+are gone (`A6A2B60C`). Do not rebuild that list.
+
+`A0633A17` (done, unsaved, P10): product delete watches one
 `DELETE /v2/products/:id` 2xx before a fresh settled
 `/products` row-absence. No blind retry. Fail closed if no
-DELETE or non-2xx.
+DELETE or non-2xx. Landed on `657cef5`.
 
 `D2FD1919` (saved, P10): leftover edit Mere then Slet shows heading
 **Bekræft**, text **Vil du slette denne kladdefaktura?**, button

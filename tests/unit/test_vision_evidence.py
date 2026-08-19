@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from billy_mcp.vision_evidence import (
+    allowed_vision_frame_dir,
     is_outside_repository,
     mark_purge_verified,
     owner_only_frame_dir,
@@ -14,6 +15,39 @@ from billy_mcp.vision_evidence import (
     write_live_pending_unless_accepted,
     write_vision_record,
 )
+
+
+def test_allowed_vision_frame_dir_rejects_caller_paths(tmp_path: Path) -> None:
+    """Owner 48ABEEB7: production must not write screenshots to a caller path."""
+
+    evil = tmp_path / "evil"
+    evil.mkdir()
+    (evil / "run-not-under-root").mkdir()
+    assert allowed_vision_frame_dir("") is None
+    assert allowed_vision_frame_dir(str(evil)) is None
+    assert allowed_vision_frame_dir(str(tmp_path)) is None
+    assert allowed_vision_frame_dir("/tmp") is None
+    root = tmp_path / "vision-tmp"
+    root.mkdir()
+    assert allowed_vision_frame_dir(str(root), base=root) is None
+    nested = root / "other"
+    nested.mkdir()
+    assert allowed_vision_frame_dir(str(nested), base=root) is None
+
+
+def test_allowed_vision_frame_dir_accepts_owner_run_dir(tmp_path: Path) -> None:
+    frames = owner_only_frame_dir(base=tmp_path / "vision-tmp")
+    assert allowed_vision_frame_dir(str(frames), base=tmp_path / "vision-tmp") == frames.resolve()
+
+
+def test_invoice_create_gates_vision_frame_dir() -> None:
+    """Owner 48ABEEB7: _create_draft must not write Path(env) without the allow gate."""
+
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    create = form[form.index("async def _create_draft") : form.index("async def _update_draft")]
+    assert "allowed_vision_frame_dir" in create
+    assert "BILLY_VISION_FRAME_DIR" in create
+    assert 'Path(dest) / "02_before_submit.png"' in create
 
 
 def test_write_vision_record_has_no_frame_bytes(tmp_path: Path) -> None:

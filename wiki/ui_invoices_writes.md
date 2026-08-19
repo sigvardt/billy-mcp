@@ -11,7 +11,7 @@ sources:
   - radio:B9C4FA7C
   - radio:DECEA79B
 created: 2026-08-16T14:30:00Z
-updated: 2026-08-19T04:10:00Z
+updated: 2026-08-19T10:55:00Z
 ---
 
 # UI invoice ticketed draft writes
@@ -24,6 +24,15 @@ through `register_ui_invoice_write_tools`. Shared ticket rules live in
 Preview performs no Billy mutation. Execute accepts only `confirmation_ticket`.
 The UI lane never calls `https://api.billysbilling.com/v2` with an API token.
 Qualification is FastMCP `call_tool`, not `BrowserRuntime` as pass proof.
+
+Live CUD captures `01_before.png`, filled-form
+`02_before_submit.png` immediately before **Gem som kladde**,
+`03_after_create.png`, `04_after_update.png` after **Enhedspris**
+`2,00`, and `05_after_delete.png`. Create execute asserts
+customer, product, description, and unit price in the DOM
+before submit (`A342BBDC`). Vision stays
+`author=live_test` / `pending_review` until independent accept.
+Honesty-16 stay red.
 
 ## Tools
 

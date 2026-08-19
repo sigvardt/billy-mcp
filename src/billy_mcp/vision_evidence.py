@@ -47,6 +47,26 @@ def owner_only_frame_dir(base: Path | None = None) -> Path:
     return destination
 
 
+def allowed_vision_frame_dir(raw: str, *, base: Path | None = None) -> Path | None:
+    """Allow screenshot writes only under owner-only vision-tmp/run-* directories."""
+
+    text = raw.strip()
+    if not text:
+        return None
+    root = (base or (Path.home() / ".local" / "share" / "billy-mcp" / "vision-tmp")).expanduser()
+    try:
+        dest = Path(text).expanduser().resolve()
+        root_resolved = root.resolve()
+        dest.relative_to(root_resolved)
+    except (OSError, RuntimeError, ValueError):
+        return None
+    if not dest.name.startswith("run-"):
+        return None
+    if not dest.is_dir():
+        return None
+    return dest
+
+
 def write_live_pending_unless_accepted(
     destination: Path,
     *,

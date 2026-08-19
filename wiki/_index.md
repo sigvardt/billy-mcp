@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-18T17:50:46Z
+updated: 2026-08-19T10:38:47Z
 ---
 
 # billy_mcp
@@ -197,7 +197,7 @@ updated: 2026-08-18T17:50:46Z
 
 [[ui_vat_declarations_list_shell|ui_vat_declarations_list_shell]]: Read-only Billy VAT declarations (Momsangivelser) list shell; dual-counts salesTaxReturns.list.
 
-[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table. Product hard-delete is owner-proved. FastMCP product CUD is next.
+[[ui_write_residual_table|ui_write_residual_table]]: Residual honesty-16 UI write table. Invoice CUD and product DELETE watch are live-proved and independently empty. Stay red until accept.
 
 [[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
 

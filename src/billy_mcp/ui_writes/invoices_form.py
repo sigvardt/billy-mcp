@@ -3,13 +3,20 @@
 from __future__ import annotations
 
 import asyncio
+import os
 from pathlib import Path
 from typing import cast
 from urllib.parse import urlsplit
 
 from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.invoices_form_bind import bind_kunde, fill_priced_line
+from billy_mcp.ui_writes.invoices_form_bind import (
+    bind_kunde,
+    fill_priced_line,
+    kunde_field,
+    price_is,
+    read_unit_price,
+)
 from billy_mcp.ui_writes.invoices_form_delete import delete_draft_invoice
 from billy_mcp.ui_writes.invoices_form_page import (
     CREATE_PERSIST_DUMP,
@@ -27,6 +34,7 @@ from billy_mcp.ui_writes.invoices_form_page import (
 from billy_mcp.ui_writes.invoices_form_price import prove_fresh_unit_price
 from billy_mcp.ui_writes.invoices_form_row import open_invoice_row
 from billy_mcp.ui_writes.page_flow import BILLY_ORIGIN, prove_text_on_fresh_page
+from billy_mcp.vision_evidence import allowed_vision_frame_dir
 
 CREATE_PRE_SUBMIT_DUMP = (
     Path.home() / ".local" / "share" / "billy-mcp" / "inspect-live-invoices-create-presubmit.json"
@@ -158,6 +166,90 @@ async def _create_draft(
     priced = await fill_priced_line(page, line_description, unit_price, product_name)
     if isinstance(priced, ToolError):
         return priced
+    dest = allowed_vision_frame_dir(os.environ.get("BILLY_VISION_FRAME_DIR", ""))
+    if dest:
+        contact_input = await kunde_field(page)
+        contact_value = ""
+        if contact_input is not None:
+            contact_value = (await contact_input.input_value()).strip()
+        if contact_value != contact_name:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice customer is not visible before submit.",
+            )
+        product_visible = await page.get_by_text(product_name, exact=True).count() >= 1
+        if not product_visible:
+            product_input = page.locator("input[name='product'], input[placeholder='Vælg produkt']")
+            if await product_input.count() >= 1:
+                product_visible = (await product_input.first.input_value()).strip() == product_name
+        if not product_visible:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice product is not visible before submit.",
+            )
+        shot = Path(dest) / "02_before_submit.png"
+        capture = getattr(page, "screenshot", None)
+        if capture is None:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice form frame was not captured before submit.",
+            )
+        await capture(path=str(shot), full_page=False)
+        if not shot.is_file() or shot.stat().st_size <= 0:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice form frame was not captured before submit.",
+            )
+        description_ok = False
+        fields = page.locator("input:not([type='hidden']), textarea")
+        for index in range(min(await fields.count(), 24)):
+            node = fields.nth(index)
+            try:
+                if not await node.is_visible():
+                    continue
+                if (await node.input_value()).strip() == line_description:
+                    description_ok = True
+                    break
+            except (TimeoutError, RuntimeError):
+                continue
+        if not description_ok:
+            for label in ("Evt. beskrivelse", "Beskrivelse"):
+                field = page.get_by_label(label, exact=True)
+                if await field.count() < 1:
+                    field = page.get_by_label(label)
+                if await field.count() < 1:
+                    continue
+                try:
+                    if (await field.first.input_value()).strip() == line_description:
+                        description_ok = True
+                        break
+                except (TimeoutError, RuntimeError):
+                    continue
+        if not description_ok:
+            editables = page.locator("[contenteditable='true']")
+            for index in range(min(await editables.count(), 12)):
+                node = editables.nth(index)
+                try:
+                    if not await node.is_visible():
+                        continue
+                    if (await node.inner_text()).strip() == line_description:
+                        description_ok = True
+                        break
+                except (TimeoutError, RuntimeError):
+                    continue
+        if not description_ok and await page.get_by_text(line_description, exact=True).count() >= 1:
+            description_ok = True
+        if line_description.strip() and not description_ok:
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice description is not visible before submit.",
+            )
+        shown_price = await read_unit_price(page)
+        if not price_is(shown_price, unit_price):
+            return ToolError(
+                code=StableErrorCode.UI_CHANGED,
+                message="Filled invoice unit price is not visible before submit.",
+            )
     write_json(
         CREATE_PRE_SUBMIT_DUMP,
         {

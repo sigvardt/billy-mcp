@@ -4,14 +4,17 @@ desc: Open product work for the UI write lane.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T07:10:00Z
+updated: 2026-08-19T10:33:00Z
 ---
 
 ## Open
 
-- Owner `D71E5B82`: reusable invoice CUD must pass after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof. Stay red.
-- Invoice draft CUD remains mandatory (`FD39FFE7` / `1F1B34F8`). Product create persist and scoped table-item hard-delete are live-proved. Honesty stays red until independent accept and purge. Stay red.
-- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved (`grossAmount=1`). Persist of priced drafts is now interface-proved. Remaining work is FastMCP update plus leftover cleanup, not another create probe. Stay red.
+- Owner `A342BBDC`: filled-form capture before **Gem som kladde** is now in create execute. Independent review still required. Stay red. Stay `pending_review`.
+- Owner `94DD65CB`: org independently empty after this live CUD. Do not remake leftover reverse-clean.
+- Independent Grok review of self-contained invoice create/update/delete stays red until the pre-submit filled-form frame exists and is accepted. Stay red.
+- Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail. Keep update preview/execute and **Enhedspris** proof.
+- Invoice draft CUD and product create remain mandatory (`FD39FFE7`). Honesty stays red until independent accept and purge. Stay red.
+- `1F1B34F8`: offline preview rejects an unpriced line. Live **Enhedspris** fill proved. Leftover reverse-clean is done. Do not remake leftover lists.
 - Residual invoice create is no longer a stop on `67CBACB6`. Product hard-delete is owner-proved. Daybook and files still wait. Do not add classify helpers.
 - Invoice draft CUD is mandatory (`FD39FFE7`). Prior `UI_CHANGED` bind dumps are unverified against the owner-visible session. `113F1E05` still forbids another entry-CTA dump. Never send, approve, or email.
 - Product create is mandatory (`FD39FFE7`) and live-proved. `56354201` / `BF91E28F` cleanup is scoped table-item `delete-icon` then **Ja, slet**. `A337A622` still forbids more product list, dialog, or archive probes. Do not remake form-contract, delete-chrome, leftover-cleanup, or either archive dump.

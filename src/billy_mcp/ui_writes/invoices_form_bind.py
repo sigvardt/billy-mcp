@@ -878,7 +878,11 @@ async def fill_priced_line(
         return committed
     if not product_name.strip():
         return None
-    return await _bind_existing_product(page, product_name)
+    bound = await _bind_existing_product(page, product_name)
+    if bound is not None:
+        return bound
+    await fill_line(page, description)
+    return None
 
 
 def price_is(raw: str, unit_price: float) -> bool:

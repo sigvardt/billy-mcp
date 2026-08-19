@@ -573,6 +573,45 @@ def test_live_invoice_writes_is_not_a_contacts_slot_stub() -> None:
     assert "pending_review" in source
 
 
+def test_live_invoice_cud_captures_filled_form_before_submit() -> None:
+    """A342BBDC / design 4.8: filled create form immediately before Gem som kladde."""
+
+    live = Path("tests/live/test_ui_invoices_writes.py").read_text(encoding="utf-8")
+    form = Path("src/billy_mcp/ui_writes/invoices_form.py").read_text(encoding="utf-8")
+    start = live.index("async def test_ui_invoices_create_update_delete_via_call_tool")
+    end = live.index("\nasync def ", start + 1)
+    body = live[start:end]
+    before = body.index('frame_dir / "01_before.png"')
+    env = body.index("BILLY_VISION_FRAME_DIR")
+    create_exec = body.index("ui_invoices_create_execute")
+    before_submit = body.index("02_before_submit.png")
+    after_create = body.index('frame_dir / "03_after_create.png"')
+    update_preview = body.index("ui_invoices_update_preview")
+    after_update = body.index('frame_dir / "04_after_update.png"')
+    price = body.index("fresh Enhedspris is not 2,00")
+    after_delete = body.index('frame_dir / "05_after_delete.png"')
+    client_gone = body.index('await _list_has_name(cleanup, slug, "clients", contact)')
+    vision = body.index("write_vision_record")
+    assert env < create_exec < before_submit
+    assert before < create_exec
+    assert create_exec < after_create < update_preview
+    assert price < after_update
+    assert client_gone < after_delete < vision
+    assert 'assert (frame_dir / "02_before_submit.png").is_file()' in body
+    assert "LEFTOVER_INVOICE_CONTACTS" not in body
+    assert 'reviewer_verdict="pending_review"' in body
+    assert 'author="live_test"' in body
+    create = form[form.index("async def _create_draft") : form.index("async def _update_draft")]
+    fill = create.index("fill_priced_line")
+    shot = create.index("02_before_submit.png")
+    gem = create.index("click_exact")
+    assert fill < shot < gem
+    assert "screenshot" in create
+    assert "kunde_field" in create
+    assert "price_is" in create
+    assert "DRAFT_SAVE" in create[gem:]
+
+
 def test_live_invoice_cud_confirms_customer_before_invoice_preview() -> None:
     """Owner D71E5B82: disposable draft is proved on /invoices before FastMCP update."""
 
