@@ -57,11 +57,30 @@ sources:
   - radio:4EAEAFFD
   - radio:E8EA9823
   - radio:D2FD1919
+  - radio:A0633A17
+  - radio:3377FB3C
+  - radio:01FCBA13
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-19T07:10:00Z
+updated: 2026-08-19T08:14:00Z
 ---
 
 ## Binding now
+
+`01FCBA13` (saved, P10): settled `/invoices` still has 7 **Kladde**
+rows. Pairs: `47BFE4A3/C0082FCA`, `9FDD7B04/2A0968A4`,
+`8DA1053F/773A4D76`, `05D2C589/0116A3D1`,
+`A9152C51/9A032275`, `2574A9D2/22679129`,
+`2AB12C2E/2647389E`. Reverse-clean invoices first, then
+products, then customers. Do not commit clean-org.
+
+`3377FB3C` (saved, P10): settled `/products` still has 7 tagged
+rows. Same seven `MCP-UI-PRD-*` tags as `01FCBA13`. Earlier
+empty-list read-back was unsettled.
+
+`A0633A17` (saved, P10): product delete must watch one
+`DELETE /v2/products/:id` 2xx before a fresh settled
+`/products` row-absence. No blind retry. Fail closed if no
+DELETE or non-2xx.
 
 `D2FD1919` (saved, P10): leftover edit Mere then Slet shows heading
 **Bekræft**, text **Vil du slette denne kladdefaktura?**, button

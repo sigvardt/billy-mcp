@@ -114,6 +114,27 @@ def _temp_profile() -> Path:
     return path
 
 
+async def _delete_or_fail(
+    server: FastMCP,
+    preview_tool: str,
+    execute_tool: str,
+    arguments: dict[str, object],
+    label: str,
+) -> None:
+    preview = await _call(server, preview_tool, arguments)
+    if preview.get("code"):
+        _record_blocker(f"{label} preview failed: {preview}")
+        pytest.fail(f"{label} preview failed: {preview}")
+    ticket = preview.get("confirmation_ticket")
+    if not isinstance(ticket, str) or not ticket:
+        _record_blocker(f"{label} preview omitted confirmation_ticket")
+        pytest.fail(f"{label} preview omitted confirmation_ticket")
+    executed = await _call(server, execute_tool, {"confirmation_ticket": ticket})
+    if executed.get("code") and executed.get("code") != "NOT_FOUND":
+        _record_blocker(f"{label} execute failed: {executed}")
+        pytest.fail(f"{label} execute failed: {executed}")
+
+
 async def _call(
     server: FastMCP, tool_name: str, arguments: dict[str, object] | None = None
 ) -> dict[str, object]:
@@ -186,6 +207,10 @@ async def _list_has_name(
         if path == "invoices":
             visible = page.get_by_text(name, exact=True)
             return await visible.count() >= 1 and await visible.first.is_visible()
+        if path == "products":
+            match = page.get_by_text(name, exact=True)
+            row = page.locator("[data-cy='table-item']").filter(has=match)
+            return await row.count() >= 1 and await row.first.is_visible()
         body = await page.locator("body").inner_text()
         return exact_name_in_text(body, name)
     finally:
@@ -379,31 +404,23 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
         assert await _list_has_name(cleanup, slug, "invoices", updated, allow_search=False) is False
 
         for leftover_product in LEFTOVER_PRODUCTS:
-            product_delete = await _call(
+            await _delete_or_fail(
                 server,
                 "ui_products_delete_preview",
+                "ui_products_delete_execute",
                 {"unique_tag": leftover_product, "organization_id": slug},
+                f"product {leftover_product}",
             )
-            if not product_delete.get("code"):
-                await _call(
-                    server,
-                    "ui_products_delete_execute",
-                    {"confirmation_ticket": product_delete["confirmation_ticket"]},
-                )
             assert await _list_has_name(cleanup, slug, "products", leftover_product) is False
 
         for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
-            contact_delete = await _call(
+            await _delete_or_fail(
                 server,
                 "ui_clients_delete_preview",
+                "ui_clients_delete_execute",
                 {"name": leftover_contact, "organization_id": slug},
+                f"contact {leftover_contact}",
             )
-            if not contact_delete.get("code"):
-                await _call(
-                    server,
-                    "ui_clients_delete_execute",
-                    {"confirmation_ticket": contact_delete["confirmation_ticket"]},
-                )
             assert await _list_has_name(cleanup, slug, "clients", leftover_contact) is False
 
         write_vision_record(
@@ -485,6 +502,59 @@ async def test_ui_invoices_create_update_delete_via_call_tool(
                     _record_blocker(
                         f"Cleanup delete failed for leftover tagged contact {leftover_contact}."
                     )
+        if extra is not None:
+            await extra.close()
+        for path in list(_REGISTERED_PROFILES):
+            if path.name.startswith("billy-live-invoices-"):
+                shutil.rmtree(path, ignore_errors=True)
+
+
+@pytest.mark.asyncio
+async def test_ui_invoice_leftover_product_contact_cleanup(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    """Delete leftover products then customers after invoice drafts are gone."""
+
+    _require_live_credentials()
+    assert not os.environ.get("BILLY_API_TOKEN"), "leftover cleanup must not use API token"
+    profile = _temp_profile()
+    proof_profile = _temp_profile()
+    monkeypatch.setenv("BILLY_BROWSER_PROFILE", str(profile))
+    monkeypatch.delenv("BILLY_ORGANIZATION_ID", raising=False)
+    server: FastMCP | None = None
+    extra: BrowserRuntime | None = None
+    slug = ""
+    try:
+        server = create_server(_REPO_ROOT)
+        slug = await _login(server)
+        for leftover_product in LEFTOVER_PRODUCTS:
+            await _delete_or_fail(
+                server,
+                "ui_products_delete_preview",
+                "ui_products_delete_execute",
+                {"unique_tag": leftover_product, "organization_id": slug},
+                f"product {leftover_product}",
+            )
+        for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
+            await _delete_or_fail(
+                server,
+                "ui_clients_delete_preview",
+                "ui_clients_delete_execute",
+                {"name": leftover_contact, "organization_id": slug},
+                f"contact {leftover_contact}",
+            )
+        proof = BrowserRuntime(
+            proof_profile,
+            credential_references=AppConfig.from_environment().browser_credentials,
+            credential_resolver=KeyringCredentialResolver(),
+        )
+        extra = proof
+        await _ready_session(proof, slug)
+        for leftover_product in LEFTOVER_PRODUCTS:
+            assert await _list_has_name(proof, slug, "products", leftover_product) is False
+        for leftover_contact in LEFTOVER_INVOICE_CONTACTS:
+            assert await _list_has_name(proof, slug, "clients", leftover_contact) is False
+    finally:
         if extra is not None:
             await extra.close()
         for path in list(_REGISTERED_PROFILES):

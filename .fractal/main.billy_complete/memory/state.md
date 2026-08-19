@@ -36,27 +36,34 @@ sources:
   - radio:D859572B
   - radio:70DB45E6
   - radio:4EAEAFFD
+  - radio:E8EA9823
+  - radio:D2FD1919
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-19T05:49:00Z
+updated: 2026-08-19T07:10:00Z
 ---
 
 ## Now
 
 Owner `96908DC6` is binding. Interface writes first. API live stays deferred.
-HEAD is clean on origin. `D859572B` is done: PUT prefix
-`/v2/invoiceLines/` is gone. GET `/v2/invoiceLines` and PUT
-prefix `/v2/invoices/` stay. Live FastMCP update of
-`MCP-UI-INV-6CDB396B` reads **Enhedspris** `2,00` in a second
-session. Delete reaches unique **Mere** and exact **Slet**.
-**Ja, slet** is not visible and no DELETE is recorded.
-Owner `E8EA9823` dump keys are live. FastMCP leftover delete
-clicks unique **Mere**, then the `A` ancestor of unique **Slet**.
-Recapture: `hit_tag=a`, `candidates=[]`, `dialog_count=0`,
-`alertdialog_count=0`, `overlay_count=0`, `delete_seen=false`,
-`navigated=false`. Empty candidates after those locators is
-valid. No named confirm. Execute returns `UI_CHANGED`. Do not
-guess a second click. Do not portal-sweep. Six leftover triples
-remain. Stay red. Do not finish.
+HEAD is clean on origin at `c4ae6ab` (E8EA9823 post-Slet dump).
+`D859572B` is done: PUT prefix `/v2/invoiceLines/` is gone. GET
+`/v2/invoiceLines` and PUT prefix `/v2/invoices/` stay. Live
+FastMCP update of `MCP-UI-INV-6CDB396B` reads **Enhedspris**
+`2,00` in a second session. Delete reaches unique **Mere** and
+exact **Slet**. Generic **Ja, slet** is the wrong confirm.
+Owner `D2FD1919`: confirm is exact **Ja, slet faktura**.
+`CONFIRM_DELETE` is that label. After the `E8EA9823` dump,
+execute clicks that exact button. Earlier leftover cleanup
+read-back was unsettled. Owner `01FCBA13` / `3377FB3C`:
+seven leftover **Kladde** rows and seven product rows remain.
+Pairs: `47BFE4A3/C0082FCA`, `9FDD7B04/2A0968A4`,
+`8DA1053F/773A4D76`, `05D2C589/0116A3D1`,
+`A9152C51/9A032275`, `2574A9D2/22679129`,
+`2AB12C2E/2647389E` (`MCP-UI-INV-*` / `MCP-UI-PRD-*`).
+Owner `A0633A17`: product delete must watch one
+`DELETE /v2/products/:id` 2xx before a fresh settled
+`/products` row-absence. Do not commit clean-org. Honesty-16
+stay red. Stay red. Do not finish.
 No children are running. Seven write children stay completed and merged.
 `59A3A933` now binds leftover cleanup. A fresh `/invoices` page
 shows 6 real **Kladde** rows at 1,00 DKK. Persist is proved by

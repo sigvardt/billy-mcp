@@ -23,6 +23,7 @@ _LABEL_ALLOW: Final = frozenset(
         "godkend",
         "ja",
         "ja, slet",
+        "ja, slet faktura",
         "luk",
         "mere",
         "nej",

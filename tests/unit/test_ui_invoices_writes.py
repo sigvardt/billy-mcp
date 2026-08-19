@@ -1543,6 +1543,21 @@ def test_invoice_delete_captures_post_slet_before_confirm() -> None:
     assert "button_labels" not in dump_src.split("async def delete_draft_invoice")[-1]
 
 
+def test_invoice_delete_clicks_ja_slet_faktura_after_capture() -> None:
+    """Owner D2FD1919: after the dump, click exact Ja, slet faktura."""
+
+    page = Path("src/billy_mcp/ui_writes/invoices_form_page.py").read_text(encoding="utf-8")
+    delete = Path("src/billy_mcp/ui_writes/invoices_form_delete.py").read_text(encoding="utf-8")
+    body = delete[delete.index("async def delete_draft_invoice") :]
+    after = body[body.index("capture_post_slet") :]
+    assert 'CONFIRM_DELETE = "Ja, slet faktura"' in page
+    assert "CONFIRM_DELETE" in after
+    assert "click_exact" in after
+    assert 'wait_persist(seen, method="DELETE")' in after
+    assert 'click_exact(page, "Ja, slet")' not in after
+    assert 'CONFIRM_DELETE = "Ja, slet"\n' not in page
+
+
 def test_post_slet_path_and_labels_are_allowlisted() -> None:
     """Post-Slet dump stores tokens, never org slugs or customer text."""
 
@@ -1561,6 +1576,7 @@ def test_post_slet_path_and_labels_are_allowlisted() -> None:
     assert heading_token("") == "none"
     assert heading_token("MCP-UI-INV-6CDB396B") == "other"
     assert allowlisted_label("Ja, slet") == "ja, slet"
+    assert allowlisted_label("Ja, slet faktura") == "ja, slet faktura"
     assert allowlisted_label("Slet") == "slet"
     assert allowlisted_label("MCP-UI-INV-6CDB396B") == "other"
 

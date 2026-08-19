@@ -7,12 +7,13 @@ from typing import Final, Protocol
 from fastmcp import FastMCP
 from pydantic import BaseModel, ConfigDict, Field, JsonValue
 
-from billy_mcp.browser import BrowserRuntime, LoginPage
+from billy_mcp.browser import BrowserRuntime
 from billy_mcp.models import StableErrorCode, ToolError
-from billy_mcp.ui_writes.page_flow import (
-    BILLY_ORIGIN,
-    prove_text_on_fresh_page,
-    require_matching_org_slug,
+from billy_mcp.ui_writes.page_flow import require_matching_org_slug
+from billy_mcp.ui_writes.products_delete_row import (
+    LIST_PATHS,
+    delete_tagged_row,
+    prove_unfiltered_row_absent,
 )
 from billy_mcp.ui_writes.protocol import (
     UiWriteExecuteInput,
@@ -22,10 +23,6 @@ from billy_mcp.ui_writes.protocol import (
 
 _EXECUTE_TOOL_NAME: Final = "ui_products_delete_execute"
 _PREVIEW_SUMMARY: Final = "Preview deletion of one Billy product in the interface."
-_CONFIRM: Final = "Ja, slet"
-_DELETE_ICON: Final = "[data-cy='delete-icon']"
-_TABLE_ITEM: Final = "[data-cy='table-item']"
-_LIST_PATHS: Final = ("products", "inventory")
 
 
 class UiProductsDeletePreviewInput(BaseModel):
@@ -97,25 +94,28 @@ class BrowserProductDeleter:
             if isinstance(slug, ToolError):
                 return slug
             clicked = False
-            for path in _LIST_PATHS:
-                if await _delete_tagged_row(page, organization_id=slug, path=path, tag=tag):
+            for path in LIST_PATHS:
+                if await delete_tagged_row(page, organization_id=slug, path=path, tag=tag):
                     clicked = True
                     break
             if not clicked:
+                already_gone = await prove_unfiltered_row_absent(
+                    self._readback_runtime,
+                    organization_id=bound,
+                    tag=tag,
+                )
+                if already_gone is None:
+                    return None
                 return ToolError(
                     code=StableErrorCode.UI_CHANGED,
                     message="Billy product row delete-icon is not visible.",
                 )
         finally:
             await page.close()
-        return await prove_text_on_fresh_page(
+        return await prove_unfiltered_row_absent(
             self._readback_runtime,
             organization_id=bound,
-            path="products",
-            text=tag,
-            absent=True,
-            allow_search=False,
-            visible_body=True,
+            tag=tag,
         )
 
 
@@ -191,45 +191,3 @@ def register_ui_product_delete_tools(
         name="ui_products_delete_execute",
         description="Execute a previewed Billy product deletion with its ticket.",
     )(ui_products_delete_execute)
-
-
-async def _delete_tagged_row(
-    page: LoginPage,
-    *,
-    organization_id: str,
-    path: str,
-    tag: str,
-) -> bool:
-    """Click the tagged row delete-icon and confirm. True when both clicks ran."""
-
-    await page.goto(
-        f"{BILLY_ORIGIN}/{organization_id}/{path}",
-        wait_until="domcontentloaded",
-    )
-    try:
-        await page.wait_for_load_state("networkidle", timeout=15000)
-    except TimeoutError:
-        pass
-    match = page.get_by_text(tag, exact=True)
-    if await match.count() < 1:
-        return False
-    row = page.locator(_TABLE_ITEM).filter(has=match)
-    if await row.count() < 1:
-        return False
-    await row.first.hover()
-    icon = row.locator(_DELETE_ICON)
-    if await icon.count() < 1 or not await icon.first.is_visible():
-        return False
-    try:
-        await icon.first.click(timeout=5000)
-    except Exception as exc:
-        if type(exc).__name__ != "TimeoutError":
-            raise
-        return False
-    confirm = page.get_by_role("button", name=_CONFIRM, exact=True)
-    if await confirm.count() < 1:
-        confirm = page.get_by_text(_CONFIRM, exact=True)
-    if await confirm.count() < 1 or not await confirm.first.is_visible():
-        return False
-    await confirm.first.click()
-    return True

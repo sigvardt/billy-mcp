@@ -48,10 +48,12 @@ def test_create_readback_uses_products_path_before_inventory() -> None:
 def test_product_unfiltered_readback_does_not_search_first() -> None:
     """Owner C6DA7FC8: unfiltered exact-text count before any search fill."""
 
-    from billy_mcp.ui_writes import products_delete, products_submit
+    from billy_mcp.ui_writes import products_delete, products_delete_row, products_submit
 
     submit = Path(products_submit.__file__).read_text(encoding="utf-8")
-    delete = Path(products_delete.__file__).read_text(encoding="utf-8")
+    delete = Path(products_delete.__file__).read_text(encoding="utf-8") + Path(
+        products_delete_row.__file__
+    ).read_text(encoding="utf-8")
     live = Path(__file__).resolve().parents[1] / "live" / "test_ui_products_writes.py"
     live_body = live.read_text(encoding="utf-8")
 
@@ -70,6 +72,23 @@ def test_product_unfiltered_readback_does_not_search_first() -> None:
     assert "[data-cy='table-item']" in delete
     assert "force=True" not in delete
     assert "page.locator(_DELETE_ICON)" not in delete
+
+
+def test_product_delete_absence_uses_table_item_not_body() -> None:
+    """Owner C6DA7FC8 / IR 198.46: leftover absence is an unfiltered row, not body text."""
+
+    from billy_mcp.ui_writes import products_delete, products_delete_row
+
+    delete = Path(products_delete.__file__).read_text(encoding="utf-8") + Path(
+        products_delete_row.__file__
+    ).read_text(encoding="utf-8")
+    prove = delete[delete.index("if not clicked") :]
+    assert "visible_body=True" not in prove
+    assert "prove_text_on_fresh_page" not in prove
+    assert "prove_unfiltered_row_absent" in prove
+    assert "TABLE_ITEM" in prove
+    assert 'path="products"' in prove or "/products" in prove
+    assert "_wait_row_gone" in delete
 
 
 def test_hidden_ember_dialog_wrapper_is_not_leftover() -> None:

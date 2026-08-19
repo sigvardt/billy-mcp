@@ -21,7 +21,7 @@ DRAFT_SAVE = "Gem som kladde"
 UPDATE_SAVE = "Opdater"
 DELETE = "Slet"
 MORE = "Mere"
-CONFIRM_DELETE = "Ja, slet"
+CONFIRM_DELETE = "Ja, slet faktura"
 _OK_STATUS = frozenset({"200", "201", "204"})
 
 

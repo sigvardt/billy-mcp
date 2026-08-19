@@ -14,10 +14,12 @@ from billy_mcp.ui_writes.invoices_form_delete_dump import (
     ui_path,
 )
 from billy_mcp.ui_writes.invoices_form_page import (
+    CONFIRM_DELETE,
     DELETE,
     MORE,
     Locator,
     Page,
+    click_exact,
     wait_persist,
     watch_invoice_response,
 )
@@ -33,7 +35,7 @@ __all__ = [
 
 
 async def delete_draft_invoice(page: Page, slug: str, contact_name: str) -> ToolError | None:
-    """Open the list row, unique Mere, exact Slet, then capture post-Slet state."""
+    """Open the list row, unique Mere, exact Slet, dump, then owner confirm."""
 
     opened = await open_invoice_row(page, slug, contact_name)
     if opened is not None:
@@ -54,11 +56,18 @@ async def delete_draft_invoice(page: Page, slug: str, contact_name: str) -> Tool
     dump = await capture_post_slet(page, seen, start_path, hit_tag)
     if dump["delete_seen"] is True:
         return await wait_persist(seen, method="DELETE")
-    return ToolError(
-        code=StableErrorCode.UI_CHANGED,
-        message="Billy invoice delete confirm is not named.",
-        details=dump,
-    )
+    clicked = await click_exact(page, CONFIRM_DELETE)
+    if clicked is not None:
+        details = dict(dump)
+        details["confirm_count"] = len(
+            await _visible_named(page.get_by_role("button", name=CONFIRM_DELETE, exact=True))
+        )
+        return ToolError(
+            code=clicked.code,
+            message=clicked.message,
+            details=details,
+        )
+    return await wait_persist(seen, method="DELETE")
 
 
 async def _click_unique_mere(page: Page) -> ToolError | None:
