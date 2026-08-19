@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-19T22:34:05Z
+updated: 2026-08-19T23:11:37Z
 ---
 
 # billy_mcp
@@ -31,7 +31,7 @@ updated: 2026-08-19T22:34:05Z
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
-[[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Residual clear API write honesty. 27 toolless rows remain after ticketed accountNatures create/update. Not completeness.
+[[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Residual clear API write honesty. 26 toolless rows remain after ticketed bankPayments.delete. Not completeness.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
 

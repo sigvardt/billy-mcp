@@ -36,11 +36,13 @@ coverage green.
    unauthenticated **405** (`METHOD_NOT_ALLOWED`) must not silently
    override them. When Supports lists a singular write **and** the
    official property table names at least one non-readonly field,
-   ship the exact typed offline ticketed contract. Keep
+   ship the exact typed offline ticketed contract. When Supports
+   lists singular **delete** with only a path `id` and no delete
+   body table, ship the ticketed DELETE with no JSON body. Keep
    `live_tested` false (`live_api=out_of_scope_by_user`). When
-   Supports lists the write but the property table has no writable
-   field map, record that contradiction and stay red. Live API
-   proof stays out of scope.
+   Supports lists a create/update write but the property table has
+   no writable field map, record that contradiction and stay red.
+   Live API proof stays out of scope.
 4. Bulk save/delete remain empty-tool red until a request/response body contract
    exists. Supports bulk mentions alone are not enough. After research137 docs/asset exhaust, treat bulk as **external-contract blocked** (see below), not as
    an open evidence loop.

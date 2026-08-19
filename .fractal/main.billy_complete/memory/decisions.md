@@ -82,13 +82,10 @@ updated: 2026-08-20T00:45:00Z
 
 ## Binding now
 
-`B54A6BFC` (saved, P9, next after this COMMIT): implement only
-singular `api.bankPayments.delete` from the current official
-Supports table. Reuse the existing bankPayments ticketed write
-service if ownership stays clear. Non-empty id. Preview makes no
-request. Execute binds DELETE /bankPayments/:id with an exact
-single-use ticket and no invented request body. Keep
-`live_tested=false` with `live_api=out_of_scope_by_user`. Then
+`B54A6BFC` (saved, P9, landed this EXECUTE): ticketed singular
+`api.bankPayments.delete`. Preview `{id}` only. Execute
+`DELETE /bankPayments/:id` with no body. Keep
+`live_tested=false` with `live_api=out_of_scope_by_user`. Next is
 invoiceReminderAssociations create/update. No live API.
 
 `EAB2F91B` (unsaved, P10, landed): official `#v2accountnatures`

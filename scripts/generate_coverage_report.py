@@ -1427,6 +1427,10 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_bank_payment_writes.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.bankPayments.delete": (
+        "tests/api/test_bank_payment_writes.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.bankLineMatches.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.bankLineMatches.create": (
@@ -1815,7 +1819,6 @@ RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
         "api.balanceModifiers.create",
         "api.balanceModifiers.update",
-        "api.bankPayments.delete",
         "api.cities.create",
         "api.cities.update",
         "api.contactBalancePostings.create",

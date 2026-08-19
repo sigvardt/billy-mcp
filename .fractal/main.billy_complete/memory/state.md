@@ -7,42 +7,35 @@ sources:
   - https://www.billy.dk/api/
   - radio:96908DC6
   - radio:9B979A05
+  - radio:B54A6BFC
   - radio:EAB2F91B
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T00:35:00Z
+updated: 2026-08-20T01:20:00Z
 ---
 
 ## Now
 
-Ticketed offline `api.accountNatures.create` and
-`api.accountNatures.update` are landed. Preview tools
-`api_account_natures_create_preview` and
-`api_account_natures_update_preview` take a nested
-`AccountNaturePayload` of only `reportType`, `name`, and
-`normalBalance` (optional strings, `extra=forbid`). Nested extras
-such as `customField` fail at the FastMCP boundary. Enum members
-stay opaque strings. No singular delete tools. Bulk stay red.
-`live_tested` stays false with
-`qualification.live_api=out_of_scope_by_user`.
+Ticketed offline `api.bankPayments.delete` is landed.
+`api_bank_payments_delete_preview` takes a non-empty `id` with
+`extra=forbid`. Preview makes no HTTP. Execute binds
+`DELETE /bankPayments/:id` with an exact single-use ticket and no
+JSON body. Create and update stay on the same module. `live_tested`
+stays false with `qualification.live_api=out_of_scope_by_user`.
 
-Generated snapshot: implemented 525, contract 530, live/vision
-339, `complete=false`. Residual honesty remaining is 27 (23
+Generated snapshot: implemented 526, contract 531, live/vision
+339, `complete=false`. Residual honesty remaining is 26 (22
 method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-Binding `9B979A05` still owns the rest of the 121 split. Binding
-`B54A6BFC` is the next proved cohort after this COMMIT: only
-singular `api.bankPayments.delete`. Reuse the existing
-bankPayments ticketed write service if ownership stays clear.
-Require a non-empty id. Preview makes no request. Execute binds
-DELETE /bankPayments/:id with an exact single-use ticket and no
-invented request body. Then continue to invoiceReminderAssociations
-create/update. Unauth 405 must not override Supports. Never infer
-bulk schemas. No live API. Do not finish.
+Binding `9B979A05` still owns the rest of the 121 split. Next
+proved cohort after this COMMIT is
+`invoiceReminderAssociations` create/update. Unauth 405 must not
+override Supports. Never infer bulk schemas. No live API. Do not
+finish.
 
 Owner `96908DC6` still binds overall finish. API live stays
 deferred. Årsrapporter stays `out_of_scope_by_user`

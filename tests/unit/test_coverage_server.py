@@ -326,6 +326,13 @@ WAVE_FIVEK_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+BANK_PAYMENT_DELETE_API_TOOL_NAMES = frozenset(
+    {
+        "api_bank_payments_delete_preview",
+        "api_bank_payments_delete_execute",
+    }
+)
+
 WAVE_FIVEL_WRITE_API_TOOL_NAMES = frozenset(
     {
         "api_sales_tax_payments_create_preview",
@@ -1183,6 +1190,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVEI_WRITE_API_TOOL_NAMES) == 12
     assert len(WAVE_FIVEJ_WRITE_API_TOOL_NAMES) == 18
     assert len(WAVE_FIVEK_WRITE_API_TOOL_NAMES) == 4
+    assert len(BANK_PAYMENT_DELETE_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVEL_WRITE_API_TOOL_NAMES) == 4
     assert len(WAVE_FIVEM_WRITE_API_TOOL_NAMES) == 4
     assert len(WAVE_FIVEN_WRITE_API_TOOL_NAMES) == 4
@@ -1194,7 +1202,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESB_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(ACCOUNT_NATURE_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 275
+    assert len(api_tool_names) == 277
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",
@@ -1299,6 +1307,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | WAVE_FIVEI_WRITE_API_TOOL_NAMES
         | WAVE_FIVEJ_WRITE_API_TOOL_NAMES
         | WAVE_FIVEK_WRITE_API_TOOL_NAMES
+        | BANK_PAYMENT_DELETE_API_TOOL_NAMES
         | WAVE_FIVEL_WRITE_API_TOOL_NAMES
         | WAVE_FIVEM_WRITE_API_TOOL_NAMES
         | WAVE_FIVEN_WRITE_API_TOOL_NAMES

@@ -15,6 +15,7 @@ from pydantic import ValidationError
 
 from billy_mcp.api.bank_payment_writes import (
     BankPaymentCreatePreviewInput,
+    BankPaymentDeletePreviewInput,
     BankPaymentUpdatePreviewInput,
     register_bank_payment_write_tools,
 )
@@ -71,7 +72,7 @@ def call_tool(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> 
     return cast(dict[str, object], payload)
 
 
-def test_registers_exactly_four_flat_typed_bank_payment_write_tools() -> None:
+def test_registers_exactly_six_flat_typed_bank_payment_write_tools() -> None:
     server, _ = make_server(lambda request: httpx.Response(200, json={}))
 
     by_name = {tool.name: tool for tool in asyncio.run(server.list_tools())}
@@ -80,6 +81,8 @@ def test_registers_exactly_four_flat_typed_bank_payment_write_tools() -> None:
         "api_bank_payments_create_execute": {"confirmation_ticket"},
         "api_bank_payments_update_preview": {"id", "bankPayment"},
         "api_bank_payments_update_execute": {"confirmation_ticket"},
+        "api_bank_payments_delete_preview": {"id"},
+        "api_bank_payments_delete_execute": {"confirmation_ticket"},
     }
     assert set(by_name) == set(expected_properties)
     for name, fields in expected_properties.items():
@@ -99,12 +102,15 @@ def test_registers_exactly_four_flat_typed_bank_payment_write_tools() -> None:
         (BankPaymentUpdatePreviewInput, {"id": "payment-1", "bankPayment": {}, "extra": True}),
         (BankPaymentUpdatePreviewInput, {"id": "", "bankPayment": {}}),
         (BankPaymentUpdatePreviewInput, {"id": "payment-1", "bankPayment": {"id": "other"}}),
+        (BankPaymentDeletePreviewInput, {"id": "payment-1", "extra": True}),
+        (BankPaymentDeletePreviewInput, {"id": ""}),
         (WriteExecuteInput, {"confirmation_ticket": "ticket", "bankPayment": {}}),
     ],
 )
 def test_outer_inputs_forbid_extras_empty_ids_and_mismatched_body_ids(
     input_model: type[BankPaymentCreatePreviewInput]
     | type[BankPaymentUpdatePreviewInput]
+    | type[BankPaymentDeletePreviewInput]
     | type[WriteExecuteInput],
     payload: dict[str, object],
 ) -> None:
@@ -141,6 +147,12 @@ def test_opaque_bank_payment_preserves_unknown_fields_and_matching_inner_id() ->
             {"bankPayment": {"futureField": {"rank": 2}}},
             {"action": "update", "resource": "bankPayment", "id": "payment-1"},
         ),
+        (
+            "api_bank_payments_delete_preview",
+            {"id": "payment-1"},
+            {"id": "payment-1"},
+            {"action": "delete", "resource": "bankPayment", "id": "payment-1"},
+        ),
     ],
 )
 def test_previews_are_mutation_free_and_bind_exact_bank_payment_requests(
@@ -161,7 +173,17 @@ def test_previews_are_mutation_free_and_bind_exact_bank_payment_requests(
 
 
 @pytest.mark.parametrize(
-    ("preview_name", "execute_name", "arguments", "method", "path", "body"),
+    (
+        "preview_name",
+        "execute_name",
+        "arguments",
+        "method",
+        "path",
+        "body",
+        "response",
+        "expected_records",
+        "expected_deleted",
+    ),
     [
         (
             "api_bank_payments_create_preview",
@@ -170,6 +192,9 @@ def test_previews_are_mutation_free_and_bind_exact_bank_payment_requests(
             "POST",
             "/v2/bankPayments",
             {"bankPayment": {"unknown": {"rank": 2}}},
+            {"bankPayments": [{"id": "payment-1"}], "bankLines": [{"id": "line-1"}]},
+            {"bankPayments": [{"id": "payment-1"}]},
+            None,
         ),
         (
             "api_bank_payments_update_preview",
@@ -178,6 +203,20 @@ def test_previews_are_mutation_free_and_bind_exact_bank_payment_requests(
             "PUT",
             "/v2/bankPayments/payment%20%2F%3F",
             {"bankPayment": {"futureField": {"rank": 2}}},
+            {"bankPayments": [{"id": "payment-1"}], "bankLines": [{"id": "line-1"}]},
+            {"bankPayments": [{"id": "payment-1"}]},
+            None,
+        ),
+        (
+            "api_bank_payments_delete_preview",
+            "api_bank_payments_delete_execute",
+            {"id": "payment /?"},
+            "DELETE",
+            "/v2/bankPayments/payment%20%2F%3F",
+            None,
+            {"meta": {"deletedRecords": {"bankPayments": ["payment /?"]}}},
+            {},
+            {"bankPayments": ["payment /?"]},
         ),
     ],
 )
@@ -187,9 +226,11 @@ def test_execute_sends_exact_bank_payment_write_once_and_maps_only_declared_root
     arguments: dict[str, object],
     method: str,
     path: str,
-    body: dict[str, object],
+    body: dict[str, object] | None,
+    response: dict[str, object],
+    expected_records: dict[str, object],
+    expected_deleted: dict[str, list[str]] | None,
 ) -> None:
-    response = {"bankPayments": [{"id": "payment-1"}], "bankLines": [{"id": "line-1"}]}
     server, requests = make_server(lambda request: httpx.Response(200, json=response))
 
     preview = call_tool(server, preview_name, arguments)
@@ -203,10 +244,13 @@ def test_execute_sends_exact_bank_payment_write_once_and_maps_only_declared_root
     request = requests[0]
     assert request.method == method
     assert request.url.raw_path.decode() == path
-    assert json.loads(request.content) == body
+    if body is None:
+        assert request.content == b""
+    else:
+        assert json.loads(request.content) == body
     assert execution == {
-        "changed_records": {"bankPayments": [{"id": "payment-1"}]},
-        "deleted_records": None,
+        "changed_records": expected_records,
+        "deleted_records": expected_deleted,
     }
     assert "bankLines" not in cast(dict[str, object], execution["changed_records"])
 
@@ -260,8 +304,14 @@ def test_tamper_wrong_executor_expiry_and_replay_do_not_make_unexpected_writes()
         "api_bank_payments_update_execute",
         {"confirmation_ticket": ticket},
     )
+    wrong_delete_executor = call_tool(
+        server,
+        "api_bank_payments_delete_execute",
+        {"confirmation_ticket": ticket},
+    )
     assert tampered["code"] == StableErrorCode.CONFIRMATION_INVALID
     assert wrong_executor["code"] == StableErrorCode.CONFIRMATION_MISMATCH
+    assert wrong_delete_executor["code"] == StableErrorCode.CONFIRMATION_MISMATCH
     assert requests == []
 
     first = call_tool(
@@ -321,19 +371,34 @@ def test_typed_http_errors_propagate_after_one_write(
     assert len(requests) == 1
 
 
-def test_empty_token_returns_typed_auth_required_without_network_activity() -> None:
+@pytest.mark.parametrize(
+    ("preview_name", "execute_name", "arguments"),
+    [
+        (
+            "api_bank_payments_create_preview",
+            "api_bank_payments_create_execute",
+            {"bankPayment": {"futureField": {"rank": 2}}},
+        ),
+        (
+            "api_bank_payments_delete_preview",
+            "api_bank_payments_delete_execute",
+            {"id": "payment-1"},
+        ),
+    ],
+)
+def test_empty_token_returns_typed_auth_required_without_network_activity(
+    preview_name: str,
+    execute_name: str,
+    arguments: dict[str, object],
+) -> None:
     server, requests = make_server(
         lambda request: pytest.fail(f"missing token attempted HTTP request: {request.url}"),
         token="",
     )
-    preview = call_tool(
-        server,
-        "api_bank_payments_create_preview",
-        {"bankPayment": {"futureField": {"rank": 2}}},
-    )
+    preview = call_tool(server, preview_name, arguments)
     error = call_tool(
         server,
-        "api_bank_payments_create_execute",
+        execute_name,
         {"confirmation_ticket": preview["confirmation_ticket"]},
     )
 
