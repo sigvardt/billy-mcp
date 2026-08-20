@@ -89,12 +89,29 @@ sources:
   - radio:7B947636
   - radio:A485F530
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T10:05:00Z
+updated: 2026-08-20T11:21:07Z
 ---
 
 ## Binding now
 
-`4DBD7C3F` (saved until COMMIT, P10, landed): ticketed
+`A485F530` (saved, P10, honesty remap in working tree): six
+create/update rows `contactBalancePostings`, `postings`, and
+`transactions` stay toolless/red. Official Supports lists create
+and update. Official property tables have no writable field.
+First-party bundles GET only. Qualification is
+`readonly_field_map_insufficient` /
+`READONLY_PROPERTY_TABLE`. No tools. No empty payload. No live
+API. `complete` stays false. Unsave after COMMIT.
+
+`7B947636` (unsaved, P10, landed on `bb66a48`): ticketed
+`transactions` singular delete. Preview takes a non-empty `id`.
+Execute takes `confirmation_ticket` only. Bind DELETE
+`/transactions/:id` with an encoded id and no request body.
+Official `#v2transactions` Supports delete is the offline
+contract. Independent review PASS. No create/update, bulk, UI,
+or live API. `complete` stays false.
+
+`4DBD7C3F` (unsaved, P10, landed on `da833d3`): ticketed
 `invoiceReminderAssociations` singular delete. Preview takes a
 non-empty `id`. Execute takes `confirmation_ticket` only. Bind
 DELETE `/invoiceReminderAssociations/:id` with an encoded id and
@@ -102,14 +119,6 @@ no request body. Official Supports delete is the offline
 contract. Historical unauth missing-id 200 is not cleanup proof.
 Independent review PASS. No bulk, UI, or live API. `complete`
 stays false.
-
-`7B947636` (saved, P10, next after COMMIT): take only the
-documented singular `transactions` delete. Preview takes a
-non-empty `id`. Execute takes `confirmation_ticket` only. Bind
-DELETE `/transactions/:id` with an encoded id and no request
-body. Treat official `#v2transactions` Supports delete as the
-offline contract. No create/update, bulk, UI, or live API.
-`complete` stays false.
 
 `7453B98F` (unsaved, P10, landed on `5a1bde8`): ticketed
 `balanceModifiers` create and update. Official Supports lists

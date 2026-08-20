@@ -25,33 +25,35 @@ sources:
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T10:45:00Z
+updated: 2026-08-20T11:35:00Z
 ---
 
 ## Now
 
-Ticketed offline `transactions` delete is in the working tree.
-Independent review PASS. Binding `7B947636` waits for COMMIT.
+`A485F530` honesty remap is in the working tree. Independent
+review PASS. Required fixes none. Six residual create/update rows
+stay toolless and red with
+`kind=readonly_field_map_insufficient` and
+`blocker_code=READONLY_PROPERTY_TABLE`. Method-closed remaining
+is none. No tools. No empty payload. `live_tested` stays false
+with `qualification.live_api=out_of_scope_by_user`. `complete`
+stays false. After COMMIT, one residual audit (`88C4B0A9`).
+
+Ticketed offline `transactions` delete remains on `bb66a48`.
 Preview tool `api_transactions_delete_preview` takes a non-empty
 `id` with `extra=forbid`. Execute
 `api_transactions_delete_execute` takes `confirmation_ticket`
-only. Bind `DELETE /transactions/:id` with an encoded id and no
-JSON body. Preview makes no HTTP. Empty id, extras, and a nested
-payload fail at the FastMCP boundary. Create/update stay red.
-Bulk stay red. `live_tested` stays false with
-`qualification.live_api=out_of_scope_by_user`. `complete` stays
-false.
+only. Create/update stay red. Bulk stay red.
 
 Generated snapshot: implemented 546, contract 551, live/vision
-339, `complete=false`. Residual honesty remaining is 6 (4
-method-closed, 2 readonly-map). Meta-delete remaining is none.
-Bulk 92 stay `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official
-lock is ETag `tmhc6wpdc835zt`, MD5
-`053f755f52e3926b028e29325e3670d4`.
+339, `complete=false`. Residual honesty remaining is 6, all
+readonly-map. Meta-delete remaining is none. Bulk 92 stay
+`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
+`tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-After COMMIT, unsave `7B947636` and start research-only
-`A485F530`. Binding `9B979A05` still owns the rest of the 121
-split. Never infer bulk schemas. Do not finish.
+Binding `9B979A05` still owns the rest of the 121 split. Unauth
+405 must not override current official Supports. Never infer
+bulk schemas. Do not finish.
 
 Owner `96908DC6` still binds overall finish. API live stays
 deferred. Årsrapporter stays `out_of_scope_by_user`

@@ -378,10 +378,20 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
     meta_delete = sorted(generator.RESIDUAL_META_DELETE_IDS)
     residual = sorted(generator.RESIDUAL_CLEAR_HONESTY_IDS)
 
-    assert len(method_closed) == 4
-    assert len(readonly_map) == 2
+    remapped = (
+        "api.contactBalancePostings.create",
+        "api.contactBalancePostings.update",
+        "api.postings.create",
+        "api.postings.update",
+    )
+
+    assert len(method_closed) == 0
+    assert len(readonly_map) == 6
     assert len(meta_delete) == 0
     assert len(residual) == 6
+    for row_id in remapped:
+        assert row_id not in method_closed
+        assert row_id in readonly_map
     assert "api.accountNatures.create" not in method_closed
     assert "api.accountNatures.update" not in method_closed
     assert "api.bankPayments.delete" not in method_closed
@@ -422,6 +432,8 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert "research192" in row["evidence"]
         assert "research191_unauth_reconfirm" in row["qualification"]["evidence_ref"]
         assert "research192_unauth_reconfirm" in row["qualification"]["evidence_ref"]
+        assert "research-a485f530-readonly-map" in row["qualification"]["evidence_ref"]
+        assert "unauth_status" not in row["qualification"]
 
     for row_id in method_closed:
         row = by_id[row_id]

@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-20T09:40:00Z
+updated: 2026-08-20T11:35:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -128,10 +128,11 @@ Shape hints from research136 remain non-authoritative for greening.
 | `salesTaxPayments` | POST/PUT 401; singular DELETE **405** (Supports omits singular delete) |
 | `salesTaxReturns` | POST/DELETE **405**; PUT 401 (Supports: update, no create/delete) |
 | `accountNatures` | POST/PUT/DELETE **405** despite Supports create/update |
-| `postings` | POST/PUT/DELETE **405**; property table effectively all readonly |
+| `postings` | POST/PUT/DELETE **405** historical unauth class; official Supports lists create/update but the property table is all readonly/immutable, so create/update stay toolless (`READONLY_PROPERTY_TABLE`). A485F530 first-party bundles GET only. Do not ship tools from Supports alone |
 | `bankPayments` | POST/PUT 401; DELETE **405** despite Supports listing delete |
 | `transactions` | POST/PUT 401; DELETE 200 historical unauth class; official Supports lists singular delete with path `id` and no delete body, so `api.transactions.delete` is a ticketed offline tool (`api_transactions_delete_preview`) with no request body. Historical unauth missing-id DELETE 200 is not cleanup proof and is not the contract. Property table is all readonly/immutable — create/update stay toolless (`READONLY_PROPERTY_TABLE`) |
-| `balanceModifiers`, `contactBalancePostings` | POST/PUT/DELETE **405** (Supports create/update is not enough) |
+| `balanceModifiers` | POST/PUT/DELETE **405** historical unauth class; official Supports lists create/update with required `modifier` and `subject`, so those two rows are ticketed offline tools |
+| `contactBalancePostings` | POST/PUT/DELETE **405** historical unauth class; official Supports lists create/update but the property table is all readonly, so create/update stay toolless (`READONLY_PROPERTY_TABLE`). A485F530 first-party bundles GET only. Do not ship tools from Supports alone |
 | `cities`, `countries`, `currencies`, `states`, `zipcodes`, `locales`, `countryGroups` | POST/PUT/DELETE **405** — reference data not offline-writable |
 | `contactBalancePayments` | POST/PUT 401; DELETE **405** |
 | `invoiceLateFees` | POST/PUT 401; singular DELETE **405** (Supports omits singular delete); bulk DELETE `?ids[]=` also **405** “does not support bulk deleting records” despite Supports bulk delete |
@@ -187,12 +188,12 @@ research136 bulk body probes above.
 Wave-5g through Wave-5s-C offline products are on root. Ticketed
 `accountNatures` create/update later left the residual honesty freeze
 (official Supports plus writable `reportType`, `name`, `normalBalance`).
-Current generated snapshot: implemented **525**, contract **530**,
-live/vision **339**, complete **false**. Residual honesty remaining **27**
-(23 method-closed, 2 readonly-map, 2 meta-delete). Bulk **92** stay
+Current generated snapshot: implemented **546**, contract **551**,
+live/vision **339**, complete **false**. Residual honesty remaining **6**
+(0 method-closed, 6 readonly-map, 0 meta-delete). Bulk **92** stay
 `external_contract_blocker`. Live API stays `out_of_scope_by_user`. Next
-offline slice is the remaining method-closed rows whose official property
-tables still name writable fields. Do not infer bulk schemas. Detail:
+offline slice is bulk92, not a guessed create/update payload. Do not infer
+bulk schemas. Detail:
 [[wave_fives_residual_specials_research]] and
 [[residual_clear_method_closed_inventory_honesty]].
 

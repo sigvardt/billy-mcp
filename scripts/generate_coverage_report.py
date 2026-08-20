@@ -1888,7 +1888,8 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
 
 
 RESIDUAL_EVIDENCE_REF_CHAIN = (
-    "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm"
+    "research186_residual_unauth+research191_unauth_reconfirm+"
+    "research192_unauth_reconfirm+research-a485f530-readonly-map"
 )
 
 
@@ -1914,18 +1915,16 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 
 
 # Research186 residual clear honesty: remaining Supports write rows without a
-# landed typed field map. Transactions singular delete left this freeze.
-# Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
-RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
+# landed typed field map. A485F530 remapped the last method-closed create/update
+# rows onto the readonly property-table freeze. Historical unauth 405/401 is
+# not the contract.
+RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset()
+RESIDUAL_READONLY_MAP_IDS: frozenset[str] = frozenset(
     {
         "api.contactBalancePostings.create",
         "api.contactBalancePostings.update",
         "api.postings.create",
         "api.postings.update",
-    }
-)
-RESIDUAL_READONLY_MAP_IDS: frozenset[str] = frozenset(
-    {
         "api.transactions.create",
         "api.transactions.update",
     }
@@ -1956,7 +1955,7 @@ def method_closed_offline_qualification() -> dict[str, Any]:
 
 
 def readonly_field_map_qualification() -> dict[str, Any]:
-    """Freeze for auth-gated writes whose docs property table lacks writable fields."""
+    """Freeze for Supports create/update whose official property table has no writable field."""
 
     return {
         "kind": "readonly_field_map_insufficient",
@@ -1964,7 +1963,6 @@ def readonly_field_map_qualification() -> dict[str, Any]:
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
         "evidence_ref": RESIDUAL_EVIDENCE_REF_CHAIN,
-        "unauth_status": 401,
         "live_api": "out_of_scope_by_user",
         "tools_allowed": False,
     }
@@ -2014,9 +2012,9 @@ def apply_residual_clear_honesty(operations: list[dict[str, Any]]) -> None:
         elif row_id in RESIDUAL_READONLY_MAP_IDS:
             row["qualification"] = dict(readonly_q)
             row["evidence"] = (
-                f"{row.get('evidence', '')}; research186 unauth AUTHENTICATION_REQUIRED "
-                "(401) opens method at auth gate but official property table is "
-                "effectively readonly (no non-readonly create/update field map); "
+                f"{row.get('evidence', '')}; research186 official property table "
+                "has no non-readonly create/update field map "
+                "(A485F530 exhaust); "
                 f"blocker_code={readonly_q['blocker_code']}; tools_allowed=false; "
                 "do not freeze ticketed tools from Supports alone; "
                 "research191/research192 unauth reconfirm"

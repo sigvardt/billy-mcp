@@ -4537,7 +4537,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.contactBalancePostings.create",
       "implemented": false,
@@ -4547,12 +4547,11 @@
       "operation": "create",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
       },
@@ -4583,7 +4582,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.contactBalancePostings.update",
       "implemented": false,
@@ -4593,12 +4592,11 @@
       "operation": "update",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
       },
@@ -10400,7 +10398,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.postings.create",
       "implemented": false,
@@ -10410,12 +10408,11 @@
       "operation": "create",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
       },
@@ -10446,7 +10443,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.postings.update",
       "implemented": false,
@@ -10456,12 +10453,11 @@
       "operation": "update",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
+        "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
       },
@@ -14347,7 +14343,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.transactions.create",
       "implemented": false,
@@ -14360,11 +14356,10 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
-        "tools_allowed": false,
-        "unauth_status": 401
+        "tools_allowed": false
       },
       "request_fields": [
         "transaction"
@@ -14393,7 +14388,7 @@
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth AUTHENTICATION_REQUIRED (401) opens method at auth gate but official property table is effectively readonly (no non-readonly create/update field map); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 official property table has no non-readonly create/update field map (A485F530 exhaust); blocker_code=READONLY_PROPERTY_TABLE; tools_allowed=false; do not freeze ticketed tools from Supports alone; research191/research192 unauth reconfirm",
       "filters": [],
       "id": "api.transactions.update",
       "implemented": false,
@@ -14406,11 +14401,10 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
-        "tools_allowed": false,
-        "unauth_status": 401
+        "tools_allowed": false
       },
       "request_fields": [
         "id",
