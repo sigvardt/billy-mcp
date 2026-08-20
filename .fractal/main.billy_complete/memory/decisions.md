@@ -82,13 +82,36 @@ sources:
   - radio:4DE5EE18
   - radio:47B85E43
   - radio:05F3200D
+  - radio:AB6ABE84
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T05:25:00Z
+updated: 2026-08-20T06:20:00Z
 ---
 
 ## Binding now
 
-`47B85E43` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`05F3200D` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`locales` create and update. Official Supports lists create
+and update. Nested `LocalePayload` of optional string `name`
+and `icon` with `extra=forbid`, frozen. Create preview
+`POST /locales`. Update preview `PUT /locales/:id` with
+non-empty encoded route id. Execute `confirmation_ticket` only.
+Preview makes no HTTP. No bulk. No UI. No live API.
+`live_tested` stays false with `live_api=out_of_scope_by_user`.
+Independent review PASS. No required fixes. `complete` stays
+false. Residual honesty remaining 14.
+
+`AB6ABE84` (saved, P10, after locales commit): take only
+`states` create and update. Official Supports lists create and
+update. Nested `StatePayload` of optional string `stateCode`,
+`name`, and belongs-to `country` with `extra=forbid`, frozen.
+Create preview `POST /states`. Update preview `PUT /states/:id`
+with non-empty encoded route id. Execute `confirmation_ticket`
+only. Preview makes no HTTP. No bulk. No UI. No live API.
+`live_tested` stays false with `live_api=out_of_scope_by_user`.
+Independent review before that commit. `complete` stays false.
+Do not start this slice until `05F3200D` is committed.
+
+`47B85E43` (unsaved, P10, landed on `c412588`): ticketed
 `currencies` create and update. Official Supports lists create
 and update. Nested `CurrencyPayload` of optional string `name`
 and float `exchangeRate` with `extra=forbid`, frozen. Create
@@ -99,17 +122,6 @@ UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review PASS. No
 required fixes. `complete` stays false. Residual honesty
 remaining 16.
-
-`05F3200D` (saved, P10, after currencies commit): take only
-`locales` create and update. Official Supports lists create and
-update. Nested `LocalePayload` of optional string `name` and
-`icon` with `extra=forbid`, frozen. Create preview
-`POST /locales`. Update preview `PUT /locales/:id` with
-non-empty encoded route id. Execute `confirmation_ticket` only.
-Preview makes no HTTP. No bulk. No UI. No live API.
-`live_tested` stays false with `live_api=out_of_scope_by_user`.
-Independent review before that commit. `complete` stays false.
-Do not start this slice until `47B85E43` is committed.
 
 `4DE5EE18` (unsaved, P10, landed on `5e78f1d`): ticketed
 `countries` create and update. Official Supports lists create and
