@@ -423,6 +423,8 @@ INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES = frozenset(
         "api_invoice_reminder_associations_create_execute",
         "api_invoice_reminder_associations_update_preview",
         "api_invoice_reminder_associations_update_execute",
+        "api_invoice_reminder_associations_delete_preview",
+        "api_invoice_reminder_associations_delete_execute",
     }
 )
 
@@ -1283,7 +1285,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESB_API_TOOL_NAMES) == 2
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(ACCOUNT_NATURE_WRITE_API_TOOL_NAMES) == 4
-    assert len(INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES) == 4
+    assert len(INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES) == 6
     assert len(CITY_WRITE_API_TOOL_NAMES) == 4
     assert len(COUNTRY_GROUP_WRITE_API_TOOL_NAMES) == 4
     assert len(COUNTRY_WRITE_API_TOOL_NAMES) == 4
@@ -1292,7 +1294,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(STATE_WRITE_API_TOOL_NAMES) == 4
     assert len(ZIPCODE_WRITE_API_TOOL_NAMES) == 4
     assert len(BALANCE_MODIFIER_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 313
+    assert len(api_tool_names) == 315
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",

@@ -61,7 +61,7 @@ def call_tool(server: FastMCP, tool_name: str, arguments: dict[str, object]) -> 
     return cast(dict[str, object], structured_result)
 
 
-def test_registers_exactly_four_flat_typed_invoice_reminder_association_write_tools() -> None:
+def test_registers_exactly_six_flat_typed_invoice_reminder_association_write_tools() -> None:
     server, _ = make_server(lambda request: httpx.Response(200, json={}))
 
     by_name = {tool.name: tool for tool in asyncio.run(server.list_tools())}
@@ -73,6 +73,8 @@ def test_registers_exactly_four_flat_typed_invoice_reminder_association_write_to
             "invoiceReminderAssociation",
         },
         "api_invoice_reminder_associations_update_execute": {"confirmation_ticket"},
+        "api_invoice_reminder_associations_delete_preview": {"id"},
+        "api_invoice_reminder_associations_delete_execute": {"confirmation_ticket"},
     }
     assert set(by_name) == set(expected_properties)
     for name, fields in expected_properties.items():

@@ -97,7 +97,7 @@ def test_bulk_and_residual_stay_red() -> None:
         assert row["tool_name"] == ""
         assert row["implemented"] is False
     residual_ids = generator.RESIDUAL_CLEAR_HONESTY_IDS
-    assert len(residual_ids) == 8
+    assert len(residual_ids) == 7
     by_id = {str(row["id"]): row for row in _api_rows()}
     for row_id in residual_ids:
         row = by_id[row_id]

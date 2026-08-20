@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-20T08:40:00Z
+updated: 2026-08-20T09:40:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -54,7 +54,11 @@ coverage green.
    this rule: `reportType`, `name`, and `normalBalance` only.
    `invoiceReminderAssociations` create/update follow it with required
    `reminder` and `invoice` strings. `lateFee` is readonly and is rejected
-   at the FastMCP boundary. `cities` create/update follow it with optional
+   at the FastMCP boundary. `invoiceReminderAssociations` singular delete
+   follows `bankPayments.delete`: preview `{id}` only, execute
+   `confirmation_ticket` only, `DELETE /invoiceReminderAssociations/:id`
+   with no JSON body. Historical unauth missing-id 200 is not the
+   contract. `cities` create/update follow it with optional
    string `name`, `county`, `state`, and `country`. Do not rename belongs-to
    fields to `stateId`/`countryId`. Empty payload is allowed. Do not infer
    required from the list filter `countryId`. `countryGroups` create/update
@@ -128,7 +132,7 @@ Shape hints from research136 remain non-authoritative for greening.
 | `contactBalancePayments` | POST/PUT 401; DELETE **405** |
 | `invoiceLateFees` | POST/PUT 401; singular DELETE **405** (Supports omits singular delete); bulk DELETE `?ids[]=` also **405** “does not support bulk deleting records” despite Supports bulk delete |
 | `invoiceReminders` | POST 401; PUT/DELETE **405** (Supports: create only among singular writes); bulk DELETE `?ids[]=` **405** |
-| `invoiceReminderAssociations` | POST/PUT **405** historical unauth class; official Supports lists create/update with writable `reminder` and `invoice`, so those two rows are ticketed offline tools. DELETE missing-id 200 stays meta-delete unqualified. Collection DELETE without ids → **400** `INVALID_DELETE_ID_ARRAY` citing `ids[]` query form (bulk shape hint only) |
+| `invoiceReminderAssociations` | POST/PUT **405** historical unauth class; official Supports lists create/update with writable `reminder` and `invoice`, so those two rows are ticketed offline tools. Official Supports also lists singular delete with path `id` and no delete body, so `api.invoiceReminderAssociations.delete` is a ticketed offline tool (`api_invoice_reminder_associations_delete_preview`) with no request body. Historical unauth missing-id DELETE 200 is not cleanup proof and is not the contract. Collection DELETE without ids → **400** `INVALID_DELETE_ID_ARRAY` citing `ids[]` query form (bulk shape hint only) |
 | `organizations` | POST/PUT 401; DELETE **405** |
 | `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |

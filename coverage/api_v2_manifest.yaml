@@ -8853,30 +8853,29 @@
       "area": "invoice_reminder_associations",
       "cleanup": "not_recoverable; use disposable test data",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth DELETE missing-id returns 200 meta-only (not cleanup proof, not live qualification); blocker_code=META_DELETE_NOT_CLEANUP_PROOF; tools_allowed=false; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4",
       "filters": [],
       "id": "api.invoiceReminderAssociations.delete",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "DELETE /v2/invoiceReminderAssociations/:id",
       "operation": "delete",
       "pagination": null,
       "qualification": {
-        "blocker_code": "META_DELETE_NOT_CLEANUP_PROOF",
         "docs_etag": "tmhc6wpdc835zt",
+        "docs_etag_observed": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "kind": "meta_delete_unqualified",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
         "live_api": "out_of_scope_by_user",
-        "tools_allowed": false,
-        "unauth_status": 200
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "id"
@@ -8889,9 +8888,12 @@
       "side_effects": "deletes invoiceReminderAssociation",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_invoice_reminder_association_delete.py",
+        "tests/api/test_invoice_reminder_association_delete_tickets.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "api_invoice_reminder_associations_delete_preview",
       "vision_evidence": null,
       "vision_verified": null
     },

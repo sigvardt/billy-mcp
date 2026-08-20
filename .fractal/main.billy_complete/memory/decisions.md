@@ -89,18 +89,27 @@ sources:
   - radio:7B947636
   - radio:A485F530
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T09:08:00Z
+updated: 2026-08-20T10:05:00Z
 ---
 
 ## Binding now
 
-`4DBD7C3F` (saved, P10, live slice): take only the documented
-singular `invoiceReminderAssociations` delete. Preview takes a
+`4DBD7C3F` (saved until COMMIT, P10, landed): ticketed
+`invoiceReminderAssociations` singular delete. Preview takes a
 non-empty `id`. Execute takes `confirmation_ticket` only. Bind
 DELETE `/invoiceReminderAssociations/:id` with an encoded id and
-no request body. Treat official Supports delete as the offline
-contract. No bulk, UI, or live API. BalanceModifiers already
-committed on `5a1bde8`. `complete` stays false.
+no request body. Official Supports delete is the offline
+contract. Historical unauth missing-id 200 is not cleanup proof.
+Independent review PASS. No bulk, UI, or live API. `complete`
+stays false.
+
+`7B947636` (saved, P10, next after COMMIT): take only the
+documented singular `transactions` delete. Preview takes a
+non-empty `id`. Execute takes `confirmation_ticket` only. Bind
+DELETE `/transactions/:id` with an encoded id and no request
+body. Treat official `#v2transactions` Supports delete as the
+offline contract. No create/update, bulk, UI, or live API.
+`complete` stays false.
 
 `7453B98F` (unsaved, P10, landed on `5a1bde8`): ticketed
 `balanceModifiers` create and update. Official Supports lists
@@ -128,15 +137,6 @@ UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review PASS. No
 required fixes. `complete` stays false. Residual honesty
 remaining 10.
-
-`7B947636` (saved, P10, after invoice reminder association
-delete): take only the documented singular `transactions`
-delete. Preview takes a non-empty `id`. Execute takes
-`confirmation_ticket` only. Bind DELETE `/transactions/:id`
-with an encoded id and no request body. Treat official
-`#v2transactions` Supports delete as the offline contract. No
-create/update, bulk, UI, or live API. Do not start until
-`4DBD7C3F` commits. `complete` stays false.
 
 `A485F530` (saved, P10, after transactions delete): research-only
 the six readonly-map create/update rows (`contactBalancePostings`,

@@ -45,6 +45,12 @@ class InvoiceReminderAssociationUpdatePreviewInput(_InvoiceReminderAssociationWr
     invoiceReminderAssociation: InvoiceReminderAssociationPayload
 
 
+class InvoiceReminderAssociationDeletePreviewInput(_InvoiceReminderAssociationWritePreviewInput):
+    """Input for previewing deletion of one invoice reminder association."""
+
+    id: str = Field(min_length=1)
+
+
 def _association_payload(model: InvoiceReminderAssociationPayload) -> dict[str, JsonValue]:
     """Dump the required documented belongs-to identifiers for the ticketed body."""
 
@@ -57,7 +63,7 @@ def register_invoice_reminder_association_write_tools(
     client: BillyHttpClient,
     write_protocol: WriteProtocolService,
 ) -> None:
-    """Register exactly the four frozen ticketed association write tools."""
+    """Register the six frozen ticketed association write tools."""
 
     del client
 
@@ -127,6 +133,37 @@ def register_invoice_reminder_association_write_tools(
             execute_tool_name="api_invoice_reminder_associations_update_execute",
         )
 
+    def api_invoice_reminder_associations_delete_preview(
+        id: str = Field(min_length=1),
+    ) -> WritePreviewResult:
+        """Preview deletion of one association without sending a mutation."""
+
+        input = InvoiceReminderAssociationDeletePreviewInput(id=id)
+        return write_protocol.preview(
+            _association_spec(
+                execute_tool_name="api_invoice_reminder_associations_delete_execute",
+                method=WriteMethod.DELETE,
+                payload=None,
+                resource_id=input.id,
+                summary="Delete one Billy invoice reminder association.",
+                expected_effect_state={
+                    "action": "delete",
+                    "resource": "invoiceReminderAssociation",
+                    "id": input.id,
+                },
+            )
+        )
+
+    def api_invoice_reminder_associations_delete_execute(
+        confirmation_ticket: str = Field(min_length=1),
+    ) -> WriteExecutionResult | ToolError:
+        """Execute the exact association deletion represented by a confirmation ticket."""
+
+        return write_protocol.execute(
+            WriteExecuteInput(confirmation_ticket=confirmation_ticket),
+            execute_tool_name="api_invoice_reminder_associations_delete_execute",
+        )
+
     server.tool(
         name="api_invoice_reminder_associations_create_preview",
         description=(
@@ -151,6 +188,18 @@ def register_invoice_reminder_association_write_tools(
             "Execute a previewed Billy invoice reminder association update with its ticket."
         ),
     )(api_invoice_reminder_associations_update_execute)
+    server.tool(
+        name="api_invoice_reminder_associations_delete_preview",
+        description=(
+            "Preview deletion of one Billy invoice reminder association without a mutation."
+        ),
+    )(api_invoice_reminder_associations_delete_preview)
+    server.tool(
+        name="api_invoice_reminder_associations_delete_execute",
+        description=(
+            "Execute a previewed Billy invoice reminder association deletion with its ticket."
+        ),
+    )(api_invoice_reminder_associations_delete_execute)
 
 
 def _association_spec(

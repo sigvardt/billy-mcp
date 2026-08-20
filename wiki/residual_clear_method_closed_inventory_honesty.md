@@ -1,7 +1,7 @@
 ---
 name: residual_clear_method_closed_inventory_honesty
 title: Residual clear method-closed inventory honesty freeze
-desc: Residual clear API write honesty. 8 toolless rows remain after ticketed balanceModifiers create/update. Not completeness.
+desc: Residual clear API write honesty. 7 toolless rows remain after ticketed invoiceReminderAssociations delete. Not completeness.
 tags: [billy, api, residual, method-closed, inventory, honesty, research186]
 sources:
   - https://www.billy.dk/api/
@@ -11,14 +11,14 @@ sources:
   - .fractal/main.billy_complete/tmp/research186_residual_unauth.json
   - src/billy_mcp/live_probe.py
 created: 2026-08-02T14:20:00Z
-updated: 2026-08-20T08:40:00Z
+updated: 2026-08-20T09:40:00Z
 ---
 
 # Residual clear method-closed inventory honesty freeze
 
 ## Authority and scope
 
-Research186 inventory honesty for residual clear official write rows that stay red. Current remaining set is **8** (4 method-closed, 2 readonly-map, 2 meta-delete). `api.accountNatures.create` and `api.accountNatures.update` left this freeze: official `#v2accountnatures` still lists create/update with writable `reportType`, `name`, and `normalBalance`. `api.bankPayments.delete` also left this freeze: official `#v2bankpayments` still lists singular delete, so it is a ticketed offline tool (`api_bank_payments_delete_preview`) with no request body. `api.invoiceReminderAssociations.create` and `api.invoiceReminderAssociations.update` left this freeze: official `#v2invoicereminderassociations` still lists create/update with required `reminder` and `invoice`. `api.cities.create` and `api.cities.update` left this freeze: official `#v2cities` still lists create/update with optional `name`, `county`, `state`, and `country`. `api.countryGroups.create` and `api.countryGroups.update` left this freeze: official `#v2countrygroups` still lists create/update with optional string `name`, `icon`, and `memberCountryIds`. `api.countries.create` and `api.countries.update` left this freeze: official `#v2countries` still lists create/update with optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and belongs-to `locale`. `api.currencies.create` and `api.currencies.update` left this freeze: official `#v2currencies` still lists create/update with optional string `name` and float `exchangeRate`. `api.locales.create` and `api.locales.update` left this freeze: official `#v2locales` still lists create/update with optional string `name` and `icon`. `api.states.create` and `api.states.update` left this freeze: official `#v2states` still lists create/update with optional string `stateCode`, `name`, and belongs-to `country`. `api.zipcodes.create` and `api.zipcodes.update` left this freeze: official `#v2zipcodes` still lists create/update with optional string `zipcode`, belongs-to `city`/`state`/`country`, and float `latitude`/`longitude`. `api.balanceModifiers.create` and `api.balanceModifiers.update` left this freeze: official `#v2balancemodifiers` still lists create/update with required belongs-to-reference `modifier` and `subject`. Live API stays `out_of_scope_by_user`. Official docs fingerprint is ETag `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
+Research186 inventory honesty for residual clear official write rows that stay red. Current remaining set is **7** (4 method-closed, 2 readonly-map, 1 meta-delete). `api.accountNatures.create` and `api.accountNatures.update` left this freeze: official `#v2accountnatures` still lists create/update with writable `reportType`, `name`, and `normalBalance`. `api.bankPayments.delete` also left this freeze: official `#v2bankpayments` still lists singular delete, so it is a ticketed offline tool (`api_bank_payments_delete_preview`) with no request body. `api.invoiceReminderAssociations.create` and `api.invoiceReminderAssociations.update` left this freeze: official `#v2invoicereminderassociations` still lists create/update with required `reminder` and `invoice`. `api.invoiceReminderAssociations.delete` left this freeze: official `#v2invoicereminderassociations` still lists singular delete, so it is a ticketed offline tool (`api_invoice_reminder_associations_delete_preview`) with no request body. Historical unauth missing-id DELETE 200 is not cleanup proof and is not the contract. `api.cities.create` and `api.cities.update` left this freeze: official `#v2cities` still lists create/update with optional `name`, `county`, `state`, and `country`. `api.countryGroups.create` and `api.countryGroups.update` left this freeze: official `#v2countrygroups` still lists create/update with optional string `name`, `icon`, and `memberCountryIds`. `api.countries.create` and `api.countries.update` left this freeze: official `#v2countries` still lists create/update with optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and belongs-to `locale`. `api.currencies.create` and `api.currencies.update` left this freeze: official `#v2currencies` still lists create/update with optional string `name` and float `exchangeRate`. `api.locales.create` and `api.locales.update` left this freeze: official `#v2locales` still lists create/update with optional string `name` and `icon`. `api.states.create` and `api.states.update` left this freeze: official `#v2states` still lists create/update with optional string `stateCode`, `name`, and belongs-to `country`. `api.zipcodes.create` and `api.zipcodes.update` left this freeze: official `#v2zipcodes` still lists create/update with optional string `zipcode`, belongs-to `city`/`state`/`country`, and float `latitude`/`longitude`. `api.balanceModifiers.create` and `api.balanceModifiers.update` left this freeze: official `#v2balancemodifiers` still lists create/update with required belongs-to-reference `modifier` and `subject`. Live API stays `out_of_scope_by_user`. Official docs fingerprint is ETag `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
 This page is **not**:
 
@@ -38,7 +38,7 @@ Locked base `https://api.billysbilling.com/v2`, no token:
 | --- | ---: | --- | --- |
 | HTTP **405** `METHOD_NOT_ALLOWED` (historical research186 class) | 25 then, **4** remaining | `method_closed_offline` | `METHOD_NOT_ALLOWED_UNAUTH` |
 | HTTP **401** `AUTHENTICATION_REQUIRED` on transactions create/update | 2 | `readonly_field_map_insufficient` | `READONLY_PROPERTY_TABLE` |
-| HTTP **200** meta-only on two singular deletes | 2 | `meta_delete_unqualified` | `META_DELETE_NOT_CLEANUP_PROOF` |
+| HTTP **200** meta-only on two singular deletes | 2 then, **1** remaining | `meta_delete_unqualified` | `META_DELETE_NOT_CLEANUP_PROOF` |
 
 Parity with `live_probe._RESEARCH96_RESIDUAL_OUTCOMES`. research191 unauth reconfirm (2026-08-02) matched the same 405/401/meta-200 classes (`tmp/research191_unauth_reconfirm.json`). Live API qualification remains `out_of_scope_by_user`.
 
@@ -54,7 +54,7 @@ For every residual id in `RESIDUAL_CLEAR_HONESTY_IDS`:
 
 ### Method-closed (4 remaining)
 
-Supports still lists these writes. Unauthenticated 405 is not the contract. Rows stay toolless here only when the official property table has no writable field map, or the slice has not landed yet. `accountNatures` create/update, `bankPayments.delete`, `invoiceReminderAssociations` create/update, `cities` create/update, `countryGroups` create/update, `countries` create/update, `currencies` create/update, `locales` create/update, `states` create/update, `zipcodes` create/update, and `balanceModifiers` create/update are no longer in this set.
+Supports still lists these writes. Unauthenticated 405 is not the contract. Rows stay toolless here only when the official property table has no writable field map, or the slice has not landed yet. `accountNatures` create/update, `bankPayments.delete`, `invoiceReminderAssociations` create/update/delete, `cities` create/update, `countryGroups` create/update, `countries` create/update, `currencies` create/update, `locales` create/update, `states` create/update, `zipcodes` create/update, and `balanceModifiers` create/update are no longer in this set.
 
 ### Readonly field map (2)
 
@@ -62,7 +62,7 @@ Supports still lists these writes. Unauthenticated 405 is not the contract. Rows
 
 ### Meta delete unqualified (2)
 
-`api.transactions.delete` and `api.invoiceReminderAssociations.delete` return unauth 200 meta-only for a missing id. That matches the docs' idempotent-delete narrative and is **not** cleanup proof.
+`api.transactions.delete` returns unauth 200 meta-only for a missing id. That matches the docs' idempotent-delete narrative and is **not** cleanup proof. `api.invoiceReminderAssociations.delete` left this freeze: official Supports lists singular delete with path `id` and no delete body, so it is a ticketed offline tool. The historical unauth 200 is not the contract.
 
 API live-test cells stay false with `live_api=out_of_scope_by_user`
 ([[api_live_qualification_semantics]]). That is not this freeze.
@@ -73,10 +73,10 @@ API live-test cells stay false with `live_api=out_of_scope_by_user`
 | --- | --- |
 | Bulk schema unspecified (`external_contract_blocker`) | 92 API |
 | UI product-plane bulk discovery_required ([[ui_product_plane_bulk_parity_inventory_honesty]]) | 58 UI |
-| Residual clear honesty (this freeze, still red) | 8 API |
+| Residual clear honesty (this freeze, still red) | 7 API |
 | annual_reports org inaccessible | 1 UI discovery |
 
-Generated snapshot after ticketed `balanceModifiers` create/update: implemented **544**, contract **549**, live/vision **339**, complete **false**. Historical research186 freeze snapshot was implemented/contract **470**, live/vision **286**.
+Generated snapshot after ticketed `invoiceReminderAssociations` delete: implemented **545**, contract **550**, live/vision **339**, complete **false**. Historical research186 freeze snapshot was implemented/contract **470**, live/vision **286**.
 
 ## Generator and tests
 

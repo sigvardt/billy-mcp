@@ -1640,6 +1640,11 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_invoice_reminder_association_write_tickets.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.invoiceReminderAssociations.delete": (
+        "tests/api/test_invoice_reminder_association_delete.py",
+        "tests/api/test_invoice_reminder_association_delete_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.transactions.get": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.transactions.list": (
         "tests/api/test_ledger_user_reads.py",
@@ -1904,8 +1909,8 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 
 
 # Research186 residual clear honesty: remaining Supports write rows without a
-# landed typed field map. Zipcodes create/update left this freeze. Unauth
-# matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
+# landed typed field map. Association singular delete left this freeze.
+# Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
         "api.contactBalancePostings.create",
@@ -1923,7 +1928,6 @@ RESIDUAL_READONLY_MAP_IDS: frozenset[str] = frozenset(
 RESIDUAL_META_DELETE_IDS: frozenset[str] = frozenset(
     {
         "api.transactions.delete",
-        "api.invoiceReminderAssociations.delete",
     }
 )
 RESIDUAL_CLEAR_HONESTY_IDS: frozenset[str] = (
