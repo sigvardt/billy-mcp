@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-20T06:45:00Z
+updated: 2026-08-20T08:40:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -80,6 +80,11 @@ coverage green.
    and float `latitude` and `longitude`. Reject `zipcodeId`,
    `cityId`, `stateId`, and `countryId`. Inner `zipcode` is the
    postal-code field, not the route id. Empty payload is allowed.
+   `balanceModifiers` create/update follow it with required
+   belongs-to-reference strings `modifier` and `subject`. Reject
+   `modifierId`, `subjectId`, `amount`, `entryDate`,
+   `realizedCurrencyDifference`, and `isVoided`. Empty payload is
+   not allowed. Do not invent a subject-prefix enum.
    Unauthenticated POST/PUT 405 is not the contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests

@@ -89,12 +89,26 @@ sources:
   - radio:7B947636
   - radio:A485F530
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T08:05:00Z
+updated: 2026-08-20T09:08:00Z
 ---
 
 ## Binding now
 
-`8FE83270` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`7453B98F` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`balanceModifiers` create and update. Official Supports lists
+create and update. Nested `BalanceModifierPayload` of required
+non-empty belongs-to-reference strings `modifier` and `subject`
+with `extra=forbid`, frozen. Exclude readonly `amount`,
+`entryDate`, `realizedCurrencyDifference`, and `isVoided`.
+Create preview `POST /balanceModifiers`. Update preview
+`PUT /balanceModifiers/:id` with non-empty encoded route id.
+Execute `confirmation_ticket` only. Preview makes no HTTP. No
+delete. No bulk. No UI. No live API. `live_tested` stays false
+with `live_api=out_of_scope_by_user`. Independent review PASS.
+No required fixes. `complete` stays false. Residual honesty
+remaining 8.
+
+`8FE83270` (unsaved, P10, landed on `b95f96f`): ticketed
 `zipcodes` create and update. Official Supports lists create
 and update. Nested `ZipcodePayload` of optional string
 `zipcode`, belongs-to string `city`, `state`, and `country`,
@@ -106,17 +120,6 @@ UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review PASS. No
 required fixes. `complete` stays false. Residual honesty
 remaining 10.
-
-`7453B98F` (saved, P10, after zipcodes commit): take only
-`balanceModifiers` create and update from official
-`#v2balanceModifiers`. Nested required non-empty `modifier`
-and `subject` strings (belongs-to-reference IDs). Exclude
-readonly `amount`, `entryDate`, `realizedCurrencyDifference`,
-and `isVoided`. Create preview `POST /balanceModifiers`. Update
-preview `PUT /balanceModifiers/:id`. Execute
-`confirmation_ticket` only. Preview makes no HTTP. No delete.
-No bulk. No UI. No live API. Do not start until `8FE83270` is
-committed. `complete` stays false.
 
 `4DBD7C3F` (saved, P10, after balanceModifiers commit): take
 only the documented singular `invoiceReminderAssociations`

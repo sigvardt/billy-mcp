@@ -1471,30 +1471,29 @@
       "area": "balance_modifiers",
       "cleanup": "delete dedicated test resource",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4",
       "filters": [],
       "id": "api.balanceModifiers.create",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "POST /v2/balanceModifiers",
       "operation": "create",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "tmhc6wpdc835zt",
+        "docs_etag_observed": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
         "live_api": "out_of_scope_by_user",
-        "tools_allowed": false
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "balanceModifier"
@@ -1507,9 +1506,12 @@
       "side_effects": "creates balanceModifier",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_balance_modifier_writes.py",
+        "tests/api/test_balance_modifier_write_tickets.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "api_balance_modifiers_create_preview",
       "vision_evidence": null,
       "vision_verified": null
     },
@@ -1517,30 +1519,29 @@
       "area": "balance_modifiers",
       "cleanup": "restore prior test state",
       "contract_status": "documented",
-      "contract_tested": false,
+      "contract_tested": true,
       "discovered": true,
       "errors": [
         "AUTHENTICATION_REQUIRED",
         "OAUTH_INVALID_ACCESS_TOKEN"
       ],
-      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4; research186 unauth METHOD_NOT_ALLOWED (405) overrides Supports for offline tools; blocker_code=METHOD_NOT_ALLOWED_UNAUTH; tools_allowed=false; live_api=out_of_scope_by_user; research96 residual fixture parity; research191/research192 unauth reconfirm",
+      "evidence": "https://www.billy.dk/api/ official API v2; docs etag tmhc6wpdc835zt; MD5 053f755f52e3926b028e29325e3670d4",
       "filters": [],
       "id": "api.balanceModifiers.update",
-      "implemented": false,
+      "implemented": true,
       "lane": "api",
       "live_tested": false,
       "method_or_route": "PUT /v2/balanceModifiers/:id",
       "operation": "update",
       "pagination": null,
       "qualification": {
-        "blocker_code": "METHOD_NOT_ALLOWED_UNAUTH",
         "docs_etag": "tmhc6wpdc835zt",
+        "docs_etag_observed": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm",
-        "fixture_ref": "research96_residual_unauth",
-        "kind": "method_closed_offline",
+        "docs_md5_observed": "053f755f52e3926b028e29325e3670d4",
+        "kind": "live_api_deferred",
         "live_api": "out_of_scope_by_user",
-        "tools_allowed": false
+        "scope_code": "LIVE_API_OWNER_SKIP"
       },
       "request_fields": [
         "id",
@@ -1554,9 +1555,12 @@
       "side_effects": "updates balanceModifier",
       "source_kind": "clear",
       "test_references": [
-        "tests/coverage/test_coverage_inventory.py"
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/api/test_balance_modifier_writes.py",
+        "tests/api/test_balance_modifier_write_tickets.py",
+        "tests/unit/test_coverage_server.py"
       ],
-      "tool_name": "",
+      "tool_name": "api_balance_modifiers_update_preview",
       "vision_evidence": null,
       "vision_verified": null
     },

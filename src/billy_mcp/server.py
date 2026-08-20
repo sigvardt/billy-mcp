@@ -11,6 +11,7 @@ from billy_mcp.api.account_reads import register_account_read_tools
 from billy_mcp.api.account_writes import register_account_write_tools
 from billy_mcp.api.attachment_writes import register_attachment_write_tools
 from billy_mcp.api.balance_invoice_ext_reads import register_balance_invoice_extension_read_tools
+from billy_mcp.api.balance_modifier_writes import register_balance_modifier_write_tools
 from billy_mcp.api.bank_line_writes import register_bank_line_write_tools
 from billy_mcp.api.bank_payment_writes import register_bank_payment_write_tools
 from billy_mcp.api.bank_reads import register_bank_read_tools
@@ -1210,6 +1211,7 @@ def create_server(
     register_invoice_late_fee_write_tools(server, client, write_protocol)
     register_invoice_reminder_write_tools(server, client, write_protocol)
     register_invoice_reminder_association_write_tools(server, client, write_protocol)
+    register_balance_modifier_write_tools(server, client, write_protocol)
     register_organization_write_tools(server, client, write_protocol)
     register_user_write_tools(server, client, write_protocol)
     register_sales_tax_return_write_tools(server, client, write_protocol)

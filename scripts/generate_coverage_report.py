@@ -1560,6 +1560,16 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.balanceModifiers.get": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.balanceModifiers.list": ("tests/api/test_bank_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.balanceModifiers.create": (
+        "tests/api/test_balance_modifier_writes.py",
+        "tests/api/test_balance_modifier_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.balanceModifiers.update": (
+        "tests/api/test_balance_modifier_writes.py",
+        "tests/api/test_balance_modifier_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.contactBalancePayments.get": (
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
@@ -1898,8 +1908,6 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 # matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
-        "api.balanceModifiers.create",
-        "api.balanceModifiers.update",
         "api.contactBalancePostings.create",
         "api.contactBalancePostings.update",
         "api.postings.create",
