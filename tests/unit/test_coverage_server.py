@@ -426,6 +426,15 @@ INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+CITY_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_cities_create_preview",
+        "api_cities_create_execute",
+        "api_cities_update_preview",
+        "api_cities_update_execute",
+    }
+)
+
 
 class FakeAuthStatusChecker:
     def __init__(self) -> None:
@@ -1212,7 +1221,8 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(WAVE_FIVESC_API_TOOL_NAMES) == 4
     assert len(ACCOUNT_NATURE_WRITE_API_TOOL_NAMES) == 4
     assert len(INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 281
+    assert len(CITY_WRITE_API_TOOL_NAMES) == 4
+    assert len(api_tool_names) == 285
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",
@@ -1330,6 +1340,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | WAVE_FIVESC_API_TOOL_NAMES
         | ACCOUNT_NATURE_WRITE_API_TOOL_NAMES
         | INVOICE_REMINDER_ASSOCIATION_WRITE_API_TOOL_NAMES
+        | CITY_WRITE_API_TOOL_NAMES
         | auth_tool_names
         | ui_tool_names
     )

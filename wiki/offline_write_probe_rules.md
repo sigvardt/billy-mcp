@@ -54,8 +54,11 @@ coverage green.
    this rule: `reportType`, `name`, and `normalBalance` only.
    `invoiceReminderAssociations` create/update follow it with required
    `reminder` and `invoice` strings. `lateFee` is readonly and is rejected
-   at the FastMCP boundary. Unauthenticated POST/PUT 405 is not the
-   contract.
+   at the FastMCP boundary. `cities` create/update follow it with optional
+   string `name`, `county`, `state`, and `country`. Do not rename belongs-to
+   fields to `stateId`/`countryId`. Empty payload is allowed. Do not infer
+   required from the list filter `countryId`. Unauthenticated POST/PUT 405
+   is not the contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests
    should still deny it.

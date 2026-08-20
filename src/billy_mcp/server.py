@@ -20,6 +20,7 @@ from billy_mcp.api.bill_writes import register_bill_write_tools
 from billy_mcp.api.bootstrap_reads import register_bootstrap_read_tools
 from billy_mcp.api.catalog_reads import register_catalog_read_tools
 from billy_mcp.api.catalog_writes import register_catalog_write_tools
+from billy_mcp.api.city_writes import register_city_write_tools
 from billy_mcp.api.contact_balance_payment_writes import (
     register_contact_balance_payment_write_tools,
 )
@@ -1168,6 +1169,7 @@ def create_server(
     register_file_upload_tools(server, client, configuration, confirmations)
     register_invoice_email_delivery_write_tools(server, client, configuration, confirmations)
     register_geo_read_tools(server, client)
+    register_city_write_tools(server, client, write_protocol)
     register_tax_read_tools(server, client)
     register_bank_read_tools(server, client)
     register_balance_invoice_extension_read_tools(server, client)

@@ -78,25 +78,32 @@ sources:
   - radio:B54A6BFC
   - radio:2D09964C
   - radio:8C5F08A8
+  - radio:AF8E5A1F
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T00:00:00Z
+updated: 2026-08-20T02:15:00Z
 ---
 
 ## Binding now
 
-`8C5F08A8` (saved, P10, current after this COMMIT): take only
-`cities` create and update. Official Supports lists create and
-update. Field table: optional string `name`, `county`, `state`
-belongs-to, `country` belongs-to, with no required, immutable,
-readonly, default, or enum notes. Nested `CityPayload` of those
-four optional strings with `extra=forbid`. Create preview
-`POST /cities`. Update preview `PUT /cities/:id` with non-empty
-encoded route id. Execute `confirmation_ticket` only. Preview
-makes no HTTP. No bulk. No live API. `live_tested` stays false
-with `live_api=out_of_scope_by_user`. Independent review before
-that commit. `complete` stays false.
+`AF8E5A1F` (saved, P10, current after this COMMIT): take only
+`countryGroups` create and update. Official Supports lists create
+and update. Nested `CountryGroupPayload` of optional string
+`name`, `icon`, and `memberCountryIds` with `extra=forbid`,
+frozen. Create preview `POST /countryGroups`. Update preview
+`PUT /countryGroups/:id` with non-empty encoded route id.
+Execute `confirmation_ticket` only. Preview makes no HTTP. No
+bulk. No UI. No live API. `live_tested` stays false with
+`live_api=out_of_scope_by_user`. Independent review before that
+commit. `complete` stays false.
 
-`2D09964C` (saved, P10, landed this slice): ticketed
+`8C5F08A8` (saved, P10, landed this slice): ticketed `cities`
+create and update. Nested optional string `name`, `county`,
+`state`, and `country` with `extra=forbid`. Create
+`POST /cities`. Update `PUT /cities/:id`. Execute
+`confirmation_ticket` only. Preview makes no HTTP. Independent
+review PASS. Residual honesty remaining 22.
+
+`2D09964C` (saved, P10, landed): ticketed
 `invoiceReminderAssociations` create and update. Nested required
 `reminder` and `invoice` strings, `extra=forbid`. `lateFee`
 rejected at the FastMCP boundary. Create

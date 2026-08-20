@@ -10,37 +10,38 @@ sources:
   - radio:B54A6BFC
   - radio:2D09964C
   - radio:8C5F08A8
+  - radio:AF8E5A1F
   - radio:EAB2F91B
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T01:20:00Z
+updated: 2026-08-20T02:15:00Z
 ---
 
 ## Now
 
-Ticketed offline `invoiceReminderAssociations` create and update
-are landed. Preview tools
-`api_invoice_reminder_associations_create_preview` and
-`api_invoice_reminder_associations_update_preview` take a nested
-payload of required `reminder` and `invoice` strings with
-`extra=forbid`. `lateFee` fails at the FastMCP boundary. Create
-is `POST /invoiceReminderAssociations`. Update is
-`PUT /invoiceReminderAssociations/:id` with a non-empty encoded
-id. Execute takes `confirmation_ticket` only. Preview makes no
-HTTP. Delete and bulk stay red. `live_tested` stays false with
+Ticketed offline `cities` create and update are landed. Preview
+tools `api_cities_create_preview` and `api_cities_update_preview`
+take a nested payload of optional string `name`, `county`,
+`state`, and `country` with `extra=forbid`. `stateId` and
+`countryId` fail at the FastMCP boundary. Empty nested object is
+valid. Create is `POST /cities`. Update is `PUT /cities/:id` with
+a non-empty encoded id. Execute takes `confirmation_ticket`
+only. Preview makes no HTTP. Bulk stay red. No singular delete.
+`live_tested` stays false with
 `qualification.live_api=out_of_scope_by_user`. Independent review
 PASS. `complete` stays false.
 
-Generated snapshot: implemented 528, contract 533, live/vision
-339, `complete=false`. Residual honesty remaining is 24 (20
+Generated snapshot: implemented 530, contract 535, live/vision
+339, `complete=false`. Residual honesty remaining is 22 (18
 method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-Next bind after this COMMIT is parent `8C5F08A8`: ticketed
-`cities` create and update only. Binding `9B979A05` still owns
+Next bind after this COMMIT is parent `AF8E5A1F`: ticketed
+`countryGroups` create and update only. Nested optional string
+`name`, `icon`, `memberCountryIds`. Binding `9B979A05` still owns
 the rest of the 121 split. Unauth 405 must not override Supports.
 Never infer bulk schemas. No live API. Do not finish.
 

@@ -4,13 +4,13 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T01:20:00Z
+updated: 2026-08-20T02:15:00Z
 ---
 
 ## Open
 
-- Binding `8C5F08A8`: next proved cohort after this COMMIT is ticketed `cities` create and update. Nested optional string `name`, `county`, `state`, and `country` with `extra=forbid`. No invented required fields or aliases. Create `POST /cities`. Update `PUT /cities/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No live API. Independent review before that commit. `complete` stays false.
-- Binding `9B979A05`: remaining residual honesty is 20 method-closed + 2 readonly-map + 2 meta-delete = 24. Unauth 405 must not override Supports. Then remaining geo/country-group writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
+- Binding `AF8E5A1F`: next proved cohort after this COMMIT is ticketed `countryGroups` create and update. Nested optional string `name`, `icon`, `memberCountryIds` with `extra=forbid`, frozen. No invented required fields or aliases. Create `POST /countryGroups`. Update `PUT /countryGroups/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No UI. No live API. Independent review before that commit. `complete` stays false.
+- Binding `9B979A05`: remaining residual honesty is 18 method-closed + 2 readonly-map + 2 meta-delete = 22. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -24,6 +24,7 @@ updated: 2026-08-20T01:20:00Z
 
 ## Done
 
+- Binding `8C5F08A8`: ticketed offline `api.cities.create` and `.update`. Nested optional string `name`, `county`, `state`, and `country`, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 22. Independent review PASS.
 - Binding `2D09964C`: ticketed offline `api.invoiceReminderAssociations.create` and `.update`. Nested required `reminder` and `invoice` strings, `extra=forbid`, `lateFee` rejected. Residual honesty remaining 24. Independent review PASS.
 - Binding `B54A6BFC`: ticketed offline `api.bankPayments.delete`. Preview `{id}` only. Execute DELETE `/bankPayments/:id` with no body. Residual honesty remaining 26.
 - Binding `EAB2F91B`: nested `AccountNaturePayload` is only `reportType`, `name`, `normalBalance` with `extra=forbid`. FastMCP preview schema is typed. `customField` and undocumented nested keys fail at the tool boundary. Enum members stay opaque strings. Empty payload is allowed because docs list no required fields.
