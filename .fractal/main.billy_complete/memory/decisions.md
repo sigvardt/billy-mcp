@@ -76,17 +76,39 @@ sources:
   - radio:9B979A05
   - radio:EAB2F91B
   - radio:B54A6BFC
+  - radio:2D09964C
+  - radio:8C5F08A8
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T00:45:00Z
+updated: 2026-08-20T00:00:00Z
 ---
 
 ## Binding now
 
-`B54A6BFC` (saved, P9, landed this EXECUTE): ticketed singular
+`8C5F08A8` (saved, P10, current after this COMMIT): take only
+`cities` create and update. Official Supports lists create and
+update. Field table: optional string `name`, `county`, `state`
+belongs-to, `country` belongs-to, with no required, immutable,
+readonly, default, or enum notes. Nested `CityPayload` of those
+four optional strings with `extra=forbid`. Create preview
+`POST /cities`. Update preview `PUT /cities/:id` with non-empty
+encoded route id. Execute `confirmation_ticket` only. Preview
+makes no HTTP. No bulk. No live API. `live_tested` stays false
+with `live_api=out_of_scope_by_user`. Independent review before
+that commit. `complete` stays false.
+
+`2D09964C` (saved, P10, landed this slice): ticketed
+`invoiceReminderAssociations` create and update. Nested required
+`reminder` and `invoice` strings, `extra=forbid`. `lateFee`
+rejected at the FastMCP boundary. Create
+`POST /invoiceReminderAssociations`. Update
+`PUT /invoiceReminderAssociations/:id`. Execute
+`confirmation_ticket` only. Preview makes no HTTP. Independent
+review PASS. Residual honesty remaining 24.
+
+`B54A6BFC` (unsaved, P9, landed): ticketed singular
 `api.bankPayments.delete`. Preview `{id}` only. Execute
 `DELETE /bankPayments/:id` with no body. Keep
-`live_tested=false` with `live_api=out_of_scope_by_user`. Next is
-invoiceReminderAssociations create/update. No live API.
+`live_tested=false` with `live_api=out_of_scope_by_user`.
 
 `EAB2F91B` (unsaved, P10, landed): official `#v2accountnatures`
 writable fields are exactly `reportType`, `name`, and

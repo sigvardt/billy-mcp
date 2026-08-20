@@ -52,6 +52,10 @@ coverage green.
    payload. Enum members stay opaque strings unless the docs list them. Do not
    infer required fields from live API. `accountNatures` create/update follow
    this rule: `reportType`, `name`, and `normalBalance` only.
+   `invoiceReminderAssociations` create/update follow it with required
+   `reminder` and `invoice` strings. `lateFee` is readonly and is rejected
+   at the FastMCP boundary. Unauthenticated POST/PUT 405 is not the
+   contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests
    should still deny it.
@@ -94,7 +98,7 @@ Shape hints from research136 remain non-authoritative for greening.
 | `contactBalancePayments` | POST/PUT 401; DELETE **405** |
 | `invoiceLateFees` | POST/PUT 401; singular DELETE **405** (Supports omits singular delete); bulk DELETE `?ids[]=` also **405** “does not support bulk deleting records” despite Supports bulk delete |
 | `invoiceReminders` | POST 401; PUT/DELETE **405** (Supports: create only among singular writes); bulk DELETE `?ids[]=` **405** |
-| `invoiceReminderAssociations` | POST/PUT **405**; DELETE missing-id 200 — do not offline-green create/update; collection DELETE without ids → **400** `INVALID_DELETE_ID_ARRAY` citing `ids[]` query form (bulk shape hint only) |
+| `invoiceReminderAssociations` | POST/PUT **405** historical unauth class; official Supports lists create/update with writable `reminder` and `invoice`, so those two rows are ticketed offline tools. DELETE missing-id 200 stays meta-delete unqualified. Collection DELETE without ids → **400** `INVALID_DELETE_ID_ARRAY` citing `ids[]` query form (bulk shape hint only) |
 | `organizations` | POST/PUT 401; DELETE **405** |
 | `users` | POST/DELETE **405**; PUT 401 (Supports: update, no create) |
 | `files` | POST 401; PUT/DELETE **405**; property table all readonly — JSON create is not the binary upload special |

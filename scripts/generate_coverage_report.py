@@ -1550,6 +1550,16 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
         "tests/api/test_balance_invoice_ext_reads.py",
         SERVER_REGISTRY_TEST_REFERENCE,
     ),
+    "api.invoiceReminderAssociations.create": (
+        "tests/api/test_invoice_reminder_association_writes.py",
+        "tests/api/test_invoice_reminder_association_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.invoiceReminderAssociations.update": (
+        "tests/api/test_invoice_reminder_association_writes.py",
+        "tests/api/test_invoice_reminder_association_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.transactions.get": ("tests/api/test_ledger_user_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.transactions.list": (
         "tests/api/test_ledger_user_reads.py",
@@ -1813,8 +1823,8 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
     }
 
 
-# Research186 residual clear honesty: Supports write rows that must not plan tools.
-# Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES (reconfirmed 2026-08-02).
+# Research186 residual clear honesty: remaining Supports write rows without a
+# landed typed field map. Unauth matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
         "api.balanceModifiers.create",
@@ -1829,8 +1839,6 @@ RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
         "api.countries.update",
         "api.currencies.create",
         "api.currencies.update",
-        "api.invoiceReminderAssociations.create",
-        "api.invoiceReminderAssociations.update",
         "api.locales.create",
         "api.locales.update",
         "api.postings.create",

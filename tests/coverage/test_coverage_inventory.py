@@ -378,13 +378,15 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
     meta_delete = sorted(generator.RESIDUAL_META_DELETE_IDS)
     residual = sorted(generator.RESIDUAL_CLEAR_HONESTY_IDS)
 
-    assert len(method_closed) == 22
+    assert len(method_closed) == 20
     assert len(readonly_map) == 2
     assert len(meta_delete) == 2
-    assert len(residual) == 26
+    assert len(residual) == 24
     assert "api.accountNatures.create" not in method_closed
     assert "api.accountNatures.update" not in method_closed
     assert "api.bankPayments.delete" not in method_closed
+    assert "api.invoiceReminderAssociations.create" not in method_closed
+    assert "api.invoiceReminderAssociations.update" not in method_closed
     assert set(method_closed) | set(readonly_map) | set(meta_delete) == set(residual)
 
     for row_id in residual:
@@ -420,8 +422,8 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
 
     # Honesty freeze does not change green counts or complete.
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
@@ -532,8 +534,8 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
@@ -637,8 +639,8 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
@@ -734,8 +736,8 @@ def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
@@ -809,8 +811,8 @@ def test_ui_product_plane_bulk_chrome_dual_na_empty_list_rows() -> None:
     assert geo_bulk["parity_status"] == "not_applicable"
     assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
 
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["complete"] is False
@@ -1731,8 +1733,8 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
     assert status["complete"] is False
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
 
 
 def test_research185_attachments_get_create_update_delete_na() -> None:
@@ -1806,8 +1808,8 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
     assert status["complete"] is False
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["qualification"]["implemented_rows"] == 526
-    assert status["qualification"]["contract_tested_rows"] == 531
+    assert status["qualification"]["implemented_rows"] == 528
+    assert status["qualification"]["contract_tested_rows"] == 533
     assert status["qualification"]["live_tested_rows"] == (
         74
         + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
