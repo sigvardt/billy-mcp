@@ -9,7 +9,8 @@ updated: 2026-08-20T12:06:00Z
 
 ## Open
 
-- Binding `88C4B0A9`: residual audit committed. Owner input required on bulk92 plus six readonly-map rows. Do not repeat research. Do not implement guessed tools. `complete` stays false.
+- Binding `88C4B0A9`: residual audit committed. Official lock now `pi4s9u10j037qn` / `d805f3d2bb8e339f7635d6834b4011bd` after bankLines list-filter relock. Owner input still required on bulk92 plus six readonly-map rows. Do not implement guessed tools. `complete` stays false.
+- This slice: typed `api_bank_lines_list` filters. `accountId` required. Shared `BankListRequest` unchanged.
 - Binding `9B979A05`: remaining residual honesty is 6 readonly-map. Method-closed remaining is 0. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.

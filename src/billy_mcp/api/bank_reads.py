@@ -51,6 +51,61 @@ class BankListRequest(_ReadRequest):
     sort_direction: SortDirection | None = Field(default=None, alias="sortDirection")
 
 
+class BankLineSortProperty(StrEnum):
+    """Official GET /v2/bankLines sortProperty values."""
+
+    ENTRY_DATE = "entryDate"
+    AMOUNT = "amount"
+
+
+class BankLineStatus(StrEnum):
+    """Official GET /v2/bankLines status filter values."""
+
+    PENDING = "pending"
+    BOOKED = "booked"
+
+
+class BankLineSide(StrEnum):
+    """Official GET /v2/bankLines side filter values."""
+
+    DEBIT = "debit"
+    CREDIT = "credit"
+
+
+class BankLinesListRequest(_ReadRequest):
+    """Official GET /v2/bankLines list filters. accountId is required."""
+
+    model_config = ConfigDict(extra="forbid", frozen=True, populate_by_name=True)
+
+    account_id: str = Field(alias="accountId", min_length=1)
+    page: int = Field(default=1, ge=1)
+    page_size: int = Field(default=DEFAULT_PAGE_SIZE, alias="pageSize", ge=1, le=MAX_PAGE_SIZE)
+    include: str | None = Field(default=None, min_length=1)
+    sort_property: BankLineSortProperty | None = Field(default=None, alias="sortProperty")
+    sort_direction: SortDirection | None = Field(default=None, alias="sortDirection")
+    is_reconciled: bool | None = Field(default=None, alias="isReconciled")
+    status: BankLineStatus | None = None
+    side: BankLineSide | None = None
+    external_id: str | None = Field(default=None, alias="externalId", min_length=1)
+    receipt_state: str | None = Field(default=None, alias="receiptState", min_length=1)
+    min_amount: float | None = Field(default=None, alias="minAmount")
+    max_amount: float | None = Field(default=None, alias="maxAmount")
+    min_entry_date: str | None = Field(default=None, alias="minEntryDate")
+    max_entry_date: str | None = Field(default=None, alias="maxEntryDate")
+    entry_date_period: str | None = Field(default=None, alias="entryDatePeriod")
+    q: str | None = Field(default=None, min_length=1)
+
+    def query_params(self) -> dict[str, str | int | float | bool]:
+        """Serialize documented bank-line list fields and omit unset optionals."""
+
+        dumped = self.model_dump(by_alias=True, exclude_none=True, mode="json")
+        params: dict[str, str | int | float | bool] = {}
+        for key, value in dumped.items():
+            if isinstance(value, (str, int, float, bool)):
+                params[key] = value
+        return params
+
+
 class BankRecord(BaseModel):
     """An opaque upstream bank or balance record."""
 
@@ -215,10 +270,11 @@ class BankReadService:
         record = self._get("/bankLines", "bankLine", request)
         return record if isinstance(record, ToolError) else BankLineGetSuccess(bankLine=record)
 
-    def bank_lines_list(self, request: BankListRequest) -> BankLinesListSuccess | ToolError:
-        """Read one documented page of bank lines."""
+    def bank_lines_list(self, request: BankLinesListRequest) -> BankLinesListSuccess | ToolError:
+        """Read one documented page of bank lines for a required account."""
 
-        records = self._list("/bankLines", "bankLines", request)
+        response = self._client.request("GET", "/bankLines", params=request.query_params())
+        records = _list_from_response(response, "bankLines")
         if isinstance(records, ToolError):
             return records
         bank_lines, meta = records
@@ -355,21 +411,45 @@ def register_bank_read_tools(server: FastMCP, client: BillyHttpClient) -> None:
         return service.bank_lines_get(BankGetRequest(id=id, include=include))
 
     def api_bank_lines_list(
+        accountId: str = Field(min_length=1),
         page: int = Field(default=1, ge=1),
         pageSize: int = Field(default=DEFAULT_PAGE_SIZE, ge=1, le=MAX_PAGE_SIZE),
         include: str | None = Field(default=None, min_length=1),
-        sortProperty: str | None = Field(default=None, min_length=1),
+        sortProperty: BankLineSortProperty | None = None,
         sortDirection: SortDirection | None = None,
+        isReconciled: bool | None = None,
+        status: BankLineStatus | None = None,
+        side: BankLineSide | None = None,
+        externalId: str | None = Field(default=None, min_length=1),
+        receiptState: str | None = Field(default=None, min_length=1),
+        minAmount: float | None = None,
+        maxAmount: float | None = None,
+        minEntryDate: str | None = None,
+        maxEntryDate: str | None = None,
+        entryDatePeriod: str | None = None,
+        q: str | None = Field(default=None, min_length=1),
     ) -> BankLinesListSuccess | ToolError:
-        """List Billy bank lines with documented paging, inclusion, and sorting."""
+        """List Billy bank lines for one account with official list filters."""
 
         return service.bank_lines_list(
-            BankListRequest(
+            BankLinesListRequest(
+                accountId=accountId,
                 page=page,
                 pageSize=pageSize,
                 include=include,
                 sortProperty=sortProperty,
                 sortDirection=sortDirection,
+                isReconciled=isReconciled,
+                status=status,
+                side=side,
+                externalId=externalId,
+                receiptState=receiptState,
+                minAmount=minAmount,
+                maxAmount=maxAmount,
+                minEntryDate=minEntryDate,
+                maxEntryDate=maxEntryDate,
+                entryDatePeriod=entryDatePeriod,
+                q=q,
             )
         )
 

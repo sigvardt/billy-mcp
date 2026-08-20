@@ -95,6 +95,13 @@ updated: 2026-08-20T12:06:00Z
 
 ## Binding now
 
+This slice (198.72): official docs relocked to ETag
+`pi4s9u10j037qn` / MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
+`api_bank_lines_list` takes required `accountId` and the
+official List filters. Shared `BankListRequest` is unchanged.
+Bulk92 and six readonly-map rows stay red. `complete` stays
+false.
+
 `88C4B0A9` (unsaved after owner-input report, P10, audit
 committed): remaining unimplemented API rows are exactly bulk92
 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) plus six readonly-map

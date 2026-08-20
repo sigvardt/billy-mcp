@@ -30,17 +30,14 @@ updated: 2026-08-20T12:06:00Z
 
 ## Now
 
-`88C4B0A9` residual audit is committed. Independent review PASS.
-Required fixes none. Remaining unimplemented API rows are
-exactly bulk92 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) plus
-six readonly-map create/update rows (`READONLY_PROPERTY_TABLE`).
-Method-closed remaining is none. Meta-delete remaining is none.
-No tools. No empty payload. UI remaining unimplemented is
-exactly six owner-scoped rows. `live_tested` stays false with
-`qualification.live_api=out_of_scope_by_user`. `complete` stays
-false. Owner input required for both external-contract
-blockers. Do not repeat research. Do not implement guessed
-tools. Do not relock docs on this commit. Do not finish.
+This slice lands typed official `GET /v2/bankLines` list
+filters on `api_bank_lines_list`. `accountId` is required.
+Docs lock is ETag `pi4s9u10j037qn`, MD5
+`d805f3d2bb8e339f7635d6834b4011bd`. Remaining unimplemented
+API rows stay bulk92 plus six readonly-map create/update
+rows. UI remaining unimplemented stays six owner-scoped
+rows. `complete` stays false. Do not guess bulk or
+readonly-map tools. Do not finish.
 
 Ticketed offline `transactions` delete remains on `bb66a48`.
 Preview tool `api_transactions_delete_preview` takes a non-empty
@@ -52,7 +49,7 @@ Generated snapshot: implemented 546, contract 551, live/vision
 339, `complete=false`. Residual honesty remaining is 6, all
 readonly-map. Meta-delete remaining is none. Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
-`tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
+`pi4s9u10j037qn`, MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
 
 Binding `9B979A05` still owns the rest of the 121 split. Unauth
 405 must not override current official Supports. Never infer

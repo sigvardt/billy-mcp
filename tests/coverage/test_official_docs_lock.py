@@ -1,4 +1,4 @@
-"""Owner 89DEED22: official docs lock matches the captured 2026-08-19 page."""
+"""Official docs lock matches the captured live API docs page."""
 
 from __future__ import annotations
 
@@ -27,8 +27,8 @@ def _load_script_module(name: str) -> ModuleType:
 checker = _load_script_module("check_coverage")
 generator = _load_script_module("generate_coverage_report")
 
-LIVE_ETAG: Final[str] = "tmhc6wpdc835zt"
-LIVE_MD5: Final[str] = "053f755f52e3926b028e29325e3670d4"
+LIVE_ETAG: Final[str] = "pi4s9u10j037qn"
+LIVE_MD5: Final[str] = "d805f3d2bb8e339f7635d6834b4011bd"
 LIVE_API: Final[str] = "out_of_scope_by_user"
 
 
@@ -103,6 +103,40 @@ def test_bulk_and_residual_stay_red() -> None:
         row = by_id[row_id]
         assert row["tool_name"] == ""
         assert row["implemented"] is False
+
+
+def test_bank_lines_list_filters_match_official_table() -> None:
+    """Given the live bankLines list table, When reading inventory, Then filters match."""
+
+    row = _row("api.bankLines.list")
+    filters = dict(row["filters"])
+    assert filters["accountId"] == {"type": "string", "required": True}
+    assert filters["sortProperty"] == ["entryDate", "amount"]
+    assert filters["sortDirection"] == ["ASC", "DESC"]
+    assert filters["isReconciled"] == "boolean"
+    assert filters["status"] == ["pending", "booked"]
+    assert filters["side"] == ["debit", "credit"]
+    assert filters["externalId"] == "string"
+    assert filters["receiptState"] == "string"
+    assert filters["minAmount"] == "number"
+    assert filters["maxAmount"] == "number"
+    assert filters["minEntryDate"] == "date"
+    assert filters["maxEntryDate"] == "date"
+    assert filters["entryDatePeriod"] == [
+        "all",
+        "dates:YYYY-MM-DD...YYYY-MM-DD",
+        "from:YYYY-MM-DD",
+        "half:YYYY-H",
+        "month:YYYY-MM",
+        "quarter:YYYY-Q",
+        "through:YYYY-MM-DD",
+        "year:YYYY",
+        "fiscalyear:organizationId,YYYY",
+    ]
+    assert filters["q"] == "string"
+    assert "accountId" in list(row["request_fields"])
+    assert row["tool_name"] == "api_bank_lines_list"
+    assert _status()["complete"] is False
 
 
 def test_complete_stays_false_and_api_live_tested_stays_false() -> None:

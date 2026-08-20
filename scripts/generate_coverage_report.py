@@ -16,11 +16,11 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DOCS_URL = "https://www.billy.dk/api/"
-# Official docs fingerprint promoted 2026-08-19 (89DEED22). Live intro cites
-# GET /v2/organizations for the existing list row. Special /user/organizations
-# is kept though absent from the current page.
-DOCS_ETAG = "tmhc6wpdc835zt"
-DOCS_MD5 = "053f755f52e3926b028e29325e3670d4"
+# Official docs fingerprint promoted to the live page that added bankLines
+# List filters. Live intro cites GET /v2/organizations for the existing list
+# row. Special /user/organizations is kept though absent from the current page.
+DOCS_ETAG = "pi4s9u10j037qn"
+DOCS_MD5 = "d805f3d2bb8e339f7635d6834b4011bd"
 
 # Dual-proved geo/reference UI families (research138 + research139 + research142
 # + research143 + research144 + research147 + research148 + research149 +
@@ -850,6 +850,32 @@ DAYBOOK_TRANSACTION_FILTERS: dict[str, Any] = {
     "q": ["description", "extendedDescription", "voucherNo"],
 }
 
+BANK_LINE_FILTERS: dict[str, Any] = {
+    "accountId": {"type": "string", "required": True},
+    "sortProperty": ["entryDate", "amount"],
+    "sortDirection": ["ASC", "DESC"],
+    "isReconciled": "boolean",
+    "status": ["pending", "booked"],
+    "side": ["debit", "credit"],
+    "externalId": "string",
+    "receiptState": "string",
+    "minAmount": "number",
+    "maxAmount": "number",
+    "minEntryDate": "date",
+    "maxEntryDate": "date",
+    "entryDatePeriod": [
+        "all",
+        "dates:YYYY-MM-DD...YYYY-MM-DD",
+        "from:YYYY-MM-DD",
+        "half:YYYY-H",
+        "month:YYYY-MM",
+        "quarter:YYYY-Q",
+        "through:YYYY-MM-DD",
+        "year:YYYY",
+        "fiscalyear:organizationId,YYYY",
+    ],
+    "q": "string",
+}
 GEO_COUNTRY_ID_FILTER: dict[str, Any] = {
     "countryId": {"type": "string", "required": True},
 }
@@ -862,6 +888,7 @@ LIST_FILTERS: dict[str, dict[str, Any]] = {
     "invoices": INVOICE_FILTERS,
     "bills": BILL_FILTERS,
     "daybookTransactions": DAYBOOK_TRANSACTION_FILTERS,
+    "bankLines": BANK_LINE_FILTERS,
     "cities": GEO_COUNTRY_ID_FILTER,
     "states": GEO_COUNTRY_ID_FILTER,
     "zipcodes": GEO_COUNTRY_ID_FILTER,
@@ -924,7 +951,7 @@ UI_QUALIFICATION_FIELDS = (
 LIVE_API_OUT_OF_SCOPE = "out_of_scope_by_user"
 LIVE_API_DEFERRED_KIND = "live_api_deferred"
 LIVE_API_OWNER_SKIP = "LIVE_API_OWNER_SKIP"
-# Lock promoted to the captured 2026-08-19 page; no remaining drift pair.
+# Lock promoted to the live page with bankLines List filters; no remaining drift pair.
 DOCS_ETAG_OBSERVED = DOCS_ETAG
 DOCS_MD5_OBSERVED = DOCS_MD5
 

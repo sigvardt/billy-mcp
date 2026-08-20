@@ -50,8 +50,8 @@ residual-five writes).
 
 ## Lock
 
-Inventory lock is ETag `tmhc6wpdc835zt`, MD5
-`053f755f52e3926b028e29325e3670d4` (captured official page). Intro
+Inventory lock is ETag `pi4s9u10j037qn`, MD5
+`d805f3d2bb8e339f7635d6834b4011bd` (captured official page). Intro
 prose cites `GET /v2/organizations` for the existing
 `api.organizations.list` row. Special `GET /v2/user/organizations`
 (`api_user_list_organizations`) is kept though absent from the

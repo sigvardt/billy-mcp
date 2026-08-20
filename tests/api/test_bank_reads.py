@@ -12,6 +12,10 @@ from pydantic import BaseModel, ValidationError
 
 from billy_mcp.api.bank_reads import (
     BankGetRequest,
+    BankLineSide,
+    BankLinesListRequest,
+    BankLineSortProperty,
+    BankLineStatus,
     BankListRequest,
     BankReadService,
     SortDirection,
@@ -91,7 +95,6 @@ def test_collection_reads_use_only_documented_queries_and_map_optional_paging(
     list_roots = {
         "/v2/bankPayments": "bankPayments",
         "/v2/bankLineMatches": "bankLineMatches",
-        "/v2/bankLines": "bankLines",
         "/v2/bankLineSubjectAssociations": "bankLineSubjectAssociations",
         "/v2/balanceModifiers": "balanceModifiers",
     }
@@ -115,7 +118,6 @@ def test_collection_reads_use_only_documented_queries_and_map_optional_paging(
     results = {
         "bankPayments": service.bank_payments_list(request),
         "bankLineMatches": service.bank_line_matches_list(request),
-        "bankLines": service.bank_lines_list(request),
         "bankLineSubjectAssociations": service.bank_line_subject_associations_list(request),
         "balanceModifiers": service.balance_modifiers_list(request),
     }
@@ -148,6 +150,81 @@ def test_collection_reads_use_only_documented_queries_and_map_optional_paging(
     }
 
 
+def test_bank_lines_list_requires_account_id_and_sends_documented_filters(
+    client_factory: ClientFactory,
+) -> None:
+    """Given official bank-line list filters, When listing, Then the query is exact."""
+
+    client, requests = client_factory(
+        lambda request: httpx.Response(200, json={"bankLines": [{"id": "line-1"}]})
+    )
+    request = BankLinesListRequest(
+        accountId="account-1",
+        page=2,
+        pageSize=25,
+        include="related",
+        sortProperty=BankLineSortProperty.ENTRY_DATE,
+        sortDirection=SortDirection.DESC,
+        isReconciled=True,
+        status=BankLineStatus.BOOKED,
+        side=BankLineSide.DEBIT,
+        externalId="ext-1",
+        receiptState="missing_receipt",
+        minAmount=10.5,
+        maxAmount=20.0,
+        minEntryDate="2026-01-01",
+        maxEntryDate="2026-01-31",
+        entryDatePeriod="month:2026-01",
+        q="rent",
+    )
+
+    result = BankReadService(client).bank_lines_list(request)
+
+    assert isinstance(result, BaseModel)
+    assert result.model_dump() == {"bankLines": [{"id": "line-1"}]}
+    assert [captured.url.path for captured in requests] == ["/v2/bankLines"]
+    assert all("/accounts" not in str(captured.url) for captured in requests)
+    assert requests[0].url.params == httpx.QueryParams(
+        {
+            "page": "2",
+            "pageSize": "25",
+            "include": "related",
+            "sortProperty": "entryDate",
+            "sortDirection": "DESC",
+            "accountId": "account-1",
+            "isReconciled": "true",
+            "status": "booked",
+            "side": "debit",
+            "externalId": "ext-1",
+            "receiptState": "missing_receipt",
+            "minAmount": "10.5",
+            "maxAmount": "20.0",
+            "minEntryDate": "2026-01-01",
+            "maxEntryDate": "2026-01-31",
+            "entryDatePeriod": "month:2026-01",
+            "q": "rent",
+        }
+    )
+
+
+def test_bank_lines_list_omits_unset_optional_filters(
+    client_factory: ClientFactory,
+) -> None:
+    """Given only accountId, When listing bank lines, Then optionals are omitted."""
+
+    client, requests = client_factory(
+        lambda request: httpx.Response(200, json={"bankLines": [], "meta": {}})
+    )
+
+    result = BankReadService(client).bank_lines_list(BankLinesListRequest(accountId="account-1"))
+
+    assert isinstance(result, BaseModel)
+    assert result.model_dump() == {"bankLines": [], "meta": {}}
+    assert requests[0].url.params == httpx.QueryParams(
+        {"page": "1", "pageSize": "1000", "accountId": "account-1"}
+    )
+
+
 def test_collection_reads_preserve_an_absent_optional_meta_root(
     client_factory: ClientFactory,
 ) -> None:
@@ -166,13 +243,13 @@ def test_collection_reads_preserve_meta_without_an_undocumented_paging_field(
     client_factory: ClientFactory,
 ) -> None:
     client, _ = client_factory(
-        lambda request: httpx.Response(200, json={"bankLines": [], "meta": {}})
+        lambda request: httpx.Response(200, json={"bankLineMatches": [], "meta": {}})
     )
 
-    result = BankReadService(client).bank_lines_list(BankListRequest())
+    result = BankReadService(client).bank_line_matches_list(BankListRequest())
 
     assert isinstance(result, BaseModel)
-    assert result.model_dump() == {"bankLines": [], "meta": {}}
+    assert result.model_dump() == {"bankLineMatches": [], "meta": {}}
 
 
 @pytest.mark.parametrize(
@@ -195,6 +272,22 @@ def test_collection_reads_preserve_meta_without_an_undocumented_paging_field(
         (BankListRequest, {"subjectId": "subject-1"}, "subjectId"),
         (BankListRequest, {"contactId": "contact-1"}, "contactId"),
         (BankListRequest, {"q": "synthetic"}, "q"),
+        (BankLinesListRequest, {}, "accountId"),
+        (BankLinesListRequest, {"accountId": ""}, "accountId"),
+        (
+            BankLinesListRequest,
+            {"accountId": "account-1", "sortProperty": "createdTime"},
+            "sortProperty",
+        ),
+        (BankLinesListRequest, {"accountId": "account-1", "status": "draft"}, "status"),
+        (BankLinesListRequest, {"accountId": "account-1", "side": "asset"}, "side"),
+        (BankLinesListRequest, {"accountId": "account-1", "offset": 1}, "offset"),
+        (
+            BankLinesListRequest,
+            {"accountId": "account-1", "organizationId": "organization-1"},
+            "organizationId",
+        ),
+        (BankLinesListRequest, {"accountId": "account-1", "matchId": "match-1"}, "matchId"),
     ],
 )
 def test_requests_reject_invalid_values_and_undeclared_filters(
@@ -216,13 +309,14 @@ def test_all_tools_preserve_typed_authentication_errors(
     service = BankReadService(client)
     get_request = BankGetRequest(id="bank-1")
     list_request = BankListRequest()
+    bank_lines_request = BankLinesListRequest(accountId="account-1")
     results = [
         service.bank_payments_get(get_request),
         service.bank_payments_list(list_request),
         service.bank_line_matches_get(get_request),
         service.bank_line_matches_list(list_request),
         service.bank_lines_get(get_request),
-        service.bank_lines_list(list_request),
+        service.bank_lines_list(bank_lines_request),
         service.bank_line_subject_associations_get(get_request),
         service.bank_line_subject_associations_list(list_request),
         service.balance_modifiers_get(get_request),
@@ -298,7 +392,6 @@ def test_registration_exposes_exactly_the_ten_bank_and_balance_tools(
     for name in {
         "api_bank_payments_list",
         "api_bank_line_matches_list",
-        "api_bank_lines_list",
         "api_bank_line_subject_associations_list",
         "api_balance_modifiers_list",
     }:
@@ -309,6 +402,26 @@ def test_registration_exposes_exactly_the_ten_bank_and_balance_tools(
             "sortProperty",
             "sortDirection",
         }
+    assert set(tools["api_bank_lines_list"].parameters["properties"]) == {
+        "page",
+        "pageSize",
+        "include",
+        "sortProperty",
+        "sortDirection",
+        "accountId",
+        "isReconciled",
+        "status",
+        "side",
+        "externalId",
+        "receiptState",
+        "minAmount",
+        "maxAmount",
+        "minEntryDate",
+        "maxEntryDate",
+        "entryDatePeriod",
+        "q",
+    }
+    assert "accountId" in tools["api_bank_lines_list"].parameters.get("required", [])
     result = asyncio.run(server.call_tool("api_bank_payments_list", {"page": 1, "pageSize": 1000}))
     assert result.structured_content == {"result": {"bankPayments": []}}
     assert [request.url.path for request in requests] == ["/v2/bankPayments"]
