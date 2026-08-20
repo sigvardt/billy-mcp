@@ -1356,6 +1356,16 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.states.get": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.states.list": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.states.create": (
+        "tests/api/test_state_writes.py",
+        "tests/api/test_state_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.states.update": (
+        "tests/api/test_state_writes.py",
+        "tests/api/test_state_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.zipcodes.get": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.zipcodes.list": ("tests/api/test_geo_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.taxRates.get": ("tests/api/test_tax_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
@@ -1874,7 +1884,7 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 
 
 # Research186 residual clear honesty: remaining Supports write rows without a
-# landed typed field map. Locales create/update left this freeze. Unauth
+# landed typed field map. States create/update left this freeze. Unauth
 # matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
@@ -1884,8 +1894,6 @@ RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
         "api.contactBalancePostings.update",
         "api.postings.create",
         "api.postings.update",
-        "api.states.create",
-        "api.states.update",
         "api.zipcodes.create",
         "api.zipcodes.update",
     }

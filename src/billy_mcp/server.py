@@ -63,6 +63,7 @@ from billy_mcp.api.sales_tax_account_meta_writes import register_sales_tax_accou
 from billy_mcp.api.sales_tax_payment_writes import register_sales_tax_payment_write_tools
 from billy_mcp.api.sales_tax_return_writes import register_sales_tax_return_write_tools
 from billy_mcp.api.sales_tax_writes import register_sales_tax_write_tools
+from billy_mcp.api.state_writes import register_state_write_tools
 from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.user_writes import register_user_write_tools
@@ -1174,6 +1175,7 @@ def create_server(
     register_invoice_email_delivery_write_tools(server, client, configuration, confirmations)
     register_geo_read_tools(server, client)
     register_city_write_tools(server, client, write_protocol)
+    register_state_write_tools(server, client, write_protocol)
     register_country_group_write_tools(server, client, write_protocol)
     register_country_write_tools(server, client, write_protocol)
     register_currency_write_tools(server, client, write_protocol)

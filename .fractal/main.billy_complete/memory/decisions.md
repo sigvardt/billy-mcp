@@ -83,13 +83,49 @@ sources:
   - radio:47B85E43
   - radio:05F3200D
   - radio:AB6ABE84
+  - radio:8FE83270
+  - radio:7453B98F
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T06:20:00Z
+updated: 2026-08-20T07:12:00Z
 ---
 
 ## Binding now
 
-`05F3200D` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`AB6ABE84` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`states` create and update. Official Supports lists create
+and update. Nested `StatePayload` of optional string
+`stateCode`, `name`, and belongs-to `country` with
+`extra=forbid`, frozen. Create preview `POST /states`. Update
+preview `PUT /states/:id` with non-empty encoded route id.
+Execute `confirmation_ticket` only. Preview makes no HTTP. No
+bulk. No UI. No live API. `live_tested` stays false with
+`live_api=out_of_scope_by_user`. Independent review PASS. No
+required fixes. `complete` stays false. Residual honesty
+remaining 12.
+
+`7453B98F` (saved, P10, after zipcodes commit): take only
+`balanceModifiers` create and update from official
+`#v2balanceModifiers`. Nested required non-empty `modifier`
+and `subject` strings (belongs-to-reference IDs). Exclude
+readonly `amount`, `entryDate`, `realizedCurrencyDifference`,
+and `isVoided`. Create preview `POST /balanceModifiers`. Update
+preview `PUT /balanceModifiers/:id`. Execute
+`confirmation_ticket` only. Preview makes no HTTP. No delete.
+No bulk. No UI. No live API. Do not start until `8FE83270` is
+committed. `complete` stays false.
+
+`8FE83270` (saved, P10, after states commit): take only
+`zipcodes` create and update from official `#v2zipcodes`.
+Nested `ZipcodePayload` of optional string `zipcode`, belongs-to
+string `city`, `state`, and `country`, and float `latitude` and
+`longitude` with `extra=forbid`, frozen. Create preview
+`POST /zipcodes`. Update preview `PUT /zipcodes/:id` with
+non-empty encoded route id. Execute `confirmation_ticket` only.
+Preview makes no HTTP. No bulk. No delete. No UI. No live API.
+Do not start until `AB6ABE84` is committed. `complete` stays
+false.
+
+`05F3200D` (unsaved, P10, landed on `113810e`): ticketed
 `locales` create and update. Official Supports lists create
 and update. Nested `LocalePayload` of optional string `name`
 and `icon` with `extra=forbid`, frozen. Create preview
@@ -99,17 +135,6 @@ Preview makes no HTTP. No bulk. No UI. No live API.
 `live_tested` stays false with `live_api=out_of_scope_by_user`.
 Independent review PASS. No required fixes. `complete` stays
 false. Residual honesty remaining 14.
-
-`AB6ABE84` (saved, P10, after locales commit): take only
-`states` create and update. Official Supports lists create and
-update. Nested `StatePayload` of optional string `stateCode`,
-`name`, and belongs-to `country` with `extra=forbid`, frozen.
-Create preview `POST /states`. Update preview `PUT /states/:id`
-with non-empty encoded route id. Execute `confirmation_ticket`
-only. Preview makes no HTTP. No bulk. No UI. No live API.
-`live_tested` stays false with `live_api=out_of_scope_by_user`.
-Independent review before that commit. `complete` stays false.
-Do not start this slice until `05F3200D` is committed.
 
 `47B85E43` (unsaved, P10, landed on `c412588`): ticketed
 `currencies` create and update. Official Supports lists create

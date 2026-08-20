@@ -104,7 +104,7 @@ def test_implemented_api_rows_use_live_api_deferred() -> None:
     """Given implemented API rows, When reading qualification, Then they are deferred."""
 
     implemented = [row for row in _api_rows() if row["implemented"] is True]
-    assert len(implemented) == 199
+    assert len(implemented) == 201
     for row in implemented:
         qual = dict(row.get("qualification") or {})
         assert qual.get("kind") == DEFERRED_KIND, f"{row['id']}: kind={qual.get('kind')!r}"
