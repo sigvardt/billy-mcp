@@ -81,13 +81,14 @@ sources:
   - radio:AF8E5A1F
   - radio:4DE5EE18
   - radio:47B85E43
+  - radio:05F3200D
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T03:33:21Z
+updated: 2026-08-20T05:25:00Z
 ---
 
 ## Binding now
 
-`47B85E43` (saved, P10, after countries commit): take only
+`47B85E43` (saved, P10, IR PASS, ready for COMMIT): ticketed
 `currencies` create and update. Official Supports lists create
 and update. Nested `CurrencyPayload` of optional string `name`
 and float `exchangeRate` with `extra=forbid`, frozen. Create
@@ -95,11 +96,22 @@ preview `POST /currencies`. Update preview
 `PUT /currencies/:id` with non-empty encoded route id. Execute
 `confirmation_ticket` only. Preview makes no HTTP. No bulk. No
 UI. No live API. `live_tested` stays false with
-`live_api=out_of_scope_by_user`. Independent review before that
-commit. `complete` stays false. Do not start this slice until
-`4DE5EE18` is committed.
+`live_api=out_of_scope_by_user`. Independent review PASS. No
+required fixes. `complete` stays false. Residual honesty
+remaining 16.
 
-`4DE5EE18` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`05F3200D` (saved, P10, after currencies commit): take only
+`locales` create and update. Official Supports lists create and
+update. Nested `LocalePayload` of optional string `name` and
+`icon` with `extra=forbid`, frozen. Create preview
+`POST /locales`. Update preview `PUT /locales/:id` with
+non-empty encoded route id. Execute `confirmation_ticket` only.
+Preview makes no HTTP. No bulk. No UI. No live API.
+`live_tested` stays false with `live_api=out_of_scope_by_user`.
+Independent review before that commit. `complete` stays false.
+Do not start this slice until `47B85E43` is committed.
+
+`4DE5EE18` (unsaved, P10, landed on `5e78f1d`): ticketed
 `countries` create and update. Official Supports lists create and
 update. Nested `CountryPayload` of optional string `name`,
 boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`,

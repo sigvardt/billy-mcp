@@ -453,6 +453,15 @@ COUNTRY_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+CURRENCY_WRITE_API_TOOL_NAMES = frozenset(
+    {
+        "api_currencies_create_preview",
+        "api_currencies_create_execute",
+        "api_currencies_update_preview",
+        "api_currencies_update_execute",
+    }
+)
+
 
 class FakeAuthStatusChecker:
     def __init__(self) -> None:
@@ -1242,7 +1251,8 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(CITY_WRITE_API_TOOL_NAMES) == 4
     assert len(COUNTRY_GROUP_WRITE_API_TOOL_NAMES) == 4
     assert len(COUNTRY_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 293
+    assert len(CURRENCY_WRITE_API_TOOL_NAMES) == 4
+    assert len(api_tool_names) == 297
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",
@@ -1363,6 +1373,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | CITY_WRITE_API_TOOL_NAMES
         | COUNTRY_GROUP_WRITE_API_TOOL_NAMES
         | COUNTRY_WRITE_API_TOOL_NAMES
+        | CURRENCY_WRITE_API_TOOL_NAMES
         | auth_tool_names
         | ui_tool_names
     )

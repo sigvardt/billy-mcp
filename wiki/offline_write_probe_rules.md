@@ -65,6 +65,9 @@ coverage green.
    boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`,
    string `icon`, and belongs-to `locale` as an opaque string id.
    Reject `localeId`. Empty payload is allowed.
+   `currencies` create/update follow it with optional string `name`
+   and float `exchangeRate`. Reject `currencyId`. Empty payload is
+   allowed.
    Unauthenticated POST/PUT 405 is not the contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests

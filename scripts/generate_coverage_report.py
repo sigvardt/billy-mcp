@@ -1070,6 +1070,16 @@ OFFLINE_API_IMPLEMENTATION_EVIDENCE: dict[str, tuple[str, ...]] = {
     ),
     "api.currencies.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.currencies.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
+    "api.currencies.create": (
+        "tests/api/test_currency_writes.py",
+        "tests/api/test_currency_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
+    "api.currencies.update": (
+        "tests/api/test_currency_writes.py",
+        "tests/api/test_currency_write_tickets.py",
+        SERVER_REGISTRY_TEST_REFERENCE,
+    ),
     "api.countries.get": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.countries.list": ("tests/api/test_reference_reads.py", SERVER_REGISTRY_TEST_REFERENCE),
     "api.countries.create": (
@@ -1854,7 +1864,7 @@ def bulk_external_contract_qualification() -> dict[str, Any]:
 
 
 # Research186 residual clear honesty: remaining Supports write rows without a
-# landed typed field map. Countries create/update left this freeze. Unauth
+# landed typed field map. Currencies create/update left this freeze. Unauth
 # matrix matches live_probe._RESEARCH96_RESIDUAL_OUTCOMES.
 RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
     {
@@ -1862,8 +1872,6 @@ RESIDUAL_METHOD_CLOSED_IDS: frozenset[str] = frozenset(
         "api.balanceModifiers.update",
         "api.contactBalancePostings.create",
         "api.contactBalancePostings.update",
-        "api.currencies.create",
-        "api.currencies.update",
         "api.locales.create",
         "api.locales.update",
         "api.postings.create",

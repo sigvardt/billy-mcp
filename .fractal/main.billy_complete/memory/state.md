@@ -13,43 +13,41 @@ sources:
   - radio:AF8E5A1F
   - radio:4DE5EE18
   - radio:47B85E43
+  - radio:05F3200D
   - radio:EAB2F91B
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T04:20:00Z
+updated: 2026-08-20T05:25:00Z
 ---
 
 ## Now
 
-Ticketed offline `countries` create and update are landed and
-independently reviewed. Preview tools
-`api_countries_create_preview` and
-`api_countries_update_preview` take a nested payload of optional
-string `name`, boolean `hasStates`, `hasFiniteStates`,
-`hasFiniteZipcodes`, string `icon`, and string `locale`
-(belongs-to id) with `extra=forbid`. `localeId`, arrays, nested
-objects, and extra keys fail at the FastMCP boundary. Empty
-nested object is valid. Create is `POST /countries`. Update is
-`PUT /countries/:id` with a non-empty encoded id. Execute takes
-`confirmation_ticket` only. Preview makes no HTTP. Bulk stay red.
-No singular delete. `live_tested` stays false with
+Ticketed offline `currencies` create and update are landed.
+Preview tools `api_currencies_create_preview` and
+`api_currencies_update_preview` take a nested payload of optional
+string `name` and float `exchangeRate` with `extra=forbid`.
+`currencyId`, arrays, nested objects, and extra keys fail at the
+FastMCP boundary. Empty nested object is valid. Create is
+`POST /currencies`. Update is `PUT /currencies/:id` with a
+non-empty encoded id. Execute takes `confirmation_ticket` only.
+Preview makes no HTTP. Bulk stay red. No singular delete.
+`live_tested` stays false with
 `qualification.live_api=out_of_scope_by_user`. Independent review
-PASS (`tmp/grok-review.md`). No required fixes. `complete` stays
-false.
+is next. `complete` stays false.
 
-Generated snapshot: implemented 534, contract 539, live/vision
-339, `complete=false`. Residual honesty remaining is 18 (14
+Generated snapshot: implemented 536, contract 541, live/vision
+339, `complete=false`. Residual honesty remaining is 16 (12
 method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-Binding `4DE5EE18` is ready for COMMIT. After that commit,
-saved `47B85E43` owns ticketed `currencies` create and update
-only. Nested optional string `name` and float `exchangeRate`.
-Binding `9B979A05` still owns the rest of the 121 split. Never
-infer bulk schemas. Do not finish.
+Binding `47B85E43` is ready for COMMIT. After that commit,
+saved `05F3200D` owns ticketed `locales` create and update
+only. Nested optional string `name` and `icon`. Binding
+`9B979A05` still owns the rest of the 121 split. Never infer bulk
+schemas. Do not finish.
 
 Owner `96908DC6` still binds overall finish. API live stays
 deferred. Årsrapporter stays `out_of_scope_by_user`

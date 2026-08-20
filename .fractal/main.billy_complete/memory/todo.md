@@ -4,13 +4,14 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T04:20:00Z
+updated: 2026-08-20T05:10:00Z
 ---
 
 ## Open
 
-- Binding `47B85E43`: after countries is committed, take only ticketed `currencies` create and update. Nested optional `name` string and `exchangeRate` float, `extra=forbid`, frozen. Create `POST /currencies`. Update `PUT /currencies/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No UI. No live API. Do not start this slice until `4DE5EE18` lands. `complete` stays false.
-- Binding `9B979A05`: remaining residual honesty is 14 method-closed + 2 readonly-map + 2 meta-delete = 18. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
+- Binding `47B85E43`: ticketed `currencies` create and update are landed. Independent review PASS. No required fixes. Ready for COMMIT. `complete` stays false.
+- Binding `05F3200D`: after currencies is committed, take only ticketed `locales` create and update. Nested optional `name` and `icon` strings, `extra=forbid`, frozen. Create `POST /locales`. Update `PUT /locales/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No UI. No live API. Do not start this slice until `47B85E43` lands. `complete` stays false.
+- Binding `9B979A05`: remaining residual honesty is 12 method-closed + 2 readonly-map + 2 meta-delete = 16. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -24,7 +25,8 @@ updated: 2026-08-20T04:20:00Z
 
 ## Done
 
-- Binding `4DE5EE18`: ticketed offline `api.countries.create` and `.update`. Nested optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and string `locale`, `extra=forbid`. `localeId` rejected. Residual honesty remaining 18. Independent review PASS. No required fixes. Ready for COMMIT.
+- Binding `47B85E43` product: ticketed offline `api.currencies.create` and `.update` in `src/billy_mcp/api/currency_writes.py`. Nested optional `name` string and `exchangeRate` float, `extra=forbid`. `currencyId` rejected. Residual honesty remaining 16. Independent review next.
+- Binding `4DE5EE18`: ticketed offline `api.countries.create` and `.update` committed on `5e78f1d`. Nested optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and string `locale`, `extra=forbid`. `localeId` rejected. Official `#v2countries` Supports create and update; unauth 405 must not override that table. Residual honesty remaining 18. Independent review PASS. Unsaved.
 - Binding `AF8E5A1F`: ticketed offline `api.countryGroups.create` and `.update` committed on `1b037a6`. Nested optional string `name`, `icon`, and `memberCountryIds`, `extra=forbid`. Arrays and `memberCountries` rejected. Residual honesty remaining 20. Independent review PASS. Unsaved.
 - Binding `8C5F08A8`: ticketed offline `api.cities.create` and `.update`. Nested optional string `name`, `county`, `state`, and `country`, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 22. Independent review PASS.
 - Binding `2D09964C`: ticketed offline `api.invoiceReminderAssociations.create` and `.update`. Nested required `reminder` and `invoice` strings, `extra=forbid`, `lateFee` rejected. Residual honesty remaining 24. Independent review PASS.
