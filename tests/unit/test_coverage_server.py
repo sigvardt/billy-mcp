@@ -500,6 +500,13 @@ BALANCE_MODIFIER_WRITE_API_TOOL_NAMES = frozenset(
     }
 )
 
+TRANSACTION_DELETE_API_TOOL_NAMES = frozenset(
+    {
+        "api_transactions_delete_preview",
+        "api_transactions_delete_execute",
+    }
+)
+
 
 class FakeAuthStatusChecker:
     def __init__(self) -> None:
@@ -1294,7 +1301,8 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
     assert len(STATE_WRITE_API_TOOL_NAMES) == 4
     assert len(ZIPCODE_WRITE_API_TOOL_NAMES) == 4
     assert len(BALANCE_MODIFIER_WRITE_API_TOOL_NAMES) == 4
-    assert len(api_tool_names) == 315
+    assert len(TRANSACTION_DELETE_API_TOOL_NAMES) == 2
+    assert len(api_tool_names) == 317
     assert auth_tool_names == {"auth_status", "auth_login_start", "auth_login_wait"}
     assert ui_tool_names == {
         "ui_invoices_list",
@@ -1420,6 +1428,7 @@ def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_pat
         | STATE_WRITE_API_TOOL_NAMES
         | ZIPCODE_WRITE_API_TOOL_NAMES
         | BALANCE_MODIFIER_WRITE_API_TOOL_NAMES
+        | TRANSACTION_DELETE_API_TOOL_NAMES
         | auth_tool_names
         | ui_tool_names
     )

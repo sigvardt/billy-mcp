@@ -4,14 +4,13 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T10:05:00Z
+updated: 2026-08-20T10:45:00Z
 ---
 
 ## Open
 
-- Binding `7B947636`: after invoice reminder association delete commits, ticketed singular `transactions` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /transactions/:id` with no body. No create/update, bulk, UI, or live API. Do not start until `4DBD7C3F` commits. `complete` stays false.
 - Binding `A485F530`: after transactions delete commits, research-only the six readonly-map create/update rows (`contactBalancePostings`, `postings`, `transactions`). Exhaust official docs and first-party static assets. No live API. No guessed fields. Keep rows red if writable schemas stay absent. `complete` stays false.
-- Binding `9B979A05`: remaining residual honesty is 4 method-closed + 2 readonly-map + 1 meta-delete = 7. Unauth 405 must not override Supports. Then remaining postings writes and the last meta delete. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
+- Binding `9B979A05`: remaining residual honesty is 4 method-closed + 2 readonly-map = 6. Unauth 405 must not override Supports. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -25,7 +24,8 @@ updated: 2026-08-20T10:05:00Z
 
 ## Done
 
-- Binding `4DBD7C3F`: ticketed offline `api.invoiceReminderAssociations.delete` in `src/billy_mcp/api/invoice_reminder_association_writes.py`. Preview `{id}` only. Execute `DELETE /invoiceReminderAssociations/:id` with no body. Residual honesty remaining 7. Independent review PASS. Unsave after COMMIT.
+- Binding `7B947636`: ticketed offline `api.transactions.delete` in `src/billy_mcp/api/transaction_writes.py`. Preview `{id}` only. Execute `DELETE /transactions/:id` with no body. Residual honesty remaining 6. Independent review PASS. Unsave after COMMIT.
+- Binding `4DBD7C3F`: ticketed offline `api.invoiceReminderAssociations.delete` in `src/billy_mcp/api/invoice_reminder_association_writes.py` landed on `da833d3`. Preview `{id}` only. Execute `DELETE /invoiceReminderAssociations/:id` with no body. Residual honesty remaining 7. Independent review PASS. Unsaved.
 - Binding `7453B98F`: ticketed offline `api.balanceModifiers.create` and `.update` in `src/billy_mcp/api/balance_modifier_writes.py` landed on `5a1bde8`. Nested required `modifier` and `subject` strings, `extra=forbid`. Readonly `amount`/`entryDate`/`realizedCurrencyDifference`/`isVoided` and `modifierId`/`subjectId` rejected. Residual honesty remaining 8. Independent review PASS. Unsaved.
 - Binding `8FE83270`: ticketed offline `api.zipcodes.create` and `.update` in `src/billy_mcp/api/zipcode_writes.py` landed on `b95f96f`. Nested optional `zipcode`, belongs-to `city`/`state`/`country`, and float `latitude`/`longitude`, `extra=forbid`. `zipcodeId`/`cityId`/`stateId`/`countryId` rejected. Residual honesty remaining 10. Independent review PASS. Unsaved.
 - Binding `AB6ABE84`: ticketed offline `api.states.create` and `.update` in `src/billy_mcp/api/state_writes.py` landed on `850c80a`. Nested optional `stateCode`, `name`, and belongs-to `country` strings, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 12. Independent review PASS. Unsaved.

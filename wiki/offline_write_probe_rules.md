@@ -58,7 +58,11 @@ coverage green.
    follows `bankPayments.delete`: preview `{id}` only, execute
    `confirmation_ticket` only, `DELETE /invoiceReminderAssociations/:id`
    with no JSON body. Historical unauth missing-id 200 is not the
-   contract. `cities` create/update follow it with optional
+   contract. `transactions` singular delete follows the same
+   shape: preview `{id}` only, execute `confirmation_ticket` only,
+   `DELETE /transactions/:id` with no JSON body. The all-readonly
+   property table still blocks create/update. Historical unauth
+   missing-id 200 is not the contract. `cities` create/update follow it with optional
    string `name`, `county`, `state`, and `country`. Do not rename belongs-to
    fields to `stateId`/`countryId`. Empty payload is allowed. Do not infer
    required from the list filter `countryId`. `countryGroups` create/update
@@ -126,7 +130,7 @@ Shape hints from research136 remain non-authoritative for greening.
 | `accountNatures` | POST/PUT/DELETE **405** despite Supports create/update |
 | `postings` | POST/PUT/DELETE **405**; property table effectively all readonly |
 | `bankPayments` | POST/PUT 401; DELETE **405** despite Supports listing delete |
-| `transactions` | POST/PUT 401; DELETE 200; property table almost all readonly — do not freeze from Supports alone |
+| `transactions` | POST/PUT 401; DELETE 200 historical unauth class; official Supports lists singular delete with path `id` and no delete body, so `api.transactions.delete` is a ticketed offline tool (`api_transactions_delete_preview`) with no request body. Historical unauth missing-id DELETE 200 is not cleanup proof and is not the contract. Property table is all readonly/immutable — create/update stay toolless (`READONLY_PROPERTY_TABLE`) |
 | `balanceModifiers`, `contactBalancePostings` | POST/PUT/DELETE **405** (Supports create/update is not enough) |
 | `cities`, `countries`, `currencies`, `states`, `zipcodes`, `locales`, `countryGroups` | POST/PUT/DELETE **405** — reference data not offline-writable |
 | `contactBalancePayments` | POST/PUT 401; DELETE **405** |

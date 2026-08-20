@@ -25,33 +25,31 @@ sources:
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T10:05:00Z
+updated: 2026-08-20T10:45:00Z
 ---
 
 ## Now
 
-Ticketed offline `invoiceReminderAssociations` delete is in the
-working tree and independently reviewed. Binding `4DBD7C3F` is
-ready to unsave after COMMIT. Preview tool
-`api_invoice_reminder_associations_delete_preview` takes a
-non-empty `id` with `extra=forbid`. Execute
-`api_invoice_reminder_associations_delete_execute` takes
-`confirmation_ticket` only. Bind
-`DELETE /invoiceReminderAssociations/:id` with an encoded id and
-no JSON body. Preview makes no HTTP. Empty id, extras, and a
-nested payload fail at the FastMCP boundary. Bulk stay red.
-`live_tested` stays false with
-`qualification.live_api=out_of_scope_by_user`. Independent
-review PASS. No required fixes. `complete` stays false.
+Ticketed offline `transactions` delete is in the working tree.
+Independent review PASS. Binding `7B947636` waits for COMMIT.
+Preview tool `api_transactions_delete_preview` takes a non-empty
+`id` with `extra=forbid`. Execute
+`api_transactions_delete_execute` takes `confirmation_ticket`
+only. Bind `DELETE /transactions/:id` with an encoded id and no
+JSON body. Preview makes no HTTP. Empty id, extras, and a nested
+payload fail at the FastMCP boundary. Create/update stay red.
+Bulk stay red. `live_tested` stays false with
+`qualification.live_api=out_of_scope_by_user`. `complete` stays
+false.
 
-Generated snapshot: implemented 545, contract 550, live/vision
-339, `complete=false`. Residual honesty remaining is 7 (4
-method-closed, 2 readonly-map, 1 meta-delete). Bulk 92 stay
-`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
-`tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
+Generated snapshot: implemented 546, contract 551, live/vision
+339, `complete=false`. Residual honesty remaining is 6 (4
+method-closed, 2 readonly-map). Meta-delete remaining is none.
+Bulk 92 stay `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official
+lock is ETag `tmhc6wpdc835zt`, MD5
+`053f755f52e3926b028e29325e3670d4`.
 
-Saved `7B947636` is the next slice after COMMIT: ticketed
-singular `transactions` delete only. Then research-only
+After COMMIT, unsave `7B947636` and start research-only
 `A485F530`. Binding `9B979A05` still owns the rest of the 121
 split. Never infer bulk schemas. Do not finish.
 
