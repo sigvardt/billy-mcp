@@ -80,13 +80,26 @@ sources:
   - radio:8C5F08A8
   - radio:AF8E5A1F
   - radio:4DE5EE18
+  - radio:47B85E43
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T02:33:11Z
+updated: 2026-08-20T03:33:21Z
 ---
 
 ## Binding now
 
-`4DE5EE18` (saved, P10, next after this COMMIT): take only
+`47B85E43` (saved, P10, after countries commit): take only
+`currencies` create and update. Official Supports lists create
+and update. Nested `CurrencyPayload` of optional string `name`
+and float `exchangeRate` with `extra=forbid`, frozen. Create
+preview `POST /currencies`. Update preview
+`PUT /currencies/:id` with non-empty encoded route id. Execute
+`confirmation_ticket` only. Preview makes no HTTP. No bulk. No
+UI. No live API. `live_tested` stays false with
+`live_api=out_of_scope_by_user`. Independent review before that
+commit. `complete` stays false. Do not start this slice until
+`4DE5EE18` is committed.
+
+`4DE5EE18` (saved, P10, IR PASS, ready for COMMIT): ticketed
 `countries` create and update. Official Supports lists create and
 update. Nested `CountryPayload` of optional string `name`,
 boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`,
@@ -95,10 +108,11 @@ Create preview `POST /countries`. Update preview
 `PUT /countries/:id` with non-empty encoded route id. Execute
 `confirmation_ticket` only. Preview makes no HTTP. No bulk. No
 UI. No live API. `live_tested` stays false with
-`live_api=out_of_scope_by_user`. Independent review before that
-commit. `complete` stays false.
+`live_api=out_of_scope_by_user`. Independent review PASS. No
+required fixes. `complete` stays false. Residual honesty
+remaining 18.
 
-`AF8E5A1F` (saved, P10, product landed, review next): ticketed
+`AF8E5A1F` (unsaved, P10, landed on `1b037a6`): ticketed
 `countryGroups` create and update. Official Supports lists create
 and update. Nested `CountryGroupPayload` of optional string
 `name`, `icon`, and `memberCountryIds` with `extra=forbid`,
@@ -106,8 +120,8 @@ frozen. Create preview `POST /countryGroups`. Update preview
 `PUT /countryGroups/:id` with non-empty encoded route id.
 Execute `confirmation_ticket` only. Preview makes no HTTP. No
 bulk. No UI. No live API. `live_tested` stays false with
-`live_api=out_of_scope_by_user`. Independent review before that
-commit. `complete` stays false. Residual honesty remaining 20.
+`live_api=out_of_scope_by_user`. Independent review PASS.
+`complete` stays false. Residual honesty remaining 20.
 
 `8C5F08A8` (unsaved, P10, landed on `9a3a677`): ticketed
 `cities` create and update. Nested optional string `name`,
@@ -116,7 +130,7 @@ commit. `complete` stays false. Residual honesty remaining 20.
 `confirmation_ticket` only. Preview makes no HTTP. Independent
 review PASS. Residual honesty remaining 22.
 
-`2D09964C` (saved, P10, landed): ticketed
+`2D09964C` (unsaved, P10, landed): ticketed
 `invoiceReminderAssociations` create and update. Nested required
 `reminder` and `invoice` strings, `extra=forbid`. `lateFee`
 rejected at the FastMCP boundary. Create
@@ -138,7 +152,7 @@ nested Pydantic model of those optional strings with
 this resource. Enum members stay opaque strings. Do not infer
 required fields or live API.
 
-`9B979A05` (saved, P10, current after lock COMMIT): split the 121
+`9B979A05` (saved, P10, remaining split): split the 121
 offline blockers by evidence, not one permanent-red bucket. For
 the 25 `method_closed_offline` rows, current official Supports
 tables are the primary contract; an unauthenticated 405 must not

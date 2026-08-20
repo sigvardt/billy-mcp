@@ -8,7 +8,7 @@ sources:
   - https://api.billysbilling.com/v2
   - docs/superpowers/specs/2026-07-28-billy-mcp-complete-design.md
 created: 2026-07-29T21:20:00Z
-updated: 2026-08-20T02:50:00Z
+updated: 2026-08-20T03:50:00Z
 ---
 
 # Offline write probe rules from official docs and unauth API gates
@@ -61,6 +61,10 @@ coverage green.
    follow it with optional string `name`, `icon`, and `memberCountryIds`.
    Official type of `memberCountryIds` is string, not array. Reject
    `memberCountries` and JSON arrays. Empty payload is allowed.
+   `countries` create/update follow it with optional string `name`,
+   boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`,
+   string `icon`, and belongs-to `locale` as an opaque string id.
+   Reject `localeId`. Empty payload is allowed.
    Unauthenticated POST/PUT 405 is not the contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests

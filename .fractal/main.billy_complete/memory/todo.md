@@ -4,14 +4,13 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T02:33:11Z
+updated: 2026-08-20T04:20:00Z
 ---
 
 ## Open
 
-- Binding `4DE5EE18`: next proved cohort after this COMMIT is ticketed `countries` create and update. Nested optional `name` string, `hasStates` boolean, `hasFiniteStates` boolean, `hasFiniteZipcodes` boolean, `icon` string, `locale` string with `extra=forbid`, frozen. Create `POST /countries`. Update `PUT /countries/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No UI. No live API. Independent review before that commit. `complete` stays false.
-- Binding `AF8E5A1F`: ticketed `countryGroups` create and update product is landed. Independent review before this commit. `complete` stays false.
-- Binding `9B979A05`: remaining residual honesty is 16 method-closed + 2 readonly-map + 2 meta-delete = 20. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
+- Binding `47B85E43`: after countries is committed, take only ticketed `currencies` create and update. Nested optional `name` string and `exchangeRate` float, `extra=forbid`, frozen. Create `POST /currencies`. Update `PUT /currencies/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No UI. No live API. Do not start this slice until `4DE5EE18` lands. `complete` stays false.
+- Binding `9B979A05`: remaining residual honesty is 14 method-closed + 2 readonly-map + 2 meta-delete = 18. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -25,7 +24,8 @@ updated: 2026-08-20T02:33:11Z
 
 ## Done
 
-- Binding `AF8E5A1F`: ticketed offline `api.countryGroups.create` and `.update`. Nested optional string `name`, `icon`, and `memberCountryIds`, `extra=forbid`. Arrays and `memberCountries` rejected. Residual honesty remaining 20. Independent review pending.
+- Binding `4DE5EE18`: ticketed offline `api.countries.create` and `.update`. Nested optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and string `locale`, `extra=forbid`. `localeId` rejected. Residual honesty remaining 18. Independent review PASS. No required fixes. Ready for COMMIT.
+- Binding `AF8E5A1F`: ticketed offline `api.countryGroups.create` and `.update` committed on `1b037a6`. Nested optional string `name`, `icon`, and `memberCountryIds`, `extra=forbid`. Arrays and `memberCountries` rejected. Residual honesty remaining 20. Independent review PASS. Unsaved.
 - Binding `8C5F08A8`: ticketed offline `api.cities.create` and `.update`. Nested optional string `name`, `county`, `state`, and `country`, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 22. Independent review PASS.
 - Binding `2D09964C`: ticketed offline `api.invoiceReminderAssociations.create` and `.update`. Nested required `reminder` and `invoice` strings, `extra=forbid`, `lateFee` rejected. Residual honesty remaining 24. Independent review PASS.
 - Binding `B54A6BFC`: ticketed offline `api.bankPayments.delete`. Preview `{id}` only. Execute DELETE `/bankPayments/:id` with no body. Residual honesty remaining 26.
