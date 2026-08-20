@@ -85,23 +85,27 @@ sources:
   - radio:AB6ABE84
   - radio:8FE83270
   - radio:7453B98F
+  - radio:4DBD7C3F
+  - radio:7B947636
+  - radio:A485F530
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T07:12:00Z
+updated: 2026-08-20T08:05:00Z
 ---
 
 ## Binding now
 
-`AB6ABE84` (saved, P10, IR PASS, ready for COMMIT): ticketed
-`states` create and update. Official Supports lists create
-and update. Nested `StatePayload` of optional string
-`stateCode`, `name`, and belongs-to `country` with
-`extra=forbid`, frozen. Create preview `POST /states`. Update
-preview `PUT /states/:id` with non-empty encoded route id.
-Execute `confirmation_ticket` only. Preview makes no HTTP. No
-bulk. No UI. No live API. `live_tested` stays false with
+`8FE83270` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`zipcodes` create and update. Official Supports lists create
+and update. Nested `ZipcodePayload` of optional string
+`zipcode`, belongs-to string `city`, `state`, and `country`,
+and float `latitude` and `longitude` with `extra=forbid`,
+frozen. Create preview `POST /zipcodes`. Update preview
+`PUT /zipcodes/:id` with non-empty encoded route id. Execute
+`confirmation_ticket` only. Preview makes no HTTP. No bulk. No
+UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review PASS. No
 required fixes. `complete` stays false. Residual honesty
-remaining 12.
+remaining 10.
 
 `7453B98F` (saved, P10, after zipcodes commit): take only
 `balanceModifiers` create and update from official
@@ -114,16 +118,42 @@ preview `PUT /balanceModifiers/:id`. Execute
 No bulk. No UI. No live API. Do not start until `8FE83270` is
 committed. `complete` stays false.
 
-`8FE83270` (saved, P10, after states commit): take only
-`zipcodes` create and update from official `#v2zipcodes`.
-Nested `ZipcodePayload` of optional string `zipcode`, belongs-to
-string `city`, `state`, and `country`, and float `latitude` and
-`longitude` with `extra=forbid`, frozen. Create preview
-`POST /zipcodes`. Update preview `PUT /zipcodes/:id` with
-non-empty encoded route id. Execute `confirmation_ticket` only.
-Preview makes no HTTP. No bulk. No delete. No UI. No live API.
-Do not start until `AB6ABE84` is committed. `complete` stays
-false.
+`4DBD7C3F` (saved, P10, after balanceModifiers commit): take
+only the documented singular `invoiceReminderAssociations`
+delete. Preview takes a non-empty `id`. Execute takes
+`confirmation_ticket` only. Bind DELETE
+`/invoiceReminderAssociations/:id` with an encoded id and no
+request body. Treat official Supports delete as the offline
+contract. No bulk, UI, or live API. Do not start until
+`7453B98F` commits. `complete` stays false.
+
+`7B947636` (saved, P10, after invoice reminder association
+delete): take only the documented singular `transactions`
+delete. Preview takes a non-empty `id`. Execute takes
+`confirmation_ticket` only. Bind DELETE `/transactions/:id`
+with an encoded id and no request body. Treat official
+`#v2transactions` Supports delete as the offline contract. No
+create/update, bulk, UI, or live API. Do not start until
+`4DBD7C3F` commits. `complete` stays false.
+
+`A485F530` (saved, P10, after transactions delete): research-only
+the six readonly-map create/update rows (`contactBalancePostings`,
+`postings`, `transactions`). Exhaust official docs and first-party
+static assets. No live API. No guessed fields. Keep rows red if
+writable schemas stay absent. Do not start until `7B947636`
+commits. `complete` stays false.
+
+`AB6ABE84` (unsaved, P10, landed on `850c80a`): ticketed
+`states` create and update. Official Supports lists create
+and update. Nested `StatePayload` of optional string
+`stateCode`, `name`, and belongs-to `country` with
+`extra=forbid`, frozen. Create preview `POST /states`. Update
+preview `PUT /states/:id` with non-empty encoded route id.
+Execute `confirmation_ticket` only. Preview makes no HTTP. No
+bulk. No UI. No live API. `live_tested` stays false with
+`live_api=out_of_scope_by_user`. Independent review PASS. No
+required fixes. `complete` stays false. Residual honesty
+remaining 12.
 
 `05F3200D` (unsaved, P10, landed on `113810e`): ticketed
 `locales` create and update. Official Supports lists create

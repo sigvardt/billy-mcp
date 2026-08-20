@@ -17,41 +17,46 @@ sources:
   - radio:AB6ABE84
   - radio:8FE83270
   - radio:7453B98F
+  - radio:4DBD7C3F
+  - radio:7B947636
+  - radio:A485F530
   - radio:EAB2F91B
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T07:12:00Z
+updated: 2026-08-20T08:05:00Z
 ---
 
 ## Now
 
-Ticketed offline `states` create and update are landed.
-Preview tools `api_states_create_preview` and
-`api_states_update_preview` take a nested payload of optional
-string `stateCode`, `name`, and belongs-to `country` with
-`extra=forbid`. `stateId`, `countryId`, arrays, nested objects,
-and extra keys fail at the FastMCP boundary. Empty nested object
-is valid. Create is `POST /states`. Update is `PUT /states/:id`
+Ticketed offline `zipcodes` create and update are landed.
+Preview tools `api_zipcodes_create_preview` and
+`api_zipcodes_update_preview` take a nested payload of optional
+string `zipcode`, belongs-to `city`/`state`/`country`, and
+float `latitude`/`longitude` with `extra=forbid`. Inner
+`zipcode` is the postal-code field. `zipcodeId`, `cityId`,
+`stateId`, `countryId`, arrays, nested objects, and extra keys
+fail at the FastMCP boundary. Empty nested object is valid.
+Create is `POST /zipcodes`. Update is `PUT /zipcodes/:id`
 with a non-empty encoded id. Execute takes
 `confirmation_ticket` only. Preview makes no HTTP. Bulk stay
 red. No singular delete. `live_tested` stays false with
-`qualification.live_api=out_of_scope_by_user`. Independent review
-PASS. No required fixes. Ready for COMMIT. `complete` stays
-false.
+`qualification.live_api=out_of_scope_by_user`. Independent
+review PASS. No required fixes. Ready for COMMIT. `complete`
+stays false.
 
-Generated snapshot: implemented 540, contract 545, live/vision
-339, `complete=false`. Residual honesty remaining is 12 (8
+Generated snapshot: implemented 542, contract 547, live/vision
+339, `complete=false`. Residual honesty remaining is 10 (6
 method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-Binding `AB6ABE84` is ready for COMMIT. After that commit,
-saved `8FE83270` owns ticketed `zipcodes` create and update
-only. Saved `7453B98F` owns ticketed `balanceModifiers` create
-and update after zipcodes. Binding `9B979A05` still owns the
-rest of the 121 split. Never infer bulk schemas. Do not finish.
+Binding `8FE83270` is ready for COMMIT. After that commit,
+saved `7453B98F` owns ticketed `balanceModifiers` create and
+update only. Then `4DBD7C3F`, `7B947636`, and research-only
+`A485F530`. Binding `9B979A05` still owns the rest of the 121
+split. Never infer bulk schemas. Do not finish.
 
 Owner `96908DC6` still binds overall finish. API live stays
 deferred. Årsrapporter stays `out_of_scope_by_user`

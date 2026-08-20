@@ -75,6 +75,11 @@ coverage green.
    Reject `stateId` and `countryId`. Empty payload is allowed.
    Do not copy the list filter `countryId` into the write payload
    as required.
+   `zipcodes` create/update follow it with optional string `zipcode`,
+   belongs-to `city`, `state`, and `country` as opaque string ids,
+   and float `latitude` and `longitude`. Reject `zipcodeId`,
+   `cityId`, `stateId`, and `countryId`. Inner `zipcode` is the
+   postal-code field, not the route id. Empty payload is allowed.
    Unauthenticated POST/PUT 405 is not the contract.
 6. API traffic stays on `https://api.billysbilling.com/v2`. The docs' file-upload
    sample host `api.billy.dk` must never become the client base; host-lock tests

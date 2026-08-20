@@ -68,6 +68,7 @@ from billy_mcp.api.tax_reads import register_tax_read_tools
 from billy_mcp.api.tax_writes import register_tax_write_tools
 from billy_mcp.api.user_writes import register_user_write_tools
 from billy_mcp.api.write_protocol import WriteProtocolService
+from billy_mcp.api.zipcode_writes import register_zipcode_write_tools
 from billy_mcp.browser import (
     AuthLoginService,
     AuthStatusChecker,
@@ -1176,6 +1177,7 @@ def create_server(
     register_geo_read_tools(server, client)
     register_city_write_tools(server, client, write_protocol)
     register_state_write_tools(server, client, write_protocol)
+    register_zipcode_write_tools(server, client, write_protocol)
     register_country_group_write_tools(server, client, write_protocol)
     register_country_write_tools(server, client, write_protocol)
     register_currency_write_tools(server, client, write_protocol)

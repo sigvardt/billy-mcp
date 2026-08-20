@@ -4,15 +4,17 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T07:12:00Z
+updated: 2026-08-20T08:05:00Z
 ---
 
 ## Open
 
-- Binding `AB6ABE84`: ticketed `states` create and update are landed. Independent review PASS. No required fixes. Ready for COMMIT. `complete` stays false.
-- Binding `8FE83270`: after states is committed, take only ticketed `zipcodes` create and update. Nested optional `zipcode` string, `city`/`state`/`country` belongs-to IDs, `latitude`/`longitude` float, `extra=forbid`, frozen. Create `POST /zipcodes`. Update `PUT /zipcodes/:id`. Execute `confirmation_ticket` only. Preview makes no HTTP. No bulk. No delete. No UI. No live API. Do not start this slice until `AB6ABE84` lands. `complete` stays false.
+- Binding `8FE83270`: ticketed `zipcodes` create and update are landed. Independent review PASS. No required fixes. Ready for COMMIT. `complete` stays false.
 - Binding `7453B98F`: after zipcodes commits, ticketed `balanceModifiers` create and update from official `#v2balanceModifiers`. Nested required non-empty `modifier` and `subject` strings. Exclude readonly `amount`, `entryDate`, `realizedCurrencyDifference`, and `isVoided`. Create `POST /balanceModifiers`. Update `PUT /balanceModifiers/:id`. Do not start until `8FE83270` is committed. `complete` stays false.
-- Binding `9B979A05`: remaining residual honesty is 8 method-closed + 2 readonly-map + 2 meta-delete = 12. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
+- Binding `4DBD7C3F`: after balanceModifiers commits, ticketed singular `invoiceReminderAssociations` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /invoiceReminderAssociations/:id` with no body. No bulk, UI, or live API. Do not start until `7453B98F` commits. `complete` stays false.
+- Binding `7B947636`: after invoice reminder association delete commits, ticketed singular `transactions` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /transactions/:id` with no body. No create/update, bulk, UI, or live API. Do not start until `4DBD7C3F` commits. `complete` stays false.
+- Binding `A485F530`: after transactions delete commits, research-only the six readonly-map create/update rows (`contactBalancePostings`, `postings`, `transactions`). Exhaust official docs and first-party static assets. No live API. No guessed fields. Keep rows red if writable schemas stay absent. `complete` stays false.
+- Binding `9B979A05`: remaining residual honesty is 6 method-closed + 2 readonly-map + 2 meta-delete = 10. Unauth 405 must not override Supports. Then remaining geo writes, readonly transaction writes, and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
 - `A337A622` still forbids more product list, dialog, or archive probes.
@@ -26,7 +28,8 @@ updated: 2026-08-20T07:12:00Z
 
 ## Done
 
-- Binding `AB6ABE84` product: ticketed offline `api.states.create` and `.update` in `src/billy_mcp/api/state_writes.py`. Nested optional `stateCode`, `name`, and belongs-to `country` strings, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 12. Independent review PASS. Ready for COMMIT.
+- Binding `8FE83270` product: ticketed offline `api.zipcodes.create` and `.update` in `src/billy_mcp/api/zipcode_writes.py`. Nested optional `zipcode`, belongs-to `city`/`state`/`country`, and float `latitude`/`longitude`, `extra=forbid`. `zipcodeId`/`cityId`/`stateId`/`countryId` rejected. Residual honesty remaining 10. Independent review PASS. Ready for COMMIT.
+- Binding `AB6ABE84`: ticketed offline `api.states.create` and `.update` in `src/billy_mcp/api/state_writes.py` landed on `850c80a`. Nested optional `stateCode`, `name`, and belongs-to `country` strings, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 12. Independent review PASS. Unsaved.
 - Binding `05F3200D`: ticketed offline `api.locales.create` and `.update` in `src/billy_mcp/api/locale_writes.py` landed on `113810e`. Nested optional `name` and `icon` strings, `extra=forbid`. `localeId` rejected. Residual honesty remaining 14. Independent review PASS. Unsaved.
 - Binding `47B85E43`: ticketed offline `api.currencies.create` and `.update` in `src/billy_mcp/api/currency_writes.py`. Nested optional `name` string and `exchangeRate` float, `extra=forbid`. `currencyId` rejected. Residual honesty remaining 16. Independent review PASS. Committed.
 - Binding `4DE5EE18`: ticketed offline `api.countries.create` and `.update` committed on `5e78f1d`. Nested optional string `name`, boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`, string `icon`, and string `locale`, `extra=forbid`. `localeId` rejected. Official `#v2countries` Supports create and update; unauth 405 must not override that table. Residual honesty remaining 18. Independent review PASS. Unsaved.
