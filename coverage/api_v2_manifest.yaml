@@ -4550,7 +4550,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
@@ -4595,7 +4595,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
@@ -10411,7 +10411,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
@@ -10456,7 +10456,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
@@ -14356,7 +14356,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false
@@ -14401,7 +14401,7 @@
         "blocker_code": "READONLY_PROPERTY_TABLE",
         "docs_etag": "tmhc6wpdc835zt",
         "docs_md5": "053f755f52e3926b028e29325e3670d4",
-        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map",
+        "evidence_ref": "research186_residual_unauth+research191_unauth_reconfirm+research192_unauth_reconfirm+research-a485f530-readonly-map+research-88c4b0a9-residual-audit",
         "kind": "readonly_field_map_insufficient",
         "live_api": "out_of_scope_by_user",
         "tools_allowed": false

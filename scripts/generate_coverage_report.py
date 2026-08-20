@@ -1889,7 +1889,8 @@ def standard_rows(resource: str, create: bool, update: bool, delete: bool) -> li
 
 RESIDUAL_EVIDENCE_REF_CHAIN = (
     "research186_residual_unauth+research191_unauth_reconfirm+"
-    "research192_unauth_reconfirm+research-a485f530-readonly-map"
+    "research192_unauth_reconfirm+research-a485f530-readonly-map+"
+    "research-88c4b0a9-residual-audit"
 )
 
 

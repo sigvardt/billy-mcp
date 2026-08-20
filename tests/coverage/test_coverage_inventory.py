@@ -433,6 +433,7 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert "research191_unauth_reconfirm" in row["qualification"]["evidence_ref"]
         assert "research192_unauth_reconfirm" in row["qualification"]["evidence_ref"]
         assert "research-a485f530-readonly-map" in row["qualification"]["evidence_ref"]
+        assert "research-88c4b0a9-residual-audit" in row["qualification"]["evidence_ref"]
         assert "unauth_status" not in row["qualification"]
 
     for row_id in method_closed:
@@ -452,6 +453,31 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
         assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
 
     # Honesty freeze does not change green counts or complete.
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is False
+
+
+def test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map() -> None:
+    """Unimplemented API ids are exactly bulk92 plus the six readonly-map rows."""
+
+    api_manifest, _, _, status, _ = documents()
+    operations = list(api_manifest["operations"])
+    unimplemented = {
+        str(row["id"])
+        for row in operations
+        if row.get("implemented") is not True or row.get("contract_tested") is not True
+    }
+    bulk = {str(row["id"]) for row in operations if row.get("source_kind") == "ambiguous_bulk"}
+    expected = bulk | set(generator.RESIDUAL_READONLY_MAP_IDS)
+    assert unimplemented == expected
+    assert len(unimplemented) == 98
+    assert len(bulk) == 92
+    assert len(generator.RESIDUAL_READONLY_MAP_IDS) == 6
+    assert len(generator.RESIDUAL_METHOD_CLOSED_IDS) == 0
+    assert len(generator.RESIDUAL_META_DELETE_IDS) == 0
     assert status["qualification"]["implemented_rows"] == 546
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339

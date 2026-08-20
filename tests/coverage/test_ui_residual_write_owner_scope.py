@@ -22,6 +22,12 @@ SCOPED_ROWS: Final[dict[str, str]] = {
     "ui.parity.daybooks.create": "DAYBOOKS_UNIQUE_PERSIST_ABSENT",
     "ui.parity.daybooks.delete": "DAYBOOKS_UNIQUE_PERSIST_ABSENT",
 }
+UNIMPLEMENTED_UI_OWNER_SCOPE: Final[frozenset[str]] = frozenset(
+    {
+        "ui.discovery.annual_reports",
+        *SCOPED_ROWS,
+    }
+)
 
 
 def _load_script_module(name: str) -> ModuleType:
@@ -73,3 +79,23 @@ def test_residual_owner_scope_keeps_coverage_incomplete() -> None:
 
     status = checker.load_document(ROOT / "coverage" / "status.json")
     assert status["complete"] is False
+
+
+def test_unimplemented_ui_rows_are_exactly_owner_scoped() -> None:
+    """Unimplemented UI rows are exactly the six owner-scoped rows."""
+
+    document = checker.load_document(ROOT / "coverage" / "ui_workflows_manifest.yaml")
+    workflows = list(document["workflows"])
+    unimplemented = [row for row in workflows if row.get("implemented") is not True]
+    ids = {str(row["id"]) for row in unimplemented}
+    assert ids == set(UNIMPLEMENTED_UI_OWNER_SCOPE)
+    assert len(unimplemented) == 6
+    for row in unimplemented:
+        assert generator.is_owner_out_of_scope(row) is True
+        assert generator.row_is_qualified(row, generator.UI_QUALIFICATION_FIELDS) is True
+    unqualified = [
+        str(row["id"])
+        for row in workflows
+        if not generator.row_is_qualified(row, generator.UI_QUALIFICATION_FIELDS)
+    ]
+    assert unqualified == []

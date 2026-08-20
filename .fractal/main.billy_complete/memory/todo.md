@@ -4,12 +4,12 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T11:35:00Z
+updated: 2026-08-20T12:06:00Z
 ---
 
 ## Open
 
-- Binding `A485F530`: honesty remap in the working tree. Independent review next. Keep six rows toolless/red. Unsave after COMMIT. `complete` stays false.
+- Binding `88C4B0A9`: residual audit committed. Owner input required on bulk92 plus six readonly-map rows. Do not repeat research. Do not implement guessed tools. `complete` stays false.
 - Binding `9B979A05`: remaining residual honesty is 6 readonly-map. Method-closed remaining is 0. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.
@@ -24,6 +24,8 @@ updated: 2026-08-20T11:35:00Z
 
 ## Done
 
+- Binding `88C4B0A9` residual audit: unimplemented API set is exactly bulk92 plus six readonly-map rows. Census tests and evidence ref `research-88c4b0a9-residual-audit` landed. Independent review PASS. Owner input required. Unsaved after the owner-input report.
+- Binding `A485F530` honesty remap committed on `e995411`. Six create/update rows stay toolless/red (`readonly_field_map_insufficient` / `READONLY_PROPERTY_TABLE`). Independent review PASS. Unsaved.
 - Binding `A485F530` research: official property tables for `contactBalancePostings`, `postings`, and `transactions` create/update are all readonly or immutable. First-party bundles GET only. No writable field map. Honesty remap: six rows `readonly_field_map_insufficient`. No tools.
 - Binding `7B947636`: ticketed offline `api.transactions.delete` in `src/billy_mcp/api/transaction_writes.py` landed on `bb66a48`. Preview `{id}` only. Execute `DELETE /transactions/:id` with no body. Residual honesty remaining 6. Independent review PASS. Unsaved.
 - Binding `4DBD7C3F`: ticketed offline `api.invoiceReminderAssociations.delete` in `src/billy_mcp/api/invoice_reminder_association_writes.py` landed on `da833d3`. Preview `{id}` only. Execute `DELETE /invoiceReminderAssociations/:id` with no body. Residual honesty remaining 7. Independent review PASS. Unsaved.

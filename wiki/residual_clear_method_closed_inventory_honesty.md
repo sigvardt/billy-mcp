@@ -1,7 +1,7 @@
 ---
 name: residual_clear_method_closed_inventory_honesty
 title: Residual clear method-closed inventory honesty freeze
-desc: Residual clear API write honesty. 6 toolless readonly-map rows remain. Not completeness.
+desc: Residual clear API write honesty. 6 toolless readonly-map rows remain plus bulk92. Not completeness.
 tags: [billy, api, residual, method-closed, inventory, honesty, research186]
 sources:
   - https://www.billy.dk/api/
@@ -11,8 +11,9 @@ sources:
   - .fractal/main.billy_complete/tmp/research186_residual_unauth.json
   - src/billy_mcp/live_probe.py
   - radio:A485F530
+  - radio:88C4B0A9
 created: 2026-08-02T14:20:00Z
-updated: 2026-08-20T11:35:00Z
+updated: 2026-08-20T12:20:00Z
 ---
 
 # Residual clear method-closed inventory honesty freeze
@@ -70,19 +71,25 @@ API live-test cells stay false with `live_api=out_of_scope_by_user`
 
 ## Completeness walls still open
 
-| Blocker | Rows |
-| --- | --- |
-| Bulk schema unspecified (`external_contract_blocker`) | 92 API |
-| UI product-plane bulk discovery_required ([[ui_product_plane_bulk_parity_inventory_honesty]]) | 58 UI |
-| Residual clear honesty (this freeze, still red) | 6 API |
-| annual_reports org inaccessible | 1 UI discovery |
+`88C4B0A9` residual audit: remaining unimplemented API rows are
+exactly these two external-contract blockers. Remaining
+unimplemented UI rows are owner-scoped and non-blocking. Do not
+repeat bulk or writable-field-map exhaust. Do not invent tools.
 
-Generated snapshot after the A485F530 readonly-map remap: implemented **546**, contract **551**, live/vision **339**, complete **false**. Historical research186 freeze snapshot was implemented/contract **470**, live/vision **286**.
+| Blocker | Rows |
+| --- | ---: |
+| Bulk schema unspecified (`external_contract_blocker` / `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) | 92 API |
+| Residual clear honesty (this freeze, still red) | 6 API |
+| Owner-scoped UI writes and annual reports (`out_of_scope_by_user`, non-blocking) | 6 UI |
+| Product-plane UI bulk parity | **0** open (dual-NA freezes closed) |
+
+Generated snapshot after the `88C4B0A9` residual audit: implemented **546**, contract **551**, live/vision **339**, complete **false**. Historical research186 freeze snapshot was implemented/contract **470**, live/vision **286**.
 
 ## Generator and tests
 
-- `scripts/generate_coverage_report.py`: `apply_residual_clear_honesty`, frozensets, qualification builders
-- `tests/coverage/test_coverage_inventory.py`: `test_residual_clear_honesty_rows_are_toolless_and_qualified`
+- `scripts/generate_coverage_report.py`: `apply_residual_clear_honesty`, frozensets, qualification builders. Evidence ref ends with `research-88c4b0a9-residual-audit`.
+- `tests/coverage/test_coverage_inventory.py`: `test_residual_clear_honesty_rows_are_toolless_and_qualified`, `test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map`
+- `tests/coverage/test_ui_residual_write_owner_scope.py`: `test_unimplemented_ui_rows_are_exactly_owner_scoped`
 
 ## research192 unauth reconfirm (2026-08-02)
 
@@ -104,15 +111,15 @@ Official docs fingerprint re-checked only (no residual unauth matrix this pass; 
 
 Residual **20** stay red and toolless (`tools_allowed=false`). Inventory `evidence_ref` remains ending at `research192_unauth_reconfirm`. Not greening; not product ACCEPT; complete stays false.
 
-### Current external walls (counts after product-plane UI bulk honesty closed)
+### Current external walls (counts after `88C4B0A9` residual audit)
 
 | Blocker | Rows |
 | --- | ---: |
 | Bulk schema unspecified | 92 API |
-| Residual clear honesty (this freeze) | 20 API |
-| annual_reports org inaccessible | 1 UI discovery |
+| Residual clear honesty (this freeze) | 6 API |
+| Owner-scoped UI (`FE6FA4B1` five plus `DC3B8E96` annual reports) | 6 UI, non-blocking |
 | Product-plane UI bulk parity | **0** open (dual-NA freezes closed) |
 
-Generated coverage snapshot at research193: implemented/contract **528**, live/vision **344**, complete **false**. Current generated snapshot after ticketed `countryGroups` create/update: implemented **532**, contract **537**, live/vision **339**, complete **false**. The live/vision drop versus research193 is later honesty remaps, not this freeze.
+Generated coverage snapshot at research193: implemented/contract **528**, live/vision **344**, complete **false**. Current generated snapshot after the residual audit: implemented **546**, contract **551**, live/vision **339**, complete **false**. The live/vision drop versus research193 is later honesty remaps, not this freeze. Evidence ref now ends with `research-88c4b0a9-residual-audit`.
 
 Unlock residual tools only when official docs correct the method map or authenticated non-production write proof is in scope (live API remains `out_of_scope_by_user`).

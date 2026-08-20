@@ -88,20 +88,33 @@ sources:
   - radio:4DBD7C3F
   - radio:7B947636
   - radio:A485F530
+  - radio:88C4B0A9
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T11:21:07Z
+updated: 2026-08-20T12:06:00Z
 ---
 
 ## Binding now
 
-`A485F530` (saved, P10, honesty remap in working tree): six
+`88C4B0A9` (unsaved after owner-input report, P10, audit
+committed): remaining unimplemented API rows are exactly bulk92
+(`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) plus six readonly-map
+create/update rows (`READONLY_PROPERTY_TABLE`). Remaining
+unimplemented UI rows are exactly six owner-scoped
+`out_of_scope_by_user` rows. Evidence ref appends
+`research-88c4b0a9-residual-audit`. No tools. No empty payload.
+No live API. Required fixes none. Owner input required.
+`complete` stays false unless owner scope permits honest
+completion. Live docs HTML/chunk fingerprint drift is advisory;
+do not relock on this commit.
+
+`A485F530` (unsaved, P10, committed on `e995411`): six
 create/update rows `contactBalancePostings`, `postings`, and
 `transactions` stay toolless/red. Official Supports lists create
 and update. Official property tables have no writable field.
 First-party bundles GET only. Qualification is
 `readonly_field_map_insufficient` /
 `READONLY_PROPERTY_TABLE`. No tools. No empty payload. No live
-API. `complete` stays false. Unsave after COMMIT.
+API. Independent review PASS. `complete` stays false.
 
 `7B947636` (unsaved, P10, landed on `bb66a48`): ticketed
 `transactions` singular delete. Preview takes a non-empty `id`.

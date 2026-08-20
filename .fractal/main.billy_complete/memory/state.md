@@ -25,19 +25,22 @@ sources:
   - radio:FE6FA4B1
   - radio:DC3B8E96
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T11:35:00Z
+updated: 2026-08-20T12:06:00Z
 ---
 
 ## Now
 
-`A485F530` honesty remap is in the working tree. Independent
-review PASS. Required fixes none. Six residual create/update rows
-stay toolless and red with
-`kind=readonly_field_map_insufficient` and
-`blocker_code=READONLY_PROPERTY_TABLE`. Method-closed remaining
-is none. No tools. No empty payload. `live_tested` stays false
-with `qualification.live_api=out_of_scope_by_user`. `complete`
-stays false. After COMMIT, one residual audit (`88C4B0A9`).
+`88C4B0A9` residual audit is committed. Independent review PASS.
+Required fixes none. Remaining unimplemented API rows are
+exactly bulk92 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) plus
+six readonly-map create/update rows (`READONLY_PROPERTY_TABLE`).
+Method-closed remaining is none. Meta-delete remaining is none.
+No tools. No empty payload. UI remaining unimplemented is
+exactly six owner-scoped rows. `live_tested` stays false with
+`qualification.live_api=out_of_scope_by_user`. `complete` stays
+false. Owner input required for both external-contract
+blockers. Do not repeat research. Do not implement guessed
+tools. Do not relock docs on this commit. Do not finish.
 
 Ticketed offline `transactions` delete remains on `bb66a48`.
 Preview tool `api_transactions_delete_preview` takes a non-empty
