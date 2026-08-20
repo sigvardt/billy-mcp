@@ -4,13 +4,14 @@ desc: Open product work after official docs lock promote.
 tags: [todo]
 sources: []
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T12:06:00Z
+updated: 2026-08-20T13:55:05Z
 ---
 
 ## Open
 
+- Binding `3DA6FB8E` done: independent review PASS on `df2f475`; owner-input outbox posted; unsaved. Residual still bulk92 plus six `READONLY_PROPERTY_TABLE` rows and six UI owner-scope rows. `complete` stays false. Wait for owner scope.
 - Binding `88C4B0A9`: residual audit committed. Official lock now `pi4s9u10j037qn` / `d805f3d2bb8e339f7635d6834b4011bd` after bankLines list-filter relock. Owner input still required on bulk92 plus six readonly-map rows. Do not implement guessed tools. `complete` stays false.
-- This slice: typed `api_bank_lines_list` filters. `accountId` required. Shared `BankListRequest` unchanged.
+- Typed `api_bank_lines_list` filters landed. `accountId` required. Shared `BankListRequest` unchanged. Independent review PASS.
 - Binding `9B979A05`: remaining residual honesty is 6 readonly-map. Method-closed remaining is 0. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
 - Residual five are `out_of_scope_by_user` (`FE6FA4B1`). Do not remake dumps. Do not arm `_ledger_write`. `complete` stays false on bulk92.
 - Owner `D71E5B82` still binds: reusable invoice CUD must pass `ui-full` after settled zero with no `LEFTOVER_*` hard-fail.

@@ -24,20 +24,29 @@ sources:
   - radio:7C9348E1
   - radio:FE6FA4B1
   - radio:DC3B8E96
+  - radio:3DA6FB8E
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T12:06:00Z
+updated: 2026-08-20T14:30:00Z
 ---
 
 ## Now
 
-This slice lands typed official `GET /v2/bankLines` list
-filters on `api_bank_lines_list`. `accountId` is required.
-Docs lock is ETag `pi4s9u10j037qn`, MD5
-`d805f3d2bb8e339f7635d6834b4011bd`. Remaining unimplemented
-API rows stay bulk92 plus six readonly-map create/update
-rows. UI remaining unimplemented stays six owner-scoped
-rows. `complete` stays false. Do not guess bulk or
-readonly-map tools. Do not finish.
+Parent `3DA6FB8E` is done: independent review of the
+bankLines list-filter slice on `df2f475` PASSed. Frozen
+List filters match `BankLinesListRequest`. GET is
+`/bankLines` only. Shared `BankListRequest` still rejects
+`accountId` and `q`. Owner-input report is posted. No
+required fixes. Stopped for owner scope on bulk92 plus six
+readonly-map rows. No new tools. No live docs GET. Do not
+spawn. `complete` stays false. Do not finish.
+
+Typed official `GET /v2/bankLines` list filters are on
+`api_bank_lines_list`. `accountId` is required. Docs lock is
+ETag `pi4s9u10j037qn`, MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
+Remaining unimplemented API rows stay bulk92 plus six
+readonly-map create/update rows. UI remaining unimplemented
+stays six owner-scoped rows. Do not guess bulk or
+readonly-map tools.
 
 Ticketed offline `transactions` delete remains on `bb66a48`.
 Preview tool `api_transactions_delete_preview` takes a non-empty
@@ -50,6 +59,18 @@ Generated snapshot: implemented 546, contract 551, live/vision
 readonly-map. Meta-delete remaining is none. Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `pi4s9u10j037qn`, MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
+
+EXECUTE recheck tests that still lock the residual set:
+
+- `tests/api/test_bank_reads.py`
+- `tests/coverage/test_official_docs_lock.py`
+- `tests/coverage/test_coverage_inventory.py::test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map`
+- `tests/coverage/test_coverage_inventory.py::test_residual_clear_honesty_rows_are_toolless_and_qualified`
+- `tests/coverage/test_coverage_inventory.py::test_bulk_rows_remain_ambiguous_and_toolless`
+- `tests/coverage/test_ui_residual_write_owner_scope.py::test_unimplemented_ui_rows_are_exactly_owner_scoped`
+
+Unread owner radio after the recheck: none besides already
+handled `3DA6FB8E`.
 
 Binding `9B979A05` still owns the rest of the 121 split. Unauth
 405 must not override current official Supports. Never infer
@@ -89,11 +110,13 @@ Never read `/Users/user/Desktop/billy_login.txt`.
 
 ## Children
 
-No children are running. Seven write children stay completed and
-merged (`ui_contacts_writes`, `ui_bills_writes`,
+No children are running. Parent `main` and `origin/main` are
+already in HEAD `df2f475`. Seven write children stay completed
+and merged (`ui_contacts_writes`, `ui_bills_writes`,
 `ui_invoices_writes` draft only, `ui_products_writes`,
 `ui_ledger_writes`, `ui_files_writes`, `ui_org_writes` company
-fields only). Leftover retired descendants stay unmerged. Do not
-continue, reset, or merge them.
+fields only) with empty logs versus this branch. 62 leftover
+retired descendants still have commits; they stay unmerged. Do
+not continue, reset, or merge them.
 
 See `decisions.md` and `todo.md`.

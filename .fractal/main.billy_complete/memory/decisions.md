@@ -89,18 +89,27 @@ sources:
   - radio:7B947636
   - radio:A485F530
   - radio:88C4B0A9
+  - radio:3DA6FB8E
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T12:06:00Z
+updated: 2026-08-20T13:55:05Z
 ---
 
 ## Binding now
 
-This slice (198.72): official docs relocked to ETag
-`pi4s9u10j037qn` / MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
-`api_bank_lines_list` takes required `accountId` and the
-official List filters. Shared `BankListRequest` is unchanged.
-Bulk92 and six readonly-map rows stay red. `complete` stays
-false.
+`3DA6FB8E` (unsaved after owner-input report, P10): finish
+the bankLines list-filter and docs-relock slice, independently
+review it, then stop. Done. No further docs scan. Recheck
+passed. Independent review PASS. Owner-input outbox posted.
+Bulk92 plus six `READONLY_PROPERTY_TABLE` rows still need
+owner scope. No guessed payloads. No live API. `complete`
+stays false.
+
+The bankLines list-filter slice is on `df2f475`: official
+docs relocked to ETag `pi4s9u10j037qn` / MD5
+`d805f3d2bb8e339f7635d6834b4011bd`. `api_bank_lines_list`
+takes required `accountId` and the official List filters.
+Shared `BankListRequest` is unchanged. Bulk92 and six
+readonly-map rows stay red.
 
 `88C4B0A9` (unsaved after owner-input report, P10, audit
 committed): remaining unimplemented API rows are exactly bulk92
