@@ -9,8 +9,7 @@ updated: 2026-08-20T09:08:00Z
 
 ## Open
 
-- Binding `7453B98F`: ticketed `balanceModifiers` create and update are landed. Independent review PASS. No required fixes. Ready for COMMIT. `complete` stays false.
-- Binding `4DBD7C3F`: after balanceModifiers commits, ticketed singular `invoiceReminderAssociations` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /invoiceReminderAssociations/:id` with no body. No bulk, UI, or live API. Do not start until `7453B98F` commits. `complete` stays false.
+- Binding `4DBD7C3F`: ticketed singular `invoiceReminderAssociations` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /invoiceReminderAssociations/:id` with no body. No bulk, UI, or live API. BalanceModifiers already committed on `5a1bde8`. `complete` stays false.
 - Binding `7B947636`: after invoice reminder association delete commits, ticketed singular `transactions` delete only. Preview takes a non-empty `id`. Execute takes `confirmation_ticket` only. `DELETE /transactions/:id` with no body. No create/update, bulk, UI, or live API. Do not start until `4DBD7C3F` commits. `complete` stays false.
 - Binding `A485F530`: after transactions delete commits, research-only the six readonly-map create/update rows (`contactBalancePostings`, `postings`, `transactions`). Exhaust official docs and first-party static assets. No live API. No guessed fields. Keep rows red if writable schemas stay absent. `complete` stays false.
 - Binding `9B979A05`: remaining residual honesty is 4 method-closed + 2 readonly-map + 2 meta-delete = 8. Unauth 405 must not override Supports. Then remaining postings writes and meta deletes. Bulk92 stay unspecified. Never infer a common bulk shape. Unresolved stay red. No live API. Do not finish.
@@ -27,7 +26,7 @@ updated: 2026-08-20T09:08:00Z
 
 ## Done
 
-- Binding `7453B98F` product: ticketed offline `api.balanceModifiers.create` and `.update` in `src/billy_mcp/api/balance_modifier_writes.py`. Nested required `modifier` and `subject` strings, `extra=forbid`. Readonly `amount`/`entryDate`/`realizedCurrencyDifference`/`isVoided` and `modifierId`/`subjectId` rejected. Residual honesty remaining 8. Independent review PASS. Ready for COMMIT.
+- Binding `7453B98F`: ticketed offline `api.balanceModifiers.create` and `.update` in `src/billy_mcp/api/balance_modifier_writes.py` landed on `5a1bde8`. Nested required `modifier` and `subject` strings, `extra=forbid`. Readonly `amount`/`entryDate`/`realizedCurrencyDifference`/`isVoided` and `modifierId`/`subjectId` rejected. Residual honesty remaining 8. Independent review PASS. Unsaved.
 - Binding `8FE83270`: ticketed offline `api.zipcodes.create` and `.update` in `src/billy_mcp/api/zipcode_writes.py` landed on `b95f96f`. Nested optional `zipcode`, belongs-to `city`/`state`/`country`, and float `latitude`/`longitude`, `extra=forbid`. `zipcodeId`/`cityId`/`stateId`/`countryId` rejected. Residual honesty remaining 10. Independent review PASS. Unsaved.
 - Binding `AB6ABE84`: ticketed offline `api.states.create` and `.update` in `src/billy_mcp/api/state_writes.py` landed on `850c80a`. Nested optional `stateCode`, `name`, and belongs-to `country` strings, `extra=forbid`. `stateId`/`countryId` rejected. Residual honesty remaining 12. Independent review PASS. Unsaved.
 - Binding `05F3200D`: ticketed offline `api.locales.create` and `.update` in `src/billy_mcp/api/locale_writes.py` landed on `113810e`. Nested optional `name` and `icon` strings, `extra=forbid`. `localeId` rejected. Residual honesty remaining 14. Independent review PASS. Unsaved.

@@ -94,7 +94,15 @@ updated: 2026-08-20T09:08:00Z
 
 ## Binding now
 
-`7453B98F` (saved, P10, IR PASS, ready for COMMIT): ticketed
+`4DBD7C3F` (saved, P10, live slice): take only the documented
+singular `invoiceReminderAssociations` delete. Preview takes a
+non-empty `id`. Execute takes `confirmation_ticket` only. Bind
+DELETE `/invoiceReminderAssociations/:id` with an encoded id and
+no request body. Treat official Supports delete as the offline
+contract. No bulk, UI, or live API. BalanceModifiers already
+committed on `5a1bde8`. `complete` stays false.
+
+`7453B98F` (unsaved, P10, landed on `5a1bde8`): ticketed
 `balanceModifiers` create and update. Official Supports lists
 create and update. Nested `BalanceModifierPayload` of required
 non-empty belongs-to-reference strings `modifier` and `subject`
@@ -120,15 +128,6 @@ UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review PASS. No
 required fixes. `complete` stays false. Residual honesty
 remaining 10.
-
-`4DBD7C3F` (saved, P10, after balanceModifiers commit): take
-only the documented singular `invoiceReminderAssociations`
-delete. Preview takes a non-empty `id`. Execute takes
-`confirmation_ticket` only. Bind DELETE
-`/invoiceReminderAssociations/:id` with an encoded id and no
-request body. Treat official Supports delete as the offline
-contract. No bulk, UI, or live API. Do not start until
-`7453B98F` commits. `complete` stays false.
 
 `7B947636` (saved, P10, after invoice reminder association
 delete): take only the documented singular `transactions`

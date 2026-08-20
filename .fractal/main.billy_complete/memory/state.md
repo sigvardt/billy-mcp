@@ -30,8 +30,8 @@ updated: 2026-08-20T09:08:00Z
 
 ## Now
 
-Ticketed offline `balanceModifiers` create and update are
-landed. Binding `7453B98F` is ready for COMMIT. Preview tools
+Ticketed offline `balanceModifiers` create and update landed on
+`5a1bde8`. Binding `7453B98F` is unsaved. Preview tools
 `api_balance_modifiers_create_preview` and
 `api_balance_modifiers_update_preview` take a nested payload of
 required non-empty belongs-to-reference strings `modifier` and
@@ -52,10 +52,13 @@ method-closed, 2 readonly-map, 2 meta-delete). Bulk 92 stay
 `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
 `tmhc6wpdc835zt`, MD5 `053f755f52e3926b028e29325e3670d4`.
 
-After COMMIT, saved `4DBD7C3F` owns ticketed singular
-`invoiceReminderAssociations` delete only. Then `7B947636` and
-research-only `A485F530`. Binding `9B979A05` still owns the rest
-of the 121 split. Never infer bulk schemas. Do not finish.
+Saved `4DBD7C3F` is the live slice: ticketed singular
+`invoiceReminderAssociations` delete only. Preview takes a
+non-empty `id`. Execute takes `confirmation_ticket` only. Bind
+`DELETE /invoiceReminderAssociations/:id` with no body. Then
+`7B947636` and research-only `A485F530`. Binding `9B979A05` still
+owns the rest of the 121 split. Never infer bulk schemas. Do not
+finish.
 
 Owner `96908DC6` still binds overall finish. API live stays
 deferred. Årsrapporter stays `out_of_scope_by_user`
