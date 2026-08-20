@@ -79,13 +79,26 @@ sources:
   - radio:2D09964C
   - radio:8C5F08A8
   - radio:AF8E5A1F
+  - radio:4DE5EE18
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T02:15:00Z
+updated: 2026-08-20T02:33:11Z
 ---
 
 ## Binding now
 
-`AF8E5A1F` (saved, P10, current after this COMMIT): take only
+`4DE5EE18` (saved, P10, next after this COMMIT): take only
+`countries` create and update. Official Supports lists create and
+update. Nested `CountryPayload` of optional string `name`,
+boolean `hasStates`, `hasFiniteStates`, `hasFiniteZipcodes`,
+string `icon`, and string `locale` with `extra=forbid`, frozen.
+Create preview `POST /countries`. Update preview
+`PUT /countries/:id` with non-empty encoded route id. Execute
+`confirmation_ticket` only. Preview makes no HTTP. No bulk. No
+UI. No live API. `live_tested` stays false with
+`live_api=out_of_scope_by_user`. Independent review before that
+commit. `complete` stays false.
+
+`AF8E5A1F` (saved, P10, product landed, review next): ticketed
 `countryGroups` create and update. Official Supports lists create
 and update. Nested `CountryGroupPayload` of optional string
 `name`, `icon`, and `memberCountryIds` with `extra=forbid`,
@@ -94,11 +107,11 @@ frozen. Create preview `POST /countryGroups`. Update preview
 Execute `confirmation_ticket` only. Preview makes no HTTP. No
 bulk. No UI. No live API. `live_tested` stays false with
 `live_api=out_of_scope_by_user`. Independent review before that
-commit. `complete` stays false.
+commit. `complete` stays false. Residual honesty remaining 20.
 
-`8C5F08A8` (saved, P10, landed this slice): ticketed `cities`
-create and update. Nested optional string `name`, `county`,
-`state`, and `country` with `extra=forbid`. Create
+`8C5F08A8` (unsaved, P10, landed on `9a3a677`): ticketed
+`cities` create and update. Nested optional string `name`,
+`county`, `state`, and `country` with `extra=forbid`. Create
 `POST /cities`. Update `PUT /cities/:id`. Execute
 `confirmation_ticket` only. Preview makes no HTTP. Independent
 review PASS. Residual honesty remaining 22.

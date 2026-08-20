@@ -28,6 +28,7 @@ from billy_mcp.api.contact_person_reads import register_contact_person_read_tool
 from billy_mcp.api.contact_person_writes import register_contact_person_write_tools
 from billy_mcp.api.contact_reads import register_contact_read_tools
 from billy_mcp.api.contact_writes import register_contact_write_tools
+from billy_mcp.api.country_group_writes import register_country_group_write_tools
 from billy_mcp.api.daybook_balance_account_writes import (
     register_daybook_balance_account_write_tools,
 )
@@ -1170,6 +1171,7 @@ def create_server(
     register_invoice_email_delivery_write_tools(server, client, configuration, confirmations)
     register_geo_read_tools(server, client)
     register_city_write_tools(server, client, write_protocol)
+    register_country_group_write_tools(server, client, write_protocol)
     register_tax_read_tools(server, client)
     register_bank_read_tools(server, client)
     register_balance_invoice_extension_read_tools(server, client)
