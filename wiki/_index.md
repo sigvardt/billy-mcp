@@ -45,6 +45,8 @@ updated: 2026-08-20T12:22:01Z
 
 [[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Owner skip (radio DC3B8E96, 2026-08-04) marks ui.discovery.annual_reports out_of_scope_by_user; no tool; not_applicable rejected; historical dual Upsedasse retained.
 
+[[undocumented_bulk_owner_skip|undocumented_bulk_owner_skip]]: Owner skip for 92 undocumented bulk API mentions. Keep visible and unimplemented; they do not block current completion.
+
 [[ui_attachments_get_create_update_delete_not_applicable|ui_attachments_get_create_update_delete_not_applicable]]: Dual-session research185 freeze — no equivalent mit.billy.dk get-detail, join-form create, update-form, or delete-chrome workflow for residual attachments ops; list stays dual-count green on Bilag; exact NA for get/create/update/delete only.
 
 [[ui_bank_accounts_list_shell|ui_bank_accounts_list_shell]]: Read-only headless ui_bank_accounts_list contract for Billy bank accounts list shell open only.

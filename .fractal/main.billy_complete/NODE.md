@@ -88,6 +88,21 @@ Qualification scope changed by the user on 2026-08-04 (owner radio DC3B8E96):
 - Do not re-open live dual reconfirm or live API tests for annual reports under
   this scope decision.
 
+Qualification scope changed by the user on 2026-08-21:
+
+- Stop work on the 92 bulk save/delete mentions. Billy's official documentation
+  exposes Supports flags but no usable request contract, and separate bulk tools
+  were not shown to be needed because the same business actions have individual
+  operations.
+- Keep every bulk row visible as machine-readable `out_of_scope_by_user` with
+  `scope_code=BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP`. Do not mark the rows green,
+  implement tools, infer payloads, or run live API probes.
+- These 92 rows are outside the applicable operation count and do not block
+  `coverage/status.json` from becoming `complete: true` under owner scope.
+- Revisit them only if Billy publishes a complete contract or the owner
+  explicitly requests separate bulk tools. This decision stops research before
+  establishing that those tools are needed.
+
 Work in this order:
 
 1. Generate the official API inventory before API implementation. Record every
@@ -103,7 +118,7 @@ Work in this order:
 5. Implement API writes with preview and exact-operation execution.
 6. Implement headless interface parity, then interface-only workflows.
 7. Reconcile both inventories, run the complete non-production test suite,
-   perform independent review, and close every red coverage row.
+   perform independent review, and close every applicable red coverage row.
 
 Use Pydantic input and output models for every tool. Use stable names in the
 form `api_<area>_<operation>`, `ui_<area>_<operation>`,
@@ -162,7 +177,8 @@ areas, test harnesses, and final review when their file ownership can remain
 clear.
 
 Never count a stub, placeholder, skipped test, mocked live result, inaccessible
-screen, ambiguous bulk operation, or untested irreversible action as complete.
+screen, or untested irreversible action as complete. Owner-skipped bulk mentions
+remain visible outside the applicable count and are never counted as green.
 Budget or iteration exhaustion is incomplete work, never success.
 
 ## Completion Requirements
@@ -173,12 +189,13 @@ The node may finish only when all conditions below are true:
    official API documentation. Each row records the endpoint, method, request
    fields, response fields, filters, pagination, errors, sensitivity, tool
    name, and test references.
-2. Every API inventory row has `discovered`, `implemented`, and
+2. Every applicable API inventory row has `discovered`, `implemented`, and
    `contract_tested` set to true. `live_tested` remains false and is accompanied
    by an explicit machine-readable `out_of_scope_by_user` qualification. No API
-   row is skipped, stubbed, or falsely marked live-tested.
-3. Every API operation has a real typed FastMCP tool with typed success and
-   error output. Request construction, response mapping, filters, pagination,
+   row is stubbed or falsely marked live-tested. The 92 bulk mentions use the
+   separate owner-skip scope above and remain visible without tools.
+3. Every applicable supported API operation has a real typed FastMCP tool with
+   typed success and error output. Request construction, response mapping, filters, pagination,
    documented errors, and write behaviour have passing tests.
 4. The maintained interface inventory maps every API operation to a tested
    interface workflow or an evidence-backed `not_applicable` result. It also
@@ -221,7 +238,8 @@ The node may finish only when all conditions below are true:
     qualification policy. The generated report has no red, unknown, ambiguous,
     untested, skipped, or stubbed applicable implementation or contract row, and
     no incomplete interface row. API live-test cells remain false with
-    `out_of_scope_by_user` rather than being falsely green.
+    `out_of_scope_by_user` rather than being falsely green. The 92 owner-skipped
+    bulk rows remain visible outside the applicable count.
 17. `BILLY_TEST_MODE=ui-full bash "$NODE_DIR/scripts/test.sh"` passes
     immediately before completion. This mode runs the full offline API suite and
     full live interface suite without live API traffic.
@@ -235,9 +253,9 @@ The node may finish only when all conditions below are true:
 - Keep the public repository free of credentials and sensitive evidence.
 - Treat inaccessible or plan-gated features as blockers until tested or
   supported by defensible interface evidence. They stay red meanwhile.
-- Clarify the 92 ambiguous bulk API entries from official documentation and
-  defensible offline contract evidence. Do not use live API testing or infer
-  them into green coverage.
+- Do not implement or continue contract research for the 92 undocumented bulk
+  API mentions. Keep them visible as owner-skipped and non-blocking. Reopen only
+  after a complete official contract or a new owner decision.
 - Use Python 3.12, `uv`, locked dependencies, Ruff, Pyright, pytest, and
   Playwright Chromium.
 - Before each commit, run formatting, lint, type, unit, contract, and safety
