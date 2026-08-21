@@ -108,7 +108,9 @@ async def _capture_invoices_list_frame(
         except Exception:
             pass
         path = urlsplit(page.url).path or ""
-        assert path.endswith("/invoices"), "vision frame must be the invoices list path class"
+        assert path.endswith("/invoices") or path.endswith("/invoices/empty"), (
+            "vision frame must be the populated or exact-empty invoices list path class"
+        )
         # Playwright page is only typed as LoginPage in BrowserRuntime; cast for live DOM.
         live_page = cast(Any, page)
         heading = live_page.locator("h1")
@@ -116,6 +118,10 @@ async def _capture_invoices_list_frame(
         assert (await heading.first.inner_text()).strip() == "Fakturaer"
         cta = live_page.locator("text=Opret faktura")
         assert await cta.count() >= 1 and await cta.first.is_visible()
+        if path.endswith("/invoices/empty"):
+            empty = live_page.locator("text=Ingen fakturaer")
+            assert await empty.count() >= 1 and await empty.first.is_visible()
+            assert (await empty.first.inner_text()).strip() == "Ingen fakturaer"
         await live_page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
     finally:

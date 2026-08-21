@@ -1268,6 +1268,90 @@ def test_ui_invoices_list_returns_success_for_list_shell(tmp_path: Path) -> None
     assert page.closed
 
 
+def test_ui_invoices_list_returns_success_for_exact_empty_url(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _invoices_shell_controls()
+    controls["text=Ingen fakturaer"] = FakeLoginControl(text="Ingen fakturaer")
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_empty(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/invoices"):
+            page.url = "https://mit.billy.dk/test-org-slug/invoices/empty"
+        return result
+
+    page.goto = goto_empty  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_invoices_list())
+
+    assert result == UiInvoicesListSuccess(
+        create_action_visible=True,
+        shell_markers_present=True,
+    )
+    assert page.closed
+
+
+def test_ui_invoices_list_rejects_empty_url_without_exact_empty_state(tmp_path: Path) -> None:
+    identity_path = tmp_path / "ui-org-identity.json"
+    identity_path.write_text(
+        json.dumps({"source": "ui_dashboard_path", "org_slug": "test-org-slug"}) + "\n",
+        encoding="utf-8",
+    )
+    controls = _invoices_shell_controls()
+    controls["text=Ingen fakturaer"] = FakeLoginControl(count=0, visible=False)
+    page = FakeLoginPage(
+        final_url="https://mit.billy.dk/test-org-slug/dashboard",
+        controls=controls,
+        follow_goto=True,
+    )
+    original_goto = page.goto
+
+    async def goto_empty(url: str, *, wait_until: str) -> object:
+        result = await original_goto(url, wait_until=wait_until)
+        if url.rstrip("/").endswith("/invoices"):
+            page.url = "https://mit.billy.dk/test-org-slug/invoices/empty"
+        return result
+
+    page.goto = goto_empty  # type: ignore[method-assign]
+    context = FakeLoginContext(page)
+
+    async def launcher(profile_path: str, **kwargs: bool) -> PersistentContext:
+        return cast(PersistentContext, context)
+
+    runtime = BrowserRuntime(
+        profile_path=tmp_path / "profile",
+        egress_manifest_path=write_browser_egress_fixture(tmp_path),
+        launcher=launcher,
+        org_identity_path=identity_path,
+    )
+
+    result = asyncio.run(runtime.ui_invoices_list())
+
+    assert isinstance(result, ToolError)
+    assert result.code is StableErrorCode.UI_CHANGED
+    assert page.closed
+
+
 def test_ui_invoices_list_returns_ui_changed_for_error_shell(tmp_path: Path) -> None:
     identity_path = tmp_path / "ui-org-identity.json"
     identity_path.write_text(

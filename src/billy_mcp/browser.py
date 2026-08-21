@@ -104,8 +104,9 @@ _INTERACTION_CHALLENGE_SELECTORS = (
     "input[name*='totp' i]",
 )
 _DASHBOARD_PATH = re.compile(r"^/[^/]+/dashboard$")
-_INVOICES_LIST_PATH = re.compile(r"^/[^/]+/invoices$")
+_INVOICES_LIST_PATH = re.compile(r"^/[^/]+/invoices(?:/empty)?$")
 _INVOICES_LIST_HEADING = "Fakturaer"
+_INVOICES_EMPTY_STATE_HEADING = "Ingen fakturaer"
 _INVOICES_CREATE_CTA = "Opret faktura"
 _INVOICES_CREATE_PATH = re.compile(r"^/[^/]+/invoices/new$")
 _INVOICES_CREATE_HEADING = "Opret faktura"
@@ -5331,7 +5332,7 @@ def _is_dashboard_shell_url(url: str) -> bool:
 
 
 def _is_invoices_list_url(url: str) -> bool:
-    """Accept mit.billy.dk /:org_slug/invoices, including Billy's list query params."""
+    """Accept Billy's populated or exact-empty invoices list path and query params."""
 
     try:
         parsed = urlsplit(url)
@@ -6622,7 +6623,7 @@ async def _has_shell_nav_markers(page: LoginPage) -> bool:
 
 
 async def _has_invoices_list_signature(page: LoginPage) -> bool:
-    """Verify the research102 invoices list heading and create CTA without clicking."""
+    """Verify populated or exact-empty invoices list chrome without clicking."""
 
     try:
         headings = page.locator("h1")
@@ -6634,7 +6635,16 @@ async def _has_invoices_list_signature(page: LoginPage) -> bool:
         if (await heading.inner_text()).strip() != _INVOICES_LIST_HEADING:
             return False
         create_action = page.locator(f"text={_INVOICES_CREATE_CTA}")
-        return await create_action.count() >= 1 and await create_action.first.is_visible()
+        if await create_action.count() < 1 or not await create_action.first.is_visible():
+            return False
+        if (urlsplit(page.url).path or "").endswith("/invoices/empty"):
+            empty = page.locator(f"text={_INVOICES_EMPTY_STATE_HEADING}")
+            return (
+                await empty.count() >= 1
+                and await empty.first.is_visible()
+                and (await empty.first.inner_text()).strip() == _INVOICES_EMPTY_STATE_HEADING
+            )
+        return True
     except Exception:
         return False
 

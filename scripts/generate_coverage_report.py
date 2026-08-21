@@ -3429,7 +3429,9 @@ def apply_ui_invoices_list_shell_evidence(
     the durable review record lives outside git under node tmp.
     """
 
-    row["method_or_route"] = "mit.billy.dk /:org_slug/invoices (read-only list shell open)"
+    row["method_or_route"] = (
+        "mit.billy.dk /:org_slug/invoices(?:/empty) (read-only list shell open)"
+    )
     row["tool_name"] = UI_INVOICES_LIST_TOOL_NAME
     # Shell-only contract actually tested by ui_invoices_list (empty tool input).
     row["request_fields"] = []
@@ -3451,7 +3453,8 @@ def apply_ui_invoices_list_shell_evidence(
     ]
     row["evidence"] = (
         "research102 dual-session headless observation + ui_invoices_list product; "
-        "list shell only (path class, h1 Fakturaer, CTA Opret faktura present, no create); "
+        "list shell only (populated or exact /invoices/empty path, h1 Fakturaer, "
+        "CTA Opret faktura present, exact Ingen fakturaer on empty, no create); "
         "API list filters/sort/pagination UI not producted; "
         "vision record tmp/vision-records/ui_invoices_list.json (list surface frames, accept)"
     )
