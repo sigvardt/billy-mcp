@@ -1,0 +1,3157 @@
+"""Tests for the fail-closed generated coverage inventory."""
+
+from __future__ import annotations
+
+import copy
+import importlib.util
+import json
+import subprocess
+import sys
+from collections import Counter
+from pathlib import Path
+from types import ModuleType
+from typing import Any, cast
+
+ROOT = Path(__file__).resolve().parents[2]
+SCRIPTS = ROOT / "scripts"
+if str(SCRIPTS) not in sys.path:
+    sys.path.insert(0, str(SCRIPTS))
+
+
+def load_script_module(name: str) -> ModuleType:
+    """Load an owned script module so its public helpers are testable."""
+
+    spec = importlib.util.spec_from_file_location(name, SCRIPTS / f"{name}.py")
+    assert spec is not None
+    assert spec.loader is not None
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+generator = load_script_module("generate_coverage_report")
+checker = load_script_module("check_coverage")
+
+
+def documents() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any], str]:
+    """Load the checked-in generated artifacts once per assertion group."""
+
+    coverage = ROOT / "coverage"
+    return (
+        checker.load_document(coverage / "api_v2_manifest.yaml"),
+        checker.load_document(coverage / "ui_workflows_manifest.yaml"),
+        checker.load_document(coverage / "browser_egress.yaml"),
+        checker.load_document(coverage / "status.json"),
+        (coverage / "report.md").read_text(encoding="utf-8"),
+    )
+
+
+def validation_errors(
+    api_manifest: dict[str, Any],
+    ui_manifest: dict[str, Any],
+    browser_egress: dict[str, Any],
+    status: dict[str, Any],
+    report: str,
+    *,
+    root: Path = ROOT,
+    reject_false_completeness: bool = False,
+    require_complete: bool = False,
+) -> list[str]:
+    """Validate in-memory copies without changing generated repository files."""
+
+    return checker.validate_documents(
+        api_manifest,
+        ui_manifest,
+        browser_egress,
+        status,
+        report,
+        root,
+        reject_false_completeness=reject_false_completeness,
+        require_complete=require_complete,
+    )
+
+
+def test_generated_inventory_passes_its_self_check() -> None:
+    """The checked-in manifests, report, and status agree exactly."""
+
+    assert checker.validate_root(ROOT) == []
+
+
+def test_write_response_root_overrides_are_scoped() -> None:
+    """Preserve the frozen root without changing conventional write rows."""
+
+    operations = generator.build_api_manifest()["operations"]
+    by_id = {row["id"]: row for row in operations}
+
+    assert by_id["api.invoiceReminders.create"]["response_fields"] == ["invoiceReminders[]"]
+    assert by_id["api.organizations.create"]["response_fields"] == ["organizations[]"]
+    assert by_id["api.invoiceLateFees.create"]["response_fields"] == [
+        "changed_records[]",
+        "meta.deletedRecords",
+    ]
+
+
+def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
+    """The 207/92/6 research snapshot retains its protected API details."""
+
+    api_manifest, _, _, status, _ = documents()
+    operations = api_manifest["operations"]
+    by_id = {row["id"]: row for row in operations}
+
+    assert Counter(row["source_kind"] for row in operations) == {
+        "clear": 207,
+        "ambiguous_bulk": 92,
+        "special": 6,
+    }
+    assert len(operations) == 305
+    assert by_id["api.invoices.list"]["filters"] == generator.INVOICE_FILTERS
+    assert by_id["api.bills.list"]["filters"] == generator.BILL_FILTERS
+    assert by_id["api.daybookTransactions.list"]["filters"] == generator.DAYBOOK_TRANSACTION_FILTERS
+    for resource in ("cities", "states", "zipcodes"):
+        row = by_id[f"api.{resource}.list"]
+        assert row["filters"] == {"countryId": {"type": "string", "required": True}}
+        assert row["request_fields"] == [
+            "page",
+            "pageSize",
+            "include",
+            "sortProperty",
+            "sortDirection",
+            "countryId",
+        ]
+        assert row["contract_status"] == "documented_plus_live_observation"
+        assert "without a non-empty countryId" in row["evidence"]
+    assert by_id["api.files.create"]["alias_of"] == generator.FILES_UPLOAD_ALIAS
+    assert by_id["api.files.create"]["tool_name"] == ""
+    assert by_id["api.files.create"]["request_fields"] == generator.FILES_UPLOAD_REQUEST_FIELDS
+    assert by_id[generator.FILES_UPLOAD_ALIAS]["tool_name"] == generator.FILES_UPLOAD_TOOL_NAME
+    assert (
+        by_id[generator.FILES_UPLOAD_ALIAS]["request_fields"]
+        == generator.FILES_UPLOAD_REQUEST_FIELDS
+    )
+    upload_evidence = (
+        "tests/api/test_file_upload_writes.py",
+        generator.SERVER_REGISTRY_TEST_REFERENCE,
+    )
+    assert generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE["api.files.create"] == upload_evidence
+    assert generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE[generator.FILES_UPLOAD_ALIAS] == (
+        upload_evidence
+    )
+    for row_id in ("api.files.create", generator.FILES_UPLOAD_ALIAS):
+        assert by_id[row_id]["test_references"] == [generator.TEST_REFERENCE, *upload_evidence]
+        assert by_id[row_id]["implemented"] is True
+        assert by_id[row_id]["contract_tested"] is True
+    assert by_id["api.bankLineMatches.get"]["response_fields"] == ["bankLineMatch"]
+    for row_id in (
+        "api.salesTaxPayments.create",
+        "api.contactBalancePayments.create",
+        "api.invoiceLateFees.create",
+    ):
+        assert by_id[row_id]["cleanup"] == (
+            "live non-production cleanup strategy unqualified; singular DELETE is unsupported"
+        )
+    assert by_id["api.users.update"]["sensitivity"] == "high"
+    assert by_id["api.users.update"]["side_effects"] == (
+        "high: updates user PII and privilege flags"
+    )
+    assert by_id["api.users.update"]["cleanup"] == (
+        "must read and restore prior non-production user state via PUT before "
+        "greening; singular DELETE is method-closed (405)"
+    )
+
+    offline_evidence = generator.OFFLINE_API_IMPLEMENTATION_EVIDENCE
+    for row in operations:
+        assert set(generator.COMMON_ERRORS).issubset(row["errors"])
+        expected_offline_evidence = offline_evidence.get(row["id"], ())
+        assert row["implemented"] is bool(expected_offline_evidence)
+        assert row["contract_tested"] is bool(expected_offline_evidence)
+        assert row["live_tested"] is False
+        assert row["test_references"] == [generator.TEST_REFERENCE, *expected_offline_evidence]
+        if row["operation"] == "list" and row["source_kind"] == "clear":
+            assert row["pagination"] == generator.PAGING
+            assert "offset" not in row["request_fields"]
+    assert status["complete"] is True
+    assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
+    assert status["source_counts"]["api_total"] == 305
+    geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    # Prior 74 greened shells/parity + research184 attachments.list + files.create dual-count.
+    ui_shell_green = 76
+    residual_scope = len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
+    assert status["qualification"]["implemented_rows"] == (
+        len(offline_evidence) + ui_shell_green + geo_na - residual_scope
+    )
+    assert status["qualification"]["contract_tested_rows"] == (
+        len(offline_evidence) + ui_shell_green + geo_na
+    )
+    # API live remains 0 (out of scope); UI shell rows + geo NA dual-session freezes.
+    assert status["qualification"]["live_tested_rows"] == (ui_shell_green + geo_na - residual_scope)
+    assert status["qualification"]["vision_verified_rows"] == (
+        ui_shell_green + geo_na - residual_scope
+    )
+    assert '"bankLineMatche"' not in json.dumps(api_manifest)
+
+
+def test_status_completeness_is_derived_from_row_evidence() -> None:
+    """A future green claim depends on every lane state and resolved bulk rows."""
+
+    green_api = [
+        {
+            "source_kind": "clear",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": False,
+            "qualification": {"live_api": "out_of_scope_by_user"},
+        }
+    ]
+    green_ui = [
+        {
+            "workflow_kind": "api_parity",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+            "vision_verified": True,
+        }
+    ]
+
+    assert (
+        generator.build_status({"operations": green_api}, {"workflows": green_ui})["complete"]
+        is True
+    )
+    assert (
+        generator.build_status(
+            {"operations": [{**green_api[0], "source_kind": "ambiguous_bulk"}]},
+            {"workflows": green_ui},
+        )["complete"]
+        is False
+    )
+
+
+def test_require_complete_checks_each_row_state_and_bulk_resolution() -> None:
+    """The full gate has no shortcut around API, UI, or bulk qualification."""
+
+    qualified_api = [
+        {
+            "id": "api.products.list",
+            "source_kind": "clear",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": False,
+            "qualification": {"live_api": "out_of_scope_by_user"},
+        }
+    ]
+    qualified_ui = [
+        {
+            "id": "ui.parity.products.list",
+            "workflow_kind": "api_parity",
+            "discovered": True,
+            "implemented": True,
+            "contract_tested": True,
+            "live_tested": True,
+            "vision_verified": True,
+        }
+    ]
+    complete_status = {"complete": True}
+
+    assert checker.require_complete_errors(qualified_api, qualified_ui, complete_status) == []
+
+    incomplete_api = copy.deepcopy(qualified_api)
+    incomplete_api[0]["contract_tested"] = False
+    assert any(
+        "for every API row" in error
+        for error in checker.require_complete_errors(incomplete_api, qualified_ui, complete_status)
+    )
+
+    incomplete_ui = copy.deepcopy(qualified_ui)
+    incomplete_ui[0]["vision_verified"] = False
+    assert any(
+        "for every UI row" in error
+        for error in checker.require_complete_errors(qualified_api, incomplete_ui, complete_status)
+    )
+
+    unresolved_bulk = [{**qualified_api[0], "source_kind": "ambiguous_bulk"}]
+    assert any(
+        "no ambiguous_bulk rows" in error
+        for error in checker.require_complete_errors(unresolved_bulk, qualified_ui, complete_status)
+    )
+
+
+def test_files_create_remains_a_raw_binary_alias_without_a_second_tool() -> None:
+    """The Supports create flag must not invent a JSON files-create contract."""
+
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+    duplicate_tool = copy.deepcopy(api_manifest)
+    files_create = next(
+        row for row in duplicate_tool["operations"] if row["id"] == "api.files.create"
+    )
+    files_create["tool_name"] = "api_files_create_preview"
+
+    assert any(
+        "must not plan a separate files-create tool" in error
+        for error in validation_errors(duplicate_tool, ui_manifest, browser_egress, status, report)
+    )
+    assert any(
+        "must not invent an api_files_create tool" in error
+        for error in validation_errors(duplicate_tool, ui_manifest, browser_egress, status, report)
+    )
+
+    missing_header = copy.deepcopy(api_manifest)
+    files_upload = next(
+        row for row in missing_header["operations"] if row["id"] == generator.FILES_UPLOAD_ALIAS
+    )
+    files_upload["request_fields"] = ["file_bytes"]
+    assert any(
+        "api.special.files_upload: must preserve documented raw-binary upload headers" in error
+        for error in validation_errors(missing_header, ui_manifest, browser_egress, status, report)
+    )
+
+
+def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
+    """No historical bulk shape can accidentally become a planned tool."""
+
+    api_manifest, _, _, _, _ = documents()
+    bulk_rows = [
+        row for row in api_manifest["operations"] if row["source_kind"] == "ambiguous_bulk"
+    ]
+
+    assert len(bulk_rows) == 92
+    assert all(row["contract_status"] == "ambiguous_bulk" for row in bulk_rows)
+    assert all(row["tool_name"] == "" for row in bulk_rows)
+    assert all(row["implemented"] is False for row in bulk_rows)
+    assert all(row["contract_tested"] is False for row in bulk_rows)
+    assert all(row["live_tested"] is False for row in bulk_rows)
+
+    saves = [row for row in bulk_rows if row["operation"] == "bulk_save"]
+    deletes = [row for row in bulk_rows if row["operation"] == "bulk_delete"]
+    assert len(saves) == 46
+    assert len(deletes) == 46
+    assert all(row["request_fields"] == ["json_object_root"] for row in saves)
+    assert all(row["request_fields"] == ["ids[]"] for row in deletes)
+    assert all(row["method_or_route"].startswith("AMBIGUOUS Supports: bulk save") for row in saves)
+    assert all(
+        row["method_or_route"].startswith("AMBIGUOUS Supports: bulk delete") for row in deletes
+    )
+    assert all(
+        "offline shape PUT /v2/" in row["method_or_route"] and "/bulk" in row["method_or_route"]
+        for row in saves
+    )
+    assert all(
+        "offline shape DELETE /v2/" in row["method_or_route"] and "ids[]" in row["method_or_route"]
+        for row in deletes
+    )
+    assert all("INVALID_REQUEST_BODY" in row["errors"] for row in saves)
+    assert all("INVALID_DELETE_ID_ARRAY" in row["errors"] for row in deletes)
+    assert all("research136 offline unauth shape freeze" in row["evidence"] for row in bulk_rows)
+    assert all(
+        "research137 official docs" in row["evidence"]
+        and "research191" in row["evidence"]
+        and "research192" in row["evidence"]
+        and "versioned-asset exhaust" in row["evidence"]
+        for row in bulk_rows
+    )
+    assert all("BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in row["evidence"] for row in bulk_rows)
+    assert all("radio:21A3D94F" in row["evidence"] for row in bulk_rows)
+    assert all(isinstance(row.get("qualification"), dict) for row in bulk_rows)
+    assert all(row["qualification"]["kind"] == "out_of_scope_by_user" for row in bulk_rows)
+    assert all(
+        row["qualification"]["scope_code"] == "BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP"
+        for row in bulk_rows
+    )
+    assert all(
+        row["qualification"]["supersedes_blocker_code"] == "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
+        for row in bulk_rows
+    )
+    assert all(row["qualification"]["live_api"] == "out_of_scope_by_user" for row in bulk_rows)
+    assert all(row["qualification"]["tools_allowed"] is False for row in bulk_rows)
+    assert all(row["qualification"]["owner_decision_ref"] == "radio:21A3D94F" for row in bulk_rows)
+    assert all(generator.is_owner_out_of_scope(row) is True for row in bulk_rows)
+    assert all(
+        row["qualification"]["reconfirm_ref"] == "research192_unauth_reconfirm" for row in bulk_rows
+    )
+    # Shape hints must never look like a completed contract.
+    assert all(row["response_fields"] == [] for row in bulk_rows)
+
+
+def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
+    """Research186: residual clear writes must not plan non-existent preview tools."""
+
+    api_manifest, _, _, status, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    method_closed = sorted(generator.RESIDUAL_METHOD_CLOSED_IDS)
+    readonly_map = sorted(generator.RESIDUAL_READONLY_MAP_IDS)
+    meta_delete = sorted(generator.RESIDUAL_META_DELETE_IDS)
+    residual = sorted(generator.RESIDUAL_CLEAR_HONESTY_IDS)
+
+    remapped = (
+        "api.contactBalancePostings.create",
+        "api.contactBalancePostings.update",
+        "api.postings.create",
+        "api.postings.update",
+    )
+
+    assert len(method_closed) == 0
+    assert len(readonly_map) == 6
+    assert len(meta_delete) == 0
+    assert len(residual) == 6
+    for row_id in remapped:
+        assert row_id not in method_closed
+        assert row_id in readonly_map
+    assert "api.accountNatures.create" not in method_closed
+    assert "api.accountNatures.update" not in method_closed
+    assert "api.bankPayments.delete" not in method_closed
+    assert "api.invoiceReminderAssociations.create" not in method_closed
+    assert "api.invoiceReminderAssociations.update" not in method_closed
+    assert "api.cities.create" not in method_closed
+    assert "api.cities.update" not in method_closed
+    assert "api.countryGroups.create" not in method_closed
+    assert "api.countryGroups.update" not in method_closed
+    assert "api.countries.create" not in method_closed
+    assert "api.countries.update" not in method_closed
+    assert "api.currencies.create" not in method_closed
+    assert "api.currencies.update" not in method_closed
+    assert "api.locales.create" not in method_closed
+    assert "api.locales.update" not in method_closed
+    assert "api.states.create" not in method_closed
+    assert "api.states.update" not in method_closed
+    assert "api.zipcodes.create" not in method_closed
+    assert "api.zipcodes.update" not in method_closed
+    assert "api.balanceModifiers.create" not in method_closed
+    assert "api.balanceModifiers.update" not in method_closed
+    assert "api.invoiceReminderAssociations.delete" not in meta_delete
+    assert "api.transactions.delete" not in meta_delete
+    assert set(method_closed) | set(readonly_map) | set(meta_delete) == set(residual)
+
+    for row_id in residual:
+        row = by_id[row_id]
+        assert row["source_kind"] == "clear"
+        assert row["tool_name"] == ""
+        assert row["implemented"] is False
+        assert row["contract_tested"] is False
+        assert row["live_tested"] is False
+        assert isinstance(row.get("qualification"), dict)
+        assert row["qualification"]["tools_allowed"] is False
+        assert row["qualification"]["live_api"] == "out_of_scope_by_user"
+        assert "research186" in row["evidence"]
+        assert "research191" in row["evidence"]
+        assert "research192" in row["evidence"]
+        assert "research191_unauth_reconfirm" in row["qualification"]["evidence_ref"]
+        assert "research192_unauth_reconfirm" in row["qualification"]["evidence_ref"]
+        assert "research-a485f530-readonly-map" in row["qualification"]["evidence_ref"]
+        assert "research-88c4b0a9-residual-audit" in row["qualification"]["evidence_ref"]
+        assert "unauth_status" not in row["qualification"]
+
+    for row_id in method_closed:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "method_closed_offline"
+        assert row["qualification"]["blocker_code"] == "METHOD_NOT_ALLOWED_UNAUTH"
+        assert "METHOD_NOT_ALLOWED" in row["evidence"]
+
+    for row_id in readonly_map:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "out_of_scope_by_user"
+        assert row["qualification"]["scope_code"] == "READONLY_PROPERTY_TABLE_OWNER_SKIP"
+        assert row["qualification"]["supersedes_blocker_code"] == "READONLY_PROPERTY_TABLE"
+        assert row["qualification"]["owner_decision_ref"] == "radio:21A3D94F"
+        assert generator.is_owner_out_of_scope(row) is True
+        assert "radio:21A3D94F" in row["evidence"]
+
+    for row_id in meta_delete:
+        row = by_id[row_id]
+        assert row["qualification"]["kind"] == "meta_delete_unqualified"
+        assert row["qualification"]["blocker_code"] == "META_DELETE_NOT_CLEANUP_PROOF"
+
+    # Honesty freeze does not change green counts or complete.
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+
+
+def test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map() -> None:
+    """Unimplemented API ids are exactly bulk92 plus the six readonly-map rows."""
+
+    api_manifest, _, _, status, _ = documents()
+    operations = list(api_manifest["operations"])
+    unimplemented = {
+        str(row["id"])
+        for row in operations
+        if row.get("implemented") is not True or row.get("contract_tested") is not True
+    }
+    bulk = {str(row["id"]) for row in operations if row.get("source_kind") == "ambiguous_bulk"}
+    expected = bulk | set(generator.RESIDUAL_READONLY_MAP_IDS)
+    assert unimplemented == expected
+    assert len(unimplemented) == 98
+    assert len(bulk) == 92
+    assert len(generator.RESIDUAL_READONLY_MAP_IDS) == 6
+    assert len(generator.RESIDUAL_METHOD_CLOSED_IDS) == 0
+    assert len(generator.RESIDUAL_META_DELETE_IDS) == 0
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+
+
+def test_account_natures_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.accountNatures.create"]
+    update = by_id["api.accountNatures.update"]
+    assert create["tool_name"] == "api_account_natures_create_preview"
+    assert update["tool_name"] == "api_account_natures_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/accountNatures"
+    assert update["method_or_route"] == "PUT /v2/accountNatures/:id"
+    assert "tests/api/test_account_nature_writes.py" in create["test_references"]
+    assert "tests/api/test_account_nature_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_account_nature_writes.py" in update["test_references"]
+    assert "tests/api/test_account_nature_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_cities_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.cities.create"]
+    update = by_id["api.cities.update"]
+    assert create["tool_name"] == "api_cities_create_preview"
+    assert update["tool_name"] == "api_cities_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/cities"
+    assert update["method_or_route"] == "PUT /v2/cities/:id"
+    assert "tests/api/test_city_writes.py" in create["test_references"]
+    assert "tests/api/test_city_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_city_writes.py" in update["test_references"]
+    assert "tests/api/test_city_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_country_groups_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.countryGroups.create"]
+    update = by_id["api.countryGroups.update"]
+    assert create["tool_name"] == "api_country_groups_create_preview"
+    assert update["tool_name"] == "api_country_groups_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/countryGroups"
+    assert update["method_or_route"] == "PUT /v2/countryGroups/:id"
+    assert "tests/api/test_country_group_writes.py" in create["test_references"]
+    assert "tests/api/test_country_group_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_country_group_writes.py" in update["test_references"]
+    assert "tests/api/test_country_group_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_currencies_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.currencies.create"]
+    update = by_id["api.currencies.update"]
+    assert create["tool_name"] == "api_currencies_create_preview"
+    assert update["tool_name"] == "api_currencies_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/currencies"
+    assert update["method_or_route"] == "PUT /v2/currencies/:id"
+    assert "tests/api/test_currency_writes.py" in create["test_references"]
+    assert "tests/api/test_currency_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_currency_writes.py" in update["test_references"]
+    assert "tests/api/test_currency_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_locales_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.locales.create"]
+    update = by_id["api.locales.update"]
+    assert create["tool_name"] == "api_locales_create_preview"
+    assert update["tool_name"] == "api_locales_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/locales"
+    assert update["method_or_route"] == "PUT /v2/locales/:id"
+    assert "tests/api/test_locale_writes.py" in create["test_references"]
+    assert "tests/api/test_locale_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_locale_writes.py" in update["test_references"]
+    assert "tests/api/test_locale_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_balance_modifiers_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.balanceModifiers.create"]
+    update = by_id["api.balanceModifiers.update"]
+    assert create["tool_name"] == "api_balance_modifiers_create_preview"
+    assert update["tool_name"] == "api_balance_modifiers_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/balanceModifiers"
+    assert update["method_or_route"] == "PUT /v2/balanceModifiers/:id"
+    assert "tests/api/test_balance_modifier_writes.py" in create["test_references"]
+    assert "tests/api/test_balance_modifier_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_balance_modifier_writes.py" in update["test_references"]
+    assert "tests/api/test_balance_modifier_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_zipcodes_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.zipcodes.create"]
+    update = by_id["api.zipcodes.update"]
+    assert create["tool_name"] == "api_zipcodes_create_preview"
+    assert update["tool_name"] == "api_zipcodes_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/zipcodes"
+    assert update["method_or_route"] == "PUT /v2/zipcodes/:id"
+    assert "tests/api/test_zipcode_writes.py" in create["test_references"]
+    assert "tests/api/test_zipcode_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_zipcode_writes.py" in update["test_references"]
+    assert "tests/api/test_zipcode_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_states_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.states.create"]
+    update = by_id["api.states.update"]
+    assert create["tool_name"] == "api_states_create_preview"
+    assert update["tool_name"] == "api_states_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/states"
+    assert update["method_or_route"] == "PUT /v2/states/:id"
+    assert "tests/api/test_state_writes.py" in create["test_references"]
+    assert "tests/api/test_state_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_state_writes.py" in update["test_references"]
+    assert "tests/api/test_state_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_countries_writes_are_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports create/update, When inventory is generated, Then tools exist."""
+
+    api_manifest, _, _, _, _ = documents()
+    by_id = {row["id"]: row for row in api_manifest["operations"]}
+    create = by_id["api.countries.create"]
+    update = by_id["api.countries.update"]
+    assert create["tool_name"] == "api_countries_create_preview"
+    assert update["tool_name"] == "api_countries_update_preview"
+    assert create["implemented"] is True
+    assert update["implemented"] is True
+    assert create["contract_tested"] is True
+    assert update["contract_tested"] is True
+    assert create["live_tested"] is False
+    assert update["live_tested"] is False
+    assert create["method_or_route"] == "POST /v2/countries"
+    assert update["method_or_route"] == "PUT /v2/countries/:id"
+    assert "tests/api/test_country_writes.py" in create["test_references"]
+    assert "tests/api/test_country_write_tickets.py" in create["test_references"]
+    assert "tests/api/test_country_writes.py" in update["test_references"]
+    assert "tests/api/test_country_write_tickets.py" in update["test_references"]
+    for row in (create, update):
+        qualification = row["qualification"]
+        assert qualification["live_api"] == "out_of_scope_by_user"
+        assert qualification["kind"] != "method_closed_offline"
+        assert qualification.get("tools_allowed") is not False
+
+
+def test_bank_payments_delete_is_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports delete, When inventory is generated, Then the preview tool exists."""
+
+    api_manifest, _, _, _, _ = documents()
+    row = {item["id"]: item for item in api_manifest["operations"]}["api.bankPayments.delete"]
+    assert row["tool_name"] == "api_bank_payments_delete_preview"
+    assert row["implemented"] is True
+    assert row["contract_tested"] is True
+    assert row["live_tested"] is False
+    assert row["method_or_route"] == "DELETE /v2/bankPayments/:id"
+    assert row["request_fields"] == ["id"]
+    assert "tests/api/test_bank_payment_writes.py" in row["test_references"]
+    qualification = row["qualification"]
+    assert qualification["live_api"] == "out_of_scope_by_user"
+    assert qualification["kind"] != "method_closed_offline"
+    assert qualification.get("tools_allowed") is not False
+
+
+def test_invoice_reminder_associations_delete_is_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports delete, When inventory is generated, Then the preview tool exists."""
+
+    api_manifest, _, _, _, _ = documents()
+    row = {item["id"]: item for item in api_manifest["operations"]}[
+        "api.invoiceReminderAssociations.delete"
+    ]
+    assert row["tool_name"] == "api_invoice_reminder_associations_delete_preview"
+    assert row["implemented"] is True
+    assert row["contract_tested"] is True
+    assert row["live_tested"] is False
+    assert row["method_or_route"] == "DELETE /v2/invoiceReminderAssociations/:id"
+    assert row["request_fields"] == ["id"]
+    assert "tests/api/test_invoice_reminder_association_delete.py" in row["test_references"]
+    assert "tests/api/test_invoice_reminder_association_delete_tickets.py" in row["test_references"]
+    qualification = row["qualification"]
+    assert qualification["live_api"] == "out_of_scope_by_user"
+    assert qualification["kind"] != "meta_delete_unqualified"
+    assert qualification.get("tools_allowed") is not False
+
+
+def test_transactions_delete_is_ticketed_offline_and_not_live_tested() -> None:
+    """Given official Supports delete, When inventory is generated, Then the preview tool exists."""
+
+    api_manifest, _, _, _, _ = documents()
+    row = {item["id"]: item for item in api_manifest["operations"]}["api.transactions.delete"]
+    assert row["tool_name"] == "api_transactions_delete_preview"
+    assert row["implemented"] is True
+    assert row["contract_tested"] is True
+    assert row["live_tested"] is False
+    assert row["method_or_route"] == "DELETE /v2/transactions/:id"
+    assert row["request_fields"] == ["id"]
+    assert "tests/api/test_transaction_delete.py" in row["test_references"]
+    assert "tests/api/test_transaction_delete_tickets.py" in row["test_references"]
+    qualification = row["qualification"]
+    assert qualification["live_api"] == "out_of_scope_by_user"
+    assert qualification["kind"] != "meta_delete_unqualified"
+    assert qualification.get("tools_allowed") is not False
+
+
+def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() -> None:
+    """Research187: product-plane UI bulk stays discovery_required with structured quals."""
+
+    _, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+
+    resources = sorted(generator.UI_PRODUCT_PLANE_BULK_RESOURCES)
+    honesty_ids = sorted(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+
+    assert len(resources) == 29
+    assert len(honesty_ids) == 58
+    assert honesty_ids == sorted(
+        f"ui.parity.{resource}.{op}"
+        for resource in resources
+        for op in ("bulk_save", "bulk_delete")
+    )
+
+    strong_ids = set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    soft_ids = set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    empty_ids = set(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS)
+    remaining_honesty = sorted(set(honesty_ids) - strong_ids - soft_ids - empty_ids)
+    assert len(strong_ids) == 30
+    assert len(soft_ids) == 18
+    assert len(empty_ids) == 10
+    assert len(remaining_honesty) == 0
+    assert not (strong_ids & soft_ids)
+    assert not (strong_ids & empty_ids)
+    assert not (soft_ids & empty_ids)
+    assert strong_ids | soft_ids | empty_ids == set(honesty_ids)
+
+    for row_id in sorted(strong_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+
+    for row_id in sorted(soft_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+
+    for row_id in sorted(empty_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        )
+
+    # Geo/reference UI bulk already NA must not be force-redded by honesty freeze.
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
+    assert "×10" not in status["qualification"]["blocker"]
+
+
+def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
+    """Research188: strong dual-absent product-plane bulk UI rows are not_applicable."""
+
+    api_manifest, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+    api_by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    strong_resources = sorted(generator.UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES)
+    strong_ids = sorted(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    soft_ids = set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    honesty_ids = set(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+    remaining_after_strong = sorted(honesty_ids - set(strong_ids))
+    empty_ids = set(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS)
+    remaining_honesty = sorted(honesty_ids - set(strong_ids) - soft_ids - empty_ids)
+
+    assert len(strong_resources) == 15
+    assert len(strong_ids) == 30
+    assert set(strong_ids).issubset(honesty_ids)
+    assert len(remaining_after_strong) == 28
+    assert len(remaining_honesty) == 0
+    assert set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS) == set(strong_resources)
+
+    held = {
+        "contacts",
+        "invoices",
+        "invoiceLines",
+        "bills",
+        "billLines",
+        "salesTaxAccounts",
+        "salesTaxMetaFields",
+        "salesTaxPayments",
+        "salesTaxReturns",
+        "salesTaxRules",
+        "salesTaxRulesets",
+        "taxRateDeductionComponents",
+        "taxRates",
+        "users",
+    }
+    assert not (set(strong_resources) & held)
+
+    for row_id in strong_ids:
+        row = by_id[row_id]
+        resource, operation = row_id.split(".")[2], row_id.split(".")[3]
+        shell = generator.UI_BULK_CHROME_DUAL_NA_STRONG_SHELLS[resource]
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["parity_status"] == "not_applicable"
+        qual = row["qualification"]
+        assert isinstance(qual, dict)
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        assert qual["evidence_ref"] == "research188_bulk_chrome_dual"
+        assert qual["tools_allowed"] is False
+        assert qual["empty_list_shell"] is False
+        assert qual["linked_api_row_id"] == f"api.{resource}.{operation}"
+        assert qual["shell_id"] == shell["shell_id"]
+        assert qual["path_class"] == shell["path_class"]
+        assert "research188" in row["evidence"]
+        assert "UI_BULK_CHROME_ABSENT_DUAL" in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+
+        api_row = api_by_id[f"api.{resource}.{operation}"]
+        assert api_row["tool_name"] == ""
+        assert api_row.get("implemented") is False
+        assert api_row.get("contract_tested") is False
+        assert api_row.get("live_tested") is False
+
+    for row_id in remaining_honesty:
+        row = by_id[row_id]
+        assert row["parity_status"] == "discovery_required"
+        assert row["tool_name"] == ""
+        assert row["live_tested"] is False
+        assert row["qualification"]["kind"] == "ui_bulk_parity_discovery_required"
+        assert row["qualification"]["blocker_code"] == "UI_BULK_CHROME_DUAL_REQUIRED"
+
+    for row_id in sorted(soft_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
+    assert "×10" not in status["qualification"]["blocker"]
+
+
+def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
+    """Research189: soft tool dual-absent product-plane bulk UI rows are not_applicable."""
+
+    api_manifest, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+    api_by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    soft_resources = sorted(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_RESOURCES)
+    soft_ids = sorted(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    strong_ids = set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    honesty_ids = set(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+    empty_ids = set(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS)
+    remaining_honesty = sorted(honesty_ids - strong_ids - set(soft_ids) - empty_ids)
+
+    assert len(soft_resources) == 9
+    assert len(soft_ids) == 18
+    assert set(soft_ids).issubset(honesty_ids)
+    assert not (set(soft_ids) & strong_ids)
+    assert len(remaining_honesty) == 0
+    assert set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS) == set(soft_resources)
+
+    empty_held = {
+        "contacts",
+        "invoices",
+        "invoiceLines",
+        "bills",
+        "billLines",
+    }
+    assert not (set(soft_resources) & empty_held)
+    assert not (set(soft_resources) & set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_RESOURCES))
+
+    for row_id in soft_ids:
+        row = by_id[row_id]
+        resource, operation = row_id.split(".")[2], row_id.split(".")[3]
+        panel = generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_PANELS[resource]
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["parity_status"] == "not_applicable"
+        qual = row["qualification"]
+        assert isinstance(qual, dict)
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        assert qual["evidence_ref"] == "research189_bulk_followon_dual"
+        assert qual["tools_allowed"] is False
+        assert qual["empty_list_shell"] is False
+        assert qual["tool_panel"] is True
+        assert qual["linked_api_row_id"] == f"api.{resource}.{operation}"
+        assert qual["shell_id"] == panel["shell_id"]
+        assert qual["path_class"] == panel["path_class"]
+        assert qual["tool_ref"] == panel["tool_ref"]
+        assert "research189" in row["evidence"]
+        assert "UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL" in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+
+        api_row = api_by_id[f"api.{resource}.{operation}"]
+        assert api_row["tool_name"] == ""
+        assert api_row.get("implemented") is False
+        assert api_row.get("contract_tested") is False
+        assert api_row.get("live_tested") is False
+
+    assert remaining_honesty == []
+    for row_id in sorted(empty_ids):
+        row = by_id[row_id]
+        assert row["parity_status"] == "not_applicable"
+        assert row["tool_name"] == ""
+        assert row["live_tested"] is True
+        assert row["qualification"]["kind"] == "ui_not_applicable"
+        assert row["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        )
+        resource = row_id.split(".")[2]
+        assert resource in empty_held
+
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
+    assert "×10" not in status["qualification"]["blocker"]
+
+
+def test_ui_product_plane_bulk_chrome_dual_na_empty_list_rows() -> None:
+    """Research190: empty-list dual-absent product-plane bulk UI rows are not_applicable."""
+
+    api_manifest, ui_manifest, _, status, _ = documents()
+    by_id = {row["id"]: row for row in ui_manifest["workflows"]}
+    api_by_id = {row["id"]: row for row in api_manifest["operations"]}
+
+    empty_resources = sorted(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_RESOURCES)
+    empty_ids = sorted(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_IDS)
+    strong_ids = set(generator.UI_BULK_CHROME_DUAL_NA_STRONG_IDS)
+    soft_ids = set(generator.UI_BULK_CHROME_DUAL_NA_SOFT_TOOL_IDS)
+    honesty_ids = set(generator.UI_PRODUCT_PLANE_BULK_HONESTY_IDS)
+    remaining_honesty = sorted(honesty_ids - strong_ids - soft_ids - set(empty_ids))
+
+    assert len(empty_resources) == 5
+    assert len(empty_ids) == 10
+    assert set(empty_ids).issubset(honesty_ids)
+    assert not (set(empty_ids) & strong_ids)
+    assert not (set(empty_ids) & soft_ids)
+    assert remaining_honesty == []
+    assert set(generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS) == set(empty_resources)
+
+    for row_id in empty_ids:
+        row = by_id[row_id]
+        resource, operation = row_id.split(".")[2], row_id.split(".")[3]
+        shell = generator.UI_BULK_CHROME_DUAL_NA_EMPTY_LIST_SHELLS[resource]
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["parity_status"] == "not_applicable"
+        qual = row["qualification"]
+        assert isinstance(qual, dict)
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        )
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        assert qual["evidence_ref"] == "research190_empty_shell_dual"
+        assert qual["tools_allowed"] is False
+        assert qual["empty_list_shell"] is True
+        assert qual["tool_panel"] is False
+        assert qual["linked_api_row_id"] == f"api.{resource}.{operation}"
+        assert qual["shell_id"] == shell["shell_id"]
+        assert qual["path_class"] == shell["path_class"]
+        assert qual["tool_ref"] == shell["tool_ref"]
+        assert "research190" in row["evidence"]
+        assert "UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST" in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+
+        api_row = api_by_id[f"api.{resource}.{operation}"]
+        assert api_row["tool_name"] == ""
+        assert api_row.get("implemented") is False
+        assert api_row.get("contract_tested") is False
+        assert api_row.get("live_tested") is False
+
+    geo_bulk = by_id["ui.parity.accountGroups.bulk_save"]
+    assert geo_bulk["parity_status"] == "not_applicable"
+    assert geo_bulk["qualification"]["kind"] == "ui_not_applicable"
+
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
+    assert "×10" not in status["qualification"]["blocker"]
+
+
+def test_annual_reports_owner_out_of_scope_by_user() -> None:
+    """Owner plan skip records annual_reports as out_of_scope_by_user without a tool."""
+
+    _, ui_manifest, _, status, _ = documents()
+    annual = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.discovery.annual_reports"
+    )
+
+    assert annual["tool_name"] == ""
+    assert annual["discovered"] is False
+    assert annual["implemented"] is False
+    assert annual["contract_tested"] is False
+    assert annual["live_tested"] is False
+    assert annual["vision_verified"] is False
+    assert annual["parity_status"] == "out_of_scope_by_user"
+    assert annual["parity_status"] != "not_applicable"
+    assert "out_of_scope_by_user" in annual["evidence"]
+    assert "ANNUAL_REPORTS_OWNER_SKIP" in annual["evidence"]
+    assert "radio:DC3B8E96" in annual["evidence"]
+    assert "not_applicable rejected" in annual["evidence"]
+    assert "research191" in annual["evidence"]
+    assert "/:org_slug/annual_reports" in annual["method_or_route"]
+    assert "ANNUAL_REPORTS_ORG_INACCESSIBLE" not in annual["errors"]
+    assert "ui_annual" not in (annual.get("tool_name") or "")
+    assert "api_annual" not in (annual.get("tool_name") or "")
+    qual = annual["qualification"]
+    assert qual["kind"] == "out_of_scope_by_user"
+    assert qual["scope_code"] == "ANNUAL_REPORTS_OWNER_SKIP"
+    assert qual["owner_decision_ref"] == "radio:DC3B8E96"
+    assert qual["tools_allowed"] is False
+    assert qual["not_applicable_decision"] == "rejected"
+    assert qual.get("prior_evidence_ref") == "research191_annual_dual"
+    assert qual.get("supersedes_blocker_code") == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
+    assert generator.is_owner_out_of_scope(annual) is True
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
+    assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
+    assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" not in status["qualification"]["blocker"]
+    assert status["complete"] is True
+
+
+def test_geo_ui_not_applicable_dual_session_freeze() -> None:
+    """research138/139/142/143/144/147: dual-proved geo/reference UI parity is not_applicable."""
+
+    _api_manifest, ui_manifest, _egress, status, _report = documents()
+    na_rows = [
+        row for row in ui_manifest["workflows"] if row.get("parity_status") == "not_applicable"
+    ]
+
+    def _evidence_code(row: dict[str, Any]) -> str | None:
+        qual_raw = row.get("qualification")
+        if not isinstance(qual_raw, dict):
+            return None
+        qual = cast(dict[str, Any], qual_raw)
+        code = qual.get("evidence_code")
+        return code if isinstance(code, str) else None
+
+    geo_na_rows = [
+        row
+        for row in na_rows
+        if _evidence_code(row) == generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE
+    ]
+    bulk_chrome_na_rows = [
+        row
+        for row in na_rows
+        if _evidence_code(row) == generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+    ]
+    soft_bulk_chrome_na_rows = [
+        row
+        for row in na_rows
+        if _evidence_code(row) == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+    ]
+    empty_bulk_chrome_na_rows = [
+        row
+        for row in na_rows
+        if _evidence_code(row) == generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+    ]
+    # GEO_UI_NOT_APPLICABLE_ROW_COUNT includes research188 strong bulk dual-NA (+30),
+    # research189 soft tool bulk dual-NA (+18), and research190 empty-list dual-NA (+10).
+    assert len(na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    assert len(bulk_chrome_na_rows) == 30
+    assert len(soft_bulk_chrome_na_rows) == 18
+    assert len(empty_bulk_chrome_na_rows) == 10
+    assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT - 30 - 18 - 10
+    expected_prefixes = generator.GEO_UI_NOT_APPLICABLE_API_PREFIXES
+    for row in geo_na_rows:
+        api_id = row["api_row_id"]
+        assert any(api_id.startswith(prefix) for prefix in expected_prefixes) or (
+            api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_DAYBOOKS_UPDATE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_BILL_LINE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_SALES_TAX_RULESET_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS
+            or api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
+        )
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["vision_evidence"] is None
+        assert row["request_fields"] == []
+        assert row["filters"] in ([], {})
+        assert row["pagination"] is None
+        qual = row["qualification"]
+        assert qual["kind"] == "ui_not_applicable"
+        assert qual["evidence_code"] == generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE
+        assert qual["not_applicable_decision"] == "accepted"
+        assert qual["sessions"] == "dual_independent_ephemeral"
+        resource = api_id.split(".", 2)[1]
+        if api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS:
+            assert "research178" in qual["evidence_ref"]
+            assert "research178" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS:
+            assert "research178" in qual["evidence_ref"]
+            assert "research178" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS:
+            assert "research177" in qual["evidence_ref"]
+            assert "research177" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS:
+            assert "research176" in qual["evidence_ref"]
+            assert "research176" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH162_RESOURCES:
+            assert "research162" in qual["evidence_ref"]
+            assert "research162" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS:
+            assert "research150" in qual["evidence_ref"]
+            assert "research150" in row["evidence"]
+            assert "Levering af faktura pr. e-mail" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH149_RESOURCES:
+            assert "research149" in qual["evidence_ref"]
+            assert "research149" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH148_RESOURCES:
+            assert "research148" in qual["evidence_ref"]
+            assert "research148" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH147_RESOURCES:
+            assert "research147" in qual["evidence_ref"]
+            assert "research147" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH144_RESOURCES:
+            assert "research144" in qual["evidence_ref"]
+            assert "research144" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH143_RESOURCES:
+            assert "research143" in qual["evidence_ref"]
+            assert "research143" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH142_RESOURCES:
+            assert "research142" in qual["evidence_ref"]
+            assert "research142" in row["evidence"]
+        elif resource in generator.GEO_UI_NOT_APPLICABLE_RESEARCH139_RESOURCES:
+            assert "research139" in qual["evidence_ref"]
+            assert "research139" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_DAYBOOKS_UPDATE_IDS:
+            assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_BILL_LINE_IDS:
+            assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH180_USERS_IDS:
+            assert "research180" in row["method_or_route"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_DAYBOOK_TX_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_SALES_TAX_RULESET_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TAX_RATE_DEDUCTION_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH181_TRANSACTIONS_IDS:
+            assert "research181" in row["method_or_route"]
+            assert "research181" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH182_DAYBOOK_TRANSACTION_LINE_IDS:
+            assert "research182" in row["method_or_route"]
+            assert "research182" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS:
+            assert "research183" in row["method_or_route"]
+            assert "research183" in qual["evidence_ref"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS:
+            assert "research184" in row["method_or_route"]
+            assert "research184" in qual["evidence_ref"]
+            assert "research184" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS:
+            assert "research185" in row["method_or_route"]
+            assert "research185" in qual["evidence_ref"]
+            assert "research185" in row["evidence"]
+        elif api_id in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS:
+            assert "research179" in qual["evidence_ref"]
+            assert "research179" in row["evidence"]
+        else:
+            assert "research138" in qual["evidence_ref"]
+            assert "research138" in row["evidence"]
+        assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in row["evidence"]
+        assert "not_applicable accepted" in row["method_or_route"]
+        assert "ui_cities" not in row["tool_name"]
+        assert "ui_currencies" not in row["tool_name"]
+        assert "ui_locales" not in row["tool_name"]
+        assert "ui_account_natures" not in row["tool_name"]
+        assert "ui_balance_modifiers" not in row["tool_name"]
+        assert "ui_account_groups" not in row["tool_name"]
+        assert "ui_contact_balance_postings" not in row["tool_name"]
+        assert "ui_contact_balance_payments" not in row["tool_name"]
+        assert "ui_contact_persons" not in row["tool_name"]
+        assert "ui_invoice_late_fees" not in row["tool_name"]
+        assert "ui_invoice_reminder_associations" not in row["tool_name"]
+        assert "ui_invoice_deliveries" not in row["tool_name"]
+        assert "ui_invoice_logs" not in row["tool_name"]
+        assert "ui_product_prices" not in row["tool_name"]
+        assert qual.get("deferred_families") in (None, [])
+    # currencies/locales dual-proved (research139) — no longer discovery_required
+    currency_locale = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(("api.currencies.", "api.locales."))
+    ]
+    assert len(currency_locale) == 12
+    assert all(row["parity_status"] == "not_applicable" for row in currency_locale)
+    assert all(row["implemented"] is True for row in currency_locale)
+    assert all(row["live_tested"] is True for row in currency_locale)
+    assert all(row["tool_name"] == "" for row in currency_locale)
+    # accountNatures/balanceModifiers dual-proved (research142)
+    natures_modifiers = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(
+            ("api.accountNatures.", "api.balanceModifiers.")
+        )
+    ]
+    assert len(natures_modifiers) == 12
+    assert all(row["parity_status"] == "not_applicable" for row in natures_modifiers)
+    assert all(row["implemented"] is True for row in natures_modifiers)
+    assert all(row["live_tested"] is True for row in natures_modifiers)
+    assert all(row["tool_name"] == "" for row in natures_modifiers)
+    # accountGroups dual-proved (research143) — includes singular delete (7 ops)
+    account_groups = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.accountGroups.")
+    ]
+    assert len(account_groups) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in account_groups)
+    assert all(row["implemented"] is True for row in account_groups)
+    assert all(row["live_tested"] is True for row in account_groups)
+    assert all(row["tool_name"] == "" for row in account_groups)
+    # research144 join/meta package (6 + 7 + 6 = 19)
+    join_meta = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith(
+            (
+                "api.contactBalancePostings.",
+                "api.invoiceReminderAssociations.",
+                "api.invoiceLateFees.",
+            )
+        )
+    ]
+    assert len(join_meta) == 19
+    assert all(row["parity_status"] == "not_applicable" for row in join_meta)
+    assert all(row["implemented"] is True for row in join_meta)
+    assert all(row["live_tested"] is True for row in join_meta)
+    assert all(row["tool_name"] == "" for row in join_meta)
+    # research147 contactBalancePayments package (6 ops; not bankPayments)
+    contact_balance_payments = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.contactBalancePayments.")
+    ]
+    assert len(contact_balance_payments) == 6
+    assert all(row["parity_status"] == "not_applicable" for row in contact_balance_payments)
+    assert all(row["implemented"] is True for row in contact_balance_payments)
+    assert all(row["live_tested"] is True for row in contact_balance_payments)
+    assert all(row["vision_verified"] is True for row in contact_balance_payments)
+    assert all(row["tool_name"] == "" for row in contact_balance_payments)
+    assert all("research147" in (row.get("evidence") or "") for row in contact_balance_payments)
+    # research148 contactPersons package (7 ops including singular delete)
+    contact_persons = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.contactPersons.")
+    ]
+    assert len(contact_persons) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in contact_persons)
+    assert all(row["implemented"] is True for row in contact_persons)
+    assert all(row["live_tested"] is True for row in contact_persons)
+    assert all(row["vision_verified"] is True for row in contact_persons)
+    assert all(row["tool_name"] == "" for row in contact_persons)
+    assert all("research148" in (row.get("evidence") or "") for row in contact_persons)
+    # research149 invoiceReminders package (5 ops; no singular update/delete)
+    invoice_reminders = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.invoiceReminders.")
+    ]
+    assert len(invoice_reminders) == 5
+    assert all(row["parity_status"] == "not_applicable" for row in invoice_reminders)
+    assert all(row["implemented"] is True for row in invoice_reminders)
+    assert all(row["live_tested"] is True for row in invoice_reminders)
+    assert all(row["vision_verified"] is True for row in invoice_reminders)
+    assert all(row["tool_name"] == "" for row in invoice_reminders)
+    assert all("research149" in (row.get("evidence") or "") for row in invoice_reminders)
+    # research150 specials invoice_delivery + invoice_logs only (exact ids)
+    specials_delivery_logs = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH150_SPECIAL_IDS
+    ]
+    assert len(specials_delivery_logs) == 2
+    assert all(row["parity_status"] == "not_applicable" for row in specials_delivery_logs)
+    assert all(row["implemented"] is True for row in specials_delivery_logs)
+    assert all(row["live_tested"] is True for row in specials_delivery_logs)
+    assert all(row["vision_verified"] is True for row in specials_delivery_logs)
+    assert all(row["tool_name"] == "" for row in specials_delivery_logs)
+    assert all("research150" in (row.get("evidence") or "") for row in specials_delivery_logs)
+    assert all(
+        "Levering af faktura pr. e-mail" in (row.get("evidence") or "")
+        for row in specials_delivery_logs
+    )
+    # research162 productPrices package (7 ops including singular delete)
+    product_prices = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.productPrices.")
+    ]
+    assert len(product_prices) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in product_prices)
+    assert all(row["implemented"] is True for row in product_prices)
+    assert all(row["live_tested"] is True for row in product_prices)
+    assert all(row["vision_verified"] is True for row in product_prices)
+    assert all(row["tool_name"] == "" for row in product_prices)
+    assert all("research162" in (row.get("evidence") or "") for row in product_prices)
+    # products.list shell stays greened (different resource; not dual-counted as prices)
+    products_list_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.products.list"
+    ]
+    assert len(products_list_parity) == 1
+    assert products_list_parity[0]["tool_name"] == "ui_products_list"
+    assert products_list_parity[0]["live_tested"] is True
+    assert products_list_parity[0]["parity_status"] != "not_applicable"
+    # research163 products.create form_open via inventory Opret produkt
+    products_create_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.products.create"
+    ]
+    assert len(products_create_parity) == 1
+    assert products_create_parity[0]["tool_name"] == "ui_products_create_preview"
+    assert products_create_parity[0]["live_tested"] is True
+    assert products_create_parity[0]["parity_status"] == "preview_execute"
+    assert "research163" in (products_create_parity[0].get("evidence") or "")
+    products_create_discovery = [
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.discovery.products_create"
+    ]
+    assert len(products_create_discovery) == 1
+    assert products_create_discovery[0]["tool_name"] == "ui_products_create_open"
+    assert products_create_discovery[0]["live_tested"] is True
+    # research176 products.get/update/delete NA freeze (exact ids; not list/create/bulk)
+    products_gud = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH176_PRODUCT_IDS
+    ]
+    assert len(products_gud) == 3
+    assert all(row["parity_status"] == "not_applicable" for row in products_gud)
+    assert all(row["implemented"] is True for row in products_gud)
+    assert all(row["live_tested"] is True for row in products_gud)
+    assert all(row["vision_verified"] is True for row in products_gud)
+    assert all(row["tool_name"] == "" for row in products_gud)
+    assert all("research176" in (row.get("evidence") or "") for row in products_gud)
+    for residual_id, api_id in (
+        ("ui.parity.products.get", "api.products.get"),
+        ("ui.parity.products.update", "api.products.update"),
+        ("ui.parity.products.delete", "api.products.delete"),
+    ):
+        residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
+        assert residual.get("api_row_id") == api_id
+        assert residual.get("parity_status") == "not_applicable"
+        assert residual.get("live_tested") is True
+    # products bulk UI parity stays non-NA (external-contract / discovery — not this freeze)
+    for bulk_api in ("api.products.bulk_save", "api.products.bulk_delete"):
+        bulk_rows = [
+            row for row in ui_manifest["workflows"] if str(row.get("api_row_id") or "") == bulk_api
+        ]
+        assert len(bulk_rows) == 1
+        # research188 strong dual-NA (non-empty products list shell)
+        assert bulk_rows[0].get("parity_status") == "not_applicable"
+        assert bulk_rows[0].get("live_tested") is True
+    # research177 organizations.create NA freeze (exact id; not list/get/update/bulk)
+    org_create_na = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH177_ORG_CREATE_IDS
+    ]
+    assert len(org_create_na) == 1
+    assert org_create_na[0]["parity_status"] == "not_applicable"
+    assert org_create_na[0]["implemented"] is True
+    assert org_create_na[0]["live_tested"] is True
+    assert org_create_na[0]["tool_name"] == ""
+    assert "research177" in (org_create_na[0].get("evidence") or "")
+    residual_create = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.parity.organizations.create"
+    )
+    assert residual_create.get("api_row_id") == "api.organizations.create"
+    assert residual_create.get("parity_status") == "not_applicable"
+    assert residual_create.get("live_tested") is True
+    # special.user_get dual-counted to settings Profil (research151); not NA
+    user_get_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.user_get"
+    ]
+    assert len(user_get_parity) == 1
+    assert user_get_parity[0]["parity_status"] == "shell_open_only"
+    assert user_get_parity[0]["tool_name"] == "ui_settings_user_open"
+    assert user_get_parity[0]["live_tested"] is True
+    assert "research151" in (user_get_parity[0].get("evidence") or "")
+    # special.files_upload dual-counted to Bilag upload surface (research155)
+    files_upload_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.files_upload"
+    ]
+    assert len(files_upload_parity) == 1
+    assert files_upload_parity[0]["parity_status"] == "list_shell_open_only"
+    assert files_upload_parity[0]["tool_name"] == "ui_uploads_list"
+    assert files_upload_parity[0]["live_tested"] is True
+    assert "research155" in (files_upload_parity[0].get("evidence") or "")
+    # research178 special.invoice_email NA freeze (exact special id; not invoice CRUD tools)
+    invoice_email_na = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_SPECIAL_IDS
+    ]
+    assert len(invoice_email_na) == 1
+    assert invoice_email_na[0]["parity_status"] == "not_applicable"
+    assert invoice_email_na[0]["implemented"] is True
+    assert invoice_email_na[0]["live_tested"] is True
+    assert invoice_email_na[0]["vision_verified"] is True
+    assert invoice_email_na[0]["tool_name"] == ""
+    assert "research178" in (invoice_email_na[0].get("evidence") or "")
+    residual_email = next(
+        row for row in ui_manifest["workflows"] if row["id"] == "ui.parity.special.invoice_email"
+    )
+    assert residual_email.get("api_row_id") == "api.special.invoice_email"
+    assert residual_email.get("parity_status") == "not_applicable"
+    assert residual_email.get("live_tested") is True
+    # research178 accounts get/create/update/delete NA freeze (exact ids; not list/bulk)
+    accounts_gud = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH178_ACCOUNT_IDS
+    ]
+    assert len(accounts_gud) == 4
+    assert all(row["parity_status"] == "not_applicable" for row in accounts_gud)
+    assert all(row["implemented"] is True for row in accounts_gud)
+    assert all(row["live_tested"] is True for row in accounts_gud)
+    assert all(row["vision_verified"] is True for row in accounts_gud)
+    assert all(row["tool_name"] == "" for row in accounts_gud)
+    assert all("research178" in (row.get("evidence") or "") for row in accounts_gud)
+    for residual_id, api_id in (
+        ("ui.parity.accounts.get", "api.accounts.get"),
+        ("ui.parity.accounts.create", "api.accounts.create"),
+        ("ui.parity.accounts.update", "api.accounts.update"),
+        ("ui.parity.accounts.delete", "api.accounts.delete"),
+    ):
+        residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
+        assert residual.get("api_row_id") == api_id
+        assert residual.get("parity_status") == "not_applicable"
+        assert residual.get("live_tested") is True
+    # accounts.list stays tool-green shell (not stolen by residual NA)
+    accounts_list = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.accounts.list"
+    ]
+    assert len(accounts_list) == 1
+    assert accounts_list[0]["parity_status"] == "shell_open_only"
+    assert accounts_list[0]["tool_name"] == "ui_settings_accounting_open"
+    assert accounts_list[0]["live_tested"] is True
+    for bulk_api in ("api.accounts.bulk_save", "api.accounts.bulk_delete"):
+        bulk_rows = [
+            row for row in ui_manifest["workflows"] if str(row.get("api_row_id") or "") == bulk_api
+        ]
+        assert len(bulk_rows) == 1
+        # research188 strong dual-NA (settings accounting shell)
+        assert bulk_rows[0].get("parity_status") == "not_applicable"
+        assert bulk_rows[0].get("live_tested") is True
+
+    # research179 invoiceLines get/list/create/update/delete NA (exact ids; not bulk)
+    invoice_lines_na = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "")
+        in generator.GEO_UI_NOT_APPLICABLE_RESEARCH179_INVOICE_LINE_IDS
+    ]
+    assert len(invoice_lines_na) == 5
+    assert all(row["parity_status"] == "not_applicable" for row in invoice_lines_na)
+    assert all(row["implemented"] is True for row in invoice_lines_na)
+    assert all(row["live_tested"] is True for row in invoice_lines_na)
+    assert all(row["vision_verified"] is True for row in invoice_lines_na)
+    assert all(row["tool_name"] == "" for row in invoice_lines_na)
+    assert all("research179" in (row.get("evidence") or "") for row in invoice_lines_na)
+    for residual_id, api_id in (
+        ("ui.parity.invoiceLines.get", "api.invoiceLines.get"),
+        ("ui.parity.invoiceLines.list", "api.invoiceLines.list"),
+        ("ui.parity.invoiceLines.create", "api.invoiceLines.create"),
+        ("ui.parity.invoiceLines.update", "api.invoiceLines.update"),
+        ("ui.parity.invoiceLines.delete", "api.invoiceLines.delete"),
+    ):
+        residual = next(row for row in ui_manifest["workflows"] if row["id"] == residual_id)
+        assert residual.get("api_row_id") == api_id
+        assert residual.get("parity_status") == "not_applicable"
+        assert residual.get("live_tested") is True
+    for bulk_api in ("api.invoiceLines.bulk_save", "api.invoiceLines.bulk_delete"):
+        bulk_rows = [
+            row for row in ui_manifest["workflows"] if str(row.get("api_row_id") or "") == bulk_api
+        ]
+        assert len(bulk_rows) == 1
+        assert bulk_rows[0].get("parity_status") == "not_applicable"
+        assert bulk_rows[0]["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        )
+    # research179 daybooks.get tool-green detail_open_only
+    daybooks_get = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.daybooks.get"
+    ]
+    assert len(daybooks_get) == 1
+    assert daybooks_get[0]["parity_status"] == "detail_open_only"
+    assert daybooks_get[0]["tool_name"] == "ui_daybooks_get_open"
+    assert daybooks_get[0]["live_tested"] is True
+    assert "research179" in (daybooks_get[0].get("evidence") or "")
+    # list+create still on ui_daybooks_open
+    daybooks_list = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.daybooks.list"
+    ]
+    assert len(daybooks_list) == 1
+    assert daybooks_list[0]["tool_name"] == "ui_daybooks_open"
+    daybooks_create = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.daybooks.create"
+    ]
+    assert len(daybooks_create) == 1
+    assert daybooks_create[0]["tool_name"] == "ui_daybooks_open"
+    # special.user_organizations dual-counted to Virksomheder shell (research152)
+    user_orgs_parity = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "") == "api.special.user_organizations"
+    ]
+    assert len(user_orgs_parity) == 1
+    assert user_orgs_parity[0]["parity_status"] == "shell_open_only"
+    assert user_orgs_parity[0]["tool_name"] == "ui_settings_user_organizations_open"
+    assert user_orgs_parity[0]["live_tested"] is True
+    assert "research152" in (user_orgs_parity[0].get("evidence") or "")
+    # associations remain NA green (research144) — separate resource
+    reminder_assoc = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.invoiceReminderAssociations.")
+    ]
+    assert len(reminder_assoc) == 7
+    assert all(row["parity_status"] == "not_applicable" for row in reminder_assoc)
+    # research184: attachments.list dual-counted on Bilag; research185 NA residual
+    # get/create/update/delete (not pure-NA of whole family including list).
+    attachments = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.attachments.")
+    ]
+    assert attachments
+    attach_by_id = {str(row.get("api_row_id")): row for row in attachments}
+    assert attach_by_id["api.attachments.list"]["tool_name"] == "ui_uploads_list"
+    assert attach_by_id["api.attachments.list"]["live_tested"] is True
+    assert attach_by_id["api.attachments.list"]["parity_status"] == "list_shell_open_only"
+    for residual in (
+        "api.attachments.get",
+        "api.attachments.create",
+        "api.attachments.update",
+        "api.attachments.delete",
+    ):
+        assert attach_by_id[residual].get("parity_status") == "not_applicable"
+        assert attach_by_id[residual].get("live_tested") is True
+        assert "research185" in (attach_by_id[residual].get("method_or_route") or "")
+    # research184: files.create dual-count; files.list/get NA; bulk stay red.
+    files_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.files.")
+    ]
+    assert files_rows
+    files_by_id = {str(row.get("api_row_id")): row for row in files_rows}
+    assert files_by_id["api.files.create"]["tool_name"] == "ui_uploads_list"
+    assert files_by_id["api.files.create"]["live_tested"] is False
+    assert files_by_id["api.files.create"]["parity_status"] == "out_of_scope_by_user"
+    for na_id in ("api.files.list", "api.files.get"):
+        assert files_by_id[na_id]["parity_status"] == "not_applicable"
+        assert files_by_id[na_id]["live_tested"] is True
+        assert files_by_id[na_id]["tool_name"] == ""
+    for prefix in (
+        "api.bankLineMatches.",
+        "api.bankLineSubjectAssociations.",
+        "api.bankPayments.",
+        "api.bankLines.",
+        "api.daybookBalanceAccounts.",
+        "api.postings.",
+        "api.salesTaxRules.",
+        "api.salesTaxAccounts.",
+        "api.salesTaxMetaFields.",
+        "api.salesTaxPayments.",
+    ):
+        related = [
+            row
+            for row in ui_manifest["workflows"]
+            if str(row.get("api_row_id") or "").startswith(prefix)
+        ]
+        assert related, prefix
+        non_bulk = [row for row in related if "bulk" not in str(row.get("api_row_id") or "")]
+        bulk = [row for row in related if "bulk" in str(row.get("api_row_id") or "")]
+        assert non_bulk
+        assert all(row.get("parity_status") == "not_applicable" for row in non_bulk)
+        assert all(row.get("live_tested") is True for row in non_bulk)
+        assert all("research183" in (row.get("method_or_route") or "") for row in non_bulk)
+        if bulk:
+            # research188: bank*/postings/daybookBalance bulk are strong dual-NA;
+            # research189: salesTax* bulk are soft tool dual-NA.
+            if prefix.startswith(
+                (
+                    "api.bankLineMatches.",
+                    "api.bankLineSubjectAssociations.",
+                    "api.bankPayments.",
+                    "api.bankLines.",
+                    "api.daybookBalanceAccounts.",
+                    "api.postings.",
+                    "api.salesTaxRules.",
+                    "api.salesTaxAccounts.",
+                    "api.salesTaxMetaFields.",
+                    "api.salesTaxPayments.",
+                )
+            ):
+                assert all(row.get("parity_status") == "not_applicable" for row in bulk)
+                assert all(row.get("live_tested") is True for row in bulk)
+            else:
+                assert all(row.get("parity_status") != "not_applicable" for row in bulk)
+    tax_rates_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.taxRates.")
+    ]
+    assert tax_rates_rows
+    tax_rates_list = [row for row in tax_rates_rows if row.get("api_row_id") == "api.taxRates.list"]
+    tax_rates_residual = [
+        row
+        for row in tax_rates_rows
+        if row.get("api_row_id")
+        in {
+            "api.taxRates.get",
+            "api.taxRates.create",
+            "api.taxRates.update",
+            "api.taxRates.delete",
+        }
+    ]
+    assert len(tax_rates_list) == 1
+    assert tax_rates_list[0].get("live_tested") is True
+    assert tax_rates_list[0].get("tool_name") == "ui_settings_vat_open"
+    assert len(tax_rates_residual) == 4
+    assert all(row.get("parity_status") == "not_applicable" for row in tax_rates_residual)
+    assert all(row.get("live_tested") is True for row in tax_rates_residual)
+    assert all("research181" in (row.get("method_or_route") or "") for row in tax_rates_residual)
+    # bulk taxRates soft tool dual-NA (research189)
+    tax_rates_bulk = [row for row in tax_rates_rows if "bulk" in str(row.get("api_row_id") or "")]
+    assert tax_rates_bulk
+    assert all(row.get("parity_status") == "not_applicable" for row in tax_rates_bulk)
+    assert all(row.get("live_tested") is True for row in tax_rates_bulk)
+    assert all(
+        row["qualification"]["evidence_code"]
+        == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        for row in tax_rates_bulk
+    )
+    rulesets_rows = [
+        row
+        for row in ui_manifest["workflows"]
+        if str(row.get("api_row_id") or "").startswith("api.salesTaxRulesets.")
+    ]
+    assert rulesets_rows
+    rulesets_list = [
+        row for row in rulesets_rows if row.get("api_row_id") == "api.salesTaxRulesets.list"
+    ]
+    rulesets_residual = [
+        row
+        for row in rulesets_rows
+        if row.get("api_row_id")
+        in {
+            "api.salesTaxRulesets.get",
+            "api.salesTaxRulesets.create",
+            "api.salesTaxRulesets.update",
+            "api.salesTaxRulesets.delete",
+        }
+    ]
+    assert len(rulesets_list) == 1
+    assert rulesets_list[0].get("live_tested") is True
+    assert rulesets_list[0].get("tool_name") == "ui_settings_vat_open"
+    assert len(rulesets_residual) == 4
+    assert all(row.get("parity_status") == "not_applicable" for row in rulesets_residual)
+    assert all(row.get("live_tested") is True for row in rulesets_residual)
+    assert all("research181" in (row.get("method_or_route") or "") for row in rulesets_residual)
+    assert status["complete"] is True
+    # 74 baseline tool/dual-count greens + GEO NA rows + research184 dual-counts
+    # (attachments.list + files.create) beyond pure NA, minus residual owner scope.
+    assert status["qualification"]["live_tested_rows"] == (
+        74
+        + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        + 2
+        - len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
+    )
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
+
+
+def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
+    """research183: 50 residual soft-empty dual NA rows; greened parents exclusive."""
+
+    _, ui_manifest, _, status, _ = documents()
+    expected = generator.GEO_UI_NOT_APPLICABLE_RESEARCH183_IDS
+    assert len(expected) == 50
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
+
+    rows = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in expected]
+    assert len(rows) == 50
+    for row in rows:
+        assert row["parity_status"] == "not_applicable"
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row["tool_name"] == ""
+        assert row.get("vision_evidence") is None
+        qual: dict[str, Any] = dict(row.get("qualification") or {})
+        assert qual.get("kind") == "ui_not_applicable"
+        assert qual.get("not_applicable_decision") == "accepted"
+        assert qual.get("sessions") == "dual_independent_ephemeral"
+        assert "research183" in str(qual.get("evidence_ref") or "")
+        assert "research183" in (row.get("method_or_route") or "")
+        assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in (row.get("evidence") or "")
+
+    # Dual-count bans: greened parents remain tool-green / non-NA
+    workflows = {row["id"]: row for row in ui_manifest["workflows"]}
+    assert workflows["ui.parity.salesTaxReturns.list"]["parity_status"] != "not_applicable"
+    assert workflows["ui.parity.salesTaxReturns.list"]["tool_name"] == "ui_vat_declarations_list"
+    assert workflows["ui.parity.transactions.list"]["tool_name"] == "ui_transactions_list"
+    assert workflows["ui.parity.transactions.create"]["tool_name"] == "ui_transactions_create_open"
+    assert workflows["ui.discovery.bank_accounts"]["tool_name"] == "ui_bank_accounts_list"
+    assert (
+        workflows["ui.discovery.bank_reconciliation"]["tool_name"] == "ui_bank_reconciliation_open"
+    )
+    assert workflows["ui.parity.daybookTransactions.create"]["tool_name"] == (
+        "ui_daybook_transactions_create_open"
+    )
+
+    # Empty-list bulk dual-NA (research190); soft tool dual-NA bulk are NA (research189).
+    held_empty_bulk_ids = [
+        "api.contacts.bulk_save",
+        "api.invoices.bulk_delete",
+    ]
+    held_empty_bulk = [
+        row for row in ui_manifest["workflows"] if row.get("api_row_id") in held_empty_bulk_ids
+    ]
+    assert len(held_empty_bulk) == len(held_empty_bulk_ids)
+    assert all(row.get("parity_status") == "not_applicable" for row in held_empty_bulk)
+    assert all(
+        row["qualification"]["evidence_code"]
+        == generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        for row in held_empty_bulk
+    )
+    soft_bulk_ids = [
+        "api.salesTaxAccounts.bulk_save",
+        "api.salesTaxAccounts.bulk_delete",
+        "api.users.bulk_save",
+    ]
+    soft_bulk = [row for row in ui_manifest["workflows"] if row.get("api_row_id") in soft_bulk_ids]
+    assert len(soft_bulk) == len(soft_bulk_ids)
+    assert all(row.get("parity_status") == "not_applicable" for row in soft_bulk)
+    assert all(
+        row["qualification"]["evidence_code"]
+        == generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        for row in soft_bulk
+    )
+    strong_bulk_ids = [
+        "api.bankLines.bulk_save",
+        "api.postings.bulk_save",
+        "api.daybookBalanceAccounts.bulk_delete",
+    ]
+    strong_bulk = [
+        row for row in ui_manifest["workflows"] if row.get("api_row_id") in strong_bulk_ids
+    ]
+    assert len(strong_bulk) == len(strong_bulk_ids)
+    assert all(row.get("parity_status") == "not_applicable" for row in strong_bulk)
+
+    # research183 itself does not pure-NA attachments.list (research184 dual-counts)
+    # or annual; files.list is research184 NA (separate freeze).
+    assert workflows["ui.parity.attachments.list"]["parity_status"] != "not_applicable"
+    assert workflows["ui.discovery.annual_reports"]["parity_status"] != "not_applicable"
+    assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
+
+    assert status["complete"] is True
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+
+
+def test_research184_attachments_list_files_create_dualcount_and_files_list_get_na() -> None:
+    """research184: Bilag dual-count attachments.list + files.create; NA files list/get."""
+
+    _, ui_manifest, _, status, _ = documents()
+    expected_na = generator.GEO_UI_NOT_APPLICABLE_RESEARCH184_IDS
+    assert expected_na == frozenset({"api.files.list", "api.files.get"})
+    assert len(expected_na) == 2
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
+
+    workflows = {row["id"]: row for row in ui_manifest["workflows"]}
+
+    attach_list = workflows["ui.parity.attachments.list"]
+    assert attach_list["tool_name"] == "ui_uploads_list"
+    assert attach_list["api_row_id"] == "api.attachments.list"
+    assert attach_list["parity_status"] == "list_shell_open_only"
+    assert attach_list["discovered"] is True
+    assert attach_list["implemented"] is True
+    assert attach_list["contract_tested"] is True
+    assert attach_list["live_tested"] is True
+    assert attach_list["vision_verified"] is True
+    assert "research184" in (attach_list.get("evidence") or "")
+
+    files_create = workflows["ui.parity.files.create"]
+    assert files_create["tool_name"] == "ui_uploads_list"
+    assert files_create["api_row_id"] == "api.files.create"
+    assert files_create["parity_status"] == "out_of_scope_by_user"
+    assert files_create["live_tested"] is False
+    assert files_create["vision_verified"] is False
+    assert "research184" in (files_create.get("evidence") or "")
+    assert "radio:FE6FA4B1" in (files_create.get("evidence") or "")
+
+    for row_id, api_id in (
+        ("ui.parity.files.list", "api.files.list"),
+        ("ui.parity.files.get", "api.files.get"),
+    ):
+        row = workflows[row_id]
+        assert row["api_row_id"] == api_id
+        assert row["parity_status"] == "not_applicable"
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        qual: dict[str, Any] = dict(row.get("qualification") or {})
+        assert qual.get("not_applicable_decision") == "accepted"
+        assert "research184" in str(qual.get("evidence_ref") or "")
+        assert "research184" in (row.get("method_or_route") or "")
+
+    # Residual attachments ops are research185 NA (not red); special.files_upload dual-counted
+    for residual in (
+        "ui.parity.attachments.get",
+        "ui.parity.attachments.create",
+        "ui.parity.attachments.update",
+        "ui.parity.attachments.delete",
+    ):
+        row = workflows[residual]
+        assert row.get("parity_status") == "not_applicable"
+        assert row.get("live_tested") is True
+        assert "research185" in (row.get("method_or_route") or "")
+    assert workflows["ui.parity.special.files_upload"]["tool_name"] == "ui_uploads_list"
+    assert workflows["ui.parity.special.files_upload"]["live_tested"] is True
+    # receipt inbox stays distinct (no dual-count steal)
+    assert workflows["ui.discovery.receipt_inbox"]["tool_name"] == "ui_receipt_inbox_list"
+    assert workflows["ui.discovery.receipt_inbox"]["api_row_id"] is None
+
+    # research188: attachments/files bulk strong dual-NA (non-empty Bilag shell)
+    for bulk_id in ("ui.parity.attachments.bulk_save", "ui.parity.files.bulk_save"):
+        assert workflows[bulk_id].get("parity_status") == "not_applicable"
+        assert workflows[bulk_id].get("live_tested") is True
+        assert workflows[bulk_id]["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+
+    assert status["complete"] is True
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+
+
+def test_research185_attachments_get_create_update_delete_na() -> None:
+    """research185: exact NA attachments.get/create/update/delete; list stays dual-count."""
+
+    _, ui_manifest, _, status, _ = documents()
+    expected = generator.GEO_UI_NOT_APPLICABLE_RESEARCH185_IDS
+    assert expected == frozenset(
+        {
+            "api.attachments.get",
+            "api.attachments.create",
+            "api.attachments.update",
+            "api.attachments.delete",
+        }
+    )
+    assert len(expected) == 4
+    assert generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT == 268
+
+    workflows = {row["id"]: row for row in ui_manifest["workflows"]}
+    for row_id, api_id in (
+        ("ui.parity.attachments.get", "api.attachments.get"),
+        ("ui.parity.attachments.create", "api.attachments.create"),
+        ("ui.parity.attachments.update", "api.attachments.update"),
+        ("ui.parity.attachments.delete", "api.attachments.delete"),
+    ):
+        row = workflows[row_id]
+        assert row["api_row_id"] == api_id
+        assert row["parity_status"] == "not_applicable"
+        assert row["tool_name"] == ""
+        assert row["discovered"] is True
+        assert row["implemented"] is True
+        assert row["contract_tested"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        assert row.get("vision_evidence") is None
+        qual: dict[str, Any] = dict(row.get("qualification") or {})
+        assert qual.get("kind") == "ui_not_applicable"
+        assert qual.get("not_applicable_decision") == "accepted"
+        assert qual.get("sessions") == "dual_independent_ephemeral"
+        assert "research185" in str(qual.get("evidence_ref") or "")
+        assert "research185" in (row.get("method_or_route") or "")
+        assert "research185" in (row.get("evidence") or "")
+        assert generator.GEO_UI_NOT_APPLICABLE_EVIDENCE_CODE in (row.get("evidence") or "")
+
+    # list stays dual-count green; files research184 outcomes unchanged
+    attach_list = workflows["ui.parity.attachments.list"]
+    assert attach_list["tool_name"] == "ui_uploads_list"
+    assert attach_list["parity_status"] == "list_shell_open_only"
+    assert attach_list["live_tested"] is True
+    assert attach_list["parity_status"] != "not_applicable"
+    assert workflows["ui.parity.files.create"]["tool_name"] == "ui_uploads_list"
+    assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
+    assert workflows["ui.parity.files.get"]["parity_status"] == "not_applicable"
+    assert workflows["ui.parity.special.files_upload"]["tool_name"] == "ui_uploads_list"
+
+    # research188 lifts attachments/files bulk to dual-NA; annual is owner out-of-scope
+    for bulk_id in (
+        "ui.parity.attachments.bulk_save",
+        "ui.parity.attachments.bulk_delete",
+        "ui.parity.files.bulk_save",
+        "ui.parity.files.bulk_delete",
+    ):
+        assert workflows[bulk_id].get("parity_status") == "not_applicable"
+        assert workflows[bulk_id].get("live_tested") is True
+        assert workflows[bulk_id]["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+    assert workflows["ui.discovery.annual_reports"]["parity_status"] != "not_applicable"
+    assert workflows["ui.discovery.annual_reports"]["live_tested"] is not True
+
+    assert status["complete"] is True
+    assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["vision_verified_rows"] == 339
+    assert status["qualification"]["implemented_rows"] == 546
+    assert status["qualification"]["contract_tested_rows"] == 551
+    assert status["qualification"]["live_tested_rows"] == (
+        74
+        + generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+        + 2
+        - len(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
+    )
+
+
+def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
+    """UI discovery does not use unsupported not-applicable or frame evidence."""
+
+    api_manifest, ui_manifest, browser_egress, status, _ = documents()
+    workflows = ui_manifest["workflows"]
+    parity_rows = [row for row in workflows if row["workflow_kind"] == "api_parity"]
+    discovery_rows = [row for row in workflows if row["workflow_kind"] == "discovery"]
+    qualified_ids = {
+        "ui.discovery.invoices",
+        "ui.parity.invoices.list",
+        "ui.discovery.invoices_create",
+        "ui.parity.invoices.create",
+        "ui.parity.invoices.get",
+        "ui.parity.invoices.update",
+        "ui.parity.invoices.delete",
+        "ui.parity.bills.get",
+        "ui.parity.bills.update",
+        "ui.parity.bills.delete",
+        "ui.discovery.products",
+        "ui.parity.products.list",
+        "ui.discovery.products_create",
+        "ui.parity.products.create",
+        "ui.discovery.customers",
+        "ui.parity.contacts.list",
+        "ui.discovery.clients_create",
+        "ui.parity.contacts.create",
+        "ui.parity.contacts.get",
+        "ui.parity.contacts.update",
+        "ui.parity.contacts.delete",
+        "ui.discovery.bank_accounts",
+        "ui.discovery.quotes",
+        "ui.discovery.recurring_invoices",
+        "ui.discovery.product_import",
+        "ui.discovery.suppliers",
+        "ui.discovery.suppliers_create",
+        "ui.discovery.purchases",
+        "ui.parity.bills.list",
+        "ui.discovery.bills_create",
+        "ui.parity.bills.create",
+        "ui.discovery.debtor_balances",
+        "ui.discovery.creditor_balances",
+        "ui.discovery.uploads",
+        "ui.parity.special.files_upload",
+        "ui.parity.attachments.list",
+        "ui.parity.files.create",
+        "ui.discovery.receipt_inbox",
+        "ui.discovery.bank_reconciliation",
+        "ui.discovery.financing",
+        "ui.discovery.daybooks",
+        "ui.parity.daybooks.get",
+        "ui.parity.daybooks.delete",
+        "ui.parity.daybookTransactions.create",
+        "ui.parity.daybooks.list",
+        "ui.parity.daybooks.create",
+        "ui.discovery.transactions",
+        "ui.parity.transactions.list",
+        "ui.parity.transactions.create",
+        "ui.discovery.reports",
+        "ui.discovery.vat_declarations",
+        "ui.parity.salesTaxReturns.list",
+        "ui.discovery.exports",
+        "ui.discovery.saft_exports",
+        "ui.discovery.addons",
+        "ui.discovery.integrations",
+        "ui.discovery.inventory",
+        "ui.discovery.settings_company",
+        "ui.parity.organizations.list",
+        "ui.parity.organizations.get",
+        "ui.parity.organizations.update",
+        "ui.discovery.settings_accounting",
+        "ui.parity.accounts.list",
+        "ui.discovery.settings_invoicing",
+        "ui.discovery.settings_user",
+        "ui.parity.special.user_get",
+        "ui.discovery.settings_user_organizations",
+        "ui.parity.special.user_organizations",
+        "ui.discovery.settings_vat",
+        "ui.parity.taxRates.list",
+        "ui.parity.salesTaxRulesets.list",
+        "ui.discovery.settings_users",
+        "ui.parity.users.list",
+        "ui.discovery.settings_access_token",
+        "ui.discovery.settings_beta",
+        "ui.discovery.settings_subscription",
+    }
+    tool_by_id = {
+        "ui.discovery.invoices": "ui_invoices_list",
+        "ui.parity.invoices.list": "ui_invoices_list",
+        "ui.discovery.invoices_create": "ui_invoices_create_open",
+        "ui.parity.invoices.create": "ui_invoices_create_preview",
+        "ui.parity.invoices.get": "ui_invoices_get_open",
+        "ui.parity.invoices.update": "ui_invoices_update_preview",
+        "ui.parity.invoices.delete": "ui_invoices_delete_preview",
+        "ui.parity.bills.get": "ui_bills_get_open",
+        "ui.parity.bills.update": "ui_bills_update_preview",
+        "ui.parity.bills.delete": "ui_bills_delete_preview",
+        "ui.discovery.products": "ui_products_list",
+        "ui.parity.products.list": "ui_products_list",
+        "ui.discovery.products_create": "ui_products_create_open",
+        "ui.parity.products.create": "ui_products_create_preview",
+        "ui.discovery.customers": "ui_clients_list",
+        "ui.parity.contacts.list": "ui_clients_list",
+        "ui.discovery.clients_create": "ui_clients_create_open",
+        "ui.parity.contacts.create": "ui_clients_create_preview",
+        "ui.parity.contacts.get": "ui_clients_get_open",
+        "ui.parity.contacts.update": "ui_clients_update_preview",
+        "ui.parity.contacts.delete": "ui_clients_delete_preview",
+        "ui.discovery.bank_accounts": "ui_bank_accounts_list",
+        "ui.discovery.quotes": "ui_quotes_list",
+        "ui.discovery.recurring_invoices": "ui_recurring_invoices_list",
+        "ui.discovery.product_import": "ui_products_import",
+        "ui.discovery.suppliers": "ui_suppliers_list",
+        "ui.discovery.suppliers_create": "ui_suppliers_create_open",
+        "ui.discovery.purchases": "ui_bills_list",
+        "ui.parity.bills.list": "ui_bills_list",
+        "ui.discovery.bills_create": "ui_bills_create_open",
+        "ui.parity.bills.create": "ui_bills_create_preview",
+        "ui.discovery.debtor_balances": "ui_debtor_balances_list",
+        "ui.discovery.creditor_balances": "ui_creditor_balances_list",
+        "ui.discovery.uploads": "ui_uploads_list",
+        "ui.parity.special.files_upload": "ui_uploads_list",
+        "ui.parity.attachments.list": "ui_uploads_list",
+        "ui.parity.files.create": "ui_uploads_list",
+        "ui.discovery.receipt_inbox": "ui_receipt_inbox_list",
+        "ui.discovery.bank_reconciliation": "ui_bank_reconciliation_open",
+        "ui.discovery.financing": "ui_financing_open",
+        "ui.discovery.daybooks": "ui_daybooks_open",
+        "ui.parity.daybooks.get": "ui_daybooks_get_open",
+        "ui.parity.daybooks.delete": "ui_daybooks_delete_open",
+        "ui.parity.daybookTransactions.create": "ui_daybook_transactions_create_open",
+        "ui.parity.daybooks.list": "ui_daybooks_open",
+        "ui.parity.daybooks.create": "ui_daybooks_open",
+        "ui.discovery.transactions": "ui_transactions_list",
+        "ui.parity.transactions.list": "ui_transactions_list",
+        "ui.parity.transactions.create": "ui_transactions_create_open",
+        "ui.discovery.reports": "ui_reports_open",
+        "ui.discovery.vat_declarations": "ui_vat_declarations_list",
+        "ui.parity.salesTaxReturns.list": "ui_vat_declarations_list",
+        "ui.discovery.exports": "ui_exports_open",
+        "ui.discovery.saft_exports": "ui_saft_exports_open",
+        "ui.discovery.addons": "ui_addons_open",
+        "ui.discovery.integrations": "ui_integrations_open",
+        "ui.discovery.inventory": "ui_inventory_open",
+        "ui.discovery.settings_company": "ui_settings_company_open",
+        "ui.parity.organizations.list": "ui_settings_company_open",
+        "ui.parity.organizations.get": "ui_settings_company_open",
+        "ui.parity.organizations.update": "ui_organizations_update_preview",
+        "ui.discovery.settings_accounting": "ui_settings_accounting_open",
+        "ui.parity.accounts.list": "ui_settings_accounting_open",
+        "ui.discovery.settings_invoicing": "ui_settings_invoicing_open",
+        "ui.discovery.settings_user": "ui_settings_user_open",
+        "ui.parity.special.user_get": "ui_settings_user_open",
+        "ui.discovery.settings_user_organizations": "ui_settings_user_organizations_open",
+        "ui.parity.special.user_organizations": "ui_settings_user_organizations_open",
+        "ui.discovery.settings_vat": "ui_settings_vat_open",
+        "ui.parity.taxRates.list": "ui_settings_vat_open",
+        "ui.parity.salesTaxRulesets.list": "ui_settings_vat_open",
+        "ui.discovery.settings_users": "ui_settings_users_open",
+        "ui.parity.users.list": "ui_settings_users_open",
+        "ui.discovery.settings_access_token": "ui_settings_access_token_open",
+        "ui.discovery.settings_beta": "ui_settings_beta_open",
+        "ui.discovery.settings_subscription": "ui_settings_subscription_open",
+    }
+    geo_na_rows = [row for row in workflows if row.get("parity_status") == "not_applicable"]
+    geo_na_ids = {row["id"] for row in geo_na_rows}
+    remaining = [
+        row for row in workflows if row["id"] not in qualified_ids and row["id"] not in geo_na_ids
+    ]
+    qualified = [row for row in workflows if row["id"] in qualified_ids]
+
+    assert {row["api_row_id"] for row in parity_rows} == {
+        row["id"] for row in api_manifest["operations"]
+    }
+    assert {row["area"] for row in discovery_rows} == set(generator.UI_DISCOVERY_FAMILIES)
+    assert all(row["vision_verified"] is False for row in remaining)
+    assert all(row["implemented"] is False for row in remaining)
+    assert all(row["contract_tested"] is False for row in remaining)
+    assert all(row["live_tested"] is False for row in remaining)
+    assert all(row["vision_evidence"] is None for row in workflows)
+    assert all(row["parity_status"] != "not_applicable" for row in remaining)
+    assert all(row["parity_status"] != "not_applicable" for row in qualified)
+    assert len(qualified) == 76
+    assert len(geo_na_rows) == generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
+    honesty_ids = generator.UI_CUD_PARITY_OPEN_ONLY_HONESTY_IDS
+    residual_scope_ids = set(generator.UI_RESIDUAL_WRITE_OWNER_SCOPE)
+    for row in qualified:
+        assert row["tool_name"] == tool_by_id[row["id"]]
+        assert row["discovered"] is True
+        assert row["contract_tested"] is True
+        assert row["vision_evidence"] is None
+        if row["id"] in honesty_ids or row["id"] in residual_scope_ids:
+            assert row["implemented"] is False
+            assert row["live_tested"] is False
+            assert row["vision_verified"] is False
+            if row["id"] in residual_scope_ids:
+                assert row["parity_status"] == "out_of_scope_by_user"
+                assert generator.is_owner_out_of_scope(row) is True
+            else:
+                assert row["parity_status"] in generator.OPEN_ONLY_PARITY_STATUSES
+            continue
+        assert row["implemented"] is True
+        assert row["live_tested"] is True
+        assert row["vision_verified"] is True
+        # Shell-open only: must not claim full API list filters (IR 186.3 R1).
+        assert row["request_fields"] == []
+        assert row["filters"] in ([], {})
+        assert row["pagination"] is None
+        assert row["parity_status"] in {
+            "list_shell_open_only",
+            "shell_open_only",
+            "form_open_only",
+            "detail_open_only",
+            "delete_chrome_open_only",
+            "create_chrome_open_only",
+            "soft_empty_shell_observed",
+            "preview_execute",
+        }
+    invoices_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.list")
+    assert "api.invoices.list" in invoices_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in invoices_parity["evidence"]
+    products_parity = next(row for row in qualified if row["id"] == "ui.parity.products.list")
+    assert "api.products.list" in products_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in products_parity["evidence"]
+    contacts_parity = next(row for row in qualified if row["id"] == "ui.parity.contacts.list")
+    assert "api.contacts.list" in contacts_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in contacts_parity["evidence"]
+    bills_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.list")
+    assert "api.bills.list" in bills_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in bills_parity["evidence"]
+    transactions_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.transactions.list"
+    )
+    assert "api.transactions.list" in transactions_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in transactions_parity["evidence"]
+    sales_tax_returns_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.salesTaxReturns.list"
+    )
+    assert sales_tax_returns_parity["api_row_id"] == "api.salesTaxReturns.list"
+    assert sales_tax_returns_parity["tool_name"] == "ui_vat_declarations_list"
+    assert "api.salesTaxReturns.list" in sales_tax_returns_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in sales_tax_returns_parity["evidence"]
+    assert "research140" in sales_tax_returns_parity["evidence"]
+    for na_id in (
+        "ui.parity.salesTaxReturns.get",
+        "ui.parity.salesTaxReturns.update",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research183" in na_row["method_or_route"]
+    for na_bulk_id in (
+        "ui.parity.salesTaxReturns.bulk_save",
+        "ui.parity.salesTaxReturns.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+    users_parity = next(row for row in qualified if row["id"] == "ui.parity.users.list")
+    assert users_parity["api_row_id"] == "api.users.list"
+    assert users_parity["tool_name"] == "ui_settings_users_open"
+    assert users_parity["parity_status"] == "shell_open_only"
+    assert "api.users.list" in users_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in users_parity["evidence"]
+    assert "research141" in users_parity["evidence"]
+    for na_id in (
+        "ui.parity.users.get",
+        "ui.parity.users.update",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research180" in na_row["method_or_route"]
+    for na_bulk_id in (
+        "ui.parity.users.bulk_save",
+        "ui.parity.users.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+    accounts_parity = next(row for row in qualified if row["id"] == "ui.parity.accounts.list")
+    assert accounts_parity["api_row_id"] == "api.accounts.list"
+    assert accounts_parity["tool_name"] == "ui_settings_accounting_open"
+    assert accounts_parity["parity_status"] == "shell_open_only"
+    assert "api.accounts.list" in accounts_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in accounts_parity["evidence"]
+    assert "research145" in accounts_parity["evidence"]
+    # research178: accounts get/create/update/delete NA in geo_na; bulk stays red remaining
+    for na_id in (
+        "ui.parity.accounts.get",
+        "ui.parity.accounts.create",
+        "ui.parity.accounts.update",
+        "ui.parity.accounts.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research178" in (na_row.get("evidence") or "")
+    for na_bulk_id in (
+        "ui.parity.accounts.bulk_save",
+        "ui.parity.accounts.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+    tax_rates_parity = next(row for row in qualified if row["id"] == "ui.parity.taxRates.list")
+    assert tax_rates_parity["api_row_id"] == "api.taxRates.list"
+    assert tax_rates_parity["tool_name"] == "ui_settings_vat_open"
+    assert tax_rates_parity["parity_status"] == "shell_open_only"
+    assert "api.taxRates.list" in tax_rates_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in tax_rates_parity["evidence"]
+    assert "research158" in tax_rates_parity["evidence"]
+    for na_id in (
+        "ui.parity.taxRates.get",
+        "ui.parity.taxRates.create",
+        "ui.parity.taxRates.update",
+        "ui.parity.taxRates.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
+    for na_bulk_id in (
+        "ui.parity.taxRates.bulk_save",
+        "ui.parity.taxRates.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+    rulesets_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.salesTaxRulesets.list"
+    )
+    assert rulesets_parity["api_row_id"] == "api.salesTaxRulesets.list"
+    assert rulesets_parity["tool_name"] == "ui_settings_vat_open"
+    assert rulesets_parity["parity_status"] == "shell_open_only"
+    assert "api.salesTaxRulesets.list" in rulesets_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in rulesets_parity["evidence"]
+    assert "research159" in rulesets_parity["evidence"]
+    assert "Regelsæt" in rulesets_parity["evidence"] or "rulesets" in rulesets_parity["evidence"]
+    for na_id in (
+        "ui.parity.salesTaxRulesets.get",
+        "ui.parity.salesTaxRulesets.create",
+        "ui.parity.salesTaxRulesets.update",
+        "ui.parity.salesTaxRulesets.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
+    for na_bulk_id in (
+        "ui.parity.salesTaxRulesets.bulk_save",
+        "ui.parity.salesTaxRulesets.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_TOOL_PANEL_EVIDENCE_CODE
+        )
+    organizations_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.organizations.list"
+    )
+    assert organizations_parity["api_row_id"] == "api.organizations.list"
+    assert organizations_parity["tool_name"] == "ui_settings_company_open"
+    assert organizations_parity["parity_status"] == "shell_open_only"
+    assert "api.organizations.list" in organizations_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in organizations_parity["evidence"]
+    assert "research146" in organizations_parity["evidence"]
+    organizations_get = next(row for row in qualified if row["id"] == "ui.parity.organizations.get")
+    assert organizations_get["api_row_id"] == "api.organizations.get"
+    assert organizations_get["tool_name"] == "ui_settings_company_open"
+    assert organizations_get["parity_status"] == "detail_open_only"
+    assert "api.organizations.get" in organizations_get["evidence"]
+    assert "research177" in organizations_get["evidence"]
+    organizations_update = next(
+        row for row in qualified if row["id"] == "ui.parity.organizations.update"
+    )
+    assert organizations_update["api_row_id"] == "api.organizations.update"
+    assert organizations_update["tool_name"] == "ui_organizations_update_preview"
+    assert organizations_update["parity_status"] == "preview_execute"
+    assert "api.organizations.update" in organizations_update["evidence"]
+    assert "research177" in organizations_update["evidence"]
+    assert organizations_update["sensitivity"] == "medium"
+    # create is NA (geo_na_ids), not remaining discovery_required
+    org_create_row = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.organizations.create"
+    )
+    assert org_create_row["api_row_id"] == "api.organizations.create"
+    assert org_create_row["parity_status"] == "not_applicable"
+    assert "research177" in (org_create_row.get("evidence") or "")
+    for na_bulk_id in (
+        "ui.parity.organizations.bulk_save",
+        "ui.parity.organizations.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+    daybooks_parity = next(row for row in qualified if row["id"] == "ui.parity.daybooks.list")
+    assert daybooks_parity["api_row_id"] == "api.daybooks.list"
+    assert daybooks_parity["tool_name"] == "ui_daybooks_open"
+    assert daybooks_parity["parity_status"] == "shell_open_only"
+    assert "api.daybooks.list" in daybooks_parity["evidence"]
+    assert "filters/sort/pagination UI not producted" in daybooks_parity["evidence"]
+    assert "research156" in daybooks_parity["evidence"]
+    daybooks_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.daybooks.create"
+    )
+    assert daybooks_create_parity["api_row_id"] == "api.daybooks.create"
+    assert daybooks_create_parity["tool_name"] == "ui_daybooks_open"
+    assert daybooks_create_parity["parity_status"] == "out_of_scope_by_user"
+    assert "api.daybooks.create" in daybooks_create_parity["evidence"]
+    assert "research157" in daybooks_create_parity["evidence"]
+    assert "radio:FE6FA4B1" in daybooks_create_parity["evidence"]
+    assert daybooks_create_parity["sensitivity"] == "medium"
+    daybooks_get_parity = next(row for row in qualified if row["id"] == "ui.parity.daybooks.get")
+    assert daybooks_get_parity["api_row_id"] == "api.daybooks.get"
+    assert daybooks_get_parity["tool_name"] == "ui_daybooks_get_open"
+    assert daybooks_get_parity["parity_status"] == "detail_open_only"
+    assert "api.daybooks.get" in daybooks_get_parity["evidence"]
+    assert "research179" in daybooks_get_parity["evidence"]
+    daybooks_discovery = next(row for row in qualified if row["id"] == "ui.discovery.daybooks")
+    assert daybooks_discovery["tool_name"] == "ui_daybooks_open"
+    assert daybooks_discovery["api_row_id"] is None
+    daybooks_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.daybooks.delete"
+    )
+    assert daybooks_delete_parity["api_row_id"] == "api.daybooks.delete"
+    assert daybooks_delete_parity["tool_name"] == "ui_daybooks_delete_open"
+    assert daybooks_delete_parity["parity_status"] == "out_of_scope_by_user"
+    assert "api.daybooks.delete" in daybooks_delete_parity["evidence"]
+    assert "research180" in daybooks_delete_parity["evidence"]
+    assert "radio:FE6FA4B1" in daybooks_delete_parity["evidence"]
+    dtx_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.daybookTransactions.create"
+    )
+    assert dtx_create_parity["api_row_id"] == "api.daybookTransactions.create"
+    assert dtx_create_parity["tool_name"] == "ui_daybook_transactions_create_open"
+    assert dtx_create_parity["parity_status"] == "out_of_scope_by_user"
+    assert "api.daybookTransactions.create" in dtx_create_parity["evidence"]
+    assert "research181" in dtx_create_parity["evidence"]
+    assert "radio:FE6FA4B1" in dtx_create_parity["evidence"]
+    for na_id in (
+        "ui.parity.daybookTransactions.get",
+        "ui.parity.daybookTransactions.list",
+        "ui.parity.daybookTransactions.update",
+        "ui.parity.daybookTransactions.delete",
+        "ui.parity.taxRates.get",
+        "ui.parity.taxRates.create",
+        "ui.parity.taxRates.update",
+        "ui.parity.taxRates.delete",
+        "ui.parity.salesTaxRulesets.get",
+        "ui.parity.salesTaxRulesets.create",
+        "ui.parity.salesTaxRulesets.update",
+        "ui.parity.salesTaxRulesets.delete",
+        "ui.parity.taxRateDeductionComponents.get",
+        "ui.parity.taxRateDeductionComponents.list",
+        "ui.parity.taxRateDeductionComponents.create",
+        "ui.parity.taxRateDeductionComponents.update",
+        "ui.parity.taxRateDeductionComponents.delete",
+        "ui.parity.transactions.get",
+        "ui.parity.transactions.update",
+        "ui.parity.transactions.delete",
+    ):
+        na_row = next(row for row in geo_na_rows if row["id"] == na_id)
+        assert na_row["parity_status"] == "not_applicable"
+        assert na_row["live_tested"] is True
+        assert "research181" in na_row["method_or_route"]
+    # update is NA (research180); bulk remain discovery_required / external-contract red
+    daybooks_update_na = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.daybooks.update"
+    )
+    assert daybooks_update_na["parity_status"] == "not_applicable"
+    assert daybooks_update_na["live_tested"] is True
+    assert "research180" in daybooks_update_na["method_or_route"]
+    for na_bulk_id in (
+        "ui.parity.daybooks.bulk_save",
+        "ui.parity.daybooks.bulk_delete",
+    ):
+        na_bulk = next(row for row in geo_na_rows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
+        )
+    user_get_special_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.special.user_get"
+    )
+    assert user_get_special_parity["api_row_id"] == "api.special.user_get"
+    assert user_get_special_parity["tool_name"] == "ui_settings_user_open"
+    assert user_get_special_parity["parity_status"] == "shell_open_only"
+    assert "api.special.user_get" in user_get_special_parity["evidence"]
+    assert "research151" in user_get_special_parity["evidence"]
+    user_orgs_special_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.special.user_organizations"
+    )
+    assert user_orgs_special_parity["api_row_id"] == "api.special.user_organizations"
+    assert user_orgs_special_parity["tool_name"] == "ui_settings_user_organizations_open"
+    assert user_orgs_special_parity["parity_status"] == "shell_open_only"
+    assert "api.special.user_organizations" in user_orgs_special_parity["evidence"]
+    assert "research152" in user_orgs_special_parity["evidence"]
+    invoices_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.invoices.create"
+    )
+    assert invoices_create_parity["api_row_id"] == "api.invoices.create"
+    assert invoices_create_parity["tool_name"] == "ui_invoices_create_preview"
+    assert invoices_create_parity["parity_status"] == "preview_execute"
+    assert "api.invoices.create" in invoices_create_parity["evidence"]
+    assert "research153" in invoices_create_parity["evidence"]
+    invoices_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.invoices_create"
+    )
+    assert invoices_create_discovery["tool_name"] == "ui_invoices_create_open"
+    assert invoices_create_discovery["api_row_id"] is None
+
+    invoices_get_parity = next(row for row in qualified if row["id"] == "ui.parity.invoices.get")
+    assert invoices_get_parity["api_row_id"] == "api.invoices.get"
+    assert invoices_get_parity["tool_name"] == "ui_invoices_get_open"
+    assert invoices_get_parity["parity_status"] == "detail_open_only"
+    assert invoices_get_parity["live_tested"] is True
+    assert invoices_get_parity["vision_verified"] is True
+    assert "research169" in invoices_get_parity["evidence"]
+    assert "api.invoices.get" in invoices_get_parity["evidence"]
+
+    invoices_update_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.invoices.update"
+    )
+    assert invoices_update_parity["api_row_id"] == "api.invoices.update"
+    assert invoices_update_parity["tool_name"] == "ui_invoices_update_preview"
+
+    assert invoices_update_parity["parity_status"] == "preview_execute"
+    assert invoices_update_parity["live_tested"] is True
+    assert invoices_update_parity["vision_verified"] is True
+    assert "research174" in invoices_update_parity["evidence"]
+    assert "api.invoices.update" in invoices_update_parity["evidence"]
+
+    invoices_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.invoices.delete"
+    )
+    assert invoices_delete_parity["api_row_id"] == "api.invoices.delete"
+    assert invoices_delete_parity["tool_name"] == "ui_invoices_delete_preview"
+    assert invoices_delete_parity["parity_status"] == "preview_execute"
+    assert invoices_delete_parity["live_tested"] is True
+    assert invoices_delete_parity["vision_verified"] is True
+    assert "research175" in invoices_delete_parity["evidence"]
+    assert "api.invoices.delete" in invoices_delete_parity["evidence"]
+
+    bills_get_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.get")
+    assert bills_get_parity["api_row_id"] == "api.bills.get"
+    assert bills_get_parity["tool_name"] == "ui_bills_get_open"
+    assert bills_get_parity["parity_status"] == "detail_open_only"
+    assert bills_get_parity["live_tested"] is True
+    assert bills_get_parity["vision_verified"] is True
+    assert "research170" in bills_get_parity["evidence"]
+    assert "api.bills.get" in bills_get_parity["evidence"]
+
+    bills_update_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.update")
+    assert bills_update_parity["api_row_id"] == "api.bills.update"
+    assert bills_update_parity["tool_name"] == "ui_bills_update_preview"
+    assert bills_update_parity["parity_status"] == "preview_execute"
+    assert bills_update_parity["live_tested"] is True
+    assert bills_update_parity["vision_verified"] is True
+    assert "research172" in bills_update_parity["evidence"]
+    assert "api.bills.update" in bills_update_parity["evidence"]
+
+    bills_delete_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.delete")
+    assert bills_delete_parity["api_row_id"] == "api.bills.delete"
+    assert bills_delete_parity["tool_name"] == "ui_bills_delete_preview"
+    assert bills_delete_parity["parity_status"] == "preview_execute"
+    assert bills_delete_parity["live_tested"] is True
+    assert bills_delete_parity["vision_verified"] is True
+    assert "research173" in bills_delete_parity["evidence"]
+    assert "api.bills.delete" in bills_delete_parity["evidence"]
+
+    bills_create_parity = next(row for row in qualified if row["id"] == "ui.parity.bills.create")
+    assert bills_create_parity["api_row_id"] == "api.bills.create"
+    assert bills_create_parity["tool_name"] == "ui_bills_create_preview"
+    assert bills_create_parity["parity_status"] == "preview_execute"
+    assert "api.bills.create" in bills_create_parity["evidence"]
+    assert "research154" in bills_create_parity["evidence"]
+    bills_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.bills_create"
+    )
+    assert bills_create_discovery["tool_name"] == "ui_bills_create_open"
+    assert bills_create_discovery["api_row_id"] is None
+
+    contacts_create_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.contacts.create"
+    )
+    assert contacts_create_parity["api_row_id"] == "api.contacts.create"
+    assert contacts_create_parity["tool_name"] == "ui_clients_create_preview"
+    assert contacts_create_parity["parity_status"] == "preview_execute"
+    assert "api.contacts.create" in contacts_create_parity["evidence"]
+    assert "research160" in contacts_create_parity["evidence"]
+    contacts_get_parity = next(row for row in qualified if row["id"] == "ui.parity.contacts.get")
+    assert contacts_get_parity["api_row_id"] == "api.contacts.get"
+    assert contacts_get_parity["tool_name"] == "ui_clients_get_open"
+    assert contacts_get_parity["parity_status"] == "detail_open_only"
+    assert "api.contacts.get" in contacts_get_parity["evidence"]
+    assert "research164" in contacts_get_parity["evidence"]
+    contacts_update_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.contacts.update"
+    )
+    assert contacts_update_parity["api_row_id"] == "api.contacts.update"
+    assert contacts_update_parity["tool_name"] == "ui_clients_update_preview"
+    assert contacts_update_parity["parity_status"] == "preview_execute"
+    assert "api.contacts.update" in contacts_update_parity["evidence"]
+    assert "research166" in contacts_update_parity["evidence"]
+    contacts_delete_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.contacts.delete"
+    )
+    assert contacts_delete_parity["api_row_id"] == "api.contacts.delete"
+    assert contacts_delete_parity["tool_name"] == "ui_clients_delete_preview"
+    assert contacts_delete_parity["parity_status"] == "preview_execute"
+    assert "api.contacts.delete" in contacts_delete_parity["evidence"]
+    assert "research167" in contacts_delete_parity["evidence"]
+    clients_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.clients_create"
+    )
+    assert clients_create_discovery["tool_name"] == "ui_clients_create_open"
+    assert clients_create_discovery["api_row_id"] is None
+    suppliers_create_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.suppliers_create"
+    )
+    assert suppliers_create_discovery["tool_name"] == "ui_suppliers_create_open"
+    assert suppliers_create_discovery["api_row_id"] is None
+    assert suppliers_create_discovery.get("parity_status") == "form_open_only"
+    # contacts.create remains on clients create only (no suppliers re-count)
+    assert contacts_create_parity["tool_name"] == "ui_clients_create_preview"
+    files_upload_special_parity = next(
+        row for row in qualified if row["id"] == "ui.parity.special.files_upload"
+    )
+    assert files_upload_special_parity["api_row_id"] == "api.special.files_upload"
+    assert files_upload_special_parity["tool_name"] == "ui_uploads_list"
+    assert files_upload_special_parity["parity_status"] == "list_shell_open_only"
+    assert "api.special.files_upload" in files_upload_special_parity["evidence"]
+    assert "research155" in files_upload_special_parity["evidence"]
+    assert "file_input_present" in files_upload_special_parity["response_fields"]
+    uploads_discovery = next(row for row in qualified if row["id"] == "ui.discovery.uploads")
+    assert uploads_discovery["tool_name"] == "ui_uploads_list"
+    assert uploads_discovery["api_row_id"] is None
+    assert "file_input_present" in uploads_discovery["response_fields"]
+    # research178: special.invoice_email NA in geo_na (not remaining red)
+    invoice_email_na = next(
+        row for row in geo_na_rows if row["id"] == "ui.parity.special.invoice_email"
+    )
+    assert invoice_email_na["parity_status"] == "not_applicable"
+    assert invoice_email_na["live_tested"] is True
+    assert "research178" in (invoice_email_na.get("evidence") or "")
+    for na_bulk_id in (
+        # empty-list dual-NA research190 (no longer remaining red)
+        "ui.parity.invoices.bulk_save",
+        "ui.parity.invoices.bulk_delete",
+        "ui.parity.bills.bulk_save",
+        "ui.parity.bills.bulk_delete",
+    ):
+        na_bulk = next(row for row in workflows if row["id"] == na_bulk_id)
+        assert na_bulk["parity_status"] == "not_applicable"
+        assert na_bulk["live_tested"] is True
+        assert na_bulk["qualification"]["evidence_code"] == (
+            generator.UI_BULK_CHROME_ABSENT_DUAL_EMPTY_LIST_EVIDENCE_CODE
+        )
+        assert na_bulk not in remaining
+    company_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.settings_company"
+    )
+    assert company_discovery["api_row_id"] is None
+    settings_user_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.settings_user"
+    )
+    assert settings_user_discovery["api_row_id"] is None
+    settings_user_organizations_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.settings_user_organizations"
+    )
+    assert settings_user_organizations_discovery["api_row_id"] is None
+    assert settings_user_organizations_discovery["tool_name"] == (
+        "ui_settings_user_organizations_open"
+    )
+    accounting_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.settings_accounting"
+    )
+    assert accounting_discovery["api_row_id"] is None
+    transactions_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.transactions"
+    )
+    assert transactions_discovery["api_row_id"] is None
+    purchases_discovery = next(row for row in qualified if row["id"] == "ui.discovery.purchases")
+    assert purchases_discovery["api_row_id"] is None
+    assert (
+        "purchases maps to bills route" in purchases_discovery["evidence"]
+        or "bills" in purchases_discovery["method_or_route"]
+    )
+    debtor_discovery = next(row for row in qualified if row["id"] == "ui.discovery.debtor_balances")
+    assert debtor_discovery["api_row_id"] is None
+    assert "debtorbalance" in debtor_discovery["method_or_route"]
+    assert (
+        "no invent api_debtor" in debtor_discovery["evidence"]
+        or "api_debtor_balances" in debtor_discovery["evidence"]
+    )
+    creditor_discovery = next(
+        row for row in qualified if row["id"] == "ui.discovery.creditor_balances"
+    )
+    assert creditor_discovery["api_row_id"] is None
+    assert "creditorbalance" in creditor_discovery["method_or_route"]
+    assert (
+        "no invent api_creditor" in creditor_discovery["evidence"]
+        or "api_creditor_balances" in creditor_discovery["evidence"]
+    )
+    uploads_discovery = next(row for row in qualified if row["id"] == "ui.discovery.uploads")
+    assert uploads_discovery["api_row_id"] is None
+    assert "uploads" in uploads_discovery["method_or_route"]
+    assert (
+        "no invent api_uploads" in uploads_discovery["evidence"]
+        or "api_uploads" in uploads_discovery["evidence"]
+        or "api_bilag" in uploads_discovery["evidence"]
+    )
+    assert "Upload filer" in uploads_discovery["evidence"] or "upload_action" in str(
+        uploads_discovery["response_fields"]
+    )
+    bank_discovery = next(row for row in qualified if row["id"] == "ui.discovery.bank_accounts")
+    assert bank_discovery["api_row_id"] is None
+    assert "no bankAccounts API resource" in bank_discovery["evidence"]
+    assert "api_bank_accounts" in bank_discovery["evidence"]
+    assert checker.raw_evidence_errors(ui_manifest) == []
+    assert status["source_counts"]["ui_api_parity"] == 305
+    assert status["complete"] is True
+    assert '"bankLineMatche"' not in json.dumps(ui_manifest)
+
+    by_host = {rule["host"]: rule for rule in browser_egress["hosts"]}
+    assert browser_egress["default_action"] == "deny"
+    assert by_host["mit.billy.dk"]["browser_action"] == "allow"
+    assert by_host["download.billy.dk"]["owner"] == "future_typed_download"
+    assert by_host["api.billysbilling.com"]["api_client_action"] == "exclusive_allow"
+    assert by_host["api.billysbilling.com"]["browser_action"] == "path_allow"
+    assert any(
+        rule.get("path") == "/v2/user/login" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/contacts" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/contacts" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        "PUT" in rule.get("methods", []) and str(rule.get("path") or "").startswith("/v2/contacts")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PATCH" in rule.get("methods", [])
+        and str(rule.get("path") or "").startswith("/v2/contacts")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/countries" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/products" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/products" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/accounts" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/salesTaxRulesets" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/invoices" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/bills" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    # research169/170: invoices GET/POST/DELETE; bills GET/POST/DELETE + taxRates GET
+    assert any(
+        rule.get("path") == "/v2/invoices" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/invoices" and "DELETE" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        "PUT" in rule.get("methods", []) and str(rule.get("path") or "").startswith("/v2/invoices/")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PUT" in rule.get("methods", []) and rule.get("path") == "/v2/invoices"
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PATCH" in rule.get("methods", [])
+        and str(rule.get("path") or "").startswith("/v2/invoices")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/invoiceLines" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        method in rule.get("methods", [])
+        and str(rule.get("path") or "").startswith("/v2/invoiceLines")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+        for method in ("POST", "PUT", "PATCH", "DELETE")
+    )
+    assert any(
+        rule.get("path") == "/v2/bills" and "POST" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/bills" and "DELETE" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        "PUT" in rule.get("methods", []) and str(rule.get("path") or "").startswith("/v2/bills/")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PUT" in rule.get("methods", []) and rule.get("path") == "/v2/bills"
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert not any(
+        "PATCH" in rule.get("methods", []) and str(rule.get("path") or "").startswith("/v2/bills")
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert any(
+        rule.get("path") == "/v2/taxRates" and "GET" in rule.get("methods", [])
+        for rule in by_host["api.billysbilling.com"]["browser_path_allows"]
+    )
+    assert by_host["api.billy.dk"]["browser_action"] == "deny"
+
+
+def test_checker_rejects_missing_fields_false_completeness_green_bulk_and_frames() -> None:
+    """The contract checker permits red rows but rejects unsupported green claims."""
+
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+
+    missing_field = copy.deepcopy(api_manifest)
+    del missing_field["operations"][0]["evidence"]
+    assert any(
+        "missing required fields evidence" in error
+        for error in validation_errors(missing_field, ui_manifest, browser_egress, status, report)
+    )
+
+    false_complete = copy.deepcopy(status)
+    false_complete["complete"] = True
+    broken_api = copy.deepcopy(api_manifest)
+    implemented = next(row for row in broken_api["operations"] if row.get("implemented") is True)
+    implemented["implemented"] = False
+    implemented["contract_tested"] = False
+    assert any(
+        "falsely claims complete" in error
+        for error in validation_errors(
+            broken_api,
+            ui_manifest,
+            browser_egress,
+            false_complete,
+            report,
+            reject_false_completeness=True,
+        )
+    )
+
+    green_bulk = copy.deepcopy(api_manifest)
+    bulk = next(row for row in green_bulk["operations"] if row["source_kind"] == "ambiguous_bulk")
+    bulk["implemented"] = True
+    assert any(
+        "ambiguous bulk row must stay red" in error
+        for error in validation_errors(green_bulk, ui_manifest, browser_egress, status, report)
+    )
+
+    raw_frame = copy.deepcopy(ui_manifest)
+    raw_frame["workflows"][0]["raw_frame_path"] = "rendered-frames/route.png"
+    assert any(
+        "raw browser evidence" in error
+        for error in validation_errors(api_manifest, raw_frame, browser_egress, status, report)
+    )
+
+    false_report = report.replace("Complete: `true`", "Complete: `false`")
+    assert any(
+        "coverage/report.md is stale" in error
+        for error in validation_errors(
+            api_manifest,
+            ui_manifest,
+            browser_egress,
+            status,
+            false_report,
+            reject_false_completeness=True,
+        )
+    )
+
+
+def test_checker_cli_allows_require_complete_under_owner_scope() -> None:
+    """Root lint and the full gate both pass under owner-scoped bulk and readonly-map skips."""
+
+    checker_path = SCRIPTS / "check_coverage.py"
+    lint_result = subprocess.run(
+        [sys.executable, str(checker_path), "--reject-false-completeness"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert lint_result.returncode == 0, lint_result.stdout + lint_result.stderr
+
+    complete_result = subprocess.run(
+        [sys.executable, str(checker_path), "--require-complete"],
+        cwd=ROOT,
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+    assert complete_result.returncode == 0, complete_result.stdout + complete_result.stderr
+    assert "Coverage inventory checks passed" in complete_result.stdout
+
+
+def test_checker_rejects_imperatively_registered_domain_tool_without_coverage_row(
+    tmp_path: Path,
+) -> None:
+    """AST scanning catches the FastMCP registration form used by the real server."""
+
+    source = tmp_path / "src" / "billy_mcp" / "server.py"
+    source.parent.mkdir(parents=True)
+    source.write_text(
+        'mcp.tool(name="api_uninventoried_resource")(handler)\n',
+        encoding="utf-8",
+    )
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+
+    assert any(
+        "registered domain tool lacks a coverage row: api_uninventoried_resource" in error
+        for error in validation_errors(
+            api_manifest, ui_manifest, browser_egress, status, report, root=tmp_path
+        )
+    )
+
+
+def test_checker_allows_exact_execute_twin_but_rejects_unpaired_execute_tool(
+    tmp_path: Path,
+) -> None:
+    """Execute companions are derived from preview inventory rows, never added as rows."""
+
+    source = tmp_path / "src" / "billy_mcp" / "server.py"
+    source.parent.mkdir(parents=True)
+    api_manifest, ui_manifest, browser_egress, status, report = documents()
+
+    source.write_text(
+        'mcp.tool(name="api_contacts_create_execute")(handler)\n',
+        encoding="utf-8",
+    )
+    assert (
+        validation_errors(api_manifest, ui_manifest, browser_egress, status, report, root=tmp_path)
+        == []
+    )
+
+    source.write_text(
+        'mcp.tool(name="api_contacts_create_execute_extra")(handler)\n',
+        encoding="utf-8",
+    )
+    assert any(
+        "registered domain tool lacks a coverage row: api_contacts_create_execute_extra" in error
+        for error in validation_errors(
+            api_manifest, ui_manifest, browser_egress, status, report, root=tmp_path
+        )
+    )
+
+
+def test_report_is_deterministic_and_json_yaml_has_no_offset_contract() -> None:
+    """Generation is reproducible and the YAML-subset source never exposes offset paging."""
+
+    _, _, _, status, report = documents()
+
+    assert report == generator.render_report(status)
+    api_text = (ROOT / "coverage" / "api_v2_manifest.yaml").read_text(encoding="utf-8")
+    assert "offset" not in json.dumps(json.loads(api_text)).lower()

@@ -2,6 +2,8 @@
 
 Date: 2026-07-28
 
+Scope revision: 2026-08-21
+
 Repository: `sigvardt/billy-mcp`
 
 Status: Approved design, implementation not started
@@ -369,7 +371,7 @@ Initial documentation research found:
 
 These counts are a starting point, not a completeness claim.
 
-The 92 ambiguous bulk operations must be clarified through updated official documentation, Billy support, or controlled testing against the dedicated non-production organisation. They remain red until their complete contract is known, implemented, and tested.
+The 92 bulk save/delete mentions have no usable request contract in Billy's official documentation. The owner stopped this research on 2026-08-21 before establishing that separate bulk tools are needed. These rows remain visible as `out_of_scope_by_user` with `scope_code=BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP`. They are not implemented, tested, or counted as supported operations, and they do not block the current completeness claim. Reconsider them only if Billy publishes a complete contract or the owner explicitly asks for separate bulk tools.
 
 ### 9.3 API implementation order
 
@@ -377,10 +379,10 @@ The 92 ambiguous bulk operations must be clarified through updated official docu
 2. Implement typed read operations.
 3. Implement pagination, filtering, response mapping, and errors.
 4. Implement writes through preview and execute.
-5. Implement bulk and special operations only after their contracts are clear.
+5. Do not implement the owner-skipped bulk mentions. Reconsider them only after a complete official contract and a new owner decision.
 6. Run contract and live non-production tests.
 
-No documentation ambiguity may be waived into a green completeness status.
+No documentation ambiguity may be waived into a green completeness status. Owner-skipped rows remain visible and unimplemented; they are excluded from the applicable operation count rather than marked green.
 
 ## 10. Interface lane
 
@@ -569,7 +571,7 @@ An interface row requires those four statuses plus:
 
 `vision_verified` is not applicable to API rows. It is mandatory for every interface parity and UI-only row.
 
-An operation that cannot yet be safely tested remains red. `not_applicable` is allowed only for a UI parity row when evidence shows Billy exposes no equivalent UI workflow. It is not allowed for an official API operation.
+An applicable operation that cannot yet be safely tested remains red. `not_applicable` is allowed only for a UI parity row when evidence shows Billy exposes no equivalent UI workflow. It is not allowed for an official API operation. The 92 undocumented bulk mentions use the separate owner-scope state `out_of_scope_by_user`; this does not claim that a usable operation exists or works.
 
 The project may claim feature completeness only when:
 
@@ -753,7 +755,7 @@ The repository excludes:
 
 1. Implement every clear read operation.
 2. Implement typed response mapping, filters, pagination, and errors.
-3. Clarify every ambiguous bulk and special operation.
+3. Keep the 92 undocumented bulk mentions visible as owner-skipped. Do not implement or test them without a new owner decision.
 4. Implement every write through preview and execute.
 5. Run unit, contract, and dedicated-organisation tests.
 6. Keep ambiguous or untested rows red.
@@ -813,13 +815,13 @@ The project is complete only when all of these are true:
 14. Test data is removed or restored, cleanup failures are visible, and ephemeral rendered frames are purged after review.
 15. Production runtime persists no screenshot, rendered frame, HAR, or browser trace.
 16. The public repository contains no credential or private company artifact.
-17. No unresolved documentation gap is counted as complete.
+17. No unresolved documentation gap for an applicable operation is counted as complete. The 92 owner-skipped bulk mentions remain visible outside the applicable count.
 
 ## 20. Known gaps at design approval
 
 | Gap | Required resolution |
 | --- | --- |
-| 92 ambiguous bulk save/delete operation mentions | Obtain the complete official contract or verify with Billy in the dedicated organisation |
+| 92 undocumented bulk save/delete mentions | Owner-skipped on 2026-08-21 before separate tools were shown to be needed. Keep visible and unimplemented; reconsider only after a complete official contract or a new owner decision. |
 | No documented webhook found | Continue official and interface discovery; do not invent a tool |
 | Field-level write forms | Map and test every field and validation |
 | Authentication transitions | Test headless login, persisted session, credential and TOTP resolution, expiry, reauthentication, challenge errors, switching, and logout |
@@ -830,7 +832,7 @@ The project is complete only when all of these are true:
 | Irreversible actions | Obtain a safe supported test path |
 | Vision evidence pipeline | Implement rendered-frame capture, vision review, evidence indexing, and purge verification |
 
-Every unresolved gap remains visible and blocks the relevant completeness claim.
+Every unresolved applicable gap remains visible and blocks the relevant completeness claim. An owner-skipped row stays visible but does not block the current scope.
 
 ## 21. Approved decisions
 
@@ -853,6 +855,7 @@ Every unresolved gap remains visible and blocks the relevant completeness claim.
 17. Every UI workflow requires DOM assertions, independent read-back, and agent vision; no UI row is green without `vision_verified`.
 18. UI write tests capture initial, completed-form, submitted-result, and cleaned-up frames.
 19. Non-production frames are ephemeral and purged; production runtime persists no visual or browser trace artifact.
+20. The 92 undocumented bulk save/delete mentions are owner-skipped. They are not supported operations, are not marked green, and do not block current completion.
 
 ## 22. Document control
 

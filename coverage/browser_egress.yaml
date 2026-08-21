@@ -1,0 +1,375 @@
+{
+  "default_action": "deny",
+  "hosts": [
+    {
+      "api_client_action": "deny",
+      "browser_action": "allow",
+      "condition": "typed UI/auth workflow",
+      "evidence": "Frozen brief \u00a710.3: official app host",
+      "host": "mit.billy.dk",
+      "owner": "ui_auth",
+      "purpose": "Billy web interface and headless authentication only",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_products_list.py",
+        "tests/live/test_ui_clients_list.py",
+        "tests/live/test_ui_bank_accounts_list.py",
+        "tests/live/test_ui_quotes_list.py",
+        "tests/live/test_ui_recurring_invoices_list.py",
+        "tests/live/test_ui_products_import.py",
+        "tests/live/test_ui_suppliers_list.py",
+        "tests/live/test_ui_bills_list.py",
+        "tests/live/test_ui_debtor_balances_list.py",
+        "tests/live/test_ui_creditor_balances_list.py",
+        "tests/live/test_ui_uploads_list.py",
+        "tests/live/test_ui_receipt_inbox_list.py",
+        "tests/live/test_ui_bank_reconciliation_open.py",
+        "tests/live/test_ui_financing_open.py",
+        "tests/live/test_ui_daybooks_open.py",
+        "tests/live/test_ui_daybooks_get_open.py",
+        "tests/live/test_ui_daybooks_delete_open.py",
+        "tests/live/test_ui_daybook_transactions_create_open.py",
+        "tests/live/test_ui_transactions_create_open.py",
+        "tests/live/test_ui_transactions_list.py",
+        "tests/live/test_ui_reports_open.py",
+        "tests/live/test_ui_vat_declarations_list.py",
+        "tests/live/test_ui_exports_open.py",
+        "tests/live/test_ui_saft_exports_open.py",
+        "tests/live/test_ui_addons_open.py",
+        "tests/live/test_ui_integrations_open.py",
+        "tests/live/test_ui_inventory_open.py",
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/live/test_ui_settings_accounting_open.py",
+        "tests/live/test_ui_settings_invoicing_open.py",
+        "tests/live/test_ui_settings_user_open.py",
+        "tests/live/test_ui_settings_vat_open.py",
+        "tests/live/test_ui_settings_users_open.py",
+        "tests/live/test_ui_settings_access_token_open.py",
+        "tests/live/test_ui_settings_beta_open.py",
+        "tests/live/test_ui_settings_subscription_open.py"
+      ]
+    },
+    {
+      "api_client_action": "deny",
+      "browser_action": "allow",
+      "condition": "future verified typed download workflow; not general navigation",
+      "evidence": "Frozen brief \u00a710.3: files downloadUrl host",
+      "host": "download.billy.dk",
+      "owner": "future_typed_download",
+      "purpose": "Typed Billy file download handling only",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    },
+    {
+      "api_client_action": "exclusive_allow",
+      "browser_action": "path_allow",
+      "browser_path_allows": [
+        {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/user/login"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/auth/"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/user"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/user/bootstrap"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "GET"
+          ],
+          "path": "/oauth2/tokeninfo"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "GET"
+          ],
+          "path": "/user/organizations"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "GET"
+          ],
+          "path": "/user/umbrellas"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "PUT"
+          ],
+          "path": "/v2/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/organizations/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/e-invoicing/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/contacts"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/contacts"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/contacts"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "PUT"
+          ],
+          "path": "/v2/contacts/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/countries"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/products"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/products"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/products"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/accounts"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/salesTaxRulesets"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/invoices"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/invoices"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/invoices"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "PUT"
+          ],
+          "path": "/v2/invoices/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/invoiceLines"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/bills"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/bills"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/bills"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "PUT"
+          ],
+          "path": "/v2/bills/"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/taxRates"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "GET"
+          ],
+          "path": "/v2/daybooks"
+        },
+        {
+          "match": "exact",
+          "methods": [
+            "POST"
+          ],
+          "path": "/v2/daybooks"
+        },
+        {
+          "match": "prefix",
+          "methods": [
+            "DELETE"
+          ],
+          "path": "/v2/daybooks"
+        }
+      ],
+      "condition": "browser auth/bootstrap paths plus scoped UI contacts, products, invoices, and bills data-planes (research164/165/168/169/170); never full API browse",
+      "evidence": "research100 headless credentialed discovery: POST /v2/user/login then bootstrap GETs reach /:org_slug/dashboard; research164 dual XHR: GET/POST/DELETE /v2/contacts and GET /v2/countries for clients; F3F318A2 PUT prefix /v2/contacts/ for SPA contact update only (no collection PUT, no PATCH); research165 dual XHR: GET/POST/DELETE /v2/products plus GET /v2/accounts and GET /v2/salesTaxRulesets for products list/detail and disposable seed (was ERR_BLOCKED_BY_CLIENT under contacts-only path_allow); research168 dual XHR: GET /v2/invoices and GET /v2/bills (prefix covers /summary); research169 dual: exact POST /v2/invoices and prefix DELETE /v2/invoices for disposable draft seed/cleanup and invoice detail get-open at /:org_slug/invoices/:id/edit; research170 dual: exact POST /v2/bills, prefix DELETE /v2/bills, and GET /v2/taxRates for disposable draft bill seed and bill detail get-open at /:org_slug/bills/:id (emails still denied); 31F6E753 PUT prefix /v2/bills/ for SPA draft bill update only (no collection PUT, no PATCH); 32662804 PUT prefix /v2/invoices/ for SPA draft invoice update only (no collection PUT, no PATCH, no emails); leftover edit after fresh page still exact_count=0 input_count=8 product_text_count=0 while GET /v2/invoiceLines was denied, so GET prefix /v2/invoiceLines is allowed for line-editor render only (no POST/PUT/PATCH/DELETE); D859572B forbids PUT /v2/invoiceLines/ unless a captured blocked XHR names that path; research179 dual: GET/POST/DELETE /v2/daybooks for daybook get-open SPA list and disposable seed/cleanup",
+      "host": "api.billysbilling.com",
+      "owner": "ui_auth",
+      "purpose": "Path-scoped browser XHR for headless login, shell settle, contacts UI, products UI, invoices list/get seed+cleanup, and bills list/get seed+cleanup data-plane",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py",
+        "tests/unit/test_browser.py",
+        "tests/live/test_ui_invoices_list.py",
+        "tests/live/test_ui_products_list.py",
+        "tests/live/test_ui_clients_list.py",
+        "tests/live/test_ui_clients_get_open.py",
+        "tests/live/test_ui_clients_create_open.py",
+        "tests/live/test_ui_bank_accounts_list.py",
+        "tests/live/test_ui_quotes_list.py",
+        "tests/live/test_ui_recurring_invoices_list.py",
+        "tests/live/test_ui_products_import.py",
+        "tests/live/test_ui_suppliers_list.py",
+        "tests/live/test_ui_bills_list.py",
+        "tests/live/test_ui_bills_get_open.py",
+        "tests/live/test_ui_bills_update_open.py",
+        "tests/live/test_ui_debtor_balances_list.py",
+        "tests/live/test_ui_creditor_balances_list.py",
+        "tests/live/test_ui_uploads_list.py",
+        "tests/live/test_ui_receipt_inbox_list.py",
+        "tests/live/test_ui_bank_reconciliation_open.py",
+        "tests/live/test_ui_financing_open.py",
+        "tests/live/test_ui_daybooks_open.py",
+        "tests/live/test_ui_daybooks_get_open.py",
+        "tests/live/test_ui_daybooks_delete_open.py",
+        "tests/live/test_ui_daybook_transactions_create_open.py",
+        "tests/live/test_ui_transactions_create_open.py",
+        "tests/live/test_ui_transactions_list.py",
+        "tests/live/test_ui_reports_open.py",
+        "tests/live/test_ui_vat_declarations_list.py",
+        "tests/live/test_ui_exports_open.py",
+        "tests/live/test_ui_saft_exports_open.py",
+        "tests/live/test_ui_addons_open.py",
+        "tests/live/test_ui_integrations_open.py",
+        "tests/live/test_ui_inventory_open.py",
+        "tests/live/test_ui_settings_company_open.py",
+        "tests/live/test_ui_settings_accounting_open.py",
+        "tests/live/test_ui_settings_invoicing_open.py",
+        "tests/live/test_ui_settings_user_open.py",
+        "tests/live/test_ui_settings_vat_open.py",
+        "tests/live/test_ui_settings_users_open.py",
+        "tests/live/test_ui_settings_access_token_open.py",
+        "tests/live/test_ui_settings_beta_open.py",
+        "tests/live/test_ui_settings_subscription_open.py"
+      ]
+    },
+    {
+      "api_client_action": "deny",
+      "browser_action": "deny",
+      "condition": "never permitted",
+      "evidence": "Frozen brief \u00a72.3 and \u00a710.3 alias-host denial",
+      "host": "api.billy.dk",
+      "owner": "none",
+      "purpose": "Denied API alias",
+      "test_references": [
+        "tests/coverage/test_coverage_inventory.py"
+      ]
+    }
+  ],
+  "manifest": "billy_browser_egress_phase_0",
+  "schema_version": 1
+}

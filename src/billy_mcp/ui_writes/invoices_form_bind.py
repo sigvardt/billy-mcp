@@ -1,0 +1,1051 @@
+"""Kunde bind and line fill for draft invoice writes."""
+
+from __future__ import annotations
+
+import asyncio
+from pathlib import Path
+
+from billy_mcp.models import StableErrorCode, ToolError
+from billy_mcp.ui_writes.invoices_form_observe import (
+    ALT_LIST_SELECTORS,
+    KundeTraceSink,
+    attach_kunde_event,
+    attach_kunde_trace,
+    dump_kunde_chrome,
+    dump_kunde_lookup,
+    dump_kunde_opener,
+    dump_kunde_phases,
+    dump_kunde_trace,
+    observe_kunde,
+    observe_kunde_active_element,
+    observe_kunde_opener,
+    portal_items,
+    read_kunde_event_counts,
+    watch_contact_lookups,
+)
+from billy_mcp.ui_writes.invoices_form_page import Locator, Page
+from billy_mcp.ui_writes.invoices_kunde import (
+    KUNDE_INPUT_SELECTORS,
+    KUNDE_LABEL,
+    chevron_hit_missing_keys,
+    chevron_offset_from_box,
+    kunde_event_missing_keys,
+    kunde_trace_missing_keys,
+    kunde_trace_names_next_action,
+    pick_kunde_existing_option_index,
+    portal_create_footer_label,
+    right_edge_click_offset,
+    widget_named_action,
+)
+from billy_mcp.ui_writes.invoices_kunde_div import (
+    div_ownership_missing_keys,
+    ownership_click_point,
+)
+from billy_mcp.ui_writes.invoices_kunde_events import (
+    as_str_object_map,
+    event_names_change_gap,
+    mapping_int,
+    pageerror_unrelated_at_rest,
+    requests_have_contacts,
+)
+
+LINE_SELECTORS = (
+    "textarea[name='invoiceLines.0.description']",
+    "input[name='invoiceLines.0.description']",
+    "textarea[name='description']",
+    "input[name='description']",
+)
+QUANTITY_LABELS = ("Antal", "Quantity")
+UNIT_PRICE_SELECTORS = ("input[name='unitPrice'][placeholder='Enhedspris']",)
+QUANTITY_SELECTORS = (
+    "input[name='invoiceLines.0.quantity']",
+    "input[name='quantity']",
+)
+
+
+async def capture_kunde_chevron_hit_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only A3AB03C3 recapture. One right-edge click only if the hit is the INPUT."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    offset = right_edge_click_offset(opener)
+    clicked = False
+    after_click: dict[str, object] | None = None
+    if offset is None:
+        return {
+            "opener": opener,
+            "clicked": False,
+            "after_click": None,
+            "option_visible": False,
+            "chevron_missing_keys": chevron_hit_missing_keys(opener),
+            "right_edge_same_input": opener.get("right_edge_same_input"),
+        }
+    type_target = await _click_field_once(field, offset=offset)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    clicked = True
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    items = await _wait_options(page, unique_tag, wrapper)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_click)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    if not option_visible:
+        dump_kunde_lookup(len(lookups))
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde existing option is not visible.",
+            "opener": opener,
+            "clicked": clicked,
+            "after_click": after_click,
+            "option_visible": False,
+            "contact_get_count": len(lookups),
+            "chevron_missing_keys": chevron_hit_missing_keys(after_click),
+        }
+    return {
+        "opener": opener,
+        "clicked": clicked,
+        "after_click": after_click,
+        "option_visible": True,
+        "contact_get_count": len(lookups),
+        "chevron_missing_keys": chevron_hit_missing_keys(after_click),
+    }
+
+
+async def capture_kunde_div_ownership_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only 9F777B8F recapture. One position click only if DIV ownership is proved."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    point = ownership_click_point(opener)
+    if point is None:
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde DIV ownership is not proved.",
+            "opener": opener,
+            "clicked": False,
+            "after_click": None,
+            "option_visible": False,
+            "div_ownership_missing_keys": div_ownership_missing_keys(opener),
+            "hit_shares_smallest_wrapper": opener.get("hit_shares_smallest_wrapper"),
+        }
+    await page.mouse.click(point["x"], point["y"])
+    await asyncio.sleep(0.3)
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    items = await _wait_options(page, unique_tag, wrapper)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_click)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    if not option_visible:
+        dump_kunde_lookup(len(lookups))
+        return {
+            "code": "UI_CHANGED",
+            "message": "Billy Kunde existing option is not visible.",
+            "opener": opener,
+            "clicked": True,
+            "after_click": after_click,
+            "option_visible": False,
+            "contact_get_count": len(lookups),
+            "div_ownership_missing_keys": div_ownership_missing_keys(after_click),
+        }
+    return {
+        "opener": opener,
+        "clicked": True,
+        "after_click": after_click,
+        "option_visible": True,
+        "contact_get_count": len(lookups),
+        "div_ownership_missing_keys": div_ownership_missing_keys(after_click),
+    }
+
+
+async def capture_kunde_tagged_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+    allow_change_dispatch: bool = True,
+) -> dict[str, object]:
+    """Instrumented 8EFD0EAD recapture. Caller attaches watch_kunde_trace first."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    wrapper = kunde_wrapper(page)
+    rest = await observe_kunde(page, field, unique_tag, phase="at_rest", wrapper=wrapper)
+    rest_portal_raw = rest.get("portal_count")
+    rest_portal = rest_portal_raw if isinstance(rest_portal_raw, int) else 0
+    rest["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        rest,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    attach_kunde_event(
+        rest,
+        sink.snapshot_phase("at_rest", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
+    type_target = await _click_field_once(field)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    after_click["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        after_click,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    attach_kunde_event(
+        after_click,
+        sink.snapshot_phase("after_click", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
+    await _type_kunde(type_target, unique_tag)
+    after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
+    after_type["active_element"] = await observe_kunde_active_element(page)
+    attach_kunde_trace(
+        after_type,
+        sink,
+        listener_attached_before_form=listener_attached_before_form,
+        rest_portal_count=rest_portal,
+    )
+    attach_kunde_event(
+        after_type,
+        sink.snapshot_phase("after_type", await read_kunde_event_counts(page)),
+        pageerror_unrelated_at_rest=False,
+    )
+    unrelated = pageerror_unrelated_at_rest(
+        rest_pageerror=mapping_int(rest.get("console_delta"), "pageerror"),
+        click_delta=mapping_int(after_click.get("console_delta"), "pageerror"),
+        type_delta=mapping_int(after_type.get("console_delta"), "pageerror"),
+    )
+    for phase in (rest, after_click, after_type):
+        attach_kunde_event(
+            phase,
+            {
+                "event_counts": phase.get("event_counts"),
+                "console_delta": phase.get("console_delta"),
+                "errors": phase.get("errors"),
+            },
+            pageerror_unrelated_at_rest=unrelated,
+        )
+    dump_kunde_phases(after_click, after_type)
+    type_counts = as_str_object_map(after_type.get("event_counts"))
+    has_contacts = requests_have_contacts(after_type.get("requests"))
+    dispatched_change = False
+    if (
+        allow_change_dispatch
+        and type_counts is not None
+        and event_names_change_gap(type_counts, contacts=has_contacts)
+    ):
+        await type_target.dispatch_event("change")
+        dispatched_change = True
+        await asyncio.sleep(0.5)
+    named = kunde_trace_names_next_action(after_click) or kunde_trace_names_next_action(after_type)
+    if dispatched_change and any(
+        row.get("path_class") == "contacts" for row in sink.snapshot_requests()
+    ):
+        named = True
+    items = await _wait_options(page, unique_tag, wrapper)
+    option_visible = any(
+        item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+        for item in items
+    )
+    clicked_option = False
+    if named and option_visible and pick_kunde_existing_option_index(items) is not None:
+        clicked_option = await _click_scoped_option(page, unique_tag)
+    result: dict[str, object] = {
+        "opener": opener,
+        "at_rest": rest,
+        "after_click": after_click,
+        "after_type": after_type,
+        "clicked": True,
+        "typed": True,
+        "listener_attached_before_form": listener_attached_before_form,
+        "named_next_action": named,
+        "option_visible": option_visible,
+        "clicked_option": clicked_option,
+        "kunde_trace_missing_keys": {
+            "at_rest": kunde_trace_missing_keys(rest),
+            "after_click": kunde_trace_missing_keys(after_click),
+            "after_type": kunde_trace_missing_keys(after_type),
+        },
+        "kunde_event_missing_keys": {
+            "at_rest": kunde_event_missing_keys(rest),
+            "after_click": kunde_event_missing_keys(after_click),
+            "after_type": kunde_event_missing_keys(after_type),
+        },
+        "pageerror_unrelated_at_rest": unrelated,
+    }
+    if not named or not clicked_option:
+        result["code"] = "UI_CHANGED"
+        result["message"] = "Billy Kunde existing option is not visible."
+    dump_kunde_trace(result)
+    return result
+
+
+async def capture_kunde_event_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+) -> dict[str, object]:
+    """Instrumented 4A5CD1E7 recapture.
+
+    Caller must call install_kunde_event_listeners and watch_kunde_trace
+    before goto.
+    """
+
+    from billy_mcp.ui_writes.invoices_form_observe import dump_kunde_event_messages
+
+    result = await capture_kunde_tagged_trace(
+        page,
+        unique_tag,
+        sink=sink,
+        listener_attached_before_form=listener_attached_before_form,
+    )
+    dump_kunde_event_messages(sink.scrubbed_messages)
+    return result
+
+
+async def capture_kunde_route_trace(
+    page: Page,
+    unique_tag: str,
+    *,
+    sink: KundeTraceSink,
+    listener_attached_before_form: bool,
+    template_path: Path | None = None,
+) -> dict[str, object]:
+    """Instrumented F12B607E recapture. Does not dispatch change."""
+
+    from billy_mcp.ui_writes.invoices_kunde_routes import apply_kunde_route_dump
+
+    result = await capture_kunde_tagged_trace(
+        page,
+        unique_tag,
+        sink=sink,
+        listener_attached_before_form=listener_attached_before_form,
+        allow_change_dispatch=False,
+    )
+    return apply_kunde_route_dump(
+        result,
+        sink.route_templates,
+        template_path=template_path,
+    )
+
+
+async def capture_kunde_control_contract(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only 452E0773 dump. Does not click, type, or create records."""
+
+    from billy_mcp.ui_writes.invoices_kunde_control import inspect_kunde_control
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_control(page)
+    if dump_path is not None:
+        from billy_mcp.ui_writes.invoices_kunde_control import apply_kunde_control_dump
+
+        result = apply_kunde_control_dump(result, dump_path=dump_path)
+    return result
+
+
+async def capture_kunde_descendants(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only E87B6AEF descendant map. Does not click or type."""
+
+    from billy_mcp.ui_writes.invoices_kunde_descendant_inspect import inspect_kunde_descendants
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_descendants(page)
+    if dump_path is not None:
+        from billy_mcp.ui_writes.invoices_kunde_descendants import apply_kunde_descendant_dump
+
+        result = apply_kunde_descendant_dump(result, dump_path=dump_path)
+    return result
+
+
+async def capture_kunde_ember(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only 31B0C7A6 Ember inspect. Does not click, type, or invoke."""
+
+    from billy_mcp.ui_writes.invoices_kunde_ember import apply_kunde_ember_dump
+    from billy_mcp.ui_writes.invoices_kunde_ember_inspect import inspect_kunde_ember
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_ember(page)
+    if dump_path is not None:
+        result = apply_kunde_ember_dump(result, dump_path=dump_path)
+    return result
+
+
+async def capture_kunde_fiber(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only React fiber inspect. Does not click, type, or invoke."""
+
+    from billy_mcp.ui_writes.invoices_kunde_fiber import apply_kunde_fiber_dump
+    from billy_mcp.ui_writes.invoices_kunde_fiber_inspect import inspect_kunde_fiber
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_fiber(page)
+    if dump_path is not None:
+        result = apply_kunde_fiber_dump(result, dump_path=dump_path)
+    return result
+
+
+async def capture_kunde_listeners(
+    page: Page,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Read-only listener contract. Does not click, type, or invoke."""
+
+    from billy_mcp.ui_writes.invoices_kunde_listener_inspect import inspect_kunde_listeners
+    from billy_mcp.ui_writes.invoices_kunde_listeners import apply_kunde_listener_dump
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_listeners(page)
+    if dump_path is not None:
+        result = apply_kunde_listener_dump(result, dump_path=dump_path)
+    return result
+
+
+async def apply_named_control_action(page: Page, payload: dict[str, object]) -> dict[str, object]:
+    """Run the one named control action. Does not type or click the overlay DIV."""
+
+    token = payload.get("named_next_action_token")
+    if token != "click_open":
+        return {"applied": False, "option_role_count": 0}
+    wrapper = page.locator("input[name='contact']").locator(
+        "xpath=ancestor::*[contains(@class,'pickerfield')][1]"
+    )
+    if await wrapper.count() < 1 or not await wrapper.first.is_visible():
+        return {"applied": False, "option_role_count": 0}
+    await wrapper.first.click()
+    await asyncio.sleep(0.4)
+    options = page.get_by_role("option")
+    count = await options.count()
+    return {"applied": True, "option_role_count": count}
+
+
+async def capture_kunde_post_click(
+    page: Page,
+    unique_tag: str,
+    *,
+    dump_path: Path | None = None,
+) -> dict[str, object]:
+    """Scoped MutationObserver dump after one pickerfield click."""
+
+    from billy_mcp.ui_writes.invoices_kunde_post_click import (
+        apply_kunde_post_click_dump,
+        inspect_kunde_post_click,
+    )
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    result = await inspect_kunde_post_click(page, unique_tag)
+    if dump_path is not None:
+        result = apply_kunde_post_click_dump(result, dump_path=dump_path)
+    return result
+
+
+async def capture_kunde_widget_dump(page: Page, unique_tag: str) -> dict[str, object]:
+    """Read-only widget contract recapture. Does not save a draft."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    field = None
+    for _ in range(40):
+        field = await kunde_field(page)
+        if field is not None:
+            break
+        await asyncio.sleep(0.25)
+    if field is None:
+        await dump_kunde_chrome(page)
+        return {"code": "UI_CHANGED", "message": "Billy Kunde control is not visible."}
+    opener = await observe_kunde_opener(page, field)
+    dump_kunde_opener(opener)
+    type_target = await _click_field_once(field)
+    if type_target is None:
+        return {"code": "UI_CHANGED", "message": "Billy Kunde opener is not visible."}
+    wrapper = kunde_wrapper(page)
+    lookups: list[str] = []
+    watch_contact_lookups(page, lookups)
+    after_click = await observe_kunde(page, field, unique_tag, phase="after_click", wrapper=wrapper)
+    await _type_kunde(type_target, unique_tag)
+    await _wait_options(page, unique_tag, wrapper)
+    after_type = await observe_kunde(page, field, unique_tag, phase="after_type", wrapper=wrapper)
+    after_type["contact_get_count"] = len(lookups)
+    dump_kunde_phases(after_click, after_type)
+    merged = {**opener, **after_type}
+    named_action = widget_named_action(merged)
+    if named_action == "tab_blur":
+        press = getattr(type_target, "press", None)
+        if press is not None:
+            await press("Tab")
+            await asyncio.sleep(0.4)
+            after_type = await observe_kunde(
+                page, field, unique_tag, phase="after_tab", wrapper=wrapper
+            )
+            after_type["contact_get_count"] = len(lookups)
+            dump_kunde_phases(after_click, after_type)
+            merged = {**opener, **after_type}
+            named_action = widget_named_action(merged)
+    if named_action is None:
+        dump_kunde_lookup(len(lookups))
+    return {
+        "opener": opener,
+        "after_type": after_type,
+        "named_action": named_action,
+        "contact_get_count": len(lookups),
+        "widget_missing_keys": after_type.get("widget_missing_keys"),
+    }
+
+
+async def bind_kunde(page: Page, unique_tag: str) -> str | ToolError:
+    """Bind an existing Kunde option. Never clicks Opret ny."""
+
+    field = await _vaelg_kunde_textbox(page)
+    if field is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy Kunde control is not visible.",
+        )
+    type_target = await _click_kunde_chevron(page, field)
+    if type_target is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy Kunde opener is not visible.",
+        )
+    wrapper = kunde_wrapper(page)
+    items = await _wait_options(page, unique_tag, wrapper)
+    if pick_kunde_existing_option_index(items) is not None:
+        if await _click_scoped_option(page, unique_tag):
+            return "scoped:existing_option"
+    if await _click_exact_visible_tag(page, unique_tag):
+        return "scoped:existing_option"
+    await _type_kunde(type_target, unique_tag)
+    items = await _wait_options(page, unique_tag, wrapper)
+    if pick_kunde_existing_option_index(items) is not None:
+        if await _click_scoped_option(page, unique_tag):
+            return "scoped:existing_option"
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy Kunde existing option is not visible.",
+    )
+
+
+async def _click_kunde_chevron(page: Page, field: Locator) -> Locator | None:
+    """Open Kunde via data-cy=dropdown-icon. Chevron offset is fallback only."""
+
+    picker = page.locator(".pickerfield").filter(has=page.locator("input[name='contact']"))
+    icon = picker.locator("[data-cy='dropdown-icon']")
+    try:
+        if await icon.count() >= 1 and await icon.first.is_visible():
+            box = await icon.first.bounding_box()
+            if box is not None:
+                await page.mouse.click(
+                    box["x"] + box["width"] / 2,
+                    box["y"] + box["height"] / 2,
+                )
+            else:
+                await icon.first.click(timeout=5000)
+            await asyncio.sleep(0.5)
+            return field
+        box = await field.bounding_box()
+        if box is None:
+            return None
+        return await _click_field_once(
+            field,
+            offset=chevron_offset_from_box(int(box["width"]), int(box["height"])),
+        )
+    except Exception as exc:
+        if type(exc).__name__ != "TimeoutError":
+            raise
+        return None
+
+
+async def _vaelg_kunde_textbox(page: Page) -> Locator | None:
+    """Owner-visible Kunde textbox. Placeholder is Vælg kunde."""
+
+    named = page.get_by_role("textbox", name="Vælg kunde")
+    if await named.count() >= 1 and await named.first.is_visible():
+        return named.first
+    placeholder = page.locator("input[placeholder='Vælg kunde']")
+    if await placeholder.count() >= 1 and await placeholder.first.is_visible():
+        return placeholder.first
+    return await kunde_field(page)
+
+
+async def _click_field_once(
+    field: Locator, *, offset: dict[str, int] | None = None
+) -> Locator | None:
+    """One normal click on the proved contact field. Not a guessed sibling."""
+
+    if not await field.is_visible():
+        return None
+    if offset is None:
+        await field.click(timeout=5000)
+    else:
+        await field.click(position={"x": offset["dx"], "y": offset["dy"]}, timeout=5000)
+    await asyncio.sleep(0.3)
+    return field
+
+
+def kunde_wrapper(page: Page) -> Locator:
+    """Return the input-wrapper that owns input[name=contact]."""
+
+    return page.locator("[data-testid='input-wrapper']").filter(
+        has=page.locator("input[name='contact']")
+    )
+
+
+async def kunde_field(page: Page) -> Locator | None:
+    """Return the live-proved typeable Kunde input."""
+
+    field = page.locator("input[name='contact']")
+    if await field.count() >= 1 and await field.first.is_visible():
+        return field.first
+    labeled = page.get_by_label(KUNDE_LABEL, exact=True)
+    if await labeled.count() >= 1 and await labeled.first.is_visible():
+        inner = labeled.locator("input:not([type='hidden'])")
+        if await inner.count() >= 1 and await inner.first.is_visible():
+            return inner.first
+        return labeled.first
+    for selector in KUNDE_INPUT_SELECTORS:
+        field = page.locator(selector)
+        if await field.count() >= 1 and await field.first.is_visible():
+            return field.first
+    return None
+
+
+async def _type_kunde(field: Locator, unique_tag: str) -> None:
+    sequential = getattr(field, "press_sequentially", None)
+    if sequential is not None:
+        try:
+            await sequential(unique_tag, delay=50)
+        except TypeError:
+            await sequential(unique_tag)
+    else:
+        await field.fill(unique_tag)
+    await asyncio.sleep(0.5)
+
+
+async def _wait_options(page: Page, unique_tag: str, wrapper: Locator) -> list[dict[str, bool]]:
+    combined: list[dict[str, bool]] = []
+    for _ in range(16):
+        items = await portal_items(page, unique_tag)
+        wrapper_items = await portal_items(
+            page, unique_tag, root=wrapper.locator(".ds-dropdown-list")
+        )
+        alt_items: list[dict[str, bool]] = []
+        for selector in ALT_LIST_SELECTORS:
+            alt_items.extend(await portal_items(page, unique_tag, root=page.locator(selector)))
+        combined = [*wrapper_items, *alt_items, *items]
+        if any(
+            item.get("visible") and (item.get("has_tag") or item.get("has_create_footer"))
+            for item in combined
+        ):
+            return combined
+        await asyncio.sleep(0.25)
+    return combined
+
+
+async def _click_scoped_option(page: Page, unique_tag: str) -> bool:
+    footer_label = portal_create_footer_label(unique_tag)
+    for selector in (
+        ".ds-dropdown-list.ds-moved-with-portal",
+        ".ds-dropdown-list",
+        *ALT_LIST_SELECTORS,
+    ):
+        lists = page.locator(selector)
+        for index in range(min(await lists.count(), 9)):
+            root = lists.nth(index)
+            option = root.get_by_text(unique_tag, exact=True)
+            footer = root.get_by_text(footer_label, exact=True)
+            if await option.count() < 1 or not await option.first.is_visible():
+                continue
+            if await footer.count() >= 1 and await footer.first.is_visible():
+                continue
+            await option.first.click()
+            return True
+    return False
+
+
+async def _click_exact_visible_tag(page: Page, unique_tag: str) -> bool:
+    """Pick the exact visible customer name. Never the Opret ny footer."""
+
+    footer_label = portal_create_footer_label(unique_tag)
+    matches = page.get_by_text(unique_tag, exact=True)
+    visible: list[Locator] = []
+    try:
+        for index in range(min(await matches.count(), 9)):
+            node = matches.nth(index)
+            if not await node.is_visible():
+                continue
+            text = (await node.inner_text()).strip()
+            if text != unique_tag or text == footer_label:
+                continue
+            visible.append(node)
+        if len(visible) != 1:
+            return False
+        await visible[0].click(timeout=5000)
+        return True
+    except Exception as exc:
+        if type(exc).__name__ != "TimeoutError":
+            raise
+        return False
+
+
+async def fill_line(page: Page, value: str) -> str | None:
+    """Fill the first visible invoice line description."""
+
+    filled = await _fill_first_visible(page, LINE_SELECTORS, value)
+    if filled is not None:
+        return filled
+    for label in ("Evt. beskrivelse", "Beskrivelse"):
+        labeled = await _fill_labeled(page, (label,), value)
+        if labeled is not None:
+            return labeled
+    return None
+
+
+async def fill_priced_line(
+    page: Page, description: str, unit_price: float, product_name: str = ""
+) -> ToolError | None:
+    """Fill description, Antal, and Enhedspris. Never create a product."""
+
+    if unit_price <= 0:
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice draft line requires a positive unit price.",
+        )
+    if await fill_line(page, description) is None and product_name.strip():
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice line description field is not visible.",
+        )
+    quantity = await _fill_labeled(page, QUANTITY_LABELS, "1")
+    if quantity is None:
+        await _fill_first_visible(page, QUANTITY_SELECTORS, "1")
+    if await unit_price_field(page) is None:
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice unit price field is not visible.",
+            details=await enhedspris_missing_details(page),
+        )
+    from billy_mcp.ui_writes.invoices_form_price import commit_unit_price
+
+    committed = await commit_unit_price(page, unit_price)
+    if committed is not None:
+        return committed
+    if not product_name.strip():
+        return None
+    bound = await _bind_existing_product(page, product_name)
+    if bound is not None:
+        return bound
+    await fill_line(page, description)
+    return None
+
+
+def price_is(raw: str, unit_price: float) -> bool:
+    """True when a visible price field holds the ticket unit price."""
+
+    text = raw.strip().replace(" ", "").replace("DKK", "").replace("kr.", "")
+    text = text.replace(",", ".")
+    try:
+        return abs(float(text) - unit_price) < 0.001
+    except ValueError:
+        return False
+
+
+async def read_unit_price(page: Page) -> str:
+    """Read the visible Enhedspris value. Empty when the field is missing."""
+
+    field = await unit_price_field(page)
+    if field is None:
+        return ""
+    try:
+        return await field.input_value()
+    except (TimeoutError, RuntimeError):
+        return ""
+
+
+async def enhedspris_missing_details(page: Page) -> dict[str, object]:
+    """Sanitized URL, heading, and counts when the exact Enhedspris input is missing."""
+
+    from urllib.parse import urlsplit
+
+    details: dict[str, object] = {
+        "path": "",
+        "heading": "",
+        "exact_count": -1,
+        "product_text_count": -1,
+        "input_count": -1,
+    }
+    try:
+        details["path"] = urlsplit(page.url).path
+    except (AttributeError, RuntimeError):
+        pass
+    try:
+        heading = page.locator("h1")
+        if await heading.count() >= 1:
+            details["heading"] = (await heading.first.inner_text()).strip()[:80]
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["exact_count"] = await page.locator(UNIT_PRICE_SELECTORS[0]).count()
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["product_text_count"] = await page.get_by_text("MCP-UI-PRD-").count()
+    except (TimeoutError, RuntimeError):
+        pass
+    try:
+        details["input_count"] = await page.locator("input").count()
+    except (TimeoutError, RuntimeError):
+        pass
+    return details
+
+
+async def unit_price_field(page: Page) -> Locator | None:
+    """Owner 3CB4D807: wait for the exact main-frame Enhedspris input."""
+
+    try:
+        await page.wait_for_load_state("networkidle")
+    except (TimeoutError, RuntimeError):
+        pass
+    for _ in range(80):
+        field = page.locator(UNIT_PRICE_SELECTORS[0])
+        try:
+            if await field.count() >= 1 and await field.first.is_visible():
+                return field.first
+        except (TimeoutError, RuntimeError):
+            pass
+        await asyncio.sleep(0.25)
+    return None
+
+
+async def _fill_labeled(page: Page, labels: tuple[str, ...], value: str) -> str | None:
+    for label in labels:
+        field = page.get_by_label(label, exact=True)
+        if await field.count() < 1:
+            field = page.get_by_label(label)
+        if await field.count() < 1:
+            continue
+        target = field.first
+        if not await target.is_visible():
+            continue
+        await target.fill(value)
+        return value
+    return None
+
+
+async def _fill_first_visible(page: Page, selectors: tuple[str, ...], value: str) -> str | None:
+    for selector in selectors:
+        field = page.locator(selector)
+        if await field.count() < 1:
+            continue
+        target = field.first
+        if not await target.is_visible():
+            continue
+        await target.fill(value)
+        return value
+    return None
+
+
+async def _bind_existing_product(page: Page, product_name: str) -> ToolError | None:
+    """Open Vælg produkt and pick the exact tagged option. Never Opret ny."""
+
+    if not product_name.strip():
+        return ToolError(
+            code=StableErrorCode.VALIDATION_ERROR,
+            message="Invoice draft line requires a product name.",
+        )
+    field = page.get_by_role("textbox", name="Vælg produkt")
+    if await field.count() < 1 or not await field.first.is_visible():
+        return ToolError(
+            code=StableErrorCode.UI_CHANGED,
+            message="Billy invoice product control is not visible.",
+        )
+    picker = page.locator(".pickerfield").filter(has=field)
+    icon = picker.locator("[data-cy='dropdown-icon']")
+    if await icon.count() >= 1 and await icon.first.is_visible():
+        box = await icon.first.bounding_box()
+        if box is not None:
+            await page.mouse.click(
+                box["x"] + box["width"] / 2,
+                box["y"] + box["height"] / 2,
+            )
+        else:
+            await icon.first.click(timeout=5000)
+        await asyncio.sleep(0.5)
+    for _ in range(16):
+        if await _product_field_has_tag(page, product_name):
+            return None
+        option = page.get_by_role("option", name=product_name, exact=True)
+        if await option.count() >= 1 and await option.first.is_visible():
+            await option.first.click()
+        else:
+            await _click_exact_visible_tag(page, product_name)
+        await asyncio.sleep(0.25)
+    return ToolError(
+        code=StableErrorCode.UI_CHANGED,
+        message="Billy invoice product existing option is not visible.",
+    )
+
+
+async def _product_field_has_tag(page: Page, product_name: str) -> bool:
+    """True when the Vælg produkt control shows the exact tagged product."""
+
+    field = page.get_by_role("textbox", name="Vælg produkt")
+    if await field.count() < 1:
+        return False
+    try:
+        value = await field.first.input_value()
+    except Exception:
+        value = ""
+    if product_name == value.strip() or product_name in value:
+        return True
+    try:
+        text = (await field.first.inner_text()).strip()
+    except Exception:
+        text = ""
+    return product_name == text or product_name in text
