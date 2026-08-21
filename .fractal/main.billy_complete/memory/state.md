@@ -25,61 +25,80 @@ sources:
   - radio:FE6FA4B1
   - radio:DC3B8E96
   - radio:3DA6FB8E
+  - radio:21A3D94F
 created: 2026-08-16T14:29:47Z
-updated: 2026-08-20T14:30:00Z
+updated: 2026-08-21T15:15:00Z
 ---
 
 ## Now
 
-Parent `3DA6FB8E` is done: independent review of the
-bankLines list-filter slice on `df2f475` PASSed. Frozen
-List filters match `BankLinesListRequest`. GET is
-`/bankLines` only. Shared `BankListRequest` still rejects
-`accountId` and `q`. Owner-input report is posted. No
-required fixes. Stopped for owner scope on bulk92 plus six
-readonly-map rows. No new tools. No live docs GET. Do not
-spawn. `complete` stays false. Do not finish.
+Parent `21A3D94F` owns this resume: one bounded offline
+closeout, then finish. No production UI writes. No live API.
+Do not spawn. Do not claim fresh production MCP qualification
+from this closeout. That last check runs in the owner session
+after merge.
+
+Docs already record the 92 bulk mentions as owner-skip
+(`BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP`) on `72aebd2`. The
+generator, manifests, `coverage/status.json`, tests, and
+checker still treat them as
+`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS` blockers. Encode the
+skip in those surfaces. Keep the 92 rows visible, toolless,
+not green, and outside the applicable count.
+
+The six `READONLY_PROPERTY_TABLE` create/update rows stay
+visible, toolless, and unimplemented:
+`api.contactBalancePostings.create`,
+`api.contactBalancePostings.update`, `api.postings.create`,
+`api.postings.update`, `api.transactions.create`,
+`api.transactions.update`. Official property tables still have
+no writable request contract. Give them a separate owner-skip
+scope code. Do not guess fields. Do not add tools. Reopen only
+if Billy publishes a usable contract or the owner asks.
+
+Completeness still fails while `source_kind=ambiguous_bulk`
+rows exist and while API owner-skip rows must pass
+`api_row_is_qualified`. Fix that so owner-skip API rows stay
+visible but non-blocking. Then regenerate coverage, run
+offline formatting, lint, type, unit, contract, safety, and
+repository-policy checks, independent Grok review, clean
+push, finish.
+
+Do not run `BILLY_TEST_MODE=ui-full` live UI for this
+closeout. Seed still names that gate; `21A3D94F` overrides it
+for Fractal. API live stays deferred. Årsrapporter stays
+`out_of_scope_by_user` (`ANNUAL_REPORTS_OWNER_SKIP`). Do not
+invent `ui_annual_*` or `api_annual_*` tools. Do not edit
+`coverage/status.json` by hand.
 
 Typed official `GET /v2/bankLines` list filters are on
 `api_bank_lines_list`. `accountId` is required. Docs lock is
 ETag `pi4s9u10j037qn`, MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
-Remaining unimplemented API rows stay bulk92 plus six
-readonly-map create/update rows. UI remaining unimplemented
-stays six owner-scoped rows. Do not guess bulk or
-readonly-map tools.
+UI remaining unimplemented stays the six already owner-scoped
+rows (annual reports, files create, daybooks create/delete,
+daybookTransactions create, transactions create). Ticketed
+offline `transactions` delete remains. Create/update of
+transactions stay toolless.
 
-Ticketed offline `transactions` delete remains on `bb66a48`.
-Preview tool `api_transactions_delete_preview` takes a non-empty
-`id` with `extra=forbid`. Execute
-`api_transactions_delete_execute` takes `confirmation_ticket`
-only. Create/update stay red. Bulk stay red.
+Live official docs GET on 2026-08-21: ETag
+`"usuwcuphx03ct7"`, MD5 `e1f8e5d5081645709ba736265ab9a098`.
+That drifted from the frozen lock. Remaining tables still
+show 46 bulk-save and 46 bulk-delete Supports flags with no
+body schema, and the six create/update property tables still
+have no writable request field. Do not relock. Do not infer
+payloads. Recommended readonly skip code is
+`READONLY_PROPERTY_TABLE_OWNER_SKIP`. Brief is
+`.fractal/main.billy_complete/tmp/grok-research.md`.
 
-Generated snapshot: implemented 546, contract 551, live/vision
-339, `complete=false`. Residual honesty remaining is 6, all
-readonly-map. Meta-delete remaining is none. Bulk 92 stay
-`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. Official lock is ETag
-`pi4s9u10j037qn`, MD5 `d805f3d2bb8e339f7635d6834b4011bd`.
+Generated snapshot reads implemented 546, contract 551,
+live/vision 339, `complete=true` under owner scope. Bulk92 and
+six readonly-map rows stay visible and toolless. Independent
+review PASS. Required fixes none. FIX-VERIFY recorded. COMMIT
+next, then finish under `21A3D94F`. Do not claim fresh
+production MCP qualification.
 
-EXECUTE recheck tests that still lock the residual set:
-
-- `tests/api/test_bank_reads.py`
-- `tests/coverage/test_official_docs_lock.py`
-- `tests/coverage/test_coverage_inventory.py::test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map`
-- `tests/coverage/test_coverage_inventory.py::test_residual_clear_honesty_rows_are_toolless_and_qualified`
-- `tests/coverage/test_coverage_inventory.py::test_bulk_rows_remain_ambiguous_and_toolless`
-- `tests/coverage/test_ui_residual_write_owner_scope.py::test_unimplemented_ui_rows_are_exactly_owner_scoped`
-
-Unread owner radio after the recheck: none besides already
-handled `3DA6FB8E`.
-
-Binding `9B979A05` still owns the rest of the 121 split. Unauth
-405 must not override current official Supports. Never infer
-bulk schemas. Do not finish.
-
-Owner `96908DC6` still binds overall finish. API live stays
-deferred. Årsrapporter stays `out_of_scope_by_user`
-(`ANNUAL_REPORTS_OWNER_SKIP`). Do not invent `ui_annual_*` or
-`api_annual_*` tools. Do not edit `coverage/status.json` by hand.
+`9B979A05` bulk research is stopped. `96908DC6` Fractal
+UI-write path is superseded for this closeout. Unsaved both.
 
 ## Proved UI writes still in inventory
 

@@ -170,7 +170,7 @@ def test_api_source_arithmetic_and_documented_contracts_are_frozen() -> None:
         if row["operation"] == "list" and row["source_kind"] == "clear":
             assert row["pagination"] == generator.PAGING
             assert "offset" not in row["request_fields"]
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["phase"] == generator.CURRENT_COVERAGE_PHASE
     assert status["source_counts"]["api_total"] == 305
     geo_na = generator.GEO_UI_NOT_APPLICABLE_ROW_COUNT
@@ -352,14 +352,21 @@ def test_bulk_rows_remain_ambiguous_and_toolless() -> None:
         for row in bulk_rows
     )
     assert all("BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in row["evidence"] for row in bulk_rows)
+    assert all("radio:21A3D94F" in row["evidence"] for row in bulk_rows)
     assert all(isinstance(row.get("qualification"), dict) for row in bulk_rows)
-    assert all(row["qualification"]["kind"] == "external_contract_blocker" for row in bulk_rows)
+    assert all(row["qualification"]["kind"] == "out_of_scope_by_user" for row in bulk_rows)
     assert all(
-        row["qualification"]["blocker_code"] == "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
+        row["qualification"]["scope_code"] == "BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP"
+        for row in bulk_rows
+    )
+    assert all(
+        row["qualification"]["supersedes_blocker_code"] == "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
         for row in bulk_rows
     )
     assert all(row["qualification"]["live_api"] == "out_of_scope_by_user" for row in bulk_rows)
     assert all(row["qualification"]["tools_allowed"] is False for row in bulk_rows)
+    assert all(row["qualification"]["owner_decision_ref"] == "radio:21A3D94F" for row in bulk_rows)
+    assert all(generator.is_owner_out_of_scope(row) is True for row in bulk_rows)
     assert all(
         row["qualification"]["reconfirm_ref"] == "research192_unauth_reconfirm" for row in bulk_rows
     )
@@ -444,8 +451,12 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
 
     for row_id in readonly_map:
         row = by_id[row_id]
-        assert row["qualification"]["kind"] == "readonly_field_map_insufficient"
-        assert row["qualification"]["blocker_code"] == "READONLY_PROPERTY_TABLE"
+        assert row["qualification"]["kind"] == "out_of_scope_by_user"
+        assert row["qualification"]["scope_code"] == "READONLY_PROPERTY_TABLE_OWNER_SKIP"
+        assert row["qualification"]["supersedes_blocker_code"] == "READONLY_PROPERTY_TABLE"
+        assert row["qualification"]["owner_decision_ref"] == "radio:21A3D94F"
+        assert generator.is_owner_out_of_scope(row) is True
+        assert "radio:21A3D94F" in row["evidence"]
 
     for row_id in meta_delete:
         row = by_id[row_id]
@@ -457,7 +468,9 @@ def test_residual_clear_honesty_rows_are_toolless_and_qualified() -> None:
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
 
 
 def test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map() -> None:
@@ -482,7 +495,9 @@ def test_residual_audit_unimplemented_api_set_is_bulk_plus_readonly_map() -> Non
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
 
 
 def test_account_natures_writes_are_ticketed_offline_and_not_live_tested() -> None:
@@ -858,9 +873,11 @@ def test_ui_product_plane_bulk_parity_honesty_rows_are_toolless_and_qualified() 
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
-    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -963,9 +980,11 @@ def test_ui_product_plane_bulk_chrome_dual_na_strong_rows() -> None:
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
-    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -1060,9 +1079,11 @@ def test_ui_product_plane_bulk_chrome_dual_na_soft_tool_rows() -> None:
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
-    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -1135,9 +1156,11 @@ def test_ui_product_plane_bulk_chrome_dual_na_empty_list_rows() -> None:
     assert status["qualification"]["contract_tested_rows"] == 551
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["source_counts"]["api_owner_skipped_bulk"] == 92
+    assert status["source_counts"]["api_owner_skipped_readonly_map"] == 6
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
-    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
     assert "UI product-plane bulk remaining" not in status["qualification"]["blocker"]
     assert "×10" not in status["qualification"]["blocker"]
 
@@ -1176,13 +1199,10 @@ def test_annual_reports_owner_out_of_scope_by_user() -> None:
     assert qual.get("prior_evidence_ref") == "research191_annual_dual"
     assert qual.get("supersedes_blocker_code") == "ANNUAL_REPORTS_ORG_INACCESSIBLE"
     assert generator.is_owner_out_of_scope(annual) is True
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
     assert "annual_reports org_inaccessible" not in status["qualification"]["blocker"]
-    assert "annual_reports out_of_scope_by_user" in status["qualification"]["blocker"]
-    assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" in status["qualification"]["blocker"]
-    assert "external-contract" in status["qualification"]["blocker"].lower() or (
-        "External-contract" in status["qualification"]["blocker"]
-    )
-    assert status["complete"] is False
+    assert "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS" not in status["qualification"]["blocker"]
+    assert status["complete"] is True
 
 
 def test_geo_ui_not_applicable_dual_session_freeze() -> None:
@@ -1872,7 +1892,7 @@ def test_geo_ui_not_applicable_dual_session_freeze() -> None:
     assert all(row.get("parity_status") == "not_applicable" for row in rulesets_residual)
     assert all(row.get("live_tested") is True for row in rulesets_residual)
     assert all("research181" in (row.get("method_or_route") or "") for row in rulesets_residual)
-    assert status["complete"] is False
+    assert status["complete"] is True
     # 74 baseline tool/dual-count greens + GEO NA rows + research184 dual-counts
     # (attachments.list + files.create) beyond pure NA, minus residual owner scope.
     assert status["qualification"]["live_tested_rows"] == (
@@ -1971,7 +1991,7 @@ def test_research183_residual_soft_empty_not_applicable_freeze() -> None:
     assert workflows["ui.discovery.annual_reports"]["parity_status"] != "not_applicable"
     assert workflows["ui.parity.files.list"]["parity_status"] == "not_applicable"
 
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
 
@@ -2050,7 +2070,7 @@ def test_research184_attachments_list_files_create_dualcount_and_files_list_get_
             generator.UI_BULK_CHROME_ABSENT_DUAL_EVIDENCE_CODE
         )
 
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["qualification"]["implemented_rows"] == 546
@@ -2125,7 +2145,7 @@ def test_research185_attachments_get_create_update_delete_na() -> None:
     assert workflows["ui.discovery.annual_reports"]["parity_status"] != "not_applicable"
     assert workflows["ui.discovery.annual_reports"]["live_tested"] is not True
 
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["qualification"]["live_tested_rows"] == 339
     assert status["qualification"]["vision_verified_rows"] == 339
     assert status["qualification"]["implemented_rows"] == 546
@@ -2876,7 +2896,7 @@ def test_ui_parity_and_egress_are_complete_but_visibly_red() -> None:
     assert "api_bank_accounts" in bank_discovery["evidence"]
     assert checker.raw_evidence_errors(ui_manifest) == []
     assert status["source_counts"]["ui_api_parity"] == 305
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert '"bankLineMatche"' not in json.dumps(ui_manifest)
 
     by_host = {rule["host"]: rule for rule in browser_egress["hosts"]}
@@ -3007,10 +3027,14 @@ def test_checker_rejects_missing_fields_false_completeness_green_bulk_and_frames
 
     false_complete = copy.deepcopy(status)
     false_complete["complete"] = True
+    broken_api = copy.deepcopy(api_manifest)
+    implemented = next(row for row in broken_api["operations"] if row.get("implemented") is True)
+    implemented["implemented"] = False
+    implemented["contract_tested"] = False
     assert any(
         "falsely claims complete" in error
         for error in validation_errors(
-            api_manifest,
+            broken_api,
             ui_manifest,
             browser_egress,
             false_complete,
@@ -3034,7 +3058,7 @@ def test_checker_rejects_missing_fields_false_completeness_green_bulk_and_frames
         for error in validation_errors(api_manifest, raw_frame, browser_egress, status, report)
     )
 
-    false_report = report.replace("Complete: `false`", "Complete: `true`")
+    false_report = report.replace("Complete: `true`", "Complete: `false`")
     assert any(
         "coverage/report.md is stale" in error
         for error in validation_errors(
@@ -3048,8 +3072,8 @@ def test_checker_rejects_missing_fields_false_completeness_green_bulk_and_frames
     )
 
 
-def test_checker_cli_allows_offline_red_inventory_but_rejects_full_qualification() -> None:
-    """Root lint can validate red inventory, while the full gate fails closed."""
+def test_checker_cli_allows_require_complete_under_owner_scope() -> None:
+    """Root lint and the full gate both pass under owner-scoped bulk and readonly-map skips."""
 
     checker_path = SCRIPTS / "check_coverage.py"
     lint_result = subprocess.run(
@@ -3068,13 +3092,8 @@ def test_checker_cli_allows_offline_red_inventory_but_rejects_full_qualification
         capture_output=True,
         text=True,
     )
-    assert complete_result.returncode == 1
-    assert (
-        "--require-complete requires coverage/status.json complete=true" in complete_result.stdout
-    )
-    assert (
-        "--require-complete requires no ambiguous_bulk rows (92 remain)" in complete_result.stdout
-    )
+    assert complete_result.returncode == 0, complete_result.stdout + complete_result.stderr
+    assert "Coverage inventory checks passed" in complete_result.stdout
 
 
 def test_checker_rejects_imperatively_registered_domain_tool_without_coverage_row(

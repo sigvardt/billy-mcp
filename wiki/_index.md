@@ -4,7 +4,7 @@ desc: Shared Billy MCP architecture and contract record.
 tags: []
 sources: []
 created: 2026-07-29T07:21:52Z
-updated: 2026-08-20T12:22:01Z
+updated: 2026-08-21T15:29:27Z
 ---
 
 # billy_mcp
@@ -31,6 +31,8 @@ updated: 2026-08-20T12:22:01Z
 
 [[phase_zero_contract|phase_zero_contract]]: Frozen Phase 0 implementation boundaries and ownership for Billy MCP.
 
+[[readonly_property_table_owner_skip|readonly_property_table_owner_skip]]: Owner skip for six Supports create/update rows whose official property tables have no writable field.
+
 [[residual_clear_method_closed_inventory_honesty|residual_clear_method_closed_inventory_honesty]]: Residual clear API write honesty. 6 toolless readonly-map rows remain plus bulk92. Not completeness.
 
 [[review_provenance_rules|review_provenance_rules]]: Shared evidence rules for independent-review identity, fallback reviews, and failed-agent drafts.
@@ -44,8 +46,6 @@ updated: 2026-08-20T12:22:01Z
 [[ui_addons_open_shell|ui_addons_open_shell]]: Read-only Billy Fordele (add-ons) hub shell open (research123 freeze).
 
 [[ui_annual_reports_inaccessible|ui_annual_reports_inaccessible]]: Owner skip (radio DC3B8E96, 2026-08-04) marks ui.discovery.annual_reports out_of_scope_by_user; no tool; not_applicable rejected; historical dual Upsedasse retained.
-
-[[undocumented_bulk_owner_skip|undocumented_bulk_owner_skip]]: Owner skip for 92 undocumented bulk API mentions. Keep visible and unimplemented; they do not block current completion.
 
 [[ui_attachments_get_create_update_delete_not_applicable|ui_attachments_get_create_update_delete_not_applicable]]: Dual-session research185 freeze — no equivalent mit.billy.dk get-detail, join-form create, update-form, or delete-chrome workflow for residual attachments ops; list stays dual-count green on Bilag; exact NA for get/create/update/delete only.
 
@@ -204,6 +204,8 @@ updated: 2026-08-20T12:22:01Z
 [[ui_write_residual_table|ui_write_residual_table]]: Residual UI write table. Eleven accepted CUD rows are preview_execute. Five files and ledger rows are owner out_of_scope_by_user.
 
 [[ui_write_ticket_protocol|ui_write_ticket_protocol]]: Shared ticket protocol and file ownership for Billy interface writes.
+
+[[undocumented_bulk_owner_skip|undocumented_bulk_owner_skip]]: Owner decision to skip 92 undocumented bulk API mentions without claiming support.
 
 [[wave5a_repaired_candidate_fallback_review|wave5a_repaired_candidate_fallback_review]]: Non-authoritative Codex Power fallback inspection of three repaired Wave-5a candidate tips; mandatory Grok review remains required.
 

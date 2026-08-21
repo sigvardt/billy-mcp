@@ -90,19 +90,35 @@ sources:
   - radio:A485F530
   - radio:88C4B0A9
   - radio:3DA6FB8E
+  - radio:21A3D94F
 created: 2026-08-16T13:50:50Z
-updated: 2026-08-20T13:55:05Z
+updated: 2026-08-21T15:15:00Z
 ---
 
 ## Binding now
+
+`21A3D94F` (saved, P10): one bounded offline closeout, then
+finish. No production UI writes. No live API. Encode the 92
+undocumented bulk mentions as visible `out_of_scope_by_user`
+with `scope_code=BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP` in
+generator, manifests, status logic, tests, docs, and checker.
+They stay unimplemented and not green, but they no longer
+block. Encode the six `READONLY_PROPERTY_TABLE` create/update
+rows the same way with a precise separate scope code when the
+official property tables provide no writable request contract.
+Keep them visible, toolless, unimplemented, and outside the
+applicable count. Fractal owns code and offline qualification.
+Fresh production MCP qualification runs only after merge in
+the owner session. Do not claim that qualification from this
+closeout. No new children unless genuinely necessary. Current
+descendants are already completed or retired.
 
 `3DA6FB8E` (unsaved after owner-input report, P10): finish
 the bankLines list-filter and docs-relock slice, independently
 review it, then stop. Done. No further docs scan. Recheck
 passed. Independent review PASS. Owner-input outbox posted.
-Bulk92 plus six `READONLY_PROPERTY_TABLE` rows still need
-owner scope. No guessed payloads. No live API. `complete`
-stays false.
+Superseded as the current stop by `21A3D94F`. No guessed
+payloads. No live API.
 
 The bankLines list-filter slice is on `df2f475`: official
 docs relocked to ETag `pi4s9u10j037qn` / MD5
@@ -271,18 +287,13 @@ nested Pydantic model of those optional strings with
 this resource. Enum members stay opaque strings. Do not infer
 required fields or live API.
 
-`9B979A05` (saved, P10, remaining split): split the 121
-offline blockers by evidence, not one permanent-red bucket. For
-the 25 `method_closed_offline` rows, current official Supports
-tables are the primary contract; an unauthenticated 405 must not
-silently override current official documentation. Then the two
-`readonly_field_map_insufficient` transaction writes and two
-`meta_delete_unqualified` rows from official tables/examples and
-static official assets only. For bulk92, exhaust the official
-page/assets plus static first-party client bundles for exact
-request and response schemas. Never infer a common shape. Never
-live API. Land the smallest proved cohort with independent Grok
-review. Unresolved stay red.
+`9B979A05` (unsaved, P10, superseded for remaining bulk
+research by `21A3D94F`): split of the 121 offline blockers is
+done except bulk92 and the six readonly-map rows. Method-closed
+remaining is 0. Meta-delete remaining is 0. Bulk92 research
+stops before a usable contract exists. The six readonly-map
+rows stay toolless. Never infer a common bulk shape. Never live
+API.
 
 `89DEED22` (saved, P9, lock landed this COMMIT): official lock is
 ETag `tmhc6wpdc835zt` / MD5 `053f755f52e3926b028e29325e3670d4`.
@@ -545,7 +556,7 @@ browser. Do not escalate to Joakim.
 
 `EC676F84` (saved, P10): invoice Kunde works when a customer exists. Create a tagged customer through FastMCP and confirm it independently. `9310BC17` now names the stale-page recovery. Delete invoice first, customer second. No live API. No send, approve, or email.
 
-`96908DC6` (saved): complete UI writes and finish the MCP. Interface first. API live testing still deferred. Supersedes `9FD3042F` (read/open-only) and `3F11A9DF` (stop until explicit start).
+`96908DC6` (unsaved for this closeout): complete UI writes and finish the MCP. Interface first. API live testing still deferred. Supersedes `9FD3042F` (read/open-only) and `3F11A9DF` (stop until explicit start). `21A3D94F` now owns the Fractal closeout: no production UI writes here; fresh production MCP qualification is owner-session after merge.
 
 `728BD2E4` (unsaved, superseded for this slice by `7C9348E1`): no API-doc detour while UI writes were the gap. Live API still deferred. Offline API semantics and official-docs comparison are now in force under `7C9348E1`. No HOLD. No BrowserRuntime-only qualification.
 
@@ -642,7 +653,13 @@ Use only the Grok CLI for this node and any child (`--agent=grok`). Qualify UI t
 
 ## Not a completion wall by themselves
 
-Official-docs bulk92 (`BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) and residual29 stay red until `9B979A05` proves a cohort. Do not mark them permanently excluded. Do not run live API. An unauthenticated 405 must not silently override current official Supports tables. The current product is the smallest proved offline cohort.
+Official-docs bulk92 stay visible owner-skip
+(`BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP`) under `21A3D94F`.
+They are unimplemented and not green, and they do not block
+the applicable count. The six readonly-map create/update rows
+get a separate owner-skip code the same way. Do not run live
+API. Do not infer payloads. An unauthenticated 405 must not
+silently override current official Supports tables.
 
 ## Agent routing
 

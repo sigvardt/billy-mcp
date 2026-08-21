@@ -27,7 +27,9 @@ from generate_coverage_report import (
     build_api_manifest,
     build_status,
     coverage_is_complete,
+    is_owner_out_of_scope,
     render_report,
+    row_is_qualified,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -434,13 +436,19 @@ def require_complete_errors(
     errors: list[str] = []
     if status.get("complete") is not True:
         errors.append("--require-complete requires coverage/status.json complete=true")
-    ambiguous_rows = [row for row in api_rows if row.get("source_kind") == "ambiguous_bulk"]
+    ambiguous_rows = [
+        row
+        for row in api_rows
+        if row.get("source_kind") == "ambiguous_bulk" and not is_owner_out_of_scope(row)
+    ]
     if ambiguous_rows:
         errors.append(
             f"--require-complete requires no ambiguous_bulk rows ({len(ambiguous_rows)} remain)"
         )
     incomplete_api = [
-        str(row.get("id", "<missing-id>")) for row in api_rows if not api_row_is_qualified(row)
+        str(row.get("id", "<missing-id>"))
+        for row in api_rows
+        if not is_owner_out_of_scope(row) and not api_row_is_qualified(row)
     ]
     live_tested_true = [
         str(row.get("id", "<missing-id>")) for row in api_rows if row.get("live_tested") is True
@@ -468,7 +476,7 @@ def require_complete_errors(
     incomplete_ui = [
         str(row.get("id", "<missing-id>"))
         for row in ui_rows
-        if not all(row.get(field) is True for field in UI_QUALIFICATION_FIELDS)
+        if not row_is_qualified(row, UI_QUALIFICATION_FIELDS)
     ]
     if incomplete_ui:
         errors.append(

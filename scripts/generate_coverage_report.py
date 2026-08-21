@@ -951,6 +951,11 @@ UI_QUALIFICATION_FIELDS = (
 LIVE_API_OUT_OF_SCOPE = "out_of_scope_by_user"
 LIVE_API_DEFERRED_KIND = "live_api_deferred"
 LIVE_API_OWNER_SKIP = "LIVE_API_OWNER_SKIP"
+BULK_OWNER_SKIP_SCOPE = "BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP"
+READONLY_MAP_OWNER_SKIP_SCOPE = "READONLY_PROPERTY_TABLE_OWNER_SKIP"
+BULK_EXTERNAL_CONTRACT_BLOCKER = "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS"
+READONLY_PROPERTY_TABLE_BLOCKER = "READONLY_PROPERTY_TABLE"
+NO_MANIFEST_BLOCKERS = "No manifest qualification blockers remain."
 # Lock promoted to the live page with bankLines List filters; no remaining drift pair.
 DOCS_ETAG_OBSERVED = DOCS_ETAG
 DOCS_MD5_OBSERVED = DOCS_MD5
@@ -1922,24 +1927,86 @@ RESIDUAL_EVIDENCE_REF_CHAIN = (
 
 
 def bulk_external_contract_qualification() -> dict[str, Any]:
-    """Machine-readable external-contract freeze for ambiguous bulk rows.
-
-    Research137 exhausted official docs and versioned assets: no exact bulk
-    request/response schema. Live API qualification is out of user scope.
-    Rows stay red (ambiguous_bulk); this is not greening and not a tool plan.
-    """
+    """Historical bulk freeze retained as supersedes_blocker_code evidence."""
 
     return {
         "kind": "external_contract_blocker",
-        "blocker_code": "BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS",
+        "blocker_code": BULK_EXTERNAL_CONTRACT_BLOCKER,
         "docs_etag": DOCS_ETAG,
         "docs_md5": DOCS_MD5,
         "asset_sweep": "research137",
         "offline_shape": "research136",
         "reconfirm_ref": "research192_unauth_reconfirm",
-        "live_api": "out_of_scope_by_user",
+        "live_api": LIVE_API_OUT_OF_SCOPE,
         "tools_allowed": False,
     }
+
+
+def bulk_owner_skip_qualification() -> dict[str, Any]:
+    """Owner 21A3D94F skip for undocumented bulk Supports mentions."""
+
+    historical = bulk_external_contract_qualification()
+    return {
+        "kind": "out_of_scope_by_user",
+        "scope_code": BULK_OWNER_SKIP_SCOPE,
+        "owner_decision_ref": "radio:21A3D94F",
+        "owner_decision_date": "2026-08-21",
+        "tools_allowed": False,
+        "live_api": LIVE_API_OUT_OF_SCOPE,
+        "supersedes_blocker_code": historical["blocker_code"],
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "asset_sweep": historical["asset_sweep"],
+        "offline_shape": historical["offline_shape"],
+        "reconfirm_ref": historical["reconfirm_ref"],
+    }
+
+
+def readonly_map_owner_skip_qualification() -> dict[str, Any]:
+    """Owner 21A3D94F skip for Supports writes with no writable property table."""
+
+    return {
+        "kind": "out_of_scope_by_user",
+        "scope_code": READONLY_MAP_OWNER_SKIP_SCOPE,
+        "owner_decision_ref": "radio:21A3D94F",
+        "owner_decision_date": "2026-08-21",
+        "tools_allowed": False,
+        "live_api": LIVE_API_OUT_OF_SCOPE,
+        "supersedes_blocker_code": READONLY_PROPERTY_TABLE_BLOCKER,
+        "docs_etag": DOCS_ETAG,
+        "docs_md5": DOCS_MD5,
+        "evidence_ref": RESIDUAL_EVIDENCE_REF_CHAIN,
+        "not_applicable_decision": "rejected",
+    }
+
+
+def apply_readonly_map_owner_skip(operations: list[dict[str, Any]]) -> None:
+    """Overlay owner skip on residual readonly-map create/update rows."""
+
+    qualification = readonly_map_owner_skip_qualification()
+    cite = (
+        "owner decision radio:21A3D94F (2026-08-21): qualification.kind="
+        "out_of_scope_by_user scope_code=READONLY_PROPERTY_TABLE_OWNER_SKIP "
+        "tools_allowed=false; supersedes READONLY_PROPERTY_TABLE; no guessed "
+        "writable field map; no tools"
+    )
+    seen: set[str] = set()
+    for row in operations:
+        row_id = str(row.get("id", ""))
+        if row_id not in RESIDUAL_READONLY_MAP_IDS:
+            continue
+        seen.add(row_id)
+        row["qualification"] = dict(qualification)
+        prior = str(row.get("evidence") or "").strip()
+        if "radio:21A3D94F" not in prior:
+            row["evidence"] = f"{prior}; {cite}" if prior else cite
+        row["tool_name"] = ""
+        row["implemented"] = False
+        row["contract_tested"] = False
+        row["live_tested"] = False
+    missing = set(RESIDUAL_READONLY_MAP_IDS) - seen
+    if missing:
+        raise RuntimeError(f"readonly-map owner-skip missing rows: {sorted(missing)}")
 
 
 # Research186 residual clear honesty: remaining Supports write rows without a
@@ -3134,7 +3201,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
 
     area = snake_case(resource)
     route = f"/v2/{resource}"
-    qualification = bulk_external_contract_qualification()
+    qualification = bulk_owner_skip_qualification()
     shape_evidence = (
         f"{DOCS_URL} official API v2; docs etag {DOCS_ETAG}; MD5 {DOCS_MD5}; "
         "research136 offline unauth shape freeze only (not a full bulk body/"
@@ -3142,7 +3209,10 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
         "and research191/research192 reconfirm; versioned-asset exhaust (OpenAPI/swagger "
         "probes 404; page chunk "
         "Supports-only; no bulk body/response schema) → external_contract_blocker "
-        f"{qualification['blocker_code']}; live_api=out_of_scope_by_user; no bulk tools"
+        f"{qualification['supersedes_blocker_code']}; live_api=out_of_scope_by_user; "
+        "no bulk tools; owner decision radio:21A3D94F (2026-08-21): "
+        "qualification.kind=out_of_scope_by_user "
+        f"scope_code={qualification['scope_code']} tools_allowed=false"
     )
     bulk_save = base_api_row(
         row_id=f"api.{resource}.bulk_save",
@@ -3160,7 +3230,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
             "unknown until field schema, partial failures, empty-array semantics, "
             "and limits are contracted; offline unauth only proves object-root body "
             "parse then AUTHENTICATION_REQUIRED; blocked by external_contract_blocker "
-            f"{qualification['blocker_code']}"
+            f"{qualification['supersedes_blocker_code']}"
         ),
         cleanup=(
             "unknown until the bulk contract is published by Billy official docs "
@@ -3192,7 +3262,7 @@ def bulk_rows(resource: str) -> list[dict[str, Any]]:
             "unknown until identifiers, partial failures, and limits are contracted; "
             "empty ids are INVALID_DELETE_ID_ARRAY offline; unauth non-empty id "
             "200 meta-only is not effect proof; blocked by external_contract_blocker "
-            f"{qualification['blocker_code']}"
+            f"{qualification['supersedes_blocker_code']}"
         ),
         cleanup=(
             "unknown until the bulk contract is published by Billy official docs "
@@ -3336,6 +3406,7 @@ def build_api_manifest() -> dict[str, Any]:
         operations.extend(bulk_rows(resource))
     operations.extend(special_rows())
     apply_residual_clear_honesty(operations)
+    apply_readonly_map_owner_skip(operations)
     apply_api_live_api_deferred(operations)
     return {
         "manifest": "billy_api_v2_phase_0",
@@ -8559,13 +8630,16 @@ def api_row_is_qualified(row: dict[str, Any]) -> bool:
 
 
 def coverage_is_complete(api_rows: list[dict[str, Any]], ui_rows: list[dict[str, Any]]) -> bool:
-    """Derive a completeness claim from row evidence and unresolved bulk contracts."""
+    """Derive a completeness claim, excluding owner-scoped rows from the applicable set."""
 
     return (
         bool(api_rows)
         and bool(ui_rows)
-        and not any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows)
-        and all(api_row_is_qualified(row) for row in api_rows)
+        and not any(
+            row.get("source_kind") == "ambiguous_bulk" and not is_owner_out_of_scope(row)
+            for row in api_rows
+        )
+        and all(is_owner_out_of_scope(row) or api_row_is_qualified(row) for row in api_rows)
         and all(row_is_qualified(row, UI_QUALIFICATION_FIELDS) for row in ui_rows)
     )
 
@@ -8574,10 +8648,13 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
     """Describe the first current evidence gap without changing qualification state."""
 
     if coverage_is_complete(api_rows, ui_rows):
-        return "No manifest qualification blockers remain."
+        return NO_MANIFEST_BLOCKERS
     # User scope (2026-07-31): API live testing is out of scope. Do not blame a
     # missing BILLY_API_TOKEN for incomplete UI qualification.
-    if any(row.get("source_kind") == "ambiguous_bulk" for row in api_rows):
+    if any(
+        row.get("source_kind") == "ambiguous_bulk" and not is_owner_out_of_scope(row)
+        for row in api_rows
+    ):
         return (
             "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: "
             "92 ambiguous_bulk rows stay red after official docs/asset exhaust "
@@ -8590,7 +8667,7 @@ def qualification_blocker(api_rows: list[dict[str, Any]], ui_rows: list[dict[str
     if any(
         not row.get("implemented") or not row.get("contract_tested")
         for row in api_rows
-        if row.get("source_kind") != "ambiguous_bulk"
+        if row.get("source_kind") != "ambiguous_bulk" and not is_owner_out_of_scope(row)
     ):
         return "API offline implementation or contract evidence is incomplete"
     if any(not row.get("live_tested") for row in ui_rows if not is_owner_out_of_scope(row)) or any(
@@ -8618,6 +8695,17 @@ def build_status(api_manifest: dict[str, Any], ui_manifest: dict[str, Any]) -> d
             "api_clear": count_by(api_rows, "source_kind").get("clear", 0),
             "api_ambiguous_bulk": count_by(api_rows, "source_kind").get("ambiguous_bulk", 0),
             "api_special": count_by(api_rows, "source_kind").get("special", 0),
+            "api_owner_skipped_bulk": sum(
+                1
+                for row in api_rows
+                if row.get("source_kind") == "ambiguous_bulk" and is_owner_out_of_scope(row)
+            ),
+            "api_owner_skipped_readonly_map": sum(
+                1
+                for row in api_rows
+                if str(row.get("id", "")) in RESIDUAL_READONLY_MAP_IDS
+                and is_owner_out_of_scope(row)
+            ),
             "api_total": len(api_rows),
             "ui_discovery": count_by(ui_rows, "workflow_kind").get("discovery", 0),
             "ui_api_parity": count_by(ui_rows, "workflow_kind").get("api_parity", 0),
@@ -8662,6 +8750,8 @@ def render_report(status: dict[str, Any]) -> str:
             "| --- | ---: |",
             f"| Clear API operations | {counts['api_clear']} |",
             f"| Ambiguous bulk mentions | {counts['api_ambiguous_bulk']} |",
+            f"| Owner-skipped bulk mentions | {counts['api_owner_skipped_bulk']} |",
+            f"| Owner-skipped readonly-map writes | {counts['api_owner_skipped_readonly_map']} |",
             f"| Documented special routes | {counts['api_special']} |",
             f"| API snapshot total | {counts['api_total']} |",
             f"| UI discovery seeds | {counts['ui_discovery']} |",

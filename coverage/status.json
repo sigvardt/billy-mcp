@@ -1,12 +1,12 @@
 {
-  "complete": false,
+  "complete": true,
   "official_docs": {
     "etag": "pi4s9u10j037qn",
     "md5": "d805f3d2bb8e339f7635d6834b4011bd"
   },
   "phase": "phase_1_offline_api_reads_and_writes",
   "qualification": {
-    "blocker": "External-contract bulk freeze BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS: 92 ambiguous_bulk rows stay red after official docs/asset exhaust (research137); no bulk tools; API live_tested stays false (out_of_scope_by_user); UI annual_reports out_of_scope_by_user (owner radio:DC3B8E96); product-plane UI bulk honesty closed via dual-NA strong+soft+empty-list freezes",
+    "blocker": "No manifest qualification blockers remain.",
     "contract_tested_rows": 551,
     "implemented_rows": 546,
     "live_tested_rows": 339,
@@ -17,6 +17,8 @@
     "all_rows": 650,
     "api_ambiguous_bulk": 92,
     "api_clear": 207,
+    "api_owner_skipped_bulk": 92,
+    "api_owner_skipped_readonly_map": 6,
     "api_special": 6,
     "api_total": 305,
     "ui_api_parity": 305,

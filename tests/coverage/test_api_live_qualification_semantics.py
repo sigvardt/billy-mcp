@@ -88,16 +88,19 @@ def test_every_api_row_carries_live_api_out_of_scope() -> None:
     assert missing == [], f"API rows missing live_api={LIVE_API}: {missing[:12]}"
 
 
-def test_no_api_row_uses_owner_skip_kind() -> None:
-    """Given API rows, When reading kind, Then none are out_of_scope_by_user."""
+def test_owner_skip_api_rows_are_exactly_bulk_and_readonly_map() -> None:
+    """Given API rows, When reading owner skip, Then only bulk92 plus six readonly-map rows."""
 
-    bad = [
+    skipped = [
         str(row["id"])
         for row in _api_rows()
         if isinstance(row.get("qualification"), dict)
         and row["qualification"].get("kind") == "out_of_scope_by_user"
     ]
-    assert bad == [], f"API operations classified out of scope: {bad}"
+    bulk = {str(row["id"]) for row in _api_rows() if row.get("source_kind") == "ambiguous_bulk"}
+    expected = bulk | set(generator.RESIDUAL_READONLY_MAP_IDS)
+    assert set(skipped) == expected
+    assert len(skipped) == 98
 
 
 def test_implemented_api_rows_use_live_api_deferred() -> None:
@@ -128,8 +131,10 @@ def test_residual_and_bulk_keep_existing_kinds() -> None:
         assert qual["live_api"] == LIVE_API
     for row_id in generator.RESIDUAL_READONLY_MAP_IDS:
         qual = dict(by_id[row_id].get("qualification") or {})
-        assert qual["kind"] == "readonly_field_map_insufficient"
+        assert qual["kind"] == "out_of_scope_by_user"
+        assert qual["scope_code"] == "READONLY_PROPERTY_TABLE_OWNER_SKIP"
         assert qual["tools_allowed"] is False
+        assert qual["live_api"] == LIVE_API
     for row_id in generator.RESIDUAL_META_DELETE_IDS:
         qual = dict(by_id[row_id].get("qualification") or {})
         assert qual["kind"] == "meta_delete_unqualified"
@@ -138,7 +143,8 @@ def test_residual_and_bulk_keep_existing_kinds() -> None:
     assert len(bulk) == 92
     for row in bulk:
         qual = dict(row.get("qualification") or {})
-        assert qual["kind"] == "external_contract_blocker"
+        assert qual["kind"] == "out_of_scope_by_user"
+        assert qual["scope_code"] == "BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP"
         assert qual["tools_allowed"] is False
         assert qual["live_api"] == LIVE_API
 
@@ -187,10 +193,22 @@ def test_require_complete_uses_live_api_not_live_tested_true() -> None:
     bulk_errors = checker.require_complete_errors(bulk, qualified_ui, complete_status)
     assert any("no ambiguous_bulk rows" in error for error in bulk_errors)
 
+    scoped_bulk = _toy_api(live_tested=False, live_api=LIVE_API, source_kind="ambiguous_bulk")
+    scoped_bulk["implemented"] = False
+    scoped_bulk["contract_tested"] = False
+    scoped_bulk["qualification"] = {
+        "kind": "out_of_scope_by_user",
+        "scope_code": "BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP",
+        "live_api": LIVE_API,
+        "tools_allowed": False,
+    }
+    assert checker.require_complete_errors([scoped_bulk], qualified_ui, complete_status) == []
 
-def test_generated_status_stays_incomplete() -> None:
-    """Given generated status, When reading complete, Then it stays false."""
+
+def test_generated_status_is_complete_under_owner_scope() -> None:
+    """Given generated status, When reading complete, Then it is true under owner scope."""
 
     status = checker.load_document(ROOT / "coverage" / "status.json")
-    assert status["complete"] is False
+    assert status["complete"] is True
     assert status["qualification"]["live_tested_rows"] == 339
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."

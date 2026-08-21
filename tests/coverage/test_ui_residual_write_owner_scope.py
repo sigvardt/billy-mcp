@@ -74,11 +74,12 @@ def test_residual_write_rows_are_owner_out_of_scope() -> None:
         assert generator.is_owner_out_of_scope(row) is True
 
 
-def test_residual_owner_scope_keeps_coverage_incomplete() -> None:
-    """Given residual owner scope, When reading status, Then complete stays false."""
+def test_residual_owner_scope_does_not_block_complete() -> None:
+    """Given residual owner scope, When reading status, Then complete is true."""
 
     status = checker.load_document(ROOT / "coverage" / "status.json")
-    assert status["complete"] is False
+    assert status["complete"] is True
+    assert status["qualification"]["blocker"] == "No manifest qualification blockers remain."
 
 
 def test_unimplemented_ui_rows_are_exactly_owner_scoped() -> None:

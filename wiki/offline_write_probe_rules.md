@@ -113,10 +113,14 @@ JSON object root; object roots hit `AUTHENTICATION_REQUIRED` before field-level
 bulk validation is visible; bulk delete form class uses `ids[]` in error text
 only.
 
-**Decision:** all 92 inventory bulk rows stay `ambiguous_bulk` red with machine-readable `qualification.kind=external_contract_blocker` and
-`blocker_code=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. No bulk FastMCP tools.
-Do not run further bulk evidence-only iterations until Billy publishes schemas
-or live API bulk qualification is re-opened by the user.
+**Decision (superseded as a completeness wall by owner radio `21A3D94F`,
+2026-08-21):** all 92 inventory bulk rows stay `ambiguous_bulk`, toolless, and
+not green. Qualification is now `kind=out_of_scope_by_user` with
+`scope_code=BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP` and
+`supersedes_blocker_code=BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`. They stay
+outside the applicable count. See [[undocumented_bulk_owner_skip]]. Do not
+infer payloads. Reopen only after a complete official contract or a new owner
+request.
 
 Shape hints from research136 remain non-authoritative for greening.
 

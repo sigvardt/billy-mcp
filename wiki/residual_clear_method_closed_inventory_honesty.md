@@ -26,9 +26,9 @@ This page is **not**:
 
 - product ACCEPT for ticketed write tools
 - greening of `implemented` / `contract_tested` / `live_tested`
-- bulk resolution
-- annual_reports resolution
-- a completeness claim (`complete` stays false)
+- bulk tools
+- annual_reports tools
+- a claim that bulk or readonly-map writes work
 
 It **is** the durable record that inventory no longer advertises non-existent `*_preview` tool names for these rows, and that each row carries a machine-readable qualification aligned with [[offline_write_probe_rules]].
 
@@ -69,21 +69,21 @@ Supports still lists writes that historically returned unauth 405. Unauthenticat
 API live-test cells stay false with `live_api=out_of_scope_by_user`
 ([[api_live_qualification_semantics]]). That is not this freeze.
 
-## Completeness walls still open
+## Completeness walls
 
-`88C4B0A9` residual audit: remaining unimplemented API rows are
-exactly these two external-contract blockers. Remaining
-unimplemented UI rows are owner-scoped and non-blocking. Do not
-repeat bulk or writable-field-map exhaust. Do not invent tools.
+Owner `21A3D94F` moved the remaining unimplemented API rows outside
+the applicable count. They stay visible and toolless.
 
-| Blocker | Rows |
-| --- | ---: |
-| Bulk schema unspecified (`external_contract_blocker` / `BULK_SCHEMA_UNSPECIFIED_OFFICIAL_DOCS`) | 92 API |
-| Residual clear honesty (this freeze, still red) | 6 API |
-| Owner-scoped UI writes and annual reports (`out_of_scope_by_user`, non-blocking) | 6 UI |
-| Product-plane UI bulk parity | **0** open (dual-NA freezes closed) |
+| Set | Rows | Scope |
+| --- | ---: | --- |
+| Bulk mentions | 92 API | `out_of_scope_by_user` / `BULK_CONTRACT_UNDOCUMENTED_OWNER_SKIP` |
+| Readonly-map create/update (this freeze) | 6 API | `out_of_scope_by_user` / `READONLY_PROPERTY_TABLE_OWNER_SKIP` |
+| Owner-scoped UI writes and annual reports | 6 UI | `out_of_scope_by_user` (`FE6FA4B1` / `DC3B8E96`) |
+| Product-plane UI bulk parity | **0** open | dual-NA freezes closed |
 
-Generated snapshot after the `88C4B0A9` residual audit: implemented **546**, contract **551**, live/vision **339**, complete **false**. Historical research186 freeze snapshot was implemented/contract **470**, live/vision **286**.
+Generated snapshot: implemented **546**, contract **551**, live/vision **339**,
+complete **true** under owner scope. Historical research186 freeze snapshot
+was implemented/contract **470**, live/vision **286**.
 
 ## Generator and tests
 
@@ -109,17 +109,21 @@ Official docs fingerprint re-checked only (no residual unauth matrix this pass; 
 | api-docs page chunk | Supports-line bulk wording only; no bulk body schema |
 | Unauth residual re-probe | **not run** (no new contract finding expected; no `evidence_ref` bump) |
 
-Residual **20** stay red and toolless (`tools_allowed=false`). Inventory `evidence_ref` remains ending at `research192_unauth_reconfirm`. Not greening; not product ACCEPT; complete stays false.
+Residual rows stay red and toolless (`tools_allowed=false`). Inventory
+`evidence_ref` remains ending at `research-88c4b0a9-residual-audit`. Not
+greening tools. Owner `21A3D94F` excludes them from the applicable count.
 
-### Current external walls (counts after `88C4B0A9` residual audit)
+### Current owner-skip set
 
-| Blocker | Rows |
+| Set | Rows |
 | --- | ---: |
-| Bulk schema unspecified | 92 API |
-| Residual clear honesty (this freeze) | 6 API |
-| Owner-scoped UI (`FE6FA4B1` five plus `DC3B8E96` annual reports) | 6 UI, non-blocking |
+| Bulk mentions | 92 API |
+| Readonly-map create/update (this freeze) | 6 API |
+| Owner-scoped UI (`FE6FA4B1` five plus `DC3B8E96` annual reports) | 6 UI |
 | Product-plane UI bulk parity | **0** open (dual-NA freezes closed) |
 
-Generated coverage snapshot at research193: implemented/contract **528**, live/vision **344**, complete **false**. Current generated snapshot after the residual audit: implemented **546**, contract **551**, live/vision **339**, complete **false**. The live/vision drop versus research193 is later honesty remaps, not this freeze. Evidence ref now ends with `research-88c4b0a9-residual-audit`.
+Generated coverage snapshot: implemented **546**, contract **551**, live/vision
+**339**, complete **true** under owner scope. Evidence ref now ends with
+`research-88c4b0a9-residual-audit`.
 
 Unlock residual tools only when official docs correct the method map or authenticated non-production write proof is in scope (live API remains `out_of_scope_by_user`).

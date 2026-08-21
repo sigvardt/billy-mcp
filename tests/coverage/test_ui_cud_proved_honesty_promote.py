@@ -134,8 +134,8 @@ def test_remaining_honesty_set_is_empty_after_owner_scope() -> None:
             assert row[field] is False, f"{row_id}: {field} greened"
 
 
-def test_promoted_coverage_stays_incomplete() -> None:
-    """Given the 11-row promote, When reading status, Then complete stays false."""
+def test_promoted_coverage_is_complete_under_owner_scope() -> None:
+    """Given the 11-row promote plus owner skips, When reading status, Then complete is true."""
 
     status = checker.load_document(ROOT / "coverage" / "status.json")
-    assert status["complete"] is False
+    assert status["complete"] is True

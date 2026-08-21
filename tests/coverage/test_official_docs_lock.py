@@ -136,13 +136,13 @@ def test_bank_lines_list_filters_match_official_table() -> None:
     assert filters["q"] == "string"
     assert "accountId" in list(row["request_fields"])
     assert row["tool_name"] == "api_bank_lines_list"
-    assert _status()["complete"] is False
+    assert _status()["complete"] is True
 
 
-def test_complete_stays_false_and_api_live_tested_stays_false() -> None:
-    """Given generated coverage, When scoring complete, Then it stays false."""
+def test_complete_is_true_and_api_live_tested_stays_false() -> None:
+    """Given generated coverage, When scoring complete, Then it is true under owner scope."""
 
-    assert _status()["complete"] is False
+    assert _status()["complete"] is True
     rows = _api_rows()
     assert len(rows) == 305
     for row in rows:

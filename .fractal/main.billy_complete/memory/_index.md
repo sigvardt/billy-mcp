@@ -4,7 +4,7 @@ desc: Private working state and durable review decisions for billy_complete.
 tags: []
 sources: []
 created: 2026-07-29T07:56:19Z
-updated: 2026-08-19T20:47:08Z
+updated: 2026-08-21T15:15:31Z
 ---
 
 # memory
@@ -13,7 +13,7 @@ updated: 2026-08-19T20:47:08Z
 
 [[state|state]]: Current node state for the Billy MCP complete run.
 
-[[todo|todo]]: Open product work after official docs lock promote.
+[[todo|todo]]: Open product work for the bounded offline closeout.
 
 ***
 
