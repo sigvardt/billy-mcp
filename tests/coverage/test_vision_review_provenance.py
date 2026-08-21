@@ -14,7 +14,9 @@ from billy_mcp.vision_evidence import (
 )
 
 _REPO = Path(__file__).resolve().parents[2]
-_CONTACTS_VISION_RECORD = _REPO / "tmp" / "vision-records" / "ui_contacts_writes.json"
+_CONTACTS_VISION_RECORD = (
+    _REPO / "coverage" / "vision-records" / "ui_contacts_writes.json"
+)
 _CONTACTS_FRAME_RUN_ID = "3d5b151dfd5342258f8734373597f8c1"
 _WRITE_LIVE_TESTS = (
     _REPO / "tests/live/test_ui_contacts_writes.py",

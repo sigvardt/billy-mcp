@@ -1,0 +1,16 @@
+{
+  "workflow_ref": "ui.parity.organizations.update",
+  "run_id": "0937a009bf7e496ca2ce15a8af313868",
+  "assertion_refs": [
+    "tests/live/test_ui_organizations_writes.py",
+    "input[name=phone]",
+    "affdb4f98390481880e4bcd554ec4fd9",
+    ".fractal/main.billy_complete/tmp/grok-review.md"
+  ],
+  "second_interface_ref": "fresh-session-input-name-phone",
+  "reviewer_verdict": "accept",
+  "timestamp": "2026-08-18T06:26:26+00:00",
+  "purge_verified": true,
+  "frame_paths_were_outside_repo": true,
+  "author": "independent_review"
+}

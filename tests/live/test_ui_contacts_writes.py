@@ -35,7 +35,7 @@ pytestmark = pytest.mark.live
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _DATA_ROOT = Path.home() / ".local" / "share" / "billy-mcp"
-_VISION_RECORD = _REPO_ROOT / "tmp" / "vision-records" / "ui_contacts_writes.json"
+_VISION_RECORD = _REPO_ROOT / "coverage" / "vision-records" / "ui_contacts_writes.json"
 _BLOCKER_PATH = (
     _REPO_ROOT / ".fractal" / "main.billy_complete" / "tmp" / "live-contacts-writes-blocker.txt"
 )

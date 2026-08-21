@@ -24,47 +24,47 @@ PROVED_STATUS: Final[str] = "preview_execute"
 PROVED_ROWS: Final[dict[str, tuple[str, str]]] = {
     "ui.parity.contacts.create": (
         "ui_clients_create_preview",
-        "tmp/vision-records/ui_contacts_writes.json",
+        "coverage/vision-records/ui_contacts_writes.json",
     ),
     "ui.parity.contacts.update": (
         "ui_clients_update_preview",
-        "tmp/vision-records/ui_contacts_writes.json",
+        "coverage/vision-records/ui_contacts_writes.json",
     ),
     "ui.parity.contacts.delete": (
         "ui_clients_delete_preview",
-        "tmp/vision-records/ui_contacts_writes.json",
+        "coverage/vision-records/ui_contacts_writes.json",
     ),
     "ui.parity.bills.create": (
         "ui_bills_create_preview",
-        "tmp/vision-records/ui_bills_writes.json",
+        "coverage/vision-records/ui_bills_writes.json",
     ),
     "ui.parity.bills.update": (
         "ui_bills_update_preview",
-        "tmp/vision-records/ui_bills_writes.json",
+        "coverage/vision-records/ui_bills_writes.json",
     ),
     "ui.parity.bills.delete": (
         "ui_bills_delete_preview",
-        "tmp/vision-records/ui_bills_writes.json",
+        "coverage/vision-records/ui_bills_writes.json",
     ),
     "ui.parity.organizations.update": (
         "ui_organizations_update_preview",
-        "tmp/vision-records/ui_organizations_writes.json",
+        "coverage/vision-records/ui_organizations_writes.json",
     ),
     "ui.parity.invoices.create": (
         "ui_invoices_create_preview",
-        "tmp/vision-records/ui_invoices_writes.json",
+        "coverage/vision-records/ui_invoices_writes.json",
     ),
     "ui.parity.invoices.update": (
         "ui_invoices_update_preview",
-        "tmp/vision-records/ui_invoices_writes.json",
+        "coverage/vision-records/ui_invoices_writes.json",
     ),
     "ui.parity.invoices.delete": (
         "ui_invoices_delete_preview",
-        "tmp/vision-records/ui_invoices_writes.json",
+        "coverage/vision-records/ui_invoices_writes.json",
     ),
     "ui.parity.products.create": (
         "ui_products_create_preview",
-        "tmp/vision-records/ui_products_writes.json",
+        "coverage/vision-records/ui_products_writes.json",
     ),
 }
 

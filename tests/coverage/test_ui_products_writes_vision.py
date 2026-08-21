@@ -10,7 +10,7 @@ from billy_mcp.vision_evidence import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-_VISION_RECORD = ROOT / "tmp" / "vision-records" / "ui_products_writes.json"
+_VISION_RECORD = ROOT / "coverage" / "vision-records" / "ui_products_writes.json"
 _FRAME_NAMES = (
     "01_before.png",
     "02_before_submit.png",

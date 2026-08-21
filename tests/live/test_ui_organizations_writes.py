@@ -34,7 +34,9 @@ pytestmark = pytest.mark.live
 
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 _EGRESS = _REPO_ROOT / "coverage" / "browser_egress.yaml"
-_VISION_RECORD = _REPO_ROOT / "tmp" / "vision-records" / "ui_organizations_writes.json"
+_VISION_RECORD = (
+    _REPO_ROOT / "coverage" / "vision-records" / "ui_organizations_writes.json"
+)
 _BLOCKER_PATH = (
     _REPO_ROOT
     / ".fractal"

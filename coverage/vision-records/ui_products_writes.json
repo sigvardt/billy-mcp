@@ -1,0 +1,17 @@
+{
+  "workflow_ref": "ui.parity.products.create",
+  "run_id": "29c1b1de26a14976aaa1b98bfe9de46e",
+  "assertion_refs": [
+    "tests/live/test_ui_products_writes.py::test_ui_products_create_delete_via_call_tool",
+    "create_server_call_tool_create_delete",
+    "independent_readback_session",
+    "third_session_cleanup",
+    ".fractal/main.billy_complete/tmp/grok-review.md"
+  ],
+  "second_interface_ref": "create_server_readback_plus_third_profile",
+  "reviewer_verdict": "accept",
+  "timestamp": "2026-08-19T16:44:54+00:00",
+  "purge_verified": true,
+  "frame_paths_were_outside_repo": true,
+  "author": "independent_review"
+}

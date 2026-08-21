@@ -10,7 +10,7 @@ from billy_mcp.vision_evidence import (
 )
 
 ROOT = Path(__file__).resolve().parents[2]
-_VISION_RECORD = ROOT / "tmp" / "vision-records" / "ui_invoices_writes.json"
+_VISION_RECORD = ROOT / "coverage" / "vision-records" / "ui_invoices_writes.json"
 _FRAME_RUN_ID = "60b6d620772644f3bca9609c8ae53846"
 _FRAME_DIR = Path.home() / ".local" / "share" / "billy-mcp" / "vision-tmp" / f"run-{_FRAME_RUN_ID}"
 _FRAME_NAMES = (

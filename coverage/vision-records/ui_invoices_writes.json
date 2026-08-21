@@ -1,0 +1,18 @@
+{
+  "workflow_ref": "ui.parity.invoices.update",
+  "run_id": "60b6d620772644f3bca9609c8ae53846",
+  "assertion_refs": [
+    "tests/live/test_ui_invoices_writes.py::test_ui_invoices_create_update_delete_via_call_tool",
+    "create_server_call_tool_disposable_update_delete",
+    "list_row_open_not_post_id",
+    "independent_readback_session",
+    "third_session_cleanup",
+    ".fractal/main.billy_complete/tmp/grok-review.md"
+  ],
+  "second_interface_ref": "create_server_readback_plus_third_profile",
+  "reviewer_verdict": "accept",
+  "timestamp": "2026-08-19T14:17:18+00:00",
+  "purge_verified": true,
+  "frame_paths_were_outside_repo": true,
+  "author": "independent_review"
+}
