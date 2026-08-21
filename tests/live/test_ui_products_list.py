@@ -93,7 +93,7 @@ async def _capture_products_list_frame(
     runtime: BrowserRuntime,
     org_identity: Path,
     destination: Path,
-) -> None:
+) -> bool:
     """Screenshot the products list surface for vision review."""
 
     payload = json.loads(org_identity.read_text(encoding="utf-8"))
@@ -114,9 +114,14 @@ async def _capture_products_list_frame(
         assert await heading.count() >= 1
         assert (await heading.first.inner_text()).strip() == "Produkter"
         search = live_page.locator("[data-cy='search-button']")
-        assert await search.count() >= 1 and await search.first.is_visible()
+        search_visible = await search.count() >= 1 and await search.first.is_visible()
+        if not search_visible:
+            empty = live_page.locator("text=Ingen produkter")
+            assert await empty.count() >= 1 and await empty.first.is_visible()
+            assert (await empty.first.inner_text()).strip() == "Ingen produkter"
         await live_page.screenshot(path=str(destination), full_page=False)
         assert destination.is_file() and destination.stat().st_size > 0
+        return search_visible
     finally:
         await page.close()
 
@@ -147,11 +152,11 @@ async def test_dual_profiles_open_products_list_shell() -> None:
         assert isinstance(list_a, UiProductsListSuccess)
         assert list_a.path_class == "/:org_slug/products"
         assert list_a.heading == "Produkter"
-        assert list_a.search_control_visible is True
         assert _org_slug_len_only(org_a) > 0
 
         frame_a = frame_dir / "session_a_products_list.png"
-        await _capture_products_list_frame(runtime_a, org_a, frame_a)
+        frame_a_search_visible = await _capture_products_list_frame(runtime_a, org_a, frame_a)
+        assert list_a.search_control_visible is frame_a_search_visible
         await runtime_a.close()
         runtime_a = None
 
@@ -165,7 +170,8 @@ async def test_dual_profiles_open_products_list_shell() -> None:
         assert _org_slug_len_only(org_b) == _org_slug_len_only(org_a)
 
         frame_b = frame_dir / "session_b_products_list.png"
-        await _capture_products_list_frame(runtime_b, org_b, frame_b)
+        frame_b_search_visible = await _capture_products_list_frame(runtime_b, org_b, frame_b)
+        assert list_b.search_control_visible is frame_b_search_visible
         await runtime_b.close()
         runtime_b = None
 
@@ -179,7 +185,7 @@ async def test_dual_profiles_open_products_list_shell() -> None:
                 "session_b_ui_products_list",
                 "session_a_products_list_frame",
                 "session_b_products_list_frame",
-                "list_surface_h1_produkter_search",
+                "list_surface_h1_produkter_search_or_exact_empty",
             ],
             second_interface_ref="fresh_profile_b_full_login",
             reviewer_verdict="accept",

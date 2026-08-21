@@ -1205,6 +1205,48 @@ def test_missing_manifests_return_typed_error(tmp_path: Path) -> None:
     ]
 
 
+def test_complete_status_rejects_unscoped_red_manifest_rows(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    (tmp_path / "coverage" / "status.json").write_text(
+        '{"complete": true, "phase": "complete", "source_counts": {"red": 2}}',
+        encoding="utf-8",
+    )
+
+    with pytest.raises(CoverageLoadError) as failure:
+        load_coverage_report(tmp_path)
+
+    assert failure.value.error.code is StableErrorCode.VALIDATION_ERROR
+    assert failure.value.error.message == (
+        "Generated coverage status conflicts with red manifest rows."
+    )
+
+
+def test_complete_status_accepts_owner_scoped_out_of_scope_rows(tmp_path: Path) -> None:
+    write_coverage_fixture(tmp_path)
+    coverage = tmp_path / "coverage"
+    for name in ("api_v2_manifest.yaml", "ui_workflows_manifest.yaml"):
+        path = coverage / name
+        path.write_text(
+            path.read_text(encoding="utf-8").replace(
+                "  evidence: frozen fixture\n",
+                "  evidence: frozen fixture\n"
+                "  qualification:\n"
+                "    kind: out_of_scope_by_user\n",
+            ),
+            encoding="utf-8",
+        )
+    (coverage / "status.json").write_text(
+        '{"complete": true, "phase": "complete", "source_counts": {"red": 2}}',
+        encoding="utf-8",
+    )
+
+    report = load_coverage_report(tmp_path)
+
+    assert report.status.complete is True
+    assert all(row.qualification["kind"] == "out_of_scope_by_user" for row in report.api_rows)
+    assert all(row.qualification["kind"] == "out_of_scope_by_user" for row in report.ui_rows)
+
+
 def test_server_registers_coverage_reads_ticketed_writes_and_auth_status(tmp_path: Path) -> None:
     write_coverage_fixture(tmp_path)
     report = load_coverage_report(tmp_path)

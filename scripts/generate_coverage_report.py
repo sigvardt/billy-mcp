@@ -4029,7 +4029,8 @@ def apply_ui_products_list_shell_evidence(
     ]
     row["evidence"] = (
         "research103 dual-session headless observation + ui_products_list product; "
-        "list shell only (path class, h1 Produkter, data-cy search-button present, no create); "
+        "list shell only (path class, h1 Produkter, either data-cy search-button present or "
+        "exact Ingen produkter empty state, no create); "
         "API list filters/sort/pagination UI not producted; "
         "vision record tmp/vision-records/ui_products_list.json (list surface frames, accept)"
     )

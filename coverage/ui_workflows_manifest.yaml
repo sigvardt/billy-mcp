@@ -240,7 +240,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research103 dual-session headless observation + ui_products_list product; list shell only (path class, h1 Produkter, data-cy search-button present, no create); API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_products_list.json (list surface frames, accept)",
+      "evidence": "research103 dual-session headless observation + ui_products_list product; list shell only (path class, h1 Produkter, either data-cy search-button present or exact Ingen produkter empty state, no create); API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_products_list.json (list surface frames, accept)",
       "filters": [],
       "id": "ui.discovery.products",
       "implemented": true,
@@ -13146,7 +13146,7 @@
         "EGRESS_DENIED",
         "BILLY_ERROR"
       ],
-      "evidence": "research103 dual-session headless observation + ui_products_list product; list shell only (path class, h1 Produkter, data-cy search-button present, no create); API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_products_list.json (list surface frames, accept); maps api.products.list to UI list-shell open only",
+      "evidence": "research103 dual-session headless observation + ui_products_list product; list shell only (path class, h1 Produkter, either data-cy search-button present or exact Ingen produkter empty state, no create); API list filters/sort/pagination UI not producted; vision record tmp/vision-records/ui_products_list.json (list surface frames, accept); maps api.products.list to UI list-shell open only",
       "filters": [],
       "id": "ui.parity.products.list",
       "implemented": true,

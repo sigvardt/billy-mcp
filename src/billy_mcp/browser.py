@@ -125,6 +125,7 @@ _INVOICES_UPDATE_FIELD_MARKERS = (
 _PRODUCTS_LIST_PATH = re.compile(r"^/[^/]+/products$")
 _PRODUCTS_LIST_HEADING = "Produkter"
 _PRODUCTS_SEARCH_CONTROL = "[data-cy='search-button']"
+_PRODUCTS_EMPTY_STATE_HEADING = "Ingen produkter"
 _CLIENTS_LIST_PATH = re.compile(r"^/[^/]+/clients(?:/empty)?$")
 _CLIENTS_DETAIL_PATH = re.compile(
     r"^/[^/]+/contacts/([^/]+)/(customer|supplier)$",
@@ -1711,9 +1712,10 @@ class BrowserRuntime:
                     )
                 if await _has_error_shell_markers(page):
                     return _ui_products_changed_error()
-                if _is_products_list_url(page.url) and await _has_products_list_signature(page):
+                signature = await _products_list_search_control_state(page)
+                if _is_products_list_url(page.url) and signature is not None:
                     return UiProductsListSuccess(
-                        search_control_visible=True,
+                        search_control_visible=signature,
                         shell_markers_present=await _has_shell_nav_markers(page),
                     )
                 await asyncio.sleep(0.2)
@@ -7396,18 +7398,30 @@ async def _has_bills_create_signature(page: LoginPage) -> bool:
 
 
 async def _has_products_list_signature(page: LoginPage) -> bool:
-    """Verify the research103 products list heading and search control without clicking."""
+    """Verify either populated or exact-empty products list chrome without clicking."""
+
+    return await _products_list_search_control_state(page) is not None
+
+
+async def _products_list_search_control_state(page: LoginPage) -> bool | None:
+    """Return search visibility for a valid products list, or None for unknown chrome."""
 
     try:
         heading = page.locator("h1")
         if await heading.count() < 1 or not await heading.is_visible():
-            return False
+            return None
         if (await heading.inner_text()).strip() != _PRODUCTS_LIST_HEADING:
-            return False
+            return None
         search = page.locator(_PRODUCTS_SEARCH_CONTROL)
-        return await search.count() >= 1 and await search.is_visible()
+        if await search.count() >= 1 and await search.is_visible():
+            return True
+        empty = page.locator(f"text={_PRODUCTS_EMPTY_STATE_HEADING}")
+        if await empty.count() >= 1 and await empty.first.is_visible():
+            if (await empty.first.inner_text()).strip() == _PRODUCTS_EMPTY_STATE_HEADING:
+                return False
+        return None
     except Exception:
-        return False
+        return None
 
 
 def _is_clients_new_soft_url(url: str) -> bool:

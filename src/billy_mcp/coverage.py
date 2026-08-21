@@ -40,6 +40,7 @@ class CoverageRow(BaseModel):
     tool_name: str = ""
     evidence: str = ""
     vision_evidence: object = None
+    qualification: dict[str, object] = Field(default_factory=dict)
     status: CoverageStatus = Field(default_factory=CoverageStatus)
 
     @classmethod
@@ -100,7 +101,7 @@ def load_coverage_report(repository_root: Path) -> CoverageReport:
     browser_entries = _load_entries(coverage_root / "browser_egress.yaml", "hosts")
     with (coverage_root / "status.json").open(encoding="utf-8") as status_file:
         status = GeneratedCoverageStatus.model_validate(json.load(status_file))
-    if status.complete and any(not _is_green(row) for row in [*api_rows, *ui_rows]):
+    if status.complete and any(not _is_complete_eligible(row) for row in [*api_rows, *ui_rows]):
         raise CoverageLoadError(
             ToolError(
                 code=StableErrorCode.VALIDATION_ERROR,
@@ -178,3 +179,9 @@ def _is_green(row: CoverageRow) -> bool:
         and status.live_tested
         and status.vision_verified is True
     )
+
+
+def _is_complete_eligible(row: CoverageRow) -> bool:
+    """Match generated-status semantics without treating owner-scoped rows as green."""
+
+    return row.qualification.get("kind") == "out_of_scope_by_user" or _is_green(row)
